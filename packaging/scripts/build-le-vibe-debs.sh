@@ -102,7 +102,7 @@ dpkg-buildpackage -us -uc -b
 
 STACK_DEB="$(find_stack_deb)"
 if [[ -z "$STACK_DEB" || ! -f "$STACK_DEB" ]]; then
-  echo "build-le-vibe-debs: could not locate le-vibe_*.deb next to repo parent; search manually under: $(cd "$ROOT/.." && pwd)" >&2
+  echo "build-le-vibe-debs: could not locate le-vibe_*.deb under $(cd "$ROOT/.." && pwd) — if dpkg-buildpackage failed, fix errors above; on success the stack .deb is emitted beside the repo directory (../le-vibe_*.deb from repo root)." >&2
 else
   echo "==> Stack .deb: $STACK_DEB"
 fi
