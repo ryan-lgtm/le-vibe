@@ -22,7 +22,10 @@ scripts=(
 
 for f in "${scripts[@]}"; do
   p="editor/vscodium/${f}"
-  [[ -f "$p" ]] || { echo "ci-vscodium-bash-syntax: missing ${p}" >&2; exit 1; }
+  [[ -f "$p" ]] || {
+    echo "ci-vscodium-bash-syntax: missing ${p} — repair editor/vscodium (Fresh clone 14.b: git submodule update --init editor/vscodium — editor/README.md)." >&2
+    exit 1
+  }
   bash -n "$p"
   echo "ci-vscodium-bash-syntax: OK ${f}"
 done
