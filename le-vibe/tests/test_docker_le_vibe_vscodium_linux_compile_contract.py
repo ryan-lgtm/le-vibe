@@ -21,3 +21,4 @@ def test_docker_le_vibe_vscodium_linux_compile_script_bash_syntax() -> None:
     assert "rustup.rs" in text
     assert "nvm.sh" in text
     assert "max-old-space-size=8192" in text
+    assert "LEVIBE_DOCKER_COMPILE_CARGO_VOLUME" in text

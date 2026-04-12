@@ -145,7 +145,7 @@ if [[ "$WITH_IDE" -eq 1 ]]; then
   _ide_args=()
   [[ -n "$VS_BUILD" ]] && _ide_args+=("$VS_BUILD")
   if ! "$ROOT/packaging/scripts/build-le-vibe-ide-deb.sh" "${_ide_args[@]}"; then
-    echo "build-le-vibe-debs: §7.3 remediation — produce VSCode-linux-*: ./editor/fetch-vscode-sources.sh (14.b), then ./packaging/scripts/ci-vscodium-linux-dev-build.sh + dev/build.sh (14.e / editor/BUILD.md 14.c), then re-run --with-ide; or pass --vs-build PATH to an existing tree. CI vs maintainer bundles: docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles); packaging/debian-le-vibe-ide/README.md." >&2
+    echo "build-le-vibe-debs: §7.3 remediation — produce VSCode-linux-*: ./editor/fetch-vscode-sources.sh (14.b), then ./packaging/scripts/ci-vscodium-linux-dev-build.sh + dev/build.sh (14.e / editor/BUILD.md 14.c), or Docker ./packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh (full compile) / prepare-only ./packaging/scripts/docker-le-vibe-vscodium-prepare-only.sh (branding layers only); then re-run --with-ide; or pass --vs-build PATH. CI vs maintainer bundles: docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles); packaging/debian-le-vibe-ide/README.md." >&2
     exit 1
   fi
   IDE_DEB="$(find_ide_deb)"
