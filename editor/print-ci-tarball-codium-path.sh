@@ -25,6 +25,11 @@ if [[ ! -f "$ARG" ]]; then
 fi
 TAR="$(realpath "$ARG")"
 
+if ! command -v tar >/dev/null 2>&1; then
+  echo "${0##*/}: tar not on PATH — install: sudo apt install tar (Debian/Ubuntu)" >&2
+  exit 1
+fi
+
 _lc="${TAR,,}"
 if [[ "${_lc}" == *.zip ]]; then
   echo "${0##*/}: received a .zip — GitHub Actions wraps \`vscodium-linux-build.tar.gz\` inside the download; unzip first, then pass the \`.tar.gz\` path (see editor/BUILD.md *14.f*)." >&2
