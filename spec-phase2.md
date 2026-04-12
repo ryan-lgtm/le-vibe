@@ -20,7 +20,7 @@ This repository ships the **bootstrap + launcher + `.deb`**, **managed Ollama** 
 |------------------------|--------|
 | **`lvibe`**, first-run, structured logs, CI `.deb` + SBOM + lintian | **`le-vibe/`** + **`debian/`** |
 | Workspace **`.lvibe/`**, PM manifests, Continue rules, **§7.2** user-gate copy | |
-| **Lé Vibe IDE** (H6) | **`editor/vscodium`** (**VSCodium** submodule), **`editor/le-vibe-overrides/`** — see **`editor/README.md`**, **`editor/BUILD.md`**, **`editor/VENDORING.md`** |
+| **Lé Vibe IDE** (H6) | **`editor/vscodium`** (**VSCodium** submodule), **`editor/le-vibe-overrides/`** — see **`editor/README.md`**, **`editor/BUILD.md`**, **`editor/VENDORING.md`**. Interim gate (no Electron compile): **`./editor/smoke.sh`** — same checks as **`build-le-vibe-ide.yml`** (**`docs/ci-qa-hardening.md`** *IDE smoke*; **`docs/PRODUCT_SPEC.md`** *Prioritization* — *How to sequence work*) |
 | Consumer Flatpak/AppImage | **H7** — optional; not required in-tree |
 
 **Navigation:** [`docs/README.md`](docs/README.md) — maintainer index for **Roadmap H1–H8** (named from **`PRODUCT_SPEC` §9** *Maintainer index*). **Phase 1** Ollama bootstrap (`le-vibe/` package) — [`spec.md`](spec.md). Must-ship conflicts and the **authority roster** — [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) §9.
