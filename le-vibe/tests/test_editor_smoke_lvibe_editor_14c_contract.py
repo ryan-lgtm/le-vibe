@@ -12,6 +12,8 @@ def _repo_root() -> Path:
 
 def test_smoke_lvibe_editor_script_contract():
     text = (_repo_root() / "editor" / "smoke-lvibe-editor.sh").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
     assert "14.c" in text or "STEP 14" in text
     assert "le_vibe.launcher" in text
     assert "--skip-first-run" in text
@@ -38,6 +40,8 @@ def test_ci_editor_gate_bash_n_smoke_lvibe_editor():
 def test_smoke_built_codium_lvibe_chains_print_built_and_smoke():
     root = _repo_root()
     text = (root / "editor" / "smoke-built-codium-lvibe.sh").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
     assert "14.c" in text or "STEP 14" in text
     assert "print-built-codium-path.sh" in text
     assert "smoke-lvibe-editor.sh" in text

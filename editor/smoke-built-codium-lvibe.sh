@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # STEP 14 (14.c): after editor/vscodium/dev/build.sh — run launcher smoke against VSCode-linux-*/bin/codium from this tree.
+# Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (before toolchain / fetch / build under editor/vscodium/).
 # From repo root: ./editor/smoke-built-codium-lvibe.sh
 # Requires: ollama on PATH (same as smoke-lvibe-editor.sh). Exits 1 if no built codium (print-built-codium-path).
 set -euo pipefail
