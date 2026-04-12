@@ -1,0 +1,7 @@
+#!/bin/sh
+# Lé Vibe — validate .lvibe/ manifest, session-manifest, chunk refs (maintainer helper).
+# Product / trust: docs/PRODUCT_SPEC.md §5–§8; docs/SESSION_ORCHESTRATION_SPEC.md; spec-phase2.md §14 (H6/H7 vs in-tree); docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
+# Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (same pointers as ci.yml, dependabot.yml).
+# Optional RAG: docs/rag/le-vibe-phase2-chunks.md (spec-phase2 §14 table; not pytest) — SECURITY Related docs; packaging/scripts/ci-smoke.sh + .github/workflows/ci.yml headers.
+export PYTHONPATH="/usr/share/le-vibe${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m le_vibe.hygiene "$@"

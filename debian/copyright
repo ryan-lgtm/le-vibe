@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: le-vibe
+Source: https://example.invalid/le-vibe
+
+Files: *
+Copyright: 2026 Le Vibe contributors
+License: MIT
+ Full text in the repository file LICENSE at the source root.

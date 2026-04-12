@@ -1,0 +1,37 @@
+name: Bug report
+description: Something in the Lé Vibe launcher or packaging is wrong
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. **Lé Vibe** is not “Visual Studio Code”; bugs in **VSCodium**, **Continue**, or **Ollama** usually belong in those projects unless the issue is clearly in our launcher or packaging.
+
+        **Must-ship behavior:** **`docs/PRODUCT_SPEC.md`** (incl. **§8** secrets, **§7.2** user gate). **E1 regression evidence:** **`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`**. **Full authority roster:** **`docs/PRODUCT_SPEC.md` §9**. **STEP → PM doc:** **`docs/PM_STAGE_MAP.md`**. **Master queue:** **`docs/PROMPT_BUILD_LE_VIBE.md`**. **This issue form:** Roadmap **H8** — **`docs/PM_STAGE_MAP` STEP 12** (product surface / **`.github/`** — **`ci.yml`**, **`dependabot.yml`**, **`ISSUE_TEMPLATE/`** + **`config.yml`** **`#` H8**).
+
+        **`.deb` installs:** **`/usr/share/doc/le-vibe/README.Debian`** (source **`debian/le-vibe.README.Debian`**) — includes **Phase 2 scope** (**`docs/spec-phase2.md` §14**, **H6**/**H7** vs this package).
+
+        **Optional RAG / embeddings (non-canonical):** **`docs/rag/le-vibe-phase2-chunks.md`** — **`spec-phase2.md` §14**; **`SECURITY.md`** *Related docs*.
+
+        **Data / privacy:** **`docs/privacy-and-telemetry.md`** (*E1 contract tests* row — same **`pytest`** roster as root **`README`** *Tests* / **`le-vibe/tests/`**). **Security-sensitive** reports: **`SECURITY.md`** at the repo root.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What went wrong in one or two sentences?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Commands, package versions, and what you expected vs what happened.
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: OS/distro, how you installed (deb / dev tree), `le-vibe` or Python version if known.
+    validations:
+      required: false

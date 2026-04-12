@@ -1,0 +1,108 @@
+{
+  "schema_version": "session-manifest.v1",
+  "meta": {
+    "session_id": "example-local-dev",
+    "created_utc": "2026-04-11T00:00:00Z",
+    "title": "Lé Vibe — example session",
+    "workspace_summary": null,
+    "rag_notes": "Populate workspace_summary or chunk refs after workspace_scan; keep entries short.",
+    "current_step_id": "opening_intent",
+    "continue_construction_note": "Optional hint: resume from this manifest + .lvibe/ per docs/AI_PILOT_AND_CONTINUE.md (user e.g. “Please continue”).",
+    "ai_pilot_note": "Optional hint: sustained coordinated mode; same PRODUCT_SPEC §5/§8 guards; doc-first per docs/PM_STAGE_MAP.md and docs/PROMPT_BUILD_LE_VIBE.md."
+  },
+  "session_steps": [
+    {
+      "id": "opening_intent",
+      "type": "opening_intent",
+      "title": "Describe what you want to build",
+      "description": "User states product intent; feeds PM epic draft. Skippable.",
+      "skippable": true,
+      "on_skip": "workspace_scan_if_nonempty"
+    },
+    {
+      "id": "workspace_scan",
+      "type": "workspace_scan",
+      "title": "Master orchestrator scans project",
+      "description": "If user skipped opening and workspace has files: build per-agent context from tree + .lvibe RAG layer."
+    },
+    {
+      "id": "agent_bootstrap",
+      "type": "agent_bootstrap",
+      "title": "Load agents and RAG context",
+      "description": "Enable skill agents per manifest; attach manifests, memory, chunk pointers."
+    },
+    {
+      "id": "epic_iteration",
+      "type": "epic_iteration",
+      "title": "Iterate PM epics and tasks",
+      "description": "Orchestrator walks product.epics in order; agents negotiate per task."
+    }
+  ],
+  "agents": {
+    "defaults": {
+      "all_enabled": true,
+      "skill_base": ".lvibe/agents"
+    },
+    "roles": [
+      {
+        "id": "product_manager",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/product-manager/skill.md"
+      },
+      {
+        "id": "project_manager",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/project-manager/skill.md"
+      },
+      {
+        "id": "senior_backend_engineer",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-backend-engineer/skill.md"
+      },
+      {
+        "id": "senior_frontend_engineer",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-frontend-engineer/skill.md"
+      },
+      {
+        "id": "senior_devops_engineer",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-devops-engineer/skill.md"
+      },
+      {
+        "id": "senior_qa_engineer",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-qa-engineer/skill.md"
+      },
+      {
+        "id": "senior_industry_advisor",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-industry-advisor/skill.md"
+      },
+      {
+        "id": "user",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/user/skill.md"
+      }
+    ]
+  },
+  "product": {
+    "epics": [
+      {
+        "id": "epic-example-001",
+        "title": "Example epic — replace with PM backlog",
+        "description": "Epics group tasks; orchestrator iterates in order unless configured otherwise.",
+        "tasks": [
+          {
+            "id": "task-example-001",
+            "title": "First task under epic",
+            "status": "pending",
+            "assignee_agent": null,
+            "notes": "",
+            "acceptance_criteria": "Define done for this task."
+          }
+        ]
+      }
+    ]
+  }
+}

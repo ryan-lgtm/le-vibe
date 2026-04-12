@@ -1,0 +1,14 @@
+[Desktop Entry]
+# Post-install flow: /usr/share/doc/le-vibe/README.Debian (step 3 — le-vibe-setup-continue).
+# Upstream: docs/PRODUCT_SPEC.md, docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
+# Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (ci.yml, dependabot.yml, packaging/bin).
+# Phase 2 scope: spec-phase2.md §14 (H6/H7 vs in-tree).
+Type=Application
+Name=Lé Vibe Continue setup reminder
+Comment=One-shot notification to run le-vibe-setup-continue after first-run (see README.Debian in /usr/share/doc/le-vibe/)
+Exec=/usr/share/le-vibe/scripts/le-vibe-continue-setup-autostart.sh
+Hidden=false
+NoDisplay=true
+Terminal=false
+StartupNotify=false
+X-GNOME-Autostart-enabled=true

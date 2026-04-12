@@ -1,0 +1,30 @@
+Source: le-vibe
+Section: devel
+Priority: optional
+Maintainer: Le Vibe Maintainers <maintainers@example.invalid>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: le-vibe
+Architecture: all
+Depends: python3,
+         python3-requests,
+         python3-jinja2,
+         python3-psutil,
+         ollama | ollama-bin,
+         ${misc:Depends}
+Recommends: codium
+Suggests: curl,
+         zenity,
+         libnotify-bin
+Description: Lé Vibe — Code OSS–based IDE with managed local Ollama
+ Lé Vibe is a Linux desktop product (Phase 2) built on open-source editor
+ components, with hardware-aware Ollama model setup and a dedicated-port
+ managed ollama serve lifecycle. This skeleton package ships the Python
+ bootstrap and launcher; the Code - OSS binary is provided separately or via
+ LE_VIBE_EDITOR (e.g. VSCodium).
+ .
+ After install, read /usr/share/doc/le-vibe/README.Debian for quick steps,
+ Continue wiring, workspace .lvibe/ memory consent (PRODUCT_SPEC §5), and
+ Phase 2 scope vs editor fork / Flatpak (spec-phase2 §14; same file, Authority).

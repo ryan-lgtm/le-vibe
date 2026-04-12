@@ -1,0 +1,58 @@
+.TH LE-VIBE-SETUP-CONTINUE 1 "2026" "Linux" "User Commands"
+.SH NAME
+le-vibe-setup-continue \- symlink Lé Vibe Continue config and install the Continue extension
+.SH SYNOPSIS
+.B le-vibe-setup-continue
+.RB [ \-\-gui ]
+.SH DESCRIPTION
+Runs
+.BR sync\-continue\-config.sh
+then
+.BR install\-continue\-extension.sh
+with clear exit codes (see below). Run as the desktop user after
+.BR le\-vibe
+has completed first\-run and written
+.IR ~/.config/le\-vibe/continue\-config.yaml .
+
+With
+.BR \-\-gui ,
+if the Continue YAML exists, shows a Zenity dialog asking whether to run the
+same steps now (requires the
+.B zenity
+package). Choosing \*(lqNot now\*(rq exits 0. If the YAML is missing, shows an
+error dialog and exits 1.
+.SH "EXIT STATUS"
+.TP
+.B 0
+Success.
+.TP
+.B 1
+No Lé Vibe Continue YAML yet; run
+.B le\-vibe
+first.
+.TP
+.B 2
+Config sync failed.
+.TP
+.B 3
+Extension install failed.
+.TP
+.B 4
+No editor binary (install VSCodium or set
+.BR LE_VIBE_EDITOR ).
+.TP
+.B 127
+Helper scripts not found, or
+.B \-\-gui
+was used without
+.B zenity
+installed.
+.TP
+.B 125
+Unknown CLI option (see
+.BR \-\-help ).
+.SH "SEE ALSO"
+.BR le\-vibe (1),
+.BR codium (1).
+.PP
+Full post\-install steps and policy summary: \fI/usr/share/doc/le\-vibe/README.Debian\fR.

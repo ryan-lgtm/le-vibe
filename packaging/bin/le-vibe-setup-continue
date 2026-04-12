@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+# One-shot Continue wiring: symlink config + install extension. Clear exit codes for automation.
+# Does not run as root in postinst — run as the desktop user after first-run.
+#
+# Optional --gui (Roadmap G-A2): Zenity dialog when YAML exists — offer to run sync + install.
+# Product / trust: docs/PRODUCT_SPEC.md §5–§8; docs/continue-extension-pin.md (H4); spec-phase2.md §14 (H6/H7 vs in-tree); docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
+# Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (same pointers as ci.yml, dependabot.yml).
+# Optional RAG: docs/rag/le-vibe-phase2-chunks.md (spec-phase2 §14 table; not pytest) — SECURITY Related docs; packaging/scripts/ci-smoke.sh + .github/workflows/ci.yml headers.
+set -euo pipefail
+
+GUI=0
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --gui)
+      GUI=1
+      shift
+      ;;
+    -h|--help)
+      cat <<'EOF'
+Usage: le-vibe-setup-continue [--gui]
+
+  Symlink Lé Vibe’s generated Continue YAML into ~/.continue/config.yaml, then
+  install the Continue extension via your Code OSS editor (VSCodium by default).
+
+  --gui   Show a Zenity confirm dialog when ~/.config/le-vibe/continue-config.yaml
+          exists (requires the zenity package). Cancel exits 0 (skipped).
+
+Exit codes: 0 ok, 1 no YAML yet, 2 sync failed, 3 extension install failed,
+4 no editor binary, 125 unknown option, 127 helpers or zenity missing (--gui only).
+EOF
+      exit 0
+      ;;
+    *)
+      echo "le-vibe-setup-continue: unknown option: $1 (try --help)" >&2
+      exit 125
+      ;;
+  esac
+done
+
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+if [[ -f "/usr/share/le-vibe/scripts/sync-continue-config.sh" ]]; then
+  SYNC_DIR="/usr/share/le-vibe/scripts"
+elif [[ -f "$SCRIPT_DIR/../scripts/sync-continue-config.sh" ]]; then
+  SYNC_DIR="$(cd "$SCRIPT_DIR/../scripts" && pwd)"
+else
+  echo "le-vibe-setup-continue: [exit 127] cannot find sync-continue-config.sh (is Lé Vibe installed?)" >&2
+  exit 127
+fi
+
+SYNC="${SYNC_DIR}/sync-continue-config.sh"
+INST="${SYNC_DIR}/install-continue-extension.sh"
+
+SRC="${LE_VIBE_CONTINUE_YAML:-${XDG_CONFIG_HOME:-$HOME/.config}/le-vibe/continue-config.yaml}"
+
+_editor_ok() {
+  local b="${LE_VIBE_EDITOR:-/usr/bin/codium}"
+  [[ -x "$b" ]] || command -v "${LE_VIBE_EDITOR:-codium}" >/dev/null 2>&1
+}
+
+_run_sync_and_install() {
+  echo "le-vibe-setup-continue: step 1/2 — sync Continue config"
+  if ! bash "$SYNC"; then
+    ec=$?
+    if [[ "$ec" -eq 1 ]]; then
+      echo "le-vibe-setup-continue: [exit 1] Missing ~/.config/le-vibe/continue-config.yaml — run le-vibe once (first-run) first." >&2
+    else
+      echo "le-vibe-setup-continue: [exit 2] Sync failed (exit $ec)." >&2
+    fi
+    [[ "$ec" -eq 1 ]] && exit 1
+    exit 2
+  fi
+
+  echo "le-vibe-setup-continue: step 2/2 — install Continue extension"
+  if ! _editor_ok; then
+    echo "le-vibe-setup-continue: [exit 4] No editor binary — install VSCodium or set LE_VIBE_EDITOR." >&2
+    exit 4
+  fi
+
+  if ! bash "$INST"; then
+    echo "le-vibe-setup-continue: [exit 3] Extension install failed (network, marketplace, or extension id)." >&2
+    exit 3
+  fi
+
+  echo "le-vibe-setup-continue: [exit 0] Done. Open your editor and use Continue with apiBase http://127.0.0.1:11435"
+  exit 0
+}
+
+if [[ "$GUI" -eq 1 ]]; then
+  if ! command -v zenity >/dev/null 2>&1; then
+    echo "le-vibe-setup-continue: [exit 127] --gui requires zenity (install zenity or run without --gui)" >&2
+    exit 127
+  fi
+  if [[ ! -f "$SRC" ]]; then
+    zenity --error --title="Lé Vibe" --no-wrap \
+      --text="Continue config not found.\n\nRun <b>le-vibe</b> once (first-run) so ~/.config/le-vibe/continue-config.yaml exists, then try again." 2>/dev/null || true
+    exit 1
+  fi
+  if ! zenity --question --title="Lé Vibe" --no-wrap \
+    --text="Lé Vibe found your Continue config.\n\nInstall the Continue extension and symlink config into ~/.continue now?" \
+    --ok-label="Install" --cancel-label="Not now" 2>/dev/null; then
+    exit 0
+  fi
+fi
+
+_run_sync_and_install

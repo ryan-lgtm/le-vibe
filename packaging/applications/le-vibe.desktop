@@ -1,0 +1,14 @@
+[Desktop Entry]
+# Post-install doc (from .deb): /usr/share/doc/le-vibe/README.Debian — §5 .lvibe/ consent, PRODUCT_SPEC pointers.
+# Upstream authority: docs/PRODUCT_SPEC.md; docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
+# Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (ci.yml, dependabot.yml, packaging/bin).
+# Phase 2 scope: spec-phase2.md §14 (H6/H7 vs in-tree — launcher + .deb ship here).
+Name=Lé Vibe
+Comment=Free, open source, local-first IDE shell (Code OSS + Continue; alternative to Cursor)
+Exec=/usr/bin/lvibe %F
+Icon=le-vibe
+Type=Application
+Categories=Development;IDE;
+Keywords=IDE;Development;Ollama;AI;Continue;Local;
+Terminal=false
+StartupNotify=true

@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+
+override_dh_auto_build:
+
+override_dh_auto_install:
+
+override_dh_install:
+	dh_install
+	rm -rf debian/le-vibe/usr/share/le-vibe/le-vibe/.pytest_cache
+	rm -rf debian/le-vibe/usr/share/le-vibe/le-vibe/output
+	rm -f debian/le-vibe/usr/share/le-vibe/le-vibe/.gitignore
+	rm -f debian/le-vibe/usr/share/le-vibe/le-vibe/README.md
+	rm -f debian/le-vibe/usr/share/le-vibe/le-vibe/requirements.txt

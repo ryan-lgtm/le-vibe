@@ -1,0 +1,44 @@
+.TH LE-VIBE 1 "2026" "Linux" "User Commands"
+.SH NAME
+le-vibe \- Lé Vibe launcher (managed Ollama + Code OSS editor)
+.SH SYNOPSIS
+.B le-vibe
+.RI [ options ]
+.RI [ editor_args " ...]"
+.SH DESCRIPTION
+Launches the Lé Vibe session: optional product first\-run bootstrap,
+starts a dedicated\-port \fBollama serve\fR, then your editor (default
+\fB/usr/bin/codium\fR via \fBLE_VIBE_EDITOR\fR). On exit, stops the
+managed Ollama process so GPU VRAM is released.
+.PP
+Product naming: Lé Vibe is not Microsoft Visual Studio Code; use Code \-
+OSS / VSCodium\-class editors.
+.PP
+Primary CLI name is \fBlvibe\fR (same as this program). Open the current directory in the editor:
+.B lvibe \.
+.SH OPTIONS
+.TP
+.BR \-\-skip\-first\-run
+Skip Phase 1 product bootstrap before opening the editor.
+.TP
+.BR \-\-force\-first\-run
+Re\-run first\-run bootstrap even if complete.
+.TP
+.BI \-\-editor " cmd"
+Editor binary (default: \fBLE_VIBE_EDITOR\fR or \fB/usr/bin/codium\fR).
+.TP
+.BI \-\-port " N"
+Managed Ollama port (default 11435).
+.SH FILES
+.TP
+.I ~/.config/le\-vibe/
+Configs, first\-run marker, welcome marker (\fB.welcome\-shown\fR), managed Ollama state,
+\fBmodel\-decision.json\fR, \fBlock\-model.json\fR (concrete Ollama tag lock), \fBcontinue\-config.yaml\fR.
+.TP
+.I .lvibe/
+Per\-project workspace memory hub \fBafter\fR you accept consent on first open (e.g. \fBlvibe .\fR); agent memory layout; add \fB.lvibe/\fR to \fB.gitignore\fR when that file exists. Summary: \fI/usr/share/doc/le\-vibe/README.Debian\fR.
+.SH "SEE ALSO"
+.BR le\-vibe\-setup\-continue (1),
+.BR codium (1),
+.BR ollama (1).
+Full docs: \fI/usr/share/doc/le\-vibe/README.Debian\fR.

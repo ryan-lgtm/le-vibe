@@ -1,0 +1,27 @@
+#!/bin/sh
+set -e
+# Lé Vibe: register .desktop; user-level bootstrap runs on first launcher start.
+case "$1" in
+  configure|abort-upgrade|abort-deconfigure|abort-remove) ;;
+  *) exit 0 ;;
+esac
+
+if command -v update-desktop-database >/dev/null 2>&1; then
+  update-desktop-database -q /usr/share/applications 2>/dev/null || true
+fi
+
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+  gtk-update-icon-cache -q /usr/share/icons/hicolor 2>/dev/null || true
+fi
+
+# First install only ($2 empty): hint Continue integration (upgrades stay quiet).
+if [ "$1" = "configure" ] && [ -z "${2:-}" ]; then
+  echo "Lé Vibe: after first-run (launch lvibe or le-vibe), wire Continue with one command:" >&2
+  echo "  le-vibe-setup-continue" >&2
+  echo "le-vibe: exit codes: 0 ok, 1 no YAML yet, 2 sync error, 3 extension install, 4 no editor — see README" >&2
+  echo "le-vibe: optional one-shot desktop reminder for Continue setup: see README (autostart + libnotify-bin)" >&2
+  echo "le-vibe: details in /usr/share/doc/le-vibe/README.Debian" >&2
+fi
+
+#DEBHELPER#
+exit 0

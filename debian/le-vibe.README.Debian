@@ -1,0 +1,32 @@
+Lé Vibe — quick steps after apt install
+=======================================
+
+1. Install a Code - OSS–compatible editor (e.g. VSCodium at /usr/bin/codium). Package recommends: codium.
+
+2. Run the launcher once so first-run can install Ollama (if needed), pull a model, and write configs under ~/.config/le-vibe/:
+     lvibe
+   (Compatibility: `le-vibe` is the same entrypoint.)
+
+3. Wire Continue in one step (as your normal user, not root):
+     le-vibe-setup-continue
+   Exit codes are documented in the main README (0 ok; 1 need first-run; 2 sync; 3 extension; 4 no editor).
+
+4. Open the editor, confirm Continue uses apiBase http://127.0.0.1:11435 (managed Ollama).
+
+Model lock (inspectable)
+------------------------
+Hardware tiering picks a **concrete** Ollama model tag for this machine. It is stored as:
+  ~/.config/le-vibe/locked-model.json
+together with `model-decision.json` and `continue-config.yaml`. The product does **not** persist a vague AUTODETECT-only lock when a real tag is known.
+
+Workspace `.lvibe/`
+-------------------
+When you open a folder (e.g. `lvibe .`), the launcher asks for **workspace memory** consent on first use (**`PRODUCT_SPEC` §5**). If you **accept**, it prepares **`.lvibe/`** at the project root, appends **`.lvibe/`** to `.gitignore` when a `.gitignore` already exists, and adds small agent-oriented files for token-efficient local memory. If you **decline**, no **`.lvibe/`** folder is created.
+
+Authority (clone the upstream repository)
+------------------------------------------
+Must-ship product requirements: **`docs/PRODUCT_SPEC.md`**. Maintainer index (Roadmap **H1–H8**): **`docs/README.md`**. Formal roster of orchestration docs: **`PRODUCT_SPEC` §9** (*Relationship to existing specs*). **E1 / acceptance:** **`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`** — maps **`le-vibe/tests/`** to §5–§10 (clone the upstream tree to run **`pytest`**). Full **E1** roster — project root **`README.md`** (*Tests* / **E1 mapping**); **`docs/spec-phase2.md` §14** *Honesty vs CI*. **Privacy / reporting:** **`docs/privacy-and-telemetry.md`** (*E1 contract tests* row); **`SECURITY.md`** (**`Related docs`** lists **`docs/README`** *Product surface* — **H8** **`.github/`** — **`ci.yml`**, **`dependabot.yml`**, **`.github/ISSUE_TEMPLATE/`** + **`config.yml`** **`#` H8** + **`privacy-and-telemetry`** *E1*; and optional **`docs/rag/le-vibe-phase2-chunks.md`** — *RAG / embeddings*, **`spec-phase2.md` §14*, non-canonical).
+
+**Phase 2 scope (this `.deb` vs fork / Flatpak):** In an upstream clone, read **`docs/spec-phase2.md` §14** — this source package ships launcher + bootstrap + configs; a **branded editor-only** binary (**H6**) and **in-repo** Flatpak/AppImage (**H7**) are **not** claimed from this repository alone.
+
+See /usr/share/doc/le-vibe/README and LICENSE. Upstream README: project repository.

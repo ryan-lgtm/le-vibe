@@ -5,6 +5,7 @@ name: build-le-vibe-ide
 
 on:
   workflow_dispatch:
+  workflow_call:
   push:
     tags:
       - "ide-v*"
@@ -54,4 +55,4 @@ jobs:
       - name: Skip summary
         if: steps.gate.outputs.present != 'true'
         run: |
-          echo "IDE build skipped — add upstream under editor/ (submodule/subtree) so editor/package.json exists."
+          echo "IDE build skipped — vendor upstream (editor/package.json or editor/vscodium/package.json); see editor/VENDORING.md."

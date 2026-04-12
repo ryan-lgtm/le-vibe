@@ -1,0 +1,77 @@
+# P1: pytest + .deb + SBOM + lintian (Roadmap H1–H3). Trust / product anchor: docs/PRODUCT_SPEC.md §8–§9;
+#     maintainer index for H-theme docs: docs/README.md (see PRODUCT_SPEC §9 Maintainer index).
+#     Full E1 pytest roster (not only H8): root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI.
+#     H8 (trust / .github/ — this workflow, dependabot.yml, ISSUE_TEMPLATE/ + config.yml # H8): docs/README.md Product surface;
+#       SECURITY.md Related docs; privacy-and-telemetry.md E1 contract tests — same chain as packaging/bin + packaging/scripts headers.
+#     spec-phase2.md §14 — H6/H7 vs in-tree scope (CI proves this repo’s .deb + Python stack only).
+#     Optional RAG chunk (docs/rag/le-vibe-phase2-chunks.md, lv-meta-overview): §14 table — not pytest-covered; SECURITY.md Related docs.
+#     .deb end users: /usr/share/doc/le-vibe/README.Debian (debian/le-vibe.README.Debian).
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-deb:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('le-vibe/requirements.txt') }}
+
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            python3 python3-pip python3-venv \
+            debhelper dpkg-dev fakeroot devscripts lintian \
+            desktop-file-utils
+
+      - name: Smoke QA (H3)
+        run: ./packaging/scripts/ci-smoke.sh
+
+      - name: Python supply chain (H2)
+        working-directory: le-vibe
+        run: |
+          python3 -m pip install pip-audit cyclonedx-bom
+          pip-audit -r requirements.txt
+          mkdir -p ../artifacts
+          cyclonedx-py requirements requirements.txt \
+            -o ../artifacts/le-vibe-python.cdx.json --of JSON
+
+      - name: Build .deb
+        run: |
+          dpkg-buildpackage -us -uc -b
+          mkdir -p artifacts
+          cp ../*.deb artifacts/
+
+      - name: Checksums (H1 — .deb + SBOM)
+        run: |
+          set -euo pipefail
+          test -f artifacts/le-vibe-python.cdx.json
+          (cd artifacts && sha256sum *.deb le-vibe-python.cdx.json > SHA256SUMS)
+          (cd artifacts && sha256sum -c SHA256SUMS)
+
+      - name: Lintian (fail on policy errors)
+        run: lintian --fail-on error --color never artifacts/*.deb
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: le-vibe-deb
+          path: |
+            artifacts/*.deb
+            artifacts/SHA256SUMS
+            artifacts/le-vibe-python.cdx.json

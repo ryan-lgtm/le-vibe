@@ -1,0 +1,14 @@
+name: Lé Vibe (Ollama local)
+version: 0.0.1
+schema: v1
+
+models:
+  - name: Lé Vibe (locked local)
+    provider: ollama
+    model: deepseek-r1:14b
+    apiBase: http://127.0.0.1:11434
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete

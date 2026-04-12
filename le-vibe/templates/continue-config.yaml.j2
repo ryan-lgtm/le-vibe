@@ -1,0 +1,15 @@
+name: Lé Vibe (Ollama local)
+version: 0.0.1
+schema: v1
+
+# Concrete model tag only — same tag is persisted under ~/.config/le-vibe/locked-model.json.
+models:
+  - name: Lé Vibe (locked local)
+    provider: ollama
+    model: {{ selected_model }}
+    apiBase: http://{{ host }}:{{ port }}
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete

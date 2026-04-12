@@ -1,0 +1,28 @@
+name: Documentation
+description: Missing, incorrect, or unclear docs (README, docs/, packaging notes)
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Lé Vibe** documentation index: **`docs/README.md`**. Must-ship requirements: **`docs/PRODUCT_SPEC.md`**. **E1 regression evidence:** **`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`**. **Full authority roster:** **`docs/PRODUCT_SPEC.md` §9**. **STEP → PM doc:** **`docs/PM_STAGE_MAP.md`**. **Master queue:** **`docs/PROMPT_BUILD_LE_VIBE.md`**. **This issue form:** Roadmap **H8** — **`docs/PM_STAGE_MAP` STEP 12** (product surface / **`.github/`** — **`ci.yml`**, **`dependabot.yml`**, **`ISSUE_TEMPLATE/`** + **`config.yml`** **`#` H8**). **`.deb` installs:** **`/usr/share/doc/le-vibe/README.Debian`** (source **`debian/le-vibe.README.Debian`**) — **Phase 2 scope** (**`docs/spec-phase2.md` §14**). **Optional RAG / embeddings (non-canonical):** **`docs/rag/le-vibe-phase2-chunks.md`** — **`spec-phase2.md` §14** table + **`SECURITY.md`** *Related docs*. Privacy / data flows: **`docs/privacy-and-telemetry.md`** (*E1 contract tests* — root **`README`** *Tests* / **`le-vibe/tests/`**). **Security reporting:** **`SECURITY.md`** (root).
+  - type: textarea
+    id: page
+    attributes:
+      label: Which page or path?
+      description: File path (e.g. `docs/apt-repo-releases.md`) or README section.
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong or missing?
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested fix (optional)
+      description: PRs welcome; maintainers may rephrase.
+    validations:
+      required: false

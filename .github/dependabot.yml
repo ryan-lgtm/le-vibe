@@ -1,0 +1,17 @@
+# Keep GitHub Actions versions current (weekly PRs).
+# Full E1 pytest roster: root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI — same as ci.yml header.
+# H8 (trust / .github/ — CI, Dependabot, ISSUE_TEMPLATE/ + config.yml # H8): docs/README.md Product surface;
+#   SECURITY.md Related docs; privacy-and-telemetry.md E1 contract tests — same chain as ci.yml + packaging headers.
+# Optional: docs/rag/le-vibe-phase2-chunks.md (lv-meta-overview) — §14 table row; not pytest-gated (see ci.yml header).
+# Pip PRs: trust / supply chain — docs/PRODUCT_SPEC.md §8–§9; after merge run pip-audit,
+# refresh CycloneDX expectations, and note user-visible bumps in CHANGELOG.md per docs/sbom-signing-audit.md.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: pip
+    directory: /le-vibe
+    schedule:
+      interval: weekly

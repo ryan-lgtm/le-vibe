@@ -1,0 +1,6 @@
+le-vibe (0.1.0) unstable; urgency=medium
+
+  * Packaging skeleton: Python stack, launcher, .desktop
+    (Code OSS artifact separate).
+
+ -- Le Vibe Maintainers <maintainers@example.invalid>  Sat, 11 Apr 2026 12:00:00 +0000

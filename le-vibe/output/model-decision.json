@@ -1,0 +1,16 @@
+{
+  "selected_model": "deepseek-r1:14b",
+  "selected_tier": "tier_32b_possible_but_slow",
+  "comfortable": true,
+  "reason": "First available model in deepseek-r1 ladder matching tier tier_32b_possible_but_slow. ram=30.6GB avail=18.3GB; disk_free=56.4GB; max_vram\u224816.0GB; accel=gpu",
+  "rejected_candidates": [
+    {
+      "model": "deepseek-r1:70b",
+      "reason": "70B requires tier_70b_candidate"
+    },
+    {
+      "model": "deepseek-r1:32b",
+      "reason": "32B is possible-but-slow on this machine; use --allow-slow for 32B"
+    }
+  ]
+}

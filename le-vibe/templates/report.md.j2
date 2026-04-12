@@ -1,0 +1,103 @@
+# le-vibe bootstrap report
+
+Generated: {{ generated_at }}
+
+## OS
+
+- **Type:** {{ os_info.os_type.value }}
+- **Name:** {{ os_info.name }}
+- **Version:** {{ os_info.version or "n/a" }}
+- **Arch:** {{ os_info.arch }}
+
+## Hardware
+
+- **CPU:** {{ hardware.cpu_model }}
+- **RAM total:** {{ "%.1f"|format(hardware.ram_total_bytes / (1024**3)) }} GiB
+- **RAM available:** {{ "%.1f"|format(hardware.ram_available_bytes / (1024**3)) }} GiB
+- **Disk free:** {{ "%.1f"|format(hardware.disk_free_bytes / (1024**3)) }} GiB
+- **Acceleration:** {{ hardware.acceleration_mode }}
+- **Apple Silicon:** {{ hardware.apple_silicon }}
+{% if hardware.gpus %}
+### GPUs
+{% for g in hardware.gpus %}
+- {{ g.vendor }} {{ g.model or "?" }} VRAM: {{ (g.vram_bytes / (1024**3))|round(1) if g.vram_bytes else "unknown" }} GiB
+{% endfor %}
+{% endif %}
+
+## Prerequisites
+
+{% for c in prerequisites %}
+- **{{ c.name }}:** {{ "ok" if c.ok else "FAIL" }} — {{ c.message }}
+{% endfor %}
+
+## Tier assessment
+
+{% if tier %}
+- **Selected tier:** `{{ tier.tier }}`
+- **Notes:** {{ tier.notes }}
+- **Scores:** ram={{ "%.2f"|format(tier.ram_score) }}, vram={{ "%.2f"|format(tier.vram_score) }}, cpu={{ "%.2f"|format(tier.cpu_score) }}, disk={{ "%.2f"|format(tier.disk_score) }}
+
+{% if tier.rejected_higher %}
+### Rejected higher tiers
+
+{% for name, reason in tier.rejected_higher %}
+- `{{ name }}`: {{ reason }}
+{% endfor %}
+{% endif %}
+{% else %}
+(none)
+{% endif %}
+
+## Model decision
+
+{% if decision %}
+- **Model:** `{{ decision.selected_model }}`
+- **Tier:** `{{ decision.selected_tier }}`
+- **Comfortable:** {{ decision.comfortable }}
+- **Reason:** {{ decision.reason }}
+
+{% if decision.rejected_candidates %}
+### Rejected candidates
+
+{% for r in decision.rejected_candidates %}
+- `{{ r.model }}`: {{ r.reason }}
+{% endfor %}
+{% endif %}
+{% else %}
+(none)
+{% endif %}
+
+## Ollama
+
+- **Installed:** {{ ollama_installed }}
+- **Version:** {{ ollama_version or "n/a" }}
+- **Was running before:** {{ ollama_was_running }}
+- **Started by script:** {{ ollama_started_by_script }}
+- **Port in use before:** {{ port_in_use_before }}
+- **API verified:** {{ api_verified }}
+- **Endpoint:** `http://{{ host }}:{{ port }}`
+- **Dry run:** {{ dry_run }}
+
+{% if install_log %}
+### Install log (excerpt)
+
+```
+{{ install_log[-4000:] }}
+```
+{% endif %}
+
+{% if pull_log %}
+### Pull log (excerpt)
+
+```
+{{ pull_log[-4000:] }}
+```
+{% endif %}
+
+## Continue
+
+Import `output/continue-config.yaml` into the Continue extension. apiBase should be `http://localhost:{{ port }}`.
+
+## Start / stop / status
+
+See `README.md` for OS-specific `scripts/` helpers.
