@@ -39,6 +39,10 @@ def test_editor_readme_lists_production_deb_pair_step14():
     assert "le-vibe-deb" in text
     assert "H1 vs §7.3 .deb bundles" in text
     assert "Release bundles (H1 / STEP 8 vs STEP 14 / §7.3)" in text
+    assert "Full-product install" in text
+    assert "Success output (`--with-ide`)" in text
+    assert "Install both packages" in text
+    assert "Maintainer build output" in text
 
 
 def test_editor_readme_path_table_lists_fine_grain_scripts():
