@@ -18,6 +18,8 @@ def test_stage_le_vibe_ide_deb_script_documents_14b_submodule_and_bash_syntax():
     assert "Fresh clone (14.b)" in text
     assert "not executable:" in text
     assert "14.c" in text
+    assert "restore packaging/debian-le-vibe-ide" in text
+    assert "restore packaging/icons from git" in text
     assert "PRODUCT_SPEC §7.3" in text
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 

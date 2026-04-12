@@ -40,11 +40,11 @@ ln -sfn "../ide/$NAME/bin/codium" "$STAGING/usr/lib/le-vibe/bin/codium"
 DESKTOP_SRC="$ROOT/packaging/debian-le-vibe-ide/debian/le-vibe.desktop"
 ICON_SRC="$ROOT/packaging/icons/hicolor/scalable/apps/le-vibe.svg"
 if [[ ! -f "$DESKTOP_SRC" ]]; then
-  echo "stage-le-vibe-ide-deb: missing $DESKTOP_SRC" >&2
+  echo "stage-le-vibe-ide-deb: missing $DESKTOP_SRC — restore packaging/debian-le-vibe-ide from git (§7.3 desktop template)." >&2
   exit 1
 fi
 if [[ ! -f "$ICON_SRC" ]]; then
-  echo "stage-le-vibe-ide-deb: missing $ICON_SRC" >&2
+  echo "stage-le-vibe-ide-deb: missing $ICON_SRC — restore packaging/icons from git (see docs/brand-assets.md)." >&2
   exit 1
 fi
 install -D -m0644 "$DESKTOP_SRC" "$STAGING/usr/share/applications/le-vibe.desktop"
