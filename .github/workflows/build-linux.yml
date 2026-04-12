@@ -1,5 +1,7 @@
 # STEP 14 — Linux IDE build entrypoint (alias). Delegates to build-le-vibe-ide.yml.
 # Use this name in docs/PM when “build-linux” is the expected workflow label.
+# Same job summary as the reusable workflow: open the run → Summary tab for ./editor/smoke.sh parity + skip reasons.
+# Authority: docs/vscodium-fork-le-vibe.md, editor/README.md.
 name: build-linux
 
 on:
