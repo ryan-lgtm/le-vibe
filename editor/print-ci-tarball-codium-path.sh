@@ -20,7 +20,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 TAR="$(realpath "$1")"
 [[ -f "$TAR" ]] || {
-  echo "${0##*/}: not a file: $TAR" >&2
+  echo "${0##*/}: not a file: $TAR — pass the path to vscodium-linux-build.tar.gz from CI (editor/BUILD.md 14.f)." >&2
   exit 1
 }
 
