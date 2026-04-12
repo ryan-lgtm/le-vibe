@@ -56,8 +56,8 @@ _editor_ok() {
   local b
   if [[ -n "${LE_VIBE_EDITOR:-}" ]]; then
     b="$LE_VIBE_EDITOR"
-  elif [[ -x /usr/bin/le-vibe-ide ]]; then
-    b=/usr/bin/le-vibe-ide
+  elif [[ -x /usr/lib/le-vibe/bin/codium ]]; then
+    b=/usr/lib/le-vibe/bin/codium
   elif [[ -x /usr/bin/codium ]]; then
     b=/usr/bin/codium
   else

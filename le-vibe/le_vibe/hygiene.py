@@ -1,7 +1,8 @@
 """Maintainer checks for ``.lvibe/`` — manifest, session-manifest, chunks (token-efficiency hygiene).
 
 Session JSON is expected to match ``schemas/session-manifest.v1.example.json`` (see
-``docs/SESSION_ORCHESTRATION_SPEC.md``; STEP 5 / PM map).
+``docs/SESSION_ORCHESTRATION_SPEC.md``; STEP 5 / E4, PM map). Use ``--seed-missing`` to
+idempotently add a missing ``session-manifest.json`` and agent ``skill.md`` files.
 """
 
 from __future__ import annotations
@@ -112,6 +113,33 @@ def _incremental_size_warning(lvibe: Path) -> list[str]:
     return warnings
 
 
+def seed_missing_pm_artifacts(workspace_root: Path) -> list[str]:
+    """
+    If ``.lvibe/`` exists, seed ``session-manifest.json`` when absent and copy any missing
+    ``agents/<id>/skill.md`` from templates (same as workspace prepare — STEP 2 / STEP 5).
+
+    Does **not** create ``.lvibe/`` (consent/product flows own that).
+    """
+    from .session_orchestrator import (
+        seed_session_manifest_if_missing,
+        sync_agent_skills_from_templates,
+    )
+
+    lv = workspace_root / ".lvibe"
+    if not lv.is_dir():
+        return ["skip: no .lvibe/ (run lvibe . after consent, or create the hub first)"]
+    messages: list[str] = []
+    seeded = seed_session_manifest_if_missing(lv)
+    if seeded is not None:
+        messages.append(f"seeded {SESSION_MANIFEST_FILENAME}")
+    written = sync_agent_skills_from_templates(lv)
+    if written:
+        messages.append(f"synced {len(written)} missing agent skill file(s)")
+    if not messages:
+        messages.append(f"{SESSION_MANIFEST_FILENAME} and agent skills already present")
+    return messages
+
+
 def check_lvibe_workspace(workspace_root: Path) -> tuple[list[str], list[str]]:
     """
     Validate ``workspace_root/.lvibe/`` for maintainer hygiene.
@@ -158,12 +186,23 @@ def main(argv: list[str] | None = None) -> int:
         default=Path.cwd(),
         help="workspace root containing .lvibe/ (default: current directory)",
     )
+    p.add_argument(
+        "--seed-missing",
+        action="store_true",
+        help=(
+            "If .lvibe/ exists, copy canonical session-manifest when missing and sync missing "
+            "agent skill.md files from le-vibe/templates/agents/ (idempotent). Then run checks."
+        ),
+    )
     args = p.parse_args(argv)
     try:
         root = args.workspace.expanduser().resolve()
     except OSError as e:
         print(f"lvibe-hygiene: bad --workspace: {e}", file=sys.stderr)
         return 2
+    if args.seed_missing:
+        for line in seed_missing_pm_artifacts(root):
+            print(f"lvibe-hygiene: {line}", file=sys.stdout)
     errs, warns = check_lvibe_workspace(root)
     for w in warns:
         print(f"warning: {w}", file=sys.stderr)

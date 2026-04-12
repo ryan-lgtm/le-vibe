@@ -16,6 +16,7 @@ def test_ensure_lvibe_welcome_md_writes_template_once(tmp_path: Path):
     text = dest.read_text(encoding="utf-8")
     assert "Welcome to Lé Vibe" in text
     assert "PRODUCT_SPEC.md" in text and "§4" in text
+    assert "Quick Open" in text
     assert ensure_lvibe_welcome_md(tmp_path) is None
 
 

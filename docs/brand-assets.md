@@ -1,8 +1,10 @@
 # Lé Vibe — brand assets & screenshot handoff (Roadmap H5)
 
+**STEP 11 / PM map:** [`PM_STAGE_MAP.md`](PM_STAGE_MAP.md) — **H5** row links **`packaging/icons/`** (canonical **`le-vibe.svg`**), [`screenshots/README.md`](screenshots/README.md), and **PRODUCT_SPEC** §1 naming.
+
 This document is the **handoff** for design and marketing: what ships in-repo today, what remains **optional** until a design system lands, and where to add **screenshots** without bloating every clone.
 
-**Product anchor:** [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md) §1 (naming **Lé Vibe**) and §9 (authority roster). **Roadmap H5** (this doc) is indexed from [`README.md`](README.md) and [`PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md). **Orchestrator:** [`PM_STAGE_MAP.md`](PM_STAGE_MAP.md) **STEP 11** — [`screenshots/README.md`](screenshots/README.md) for optional marketing captures.
+**Product anchor:** [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md) §1 (naming **Lé Vibe**) and §9 (authority roster). **Roadmap H5** (this doc) is indexed from [`README.md`](README.md) and [`PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md).
 
 **H8 / trust (§1 vs `.github/` copy):** **[`docs/README.md`](README.md)** *Product surface* and **[`SECURITY.md`](../SECURITY.md)** *Related docs* (incl. optional [`rag/le-vibe-phase2-chunks.md`](rag/le-vibe-phase2-chunks.md) for *RAG / embeddings*, non-canonical) sit with **[`privacy-and-telemetry.md`](privacy-and-telemetry.md)** (*E1 contract tests*) — keep **§1** / *Naming (must ship)* aligned when **`.github/`** intros or **`SECURITY`** trust lists change.
 

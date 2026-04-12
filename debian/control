@@ -15,7 +15,8 @@ Depends: python3,
          ollama | ollama-bin,
          ${misc:Depends}
 Recommends: codium
-Suggests: curl,
+Suggests: le-vibe-ide,
+         curl,
          zenity,
          libnotify-bin
 Description: Lé Vibe — Code OSS–based IDE with managed local Ollama
@@ -27,7 +28,7 @@ Description: Lé Vibe — Code OSS–based IDE with managed local Ollama
  .
  After install, read /usr/share/doc/le-vibe/README.Debian for quick steps,
  Continue wiring, workspace .lvibe/ memory consent (PRODUCT_SPEC §5), and
- Phase 2 scope vs editor fork / Flatpak (spec-phase2 §14; same file, Authority).
+ Phase 2 scope vs editor fork / alternate bundles (spec-phase2 §14 — H7 packaging/flatpak + packaging/appimage; same file, Authority).
  .
  Monorepo clone / CI: README.Debian summarizes build-le-vibe-ide pre-binary
  ide-ci-metadata.txt (upload-artifact retention-days; workflow permissions

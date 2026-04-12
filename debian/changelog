@@ -1,3 +1,9 @@
+le-vibe (0.1.9) unstable; urgency=low
+
+  * Launcher + stack docs: default editor prefers /usr/lib/le-vibe/bin/codium (le-vibe-ide .deb) before codium (PRODUCT_SPEC §7.3); debian/control Suggests: le-vibe-ide; man pages lvibe(1), le-vibe(1).
+
+ -- Le Vibe Maintainers <maintainers@example.invalid>  Sun, 12 Apr 2026 12:00:00 +0000
+
 le-vibe (0.1.8) unstable; urgency=low
 
   * Launcher + wrappers: default editor prefers /usr/bin/le-vibe-ide before codium (STEP 14.g); man pages lvibe(1), le-vibe(1).

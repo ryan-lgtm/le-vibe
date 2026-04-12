@@ -1,0 +1,21 @@
+"""Contract: sync-linux-icon-assets.sh + workflow dep for §7.3 Linux icons."""
+
+from __future__ import annotations
+
+import subprocess
+from pathlib import Path
+
+
+def _repo_root() -> Path:
+    return Path(__file__).resolve().parents[2]
+
+
+def test_sync_linux_icon_assets_script_bash_syntax() -> None:
+    script = _repo_root() / "editor" / "le-vibe-overrides" / "sync-linux-icon-assets.sh"
+    assert script.is_file(), script
+    subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
+
+
+def test_build_le_vibe_ide_linux_compile_installs_librsvg_for_icon_sync():
+    text = (_repo_root() / ".github" / "workflows" / "build-le-vibe-ide.yml").read_text(encoding="utf-8")
+    assert "librsvg2-bin" in text

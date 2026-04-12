@@ -3,6 +3,8 @@
 # (and build-linux.yml, which reuses that workflow) gate.
 # Run from repo root: ./packaging/scripts/ci-editor-gate.sh
 # Exits 0 when layout is none (skip). For layout=vscodium, runs bash syntax on upstream scripts (may exit 1).
+# 14.d: does not validate Lé Vibe–visible IDE branding — editor/le-vibe-overrides/branding-staging.checklist.md;
+#   docs/PRODUCT_SPEC.md §7.2. Fast gate only (same story as ./editor/smoke.sh).
 # Authority: editor/VENDORING.md.
 # E1: docs/PRODUCT_SPEC.md *Prioritization* documents ./editor/smoke.sh (this gate) — le-vibe/tests/test_product_spec_section8.py.
 # E1: editor/le-vibe-overrides/README.md — le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py.
@@ -37,6 +39,7 @@ if [[ "${layout}" == "vscodium" ]]; then
   bash -n "${ROOT}/editor/use-node-toolchain.sh"
   bash -n "${ROOT}/editor/fetch-vscode-sources.sh"
   bash -n "${ROOT}/editor/print-built-codium-path.sh"
+  bash -n "${ROOT}/editor/verify-14c-local-binary.sh"
   bash -n "${ROOT}/editor/smoke-built-codium-lvibe.sh"
   bash -n "${ROOT}/editor/print-vsbuild-codium-path.sh"
   bash -n "${ROOT}/editor/print-ci-tarball-codium-path.sh"

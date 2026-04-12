@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Lé Vibe
+Comment=Edit code with Lé Vibe (Code OSS shell)
+Exec=/usr/lib/le-vibe/bin/codium %F
+Icon=le-vibe
+Terminal=false
+Type=Application
+Categories=Development;IDE;TextEditor;
+StartupNotify=true
+MimeType=text/plain;inode/directory;
+Keywords=ide;editor;code;lvibe;

@@ -10,11 +10,19 @@ Canonical specs: `docs/PRODUCT_SPEC.md` (must-ship), `docs/SESSION_ORCHESTRATION
 
 **`.deb` / `apt`:** [`debian/le-vibe.README.Debian`](../debian/le-vibe.README.Debian) installs as **`/usr/share/doc/le-vibe/README.Debian`** — post-install flow, **§5** **`.lvibe/`** consent, pointers to **`PRODUCT_SPEC`** / [`README.md`](README.md).
 
-**Phase 2 honesty:** **[`spec-phase2.md`](../spec-phase2.md) §14** — monorepo: **`le-vibe/`** + **`editor/`** (**H6**); **H7** Flatpak may stay SKIPPED; the **0–17** queue runs **in this repository** (**STEP 13** often SKIPPED; **STEP 14** = **`editor/`** work, not a second git remote).
+**Phase 2 honesty:** **[`spec-phase2.md`](../spec-phase2.md) §14** — monorepo: **`le-vibe/`** + **`editor/`** (**H6**); **H7** — **`packaging/flatpak/`** (Flathub-oriented) + **`packaging/appimage/`**; the **0–17** queue runs **in this repository** (**STEP 14** = **`editor/`** work, not a second git remote).
 
 **Prioritization:** **[`PRODUCT_SPEC.md`](PRODUCT_SPEC.md)** *Prioritization* + *Product and project management — in service of the IDE* — **monorepo:** **`editor/`** (IDE, **H6**) + **`le-vibe/`** (stack). Master orchestrator **execution order:** **0 → 1 → 14 → 2–13 → 15–17** — **`editor/README.md`**, **[`vscodium-fork-le-vibe.md`](vscodium-fork-le-vibe.md)**.
 
 **Dependabot (H2):** [`.github/dependabot.yml`](../.github/dependabot.yml) — weekly **pip** + **GitHub Actions** bump PRs; file header points at **`PRODUCT_SPEC` §8–§9**, **[`CHANGELOG.md`](../CHANGELOG.md)**, **[`sbom-signing-audit.md`](sbom-signing-audit.md)** for merge follow-up, and **H8** (**`docs/README`** *Product surface* / **`SECURITY`** / **`privacy-and-telemetry`** *E1 contract tests* — same chain as **`ci.yml`**).
+
+---
+
+## Master iteration loop — **one paste**, **PM ↔ engineer**, **new-agent** chats
+
+**When to use:** You want a **single** prompt that routes **ENGINEER** vs **PRODUCT_MANAGER** by optional `MODE:` prefix, keeps **retrieval lean** (manuscript pointers — same shape as future **RAG** in-app), and tells you to open a **new Cursor agent** when switching roles so context stays small.
+
+**Print stdout (paste into Cursor):** `python3 packaging/scripts/print-master-iteration-loop-prompt.py` — full spec + manuscript index: **[`MASTER_ITERATION_LOOP.md`](MASTER_ITERATION_LOOP.md)**. Template pointer: [`le-vibe/templates/master-iteration-loop.md`](../le-vibe/templates/master-iteration-loop.md).
 
 ---
 
@@ -36,13 +44,14 @@ Global rules (always):
 - No fake progress; no PASTE SAME AGAIN without substantive work this turn.
 - **Design authority:** Earlier product intent is in **PRODUCT_SPEC.md**, **spec-phase2.md** (esp. §2 product definition, §4 architecture), **PROMPT_BUILD_LE_VIBE.md**, **SESSION_ORCHESTRATION_SPEC.md**, **PM_STAGE_MAP.md**, **AI_PILOT_AND_CONTINUE.md**, and **schemas/session-manifest.v1.example.json**. PM manifests and **`.lvibe/`** epics/tasks **serve shipping the Lé Vibe IDE (`editor/`) and stack together**—not side work.
 - Product-Managed delivery: the JSON at schemas/session-manifest.v1.example.json drives session_steps and product.epics/tasks; eight agents in le-vibe/templates/agents/ (including Senior Industry Advisor) — iterate implementation in queue order below.
-- **User gate (PRODUCT_SPEC §7.2):** Do **not** assume on **big** decisions (IDE branding/architecture, design, major DB/schema moves, breaking APIs, **subagent disagreement**). Escalate to the user: **halt** the affected work, print a line **`USER RESPONSE REQUIRED`** (all capitals), then **numbered questions**; accept answers like **No preference** / **I don’t care** / **Your call** as delegation. **`LÉ VIBE BLOCKED`** is for **secrets / credentials / out-of-repo** needs only—not for normal product choices.
+- **User gate (PRODUCT_SPEC §7.2 / §7.3):** **Material STEP 14 / IDE** choices are **fixed** in **§7.3**—implement them; do **not** re-open branding identity unless **§7.3** is revised. For other **big** decisions still absent from **PRODUCT_SPEC**, **halt** with **`USER RESPONSE REQUIRED`** + numbered questions. **`LÉ VIBE BLOCKED`** — **secrets / credentials / out-of-repo** only.
+- **Git checkpoints (engineering workflow):** After each **major track** (sustained work on one theme—e.g. **STEP 14** / **H6** **editor/**, **H7** alternate packages, or a **Roadmap H** cluster) or **milestone** (completing a **non-trivial** Master orchestrator **STEP 0–17**, or a named milestone in **`docs/PM_STAGE_MAP.md`** / **spec-phase2** §11), run **`git add`**, **`git commit`** with a clear message, and **`git push`** so **origin** reflects the checkpoint. Respect **`.gitignore`**; never commit **secrets**, **`.env`**, or generated artifacts the repo excludes. If there is nothing to commit, push is unavailable, or the user asked to hold commits, say so in one line and skip.
 
-ORDERED WORK QUEUE — do the **first incomplete** step **in the order listed** (editor is prioritized after baseline), then stop this turn (unless two steps are both trivially verifiable in one small commit):
+ORDERED WORK QUEUE — do the **first incomplete** step **in the order listed** (editor is prioritized after baseline). For **STEP 14**, you may take **as many turns as needed** with **substantive** progress each time until **§7.3** is fully implemented—do **not** artificially cap scope to “one chunk” when close-out work remains.
 
-  STEP 0 — MUST: Satisfy docs/PRODUCT_SPEC.md must-ship sections through §8 (naming, CLI, model, welcome, .lvibe/, gitignore, runtime/subagent harmony §7 **including §7.2 user gate**, secrets §8); align with §10 acceptance when applicable.
+  STEP 0 — MUST: Satisfy docs/PRODUCT_SPEC.md must-ship sections through §8 (naming, CLI, model, welcome, .lvibe/, gitignore, runtime/subagent harmony §7 **including §7.2 user gate** and **§7.3 IDE decisions**, secrets §8); align with §10 acceptance when applicable.
   STEP 1 — E1: Regression proof for §10 acceptance (evidence table + fix any drift; see PRODUCT_SPEC_SECTION8_EVIDENCE.md if present).
-  STEP 14 — H6 (**editor/** — **prioritized**): **`editor/vscodium`** (VSCodium submodule), IDE **CI** (smoke, **`bash -n`**, **`.nvmrc`** sync, PR paths, metadata artifacts), **`editor/smoke.sh`** (local parity with the IDE workflow gate), **`editor/le-vibe-overrides/`** placeholder (**E1:** **`test_editor_le_vibe_overrides_readme_contract.py`** locks launcher + workflow strings in **`editor/le-vibe-overrides/README.md`**; **`test_build_le_vibe_ide_workflow_contract.py`** locks **`le_vibe_editor_docs`** in **`build-le-vibe-ide.yml`** **`ide-ci-metadata.txt`**, **`upload-artifact`** **`retention-days`**, and GitHub Actions run **Summary** **Pre-binary artifact**) — next wire **`get_repo`/build**, Lé Vibe branding (**§7.2** where material), and shipping **Linux** artifacts per **`docs/vscodium-fork-le-vibe.md`** + **`editor/README.md`**. Do not claim shipped IDE binaries until a real build exists; interim **`LE_VIBE_EDITOR`** → system VSCodium is OK for dev. **USER RESPONSE REQUIRED** for material IDE scope not fixed in specs.
+  STEP 14 — H6 (**editor/** — **prioritized** — **§7.3 close-out**): **Authority:** **`docs/PRODUCT_SPEC.md` §7.3** — **Lé Vibe** end-to-end; **only `lvibe`** as the public **PATH** CLI; **full** v1 branding in the built shell (**`editor/le-vibe-overrides/`**, **`docs/vscodium-fork-le-vibe.md`**); **Debian `.deb` for the IDE** required to treat STEP 14 as **done**; **update server** deferred; **GitHub Actions are not** a v1 production or completion gate — **local / self-hosted / manual** builds must be able to produce the same outcomes; optional **`build-le-vibe-ide.yml`** / **`linux_compile`** / pre-binary **`ide-ci-metadata.txt`** remain (**fail fast:** **`ci-vscodium-bash-syntax.sh`** + **`ci-editor-nvmrc-sync.sh`** before **`ci-vscodium-linux-dev-build.sh`** → **`dev/build.sh`**; **`LEVIBE_SKIP_NODE_VERSION_CHECK`**). **Engineers:** wire **`get_repo`/build**, apply **§7.3** branding in **CI and local** outputs, land **`debian/`** (or documented sibling) **IDE** packaging, refresh E1/docs/spec honesty—**run the full close-out**, not doc-only placeholders. Interim **`LE_VIBE_EDITOR`** → system **VSCodium** remains OK only until **§7.3** artifacts exist.
   STEP 2 — PM SESSION (Product-Managed steps): Implement docs/SESSION_ORCHESTRATION_SPEC.md — seed/sync `.lvibe/session-manifest.json` from schemas/session-manifest.v1.example.json when missing; copy `le-vibe/templates/agents/*.md` into `.lvibe/agents/` during workspace prepare; wire opening_intent vs skip→workspace_scan behavior at least as documented hooks + minimal code path (orchestrator reads manifest session_steps); ensure product.epics/tasks can be iterated (loader/util or documented contract); add tests + README pointer.
   STEP 3 — E2: Continue / agent config so workspace .lvibe/ is reliably the primary memory path and references session manifest + agent skills (templates, sync script, tests as fit).
   STEP 4 — E3: In-editor welcome if still terminal-only (minimal: snippet, opened doc, or Continue onboarding text—PRODUCT_SPEC §4 copy).
@@ -54,7 +63,7 @@ ORDERED WORK QUEUE — do the **first incomplete** step **in the order listed** 
   STEP 10 — H3: QA CI—lintian/smoke/docs-ci-qa-hardening.md style hardening where gaps exist.
   STEP 11 — H5: Brand—icon/screenshot handoff per docs/brand-assets.md if still placeholder.
   STEP 12 — H8: Product surface—**`.github/`** CI, Dependabot, **ISSUE_TEMPLATE/** + **config.yml** **#** H8; privacy doc cross-links; docs index completeness.
-  STEP 13 — H7: Alternate packages (Flatpak/AppImage)—ONLY if docs/flatpak-appimage.md scope is unmet; else state SKIPPED with reason.
+  STEP 13 — H7: Alternate packages — **Flatpak** (`packaging/flatpak/org.le_vibe.Launcher.yml`, rough target **Flathub**) + **AppImage** (`packaging/appimage/`); **`docs/flatpak-appimage.md`** (**pytest** does not build bundles).
   STEP 15 — LVIBE GOVERNANCE (storage & consent): docs/PRODUCT_SPEC.md §5.1–5.6 — **consent** before creating `.lvibe/` (decline = bare-bones editor, no folder; persist opt-out); **50 MB** default budget (user-set MB); **per-agent** subtrees **`.lvibe/agents/<agent_id>/`** + **shared RAG** under **`.lvibe/rag/`** (or equivalent) per §5.2; **compaction** when at cap (§5.5 order: RAG first, then agent rollups, then round-robin); surface **usage vs cap**; migrate code off **unconditional** `.lvibe/` creation. Tests + copy for onboarding.
   STEP 16 — PM STAGE MAP + DOC-LOCKED LOOP: Keep **`docs/PM_STAGE_MAP.md`** accurate vs this queue; link from **`docs/README.md`** and root **`README.md`**; engineers **must** open the **Primary PM doc** for the STEP they are on before coding (see map). Add optional `continue_construction` / `ai_pilot` notes to **`schemas/session-manifest.v1.example.json`** or **`SESSION_ORCHESTRATION_SPEC`** examples if helpful.
   STEP 17 — AI PILOT & CONTINUE (contracts): Implement **`docs/AI_PILOT_AND_CONTINUE.md`** minimally for this repo — product copy in **`README.md`** (Please continue / AI Pilot mimic), Continue workspace rules or **`le-vibe/templates/`** text that states **doc-first** staging; no bypass of §8. Tests if strings are asserted elsewhere.
@@ -84,7 +93,7 @@ You are the implementing engineer for Lé Vibe (this workspace). Product directi
 
 Phase 0 — Orient (required, short): In your first reply, state which Master orchestrator STEPs (0–17 from docs/PROMPT_BUILD_LE_VIBE.md) are DONE vs NOT DONE in this repo, with 1–2 evidence pointers each (file path, test name, or “missing”). If uncertain, grep and read only what you must.
 
-Phase 1 — Execute: Open docs/PROMPT_BUILD_LE_VIBE.md, find the Master orchestrator ORDERED WORK QUEUE. Work on the first incomplete STEP only this turn; run cd le-vibe && python3 -m pytest tests/ after Python changes; dpkg-buildpackage -us -uc -b from repo root if debian/ or packaging touched.
+Phase 1 — Execute: Open docs/PROMPT_BUILD_LE_VIBE.md, find the Master orchestrator ORDERED WORK QUEUE. Work on the first incomplete STEP only this turn; run cd le-vibe && python3 -m pytest tests/ after Python changes; dpkg-buildpackage -us -uc -b from repo root if debian/ or packaging touched. After each **major track** or **milestone** (same meaning as the Master orchestrator **Git checkpoints** rule in this file), **`git add`**, **`git commit`**, **`git push`** when safe.
 
 Authority: docs/PRODUCT_SPEC.md; docs/SESSION_ORCHESTRATION_SPEC.md; PRODUCT_SPEC wins over older specs.
 
@@ -112,7 +121,7 @@ Phase B — Execute in order (same session, multiple steps allowed when safe):
 3) Then do remaining incomplete STEPs, skipping what is clearly already satisfied; do not redo green tests without cause.
 4) Update docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md and tests if **§1**/**H8**/§5/§10 acceptance changes.
 
-Quality bar: cd le-vibe && python3 -m pytest tests/ before you declare done; dpkg-buildpackage -us -uc -b from repo root if debian/ or packaging touched.
+Quality bar: cd le-vibe && python3 -m pytest tests/ before you declare done; dpkg-buildpackage -us -uc -b from repo root if debian/ or packaging touched. **Git:** after each **major track** or **milestone**, **`git add`**, **`git commit`**, **`git push`** per the Master orchestrator **Git checkpoints** rule in this file.
 
 Authority: docs/PRODUCT_SPEC.md (§5 wins over legacy “always create .lvibe”); docs/SESSION_ORCHESTRATION_SPEC.md; docs/PROMPT_BUILD_LE_VIBE.md queue.
 
@@ -135,8 +144,9 @@ Standing rules:
 2) Before coding: identify your current STEP (0–17); read the Primary PM doc row in docs/PM_STAGE_MAP.md for that STEP (and “Also read” if needed).
 3) “Please continue” / AI Pilot style: keep working across turns — implement the next incomplete STEP(s) until blocked; use multiple small commits per session when safe.
 4) Coordination style: when useful, label perspective (e.g. PM / Backend / QA) in prose so multi-agent coordination is visible — matches AI Pilot transcript intent.
-5) **User gate (§7.2):** On big decisions or simulated subagent disagreement, **halt** and print **`USER RESPONSE REQUIRED`**, then **numbered questions**; accept **No preference** / **I don’t care**; never fake product intent.
+5) **User gate (§7.2 / §7.3):** **§7.3** fixes material STEP 14 / IDE choices — implement them. For other big decisions or simulated subagent disagreement, **halt** and print **`USER RESPONSE REQUIRED`**, then **numbered questions**; accept **No preference** / **I don’t care**; never fake product intent.
 6) Run cd le-vibe && python3 -m pytest tests/ before claiming done; dpkg-buildpackage -us -uc -b if debian/ touched.
+7) **Git checkpoints:** after each **major track** or **milestone**, **`git add`**, **`git commit`**, **`git push`** per the Master orchestrator **Git checkpoints** rule in this file.
 
 Execute: open docs/PROMPT_BUILD_LE_VIBE.md → **Master orchestrator** ORDERED WORK QUEUE (STEPs 0–17); work on the first incomplete STEP.
 
@@ -156,7 +166,7 @@ End with exactly one last line: PASTE SAME AGAIN | LÉ VIBE SESSION COMPLETE | L
 | Factor | Note |
 |--------|------|
 | **Context & verification** | One giant session can skip tests or miss regressions; **batched** passes catch failures earlier. |
-| **Out-of-repo scope** | **H7** Flatpak/AppImage may stay policy-SKIPPED in-tree; **H6** ships from **`editor/`** in **this** monorepo. |
+| **Out-of-repo scope** | **H7** Flathub submission repo (separate **`flathub`** git remote) is outside this monorepo; **H6** ships from **`editor/`** here. |
 | **Cost / time** | A “complete journey” in one calendar session is rare; **same instructions, many pastes** achieves the same **end state** with safer checkpoints. |
 
 **What “one instruction set” already is:** The **Master orchestrator** block + **`docs/PM_STAGE_MAP.md`** + **§7.2 `USER RESPONSE REQUIRED`** + **`LÉ VIBE BLOCKED`** = **pivot to product** when needed, **continue** when not. You do **not** need different *philosophy*—only whether the engineer **batches** STEPs or **stops** at each **`PASTE SAME AGAIN`**.
@@ -182,22 +192,22 @@ Quality: cd le-vibe && python3 -m pytest tests/; dpkg-buildpackage -us -uc -b wh
 End with exactly ONE last line: PASTE SAME AGAIN | LÉ VIBE SESSION COMPLETE | LÉ VIBE BLOCKED | USER RESPONSE REQUIRED
 ```
 
-**Out of scope for this pass (say so explicitly, don’t fake):** A **compiled, installable** Lé Vibe IDE binary from **`editor/`** (until **get_repo/build** and release packaging are wired); optional **Flatpak** if policy SKIPPED; anything requiring credentials you don’t have.
+**Out of scope for this pass (say so explicitly, don’t fake):** Publishing to **Flathub** (credentials / separate **`flathub`** PR workflow); a **Lé Vibe–hosted update server** (roadmap, not v1); anything requiring credentials you don’t have. **In scope:** **§7.3** STEP 14 close-out — branded **built** IDE from **`editor/`**, **installable IDE `.deb`**, **`lvibe`**-only public CLI — use **local / self-hosted / manual** builds; **GitHub Actions** are **not** a v1 gate.
 
 ---
 
 ## Engineer lazy prompt — **same command 10+ times** (continue building)
 
-**You (PM / owner):** Use **one** fixed prompt below. Paste it to start, then paste the **identical** block **again** each time the engineer ends with **`PASTE SAME AGAIN`**—same as in-app **“Please continue.”** Expect **at least ~10** paste cycles for a full queue pass; **more** is normal. You do **not** need a new wording each time.
+**You (PM / owner):** Use **one** fixed prompt below. Paste it to start, then paste the **identical** block **again** each time the engineer ends with **`PASTE SAME AGAIN`**—same as in-app **“Please continue.”** Expect **at least ~10** paste cycles for a full queue pass; **more** is normal — **STEP 14** alone may need **many** turns (**§7.3** full implementation). You do **not** need a new wording each time.
 
 ```
 Lé Vibe engineer session — REPEATABLE (paste this same block every turn until SESSION COMPLETE).
 
-You implement the repo at this workspace path. Authority: docs/PRODUCT_SPEC.md → docs/SESSION_ORCHESTRATION_SPEC.md → docs/AI_PILOT_AND_CONTINUE.md → docs/PM_STAGE_MAP.md (read the Primary PM doc for your current STEP before coding).
+You implement the repo at this workspace path. Authority: docs/PRODUCT_SPEC.md (incl. **§7.3** material IDE decisions for STEP 14) → docs/SESSION_ORCHESTRATION_SPEC.md → docs/AI_PILOT_AND_CONTINUE.md → docs/PM_STAGE_MAP.md (read the Primary PM doc for your current STEP before coding).
 
-Work: Open docs/PROMPT_BUILD_LE_VIBE.md → **Master orchestrator** ORDERED WORK QUEUE (STEPs 0–17). Execute the **first incomplete** STEP. You may complete **multiple** STEPs in one reply only if each is small, tested, and ordered—otherwise one STEP per reply is fine.
+Work: Open docs/PROMPT_BUILD_LE_VIBE.md → **Master orchestrator** ORDERED WORK QUEUE (STEPs 0–17). Execute the **first incomplete** STEP. **Scope authority:** Do **not** self-limit STEP 14 — take **as many substantive turns as needed** (large or small diffs) until **§7.3** is **implemented**: **Lé Vibe** end-to-end identity, **full** v1 branding in the **built** shell, **only `lvibe`** as the user-facing **PATH** command, **Debian `.deb` for the IDE**, **no** reliance on **GitHub Actions** for “done.” You may batch multiple STEPs in one reply only when each is tested and ordered; for STEP 14, **prefer shipping real progress** over artificial one-chunk caps.
 
-Rules: Lé Vibe naming in UI copy (é). User gate PRODUCT_SPEC §7.2 — if you need a real product/architecture decision, halt and print USER RESPONSE REQUIRED (all caps), then numbered questions; accept No preference / I don’t care. LÉ VIBE BLOCKED only for secrets/credentials/out-of-repo.
+Rules: Lé Vibe naming in UI copy (é). **§7.3** is fixed — implement it; do **not** re-open those product choices. For decisions **outside** §7.3 still absent from PRODUCT_SPEC, use **§7.2**: halt with **USER RESPONSE REQUIRED** (all caps), then numbered questions; **No preference** / **I don’t care** allowed. **LÉ VIBE BLOCKED** only for secrets / credentials / out-of-repo.
 
 Quality: cd le-vibe && python3 -m pytest tests/ after substantive Python changes; dpkg-buildpackage -us -uc -b from repo root if debian/ or packaging changed.
 
@@ -219,9 +229,9 @@ Work each turn:
 1) **Orient (short):** git status + branch; which STEPs are incomplete using **execution order 0 → 1 → 14 → 2–13 → 15–17** (see Master orchestrator fence)—**STEP 14 (`editor/`)** comes **before** STEPs 2–13 until done or gated.
 2) **Execute:** Advance the **first incomplete** STEP (or the smallest honest next slice). You may batch multiple STEPs in one reply **only** if each is ordered, small, and backed by tests—otherwise one STEP per turn is fine.
 3) **Tracks when queue is caught up:** PRODUCT_SPEC §10 / docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md alignment, spec-phase2.md §14 honesty, Roadmap H in-repo items, README / trust / H8 surfaces—ship small reviewable diffs.
-4) **H6 / H7:** **H6** = **`editor/`** in this monorepo (see docs/vscodium-fork-le-vibe.md). **H7** Flatpak/AppImage—SKIPPED in-tree per policy unless you add manifests; do not fake alternate bundles.
+4) **H6 / H7:** **H6** = **`editor/`** in this monorepo (see docs/vscodium-fork-le-vibe.md). **H7** = **`packaging/flatpak/`** + **`packaging/appimage/`** + docs/flatpak-appimage.md (Flathub track); do not claim bundles are tested in CI unless documented.
 
-**Git — use freely:** You may run git **without asking permission** for normal maintainer workflow: inspect log/status/diff; create/switch branches; stage; commit **early and often** with clear, imperative messages; merge/rebase your feature branch when it reduces noise; **push** to `origin` when the remote exists and your commits include passing checks for the change. Avoid **destructive** operations on shared default branches (`--force` push to `main`/`master`, rewriting others’ history, hard resets that drop others’ work)—if you truly need that, stop with **USER RESPONSE REQUIRED**. Otherwise operate openly: your work should be visible as commits.
+**Git — use freely:** You may run git **without asking permission** for normal maintainer workflow: inspect log/status/diff; create/switch branches; stage; commit **early and often** with clear, imperative messages; merge/rebase your feature branch when it reduces noise; **push** to `origin` when the remote exists and your commits include passing checks for the change. **Mandatory rhythm:** after each **major track** or **milestone** (same definitions as the Master orchestrator **Git checkpoints** rule in this file), **`git add`**, **`git commit`**, **`git push`** so checkpoints are visible on **origin**—unless nothing changed, the remote is unreachable, or the user asked to hold commits (say which). Avoid **destructive** operations on shared default branches (`--force` push to `main`/`master`, rewriting others’ history, hard resets that drop others’ work)—if you truly need that, stop with **USER RESPONSE REQUIRED**. Otherwise operate openly: your work should be visible as commits.
 
 **Rules:** Lé Vibe naming (é) in user-facing copy. §8 secrets—default deny; never commit secrets. §7.2—if a **real** product/architecture decision needs the human, halt: **USER RESPONSE REQUIRED** (all caps), then **numbered questions**; **No preference** / **your call** allowed. **LÉ VIBE BLOCKED** only for missing credentials, truly external-only actions, or secrets—**not** for routine product judgment resolvable under specs.
 
@@ -247,7 +257,7 @@ Each turn:
 
 **Git:** Use freely—branch, commit often, push when green; no `--force` to shared default branch without **USER RESPONSE REQUIRED**.
 
-**Rules:** Lé Vibe (é); §8 secrets default deny; §7.2 for unresolved IDE product decisions; **LÉ VIBE BLOCKED** = secrets / credentials / impossible external-only steps only.
+**Rules:** Lé Vibe (é); §8 secrets default deny; **§7.3** governs material IDE / STEP 14 choices — implement them; use **§7.2** only for gaps **outside** §7.3; **LÉ VIBE BLOCKED** = secrets / credentials / impossible external-only steps only.
 
 End with exactly **one** last line (nothing after): PASTE SAME AGAIN | LÉ VIBE SESSION COMPLETE | LÉ VIBE BLOCKED | USER RESPONSE REQUIRED
 ```
@@ -292,7 +302,7 @@ Each turn, pick **one or more** tracks—ship **reviewable** diffs; do not rewri
   C) **Distribution / trust:** debian/, packaging/, `.github/workflows`, docs/apt-repo-releases.md, sbom-signing-audit.md, ci-qa-hardening.md.
   D) **Product surface:** root README.md, docs/README.md, **`.github/`** (ci.yml, dependabot.yml, ISSUE_TEMPLATE/ + config.yml # H8), privacy-and-telemetry.md, SECURITY.md links, **Lé Vibe** (é) copy.
   E) **Phase 2 alignment:** spec-phase2.md vs this repo—document gaps honestly; code only what belongs in-tree.
-  F) **H6 / H7:** **H6** = implement under **`editor/`**; **H7** = handoff or SKIPPED per flatpak-appimage.md—do not claim Flatpak ships without manifests.
+  F) **H6 / H7:** **H6** = implement under **`editor/`**; **H7** = maintain **`packaging/flatpak/`** + **`packaging/appimage/`** per docs/flatpak-appimage.md (Flathub-oriented).
 
 Rules: §8 secrets default deny; §7.2 → **USER RESPONSE REQUIRED** + numbered questions for real forks; **LÉ VIBE BLOCKED** = secrets / credentials / out-of-repo only.
 

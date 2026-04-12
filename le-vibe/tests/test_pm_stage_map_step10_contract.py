@@ -16,4 +16,11 @@ def test_pm_stage_map_step10_row_lists_h3_and_e1():
     row = rows[0]
     assert "test_ci_qa_hardening_doc_h3_contract.py" in row
     assert "test_ci_qa_hardening_prioritization_cargo_contract.py" in row
+    assert "test_docs_readme_ci_qa_hardening_row_contract.py" in row
+    assert "docs/README.md" in row
+    assert "14.e / 14.f" in row
+    assert "test_pm_stage_map_step10_contract.py" in row
+    assert "ci-smoke.sh" in row
+    assert "ci-editor-gate.sh" in row
+    assert "ci.yml" in row
     assert "H3" in row or "STEP 10" in row

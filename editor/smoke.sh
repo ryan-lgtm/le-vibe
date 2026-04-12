@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # Lé Vibe IDE — local smoke (STEP 14). Same checks as build-le-vibe-ide.yml / build-linux.yml (alias) gate + bash -n + .nvmrc sync.
+# 14.d: does not validate Lé Vibe–visible IDE branding — editor/le-vibe-overrides/branding-staging.checklist.md;
+#   docs/PRODUCT_SPEC.md §7.2 (delegates to ci-editor-gate.sh — same fast gate).
 # Run from repository root:
 #   ./editor/smoke.sh
 # Authority: editor/README.md, packaging/scripts/ci-editor-gate.sh

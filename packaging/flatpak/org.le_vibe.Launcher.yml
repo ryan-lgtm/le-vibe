@@ -1,0 +1,39 @@
+# Lé Vibe — Flatpak manifest (Roadmap H7). Flathub-oriented; app id may be renamed when publishing.
+# Build from monorepo root (see packaging/flatpak/README.md).
+app-id: org.le_vibe.Launcher
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: lvibe
+
+finish-args:
+  - --share=network
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --filesystem=home
+  - --filesystem=xdg-run/app
+  - --talk-name=org.freedesktop.Notifications
+  - --env=PYTHONPATH=/app/share/le-vibe
+
+modules:
+  - name: le-vibe-stack
+    buildsystem: simple
+    build-commands:
+      - pip3 install --prefix=/app --no-cache-dir -r le-vibe/requirements.txt
+      - install -d /app/share/le-vibe
+      - cp -a le-vibe /app/share/le-vibe/
+      - install -D packaging/bin/lvibe /app/bin/lvibe
+      - install -D packaging/bin/le-vibe /app/bin/le-vibe
+      - install -D packaging/bin/lvibe-hygiene /app/bin/lvibe-hygiene
+      - install -D packaging/bin/le-vibe-setup-continue /app/bin/le-vibe-setup-continue
+      - sed -i 's|PYTHONPATH="/usr/share/le-vibe|PYTHONPATH="/app/share/le-vibe|g' /app/bin/lvibe /app/bin/le-vibe /app/bin/lvibe-hygiene /app/bin/le-vibe-setup-continue
+      - chmod +x /app/bin/lvibe /app/bin/le-vibe /app/bin/lvibe-hygiene /app/bin/le-vibe-setup-continue
+      - install -D packaging/applications/le-vibe.desktop /app/share/applications/org.le_vibe.Launcher.desktop
+      - sed -i 's|^Icon=.*|Icon=org.le_vibe.Launcher|' /app/share/applications/org.le_vibe.Launcher.desktop
+      - sed -i 's|^Exec=.*|Exec=lvibe %F|' /app/share/applications/org.le_vibe.Launcher.desktop
+      - install -D packaging/icons/hicolor/scalable/apps/le-vibe.svg /app/share/icons/hicolor/scalable/apps/org.le_vibe.Launcher.svg
+    sources:
+      - type: dir
+        path: ../..

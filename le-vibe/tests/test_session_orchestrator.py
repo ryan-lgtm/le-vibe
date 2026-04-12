@@ -15,6 +15,7 @@ from le_vibe.session_orchestrator import (
     load_session_manifest,
     resolve_next_step_after_opening_skip,
     seed_session_manifest_if_missing,
+    session_manifest_example_source_path,
     sync_agent_skills_from_templates,
     workspace_has_meaningful_files,
 )
@@ -28,6 +29,15 @@ def test_bundled_example_matches_repo_schema():
     assert canonical.is_file()
     assert json.loads(bundled.read_text(encoding="utf-8")) == json.loads(
         canonical.read_text(encoding="utf-8")
+    )
+
+
+def test_session_manifest_example_source_prefers_repo_schemas():
+    repo_root = Path(__file__).resolve().parents[2]
+    src = session_manifest_example_source_path()
+    assert src == repo_root / "schemas" / "session-manifest.v1.example.json"
+    assert json.loads(src.read_text(encoding="utf-8")) == json.loads(
+        bundled_session_manifest_example_path().read_text(encoding="utf-8")
     )
 
 

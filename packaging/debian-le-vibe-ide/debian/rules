@@ -1,0 +1,10 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+
+override_dh_auto_build:
+
+override_dh_auto_install:
+	@test -e staging/usr/lib/le-vibe/bin/codium || (echo "error: run ./packaging/scripts/stage-le-vibe-ide-deb.sh from the repository root first (see packaging/debian-le-vibe-ide/README.md)." >&2; false)
+	@test -e staging/usr/share/applications/le-vibe.desktop || (echo "error: staging missing Freedesktop .desktop — run stage-le-vibe-ide-deb.sh." >&2; false)
+	dh_install --sourcedir=staging

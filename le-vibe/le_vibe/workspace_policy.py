@@ -1,4 +1,4 @@
-"""Persist workspace consent, storage caps, and usage metadata under ``~/.config/le-vibe/`` (PRODUCT_SPEC §5)."""
+"""Persist workspace consent, storage caps, and usage metadata under ``~/.config/le-vibe/`` (**PRODUCT_SPEC** §5; **STEP 15** / **docs/PM_STAGE_MAP.md**)."""
 
 from __future__ import annotations
 

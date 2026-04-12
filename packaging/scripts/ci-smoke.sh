@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Roadmap H3: quick QA — pytest + .desktop validation. Run from repo root:
+# Roadmap H3 / STEP 10 (docs/PM_STAGE_MAP.md): quick QA — pytest + .desktop validation. Run from repo root:
 #   ./packaging/scripts/ci-smoke.sh
 # Pytest step runs full le-vibe/tests/ (H8 STEP 12 anchors: test_issue_template_h8_contract.py — .github/ISSUE_TEMPLATE + config.yml).
 # Full E1 contract roster (not only H8): root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI — same pointers as docs/ci-qa-hardening.md and docs/apt-repo-releases.md E1.

@@ -1,4 +1,7 @@
-"""Lé Vibe workspace `.lvibe/` hub: RAG-oriented layout, gitignore hygiene, token-efficient defaults."""
+"""Lé Vibe workspace ``.lvibe/`` hub — layout, gitignore hygiene, storage metering (**PRODUCT_SPEC** §5.1–5.6; **STEP 15** / **docs/PM_STAGE_MAP.md**).
+
+Consent before creation: ``workspace_consent.resolve_lvibe_creation``; caps + policy JSON: ``workspace_policy``.
+"""
 
 from __future__ import annotations
 

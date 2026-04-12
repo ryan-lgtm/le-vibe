@@ -20,6 +20,7 @@ from .session_orchestrator import (
     ensure_pm_session_artifacts,
     iter_tasks_in_epic_order,
     load_session_manifest,
+    session_manifest_example_source_path,
 )
 from .welcome import maybe_print_welcome, welcome_marker_path
 from .workspace_hub import (
@@ -53,6 +54,7 @@ __all__ = [
     "le_vibe_config_dir",
     "load_session_manifest",
     "maybe_print_welcome",
+    "session_manifest_example_source_path",
     "prepare_workspaces_for_editor_args",
     "print_final_instructions",
     "stop_managed_ollama",

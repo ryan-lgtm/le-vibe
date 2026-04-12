@@ -17,3 +17,5 @@ def test_apt_repo_releases_doc_lists_ci_artifact_and_changelog():
     assert "debian/changelog" in text
     assert "CHANGELOG.md" in text
     assert "H1" in text or "Roadmap H1" in text
+    assert "PM_STAGE_MAP" in text
+    assert "STEP 8" in text

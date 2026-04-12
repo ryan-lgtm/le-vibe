@@ -15,5 +15,9 @@ def test_pm_stage_map_step8_row_lists_h1_and_e1():
     assert len(rows) == 1
     row = rows[0]
     assert "test_apt_repo_releases_doc_h1_contract.py" in row
+    assert "test_pm_stage_map_step8_contract.py" in row
     assert "le-vibe-deb" in row
+    assert "SHA256SUMS" in row
+    assert "debian/changelog" in row
+    assert "ci.yml" in row
     assert "H1" in row or "STEP 8" in row

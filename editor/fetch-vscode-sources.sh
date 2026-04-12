@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # STEP 14 (14.b / 14.c): fetch vscode sources via upstream get_repo.sh — monorepo root entrypoint.
 # Does not compile. Creates/updates editor/vscodium/vscode/ (network + git). See vscodium/docs/howto-build.md.
+#
+# Parity: upstream dev/build.sh exports VSCODE_QUALITY / VSCODE_LATEST / CI_BUILD (top of file) before sourcing
+# get_repo.sh when SKIP_SOURCE=no — we set the same three defaults here so a standalone fetch matches that path.
+# Packaging-only exports from howto-build.md *Build for CI/Downstream* (#build-ci) — SHOULD_BUILD, OS_NAME, … —
+# are not required for get_repo alone; use the full upstream block there when reproducing CI packaging.
+#
 # Prereq: Node from editor/.nvmrc — from repo root: source editor/use-node-toolchain.sh (14.a), or (cd editor && nvm install && nvm use)
 # Full local build after fetch: cd editor/vscodium && ./dev/build.sh (see editor/BUILD.md).
 # shellcheck disable=SC1091

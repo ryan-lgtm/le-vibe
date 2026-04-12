@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Install the Continue extension into VSCodium / Code - OSS (Open VSX identifier).
-# Default: pinned Open VSX version from packaging/continue-openvsx-version (Roadmap H4).
+# Default: pinned Open VSX version from packaging/continue-openvsx-version (Roadmap H4; STEP 7 — docs/PM_STAGE_MAP.md).
 # Run after the editor binary exists. Non-fatal if marketplace is unreachable.
 # Product / trust: docs/PRODUCT_SPEC.md §8–§9; spec-phase2.md §14 (H6/H7 vs in-tree; STEP 14 E1 — editor/le-vibe-overrides/README.md + le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py); H4: docs/continue-extension-pin.md; index: docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
 # Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (ci.yml, dependabot.yml, packaging/bin).
@@ -11,8 +11,8 @@ PIN_FILE="${LE_VIBE_CONTINUE_PIN_FILE:-$PIN_DEFAULT}"
 # Match le_vibe.launcher _default_editor (14.g): prefer packaged Lé Vibe IDE before VSCodium.
 if [[ -n "${LE_VIBE_EDITOR:-}" ]]; then
   BIN="${LE_VIBE_EDITOR}"
-elif [[ -x /usr/bin/le-vibe-ide ]]; then
-  BIN="/usr/bin/le-vibe-ide"
+elif [[ -x /usr/lib/le-vibe/bin/codium ]]; then
+  BIN="/usr/lib/le-vibe/bin/codium"
 elif [[ -x /usr/bin/codium ]]; then
   BIN="/usr/bin/codium"
 else

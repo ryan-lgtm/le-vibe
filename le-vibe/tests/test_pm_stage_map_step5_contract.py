@@ -1,4 +1,4 @@
-"""Contract: docs/PM_STAGE_MAP.md STEP 5 row lists hygiene.py + E1 (STEP 5)."""
+"""Contract: docs/PM_STAGE_MAP.md STEP 5 row lists hygiene.py + E4 (STEP 5)."""
 
 from __future__ import annotations
 
@@ -16,6 +16,8 @@ def test_pm_stage_map_step5_row_lists_hygiene_and_e1():
     row = rows[0]
     assert "hygiene.py" in row
     assert "test_hygiene.py" in row
-    assert "STEP 5" in row or "E5" in row
+    assert "STEP 5" in row
+    assert "E4" in row
     assert "schemas/session-manifest.v1.example.json" in row
     assert "session-manifest.v1" in row
+    assert "--seed-missing" in row

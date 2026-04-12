@@ -2,6 +2,9 @@
 # STEP 14.f — unpack a linux_compile artifact (vscodium-linux-build.tar.gz) to a temp dir and print
 # the absolute path to VSCode-linux-*/bin/codium (same layout as print-vsbuild-codium-path.sh).
 #
+# GitHub Actions serves workflow artifacts as a .zip download; unzip first — the archive contains
+# vscodium-linux-build.tar.gz (see editor/BUILD.md *14.f*).
+#
 # From repo root:
 #   LE_VIBE_EDITOR="$(./editor/print-ci-tarball-codium-path.sh ~/Downloads/vscodium-linux-build.tar.gz)"
 #
@@ -19,6 +22,12 @@ TAR="$(realpath "$1")"
   echo "${0##*/}: not a file: $TAR" >&2
   exit 1
 }
+
+_lc="${TAR,,}"
+if [[ "${_lc}" == *.zip ]]; then
+  echo "${0##*/}: received a .zip — GitHub Actions wraps \`vscodium-linux-build.tar.gz\` inside the download; unzip first, then pass the \`.tar.gz\` path (see editor/BUILD.md *14.f*)." >&2
+  exit 2
+fi
 
 WORKDIR="$(mktemp -d "${TMPDIR:-/tmp}/le-vibe-ci-artifact.XXXXXX")"
 cleanup() {

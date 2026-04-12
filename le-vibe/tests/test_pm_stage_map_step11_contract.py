@@ -15,4 +15,7 @@ def test_pm_stage_map_step11_row_lists_h5_and_e1():
     assert len(rows) == 1
     row = rows[0]
     assert "test_brand_assets_doc_h5_contract.py" in row
+    assert "test_pm_stage_map_step11_contract.py" in row
+    assert "le-vibe.svg" in row
+    assert "screenshots/README.md" in row
     assert "H5" in row or "STEP 11" in row

@@ -6,4 +6,8 @@ It is positioned as a **local-first alternative** to **Cursor** (same general in
 
 Must-ship wording for this welcome lives in **`docs/PRODUCT_SPEC.md`** §4 in the Lé Vibe product repository.
 
-_Open this file anytime from the file tree for the in-editor welcome; the terminal banner on first launch shows the same positioning._
+## In-editor (PRODUCT_SPEC §4 surface)
+
+This file is the **primary** editor welcome after **`lvibe .`** has prepared **`.lvibe/`** (with workspace memory consent). Open it here: **Explorer** → **`.lvibe`** → **`WELCOME.md`**, or **Quick Open** / **Go to File** (**Ctrl+P** / **Cmd+P**) and type **`.lvibe/WELCOME.md`**. Continue workspace rule **`01-le-vibe-product-welcome.md`** points Chat/Agent at the same §4 positioning.
+
+The **terminal** may still show a one-time **Welcome to Lé Vibe** banner on first launch; this document is the full, stable in-tree copy for the IDE.

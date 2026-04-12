@@ -16,4 +16,10 @@ def test_pm_stage_map_step9_row_lists_h2_and_e1():
     row = rows[0]
     assert "test_sbom_signing_audit_doc_h2_contract.py" in row
     assert "test_requirements_pins.py" in row
+    assert "test_pm_stage_map_step9_contract.py" in row
+    assert "le-vibe-python.cdx.json" in row
+    assert "requirements.txt" in row
+    assert "dependabot.yml" in row
+    assert "pip-audit" in row
+    assert "ci.yml" in row
     assert "H2" in row or "STEP 9" in row

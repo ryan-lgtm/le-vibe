@@ -24,5 +24,11 @@ def test_continue_extension_pin_doc_step14_h_strings():
     assert "print-built-codium-path.sh" in text
     assert "print-vsbuild-codium-path.sh" in text
     assert "print-ci-tarball-codium-path.sh" in text
+    assert "verify-14c-local-binary.sh" in text
     assert "_default_editor" in text
     assert "14.g" in text
+    assert ".zip" in text
+    assert "linux_compile" in text
+    assert "branding-staging.checklist.md" in text
+    assert "§7.2" in text
+    assert "§7.3" in text

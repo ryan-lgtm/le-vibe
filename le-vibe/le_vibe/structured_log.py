@@ -1,6 +1,9 @@
 """Append-only JSON lines at ``~/.config/le-vibe/le-vibe.log.jsonl`` — local operator diagnostics only.
 
-No third-party telemetry (**PRODUCT_SPEC** §7; **docs/privacy-and-telemetry.md**; STEP 6 / PM map).
+**Components** (representative ``component`` field): ``managed_ollama`` (serve/stop), ``first_run``,
+``launcher`` (editor spawn / first-run exit), ``workspace`` (``.lvibe/`` consent, ``lvibe_storage``
+compaction). No third-party telemetry (**PRODUCT_SPEC** §7; **docs/privacy-and-telemetry.md**;
+STEP 6 / E5, PM map). Disable with ``LE_VIBE_STRUCTURED_LOG=0``.
 """
 
 from __future__ import annotations

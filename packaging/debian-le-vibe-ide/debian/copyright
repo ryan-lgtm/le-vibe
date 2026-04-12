@@ -1,0 +1,21 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: le-vibe-ide
+Source: https://example.invalid/r-vibe
+
+Files: debian/le-vibe.desktop
+Copyright: Le Vibe Maintainers
+License: MIT
+Comment: Freedesktop entry for §7.3 — Exec points at /usr/lib/le-vibe/bin/codium (no public le-vibe-ide CLI).
+
+Files: ../icons/hicolor/scalable/apps/le-vibe.svg
+Copyright: Le Vibe Maintainers
+License: MIT
+Comment: App icon shipped under /usr/share/icons/hicolor (see docs/brand-assets.md).
+
+Files: *
+Copyright: VSCodium / Microsoft / third parties per the built VSCode-linux tree
+License: MIT and multiple — see LICENSE files inside the staged build output.
+Comment:
+ This package repacks a local dev/build.sh output; run stage-le-vibe-ide-deb.sh
+ after compiling editor/vscodium. Do not redistribute without satisfying upstream
+ license terms.

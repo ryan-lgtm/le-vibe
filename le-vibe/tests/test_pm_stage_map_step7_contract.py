@@ -18,3 +18,6 @@ def test_pm_stage_map_step7_row_lists_continue_pin_and_e1():
     assert "test_install_continue_extension_script.py" in row
     assert "test_continue_extension_pin_doc_step14_contract.py" in row
     assert "H4" in row or "STEP 7" in row
+    assert "continue-openvsx-version" in row
+    assert "install-continue-extension.sh" in row
+    assert "verify-continue-pin.sh" in row

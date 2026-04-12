@@ -39,6 +39,20 @@ def test_hygiene_errors_on_bad_session_json(tmp_path: Path):
     assert main(["-w", str(tmp_path)]) == 1
 
 
+def test_hygiene_seed_missing_restores_session_manifest(tmp_path: Path):
+    ensure_lvibe_workspace(tmp_path)
+    sm = tmp_path / ".lvibe" / SESSION_MANIFEST_FILENAME
+    sm.unlink()
+    assert not sm.exists()
+    assert main(["--workspace", str(tmp_path), "--seed-missing"]) == 0
+    assert sm.is_file()
+
+
+def test_hygiene_seed_missing_skips_without_lvibe_dir(tmp_path: Path):
+    code = main(["-w", str(tmp_path), "--seed-missing"])
+    assert code == 1
+
+
 def test_hygiene_warns_chunk_missing_path(tmp_path: Path):
     ensure_lvibe_workspace(tmp_path)
     chunk = tmp_path / ".lvibe" / "chunks" / "ref.yaml"

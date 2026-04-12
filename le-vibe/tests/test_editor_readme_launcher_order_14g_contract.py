@@ -13,9 +13,9 @@ def test_editor_readme_lists_le_vibe_ide_before_codium():
     text = (_repo_root() / "editor" / "README.md").read_text(encoding="utf-8")
     assert "14.g" in text
     assert "le-vibe/le_vibe/launcher.py" in text
-    assert "/usr/bin/le-vibe-ide" in text
+    assert "/usr/lib/le-vibe/bin/codium" in text
     assert "/usr/bin/codium" in text
-    pos_ide = text.index("/usr/bin/le-vibe-ide")
+    pos_ide = text.index("/usr/lib/le-vibe/bin/codium")
     pos_cod = text.index("/usr/bin/codium")
     assert pos_ide < pos_cod
 

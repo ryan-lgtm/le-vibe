@@ -142,6 +142,9 @@ jobs:
       || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/ide-v'))
     runs-on: ubuntu-22.04
     timeout-minutes: 360
+    # Match editor/vscodium/dev/build.sh (export NODE_OPTIONS=--max-old-space-size=8192).
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
     permissions:
       contents: read
       actions: write
@@ -161,6 +164,14 @@ jobs:
           fi
           echo "present=true" >> "$GITHUB_OUTPUT"
 
+      # Same gates as default linux smoke + ci-editor-gate — fail before fetch/compile (14.a / 14.e).
+      - name: Fail-fast editor gates (bash -n + .nvmrc sync)
+        run: |
+          set -euo pipefail
+          ./packaging/scripts/ci-vscodium-bash-syntax.sh
+          ./packaging/scripts/ci-editor-nvmrc-sync.sh
+
+      # Subset of editor/vscodium/docs/howto-build.md *Dependencies* → *Linux* (dpkg/rpm/python 3.11 headers).
       - name: Install Linux build dependencies
         run: |
           set -euo pipefail
@@ -173,9 +184,13 @@ jobs:
             libsecret-1-dev \
             libkrb5-dev \
             fakeroot \
+            dpkg-dev \
+            rpm \
             jq \
+            librsvg2-bin \
             git \
             python3 \
+            python3.11-dev \
             curl \
             ca-certificates
 
@@ -240,8 +255,12 @@ jobs:
         run: |
           {
             echo "## Lé Vibe IDE — full linux compile (14.e)"
+            echo "Fail-fast (same as \`ci-editor-gate\`): \`ci-vscodium-bash-syntax.sh\` + \`ci-editor-nvmrc-sync.sh\` before compile."
             echo "Upstream entrypoint: \`editor/vscodium/dev/build.sh\` via \`packaging/scripts/ci-vscodium-linux-dev-build.sh\`."
+            echo "Toolchain (14.a): **actions/setup-node** uses \`node-version-file: editor/.nvmrc\` (parity with \`editor/vscodium/.nvmrc\` — \`ci-editor-nvmrc-sync.sh\`). Job \`env.NODE_OPTIONS\` matches \`dev/build.sh\` (\`--max-old-space-size=8192\`)."
+            echo "Optional compile env (14.d): \`editor/le-vibe-overrides/build-env.sh\` (copy from \`build-env.sh.example\`) is sourced before \`dev/build.sh\` — **§7.2** for material branding."
             echo "Trigger: **workflow_dispatch** \`vscodium_linux_compile\`, **workflow_call** \`inputs.vscodium_linux_compile\` (e.g. \`build-linux.yml\`), or push tag \`ide-v*\`."
             echo "Artifact (when \`VSCode-linux-*\` exists): \`vscodium-linux-build.tar.gz\` → \`actions/upload-artifact\` name \`le-vibe-vscodium-linux-<run_id>\` (**retention-days** on that upload)."
+            echo "After download: GitHub wraps the file in a **.zip** — unzip, then resolve \`bin/codium\` with \`./editor/print-ci-tarball-codium-path.sh /path/to/vscodium-linux-build.tar.gz\` (**14.f**). Local tree under \`editor/vscodium/\`: \`./editor/verify-14c-local-binary.sh\` (**14.c** parity, no Ollama)."
             echo "PRs keep the fast smoke job only — no compile on pull_request."
           } >> "$GITHUB_STEP_SUMMARY"

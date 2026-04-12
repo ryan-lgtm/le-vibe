@@ -19,6 +19,22 @@ def bundled_session_manifest_example_path() -> Path:
     return Path(__file__).resolve().parent / "assets" / "session-manifest.v1.example.json"
 
 
+def session_manifest_example_source_path() -> Path:
+    """
+    Source for new ``.lvibe/session-manifest.json`` seeds.
+
+    When running from a monorepo checkout, prefer the repo-root ``schemas/session-manifest.v1.example.json``
+    (``SESSION_ORCHESTRATION_SPEC`` / STEP 2). Installed packages fall back to the bundled asset
+    (must match the schema — see ``test_session_orchestrator.test_bundled_example_matches_repo_schema``).
+    """
+    here = Path(__file__).resolve()
+    for d in (here.parent, *here.parents):
+        cand = d / "schemas" / "session-manifest.v1.example.json"
+        if cand.is_file():
+            return cand
+    return bundled_session_manifest_example_path()
+
+
 def agent_skill_templates_dir() -> Path:
     """``le-vibe/templates/agents/`` (sibling of the ``le_vibe`` package)."""
     return Path(__file__).resolve().parent.parent / "templates" / "agents"
@@ -33,7 +49,7 @@ def seed_session_manifest_if_missing(lvibe_dir: Path) -> Path | None:
     dest = lvibe_dir / SESSION_MANIFEST_FILENAME
     if dest.exists():
         return None
-    src = bundled_session_manifest_example_path()
+    src = session_manifest_example_source_path()
     shutil.copy2(src, dest)
     return dest
 

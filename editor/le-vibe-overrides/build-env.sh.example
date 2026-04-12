@@ -1,11 +1,17 @@
-# Optional Lé Vibe build hook — copy to `build-env.sh` beside this file to enable.
-# Sourced by `packaging/scripts/ci-vscodium-linux-dev-build.sh` before `editor/vscodium/dev/build.sh`
-# (CI job `linux_compile`, local full compile). Uses `set -a` so assignments export to the child shell.
+# Optional Lé Vibe build hook — copy to `build-env.sh` beside this file to enable **after** defaults (H6 / STEP 14).
+# `packaging/scripts/ci-vscodium-linux-dev-build.sh` (CI `linux_compile`, local full compile):
+#   1) merges `product-branding-merge.json` into `editor/vscodium/product.json`;
+#   2) patches `dev/build.sh` so APP_NAME / ORG_NAME / … honor `${VAR:-upstream}`;
+#   3) sources `build-env.lvibe-defaults.sh` (PRODUCT_SPEC §7.3 — committed Lé Vibe names);
+#   4) sources this file as `build-env.sh` if present (local overrides).
+# Uses `set -a` when sourced so assignments export to the child shell.
 #
-# Upstream VSCodium reads env such as APP_NAME, BINARY_NAME, ASSETS_REPOSITORY, ORG_NAME, etc.
-# (see `editor/vscodium/dev/build.sh`). Changing visible product identity or the emitted binary
-# name is a material branding choice — follow `docs/PRODUCT_SPEC.md` §7.2; do not guess in CI.
+# Upstream defaults are still defined at the top of `editor/vscodium/dev/build.sh` (verify after submodule bump):
+#   APP_NAME, ASSETS_REPOSITORY, BINARY_NAME, CI_BUILD, GH_REPO_PATH, ORG_NAME, SHOULD_BUILD,
+#   SKIP_ASSETS, SKIP_BUILD, SKIP_SOURCE, VSCODE_LATEST, VSCODE_QUALITY, VSCODE_SKIP_NODE_VERSION_CHECK
 #
-# Example (upstream defaults — uncomment only when you intend to override):
-# export APP_NAME="VSCodium"
-# export BINARY_NAME="codium"
+# Material identity beyond §7.3 still uses `docs/PRODUCT_SPEC.md` §7.2 — halt with `USER RESPONSE REQUIRED`
+# when specs do not decide.
+#
+# Example — local overrides (uncomment when needed; defaults already set APP_NAME to Lé Vibe):
+# export SKIP_ASSETS="no"

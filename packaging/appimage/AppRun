@@ -1,0 +1,5 @@
+#!/bin/sh
+# AppImage entry — Lé Vibe Python stack (H7). See packaging/appimage/README.md.
+HERE="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+export PYTHONPATH="${HERE}/usr/share/le-vibe/le-vibe:${HERE}/usr/share/le-vibe/pythondist${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m le_vibe.launcher "$@"

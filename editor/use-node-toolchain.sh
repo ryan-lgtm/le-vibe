@@ -3,6 +3,7 @@
 #
 # From repo root, load nvm + Node in your current shell:
 #   source editor/use-node-toolchain.sh
+#   (prints one stderr line: active node path + version + editor/.nvmrc path — 14.a)
 #
 # Or run one command with that Node on PATH (subprocess):
 #   ./editor/use-node-toolchain.sh node --version
@@ -40,6 +41,7 @@ nvm use
 popd >/dev/null
 
 if [[ "${_lev_sourced}" -eq 1 ]]; then
+  echo "use-node-toolchain: Node $(node --version) ($(command -v node)) - ${EDITOR_DIR}/.nvmrc" >&2
   return 0
 fi
 

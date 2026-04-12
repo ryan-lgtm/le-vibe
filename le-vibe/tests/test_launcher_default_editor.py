@@ -1,4 +1,4 @@
-"""Launcher default editor resolution (14.g — le-vibe-ide before codium)."""
+"""Launcher default editor resolution (14.g — packaged IDE path before codium)."""
 
 from __future__ import annotations
 
@@ -12,21 +12,21 @@ def test_default_editor_respects_le_vibe_editor_env(monkeypatch):
     assert launcher._default_editor() == "/opt/bin/editor"
 
 
-def test_default_editor_prefers_le_vibe_ide_on_disk(monkeypatch):
+def test_default_editor_prefers_packaged_lv_ide_codium_on_disk(monkeypatch):
     monkeypatch.delenv("LE_VIBE_EDITOR", raising=False)
 
     def isfile(p):
-        return str(p) == "/usr/bin/le-vibe-ide"
+        return str(p) == "/usr/lib/le-vibe/bin/codium"
 
     def access(path, mode):
-        return str(path) == "/usr/bin/le-vibe-ide"
+        return str(path) == "/usr/lib/le-vibe/bin/codium"
 
     monkeypatch.setattr(os.path, "isfile", isfile)
     monkeypatch.setattr(os, "access", access)
-    assert launcher._default_editor() == "/usr/bin/le-vibe-ide"
+    assert launcher._default_editor() == "/usr/lib/le-vibe/bin/codium"
 
 
-def test_default_editor_falls_back_to_codium_when_no_le_vibe_ide(monkeypatch):
+def test_default_editor_falls_back_to_codium_when_no_packaged_lv_ide(monkeypatch):
     monkeypatch.delenv("LE_VIBE_EDITOR", raising=False)
 
     def isfile(p):

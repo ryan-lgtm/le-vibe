@@ -7,12 +7,23 @@ from pathlib import Path
 
 import pytest
 
+import le_vibe.structured_log as structured_log
 from le_vibe.structured_log import (
     STRUCTURED_LOG_FILENAME,
     append_structured_log,
     structured_log_enabled,
     structured_log_path,
 )
+
+
+def test_structured_log_module_docstring_lists_authority_docs():
+    doc = structured_log.__doc__ or ""
+    assert "le-vibe.log.jsonl" in doc
+    assert "privacy-and-telemetry.md" in doc
+    assert "PRODUCT_SPEC" in doc
+    assert "managed_ollama" in doc
+    assert "workspace" in doc
+    assert "LE_VIBE_STRUCTURED_LOG" in doc
 
 
 def test_append_writes_jsonl(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):

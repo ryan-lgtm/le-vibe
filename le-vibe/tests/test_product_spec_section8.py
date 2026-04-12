@@ -49,6 +49,8 @@ def test_lvibe_editor_welcome_template_section4_positioning():
     assert "Cursor" in text
     assert "PRODUCT_SPEC.md" in text
     assert "§4" in text
+    assert "In-editor" in text
+    assert "Quick Open" in text
 
 
 def test_continue_memory_rule_documents_secrets_policy_section8():
@@ -58,12 +60,24 @@ def test_continue_memory_rule_documents_secrets_policy_section8():
     assert "Never paste secret" in body
 
 
+def test_product_spec_section73_resolved_ide_decisions_step14():
+    """§7.3 — material STEP 14 decisions recorded (H6)."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC.md").read_text(encoding="utf-8")
+    assert "### 7.3 Material Lé Vibe IDE" in text
+    assert "**Only `lvibe`**" in text
+    assert "Debian package for the IDE" in text
+    assert "GitHub Actions must not" in text
+
+
 def test_continue_memory_rule_documents_user_gate_section72():
     body = _lvibe_continue_rule_body()
     assert "PRODUCT_SPEC §7.2" in body
     assert "USER RESPONSE REQUIRED" in body
     assert "numbered questions" in body
     assert "schemas/session-manifest.v1.example.json" in body
+    assert ".lvibe/session-manifest.json" in body
+    assert "session_manifest_example_source_path" in body
 
 
 def test_workspace_hub_agents_seed_documents_secrets_section8():
@@ -103,6 +117,8 @@ def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci()
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "PRODUCT_SPEC.md").read_text(encoding="utf-8")
     assert "**How to sequence work:**" in text
+    assert "14.d" in text
+    assert "branding-staging.checklist.md" in text
     assert "./editor/smoke.sh" in text
     assert "build-le-vibe-ide.yml" in text
     assert "build-linux.yml" in text
@@ -116,17 +132,63 @@ def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci()
     assert "editor/BUILD.md" in text
     assert "editor/VENDORING.md" in text
     assert "linux_compile" in text
+    assert "ci-vscodium-bash-syntax.sh" in text
+    assert "ci-editor-nvmrc-sync.sh" in text
+    assert "ci-vscodium-linux-dev-build.sh" in text
+    assert "node --version" in text
+    assert "LEVIBE_SKIP_NODE_VERSION_CHECK" in text
+    assert "fail fast" in text
+    assert "vscodium-linux-build.tar.gz" in text
     assert "actions/cache@v4" in text
     assert ".cargo" in text
     assert "spec-phase2.md" in text and "§14" in text
+    assert "NODE_OPTIONS" in text
+    assert "max-old-space-size=8192" in text
+    assert "When full compile fails" in text
+
+
+def test_product_spec_section10_regression_evidence_lists_step14_editor_contracts():
+    """§10 — regression evidence paragraph cites editor STEP 14 E1 modules (H6 / 14.j)."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC.md").read_text(encoding="utf-8")
+    assert "Regression evidence" in text
+    assert "test_editor_build_md_contract.py" in text
+    assert "test_editor_readme_step14_contract.py" in text
+    assert "test_spec_phase2_section14_snapshot_contract.py" in text
+    assert "NODE_OPTIONS" in text
+    assert "When full compile fails" in text
+
+
+def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14():
+    """E1: §10 evidence row cites le-vibe-ide Freedesktop file + packaging contract (§7.3)."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
+    assert "packaging/debian-le-vibe-ide/debian/le-vibe.desktop" in text
+    assert "stage-le-vibe-ide-deb.sh" in text
+    assert "test_packaging_le_vibe_ide_deb_contract.py" in text
+    assert "packaging/debian-le-vibe-ide/README.md" in text
+    assert "apt-repo-releases.md" in text
+    assert "roadmap" in text
 
 
 def test_product_spec_section8_evidence_intro_lists_linux_compile_cargo_cache():
-    """E1: PRODUCT_SPEC_SECTION8_EVIDENCE intro stays aligned with PRODUCT_SPEC *Prioritization* (STEP 14.e)."""
+    """E1: PRODUCT_SPEC_SECTION8_EVIDENCE intro stays aligned with PRODUCT_SPEC *Prioritization* (STEP 14.d / 14.e)."""
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
     assert "test_product_spec_section8.py" in text
+    assert "14.d" in text
+    assert "branding-staging.checklist.md" in text
     assert "linux_compile" in text
+    assert "ci-vscodium-bash-syntax.sh" in text
+    assert "ci-vscodium-linux-dev-build.sh" in text
+    assert "LEVIBE_SKIP_NODE_VERSION_CHECK" in text
+    assert "fail fast" in text
+    assert "vscodium-linux-build.tar.gz" in text
     assert "actions/cache@v4" in text
     assert ".cargo" in text
     assert "spec-phase2.md" in text and "§14" in text
+    assert "test_editor_build_md_contract.py" in text
+    assert "test_editor_readme_step14_contract.py" in text
+    assert "test_spec_phase2_section14_snapshot_contract.py" in text
+    assert "NODE_OPTIONS" in text
+    assert "When full compile fails" in text

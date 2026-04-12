@@ -27,8 +27,10 @@ def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
         return env
-    if os.path.isfile("/usr/bin/le-vibe-ide") and os.access("/usr/bin/le-vibe-ide", os.X_OK):
-        return "/usr/bin/le-vibe-ide"
+    # Packaged Lé Vibe IDE (PRODUCT_SPEC §7.3): internal path only — public CLI remains `lvibe`.
+    lv_ide = "/usr/lib/le-vibe/bin/codium"
+    if os.path.isfile(lv_ide) and os.access(lv_ide, os.X_OK):
+        return lv_ide
     if os.path.isfile("/usr/bin/codium") and os.access("/usr/bin/codium", os.X_OK):
         return "/usr/bin/codium"
     return "codium"
@@ -56,7 +58,7 @@ def main() -> int:
     parser.add_argument(
         "--editor",
         default=_default_editor(),
-        help="editor binary (default $LE_VIBE_EDITOR, else /usr/bin/le-vibe-ide, /usr/bin/codium, else codium)",
+        help="editor binary (default $LE_VIBE_EDITOR, else /usr/lib/le-vibe/bin/codium, /usr/bin/codium, else codium)",
     )
     parser.add_argument(
         "editor_args",

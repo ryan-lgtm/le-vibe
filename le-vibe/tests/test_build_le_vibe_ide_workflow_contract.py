@@ -45,10 +45,25 @@ def test_build_le_vibe_ide_workflow_linux_compile_artifact_14e():
     assert "retention-days: 90" in text
     assert "ubuntu-22.04" in text
     assert "timeout-minutes: 360" in text
+    assert "node-version-file: editor/.nvmrc" in text
+    assert "ci-editor-nvmrc-sync" in text
+    assert "build-env.sh.example" in text
+    assert "print-ci-tarball-codium-path.sh" in text
+    assert "verify-14c-local-binary.sh" in text
+    assert "Fail-fast editor gates" in text
+    assert "./packaging/scripts/ci-vscodium-bash-syntax.sh" in text
+    assert "./packaging/scripts/ci-editor-nvmrc-sync.sh" in text
+    assert "dpkg-dev" in text
+    assert "python3.11-dev" in text
+    assert "rpm" in text
+    assert "NODE_OPTIONS" in text
+    assert "max-old-space-size=8192" in text
 
 
 def test_build_linux_yaml_uses_build_le_vibe_ide_and_documents_inherited_metadata():
     text = (_repo_root() / ".github" / "workflows" / "build-linux.yml").read_text(encoding="utf-8")
+    assert "STEP 14" in text
+    assert "name: build-linux" in text
     assert "uses: ./.github/workflows/build-le-vibe-ide.yml" in text
     assert "ide-ci-metadata.txt" in text
     assert "retention-days" in text
@@ -56,3 +71,4 @@ def test_build_linux_yaml_uses_build_le_vibe_ide_and_documents_inherited_metadat
     assert "LE_VIBE_EDITOR" in text
     assert "with:" in text
     assert "vscodium_linux_compile" in text
+    assert "github.event.inputs.vscodium_linux_compile" in text

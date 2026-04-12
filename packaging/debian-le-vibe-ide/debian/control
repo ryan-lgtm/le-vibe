@@ -1,0 +1,24 @@
+Source: le-vibe-ide
+Section: editors
+Priority: optional
+Maintainer: Le Vibe Maintainers <maintainers@example.invalid>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: le-vibe-ide
+Architecture: amd64
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Recommends: hicolor-icon-theme
+Description: Lé Vibe IDE — Code OSS desktop shell (VSCode-linux tree)
+ Installs a built VSCode-linux-* directory from editor/vscodium under
+ /usr/lib/le-vibe/ide/ and exposes /usr/lib/le-vibe/bin/codium for the
+ le-vibe stack launcher (PRODUCT_SPEC §7.3 — internal path; public CLI is lvibe).
+ Also ships a Freedesktop menu entry (le-vibe.desktop) and hicolor icon so the
+ app appears in the desktop environment alongside the stack package.
+ .
+ In-app auto-updates via a Lé Vibe-hosted channel are deferred to roadmap
+ (PRODUCT_SPEC §7.3); use apt/releases or rebuild from source for upgrades.
+ .
+ Build: run dev/build.sh, then packaging/scripts/stage-le-vibe-ide-deb.sh and
+ dpkg-buildpackage from packaging/debian-le-vibe-ide/ — see README.md there.

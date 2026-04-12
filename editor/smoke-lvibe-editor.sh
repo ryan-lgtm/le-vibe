@@ -20,6 +20,19 @@ if [[ -z "${BIN}" ]]; then
   fi
 fi
 
+# 14.c — fail fast if the editor path is wrong (before launcher / Ollama).
+if [[ "${BIN}" == */* ]]; then
+  if [[ ! -f "${BIN}" || ! -x "${BIN}" ]]; then
+    echo "smoke-lvibe-editor: not an executable file: ${BIN} (see ./editor/print-built-codium-path.sh after dev/build.sh)" >&2
+    exit 4
+  fi
+else
+  if ! command -v "${BIN}" >/dev/null 2>&1; then
+    echo "smoke-lvibe-editor: editor not on PATH: ${BIN}" >&2
+    exit 4
+  fi
+fi
+
 if ! command -v ollama >/dev/null 2>&1; then
   echo "smoke-lvibe-editor: need \`ollama\` on PATH for managed Ollama (launcher)." >&2
   exit 3

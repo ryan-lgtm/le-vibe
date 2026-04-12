@@ -1,0 +1,25 @@
+"""Contract: editor/smoke.sh — repo-root IDE smoke gate (STEP 14; same as ci-editor-gate / workflows)."""
+
+from __future__ import annotations
+
+import subprocess
+from pathlib import Path
+
+
+def _repo_root() -> Path:
+    return Path(__file__).resolve().parents[2]
+
+
+def test_editor_smoke_sh_bash_syntax() -> None:
+    script = _repo_root() / "editor" / "smoke.sh"
+    assert script.is_file(), script
+    subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
+
+
+def test_editor_smoke_sh_delegates_ci_editor_gate():
+    text = (_repo_root() / "editor" / "smoke.sh").read_text(encoding="utf-8")
+    assert "STEP 14" in text
+    assert "ci-editor-gate.sh" in text
+    assert "build-le-vibe-ide.yml" in text or "build-linux.yml" in text
+    assert "14.d" in text
+    assert "branding-staging.checklist.md" in text

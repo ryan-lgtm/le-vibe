@@ -13,6 +13,7 @@ def test_ci_qa_hardening_lists_linux_compile_cargo_cache():
     text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
     assert "test_product_spec_section8.py" in text
     assert "linux_compile" in text
+    assert "vscodium-linux-build.tar.gz" in text
     assert "actions/cache@v4" in text
     assert ".cargo" in text
     assert "spec-phase2.md" in text and "§14" in text

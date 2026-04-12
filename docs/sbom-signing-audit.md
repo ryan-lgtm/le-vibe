@@ -1,5 +1,7 @@
 # Lé Vibe — SBOM, vulnerability audit, and `.deb` signing (Roadmap H2)
 
+**STEP 9 / PM map:** [`PM_STAGE_MAP.md`](PM_STAGE_MAP.md) — **H2** row links here, **[`le-vibe/requirements.txt`](../le-vibe/requirements.txt)**, **`pip-audit`** / **`cyclonedx-py`** in **`.github/workflows/ci.yml`**, **`le-vibe-python.cdx.json`**, and **[`.github/dependabot.yml`](../.github/dependabot.yml)** (pip bumps).
+
 Supply-chain practices for the **Python** stack in **`le-vibe/`**, how they connect to **CI artifacts** and **[`docs/apt-repo-releases.md`](apt-repo-releases.md)**, and optional signing of Debian packages.
 
 **CI wiring:** [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — job step **Python supply chain (H2)** runs **`pip-audit`** and **`cyclonedx-py`** before the `.deb` build; workflow header documents **H8** (**`docs/README`** *Product surface* / **`SECURITY`** / **`privacy-and-telemetry`** *E1*). **[`.github/dependabot.yml`](../.github/dependabot.yml)** header matches the same **H8** chain; **[`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/)** (**[`config.yml`](../.github/ISSUE_TEMPLATE/config.yml)** **`#` H8**) completes the reporter-facing slice of that index. Weekly **pip** bump PRs should trigger the **H2** follow-up steps in this doc after merge. See **[`docs/ci-qa-hardening.md`](ci-qa-hardening.md)**. **[`SECURITY.md`](../SECURITY.md)** *Related docs* lists optional **[`rag/le-vibe-phase2-chunks.md`](rag/le-vibe-phase2-chunks.md)** (*RAG / embeddings*, non-canonical) beside the same **H8** roster.

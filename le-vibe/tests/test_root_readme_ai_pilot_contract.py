@@ -43,3 +43,53 @@ def test_root_readme_e1_mapping_cites_le_vibe_readme_contract():
     """*Tests* / **E1 mapping** must cite **`test_le_vibe_readme_e1_contract.py`** (package README roster alignment)."""
     text = (_repo_root() / "README.md").read_text(encoding="utf-8")
     assert "test_le_vibe_readme_e1_contract.py" in text
+
+
+def test_root_readme_e1_mapping_prioritization_lists_linux_compile_tarball():
+    """§ *Prioritization* roster — **`PRODUCT_SPEC`** / SECTION8 evidence parity (**14.e / 14.f**)."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "linux_compile" in text
+    assert "ci-vscodium-bash-syntax.sh" in text
+    assert "ci-vscodium-linux-dev-build.sh" in text
+    assert "LEVIBE_SKIP_NODE_VERSION_CHECK" in text
+    assert "fail fast" in text
+    assert "vscodium-linux-build.tar.gz" in text
+
+
+def test_root_readme_e1_mapping_cites_editor_build_md_and_spec_phase2_section14_contracts():
+    """STEP 14 / 14.j: *E1 mapping* cites **`editor/BUILD.md`**, **`editor/README.md`**, and **`spec-phase2.md` §14** snapshot tests."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "test_editor_build_md_contract.py" in text
+    assert "test_editor_readme_step14_contract.py" in text
+    assert "test_spec_phase2_section14_snapshot_contract.py" in text
+    assert "Vendoring upstream" in text
+
+
+def test_root_readme_e1_mapping_cites_ci_qa_hardening_ide_smoke_contract():
+    """STEP 10 / 14.e / 14.f: *E1 mapping* cites **`test_ci_qa_hardening_doc_h3_contract.py`** (H3 IDE smoke doc)."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "test_ci_qa_hardening_doc_h3_contract.py" in text
+    assert "ci-qa-hardening.md" in text
+
+
+def test_root_readme_ci_section_14d_branding_honesty():
+    """STEP 14.d: CI § distinguishes fast smoke from shipped Lé Vibe branding."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "Honesty (14.d)" in text
+    assert "branding-staging.checklist.md" in text
+    assert "read before overrides" in text
+    assert "14.c vs 14.d" in text
+
+
+def test_root_readme_ci_section_linux_compile_fail_fast_14e():
+    """STEP 14.e: root README documents linux_compile fail-fast gates before dev/build."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "Lé Vibe IDE (Roadmap H6, STEP 14)" in text
+    assert "linux_compile" in text
+    assert "ci-vscodium-bash-syntax.sh" in text
+    assert "ci-editor-nvmrc-sync.sh" in text
+    assert "ci-vscodium-linux-dev-build.sh" in text
+    assert "node --version" in text
+    assert "LEVIBE_SKIP_NODE_VERSION_CHECK" in text
+    assert "fail fast" in text
+    assert "editor/BUILD.md" in text

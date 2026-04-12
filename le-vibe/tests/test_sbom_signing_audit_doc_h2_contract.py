@@ -16,3 +16,7 @@ def test_sbom_signing_audit_doc_lists_pip_audit_and_cyclonedx():
     assert "requirements.txt" in text
     assert "ci.yml" in text
     assert "H2" in text or "Roadmap H2" in text
+    assert "PM_STAGE_MAP" in text
+    assert "STEP 9" in text
+    assert "le-vibe-python.cdx.json" in text
+    assert "dependabot.yml" in text

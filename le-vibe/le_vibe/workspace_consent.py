@@ -1,4 +1,4 @@
-"""Consent gate for creating ``.lvibe/`` (PRODUCT_SPEC §5.1)."""
+"""Consent gate for creating ``.lvibe/`` (**PRODUCT_SPEC** §5.1; **STEP 15** / **docs/PM_STAGE_MAP.md**)."""
 
 from __future__ import annotations
 

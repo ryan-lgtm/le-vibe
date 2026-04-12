@@ -1,5 +1,7 @@
 # Lé Vibe — releases, checksums, and apt hosting (Roadmap H1)
 
+**STEP 8 / PM map:** [`PM_STAGE_MAP.md`](PM_STAGE_MAP.md) — **H1** row links here, **`debian/changelog`**, **`CHANGELOG.md`**, and **`.github/workflows/ci.yml`** artifact **`le-vibe-deb`**.
+
 This document is for **maintainers** who publish the **`.deb`** beyond ad-hoc copies: **GitHub Actions** artifacts, **checksum files**, **GitHub Releases**, and optional **apt** repositories.
 
 **Product anchor:** [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md) §8–§9 — agent/secrets policy and the orchestration roster. **Roadmap H1** (this doc) is indexed from [`README.md`](README.md) and [`PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md); see also [`sbom-signing-audit.md`](sbom-signing-audit.md) (**H2**).

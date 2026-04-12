@@ -35,6 +35,21 @@ def test_master_fence_step0_covers_product_spec_through_section8():
     assert "§10 acceptance" in block
 
 
+def test_master_fence_step14_linux_compile_fail_fast_before_dev_build():
+    """STEP 14.e: optional linux_compile runs bash-n/nvmrc gates before compile wrapper → dev/build.sh (see build-le-vibe-ide.yml)."""
+    block = _master_orchestrator_fence()
+    assert "STEP 14 — H6" in block
+    assert "§7.3" in block
+    assert "§7.3 close-out" in block
+    assert "Debian `.deb` for the IDE" in block
+    assert "GitHub Actions are not" in block
+    assert "fail fast" in block
+    assert "ci-vscodium-bash-syntax.sh" in block
+    assert "ci-editor-nvmrc-sync.sh" in block
+    assert "ci-vscodium-linux-dev-build.sh" in block
+    assert "LEVIBE_SKIP_NODE_VERSION_CHECK" in block
+
+
 def test_print_master_orchestrator_script_matches_fence():
     root = Path(__file__).resolve().parents[2]
     script = root / "packaging" / "scripts" / "print-master-orchestrator-prompt.py"

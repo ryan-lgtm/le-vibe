@@ -16,6 +16,13 @@ def test_install_continue_extension_bash_syntax() -> None:
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 
+def test_install_continue_extension_header_points_at_pin_doc_and_pm_map() -> None:
+    script = _repo_root() / "packaging" / "scripts" / "install-continue-extension.sh"
+    head = "\n".join(script.read_text(encoding="utf-8").splitlines()[:12])
+    assert "continue-extension-pin.md" in head
+    assert "PM_STAGE_MAP" in head or "STEP 7" in head
+
+
 def test_continue_openvsx_pin_file_exists_and_semver() -> None:
     pin = _repo_root() / "packaging" / "continue-openvsx-version"
     assert pin.is_file(), pin
