@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # STEP 14 (H6): editor/ vendoring detection — matches .github/workflows/build-le-vibe-ide.yml gate.
 # Run from repo root: ./packaging/scripts/ci-editor-gate.sh
-# Exits 0 always (honest skip until upstream is present). Authority: editor/VENDORING.md.
+# Exits 0 when layout is none (skip). For layout=vscodium, runs bash syntax on upstream scripts (may exit 1).
+# Authority: editor/VENDORING.md.
 # VSCodium’s repo uses product.json + get_repo.sh (no root package.json until vscode is fetched).
 set -euo pipefail
 
@@ -22,4 +23,7 @@ if [[ "${layout}" == "none" ]]; then
 fi
 
 echo "ci-editor-gate: upstream present (${layout}) — wire Linux build in build-le-vibe-ide.yml when ready."
+if [[ "${layout}" == "vscodium" ]]; then
+  "${ROOT}/packaging/scripts/ci-vscodium-bash-syntax.sh"
+fi
 exit 0

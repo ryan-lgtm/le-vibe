@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# STEP 14: syntax-check VSCodium entrypoint scripts (no network, no compile).
+# Run from repo root. No-op if editor/vscodium is absent. Exits non-zero on bash -n failure.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$ROOT"
+
+[[ -f editor/vscodium/product.json ]] || exit 0
+
+# Core path toward a Linux build (upstream names; keep list short).
+scripts=(
+  build.sh
+  build_cli.sh
+  get_repo.sh
+  prepare_src.sh
+  prepare_vscode.sh
+)
+
+for f in "${scripts[@]}"; do
+  p="editor/vscodium/${f}"
+  [[ -f "$p" ]] || { echo "ci-vscodium-bash-syntax: missing ${p}" >&2; exit 1; }
+  bash -n "$p"
+  echo "ci-vscodium-bash-syntax: OK ${f}"
+done

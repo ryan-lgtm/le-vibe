@@ -51,6 +51,8 @@ jobs:
             cd editor/vscodium
             python3 -c "import json; u=json.load(open('upstream/stable.json')); print('pinned vscode tag:', u.get('tag','?'))"
           fi
+          cd "${GITHUB_WORKSPACE}"
+          ./packaging/scripts/ci-vscodium-bash-syntax.sh
           echo "TODO: wire VSCodium prepare/build here (see upstream get_repo.sh / build.sh)."
 
       - name: Skip summary
