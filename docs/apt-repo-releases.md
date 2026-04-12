@@ -43,6 +43,8 @@ CI runs **`sha256sum -c SHA256SUMS`** after generating the manifest so a corrupt
 
 Default **`ci.yml`** artifacts ship the **stack** **`le-vibe`** **`.deb`** only. The **Lé Vibe IDE** is a **sibling** Debian source under **`packaging/debian-le-vibe-ide/`**: after **`editor/vscodium/VSCode-linux-*`** exists, run **`packaging/scripts/build-le-vibe-ide-deb.sh`** (or **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** with the stack — **[`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)**). Full story — **[`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md)**, **[`editor/BUILD.md`](../editor/BUILD.md)**.
 
+**Maintainer build output:** Successful **`build-le-vibe-debs.sh --with-ide`** prints a **Full-product install** line (**`sudo apt install`** with both resolved **`.deb`** paths) — **[`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** (*Success output (`--with-ide`)*). Installing both from one directory (or equivalent) — **[`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md)** (*Install both packages*).
+
 For a **release** that demos the **full** stack + branded editor, attach **`le-vibe-ide_*_amd64.deb`** alongside **`le-vibe_*_all.deb`** when both exist; add both **`*.deb`** lines to **`SHA256SUMS`** and run **`sha256sum -c SHA256SUMS`** before publishing.
 
 ## GitHub Releases + checksums

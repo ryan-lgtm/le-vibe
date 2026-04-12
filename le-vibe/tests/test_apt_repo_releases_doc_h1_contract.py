@@ -28,6 +28,10 @@ def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
     assert "build-le-vibe-ide-deb.sh" in text
     assert "packaging/debian-le-vibe-ide/README.md" in text
     assert "STEP 14" in text
+    assert "Full-product install" in text
+    assert "Success output (`--with-ide`)" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "Install both packages" in text
 
 
 def test_apt_repo_releases_doc_opens_with_ci_le_vibe_deb_stack_only_step14():
