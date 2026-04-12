@@ -4,6 +4,10 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ## [Unreleased]
 
+### CI
+
+- **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **Job summary** (when sources present) lists **`ide-ci-metadata.txt`** **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`** (matches uploaded artifact; E1: **`test_build_le_vibe_ide_workflow_contract.py`**).
+
 ### Tests
 
 - **`test_editor_le_vibe_overrides_readme_contract.py`** — **`editor/le-vibe-overrides/README.md`** retains **H6** / **STEP 14** strings (**`LE_VIBE_EDITOR`**, **`build-linux.yml`**, **`./editor/smoke.sh`**) plus **`ide-ci-metadata.txt`**, **`le_vibe_editor_docs`**, **`test_build_le_vibe_ide_workflow_contract.py`** (STEP 14 metadata ↔ **`LE_VIBE_EDITOR`** docs).
