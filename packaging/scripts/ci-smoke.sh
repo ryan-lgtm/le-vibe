@@ -48,6 +48,9 @@ python3 -m pip install -q -r requirements.txt pytest
 python3 -m pytest tests/ -q
 cd "$ROOT"
 
+echo "ci-smoke: editor vendoring gate (STEP 14)"
+./packaging/scripts/ci-editor-gate.sh
+
 if command -v desktop-file-validate >/dev/null 2>&1; then
   echo "ci-smoke: desktop-file-validate"
   desktop-file-validate packaging/applications/le-vibe.desktop

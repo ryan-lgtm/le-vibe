@@ -11,7 +11,7 @@ git submodule add https://github.com/VSCodium/vscodium.git editor/vscodium
 git submodule update --init --recursive
 ```
 
-Then follow upstream’s **prepare / build** docs from **`editor/vscodium/`**. CI [`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml) (or the **`build-linux`** alias [`.github/workflows/build-linux.yml`](../.github/workflows/build-linux.yml)) treats either **`editor/package.json`** (flat checkout) or **`editor/vscodium/package.json`** (submodule layout) as “sources present.”
+Then follow upstream’s **prepare / build** docs from **`editor/vscodium/`**. CI [`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml) (or the **`build-linux`** alias [`.github/workflows/build-linux.yml`](../.github/workflows/build-linux.yml)) treats either **`editor/package.json`** (flat checkout) or **`editor/vscodium/package.json`** (submodule layout) as “sources present.” Verify locally with **[`packaging/scripts/ci-editor-gate.sh`](../packaging/scripts/ci-editor-gate.sh)**.
 
 ## Branding & About
 

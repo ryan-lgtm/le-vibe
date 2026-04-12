@@ -35,6 +35,8 @@ Upstream VSCodium prepare/build scripts remain the source of truth for **how** t
 
 ## CI sketch (monorepo)
 
+Shipped workflows: **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** (`workflow_dispatch`, tags `ide-v*`, **`workflow_call`**) and **[`.github/workflows/build-linux.yml`](../.github/workflows/build-linux.yml)** (manual **`build-linux`** alias). Local parity: **[`packaging/scripts/ci-editor-gate.sh`](../packaging/scripts/ci-editor-gate.sh)** (also invoked from **[`packaging/scripts/ci-smoke.sh`](../packaging/scripts/ci-smoke.sh)**).
+
 Prefer a **dedicated workflow** (e.g. `.github/workflows/build-le-vibe-ide.yml`) that:
 
 1. **Checkout** this repo (optionally with submodules if **`editor/`** uses them).
