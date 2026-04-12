@@ -61,6 +61,26 @@ if [[ ! -x "$BIN" ]]; then
   exit 1
 fi
 
+# §7.3 shipped identity: built Electron tree should contain merged product strings (ci-vscodium-linux-dev-build.sh before dev/build.sh).
+# Set LEVIBE_STAGE_IDE_ASSERT_BRAND=1 to fail if missing; default is warn-only. LEVIBE_STAGE_IDE_VERBOSE=1 prints OK when branded.
+PRODUCT_JSON="$VS_DIR/resources/app/product.json"
+_assert_brand="${LEVIBE_STAGE_IDE_ASSERT_BRAND:-0}"
+if [[ -f "$PRODUCT_JSON" ]]; then
+  if ! grep -q 'Lé Vibe' "$PRODUCT_JSON" 2>/dev/null; then
+    echo "stage-le-vibe-ide-deb: warning: $PRODUCT_JSON has no Lé Vibe strings — build likely skipped packaging/scripts/ci-vscodium-linux-dev-build.sh (product merge + icons) before dev/build.sh — editor/BUILD.md *Linux icons*" >&2
+    if [[ "$_assert_brand" == "1" ]]; then
+      exit 1
+    fi
+  elif [[ "${LEVIBE_STAGE_IDE_VERBOSE:-0}" == "1" ]]; then
+    echo "stage-le-vibe-ide-deb: §7.3 OK — Lé Vibe strings in resources/app/product.json" >&2
+  fi
+else
+  echo "stage-le-vibe-ide-deb: warning: missing $PRODUCT_JSON — cannot verify §7.3 identity in this VSCode-linux-* tree" >&2
+  if [[ "$_assert_brand" == "1" ]]; then
+    exit 1
+  fi
+fi
+
 rm -rf "$STAGING"
 mkdir -p "$STAGING/usr/lib/le-vibe/ide"
 cp -a "$VS_DIR" "$STAGING/usr/lib/le-vibe/ide/$NAME"
