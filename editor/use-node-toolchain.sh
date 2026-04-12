@@ -33,7 +33,7 @@ fi
 source "${NVM_DIR}/nvm.sh"
 
 if [[ ! -f "${EDITOR_DIR}/.nvmrc" ]]; then
-  _die "missing ${EDITOR_DIR}/.nvmrc"
+  _die "missing ${EDITOR_DIR}/.nvmrc — restore from git; Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md; then align pins per packaging/scripts/ci-editor-nvmrc-sync.sh (14.a)."
 fi
 
 pushd "${EDITOR_DIR}" >/dev/null

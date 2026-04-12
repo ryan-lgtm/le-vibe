@@ -20,6 +20,8 @@ def test_use_node_toolchain_script_documents_14a_nvmrc():
     text = (_repo_root() / "editor" / "use-node-toolchain.sh").read_text(encoding="utf-8")
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
+    assert "restore from git" in text
+    assert "ci-editor-nvmrc-sync.sh" in text
     assert "14.a" in text
     assert ".nvmrc" in text
     assert "ci-editor-nvmrc-sync" in text or "vscodium/.nvmrc" in text
