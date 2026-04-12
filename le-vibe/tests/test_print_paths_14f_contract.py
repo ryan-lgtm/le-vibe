@@ -40,6 +40,7 @@ def test_print_ci_tarball_codium_path_documents_14f():
     assert "realpath not on PATH" in text
     assert "tar not on PATH" in text
     assert "tar extract failed" in text
+    assert "mktemp not on PATH" in text
     assert "mktemp failed" in text
     assert "exactly one argument" in text
     assert "git submodule update --init editor/vscodium" in text

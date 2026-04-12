@@ -33,6 +33,10 @@ if ! command -v tar >/dev/null 2>&1; then
   echo "${0##*/}: tar not on PATH — install: sudo apt install tar (Debian/Ubuntu)" >&2
   exit 1
 fi
+if ! command -v mktemp >/dev/null 2>&1; then
+  echo "${0##*/}: mktemp not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md 14.f)." >&2
+  exit 1
+fi
 
 _lc="${TAR,,}"
 if [[ "${_lc}" == *.zip ]]; then
