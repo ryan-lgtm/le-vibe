@@ -30,6 +30,23 @@
 5. PM / PROJECT replies with ordered priorities and an **engineer brief**; open another **new chat** for implementation.
 6. Repeat. **Same prompt every time** — only **MODE**, **`OWNER_DIRECTIVES`**, and **CONTINUATION** change.
 
+## Marching the full queue (STEPS **0–17**)
+
+**Goal:** End with **`LÉ VIBE SESSION COMPLETE`** when every STEP is **done** or explicitly **SKIPPED** (H6/H7 may be SKIPPED per [`docs/PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md)).
+
+- **Order is fixed:** **0 → 1 → 14 → 2–13 → 15–17** — do not “skip ahead” for convenience; **advance** the **first incomplete** STEP only.
+- **`OWNER_DIRECTIVES:`** (recommended on long runs): steer the agent to **queue advancement**, not sideways churn — see the **suggested line** inside the paste block below.
+- **When to move on:** Call a STEP **DONE** when **PRODUCT_SPEC** + that STEP’s acceptance are met in-repo; call **SKIPPED** only with a **one-line reason** in the reply (e.g. out-of-repo credential work).
+- **Anti-drift:** If the agent proposes **only** extra `le-vibe/tests/*_contract.py` pins **twice** without changing STEP status, add **`OWNER_DIRECTIVES:`** forcing the **next real acceptance slice** (build, `.deb`, manifest behavior, etc.) or open **`MODE: PROJECT`** to re-sequence.
+
+## When to rerun `print-master-iteration-loop-prompt.py`
+
+- **After `docs/MASTER_ITERATION_LOOP.md` changes** (especially the fenced paste block) — refresh so Cursor’s paste matches **git**.
+- **After pull/rebase** that touched **`docs/`** or **`packaging/scripts/print-master-iteration-loop-prompt.py`**.
+- **When the prompt feels stale** or you are unsure your paste is current (optional; no fixed cadence).
+
+From the repository root: **`python3 packaging/scripts/print-master-iteration-loop-prompt.py`** — paste **stdout** into a **new** chat when refreshing.
+
 ---
 
 ## Paste block (stdout of `print-master-iteration-loop-prompt.py`)
@@ -46,6 +63,8 @@ Global rules (always):
 - **§7.2 / §8:** The **only** hard stop where you **must not** continue without the human is **USER RESPONSE REQUIRED** — unresolved product/architecture gaps not decided in PRODUCT_SPEC (all caps first line), then numbered questions; **No preference** is valid. **LÉ VIBE BLOCKED** only for secrets, credentials, or required out-of-repo access. **Do not** treat “a subsidiary checklist in a PM phase doc is all [x]” as forbidding **PASTE SAME AGAIN** if **OWNER_DIRECTIVES** or Master queue work still applies.
 - **Git checkpoints (engineering workflow):** After each **major track** (sustained theme—e.g. **STEP 14** / **H6** **editor/**, **H7**, **Roadmap H**) or **milestone** (a **non-trivial** completed Master **STEP 0–17**, or a named milestone in **PM_STAGE_MAP** / **spec-phase2** §11), run **`git add`**, **`git commit`**, **`git push`** per **`docs/PROMPT_BUILD_LE_VIBE.md`** Master orchestrator **Git checkpoints** rule. Respect **`.gitignore`**; never commit secrets or **`.env`**.
 - No fake progress; no PASTE SAME AGAIN without substantive work this turn.
+- **March STEPs 0–17 — avoid drift:** Each **ENGINEER** reply must state the **first incomplete STEP** (Master **execution order** in **docs/PROMPT_BUILD_LE_VIBE.md**) and advance **that** STEP (implementation, packaging, or tests **directly tied** to its acceptance), or declare **STEP N** **DONE** / **SKIPPED** with a one-line evidence pointer. Do **not** spend **consecutive** turns **only** adding **`le-vibe/tests/*_contract.py`** assertions unless **OWNER_DIRECTIVES** or **CONTINUATION** explicitly requests contract hardening for the **current** STEP.
+- **Suggested `OWNER_DIRECTIVES` for full-queue marches:** `March Master queue 0–17 in order; advance the first incomplete STEP each turn; after STEP 14 is DONE or SKIPPED, continue at STEP 2 — minimize sideways test-only churn.`
 
 **Human prefix (optional):** `OWNER_DIRECTIVES:` (your goals — bullet list; steers PRODUCT_MANAGER and PROJECT). Then `MODE: AUTO` (default) | `MODE: ENGINEER` | `MODE: PRODUCT_MANAGER` | `MODE: PROJECT`. Optional **CONTINUATION:** — last slice summary, blockers, or pasted brief.
 
