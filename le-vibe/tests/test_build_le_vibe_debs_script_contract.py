@@ -65,6 +65,20 @@ def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
 
 
+def test_pm_deb_build_iteration_doc_731_staging_identity_step14():
+    """STEP 14: PM deb doc names §7.3 staging env + ci-vscodium path before stage-le-vibe-ide-deb.sh."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    assert "§7.3 IDE staging" in text
+    assert "ci-vscodium-linux-dev-build.sh" in text
+    assert "product-branding-merge.json" in text
+    assert "sync-linux-icon-assets.sh" in text
+    assert "LEVIBE_STAGE_IDE_ASSERT_BRAND" in text
+    assert "LEVIBE_STAGE_IDE_VERBOSE" in text
+    assert "stage-le-vibe-ide-deb.sh" in text
+    assert "resources/app/product.json" in text
+
+
 def test_print_pm_deb_build_prompt_extractable():
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
@@ -79,3 +93,5 @@ def test_print_pm_deb_build_prompt_extractable():
     assert "PM_STAGE_MAP.md" in fence
     assert "H1 vs §7.3 .deb bundles" in fence
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in fence
+    assert "LEVIBE_STAGE_IDE_ASSERT_BRAND" in fence
+    assert "stage-le-vibe-ide-deb.sh" in fence

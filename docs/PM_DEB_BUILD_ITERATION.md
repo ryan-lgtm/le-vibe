@@ -11,6 +11,15 @@
 
 When you have both artifacts from **`build-le-vibe-debs.sh`** (stack) and **`--with-ide`** (or **`build-le-vibe-ide-deb.sh`** alone), ship or attach **`le-vibe_*_all.deb`** and **`le-vibe-ide_*_amd64.deb`** together for an install-and-demo that includes the branded IDE. **Checksums**, default CI artifact **`le-vibe-deb`** (stack-only), and **`SHA256SUMS`** expectations — **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** (*IDE package* subsection, **STEP 8 / H1**). **PM stage map:** **[`docs/PM_STAGE_MAP.md`](PM_STAGE_MAP.md)** (*H1 vs §7.3 .deb bundles* — **STEP 14** vs **STEP 8**); monorepo honesty — **[`spec-phase2.md`](../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*.
 
+### §7.3 IDE staging — Lé Vibe identity in the built tree
+
+The **`le-vibe-ide`** package repacks **`editor/vscodium/VSCode-linux-*`**. That directory should be produced after **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** (merge **`product-branding-merge.json`**, **`sync-linux-icon-assets.sh`**, env defaults) **before** **`dev/build.sh`** — not a bare upstream compile — see **`editor/BUILD.md`** *Linux icons*.
+
+**[`packaging/scripts/stage-le-vibe-ide-deb.sh`](../packaging/scripts/stage-le-vibe-ide-deb.sh)** warns if **`resources/app/product.json`** lacks **Lé Vibe** strings. Optional environment (inherited by **`build-le-vibe-ide-deb.sh`** and **`build-le-vibe-debs.sh --with-ide`**):
+
+- **`LEVIBE_STAGE_IDE_ASSERT_BRAND=1`** — fail staging when identity is missing (use for release or demo drops).
+- **`LEVIBE_STAGE_IDE_VERBOSE=1`** — print a line when the check passes.
+
 ## Lazy repeat — paste into Cursor (engineer)
 
 **Print stdout (repo root):** `python3 packaging/scripts/print-pm-deb-build-prompt.py`
@@ -22,7 +31,7 @@ You are the Lé Vibe **packaging / .deb build** engineer for this monorepo. **MO
 
 **CI vs maintainer .deb bundles:** Default **`ci.yml`** artifact **`le-vibe-deb`** is **stack-only**; **`--with-ide`** adds **`le-vibe-ide_*_amd64.deb`** for full-product drops — **[`docs/PM_STAGE_MAP.md`](PM_STAGE_MAP.md)** (*H1 vs §7.3 .deb bundles* — **STEP 14** vs **STEP 8**); monorepo honesty — **[`spec-phase2.md`](../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*.
 
-**Goal:** Keep **`build-le-vibe-debs.sh`** correct: prerequisite detection, **`dpkg-buildpackage`** for stack (repo root) and optional IDE (`--with-ide` → **`build-le-vibe-ide-deb.sh`**: stage + **`dpkg-buildpackage`** + optional **`lintian`**), **`--install`** / **`--yes`**, artifact discovery (`le-vibe_*.deb` in repo parent; `le-vibe-ide_*.deb` under **`packaging/`**). **Do not** claim GitHub Actions is a v1 production gate.
+**Goal:** Keep **`build-le-vibe-debs.sh`** correct: prerequisite detection, **`dpkg-buildpackage`** for stack (repo root) and optional IDE (`--with-ide` → **`build-le-vibe-ide-deb.sh`**: stage + **`dpkg-buildpackage`** + optional **`lintian`**), **`--install`** / **`--yes`**, artifact discovery (`le-vibe_*.deb` in repo parent; `le-vibe-ide_*.deb` under **`packaging/`**). For **`--with-ide`**, document optional **`LEVIBE_STAGE_IDE_ASSERT_BRAND`** / **`LEVIBE_STAGE_IDE_VERBOSE`** (§7.3 IDE staging above; **`stage-le-vibe-ide-deb.sh`**). **Do not** claim GitHub Actions is a v1 production gate.
 
 **After shell edits:** `bash -n packaging/scripts/build-le-vibe-debs.sh` and `cd le-vibe && python3 -m pytest tests/test_build_le_vibe_debs_script_contract.py` (or full **`pytest`**).
 
