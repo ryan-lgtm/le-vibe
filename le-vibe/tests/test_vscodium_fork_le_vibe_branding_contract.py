@@ -9,6 +9,16 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_vscodium_fork_doc_bootstrap_lists_production_deb_pair_step14():
+    """STEP 14 / §7.3: H6 policy doc opens with stack + IDE .deb build path."""
+    text = (_repo_root() / "docs" / "vscodium-fork-le-vibe.md").read_text(encoding="utf-8")
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "apt-repo-releases.md" in text
+    assert "le-vibe-ide_*_amd64.deb" in text
+    assert "SHA256SUMS" in text
+
+
 def test_vscodium_fork_doc_branding_section_honesty_and_overrides():
     text = (_repo_root() / "docs" / "vscodium-fork-le-vibe.md").read_text(encoding="utf-8")
     assert "git submodule update --init editor/vscodium" in text
