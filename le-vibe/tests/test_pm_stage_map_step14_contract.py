@@ -42,6 +42,16 @@ def test_pm_stage_map_step14_lists_ide_workflows_smoke_and_e1_test_build():
     assert "test_editor_vendoring_md_contract.py" in row
 
 
+def test_pm_stage_map_lists_h1_vs_ide_deb_bundles_step14():
+    """STEP 14: PM map names ci.yml le-vibe-deb (stack) vs maintainer le-vibe-ide (§7.3)."""
+    text = (_repo_root() / "docs" / "PM_STAGE_MAP.md").read_text(encoding="utf-8")
+    assert "H1 vs §7.3 .deb bundles" in text
+    assert "le-vibe-deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
+    assert "build-le-vibe-debs.sh" in text and "--with-ide" in text
+
+
 def test_pm_stage_map_notes_step14_fine_grain_closure_and_remaining_gap():
     text = (_repo_root() / "docs" / "PM_STAGE_MAP.md").read_text(encoding="utf-8")
     assert "14.a" in text and "14.j" in text
