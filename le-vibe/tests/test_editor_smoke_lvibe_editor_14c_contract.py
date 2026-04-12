@@ -24,3 +24,5 @@ def test_ci_editor_gate_bash_n_smoke_lvibe_editor():
     text = (_repo_root() / "packaging" / "scripts" / "ci-editor-gate.sh").read_text(encoding="utf-8")
     assert "smoke-lvibe-editor.sh" in text
     assert "bash -n" in text
+    assert "print-built-codium-path.sh" in text
+    assert "print-vsbuild-codium-path.sh" in text

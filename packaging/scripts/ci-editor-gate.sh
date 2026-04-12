@@ -34,6 +34,9 @@ bash -n "${ROOT}/editor/smoke-lvibe-editor.sh"
 if [[ "${layout}" == "vscodium" ]]; then
   "${ROOT}/packaging/scripts/ci-vscodium-bash-syntax.sh"
   "${ROOT}/packaging/scripts/ci-editor-nvmrc-sync.sh"
+  bash -n "${ROOT}/editor/fetch-vscode-sources.sh"
+  bash -n "${ROOT}/editor/print-built-codium-path.sh"
+  bash -n "${ROOT}/editor/print-vsbuild-codium-path.sh"
   bash -n "${ROOT}/packaging/scripts/ci-vscodium-linux-dev-build.sh"
 fi
 exit 0

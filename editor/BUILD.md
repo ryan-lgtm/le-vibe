@@ -3,10 +3,10 @@
 Compile steps are owned by **VSCodium** upstream. In this monorepo:
 
 1. **Toolchain:** **[`.nvmrc`](.nvmrc)** — run **`nvm install` / `nvm use`** from **`editor/`** (matches **`vscodium/.nvmrc`**; see **[`README.md`](README.md)**).
-2. **Fetch vscode sources (`get_repo`):** upstream’s script is **`vscodium/get_repo.sh`**. It is **cwd-sensitive**: run commands from **`editor/vscodium/`** (the script creates/updates **`vscode/`** next to **`product.json`**). Do not run it from the monorepo root or from **`editor/`** alone. Full procedure is **`vscodium/docs/howto-build.md`** — use *Build for Development* (**`./dev/build.sh`**) for local iteration, or *Build for CI/Downstream* when you need the **`. get_repo.sh`** / **`build.sh`** sourcing pattern with the documented env vars (avoid inventing a second how-to here). After a successful fetch, the vscode tree and root **`package.json`** appear per upstream.
+2. **Fetch vscode sources (`get_repo`):** upstream’s script is **`vscodium/get_repo.sh`**. It is **cwd-sensitive**: run commands from **`editor/vscodium/`** (the script creates/updates **`vscode/`** next to **`product.json`**). Do not run it from the monorepo root or from **`editor/`** alone. **Monorepo helper (14.b):** from the repository root, **`./editor/fetch-vscode-sources.sh`** **`cd`**s to **`editor/vscodium/`**, sets the same **`VSCODE_QUALITY` / `VSCODE_LATEST` / `CI_BUILD` defaults as **`dev/build.sh`**, and **sources** **`get_repo.sh`** (no compile). Full procedure is **`vscodium/docs/howto-build.md`** — use *Build for Development* (**`./dev/build.sh`**) for local iteration, or *Build for CI/Downstream* when you need the **`. get_repo.sh`** / **`build.sh`** sourcing pattern with the documented env vars (avoid inventing a second how-to here). After a successful fetch, the vscode tree and root **`package.json`** appear per upstream.
 3. **Lé Vibe–specific layers:** **[`le-vibe-overrides/README.md`](le-vibe-overrides/README.md)**, **[`../docs/vscodium-fork-le-vibe.md`](../docs/vscodium-fork-le-vibe.md)**, **[`../docs/PRODUCT_SPEC.md`](../docs/PRODUCT_SPEC.md)** §7.2 where branding choices are material.
 
-**CI:** [`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml) — default **PR** runs match **`./editor/smoke.sh`** (pre-binary **`ide-ci-metadata.txt`**, **`vscode-upstream-stable.json`** when pinned, GitHub Actions **Summary** **Pre-binary artifact** / **`LE_VIBE_EDITOR`** pointer). **Optional full linux compile (14.e):** job **`linux_compile`** runs **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** → **`editor/vscodium/dev/build.sh`** when you **manually dispatch** this workflow with **`vscodium_linux_compile`** enabled, or on **`ide-v*`** tag pushes (long run; may fail on undersized runners). The workflow caches **`~/.cargo/registry`** and **`~/.cargo/git`** (**`actions/cache`**) to speed repeat compiles when **`editor/vscodium/product.json`** / **`editor/.nvmrc`** change. If present, **`editor/le-vibe-overrides/build-env.sh`** is sourced first (see **`editor/le-vibe-overrides/build-env.sh.example`**) so maintainers can export upstream **`APP_NAME`** / **`BINARY_NAME`** / etc. without editing the submodule; material branding → **`PRODUCT_SPEC` §7.2**. Uploads **`vscodium-linux-build.tar.gz`** as a **`le-vibe-vscodium-linux-*`** artifact when **`VSCode-linux-*`** appears. **[`build-linux.yml`](../.github/workflows/build-linux.yml)** is a **`workflow_dispatch`** alias that **`uses:`** the same workflow. **Local smoke:** **`./editor/smoke.sh`** from the repo root.
+**CI:** [`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml) — default **PR** runs match **`./editor/smoke.sh`** (pre-binary **`ide-ci-metadata.txt`**, **`vscode-upstream-stable.json`** when pinned, GitHub Actions **Summary** **Pre-binary artifact** / **`LE_VIBE_EDITOR`** pointer). **Optional full linux compile (14.e):** job **`linux_compile`** runs **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** → **`editor/vscodium/dev/build.sh`** when you **manually dispatch** this workflow with **`vscodium_linux_compile`** enabled, or on **`ide-v*`** tag pushes (long run; may fail on undersized runners). The workflow caches **`~/.cargo/registry`** and **`~/.cargo/git`** (**`actions/cache`**) to speed repeat compiles when **`editor/vscodium/product.json`** / **`editor/.nvmrc`** change. If present, **`editor/le-vibe-overrides/build-env.sh`** is sourced first (see **`editor/le-vibe-overrides/build-env.sh.example`**) so maintainers can export upstream **`APP_NAME`** / **`BINARY_NAME`** / etc. without editing the submodule; material branding → **`PRODUCT_SPEC` §7.2**. Uploads **`vscodium-linux-build.tar.gz`** as a **`le-vibe-vscodium-linux-*`** artifact when **`VSCode-linux-*`** appears. **[`build-linux.yml`](../.github/workflows/build-linux.yml)** is a **`workflow_dispatch`** alias that **`uses:`** the same workflow and can forward **`vscodium_linux_compile`** via **`workflow_call`** **`inputs`** so **`linux_compile`** runs without opening **`build-le-vibe-ide`** directly. **Local smoke:** **`./editor/smoke.sh`** from the repo root.
 
 ## `LE_VIBE_EDITOR` after a local build
 
@@ -21,6 +21,8 @@ Until a Lé Vibe–branded install exists, **`/usr/bin/codium`** from **`Recomme
 
 After a local **VSCodium** build (or with any **`codium`**-compatible binary), point **`LE_VIBE_EDITOR`** at the **`codium`** executable your tree produced. Upstream Linux output is often under a **`VSCode-linux-*`** directory next to **`vscode/`**, or a release-style layout with **`bin/codium`** — see **`vscodium/docs/usage.md`** (*From Linux .tar.gz*) and your **`build.sh`** / **`dev/build.sh`** log lines for the exact path on your machine.
 
+**Discover the built binary (local `VSCode-linux-*` tree):** from the repository root, **`./editor/print-built-codium-path.sh`** prints the absolute path to **`editor/vscodium/VSCode-linux-*/bin/codium`** when present (if several trees exist, picks the newest by file mtime). Use it to set **`LE_VIBE_EDITOR`** before **`smoke-lvibe-editor.sh`** or **`lvibe`**.
+
 **Launcher smoke** (starts managed Ollama, then runs the editor with **`--version`** and exits — requires **`ollama`** on **`PATH`**):
 
 ```bash
@@ -28,6 +30,8 @@ After a local **VSCodium** build (or with any **`codium`**-compatible binary), p
 LE_VIBE_EDITOR=/absolute/path/to/codium ./editor/smoke-lvibe-editor.sh
 # or pass the binary as the first argument
 ./editor/smoke-lvibe-editor.sh /absolute/path/to/codium
+# after dev/build.sh, if VSCode-linux-* exists:
+LE_VIBE_EDITOR="$(./editor/print-built-codium-path.sh)" ./editor/smoke-lvibe-editor.sh
 ```
 
 If **`LE_VIBE_EDITOR`** is unset and **`/usr/bin/codium`** exists, the script uses that. This is the same stack path **`lvibe`** uses; it is not a substitute for **`./editor/smoke.sh`** (layout / **`bash -n`** / **`.nvmrc`** gate).
@@ -52,8 +56,11 @@ Successful **`linux_compile`** runs upload **`vscodium-linux-build.tar.gz`** (ar
 
 ```bash
 tar -xzf vscodium-linux-build.tar.gz
-realpath VSCode-linux-*/bin/codium   # use this for LE_VIBE_EDITOR
+# from repo root, pass the directory that contains VSCode-linux-* (often the unpack cwd):
+LE_VIBE_EDITOR="$(./editor/print-vsbuild-codium-path.sh "$PWD")"   # or: realpath VSCode-linux-*/bin/codium
 ```
+
+**`./editor/print-vsbuild-codium-path.sh`** (**14.f**) resolves **`VSCode-linux-*/bin/codium`** under any **absolute or relative** unpack root (same discovery logic as **`print-built-codium-path.sh`**, which only searches **`editor/vscodium/`** — **14.c**).
 
 This is **not** byte-identical to upstream’s release-named **`VSCodium-linux-<arch>-<version>.tar.gz`** archives, but the **per-directory** layout matches the same **`bin/codium`** pattern — see **`vscodium/docs/usage.md`** (*From Linux .tar.gz*) for portable-mode and PATH notes.
 
@@ -63,7 +70,7 @@ Official **VSCodium** Linux tarballs use **`./bin/codium`** relative to the extr
 
 ## Default `LE_VIBE_EDITOR` / packaging story when the IDE ships (14.g)
 
-**Today:** the **`le-vibe`** stack **`.deb`** does **not** ship the IDE binary. Launcher resolution (**`le_vibe.launcher`**, **`_default_editor`**) is: **`$LE_VIBE_EDITOR`** if set; else **`/usr/bin/le-vibe-ide`** if that path is executable; else **`/usr/bin/codium`** if that path is executable; else the bare command **`codium`** on **`PATH`**. **`debian/control`** uses **`Recommends: codium`** so a normal **`apt install`** usually yields an editor without extra configuration.
+**Today:** the **`le-vibe`** stack **`.deb`** does **not** ship the IDE binary. Launcher resolution (**`le_vibe.launcher._default_editor`** in **`le-vibe/le_vibe/launcher.py`**) is: **`$LE_VIBE_EDITOR`** if set; else **`/usr/bin/le-vibe-ide`** if that path is executable; else **`/usr/bin/codium`** if that path is executable; else the bare command **`codium`** on **`PATH`**. End-user copy: **`debian/le-vibe.README.Debian`** (*Default editor when `LE_VIBE_EDITOR` is unset*). **`debian/control`** uses **`Recommends: codium`** so a normal **`apt install`** usually yields an editor without extra configuration.
 
 **When a packaged Lé Vibe IDE exists** (expected separate source/binary package, e.g. **`le-vibe-ide`**, not yet in this repository): the **intended** integration is:
 

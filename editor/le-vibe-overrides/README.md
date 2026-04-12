@@ -4,6 +4,16 @@
 
 This directory is reserved for **Lé Vibe–only** inputs that upstream **VSCodium** does not ship: documented deltas against **`editor/vscodium/product.json`**, Linux **`.desktop`** / app-id notes, icon sources aligned with **[`packaging/icons/`](../../packaging/icons/)**, and maintainer patch notes—policy shell in **`docs/vscodium-fork-le-vibe.md`**.
 
+## Build flow vs branding layers (14.d)
+
+Use this order so **overrides** stay tied to a reproducible tree (upstream defaults remain **VSCodium** / **`codium`** until patches and **`build-env.sh`** exports intentionally change visible identity — **§7.2**):
+
+1. **Fetch vscode:** from repo root, **[`../fetch-vscode-sources.sh`](../fetch-vscode-sources.sh)** (**14.b**) — creates **`editor/vscodium/vscode/`**.
+2. **Compile:** **`cd editor/vscodium && ./dev/build.sh`** — see **[`../BUILD.md`](../BUILD.md)**. Optional **[`build-env.sh`](build-env.sh.example)** (copy from **`build-env.sh.example`**) is sourced by **[`../../packaging/scripts/ci-vscodium-linux-dev-build.sh`](../../packaging/scripts/ci-vscodium-linux-dev-build.sh)** before **`dev/build.sh`** in CI and for local full builds; use for upstream **`APP_NAME`**, **`BINARY_NAME`**, etc. only when **§7.2** allows.
+3. **Verify launcher ↔ binary:** **[`../print-built-codium-path.sh`](../print-built-codium-path.sh)** then **[`../smoke-lvibe-editor.sh`](../smoke-lvibe-editor.sh)** with **`LE_VIBE_EDITOR`** (**14.c**).
+
+**What “Lé Vibe branding” means here:** staged **`product.json`** diffs, icons, desktop metadata, and patch notes under this directory—**not** automatic renames until maintainers apply them. **`docs/vscodium-fork-le-vibe.md`** (*Branding & overrides*) is the policy shell.
+
 ## What to stage here (checklist)
 
 | Concern | Notes |

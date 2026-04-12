@@ -26,6 +26,9 @@ def test_vscodium_fork_doc_branding_section_honesty_and_overrides():
     assert "le-vibe.README.Debian" in text
     assert "build-env.sh.example" in text
     assert "ci-vscodium-linux-dev-build.sh" in text
+    assert "fetch-vscode-sources.sh" in text
+    assert "print-built-codium-path.sh" in text
+    assert "smoke-lvibe-editor.sh" in text
 
 
 def test_vscodium_fork_doc_installable_tree_14f():

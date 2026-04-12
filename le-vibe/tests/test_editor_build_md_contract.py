@@ -19,6 +19,8 @@ def test_editor_build_md_contract_get_repo_and_howto():
     assert "editor/vscodium/" in text
     assert ".nvmrc" in text
     assert "nvm" in text.lower()
+    assert "fetch-vscode-sources.sh" in text
+    assert "14.b" in text
 
 
 def test_editor_build_md_get_repo_upstream_paths_exist_when_vscodium_present():
@@ -28,6 +30,7 @@ def test_editor_build_md_get_repo_upstream_paths_exist_when_vscodium_present():
         return
     assert (root / "editor" / "vscodium" / "get_repo.sh").is_file()
     assert (root / "editor" / "vscodium" / "docs" / "howto-build.md").is_file()
+    assert (root / "editor" / "fetch-vscode-sources.sh").is_file()
 
 
 def test_editor_build_md_contract_lvibe_smoke_pointer():
@@ -35,6 +38,15 @@ def test_editor_build_md_contract_lvibe_smoke_pointer():
     assert "smoke-lvibe-editor.sh" in text
     assert "LE_VIBE_EDITOR" in text
     assert "--version" in text
+    assert "print-built-codium-path.sh" in text
+    assert "VSCode-linux-" in text
+
+
+def test_editor_print_built_codium_script_exists_when_vscodium_present():
+    root = _repo_root()
+    if not (root / "editor" / "vscodium" / "product.json").is_file():
+        return
+    assert (root / "editor" / "print-built-codium-path.sh").is_file()
 
 
 def test_editor_build_md_contract_ci_compile_pointer():
@@ -56,14 +68,21 @@ def test_editor_build_md_contract_tarball_and_codium_path_14f():
     assert "vscodium-linux-build.tar.gz" in text
     assert "le-vibe-vscodium-linux-" in text
     assert "realpath" in text
+    assert "print-vsbuild-codium-path.sh" in text
     assert "vscodium/docs/usage.md" in text
     assert "VSCodium-linux-" in text
+
+
+def test_editor_print_vsbuild_codium_script_exists():
+    assert (_repo_root() / "editor" / "print-vsbuild-codium-path.sh").is_file()
 
 
 def test_editor_build_md_contract_default_le_vibe_editor_packaging_14g():
     text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")
     assert "14.g" in text
-    assert "le_vibe.launcher" in text
+    assert "le_vibe.launcher._default_editor" in text
+    assert "le-vibe/le_vibe/launcher.py" in text
+    assert "le-vibe.README.Debian" in text
     assert "_default_editor" in text
     assert "/usr/bin/le-vibe-ide" in text
     assert "le-vibe-ide" in text

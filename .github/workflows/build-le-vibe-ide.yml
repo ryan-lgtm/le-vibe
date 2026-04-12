@@ -13,6 +13,11 @@ on:
         description: Run full VSCodium compile (editor/vscodium ./dev/build.sh) — long; may OOM on small runners
         default: false
   workflow_call:
+    inputs:
+      vscodium_linux_compile:
+        type: boolean
+        description: When true, run job linux_compile (same as manual dispatch flag) — long; may OOM on small runners
+        default: false
   pull_request:
     branches: [main, master]
     paths:
@@ -128,11 +133,12 @@ jobs:
             echo "See \`editor/VENDORING.md\`."
           } >> "$GITHUB_STEP_SUMMARY"
 
-  # Full upstream compile (14.e) — opt-in: manual dispatch flag, workflow_call flag, or ide-v* tag push (not PRs).
+  # Full upstream compile (14.e) — opt-in: manual dispatch flag, workflow_call inputs, or ide-v* tag push (not PRs).
   linux_compile:
-    # inputs context exists only for workflow_call; keep this gate free of `inputs.*` so pull_request stays valid.
+    # workflow_dispatch uses github.event.inputs; workflow_call uses inputs.* (boolean). Omit on pull_request.
     if: >-
       (github.event_name == 'workflow_dispatch' && github.event.inputs.vscodium_linux_compile == 'true')
+      || (github.event_name == 'workflow_call' && inputs.vscodium_linux_compile == true)
       || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/ide-v'))
     runs-on: ubuntu-22.04
     timeout-minutes: 360
@@ -235,6 +241,7 @@ jobs:
           {
             echo "## Lé Vibe IDE — full linux compile (14.e)"
             echo "Upstream entrypoint: \`editor/vscodium/dev/build.sh\` via \`packaging/scripts/ci-vscodium-linux-dev-build.sh\`."
-            echo "Trigger: manual **vscodium_linux_compile**, reusable workflow flag, or push tag \`ide-v*\`."
+            echo "Trigger: **workflow_dispatch** \`vscodium_linux_compile\`, **workflow_call** \`inputs.vscodium_linux_compile\` (e.g. \`build-linux.yml\`), or push tag \`ide-v*\`."
+            echo "Artifact (when \`VSCode-linux-*\` exists): \`vscodium-linux-build.tar.gz\` → \`actions/upload-artifact\` name \`le-vibe-vscodium-linux-<run_id>\` (**retention-days** on that upload)."
             echo "PRs keep the fast smoke job only — no compile on pull_request."
           } >> "$GITHUB_STEP_SUMMARY"

@@ -36,6 +36,9 @@ def test_build_le_vibe_ide_workflow_linux_compile_artifact_14e():
     assert "upload-artifact@v4" in text
     assert "actions/cache@v4" in text
     assert "linux_compile-cargo" in text
+    assert "workflow_call:" in text
+    assert "inputs.vscodium_linux_compile" in text
+    assert "github.event_name == 'workflow_call'" in text
 
 
 def test_build_linux_yaml_uses_build_le_vibe_ide_and_documents_inherited_metadata():
@@ -45,3 +48,5 @@ def test_build_linux_yaml_uses_build_le_vibe_ide_and_documents_inherited_metadat
     assert "retention-days" in text
     assert "permissions" in text
     assert "LE_VIBE_EDITOR" in text
+    assert "with:" in text
+    assert "vscodium_linux_compile" in text

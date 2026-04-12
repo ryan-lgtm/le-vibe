@@ -2,13 +2,21 @@
 # Use this name in docs/PM when “build-linux” is the expected workflow label.
 # Same job summary as the reusable workflow: open the run → Summary tab for ./editor/smoke.sh parity + skip reasons.
 # Inherits build-le-vibe-ide.yml: ide-ci-metadata.txt, upload-artifact retention-days, permissions (contents read + actions write), Summary Pre-binary artifact / LE_VIBE_EDITOR.
+# Optional: forward vscodium_linux_compile to run job linux_compile (14.e) — same flag as build-le-vibe-ide workflow_dispatch.
 # Authority: docs/vscodium-fork-le-vibe.md, editor/README.md.
 # E1: le-vibe/tests/test_product_spec_section8.py — PRODUCT_SPEC *Prioritization* ↔ same gate as build-le-vibe-ide.yml.
 name: build-linux
 
 on:
   workflow_dispatch:
+    inputs:
+      vscodium_linux_compile:
+        type: boolean
+        description: Run full VSCodium linux_compile job (forwards to build-le-vibe-ide) — long run
+        default: false
 
 jobs:
   le-vibe-ide:
     uses: ./.github/workflows/build-le-vibe-ide.yml
+    with:
+      vscodium_linux_compile: ${{ github.event.inputs.vscodium_linux_compile == 'true' }}

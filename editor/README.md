@@ -7,6 +7,9 @@
 | **`editor/`** (here) | Lé Vibe IDE — VSCodium/Code OSS sources, branding, build scripts, CI for the Electron app |
 | **`editor/le-vibe-overrides/`** | Reserved for Lé Vibe–specific branding/overrides (see **`README.md`** there); §7.2 for material choices |
 | **`editor/vscodium/`** | **VSCodium** upstream (recommended git submodule); **`product.json`**, **`get_repo.sh`** / **`build.sh`** per **`BUILD.md`** and upstream **`docs/howto-build.md`** |
+| **`editor/fetch-vscode-sources.sh`** | **14.b** — runs upstream **`get_repo.sh`** from **`editor/vscodium/`** (fetch **`vscode/`** only; no compile); see **`BUILD.md`** |
+| **`editor/print-built-codium-path.sh`** | **14.c** — prints **`VSCode-linux-*/bin/codium`** under **`editor/vscodium/`** after **`dev/build.sh`** |
+| **`editor/print-vsbuild-codium-path.sh`** | **14.f** — same resolution for any directory (e.g. CI **`vscodium-linux-build.tar.gz`** extract root); see **`BUILD.md`** |
 | **`editor/smoke.sh`** | Local **H6** gate — runs **`packaging/scripts/ci-editor-gate.sh`** (layout, **`bash -n`** on upstream scripts, **`editor/.nvmrc`** sync) |
 | **`editor/smoke-lvibe-editor.sh`** | Optional **launcher ↔ binary** check — runs **`lvibe`** stack with **`--editor`** and **`-- --version`** (needs **`ollama`** on **`PATH`**); see **`BUILD.md`** *Verify `lvibe`* |
 | **`le-vibe/`** | Python bootstrap, `lvibe` launcher, managed Ollama, `.lvibe/` workspace hub, **`le-vibe`** `.deb` |

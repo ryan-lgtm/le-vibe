@@ -1,44 +1,34 @@
 # Lé Vibe
 
-**How it fits together (simple view):** your **editor**, the **Continue** assistant, and a **local model** (via **Ollama**) stay on your computer; you can optionally keep **project notes** in **`.lvibe/`** so the AI does not rely on huge, noisy scans of your whole repo. **Visual theme:** **deep purple** and **ruby red** — the intended feel for **Lé Vibe** branding going forward.
+**At a glance:** you work in a normal **Code OSS–class editor**, talk to **Continue**, and run a **local model** through **Ollama**—nothing leaves your machine for the core loop. What makes Lé Vibe **different** is how it **orchestrates** work: an **Operator** coordinates the session and **delegates** to **specialist agents** (product, engineering, QA, and other roles) that **collaborate** and leave **structured notes** in **`.lvibe/`** so you are not paying to re-read the entire repo every time. **Brand colors:** **deep purple** and **ruby red**.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#4527A0', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#B39DDB', 'secondaryColor': '#FCE4EC', 'tertiaryColor': '#EDE7F6', 'lineColor': '#C62828', 'fontFamily': 'system-ui,Segoe UI,sans-serif'}}}%%
 flowchart TB
-    subgraph you_and_project[You and your project]
-        U[You]
-        P[Your code and files]
-    end
+    U[You and your project] --> IDE[Lé Vibe IDE]
+    IDE --> CON[Continue · chat and edits]
+    CON <-->|runs locally| OLL[Ollama · your LLM]
 
-    subgraph lv[Lé Vibe]
-        IDE[Lé Vibe IDE<br/>Code OSS–based editor]
-        CO[Continue<br/>AI chat and edits inside the editor]
-    end
+    CON --> OP[Operator · coordinates what happens next]
+    OP <--> SPEC[Specialist agents · PM · Eng · QA · …]
+    SPEC <--> MEM[(.lvibe · memory you approve)]
+    OP --> CON
 
-    subgraph local[On your machine only]
-        OL[Ollama<br/>runs the local LLM]
-    end
-
-    MEM[(Optional: .lvibe folder<br/>small project memory you approve)]
-
-    U --> IDE
-    P --> IDE
-    IDE --> CO
-    CO <-->|asks / answers| OL
-    CO --> IDE
-    MEM -.->|extra context when enabled| CO
-
-    style you_and_project fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#4A148C
-    style lv fill:#EDE7F6,stroke:#5E35B1,stroke-width:3px,color:#311B92
-    style local fill:#FFEBEE,stroke:#C62828,stroke-width:2px,color:#B71C1C
-    style U fill:#9575CD,stroke:#4527A0,stroke-width:2px,color:#fff
-    style P fill:#9575CD,stroke:#4527A0,stroke-width:2px,color:#fff
-    style IDE fill:#4527A0,stroke:#D1C4E9,stroke-width:2px,color:#fff
-    style CO fill:#311B92,stroke:#B39DDB,stroke-width:2px,color:#fff
-    style OL fill:#B71C1C,stroke:#FFCDD2,stroke-width:2px,color:#fff
-    style MEM fill:#AD1457,stroke:#F8BBD0,stroke-width:2px,color:#fff
-    linkStyle default stroke:#C62828,stroke-width:2px
+    style U fill:#5e35b1,stroke:#311b92,stroke-width:2px,color:#ffffff
+    style IDE fill:#4527a0,stroke:#b39ddb,stroke-width:2px,color:#ffffff
+    style CON fill:#311b92,stroke:#9575cd,stroke-width:2px,color:#ffffff
+    style OLL fill:#b71c1c,stroke:#ffcdd2,stroke-width:2px,color:#ffffff
+    style OP fill:#4a148c,stroke:#e1bee7,stroke-width:3px,color:#ffffff
+    style SPEC fill:#6a1b9a,stroke:#d1c4e9,stroke-width:2px,color:#ffffff
+    style MEM fill:#ad1457,stroke:#f8bbd0,stroke-width:2px,color:#ffffff
+    linkStyle default stroke:#c62828,stroke-width:2px
 ```
+
+### Why that matters (and why it is “free”)
+
+- **Operator (coordinator):** one **session brain** that decides what to do next—**not** a dozen separate chats fighting each other. It **delegates** to the right **specialist** perspective when that helps (for example product direction vs implementation vs review), instead of one generic assistant pretending to be everything at once.
+- **Specialist agents (teamwork):** role-style agents **work together** toward your goal. Their outputs feed **structured, size-bounded** context under **`.lvibe/`** (with your **consent**) so the Operator can **reuse** prior reasoning instead of burning tokens re-scanning noise. That is the opposite of “vibe code the whole repo into the prompt again.”
+- **At no API cost for inference:** **Ollama** runs on **your CPU/GPU**. You are not billed per token by a hosted model provider for that loop—your “cost” is **electricity**, **time**, and **honest** hardware limits (Lé Vibe picks a **realistic** model tier for your machine; see [`spec.md`](spec.md)). The stack is **open source** (MIT for our bootstrap/packaging; Ollama, VSCodium, Continue, and upstream editor parts have their own licenses—see [License](#license)).
+- **Privacy by default:** the default path keeps generation on **localhost**; there is no Lé Vibe–hosted cloud you must send code to for the core workflow.
 
 **Lé Vibe** is a **local-first** toolkit for AI-assisted coding: your models run via **Ollama**, your editor is **Code - OSS** lineage (not Microsoft “Visual Studio Code” as the product name), and your assistant flows go through the open **Continue** extension—wired together with honest **hardware-aware** model choice, a **managed Ollama** lifecycle, and optional **workspace memory** under **`.lvibe/`** (consent-gated, size-capped; see [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) §5).
 
@@ -50,7 +40,7 @@ This **monorepo** holds:
 | **`debian/`** / **`packaging/`** | **`.deb`** install of the stack (launchers, config hooks) |
 | **`editor/`** | **Lé Vibe IDE** — Code - OSS–based desktop shell; **`vscodium/`** ([VSCodium](https://github.com/VSCodium/vscodium) submodule), **`le-vibe-overrides/`** for branding inputs. Policy and build notes: [`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md) |
 
-**If you are new here:** read **§ What you get · Early access · Limitations** below, then skim **Documentation** for specs and trust docs. The sections after that are **operator- and maintainer-oriented** (install paths, CI, tests)—they evolve as engineering lands.
+**If you are new here:** read **§ What you get · Early access · Limitations** below, then skim **Documentation** for specs and trust docs. The sections after that are **build- and maintainer-oriented** (install paths, CI, tests)—they evolve as engineering lands.
 
 ### What you get today
 
