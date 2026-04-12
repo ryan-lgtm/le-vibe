@@ -72,6 +72,8 @@ def test_print_built_codium_path_documents_14c():
     assert "Fresh clone (14.b)" in text
     assert "LE_VIBE_EDITOR" in text
     assert "smoke-lvibe-editor.sh" in text
+    assert "print-built-codium-path: expected editor/vscodium" in text
+    assert 'exec "${ROOT}/editor/print-vsbuild-codium-path.sh"' in text
 
 
 def test_verify_14c_local_binary_script_contract():
