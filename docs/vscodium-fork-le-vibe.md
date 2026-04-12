@@ -35,7 +35,7 @@ Upstream VSCodium prepare/build scripts remain the source of truth for **how** t
 
 ## CI sketch (monorepo)
 
-Shipped workflows: **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** (`workflow_dispatch`, **`pull_request`** on `editor/**` + related paths, tags `ide-v*`, **`workflow_call`**) and **[`.github/workflows/build-linux.yml`](../.github/workflows/build-linux.yml)** (manual **`build-linux`** alias). Local parity: **[`packaging/scripts/ci-editor-gate.sh`](../packaging/scripts/ci-editor-gate.sh)** + **[`packaging/scripts/ci-vscodium-bash-syntax.sh`](../packaging/scripts/ci-vscodium-bash-syntax.sh)** (also invoked from **[`packaging/scripts/ci-smoke.sh`](../packaging/scripts/ci-smoke.sh)**).
+Shipped workflows: **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** (`workflow_dispatch`, **`pull_request`** on `editor/**` + related paths, tags `ide-v*`, **`workflow_call`**) and **[`.github/workflows/build-linux.yml`](../.github/workflows/build-linux.yml)** (manual **`build-linux`** alias). Local parity: **[`packaging/scripts/ci-editor-gate.sh`](../packaging/scripts/ci-editor-gate.sh)** (orchestrates layout + **`ci-vscodium-bash-syntax.sh`** + **`ci-editor-nvmrc-sync.sh`** when the submodule is present; also invoked from **[`packaging/scripts/ci-smoke.sh`](../packaging/scripts/ci-smoke.sh)**).
 
 Prefer a **dedicated workflow** (e.g. `.github/workflows/build-le-vibe-ide.yml`) that:
 
