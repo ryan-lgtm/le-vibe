@@ -72,3 +72,11 @@ def test_setup_continue_requires_bash_readlink_documented() -> None:
     text = (_repo_root() / "packaging" / "bin" / "le-vibe-setup-continue").read_text(encoding="utf-8")
     assert "bash not on PATH" in text
     assert "readlink not on PATH" in text
+
+
+def test_setup_continue_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -> None:
+    """STEP 14 / §7.3: setup-continue wrapper keeps same H1 trust line as other packaging/bin stubs."""
+    text = (_repo_root() / "packaging" / "bin" / "le-vibe-setup-continue").read_text(encoding="utf-8")
+    assert "le-vibe-deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "IDE package" in text
