@@ -14,6 +14,7 @@ on:
       - ".github/workflows/build-le-vibe-ide.yml"
       - ".github/workflows/build-linux.yml"
       - "packaging/scripts/ci-editor-gate.sh"
+      - "packaging/scripts/ci-editor-nvmrc-sync.sh"
       - "packaging/scripts/ci-vscodium-bash-syntax.sh"
   push:
     tags:
@@ -62,6 +63,7 @@ jobs:
           fi
           cd "${GITHUB_WORKSPACE}"
           ./packaging/scripts/ci-vscodium-bash-syntax.sh
+          ./packaging/scripts/ci-editor-nvmrc-sync.sh
           echo "TODO: wire VSCodium prepare/build here (see upstream get_repo.sh / build.sh)."
 
       - name: CI metadata artifact (pre-binary)

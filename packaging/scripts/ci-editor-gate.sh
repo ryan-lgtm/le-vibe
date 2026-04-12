@@ -25,5 +25,6 @@ fi
 echo "ci-editor-gate: upstream present (${layout}) — wire Linux build in build-le-vibe-ide.yml when ready."
 if [[ "${layout}" == "vscodium" ]]; then
   "${ROOT}/packaging/scripts/ci-vscodium-bash-syntax.sh"
+  "${ROOT}/packaging/scripts/ci-editor-nvmrc-sync.sh"
 fi
 exit 0
