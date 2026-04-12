@@ -23,6 +23,8 @@ def test_ci_qa_hardening_doc_lists_smoke_and_pytest():
 def test_ci_qa_hardening_ide_smoke_section_distinguishes_fast_gate_vs_linux_compile():
     """STEP 14: smoke is fast; vendoring / optional linux_compile + tarball live in editor docs."""
     text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Local clone (14.b)" in text
     assert "editor/VENDORING.md" in text
     assert "linux_compile" in text
     assert "vscodium-linux-build.tar.gz" in text
