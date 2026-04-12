@@ -7,6 +7,7 @@
 # PRODUCT_SPEC §7.3: merge Lé Vibe product strings; patch dev/build.sh to honor env; source
 #   editor/le-vibe-overrides/build-env.lvibe-defaults.sh, then optional build-env.sh (see build-env.sh.example).
 # Authority: editor/BUILD.md, docs/vscodium-fork-le-vibe.md.
+# Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (requires editor/vscodium/ with product.json).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
