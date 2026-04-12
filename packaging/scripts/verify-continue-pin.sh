@@ -15,11 +15,11 @@ fi
 
 LINE="$(grep -v '^[[:space:]]*#' "$PIN" | head -1 | tr -d '[:space:]\r')"
 if [[ -z "$LINE" ]]; then
-  echo "verify-continue-pin: no non-comment version line in $PIN" >&2
+  echo "verify-continue-pin: no non-comment version line in $PIN — add one semver line (e.g. 1.2.3); see docs/continue-extension-pin.md." >&2
   exit 1
 fi
 if [[ ! "$LINE" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$ ]]; then
-  echo "verify-continue-pin: expected semver (e.g. 1.2.3), got: $LINE" >&2
+  echo "verify-continue-pin: expected semver (e.g. 1.2.3), got: $LINE — see docs/continue-extension-pin.md" >&2
   exit 1
 fi
 

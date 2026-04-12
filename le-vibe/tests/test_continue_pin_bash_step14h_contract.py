@@ -27,6 +27,7 @@ def test_verify_continue_pin_script_documents_pin_file():
     )
     assert "continue-openvsx-version" in text
     assert "restore packaging/continue-openvsx-version from git" in text
+    assert "add one semver line" in text
     assert "continue-extension-pin.md" in text
 
 
