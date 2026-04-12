@@ -3,5 +3,10 @@
 # Product / trust: docs/PRODUCT_SPEC.md §5–§8; docs/SESSION_ORCHESTRATION_SPEC.md; spec-phase2.md §14 (H6/H7 vs in-tree; STEP 14 E1 — editor/le-vibe-overrides/README.md + le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py); docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
 # Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (same pointers as ci.yml, dependabot.yml).
 # Optional RAG: docs/rag/le-vibe-phase2-chunks.md (spec-phase2 §14 table; not pytest) — SECURITY Related docs; packaging/scripts/ci-smoke.sh + .github/workflows/ci.yml headers.
+# Requires: python3 on PATH.
 export PYTHONPATH="/usr/share/le-vibe${PYTHONPATH:+:$PYTHONPATH}"
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "lvibe-hygiene: python3 not on PATH — install Python 3 (e.g. sudo apt install python3)." >&2
+  exit 127
+fi
 exec python3 -m le_vibe.hygiene "$@"
