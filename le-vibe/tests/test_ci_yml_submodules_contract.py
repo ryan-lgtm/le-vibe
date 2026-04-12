@@ -22,3 +22,5 @@ def test_ci_yml_header_documents_le_vibe_deb_artifact_stack_only_step14():
     assert "not le-vibe-ide" in text
     assert "apt-repo-releases.md" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
