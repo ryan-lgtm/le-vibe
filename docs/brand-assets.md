@@ -53,10 +53,10 @@ Capture on a **clean** theme at a consistent resolution (e.g. **1920×1080** or 
 | `le-vibe-first-run.png` | First-run / model flow (no secrets on screen) |
 | `le-vibe-continue-chat.png` | VSCodium + **Continue** panel, one turn to **localhost** Ollama (**port 11435**) |
 
-Place files under **`docs/screenshots/`** (see **[`screenshots/README.md`](screenshots/README.md)**) **or** attach only to **GitHub Releases** / marketing CMS — avoid huge binaries on every clone if your team prefers release-only assets. Follow **[`spec-phase2.md`](../spec-phase2.md) §14** so captures do not imply a **fork-only** IDE ships from **`r-vibe`** alone (**H6** remains out-of-tree).
+Place files under **`docs/screenshots/`** (see **[`screenshots/README.md`](screenshots/README.md)**) **or** attach only to **GitHub Releases** / marketing CMS — avoid huge binaries on every clone if your team prefers release-only assets. Follow **[`spec-phase2.md`](../spec-phase2.md) §14** so captures do not imply a finished **Lé Vibe–branded** IDE **release** is already published (**H6** sources live under **`editor/vscodium/`**; branding layers use **`editor/le-vibe-overrides/`**).
 
 When adding images to **`README.md`**, use repo-relative paths, for example **`docs/screenshots/le-vibe-continue-chat.png`**.
 
-## Fork alignment
+## Monorepo alignment (H6)
 
-For a **single branded editor binary**, icons and About copy also live in the **VSCodium fork** repo — see **[`vscodium-fork-le-vibe.md`](vscodium-fork-le-vibe.md)**. Keep **launcher** and **fork** icons visually consistent where possible.
+The **Lé Vibe IDE** shell is developed under **`editor/`** in **this** repository (**VSCodium** at **`editor/vscodium/`**, overrides **`editor/le-vibe-overrides/`**) — see **[`vscodium-fork-le-vibe.md`](vscodium-fork-le-vibe.md)**. Keep **`packaging/icons/`** (launcher / **`.deb`**) visually consistent with the IDE branding where possible.

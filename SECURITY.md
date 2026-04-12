@@ -26,5 +26,5 @@ Please avoid public issues or discussions that disclose **exploit details** unti
 - **[`docs/sbom-signing-audit.md`](docs/sbom-signing-audit.md)** — dependency pins, SBOM, optional package signing  
 - **[`CHANGELOG.md`](CHANGELOG.md)** — release notes; cross-check **pip** / supply-chain changes with **`pip-audit`** / **H2** when triaging dependency CVEs  
 - **[`debian/le-vibe.README.Debian`](debian/le-vibe.README.Debian)** — shipped as **`/usr/share/doc/le-vibe/README.Debian`** on **`.deb`** installs; operator-facing paths and **§5** consent summary (full agent/secrets policy remains **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** §8)  
-- **[`spec-phase2.md`](spec-phase2.md)** §14 — what **this repo** ships vs **deferred** editor fork (**H6**) / alternate bundles (**H7**); scope for vulnerability triage (upstream editor vs launcher)  
+- **[`spec-phase2.md`](spec-phase2.md)** §14 — **H6** (**`editor/`**, **`editor/vscodium`**) vs **H7** alternate bundles; triage scope splits **upstream VSCodium / Code OSS** (editor tree) vs **`le-vibe`** launcher + **`.deb`** stack  
 - **[`docs/rag/le-vibe-phase2-chunks.md`](docs/rag/le-vibe-phase2-chunks.md)** — optional non-canonical retrieval chunk (`lv-meta-overview`); **`spec-phase2.md`** *RAG / embeddings* (not a second source of truth)  
