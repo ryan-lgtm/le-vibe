@@ -22,6 +22,9 @@ def test_install_linux_vscodium_build_deps_script_bash_syntax() -> None:
     assert script.is_file(), script
     assert script.stat().st_mode & 0o111, "script should be executable"
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
+    text = script.read_text(encoding="utf-8")
+    assert "EUID" in text
+    assert "_apt" in text
 
 
 def test_check_linux_vscodium_build_deps_matches_ci_apt_list() -> None:
