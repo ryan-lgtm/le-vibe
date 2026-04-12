@@ -22,6 +22,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Documentation
 
+- **[`SECURITY.md`](SECURITY.md)** *Related docs* — **`PRODUCT_SPEC_SECTION8_EVIDENCE`** bullet lists **`test_product_spec_section8.py`** (*Prioritization* / **`ide-ci-metadata`*) before overrides / **`test_build_*`**.
 - **[`.github/dependabot.yml`](../.github/dependabot.yml)** header — STEP **14** **E1** metadata tests (aligned with **`ci.yml`**, **`ci-smoke.sh`**, **`editor/smoke.sh`**).
 - **[`packaging/scripts/print-master-orchestrator-prompt.py`](../packaging/scripts/print-master-orchestrator-prompt.py)** module docstring — STEP **14** **E1** lists overrides, **`ide-ci-metadata`** / **`test_build_*`**, **`PRODUCT_SPEC` *Prioritization*** / **`test_product_spec_section8.py`** / **`test_le_vibe_readme_e1_contract.py`**.
 - **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** header — STEP **14** **E1** (metadata / **`LE_VIBE_EDITOR`** docs) cites **`test_product_spec_section8.py`**, **`test_build_le_vibe_ide_workflow_contract.py`**, **`test_le_vibe_readme_e1_contract.py`** + **`ci-smoke.sh`** / **`editor/smoke.sh`**.
