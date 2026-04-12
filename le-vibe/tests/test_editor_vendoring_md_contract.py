@@ -11,6 +11,7 @@ def _repo_root() -> Path:
 
 def test_editor_vendoring_md_documents_smoke_gate_and_metadata():
     text = (_repo_root() / "editor" / "VENDORING.md").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
     assert "editor/vscodium" in text
     assert "howto-build.md" in text
     assert "./editor/smoke.sh" in text
