@@ -66,6 +66,18 @@ jobs:
           ./packaging/scripts/ci-editor-nvmrc-sync.sh
           echo "TODO: wire VSCodium prepare/build here (see upstream get_repo.sh / build.sh)."
 
+      - name: Job summary — local smoke parity
+        if: steps.gate.outputs.present == 'true'
+        run: |
+          {
+            echo "## Lé Vibe IDE (STEP 14 / H6)"
+            echo "Smoke checks only — **no Electron compile** in CI yet."
+            echo ""
+            echo "**Local parity:** from the repository root run \`./editor/smoke.sh\` (same gate as this job)."
+            echo ""
+            echo "Docs: \`editor/README.md\`, \`docs/ci-qa-hardening.md\` (*IDE smoke*), \`docs/vscodium-fork-le-vibe.md\`."
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: CI metadata artifact (pre-binary)
         if: steps.gate.outputs.present == 'true'
         run: |
@@ -93,3 +105,8 @@ jobs:
         if: steps.gate.outputs.present != 'true'
         run: |
           echo "IDE build skipped — vendor upstream (editor/package.json flat, or editor/vscodium with VSCodium); see editor/VENDORING.md."
+          {
+            echo "## Lé Vibe IDE (STEP 14 / H6)"
+            echo "Skipped — no \`editor/package.json\` (flat) or \`editor/vscodium/product.json\`."
+            echo "See \`editor/VENDORING.md\`."
+          } >> "$GITHUB_STEP_SUMMARY"
