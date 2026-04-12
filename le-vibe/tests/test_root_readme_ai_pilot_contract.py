@@ -114,6 +114,8 @@ def test_root_readme_ci_section_14d_branding_honesty():
     """STEP 14.d: CI § distinguishes fast smoke from shipped Lé Vibe branding."""
     text = (_repo_root() / "README.md").read_text(encoding="utf-8")
     assert "Honesty (14.d)" in text
+    assert "editor/smoke.sh --help" in text
+    assert "ci-editor-gate" in text
     assert "branding-staging.checklist.md" in text
     assert "read before overrides" in text
     assert "14.c vs 14.d" in text
