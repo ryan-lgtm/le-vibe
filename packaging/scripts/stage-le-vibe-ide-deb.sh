@@ -26,7 +26,7 @@ VS_DIR="$(find_vsbuild "${1:-}")"
 NAME="$(basename "$VS_DIR")"
 BIN="$VS_DIR/bin/codium"
 if [[ ! -x "$BIN" ]]; then
-  echo "stage-le-vibe-ide-deb: not executable: $BIN" >&2
+  echo "stage-le-vibe-ide-deb: not executable: $BIN — fix permissions or rebuild per editor/BUILD.md (14.c); if editor/vscodium/ is empty: git submodule update --init editor/vscodium (Fresh clone 14.b: editor/README.md)." >&2
   exit 1
 fi
 
