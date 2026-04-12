@@ -22,6 +22,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Documentation
 
+- **[`spec-phase2.md`](spec-phase2.md)** §14 ships table — **Single “Lé Vibe IDE” shell** row names **`ide-ci-metadata.txt`**, **`le_vibe_editor_docs`**, Actions **Summary** **Pre-binary artifact**, E1 **`test_build_le_vibe_ide_workflow_contract.py`**.
 - **[`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md)** *CI sketch* — **Summary** tab **Pre-binary artifact** / **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`** (aligned with **`editor/README.md`** *CI* and **`docs/ci-qa-hardening.md`**).
 - **`test_build_le_vibe_ide_workflow_contract.py`** — E1 substring lock for **`build-le-vibe-ide.yml`** **`ide-ci-metadata.txt`**; roster updates: **`PRODUCT_SPEC` §9/§10**, **`spec-phase2` §14** *Honesty vs CI*, **`PROMPT_BUILD_LE_VIBE`**, **`PM_STAGE_MAP`**, **`SESSION_ORCHESTRATION_SPEC`**, **`docs/README`**, **`docs/ci-qa-hardening`**, **`docs/AI_PILOT_AND_CONTINUE`**, **`SECURITY`**, **`docs/privacy-and-telemetry`**, **`spec.md`**, **`PRODUCT_SPEC_SECTION8_EVIDENCE`**, root / **`le-vibe/README`** *Tests*.
 - **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — pre-binary **`ide-ci-metadata.txt`** includes **`le_vibe_editor_docs=editor/README.md`** (stack **`LE_VIBE_EDITOR`** pointer); **[`editor/README.md`](../editor/README.md)** *CI* paragraph and **[`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md)** describe the field.
