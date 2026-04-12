@@ -8,6 +8,7 @@
 #   editor/le-vibe-overrides/build-env.lvibe-defaults.sh, then optional build-env.sh (see build-env.sh.example).
 # Authority: editor/BUILD.md, docs/vscodium-fork-le-vibe.md.
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (requires editor/vscodium/ with product.json).
+# Requires: grep, sed, mktemp, mv on PATH for §7.3 merge/patch helpers (before dev/build.sh).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -59,6 +60,23 @@ _lvibe_patch_dev_build_sh_for_env_defaults() {
   echo "ci-vscodium-linux-dev-build: dev/build.sh missing or not executable under ${VSC}/ — repair editor/vscodium (Fresh clone 14.b: git submodule update --init editor/vscodium — editor/README.md)." >&2
   exit 1
 }
+
+if ! command -v grep >/dev/null 2>&1; then
+  echo "ci-vscodium-linux-dev-build: grep not on PATH — install grep (e.g. sudo apt install grep) (editor/BUILD.md 14.e)." >&2
+  exit 1
+fi
+if ! command -v sed >/dev/null 2>&1; then
+  echo "ci-vscodium-linux-dev-build: sed not on PATH — install sed (e.g. sudo apt install sed) (editor/BUILD.md 14.e)." >&2
+  exit 1
+fi
+if ! command -v mktemp >/dev/null 2>&1; then
+  echo "ci-vscodium-linux-dev-build: mktemp not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md 14.e)." >&2
+  exit 1
+fi
+if ! command -v mv >/dev/null 2>&1; then
+  echo "ci-vscodium-linux-dev-build: mv not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md 14.e)." >&2
+  exit 1
+fi
 
 _lvibe_sync_linux_icon_assets
 _lvibe_merge_vscodium_product_json
