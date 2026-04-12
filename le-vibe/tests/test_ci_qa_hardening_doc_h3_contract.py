@@ -18,6 +18,8 @@ def test_ci_qa_hardening_doc_lists_smoke_and_pytest():
     assert "PM_STAGE_MAP" in text
     assert "STEP 10" in text
     assert "ci-editor-gate.sh" in text
+    assert "build-le-vibe-ide-deb.sh" in text
+    assert "LEVIBE_IDE_LINTIAN_STRICT" in text
 
 
 def test_ci_qa_hardening_ide_smoke_section_distinguishes_fast_gate_vs_linux_compile():

@@ -117,7 +117,7 @@ Until **`le-vibe-ide`** is installed, keep using **`LE_VIBE_EDITOR`** pointing a
 
 1. Build: from repo root **`./packaging/scripts/ci-vscodium-linux-dev-build.sh`** (after **`fetch-vscode-sources.sh`** / toolchain — **14.a–14.b**), or **`cd editor/vscodium && ./dev/build.sh`** only if you already ran **`./editor/le-vibe-overrides/sync-linux-icon-assets.sh`** and merged **`product-branding-merge.json`** (use the wrapper unless you know upstream’s expectations).
 2. Stage: **`./packaging/scripts/stage-le-vibe-ide-deb.sh`** (optional argument: path to **`VSCode-linux-*`**; default: discover under **`editor/vscodium/`**).
-3. Package: **`./packaging/scripts/build-le-vibe-ide-deb.sh`** — produces **`le-vibe-ide_*.deb`** next to **`packaging/debian-le-vibe-ide/`** (ignored by git as **`*.deb`**).
+3. Package: **`./packaging/scripts/build-le-vibe-ide-deb.sh`** — produces **`le-vibe-ide_*.deb`** under **`packaging/`** (gitignored); runs **`lintian`** on that **`.deb`** when **`lintian`** is on **`PATH`** (non-fatal unless **`LEVIBE_IDE_LINTIAN_STRICT=1`** — **`docs/ci-qa-hardening.md`**, **`packaging/debian-le-vibe-ide/README.md`**).
 
 ### Unpacked trees and **`_default_editor`** (14.f → 14.g)
 

@@ -33,6 +33,8 @@ Order of steps on **`ubuntu-latest`**:
 
 **Lintian:** `--color never` keeps logs readable in Actions. To fail on **warnings**, change **`--fail-on`** (expect more noise until maintainer fields and policy tags are clean). See **`man lintian`**.
 
+**IDE `.deb` (`le-vibe-ide`, STEP 14 / §7.3):** **`packaging/scripts/build-le-vibe-ide-deb.sh`** runs **`lintian`** on **`packaging/le-vibe-ide_*.deb`** when **`lintian`** is installed, after **`dpkg-buildpackage`**. Tags are **non-fatal** unless **`LEVIBE_IDE_LINTIAN_STRICT=1`**. Details — **[`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md)**; this path is **not** part of the default **`ci.yml`** **Smoke QA** (that **`lintian`** applies to the **stack** **`.deb`**).
+
 ## Smoke script (`packaging/scripts/ci-smoke.sh`)
 
 Run from the **repository root**:
