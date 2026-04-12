@@ -66,3 +66,9 @@ def test_setup_continue_gui_requires_zenity_exit_127_documented() -> None:
     assert "command -v zenity" in text
     assert "[exit 127]" in text
     assert "--gui requires zenity" in text
+
+
+def test_setup_continue_requires_bash_readlink_documented() -> None:
+    text = (_repo_root() / "packaging" / "bin" / "le-vibe-setup-continue").read_text(encoding="utf-8")
+    assert "bash not on PATH" in text
+    assert "readlink not on PATH" in text
