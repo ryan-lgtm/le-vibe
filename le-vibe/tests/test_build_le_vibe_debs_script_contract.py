@@ -56,6 +56,17 @@ def test_build_le_vibe_debs_script_prints_full_product_install_hint_step14():
     assert "debian-le-vibe-ide/README.md" in text
 
 
+def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
+    """STEP 14: --help text documents Full-product stdout vs PM_DEB / apt-repo-releases."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "packaging" / "scripts" / "build-le-vibe-debs.sh").read_text(encoding="utf-8")
+    assert "Full-product (--with-ide)" in text
+    assert "docs/PM_DEB_BUILD_ITERATION.md" in text
+    assert "docs/apt-repo-releases.md" in text
+    assert "Success output" in text
+    assert "Maintainer build output" in text
+
+
 def test_pm_deb_build_iteration_doc_submodule_prereq_14b():
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
