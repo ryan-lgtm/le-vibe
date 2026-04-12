@@ -13,6 +13,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Tests
 
+- **`test_pm_stage_map_step14_contract.py`** — **`docs/PM_STAGE_MAP.md`** STEP **14** table row keeps **`build-le-vibe-ide.yml`**, **`build-linux.yml`**, **`test_build_le_vibe_ide_workflow_contract.py`**, **`ide-ci-metadata`**, **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`**, **`./editor/smoke.sh`**.
 - **`test_product_spec_section8.py`** — §9 table row **`PRODUCT_SPEC_SECTION8_EVIDENCE`** ↔ **`test_build_le_vibe_ide_workflow_contract.py`** keeps **`build-linux.yml`** (**`uses:`**) beside **`build-le-vibe-ide.yml`**.
 - **`test_le_vibe_readme_e1_contract.py`** — **`le-vibe/README.md`** *Tests* keeps **`ide-ci-metadata.txt`**, **`retention-days`**, **`permissions:`** **`contents: read`**, **`actions: write`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`** (aligned with root **`README.md`** *E1 mapping*).
 - **`test_product_spec_section8.py`** — *Prioritization* **`How to sequence work`** retains **`ide-ci-metadata.txt`**, **`le_vibe_editor_docs`**, **`retention-days`**, **`permissions:`** **`contents: read`**, **`actions: write`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`** (STEP 14 metadata story); §7.2 Continue rule — **numbered questions** (**`USER RESPONSE REQUIRED`**).
