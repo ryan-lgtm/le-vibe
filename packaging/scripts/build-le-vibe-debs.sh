@@ -136,7 +136,7 @@ if [[ "$WITH_IDE" -eq 1 ]]; then
   if [[ -n "$IDE_DEB" && -f "$IDE_DEB" ]]; then
     echo "==> IDE .deb: $IDE_DEB"
   else
-    echo "build-le-vibe-debs: could not locate le-vibe-ide_*.deb under packaging/ — if staging or dpkg-buildpackage failed, see editor/BUILD.md (14.c); empty editor/vscodium/: git submodule update --init editor/vscodium (Fresh clone 14.b: editor/README.md)." >&2
+    echo "build-le-vibe-debs: could not locate le-vibe-ide_*.deb under packaging/ — if staging or dpkg-buildpackage failed, see editor/BUILD.md (14.c); empty editor/vscodium/: git submodule update --init editor/vscodium (Fresh clone 14.b: editor/README.md). CI vs maintainer bundles: docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles); packaging/debian-le-vibe-ide/README.md." >&2
   fi
 fi
 

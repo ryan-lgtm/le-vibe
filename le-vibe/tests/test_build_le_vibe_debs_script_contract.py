@@ -30,6 +30,8 @@ def test_build_le_vibe_debs_script_mentions_submodule_14b():
     assert "could not locate le-vibe_*.deb" in text
     assert "fix errors above" in text
     assert "could not locate le-vibe-ide_*.deb" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
     assert "14.c" in text
     assert "find not on PATH" in text
     assert "sort not on PATH" in text
