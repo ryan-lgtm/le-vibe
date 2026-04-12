@@ -32,6 +32,20 @@ def test_install_continue_extension_documents_pin_path_tool_checks() -> None:
     assert "tr not on PATH" in text
 
 
+def test_install_continue_extension_documents_14g_editor_and_openvsx_ref() -> None:
+    text = (_repo_root() / "packaging" / "scripts" / "install-continue-extension.sh").read_text(
+        encoding="utf-8"
+    )
+    assert "14.g" in text
+    assert "LE_VIBE_EDITOR" in text
+    assert "/usr/lib/le-vibe/bin/codium" in text
+    assert "/usr/bin/codium" in text
+    assert "--install-extension" in text
+    assert "continue-openvsx-version" in text
+    assert "LE_VIBE_CONTINUE_OPENVSX_VERSION" in text
+    assert "continue.continue" in text
+
+
 def test_continue_openvsx_pin_file_exists_and_semver() -> None:
     pin = _repo_root() / "packaging" / "continue-openvsx-version"
     assert pin.is_file(), pin
