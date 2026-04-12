@@ -10,9 +10,11 @@ Runs
 then
 .BR install\-continue\-extension.sh
 with clear exit codes (see below). Run as the desktop user after
-.BR le\-vibe
+.B lvibe
 has completed first\-run and written
-.IR ~/.config/le\-vibe/continue\-config.yaml .
+.IR ~/.config/le\-vibe/continue\-config.yaml
+(same launcher as
+.BR le\-vibe (1)).
 
 With
 .BR \-\-gui ,
@@ -28,8 +30,9 @@ Success.
 .TP
 .B 1
 No Lé Vibe Continue YAML yet; run
-.B le\-vibe
-first.
+.B lvibe
+first (compatibility name:
+.BR le\-vibe (1)).
 .TP
 .B 2
 Config sync failed.
@@ -52,6 +55,7 @@ installed.
 Unknown CLI option (see
 .BR \-\-help ).
 .SH "SEE ALSO"
+.BR lvibe (1),
 .BR le\-vibe (1),
 .BR codium (1).
 .PP

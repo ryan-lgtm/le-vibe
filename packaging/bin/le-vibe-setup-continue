@@ -84,7 +84,7 @@ _run_sync_and_install() {
   if ! bash "$SYNC"; then
     ec=$?
     if [[ "$ec" -eq 1 ]]; then
-      echo "le-vibe-setup-continue: [exit 1] Missing ~/.config/le-vibe/continue-config.yaml — run le-vibe once (first-run) first." >&2
+      echo "le-vibe-setup-continue: [exit 1] Missing ~/.config/le-vibe/continue-config.yaml — run lvibe once (first-run) first; le-vibe is a compatibility name for the same launcher." >&2
     else
       echo "le-vibe-setup-continue: [exit 2] Sync failed (exit $ec)." >&2
     fi
@@ -114,7 +114,7 @@ if [[ "$GUI" -eq 1 ]]; then
   fi
   if [[ ! -f "$SRC" ]]; then
     zenity --error --title="Lé Vibe" --no-wrap \
-      --text="Continue config not found.\n\nRun <b>le-vibe</b> once (first-run) so ~/.config/le-vibe/continue-config.yaml exists, then try again." 2>/dev/null || true
+      --text="Continue config not found.\n\nRun <b>lvibe</b> once (first-run) so ~/.config/le-vibe/continue-config.yaml exists (le-vibe is a compatibility name), then try again." 2>/dev/null || true
     exit 1
   fi
   if ! zenity --question --title="Lé Vibe" --no-wrap \
