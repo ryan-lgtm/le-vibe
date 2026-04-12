@@ -10,6 +10,14 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_root_readme_feedback_row_submodule_init_fallback_14b():
+    """STEP 14 / 14.b: top-level README names plain-clone submodule recovery."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "recurse-submodules" in text
+    assert "Fresh clone (14.b)" in text
+
+
 def test_root_readme_documents_ai_pilot_and_user_gate():
     text = (_repo_root() / "README.md").read_text(encoding="utf-8")
     assert "Lé Vibe" in text

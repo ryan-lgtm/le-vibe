@@ -67,7 +67,7 @@ sequenceDiagram
 |--|--|
 | **Works well today** | **`lvibe .`**, managed **Ollama** on a **dedicated port** (default **11435**), **Continue** integration, **consent-gated** **`.lvibe/`**, Debian **`.deb`**, tests and CI. |
 | **In progress** | **Branded IDE** binary from **`editor/`**, fuller first-run polish, broader OS packaging. |
-| **Feedback** | **GitHub Issues** in this repository. Clone with **`git clone --recurse-submodules`** so **`editor/vscodium`** is present for [`./editor/smoke.sh`](editor/smoke.sh). |
+| **Feedback** | **GitHub Issues** in this repository. Clone with **`git clone --recurse-submodules`** so **`editor/vscodium`** is present for [`./editor/smoke.sh`](editor/smoke.sh). If you already cloned without submodules, run **`git submodule update --init editor/vscodium`** from the repo root — [`editor/README.md`](editor/README.md) *Fresh clone (14.b)*. |
 
 ### Limitations (snapshot)
 
