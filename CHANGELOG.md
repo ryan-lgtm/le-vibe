@@ -40,6 +40,12 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 - **H8 / optional RAG / `PRODUCT_SPEC` §10 honesty:** **`docs/rag/le-vibe-phase2-chunks.md`** (*RAG / embeddings*, non-canonical) and **`spec-phase2.md` §14** (*Honesty vs CI* + optional-chunk table row) aligned with **`SECURITY`** *Related docs*, **`.github/ISSUE_TEMPLATE/`** (bug / feature / documentation), **`PM_STAGE_MAP` STEP 12**, **`docs/PROMPT_BUILD_LE_VIBE.md`** intro, root **`README`**, **`privacy-and-telemetry`** *Reporting issues*, **`README.Debian`**, and packaging **`#`** headers — **E1** maintains issue-template YAML; **`pytest`** does not parse it.
 - **H2 / Dependabot:** **[`.github/dependabot.yml`](.github/dependabot.yml)** header and cross-links in root **`README`**, **`docs/PROMPT_BUILD_LE_VIBE.md`**, **`docs/sbom-signing-audit.md`**, and E1 evidence align weekly **pip** / **GitHub Actions** bump PRs with **`pip-audit`**, **`CHANGELOG.md`**, and **`PRODUCT_SPEC` §8–§9**.
 
+## [0.1.1] — 2026-04-12
+
+### Documentation
+
+- **`debian/le-vibe.README.Debian`** (installed as **`/usr/share/doc/le-vibe/README.Debian`**): **H6** note for full clones — after **`git submodule update --init --recursive`**, run **`./editor/smoke.sh`** from the repository root for the same layout / script-syntax checks as **`build-le-vibe-ide.yml`** (no Electron compile).
+
 ## [0.1.0] — 2026-04-11
 
 ### Added
