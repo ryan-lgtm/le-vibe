@@ -9,7 +9,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 PIN="${ROOT}/packaging/continue-openvsx-version"
 
 if [[ ! -f "$PIN" ]]; then
-  echo "verify-continue-pin: missing $PIN" >&2
+  echo "verify-continue-pin: missing $PIN — restore packaging/continue-openvsx-version from git (H4 pin; see docs/continue-extension-pin.md)." >&2
   exit 1
 fi
 
