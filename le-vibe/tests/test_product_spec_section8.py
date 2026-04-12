@@ -164,7 +164,9 @@ def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14()
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
     assert "packaging/debian-le-vibe-ide/debian/le-vibe.desktop" in text
+    assert "build-le-vibe-ide-deb.sh" in text
     assert "stage-le-vibe-ide-deb.sh" in text
+    assert "lintian" in text
     assert "test_packaging_le_vibe_ide_deb_contract.py" in text
     assert "packaging/debian-le-vibe-ide/README.md" in text
     assert "apt-repo-releases.md" in text
