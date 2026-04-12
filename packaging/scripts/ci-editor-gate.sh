@@ -5,8 +5,10 @@
 # Run from repo root: ./packaging/scripts/ci-editor-gate.sh
 # Requires: bash on PATH (for bash -n and downstream packaging/scripts).
 # Exits 0 when layout is none (skip). For layout=vscodium, runs bash syntax on upstream scripts (may exit 1).
-# 14.d: does not validate Lé Vibe–visible IDE branding — editor/le-vibe-overrides/branding-staging.checklist.md;
-#   docs/PRODUCT_SPEC.md §7.2. Fast gate only (same story as ./editor/smoke.sh).
+# 14.d: default path does not validate Lé Vibe–visible IDE branding — editor/le-vibe-overrides/branding-staging.checklist.md;
+#   docs/PRODUCT_SPEC.md §7.2. Fast gate only (same story as ./editor/smoke.sh). Optional release QA: set
+#   LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 to fail when editor/vscodium/VSCode-linux-*/resources/app/product.json exists
+#   but lacks Lé Vibe strings (same check as stage-le-vibe-ide-deb.sh warn path; pair with LEVIBE_STAGE_IDE_ASSERT_BRAND=1 for .deb).
 # Authority: editor/VENDORING.md.
 # H1 / §7.3: default CI uploads le-vibe-deb (stack le-vibe .deb only); this script does not build le-vibe-ide_*.deb —
 #   maintainer — packaging/scripts/build-le-vibe-ide-deb.sh / build-le-vibe-debs.sh --with-ide (Full-product install on success — docs/PM_DEB_BUILD_ITERATION.md; docs/apt-repo-releases.md IDE package).
@@ -54,4 +56,24 @@ if [[ "${layout}" == "vscodium" ]]; then
   bash -n "${ROOT}/editor/print-ci-tarball-codium-path.sh"
   bash -n "${ROOT}/packaging/scripts/ci-vscodium-linux-dev-build.sh"
 fi
+
+if [[ "${layout}" == "vscodium" && "${LEVIBE_EDITOR_GATE_ASSERT_BRAND:-0}" == "1" ]]; then
+  if ! command -v find >/dev/null 2>&1; then
+    echo "ci-editor-gate: LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 requires find on PATH (findutils)." >&2
+    exit 1
+  fi
+  _vs="$(find "${ROOT}/editor/vscodium" -maxdepth 1 -type d -name 'VSCode-linux-*' -print -quit 2>/dev/null || true)"
+  if [[ -n "${_vs}" ]]; then
+    _pj="${_vs}/resources/app/product.json"
+    if [[ ! -f "${_pj}" ]]; then
+      echo "ci-editor-gate: LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 — missing ${_pj} (incomplete VSCode-linux-* tree)." >&2
+      exit 1
+    fi
+    if ! grep -q 'Lé Vibe' "${_pj}" 2>/dev/null; then
+      echo "ci-editor-gate: LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 — ${_pj} has no Lé Vibe strings. Run packaging/scripts/ci-vscodium-linux-dev-build.sh before dev/build.sh (editor/BUILD.md *Linux icons*)." >&2
+      exit 1
+    fi
+  fi
+fi
+
 exit 0

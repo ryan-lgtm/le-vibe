@@ -157,6 +157,7 @@ def test_editor_build_md_contract_debian_section_stack_ide_one_shot_step14():
     assert "resources/app/product.json" in text
     assert "LEVIBE_STAGE_IDE_ASSERT_BRAND" in text
     assert "LEVIBE_STAGE_IDE_VERBOSE" in text
+    assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
     assert "stage-le-vibe-ide-deb.sh" in text
     assert "Full-product install" in text
     assert "Success output (`--with-ide`)" in text
