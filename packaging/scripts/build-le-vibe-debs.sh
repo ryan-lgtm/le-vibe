@@ -37,6 +37,8 @@ Environment:
 
 Prerequisites (stack): debhelper, build-essential, dpkg-dev (sudo apt install build-essential debhelper).
 Prerequisites (IDE):  a successful dev/build.sh under editor/vscodium (see editor/BUILD.md).
+  Without editor/vscodium/VSCode-linux-*, --with-ide fails after the stack .deb — fetch vscode
+  (./editor/fetch-vscode-sources.sh), then ./packaging/scripts/ci-vscodium-linux-dev-build.sh, or see editor/BUILD.md.
   Fresh clone (14.b): git submodule update --init editor/vscodium from repo root if editor/vscodium/ is empty — editor/README.md.
 
 Artifacts:
@@ -140,17 +142,17 @@ if [[ "$WITH_IDE" -eq 1 ]]; then
     LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 "$ROOT/packaging/scripts/ci-editor-gate.sh"
   fi
   echo "==> Building IDE package (le-vibe-ide) via build-le-vibe-ide-deb.sh (stage + dpkg-buildpackage + optional lintian)"
-  if [[ -n "$VS_BUILD" ]]; then
-    "$ROOT/packaging/scripts/build-le-vibe-ide-deb.sh" "$VS_BUILD"
-  else
-    "$ROOT/packaging/scripts/build-le-vibe-ide-deb.sh"
+  _ide_args=()
+  [[ -n "$VS_BUILD" ]] && _ide_args+=("$VS_BUILD")
+  if ! "$ROOT/packaging/scripts/build-le-vibe-ide-deb.sh" "${_ide_args[@]}"; then
+    echo "build-le-vibe-debs: §7.3 remediation — produce VSCode-linux-*: ./editor/fetch-vscode-sources.sh (14.b), then ./packaging/scripts/ci-vscodium-linux-dev-build.sh + dev/build.sh (14.e / editor/BUILD.md 14.c), then re-run --with-ide; or pass --vs-build PATH to an existing tree. CI vs maintainer bundles: docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles); packaging/debian-le-vibe-ide/README.md." >&2
+    exit 1
   fi
   IDE_DEB="$(find_ide_deb)"
   if [[ -n "$IDE_DEB" && -f "$IDE_DEB" ]]; then
     echo "==> IDE .deb: $IDE_DEB"
   else
-    echo "build-le-vibe-debs: could not locate le-vibe-ide_*.deb under packaging/ — if staging or dpkg-buildpackage failed, see editor/BUILD.md (14.c); empty editor/vscodium/: git submodule update --init editor/vscodium (Fresh clone 14.b: editor/README.md). CI vs maintainer bundles: docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles); packaging/debian-le-vibe-ide/README.md." >&2
-    echo "build-le-vibe-debs: --with-ide requires a successful le-vibe-ide package — exiting 1 (§7.3 full-product)." >&2
+    echo "build-le-vibe-debs: could not locate le-vibe-ide_*.deb under packaging/ after build-le-vibe-ide-deb.sh — unexpected; see editor/BUILD.md (14.c), docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles), packaging/debian-le-vibe-ide/README.md." >&2
     exit 1
   fi
 fi

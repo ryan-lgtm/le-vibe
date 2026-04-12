@@ -1,5 +1,6 @@
 #!/bin/sh
-# Lé Vibe — installed under /usr/bin/le-vibe; editor via LE_VIBE_EDITOR or launcher defaults (14.g: /usr/lib/le-vibe/bin/codium, then codium).
+# Lé Vibe — compatibility PATH name (PRODUCT_SPEC §2); same launcher as lvibe. Prefer lvibe for the public CLI story (§7.3).
+# Editor via LE_VIBE_EDITOR or launcher defaults (14.g: /usr/lib/le-vibe/bin/codium, then codium).
 # Product / trust: docs/PRODUCT_SPEC.md (launcher, §5 `.lvibe/` consent); spec-phase2.md §14 (H6/H7 vs in-tree; STEP 14 E1 — editor/le-vibe-overrides/README.md + le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py); docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
 # Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (same pointers as ci.yml, dependabot.yml).
 # H1 / §7.3: default ci.yml le-vibe-deb is stack-only; maintainer full product: build-le-vibe-debs.sh --with-ide prints Full-product install — docs/PM_DEB_BUILD_ITERATION.md; docs/apt-repo-releases.md (IDE package); docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles).
