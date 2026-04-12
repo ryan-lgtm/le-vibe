@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 # Copy Lé Vibe SVG + raster into VSCodium linux resources (PRODUCT_SPEC §7.3 — icons).
 # Run from repo root before dev/build.sh if you are not using packaging/scripts/ci-vscodium-linux-dev-build.sh.
+# Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (required before editor/vscodium/src/... exists).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+VSC="${ROOT}/editor/vscodium"
+[[ -f "${VSC}/product.json" ]] || {
+  echo "sync-linux-icon-assets: expected editor/vscodium/product.json — run: git submodule update --init editor/vscodium (Fresh clone 14.b: editor/README.md)." >&2
+  exit 1
+}
 SRC_SVG="${ROOT}/packaging/icons/hicolor/scalable/apps/le-vibe.svg"
-DEST="${ROOT}/editor/vscodium/src/stable/resources/linux"
+DEST="${VSC}/src/stable/resources/linux"
 [[ -f "$SRC_SVG" ]] || {
   echo "sync-linux-icon-assets: missing ${SRC_SVG}" >&2
   exit 1

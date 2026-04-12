@@ -16,6 +16,14 @@ def test_sync_linux_icon_assets_script_bash_syntax() -> None:
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 
+def test_sync_linux_icon_assets_documents_14b():
+    text = (
+        _repo_root() / "editor" / "le-vibe-overrides" / "sync-linux-icon-assets.sh"
+    ).read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
+
+
 def test_build_le_vibe_ide_linux_compile_installs_librsvg_for_icon_sync():
     text = (_repo_root() / ".github" / "workflows" / "build-le-vibe-ide.yml").read_text(encoding="utf-8")
     assert "librsvg2-bin" in text
