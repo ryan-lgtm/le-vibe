@@ -1,4 +1,4 @@
-"""Contract tests for docs/PRODUCT_SPEC.md — welcome §4, launcher copy, §8 secrets strings in rules."""
+"""Contract tests for docs/PRODUCT_SPEC.md — welcome §4, launcher copy, §8 secrets strings in rules, § Prioritization editor smoke."""
 
 from __future__ import annotations
 
@@ -75,3 +75,12 @@ def test_workspace_policy_reflects_product_spec_section5_defaults():
     text = p.read_text(encoding="utf-8")
     assert "DEFAULT_CAP_MB = 50" in text
     assert "workspace-policy.json" in text
+
+
+def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci():
+    """§ Prioritization — vendoring gate for editor/ (H6 / STEP 14) stays documented."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC.md").read_text(encoding="utf-8")
+    assert "**How to sequence work:**" in text
+    assert "./editor/smoke.sh" in text
+    assert "build-le-vibe-ide.yml" in text
