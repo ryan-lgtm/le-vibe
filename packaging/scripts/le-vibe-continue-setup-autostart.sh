@@ -2,7 +2,7 @@
 # Roadmap G-A3: optional XDG autostart — one desktop notification to run Continue setup.
 # Idempotent: skips after ~/.continue/config.yaml is linked, or after one successful notify,
 # or if the user disables via ~/.config/le-vibe/.continue-setup-autostart-disable.
-# Product / trust: docs/PRODUCT_SPEC.md (first-run / Continue integration); spec-phase2.md §14 (H6/H7 vs in-tree); docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
+# Product / trust: docs/PRODUCT_SPEC.md (first-run / Continue integration); spec-phase2.md §14 (H6/H7 vs in-tree; STEP 14 E1 — editor/le-vibe-overrides/README.md + le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py); docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
 # Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (ci.yml, dependabot.yml, packaging/bin).
 set -euo pipefail
 

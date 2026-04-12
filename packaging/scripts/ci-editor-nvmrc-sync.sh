@@ -2,6 +2,7 @@
 # STEP 14: ensure editor/.nvmrc matches editor/vscodium/.nvmrc (Node pin parity).
 # No-op if VSCodium tree is absent. Run from repo root.
 # Called from ci-editor-gate.sh / ./editor/smoke.sh. E1: le-vibe/tests/test_product_spec_section8.py (PRODUCT_SPEC *Prioritization*).
+# E1: editor/le-vibe-overrides/README.md — le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"

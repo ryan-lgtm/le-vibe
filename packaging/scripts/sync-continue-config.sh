@@ -2,7 +2,7 @@
 # Point Continue’s default config at Lé Vibe’s generated YAML (~/.config/le-vibe/continue-config.yaml).
 # Workspace memory: Lé Vibe also seeds `.continue/rules/00-le-vibe-lvibe-memory.md` on `lvibe <dir>` (see le_vibe.continue_workspace).
 # Safe to re-run; backs up an existing real file (not symlink) to config.yaml.bak once.
-# Product / trust: docs/PRODUCT_SPEC.md §5–§8 (`.lvibe/` + secrets); spec-phase2.md §14 (H6/H7 vs in-tree); docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
+# Product / trust: docs/PRODUCT_SPEC.md §5–§8 (`.lvibe/` + secrets); spec-phase2.md §14 (H6/H7 vs in-tree; STEP 14 E1 — editor/le-vibe-overrides/README.md + le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py); docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
 # Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (ci.yml, dependabot.yml, packaging/bin).
 set -euo pipefail
 

@@ -2,6 +2,7 @@
 # STEP 14: syntax-check VSCodium entrypoint scripts (no network, no compile).
 # Run from repo root. No-op if editor/vscodium is absent. Exits non-zero on bash -n failure.
 # Called from ci-editor-gate.sh / ./editor/smoke.sh. E1: le-vibe/tests/test_product_spec_section8.py (PRODUCT_SPEC *Prioritization*).
+# E1: editor/le-vibe-overrides/README.md — le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
