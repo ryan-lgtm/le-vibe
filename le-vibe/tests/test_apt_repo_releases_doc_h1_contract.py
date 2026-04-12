@@ -28,3 +28,11 @@ def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
     assert "build-le-vibe-ide-deb.sh" in text
     assert "packaging/debian-le-vibe-ide/README.md" in text
     assert "STEP 14" in text
+
+
+def test_apt_repo_releases_doc_opens_with_ci_le_vibe_deb_stack_only_step14():
+    """STEP 14: H1 doc states ci.yml artifact excludes le-vibe-ide; points at spec-phase2 honesty."""
+    text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
+    assert "CI vs IDE bundle" in text
+    assert "not** **`le-vibe-ide_*_amd64.deb`**" in text
+    assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text

@@ -2,6 +2,8 @@
 
 **STEP 8 / PM map:** [`PM_STAGE_MAP.md`](PM_STAGE_MAP.md) — **H1** row links here, **`debian/changelog`**, **`CHANGELOG.md`**, and **`.github/workflows/ci.yml`** artifact **`le-vibe-deb`**.
 
+**CI vs IDE bundle:** Default **`ci.yml`** **`le-vibe-deb`** contains the **stack** **`le-vibe`** **`.deb`** + SBOM + **`SHA256SUMS`** — **not** **`le-vibe-ide_*_amd64.deb`** (**§7.3**). Full-product releases attach both — *IDE package* below; monorepo honesty — **[`spec-phase2.md`](../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*.
+
 This document is for **maintainers** who publish the **`.deb`** beyond ad-hoc copies: **GitHub Actions** artifacts, **checksum files**, **GitHub Releases**, and optional **apt** repositories.
 
 **Product anchor:** [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md) §8–§9 — agent/secrets policy and the orchestration roster. **Roadmap H1** (this doc) is indexed from [`README.md`](README.md) and [`PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md); see also [`sbom-signing-audit.md`](sbom-signing-audit.md) (**H2**).
