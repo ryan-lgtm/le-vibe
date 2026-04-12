@@ -28,7 +28,13 @@ def test_editor_le_vibe_overrides_readme_documents_launcher_and_h6_gate():
     assert "ci-vscodium-linux-dev-build.sh" in text
     assert "14.d" in text
     assert "vscodium-fork-le-vibe.md" in text
+    assert "use-node-toolchain.sh" in text
+    assert "14.a" in text
     assert "fetch-vscode-sources.sh" in text
     assert "print-built-codium-path.sh" in text
+    assert "smoke-built-codium-lvibe.sh" in text
     assert "smoke-lvibe-editor.sh" in text
+    assert "Upstream touchpoints (14.d)" in text
+    assert "src/stable/resources/linux" in text
+    assert "prepare_vscode.sh" in text or "prepare_src.sh" in text
     assert "Build flow vs branding layers" in text

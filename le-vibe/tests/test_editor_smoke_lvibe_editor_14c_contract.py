@@ -24,5 +24,17 @@ def test_ci_editor_gate_bash_n_smoke_lvibe_editor():
     text = (_repo_root() / "packaging" / "scripts" / "ci-editor-gate.sh").read_text(encoding="utf-8")
     assert "smoke-lvibe-editor.sh" in text
     assert "bash -n" in text
+    assert "use-node-toolchain.sh" in text
+    assert "smoke-built-codium-lvibe.sh" in text
     assert "print-built-codium-path.sh" in text
     assert "print-vsbuild-codium-path.sh" in text
+    assert "print-ci-tarball-codium-path.sh" in text
+
+
+def test_smoke_built_codium_lvibe_chains_print_built_and_smoke():
+    root = _repo_root()
+    text = (root / "editor" / "smoke-built-codium-lvibe.sh").read_text(encoding="utf-8")
+    assert "14.c" in text or "STEP 14" in text
+    assert "print-built-codium-path.sh" in text
+    assert "smoke-lvibe-editor.sh" in text
+    assert (root / "editor" / "smoke-built-codium-lvibe.sh").is_file()

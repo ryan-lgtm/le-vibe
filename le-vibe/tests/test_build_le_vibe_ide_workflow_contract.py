@@ -39,6 +39,12 @@ def test_build_le_vibe_ide_workflow_linux_compile_artifact_14e():
     assert "workflow_call:" in text
     assert "inputs.vscodium_linux_compile" in text
     assert "github.event_name == 'workflow_call'" in text
+    assert "Collect linux output tree" in text
+    assert "Pack VSCode-linux artifact" in text
+    assert "retention-days: 14" in text
+    assert "retention-days: 90" in text
+    assert "ubuntu-22.04" in text
+    assert "timeout-minutes: 360" in text
 
 
 def test_build_linux_yaml_uses_build_le_vibe_ide_and_documents_inherited_metadata():

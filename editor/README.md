@@ -7,11 +7,14 @@
 | **`editor/`** (here) | Lé Vibe IDE — VSCodium/Code OSS sources, branding, build scripts, CI for the Electron app |
 | **`editor/le-vibe-overrides/`** | Reserved for Lé Vibe–specific branding/overrides (see **`README.md`** there); §7.2 for material choices |
 | **`editor/vscodium/`** | **VSCodium** upstream (recommended git submodule); **`product.json`**, **`get_repo.sh`** / **`build.sh`** per **`BUILD.md`** and upstream **`docs/howto-build.md`** |
+| **`editor/use-node-toolchain.sh`** | **14.a** — **`nvm install` / `nvm use`** against **`editor/.nvmrc`** (source from repo root or run a command under that Node); see **`BUILD.md`** |
 | **`editor/fetch-vscode-sources.sh`** | **14.b** — runs upstream **`get_repo.sh`** from **`editor/vscodium/`** (fetch **`vscode/`** only; no compile); see **`BUILD.md`** |
 | **`editor/print-built-codium-path.sh`** | **14.c** — prints **`VSCode-linux-*/bin/codium`** under **`editor/vscodium/`** after **`dev/build.sh`** |
 | **`editor/print-vsbuild-codium-path.sh`** | **14.f** — same resolution for any directory (e.g. CI **`vscodium-linux-build.tar.gz`** extract root); see **`BUILD.md`** |
+| **`editor/print-ci-tarball-codium-path.sh`** | **14.f** — unpack **`vscodium-linux-build.tar.gz`** to a temp dir, print **`bin/codium`** (ergonomic **`LE_VIBE_EDITOR`**); see **`BUILD.md`** |
 | **`editor/smoke.sh`** | Local **H6** gate — runs **`packaging/scripts/ci-editor-gate.sh`** (layout, **`bash -n`** on upstream scripts, **`editor/.nvmrc`** sync) |
 | **`editor/smoke-lvibe-editor.sh`** | Optional **launcher ↔ binary** check — runs **`lvibe`** stack with **`--editor`** and **`-- --version`** (needs **`ollama`** on **`PATH`**); see **`BUILD.md`** *Verify `lvibe`* |
+| **`editor/smoke-built-codium-lvibe.sh`** | **14.c** — after **`dev/build.sh`**, runs **`print-built-codium-path.sh`** then **`smoke-lvibe-editor.sh`** (one command from repo root) |
 | **`le-vibe/`** | Python bootstrap, `lvibe` launcher, managed Ollama, `.lvibe/` workspace hub, **`le-vibe`** `.deb` |
 | **`debian/`**, **`packaging/`** | Debian packaging and PATH wrappers for the **stack** package |
 
@@ -19,7 +22,7 @@
 
 Populate **`editor/`** by vendoring upstream (e.g. [VSCodium](https://github.com/VSCodium/vscodium)) via **git submodule**, **subtree**, or a tracked import—see **`docs/vscodium-fork-le-vibe.md`** and **[`VENDORING.md`](VENDORING.md)** (recommended: submodule at **`editor/vscodium/`** so this README stays in-tree). Until sources exist here, developers may point **`LE_VIBE_EDITOR`** at system **VSCodium**; production intent remains **one tree**, one product.
 
-**Node:** match VSCodium’s toolchain — **[`.nvmrc`](.nvmrc)** mirrors **`vscodium/.nvmrc`** (run **`nvm install`** / **`nvm use`** from **`editor/`** before upstream **`get_repo` / build** steps).
+**Node:** match VSCodium’s toolchain — **[`.nvmrc`](.nvmrc)** mirrors **`vscodium/.nvmrc`**. Prefer **`source editor/use-node-toolchain.sh`** from the repo root (**14.a**) before **`get_repo` / build** steps, or run **`nvm install` / `nvm use`** manually from **`editor/`**.
 
 ## `LE_VIBE_EDITOR` (launcher ↔ IDE binary)
 
@@ -29,6 +32,8 @@ The Python stack (`lvibe`, `le-vibe` wrappers) resolves the desktop editor in th
 2. Else **`/usr/bin/le-vibe-ide`** if that file exists and is executable (future packaged Lé Vibe IDE — **14.g**).
 3. Else **`/usr/bin/codium`** if that file exists and is executable.
 4. Else the bare command **`codium`** (must be on `PATH`).
+
+**Persisting `LE_VIBE_EDITOR` (14.g):** set a login/session default with **`export LE_VIBE_EDITOR=/absolute/path/to/codium`** in **`~/.profile`**, **`~/.bashrc`**, or a **`systemd` user environment file** under **`~/.config/environment.d/`** (`*.conf`) so GUI sessions and terminals inherit it before **`lvibe`**. Stack defaults and future **`le-vibe-ide`** packaging are summarized in **`debian/le-vibe.README.Debian`** and **[`BUILD.md`](BUILD.md)** *14.g*.
 
 **Packaging:** the **`le-vibe`** `.deb` sets a default of `/usr/bin/codium` in its launcher scripts and **Recommends: codium** in `debian/control` so a typical install gets an editor without extra flags. **When a future `le-vibe-ide` `.deb` ships** the branded binary, the stack should **`Recommends:`** it and define how **`LE_VIBE_EDITOR`** defaults (profile.d vs launcher order)—see **[`BUILD.md`](BUILD.md)** *Default `LE_VIBE_EDITOR` / packaging story when the IDE ships* (**14.g**). Until then, set **`LE_VIBE_EDITOR`** to your build path, symlink, or **`/usr/bin/codium`**, and keep CI smoke aligned.
 

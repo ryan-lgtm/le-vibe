@@ -19,3 +19,11 @@ def test_pm_stage_map_step2_row_lists_e1_and_session_orchestrator():
     assert "test_session_orchestration_spec_step2_contract.py" in row
     assert "STEP 2" in row
     assert "STEP 14" in row
+
+
+def test_pm_stage_map_queue_advance_honest_step14_vs_rest():
+    text = (_repo_root() / "docs" / "PM_STAGE_MAP.md").read_text(encoding="utf-8")
+    assert "Queue advance (honest)" in text
+    assert "14.a" in text and "14.j" in text
+    assert "STEP 2" in text
+    assert "spec-phase2.md" in text

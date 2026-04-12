@@ -82,7 +82,7 @@ jobs:
           cd "${GITHUB_WORKSPACE}"
           ./packaging/scripts/ci-vscodium-bash-syntax.sh
           ./packaging/scripts/ci-editor-nvmrc-sync.sh
-          echo "TODO: wire VSCodium prepare/build here (see upstream get_repo.sh / build.sh)."
+          echo "Full upstream compile is job **linux_compile** (14.e) — opt-in via workflow_dispatch (vscodium_linux_compile), workflow_call (e.g. build-linux.yml), or ide-v* tag push; not pull_request. See this workflow file."
 
       - name: Job summary — local smoke parity
         if: steps.gate.outputs.present == 'true'

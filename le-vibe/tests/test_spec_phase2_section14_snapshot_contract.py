@@ -14,6 +14,7 @@ def test_spec_phase2_section14_ide_row_honesty_strings():
     assert "## 14." in text or "§14" in text
     assert "STEP 14.j" in text
     assert "linux_compile" in text
+    assert "retention-days: 14" in text
     assert "linux_compile-cargo" in text
     assert "actions/cache@v4" in text
     assert ".cargo/registry" in text
@@ -24,6 +25,16 @@ def test_spec_phase2_section14_ide_row_honesty_strings():
     assert "test_continue_extension_pin_doc_step14_contract.py" in text
     assert "test_vscodium_fork_le_vibe_branding_contract.py" in text
     assert "CHANGELOG.md" in text
+    assert "[Unreleased]" in text
     assert "test_launcher_default_editor.py" in text
+    assert "test_debian_readme_launcher_order_14g_contract.py" in text
     assert "/usr/bin/le-vibe-ide" in text
     assert "build-env.sh.example" in text
+    assert "workflow_call" in text
+    assert "fetch-vscode-sources.sh" in text
+    assert "test_vscodium_howto_build_get_repo_14b_contract.py" in text
+    assert "editor/vscodium/docs/howto-build.md" in text
+    assert "smoke-built-codium-lvibe.sh" in text
+    assert "use-node-toolchain.sh" in text
+    assert "print-ci-tarball-codium-path.sh" in text
+    assert "print-vsbuild-codium-path.sh" in text

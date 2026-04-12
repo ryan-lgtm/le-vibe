@@ -19,6 +19,8 @@ def test_editor_build_md_contract_get_repo_and_howto():
     assert "editor/vscodium/" in text
     assert ".nvmrc" in text
     assert "nvm" in text.lower()
+    assert "use-node-toolchain.sh" in text
+    assert "14.a" in text
     assert "fetch-vscode-sources.sh" in text
     assert "14.b" in text
 
@@ -31,11 +33,13 @@ def test_editor_build_md_get_repo_upstream_paths_exist_when_vscodium_present():
     assert (root / "editor" / "vscodium" / "get_repo.sh").is_file()
     assert (root / "editor" / "vscodium" / "docs" / "howto-build.md").is_file()
     assert (root / "editor" / "fetch-vscode-sources.sh").is_file()
+    assert (root / "editor" / "use-node-toolchain.sh").is_file()
 
 
 def test_editor_build_md_contract_lvibe_smoke_pointer():
     text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")
     assert "smoke-lvibe-editor.sh" in text
+    assert "smoke-built-codium-lvibe.sh" in text
     assert "LE_VIBE_EDITOR" in text
     assert "--version" in text
     assert "print-built-codium-path.sh" in text
@@ -57,6 +61,8 @@ def test_editor_build_md_contract_ci_compile_pointer():
     assert "vscodium_linux_compile" in text
     assert "build-env.sh" in text
     assert "build-env.sh.example" in text
+    assert "retention-days: 14" in text
+    assert "retention-days: 90" in text
 
 
 def test_editor_build_md_contract_tarball_and_codium_path_14f():
@@ -68,6 +74,7 @@ def test_editor_build_md_contract_tarball_and_codium_path_14f():
     assert "vscodium-linux-build.tar.gz" in text
     assert "le-vibe-vscodium-linux-" in text
     assert "realpath" in text
+    assert "print-ci-tarball-codium-path.sh" in text
     assert "print-vsbuild-codium-path.sh" in text
     assert "vscodium/docs/usage.md" in text
     assert "VSCodium-linux-" in text
@@ -75,6 +82,10 @@ def test_editor_build_md_contract_tarball_and_codium_path_14f():
 
 def test_editor_print_vsbuild_codium_script_exists():
     assert (_repo_root() / "editor" / "print-vsbuild-codium-path.sh").is_file()
+
+
+def test_editor_print_ci_tarball_codium_script_exists():
+    assert (_repo_root() / "editor" / "print-ci-tarball-codium-path.sh").is_file()
 
 
 def test_editor_build_md_contract_default_le_vibe_editor_packaging_14g():
@@ -101,3 +112,5 @@ def test_editor_build_md_contract_continue_pin_14h():
     assert "sync-continue-config.sh" in text
     assert "le-vibe-setup-continue" in text
     assert "ci-smoke.sh" in text
+    assert "_default_editor" in text
+    assert "14.g" in text

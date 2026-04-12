@@ -14,5 +14,6 @@ def test_session_orchestration_spec_documents_step2_and_e1():
     assert "STEP 2" in text
     assert "session_orchestrator" in text
     assert "test_session_orchestrator.py" in text
+    assert "test_session_orchestration_spec_step2_contract.py" in text
     assert "ensure_pm_session_artifacts" in text or "apply_opening_skip" in text
     assert "spec-phase2.md" in text and "§14" in text

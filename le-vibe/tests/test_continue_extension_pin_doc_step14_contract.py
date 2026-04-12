@@ -21,3 +21,7 @@ def test_continue_extension_pin_doc_step14_h_strings():
     assert "verify-continue-pin.sh" in text
     assert "sync-continue-config.sh" in text
     assert "VSCode-linux-" in text
+    assert "print-built-codium-path.sh" in text
+    assert "print-vsbuild-codium-path.sh" in text
+    assert "_default_editor" in text
+    assert "14.g" in text

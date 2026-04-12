@@ -33,6 +33,12 @@ def test_root_readme_tests_section_cites_session_orchestrator_contract():
     assert "test_session_orchestrator.py" in text
 
 
+def test_root_readme_tests_section_cites_session_orchestration_spec_step2_contract():
+    """E1 / STEP 2: *E1 mapping* must cite doc-lock **`test_session_orchestration_spec_step2_contract.py`**."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "test_session_orchestration_spec_step2_contract.py" in text
+
+
 def test_root_readme_e1_mapping_cites_le_vibe_readme_contract():
     """*Tests* / **E1 mapping** must cite **`test_le_vibe_readme_e1_contract.py`** (package README roster alignment)."""
     text = (_repo_root() / "README.md").read_text(encoding="utf-8")

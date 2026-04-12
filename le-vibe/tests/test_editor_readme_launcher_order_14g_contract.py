@@ -18,3 +18,10 @@ def test_editor_readme_lists_le_vibe_ide_before_codium():
     pos_ide = text.index("/usr/bin/le-vibe-ide")
     pos_cod = text.index("/usr/bin/codium")
     assert pos_ide < pos_cod
+
+
+def test_editor_readme_documents_persisting_le_vibe_editor_14g():
+    text = (_repo_root() / "editor" / "README.md").read_text(encoding="utf-8")
+    assert "Persisting `LE_VIBE_EDITOR`" in text
+    assert "environment.d" in text
+    assert "debian/le-vibe.README.Debian" in text

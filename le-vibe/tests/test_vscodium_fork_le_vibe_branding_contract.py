@@ -15,6 +15,8 @@ def test_vscodium_fork_doc_branding_section_honesty_and_overrides():
     assert "14.d" in text
     assert "§7.2" in text
     assert "editor/le-vibe-overrides/README.md" in text
+    assert "Upstream touchpoints (14.d)" in text
+    assert "src/stable/resources/linux" in text
     assert "spec-phase2.md" in text and "§14" in text
     assert "USER RESPONSE REQUIRED" in text
     assert "CHANGELOG.md" in text
@@ -28,7 +30,9 @@ def test_vscodium_fork_doc_branding_section_honesty_and_overrides():
     assert "ci-vscodium-linux-dev-build.sh" in text
     assert "fetch-vscode-sources.sh" in text
     assert "print-built-codium-path.sh" in text
+    assert "smoke-built-codium-lvibe.sh" in text
     assert "smoke-lvibe-editor.sh" in text
+    assert "test_launcher_default_editor.py" in text
 
 
 def test_vscodium_fork_doc_installable_tree_14f():
@@ -38,6 +42,7 @@ def test_vscodium_fork_doc_installable_tree_14f():
     assert "vscodium-linux-build.tar.gz" in text
     assert "linux_compile" in text
     assert "Installable layout" in text
+    assert "print-ci-tarball-codium-path.sh" in text
 
 
 def test_vscodium_fork_doc_release_smoke_checklist_14i():
@@ -58,3 +63,9 @@ def test_vscodium_fork_doc_release_smoke_checklist_14i():
     assert "continue-extension-pin.md" in text
     assert "ci-editor-gate" in text
     assert "layout=vscodium" in text
+    assert "build-linux.yml" in text
+    assert "workflow_call" in text
+    assert "print-ci-tarball-codium-path.sh" in text
+    assert "print-vsbuild-codium-path.sh" in text
+    assert "print-built-codium-path.sh" in text
+    assert "fetch-vscode-sources.sh" in text

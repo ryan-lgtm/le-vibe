@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # STEP 14 (14.b / 14.c): fetch vscode sources via upstream get_repo.sh — monorepo root entrypoint.
 # Does not compile. Creates/updates editor/vscodium/vscode/ (network + git). See vscodium/docs/howto-build.md.
-# Prereq: Node from editor/.nvmrc — from repo root: (cd editor && nvm install && nvm use)
+# Prereq: Node from editor/.nvmrc — from repo root: source editor/use-node-toolchain.sh (14.a), or (cd editor && nvm install && nvm use)
 # Full local build after fetch: cd editor/vscodium && ./dev/build.sh (see editor/BUILD.md).
 # shellcheck disable=SC1091
 set -euo pipefail
@@ -19,7 +19,7 @@ if ! cmp -s editor/.nvmrc editor/vscodium/.nvmrc 2>/dev/null; then
   exit 1
 fi
 
-echo "fetch-vscode-sources: use Node $(tr -d '\r\n' < editor/.nvmrc) — e.g. (cd editor && nvm install && nvm use)"
+echo "fetch-vscode-sources: use Node $(tr -d '\r\n' < editor/.nvmrc) — e.g. source editor/use-node-toolchain.sh or (cd editor && nvm install && nvm use)"
 echo "fetch-vscode-sources: sourcing get_repo.sh from editor/vscodium/ (cwd-sensitive; see BUILD.md)"
 
 cd editor/vscodium

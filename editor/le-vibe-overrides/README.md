@@ -8,11 +8,22 @@ This directory is reserved for **Lé Vibe–only** inputs that upstream **VSCodi
 
 Use this order so **overrides** stay tied to a reproducible tree (upstream defaults remain **VSCodium** / **`codium`** until patches and **`build-env.sh`** exports intentionally change visible identity — **§7.2**):
 
-1. **Fetch vscode:** from repo root, **[`../fetch-vscode-sources.sh`](../fetch-vscode-sources.sh)** (**14.b**) — creates **`editor/vscodium/vscode/`**.
+1. **Toolchain + fetch vscode:** activate Node (**14.a**) — **`source ../use-node-toolchain.sh`** from repo root (or manual **`nvm`** from **`editor/`**). Then from repo root, **[`../fetch-vscode-sources.sh`](../fetch-vscode-sources.sh)** (**14.b**) — creates **`editor/vscodium/vscode/`**.
 2. **Compile:** **`cd editor/vscodium && ./dev/build.sh`** — see **[`../BUILD.md`](../BUILD.md)**. Optional **[`build-env.sh`](build-env.sh.example)** (copy from **`build-env.sh.example`**) is sourced by **[`../../packaging/scripts/ci-vscodium-linux-dev-build.sh`](../../packaging/scripts/ci-vscodium-linux-dev-build.sh)** before **`dev/build.sh`** in CI and for local full builds; use for upstream **`APP_NAME`**, **`BINARY_NAME`**, etc. only when **§7.2** allows.
-3. **Verify launcher ↔ binary:** **[`../print-built-codium-path.sh`](../print-built-codium-path.sh)** then **[`../smoke-lvibe-editor.sh`](../smoke-lvibe-editor.sh)** with **`LE_VIBE_EDITOR`** (**14.c**).
+3. **Verify launcher ↔ binary (14.c):** **[`../smoke-built-codium-lvibe.sh`](../smoke-built-codium-lvibe.sh)** from repo root after **`dev/build.sh`**, or **[`../print-built-codium-path.sh`](../print-built-codium-path.sh)** then **[`../smoke-lvibe-editor.sh`](../smoke-lvibe-editor.sh)** with **`LE_VIBE_EDITOR`**.
 
 **What “Lé Vibe branding” means here:** staged **`product.json`** diffs, icons, desktop metadata, and patch notes under this directory—**not** automatic renames until maintainers apply them. **`docs/vscodium-fork-le-vibe.md`** (*Branding & overrides*) is the policy shell.
+
+## Upstream touchpoints (14.d)
+
+Use this as a **read map** before editing upstream or recording patch notes—paths are under **`editor/vscodium/`** unless noted. Upstream moves files between releases; re-verify after a submodule bump. **Do not** commit modified **`product.json`** / desktop templates here as “done branding” until **`build-env.sh`** or forked upstream steps apply them (**§7.2**).
+
+| Area | Where to look |
+|------|----------------|
+| **Prepare / build entrypoints** | **`product.json`**, **`prepare_src.sh`**, **`prepare_vscode.sh`**, **`dev/build.sh`**, **`build.sh`** — see **`docs/howto-build.md`** |
+| **Linux `.desktop` templates** | e.g. **`src/stable/resources/linux/code.desktop`**, **`code-url-handler.desktop`** (Insider vs stable under **`src/insider/`**) |
+| **Fetched vscode tree** | After **`fetch-vscode-sources.sh`**, **`editor/vscodium/vscode/`** — merged **Code - OSS** product metadata used at compile time |
+| **Icons vs stack** | Ship art in **[`packaging/icons/`](../../packaging/icons/)**; install targets follow upstream **`resources/linux`** / **`hicolor`** layout — **`docs/vscodium-fork-le-vibe.md`** (*Branding & overrides*) |
 
 ## What to stage here (checklist)
 

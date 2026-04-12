@@ -25,6 +25,10 @@ def test_pm_stage_map_step14_lists_ide_workflows_smoke_and_e1_test_build():
     assert "LE_VIBE_EDITOR" in row
     assert "ide-ci-metadata" in row
     assert "./editor/smoke.sh" in row
+    assert "14.g" in row
+    assert "test_launcher_default_editor.py" in row
+    assert "test_editor_readme_launcher_order_14g_contract.py" in row
+    assert "test_debian_readme_launcher_order_14g_contract.py" in row
 
 
 def test_pm_stage_map_notes_step14_fine_grain_closure_and_remaining_gap():
