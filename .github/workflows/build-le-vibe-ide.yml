@@ -116,7 +116,7 @@ jobs:
 
       - name: Upload CI metadata
         if: steps.gate.outputs.present == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: le-vibe-ide-ci-metadata-${{ github.run_id }}
           path: artifacts/
@@ -243,7 +243,7 @@ jobs:
 
       - name: Upload compile artifact
         if: steps.out.outputs.found == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: le-vibe-vscodium-linux-${{ github.run_id }}
           path: vscodium-linux-build.tar.gz
