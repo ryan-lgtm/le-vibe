@@ -9,6 +9,12 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_debian_readme_documents_submodule_14b_for_clone_maintainers():
+    text = (_repo_root() / "debian" / "le-vibe.README.Debian").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
+
+
 def test_debian_readme_documents_default_editor_resolution_14g():
     text = (_repo_root() / "debian" / "le-vibe.README.Debian").read_text(encoding="utf-8")
     assert "14.g" in text
