@@ -10,6 +10,15 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_lvibe_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -> None:
+    """STEP 14 / §7.3: lvibe wrapper trust header matches H1 stack vs IDE .deb story."""
+    root = _repo_root()
+    text = (root / "packaging/bin/lvibe").read_text(encoding="utf-8")
+    assert "le-vibe-deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "IDE package" in text
+
+
 def test_packaging_bin_sh_launchers_syntax_and_python3_guard() -> None:
     root = _repo_root()
     for rel, needle in (
