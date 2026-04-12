@@ -48,7 +48,7 @@ find_vsbuild() {
     echo "$d"
     return 0
   fi
-  echo "stage-le-vibe-ide-deb: no VSCode-linux-* under editor/vscodium/ — vendor sources (Fresh clone 14.b: git submodule update --init editor/vscodium — editor/README.md), fetch/build per editor/BUILD.md, then dev/build.sh." >&2
+  echo "stage-le-vibe-ide-deb: no VSCode-linux-* under editor/vscodium/ — compile first per editor/BUILD.md. From repo root: packaging/scripts/ci-vscodium-linux-dev-build.sh (§7.3 merge + sync-linux-icon-assets.sh, then dev/build.sh), or cd editor/vscodium && ./dev/build.sh after get_repo (run sync + merge yourself — BUILD.md *Linux icons*). Submodule missing: git submodule update --init editor/vscodium (Fresh clone 14.b: editor/README.md). See packaging/debian-le-vibe-ide/README.md." >&2
   exit 1
 }
 

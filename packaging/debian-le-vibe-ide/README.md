@@ -8,7 +8,7 @@ This directory is a **separate Debian source** (sibling to the root **`debian/`*
 
 ## Build steps
 
-1. From the monorepo root, complete an IDE compile per [`editor/BUILD.md`](../../editor/BUILD.md) so **`editor/vscodium/VSCode-linux-*/`** exists.
+1. From the monorepo root, complete an IDE compile per [`editor/BUILD.md`](../../editor/BUILD.md) so **`editor/vscodium/VSCode-linux-*/`** exists. For **§7.3** (merged **`product.json`**, **`sync-linux-icon-assets.sh`**, **`build-env.lvibe-defaults.sh`**) before **`dev/build.sh`**, run **`./packaging/scripts/ci-vscodium-linux-dev-build.sh`** from the repo root; calling **`./dev/build.sh`** only from **`editor/vscodium/`** skips that wrapper unless you repeat those steps manually (**BUILD.md** *Linux icons*).
 2. **`./packaging/scripts/stage-le-vibe-ide-deb.sh`** — copies the tree into **`staging/`**, creates **`/usr/lib/le-vibe/bin/codium`** (symlink), and stages **`debian/le-vibe.desktop`** plus **`packaging/icons/.../le-vibe.svg`** for **`/usr/share/applications/`** and **`/usr/share/icons/hicolor/`** (§7.3 Freedesktop integration — no second public CLI; **`Exec=`** uses the internal **`codium`** path).
 3. **`./packaging/scripts/build-le-vibe-ide-deb.sh`** — runs **`dpkg-buildpackage`** here; **`*.deb`** artifacts land under **`packaging/`** (gitignored).
 
