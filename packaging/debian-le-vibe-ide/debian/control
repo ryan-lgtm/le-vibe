@@ -20,5 +20,8 @@ Description: Lé Vibe IDE — Code OSS desktop shell (VSCode-linux tree)
  In-app auto-updates via a Lé Vibe-hosted channel are deferred to roadmap
  (PRODUCT_SPEC §7.3); use apt/releases or rebuild from source for upgrades.
  .
- Build: run dev/build.sh, then packaging/scripts/stage-le-vibe-ide-deb.sh and
- dpkg-buildpackage from packaging/debian-le-vibe-ide/ — see README.md there.
+ Build: from the monorepo root, prefer packaging/scripts/ci-vscodium-linux-dev-build.sh
+ (§7.3 product merge + Linux icons, then editor/vscodium/dev/build.sh), then
+ packaging/scripts/stage-le-vibe-ide-deb.sh and dpkg-buildpackage here — see README.md.
+ Plain dev/build.sh alone is possible after get_repo if you repeat those §7.3 steps
+ manually (editor/BUILD.md *Linux icons*).
