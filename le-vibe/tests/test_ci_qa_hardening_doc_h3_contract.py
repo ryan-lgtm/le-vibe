@@ -16,6 +16,8 @@ def test_ci_qa_hardening_doc_upload_artifact_row_stack_only_vs_ide_deb_step14():
     assert "**not** **`le-vibe-ide`**" in text
     assert "apt-repo-releases.md" in text
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
 
 
 def test_ci_qa_hardening_doc_lists_smoke_and_pytest():
