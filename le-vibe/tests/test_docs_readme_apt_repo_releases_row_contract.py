@@ -19,3 +19,5 @@ def test_docs_readme_apt_repo_releases_row_lists_step14_ide_deb_path():
     assert "build-le-vibe-ide-deb.sh" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
