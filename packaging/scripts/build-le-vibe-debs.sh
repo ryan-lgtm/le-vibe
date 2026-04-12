@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # One-shot: build le-vibe (stack) and optionally le-vibe-ide .deb artifacts.
 # Authority: docs/PM_DEB_BUILD_ITERATION.md — PM-scoped convenience; not a v1 production gate.
+# Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md when building --with-ide and editor/vscodium/ is empty.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -28,6 +29,7 @@ Environment:
 
 Prerequisites (stack): debhelper, build-essential, dpkg-dev (sudo apt install build-essential debhelper).
 Prerequisites (IDE):  a successful dev/build.sh under editor/vscodium (see editor/BUILD.md).
+  Fresh clone (14.b): git submodule update --init editor/vscodium from repo root if editor/vscodium/ is empty — editor/README.md.
 
 Artifacts:
   Stack:  typically ../le-vibe_*.deb (parent of repo root — standard dpkg-buildpackage).
