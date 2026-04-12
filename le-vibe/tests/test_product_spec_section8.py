@@ -188,6 +188,11 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "Release bundles (H1 / STEP 8 vs STEP 14 / §7.3)" in text
     assert "test_product_spec_prioritization_names_ci_le_vibe_deb_vs_ide_deb_step14" in text
     assert "PM_STAGE_MAP.md" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "Success output (`--with-ide`)" in text
+    assert "test_build_le_vibe_debs_script_contract.py" in text
 
 
 def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14():
