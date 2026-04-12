@@ -5,6 +5,16 @@
 # Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (ci.yml, dependabot.yml, packaging/bin).
 set -euo pipefail
 BIN="${LE_VIBE_EDITOR:-/usr/bin/codium}"
+if [[ -n "${LE_VIBE_EDITOR:-}" && "$BIN" == */* ]]; then
+  if [[ ! -e "$BIN" ]]; then
+    echo "le-vibe: LE_VIBE_EDITOR not found: $BIN — install the editor or fix the path." >&2
+    exit 1
+  fi
+  if [[ ! -x "$BIN" ]]; then
+    echo "le-vibe: LE_VIBE_EDITOR not executable: $BIN" >&2
+    exit 1
+  fi
+fi
 if [ -x "$BIN" ]; then
   echo "le-vibe: editor binary present: $BIN"
   exit 0
