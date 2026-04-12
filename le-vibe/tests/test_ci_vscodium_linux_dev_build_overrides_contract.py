@@ -12,6 +12,11 @@ def _repo_root() -> Path:
 
 def test_ci_vscodium_linux_dev_build_documents_overrides_hook():
     text = (_repo_root() / "packaging" / "scripts" / "ci-vscodium-linux-dev-build.sh").read_text(encoding="utf-8")
+    assert "14.e" in text
+    assert "howto-build.md" in text
+    assert "verify-14c-local-binary.sh" in text
+    assert "print-built-codium-path.sh" in text
+    assert "build-le-vibe-ide.yml" in text or "linux_compile" in text
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
     assert "restore from git" in text
