@@ -14,7 +14,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 [[ $# -eq 1 ]] || {
-  echo "usage: ${0##*/} /path/to/vscodium-linux-build.tar.gz" >&2
+  echo "usage: ${0##*/} /path/to/vscodium-linux-build.tar.gz — exactly one argument (editor/BUILD.md 14.f)." >&2
   exit 2
 }
 
