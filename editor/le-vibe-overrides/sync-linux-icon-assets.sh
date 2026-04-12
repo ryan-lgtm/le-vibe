@@ -12,7 +12,7 @@ VSC="${ROOT}/editor/vscodium"
 SRC_SVG="${ROOT}/packaging/icons/hicolor/scalable/apps/le-vibe.svg"
 DEST="${VSC}/src/stable/resources/linux"
 [[ -f "$SRC_SVG" ]] || {
-  echo "sync-linux-icon-assets: missing ${SRC_SVG}" >&2
+  echo "sync-linux-icon-assets: missing ${SRC_SVG} — restore packaging/icons from git (see packaging/icons/hicolor and docs/brand-assets.md)." >&2
   exit 1
 }
 mkdir -p "$DEST"
