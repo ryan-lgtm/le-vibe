@@ -9,7 +9,7 @@
 #   docs/PRODUCT_SPEC.md §7.2. Fast gate only (same story as ./editor/smoke.sh).
 # Authority: editor/VENDORING.md.
 # H1 / §7.3: default CI uploads le-vibe-deb (stack le-vibe .deb only); this script does not build le-vibe-ide_*.deb —
-#   maintainer — packaging/scripts/build-le-vibe-ide-deb.sh / build-le-vibe-debs.sh --with-ide (docs/apt-repo-releases.md IDE package).
+#   maintainer — packaging/scripts/build-le-vibe-ide-deb.sh / build-le-vibe-debs.sh --with-ide (Full-product install on success — docs/PM_DEB_BUILD_ITERATION.md; docs/apt-repo-releases.md IDE package).
 # E1: docs/PRODUCT_SPEC.md *Prioritization* documents ./editor/smoke.sh (this gate) — le-vibe/tests/test_product_spec_section8.py.
 # E1: editor/le-vibe-overrides/README.md — le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py.
 # build-le-vibe-ide.yml (build-linux alias) uploads ide-ci-metadata.txt (le_vibe_editor_docs=editor/README.md);

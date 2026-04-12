@@ -22,6 +22,8 @@ def test_ci_editor_gate_header_documents_le_vibe_deb_vs_ide_deb_step14():
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
 
 
 def test_ci_editor_gate_documents_step14_smoke_and_overrides_e1():
