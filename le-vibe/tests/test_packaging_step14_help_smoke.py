@@ -22,6 +22,7 @@ def _repo_root() -> Path:
         "packaging/scripts/ci-editor-gate.sh",
         "editor/smoke.sh",
         "editor/le-vibe-overrides/sync-linux-icon-assets.sh",
+        "packaging/scripts/check-linux-vscodium-build-deps.sh",
     ],
 )
 def test_step14_script_help_exits_zero(relative: str) -> None:

@@ -110,6 +110,7 @@ def test_editor_build_md_contract_linux_compile_troubleshooting_14e():
     assert "jq" in text
     assert "librsvg2-bin" in text
     assert "libxkbfile-dev" in text
+    assert "check-linux-vscodium-build-deps.sh" in text
     assert "spec-phase2.md" in text and "§14" in text
     assert "OOM" in text
     assert "self-hosted" in text.lower()
