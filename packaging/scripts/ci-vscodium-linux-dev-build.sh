@@ -16,6 +16,23 @@ VSC="${ROOT}/editor/vscodium"
 MERGE_JSON="${ROOT}/editor/le-vibe-overrides/product-branding-merge.json"
 DEFAULTS_SH="${ROOT}/editor/le-vibe-overrides/build-env.lvibe-defaults.sh"
 
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  cat <<'EOF'
+Usage: packaging/scripts/ci-vscodium-linux-dev-build.sh
+
+Run from the repository root. Applies §7.3 Lé Vibe layers then execs editor/vscodium/dev/build.sh:
+  merge product-branding-merge.json into editor/vscodium/product.json (jq),
+  sync-linux-icon-assets.sh, patch dev/build.sh for env-driven APP_NAME, optional build-env*.sh,
+  optional Node vs editor/.nvmrc check (14.a).
+
+Environment:
+  LEVIBE_SKIP_NODE_VERSION_CHECK   Set to 1 to skip active node vs editor/.nvmrc check.
+
+Authority: editor/BUILD.md (Linux icons, 14.e), docs/vscodium-fork-le-vibe.md.
+EOF
+  exit 0
+fi
+
 _lvibe_merge_vscodium_product_json() {
   [[ -f "${MERGE_JSON}" ]] || return 0
   command -v jq >/dev/null 2>&1 || {

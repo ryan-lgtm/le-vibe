@@ -42,6 +42,8 @@ def test_ci_vscodium_linux_dev_build_documents_overrides_hook():
     assert "sed not on PATH" in text
     assert "mktemp not on PATH" in text
     assert "mv not on PATH" in text
+    assert "Usage:" in text
+    assert "--help" in text
 
 
 def test_ci_vscodium_linux_dev_build_script_bash_syntax() -> None:
