@@ -85,3 +85,8 @@ def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci()
     assert "./editor/smoke.sh" in text
     assert "build-le-vibe-ide.yml" in text
     assert "build-linux.yml" in text
+    assert "ide-ci-metadata.txt" in text
+    assert "le_vibe_editor_docs" in text
+    assert "Pre-binary artifact" in text
+    assert "editor/BUILD.md" in text
+    assert "editor/VENDORING.md" in text
