@@ -44,6 +44,11 @@ export VSCODE_QUALITY="${VSCODE_QUALITY:-stable}"
 export VSCODE_LATEST="${VSCODE_LATEST:-no}"
 export CI_BUILD="${CI_BUILD:-no}"
 
+# Upstream get_repo.sh begins with [[ -z "${RELEASE_VERSION}" ]] before assigning; with bash -u,
+# expanding unset RELEASE_VERSION aborts. Relax -u only for this source (matches dev/build.sh sourcing).
+set +u
+# shellcheck disable=SC1091
 . ./get_repo.sh
+set -u
 
 echo "fetch-vscode-sources: done. Next: cd editor/vscodium && ./dev/build.sh — then LE_VIBE_EDITOR → VSCode-linux-*/bin/codium (editor/BUILD.md)."
