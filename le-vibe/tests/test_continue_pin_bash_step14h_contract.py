@@ -25,12 +25,19 @@ def test_sync_continue_config_script_documents_missing_generated_yaml():
     text = (_repo_root() / "packaging" / "scripts" / "sync-continue-config.sh").read_text(
         encoding="utf-8"
     )
+    assert "STEP 14.h" in text
+    assert "continue-config.yaml" in text
+    assert "le-vibe: missing" in text
     assert "le-vibe/README.md" in text
     assert "PRODUCT_SPEC §5" in text or "PRODUCT_SPEC §5–§8" in text
     assert "~/.config/le-vibe/" in text
     assert "mkdir not on PATH" in text
+    assert "cp not on PATH" in text
+    assert "ln not on PATH" in text
     assert "realpath not on PATH" in text
     assert "readlink not on PATH" in text
+    assert "ln -sfn" in text
+    assert "config.yaml.bak" in text or ".bak" in text
 
 
 def test_verify_continue_pin_script_documents_pin_file():
