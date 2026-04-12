@@ -6,6 +6,24 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 VSC="${ROOT}/editor/vscodium"
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  cat <<'EOF'
+Usage: editor/le-vibe-overrides/sync-linux-icon-assets.sh
+
+Copy packaging/icons/hicolor/scalable/apps/le-vibe.svg into
+editor/vscodium/src/stable/resources/linux/ and generate le-vibe.png
+(rsvg-convert preferred, or ImageMagick convert).
+
+Requires editor/vscodium/product.json — git submodule update --init editor/vscodium
+(Fresh clone 14.b: editor/README.md).
+
+Usually invoked via packaging/scripts/ci-vscodium-linux-dev-build.sh before dev/build.sh.
+See editor/BUILD.md (*Linux icons*).
+EOF
+  exit 0
+fi
+
 [[ -f "${VSC}/product.json" ]] || {
   echo "sync-linux-icon-assets: expected editor/vscodium/product.json — run: git submodule update --init editor/vscodium (Fresh clone 14.b: editor/README.md)." >&2
   exit 1
