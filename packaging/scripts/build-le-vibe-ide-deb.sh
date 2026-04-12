@@ -11,6 +11,29 @@
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+usage() {
+  cat <<'EOF'
+Usage: packaging/scripts/build-le-vibe-ide-deb.sh [PATH]
+
+  PATH   Optional path to editor/vscodium/VSCode-linux-* (default: discover under editor/vscodium/).
+
+Builds packaging/le-vibe-ide_*.deb via stage-le-vibe-ide-deb.sh + dpkg-buildpackage.
+See packaging/debian-le-vibe-ide/README.md and docs/PM_DEB_BUILD_ITERATION.md.
+
+Environment:
+  LEVIBE_EDITOR_GATE_ASSERT_BRAND   When 1, run ci-editor-gate.sh before staging (§7.3 product.json).
+  LEVIBE_STAGE_IDE_ASSERT_BRAND     Fail staging if product.json lacks Lé Vibe (stage-le-vibe-ide-deb.sh).
+  LEVIBE_STAGE_IDE_VERBOSE          Print when §7.3 identity check passes (staging script).
+  LEVIBE_IDE_LINTIAN_STRICT         When 1, fail the script if lintian fails after build.
+EOF
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
 if [[ "${LEVIBE_EDITOR_GATE_ASSERT_BRAND:-0}" == "1" ]]; then
   echo "build-le-vibe-ide-deb: §7.3 pre-check: ci-editor-gate.sh (LEVIBE_EDITOR_GATE_ASSERT_BRAND=1)"
   LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 "$ROOT/packaging/scripts/ci-editor-gate.sh"
