@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Lé Vibe
+GenericName=Integrated Development Environment
 Comment=Edit code with Lé Vibe (Code OSS shell)
 Exec=/usr/lib/le-vibe/bin/codium %F
 Icon=le-vibe

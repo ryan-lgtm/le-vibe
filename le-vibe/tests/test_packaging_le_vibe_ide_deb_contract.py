@@ -114,6 +114,7 @@ def test_debian_le_vibe_ide_control_and_scripts():
         encoding="utf-8"
     )
     assert "Lé Vibe" in desktop
+    assert "GenericName=" in desktop
     assert "Exec=/usr/lib/le-vibe/bin/codium" in desktop
     assert "Icon=le-vibe" in desktop
     install = (root / "packaging" / "debian-le-vibe-ide" / "debian" / "le-vibe-ide.install").read_text(
