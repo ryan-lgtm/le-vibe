@@ -18,6 +18,10 @@ def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
     assert "packaging/debian-le-vibe-ide/README.md" in text
     assert "build-le-vibe-debs.sh" in text
     assert "--with-ide" in text
+    assert "Full-product install" in text
+    assert "Success output (`--with-ide`)" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "Maintainer build output" in text
 
 
 def test_le_vibe_readme_h6_submodule_init_14b():
