@@ -7,7 +7,8 @@
 # E1: docs/PRODUCT_SPEC.md *Prioritization* documents ./editor/smoke.sh (this gate) — le-vibe/tests/test_product_spec_section8.py.
 # E1: editor/le-vibe-overrides/README.md — le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py.
 # build-le-vibe-ide.yml (build-linux alias) uploads ide-ci-metadata.txt (le_vibe_editor_docs=editor/README.md);
-#   GitHub Actions run Summary — Pre-binary artifact line (LE_VIBE_EDITOR pointer) — le-vibe/tests/test_build_le_vibe_ide_workflow_contract.py.
+#   upload-artifact retention-days — le-vibe/tests/test_build_le_vibe_ide_workflow_contract.py;
+#   GitHub Actions run Summary — Pre-binary artifact line (LE_VIBE_EDITOR pointer) — same test.
 # VSCodium’s repo uses product.json + get_repo.sh (no root package.json until vscode is fetched).
 set -euo pipefail
 

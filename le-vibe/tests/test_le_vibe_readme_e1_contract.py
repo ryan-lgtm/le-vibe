@@ -19,6 +19,7 @@ def test_le_vibe_readme_lists_core_e1_contract_modules():
     assert "test_root_readme_ai_pilot_contract.py" in text
     assert "test_build_le_vibe_ide_workflow_contract.py" in text
     assert "ide-ci-metadata.txt" in text
+    assert "retention-days" in text
     assert "Pre-binary artifact" in text
     assert "editor/BUILD.md" in text
     assert "editor/VENDORING.md" in text
