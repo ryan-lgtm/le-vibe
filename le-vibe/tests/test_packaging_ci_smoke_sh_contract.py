@@ -35,3 +35,5 @@ def test_packaging_ci_smoke_sh_header_lists_le_vibe_deb_stack_only_step14():
     assert "not le-vibe-ide" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "apt-repo-releases.md" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
