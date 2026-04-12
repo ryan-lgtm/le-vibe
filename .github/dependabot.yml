@@ -1,5 +1,6 @@
 # Keep GitHub Actions versions current (weekly PRs).
 # Full E1 pytest roster: root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI — same as ci.yml header.
+# STEP 14 E1 (IDE metadata / LE_VIBE_EDITOR docs): test_product_spec_section8.py, test_build_le_vibe_ide_workflow_contract.py, test_le_vibe_readme_e1_contract.py — packaging/scripts/ci-smoke.sh, editor/smoke.sh (same roster intent as ci.yml).
 # H8 (trust / .github/ — CI, Dependabot, ISSUE_TEMPLATE/ + config.yml # H8): docs/README.md Product surface;
 #   SECURITY.md Related docs; privacy-and-telemetry.md E1 contract tests — same chain as ci.yml + packaging headers.
 # Optional: docs/rag/le-vibe-phase2-chunks.md (lv-meta-overview) — §14 table row; not pytest-gated (see ci.yml header).
