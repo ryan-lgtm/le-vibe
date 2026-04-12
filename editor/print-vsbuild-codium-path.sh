@@ -6,7 +6,7 @@
 #   SEARCH_ROOT defaults to the current working directory (typical: cd to unpack dir, then run from repo with ../../editor/... or pass the unpack path).
 # Example (artifact in /tmp/vs):
 #   ./editor/print-vsbuild-codium-path.sh /tmp/vs
-# Requires: realpath (coreutils) for the final absolute path line.
+# Requires: stat and realpath (coreutils).
 set -euo pipefail
 
 SEARCH="${1:-.}"
@@ -21,6 +21,11 @@ matches=("${SEARCH}"/VSCode-linux-*/bin/codium)
 
 if [[ ${#matches[@]} -eq 0 ]]; then
   echo "print-vsbuild-codium-path: no VSCode-linux-*/bin/codium under ${SEARCH} — editor/BUILD.md 14.f (artifact) or 14.c (local build). If editor/vscodium/ is empty: git submodule update --init editor/vscodium (Fresh clone 14.b, editor/README.md)." >&2
+  exit 1
+fi
+
+if ! command -v stat >/dev/null 2>&1; then
+  echo "print-vsbuild-codium-path: stat not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md 14.f)." >&2
   exit 1
 fi
 
