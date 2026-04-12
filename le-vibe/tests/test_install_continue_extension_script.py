@@ -23,6 +23,15 @@ def test_install_continue_extension_header_points_at_pin_doc_and_pm_map() -> Non
     assert "PM_STAGE_MAP" in head or "STEP 7" in head
 
 
+def test_install_continue_extension_documents_pin_path_tool_checks() -> None:
+    text = (_repo_root() / "packaging" / "scripts" / "install-continue-extension.sh").read_text(
+        encoding="utf-8"
+    )
+    assert "grep not on PATH" in text
+    assert "head not on PATH" in text
+    assert "tr not on PATH" in text
+
+
 def test_continue_openvsx_pin_file_exists_and_semver() -> None:
     pin = _repo_root() / "packaging" / "continue-openvsx-version"
     assert pin.is_file(), pin
