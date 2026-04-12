@@ -61,6 +61,8 @@ def test_le_vibe_readme_step8_h1_ties_full_product_to_step14_ide_deb():
     assert "full product (STEP 14 / §7.3)" in text
     assert "le-vibe-ide_*_amd64.deb" in text
     assert "IDE package" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
 
 
 def test_le_vibe_readme_lists_step9_h2_sbom():
