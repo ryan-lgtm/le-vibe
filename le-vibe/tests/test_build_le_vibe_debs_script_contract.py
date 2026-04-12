@@ -37,6 +37,16 @@ def test_pm_deb_build_iteration_doc_submodule_prereq_14b():
     assert "Fresh clone (14.b" in text
 
 
+def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():
+    """STEP 14 / §7.3: PM deb doc points at apt-repo-releases for dual-.deb demo + H1 checksums."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    assert "apt-repo-releases.md" in text
+    assert "le-vibe-ide_*_amd64.deb" in text
+    assert "le-vibe-deb" in text
+    assert "SHA256SUMS" in text
+
+
 def test_print_pm_deb_build_prompt_extractable():
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
