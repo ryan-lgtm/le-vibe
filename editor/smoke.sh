@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Lé Vibe IDE — local smoke (STEP 14). Same checks as build-le-vibe-ide.yml gate + bash -n + .nvmrc sync.
+# Lé Vibe IDE — local smoke (STEP 14). Same checks as build-le-vibe-ide.yml / build-linux.yml (alias) gate + bash -n + .nvmrc sync.
 # Run from repository root:
 #   ./editor/smoke.sh
 # Authority: editor/README.md, packaging/scripts/ci-editor-gate.sh
