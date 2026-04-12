@@ -10,15 +10,14 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Tests
 
-- **`test_product_spec_section8.py`** — *Prioritization* **`How to sequence work`** retains **`ide-ci-metadata.txt`**, **`le_vibe_editor_docs`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`** (STEP 14 metadata story).
+- **`test_le_vibe_readme_e1_contract.py`** — **`le-vibe/README.md`** *Tests* keeps **`ide-ci-metadata.txt`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`** (aligned with root **`README.md`** *E1 mapping*).
+- **`test_product_spec_section8.py`** — *Prioritization* **`How to sequence work`** retains **`ide-ci-metadata.txt`**, **`le_vibe_editor_docs`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`** (STEP 14 metadata story); §7.2 Continue rule — **numbered questions** (**`USER RESPONSE REQUIRED`**).
 - **`test_build_le_vibe_ide_workflow_contract.py`** — **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** **`ide-ci-metadata.txt`** **`le_vibe_editor_docs=editor/README.md`**; **Job summary** (**`GITHUB_STEP_SUMMARY`**, **`Pre-binary artifact`**, **`LE_VIBE_EDITOR`**).
 - **`test_editor_le_vibe_overrides_readme_contract.py`** — **`editor/le-vibe-overrides/README.md`** retains **H6** / **STEP 14** strings (**`LE_VIBE_EDITOR`**, **`build-linux.yml`**, **`./editor/smoke.sh`**) plus **`ide-ci-metadata.txt`**, **`le_vibe_editor_docs`**, **`test_build_le_vibe_ide_workflow_contract.py`** (STEP 14 metadata ↔ **`LE_VIBE_EDITOR`** docs).
 - **`test_session_orchestrator.py`** — bundled **`session-manifest`** example matches **`schemas/session-manifest.v1.example.json`** (STEP 2 / PM workspace parity).
-- **`test_le_vibe_readme_e1_contract.py`** — **`le-vibe/README.md`** *Tests* section keeps core **E1** module names aligned with root **`README.md`** *E1 mapping*.
 - **`test_issue_template_h8_contract.py`** — **`.github/ISSUE_TEMPLATE/*.yml`** and **`config.yml`** retain **STEP 12** / **`config.yml`** / **H8** string anchors (**H8**, §1 audit assist; not a YAML parse).
 - **`test_continue_workspace.py`** — **`.continue/rules`** memory file must include **numbered questions** (§7.2).
 - **`test_workspace_hub.py`** — seeded **`.lvibe/AGENTS.md`** must include **numbered questions** (§7.2 alignment with Continue rules).
-- **`test_product_spec_section8.py`** — §7.2 Continue rule must include **numbered questions** (with **`USER RESPONSE REQUIRED`**).
 - Master orchestrator fenced block in **`docs/PROMPT_BUILD_LE_VIBE.md`** remains extractable (**STEP 16** / **`packaging/scripts/print-master-orchestrator-prompt.py`**) — [`le-vibe/tests/test_prompt_build_orchestrator_fence.py`](le-vibe/tests/test_prompt_build_orchestrator_fence.py).
 
 ### Documentation
