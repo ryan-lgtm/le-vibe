@@ -42,5 +42,8 @@ cleanup() {
 }
 trap cleanup EXIT
 
-tar -xzf "${TAR}" -C "${WORKDIR}"
+if ! tar -xzf "${TAR}" -C "${WORKDIR}"; then
+  echo "${0##*/}: tar extract failed — $TAR may be corrupt or not a .tar.gz from linux_compile (editor/BUILD.md 14.f)." >&2
+  exit 1
+fi
 exec "${ROOT}/editor/print-vsbuild-codium-path.sh" "${WORKDIR}"
