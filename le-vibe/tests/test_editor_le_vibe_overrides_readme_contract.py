@@ -27,6 +27,12 @@ def test_branding_staging_checklist_14d_contract():
     assert "ci-vscodium-linux-dev-build.sh" in text
     assert "product.json" in text
     assert "vscodium-fork-le-vibe.md" in text
+    assert "le-vibe-deb" in text
+    assert "le-vibe-ide_*_amd64.deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
+    assert "Release bundles (H1 / STEP 8 vs STEP 14 / §7.3)" in text
 
 
 def test_editor_le_vibe_overrides_readme_documents_launcher_and_h6_gate():

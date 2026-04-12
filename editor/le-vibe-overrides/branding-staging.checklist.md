@@ -9,6 +9,8 @@ Use this **before** changing **user-visible** IDE identity (name, binary, About,
 - **§7.3 (2026-04-12):** **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** merges **`product-branding-merge.json`** into **`editor/vscodium/product.json`**, patches **`dev/build.sh`** so **`APP_NAME`** / **`ORG_NAME`** / … honor the environment, and sources **`build-env.lvibe-defaults.sh`** — **Lé Vibe** short/long names and **`APP_NAME`** for **`!!APP_NAME!!`** patches. Optional gitignored **`build-env.sh`** still layers local overrides (e.g. **`SKIP_ASSETS`**).
 - **Honesty:** **`sync-linux-icon-assets.sh`** + **`linuxIconName`** **`le-vibe`** ship the menu/launcher icon path for §7.3; desktop **`Keywords=`** / URL protocol / **`Exec=`** packaging polish may still need maintainer passes — **[`spec-phase2.md`](../../spec-phase2.md) §14** (*Gap*) where relevant; window title / About track **`nameShort`** / merge above.
 
+**Release bundles (CI vs maintainer `.deb`):** Default **`ci.yml`** artifact **`le-vibe-deb`** is **stack-only** — **not** **`le-vibe-ide_*_amd64.deb`**, which packages the **`VSCode-linux-*`** tree you verify here — **[`docs/apt-repo-releases.md`](../../docs/apt-repo-releases.md)** (*IDE package*); **[`docs/PM_STAGE_MAP.md`](../../docs/PM_STAGE_MAP.md)** (*H1 vs §7.3 .deb bundles*); **[`docs/PRODUCT_SPEC.md`](../../docs/PRODUCT_SPEC.md)** § *Prioritization* — **Release bundles (H1 / STEP 8 vs STEP 14 / §7.3)**.
+
 **Fresh clone (14.b):** **`git submodule update --init editor/vscodium`** from the monorepo root when **`editor/vscodium/`** is empty — **[`../README.md`](../README.md)** *Fresh clone (14.b)* — before **`fetch-vscode-sources.sh`** in *Build / verify order* below.
 
 ## Upstream knobs (verify after every `editor/vscodium` submodule bump)
