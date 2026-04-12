@@ -10,6 +10,15 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_stage_le_vibe_ide_deb_script_header_documents_h1_vs_ci_step14():
+    """STEP 14: staging script header matches ci.yml stack-only vs maintainer IDE .deb."""
+    root = _repo_root()
+    text = (root / "packaging" / "scripts" / "stage-le-vibe-ide-deb.sh").read_text(encoding="utf-8")
+    assert "le-vibe-deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+
+
 def test_stage_le_vibe_ide_deb_script_documents_14b_submodule_and_bash_syntax():
     root = _repo_root()
     script = root / "packaging" / "scripts" / "stage-le-vibe-ide-deb.sh"

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Stage editor/vscodium/VSCode-linux-* for packaging/debian-le-vibe-ide (PRODUCT_SPEC §7.3).
+# H1 / §7.3: not part of default ci.yml le-vibe-deb artifact (stack-only); full-product — docs/apt-repo-releases.md (IDE package); invoked by build-le-vibe-ide-deb.sh / build-le-vibe-debs.sh --with-ide.
 # Requires: find (findutils); basename, rm, mkdir, cp, ln, install (coreutils).
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md when editor/vscodium/ is empty.
 set -euo pipefail
