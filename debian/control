@@ -34,3 +34,7 @@ Description: Lé Vibe — Code OSS–based IDE with managed local Ollama
  ide-ci-metadata.txt (upload-artifact retention-days; workflow permissions
  contents read + actions write for checkout + artifacts) and GitHub Actions Summary
  LE_VIBE_EDITOR pointers (editor/BUILD.md).
+ .
+ Sibling le-vibe-ide .deb and full-product maintainer flow: README.Debian and
+ docs/PM_DEB_BUILD_ITERATION.md (packaging/scripts/build-le-vibe-debs.sh --with-ide;
+ Full-product install on success).
