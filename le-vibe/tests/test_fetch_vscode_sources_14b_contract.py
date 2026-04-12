@@ -30,3 +30,5 @@ def test_fetch_vscode_sources_script_documents_14b_get_repo_flow() -> None:
     assert "dev/build.sh" in text
     assert "VSCODE_QUALITY" in text and "VSCODE_LATEST" in text and "CI_BUILD" in text
     assert "#build-ci" in text or "build-ci" in text
+    assert "cmp not on PATH" in text
+    assert "tr not on PATH" in text

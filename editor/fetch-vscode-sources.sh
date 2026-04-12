@@ -7,7 +7,7 @@
 # Packaging-only exports from howto-build.md *Build for CI/Downstream* (#build-ci) — SHOULD_BUILD, OS_NAME, … —
 # are not required for get_repo alone; use the full upstream block there when reproducing CI packaging.
 #
-# Prereq: Node from editor/.nvmrc — from repo root: source editor/use-node-toolchain.sh (14.a), or (cd editor && nvm install && nvm use)
+# Prereq: cmp and tr (coreutils), Node from editor/.nvmrc — from repo root: source editor/use-node-toolchain.sh (14.a), or (cd editor && nvm install && nvm use)
 # Full local build after fetch: cd editor/vscodium && ./dev/build.sh (see editor/BUILD.md).
 # Fresh clone (14.b): git submodule update --init editor/vscodium from repo root when editor/vscodium/ is empty — editor/README.md.
 # shellcheck disable=SC1091
@@ -20,6 +20,15 @@ cd "$ROOT"
   echo "fetch-vscode-sources: expected editor/vscodium/ — run: git submodule update --init editor/vscodium (editor/README.md Fresh clone 14.b)." >&2
   exit 1
 }
+
+if ! command -v cmp >/dev/null 2>&1; then
+  echo "fetch-vscode-sources: cmp not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md 14.a)." >&2
+  exit 1
+fi
+if ! command -v tr >/dev/null 2>&1; then
+  echo "fetch-vscode-sources: tr not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md 14.a)." >&2
+  exit 1
+fi
 
 if ! cmp -s editor/.nvmrc editor/vscodium/.nvmrc 2>/dev/null; then
   echo "fetch-vscode-sources: editor/.nvmrc differs from editor/vscodium/.nvmrc — update editor/.nvmrc to match upstream pin after a vendor bump (14.a); see editor/README.md." >&2
