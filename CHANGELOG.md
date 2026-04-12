@@ -29,6 +29,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Documentation
 
+- **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** header — *STEP 14* comment names **`build-le-vibe-ide`** pre-binary **`ide-ci-metadata`**, **`retention-days`**, **`permissions`** (**`contents` read**, **`actions` write**); root **`README.md`** *CI* (**Lé Vibe IDE**) — same bundle beside **`upload-artifact`**.
 - **`docs/PRODUCT_SPEC.md`** *Prioritization* — **How to sequence work** names **`upload-artifact`** **`retention-days`** (pre-binary **`ide-ci-metadata`**); **`spec-phase2.md` §14** table + *Honesty vs CI*; **`docs/README.md`**, **`docs/AI_PILOT_AND_CONTINUE.md`**, **`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`** intro; root **`README.md`** *CI* / *E1 mapping*; **`editor/smoke.sh`** / **`packaging/scripts/ci-editor-gate.sh`** comments — aligned with **`test_product_spec_section8.py`** / **`test_le_vibe_readme_e1_contract.py`**.
 - **[`debian/le-vibe.README.Debian`](debian/le-vibe.README.Debian)** *IDE sources in a clone* — **`build-le-vibe-ide`** **`ide-ci-metadata.txt`**, **`upload-artifact`** **`retention-days`**, Actions **Summary** **Pre-binary artifact** / **`LE_VIBE_EDITOR`** (**`editor/BUILD.md`**, **`editor/VENDORING.md`**).
 - **[`docs/privacy-and-telemetry.md`](docs/privacy-and-telemetry.md)** *E1 contract tests* row — **`test_product_spec_section8.py`** (*Prioritization* / **`ide-ci-metadata`** / **`retention-days`*) before **H8** / **STEP 14** modules.
