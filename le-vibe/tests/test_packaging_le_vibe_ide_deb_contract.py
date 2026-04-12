@@ -31,6 +31,8 @@ def test_stage_le_vibe_ide_deb_script_documents_14b_submodule_and_bash_syntax():
     assert "restore packaging/icons from git" in text
     assert "PRODUCT_SPEC §7.3" in text
     assert "no VSCode-linux-* under editor/vscodium" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
     assert "find not on PATH" in text
     assert "basename not on PATH" in text
     assert "rm not on PATH" in text
