@@ -4,6 +4,7 @@
 #
 # GitHub Actions serves workflow artifacts as a .zip download; unzip first — the archive contains
 # vscodium-linux-build.tar.gz (see editor/BUILD.md *14.f*).
+# Local tree instead of this tarball: Fresh clone (14.b) — git submodule update --init editor/vscodium — editor/README.md, then editor/BUILD.md (14.a→14.c).
 #
 # From repo root:
 #   LE_VIBE_EDITOR="$(./editor/print-ci-tarball-codium-path.sh ~/Downloads/vscodium-linux-build.tar.gz)"
