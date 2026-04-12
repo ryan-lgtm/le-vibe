@@ -22,7 +22,8 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Debian packaging
 
-- **`debian/changelog`** — **`0.1.2`**: **`README.Debian`** documents **`ide-ci-metadata`** / **Summary** / **`LE_VIBE_EDITOR`** for monorepo clone developers.
+- **`debian/control`** *Description* — **`README.Debian`** / **`build-le-vibe-ide`** **`ide-ci-metadata.txt`**, Actions **Summary** **`LE_VIBE_EDITOR`** (**`editor/BUILD.md`**).
+- **`debian/changelog`** — **`0.1.3`**: **`control`** *Description* cross-ref; **`0.1.2`**: **`README.Debian`** documents **`ide-ci-metadata`** / **Summary** / **`LE_VIBE_EDITOR`** for monorepo clone developers.
 
 ### Documentation
 

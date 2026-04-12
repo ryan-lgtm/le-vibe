@@ -28,3 +28,6 @@ Description: Lé Vibe — Code OSS–based IDE with managed local Ollama
  After install, read /usr/share/doc/le-vibe/README.Debian for quick steps,
  Continue wiring, workspace .lvibe/ memory consent (PRODUCT_SPEC §5), and
  Phase 2 scope vs editor fork / Flatpak (spec-phase2 §14; same file, Authority).
+ .
+ Monorepo clone / CI: README.Debian summarizes build-le-vibe-ide pre-binary
+ ide-ci-metadata.txt and GitHub Actions Summary LE_VIBE_EDITOR pointers (editor/BUILD.md).
