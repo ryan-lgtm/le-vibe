@@ -10,6 +10,7 @@
 #   ./editor/use-node-toolchain.sh ./editor/fetch-vscode-sources.sh
 #
 # Requires nvm: https://github.com/nvm-sh/nvm (default NVM_DIR=~/.nvm)
+# Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (editor/.nvmrc tracks editor/vscodium/.nvmrc).
 set -euo pipefail
 
 EDITOR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
