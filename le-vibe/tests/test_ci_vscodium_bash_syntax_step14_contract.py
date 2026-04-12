@@ -28,3 +28,11 @@ def test_ci_vscodium_bash_syntax_documents_step14_and_upstream_scripts():
     assert "editor/vscodium" in text
     assert "repair editor/vscodium" in text
     assert "bash not on PATH" in text
+    # Core path toward a Linux build — keep list in sync with script (short upstream bash -n set)
+    assert 'scripts=(' in text
+    assert "build.sh" in text
+    assert "build_cli.sh" in text
+    assert "prepare_src.sh" in text
+    assert "prepare_vscode.sh" in text
+    assert 'bash -n "$p"' in text
+    assert "ci-vscodium-bash-syntax: OK" in text
