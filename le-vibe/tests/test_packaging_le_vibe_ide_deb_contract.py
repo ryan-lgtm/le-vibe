@@ -53,6 +53,11 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "Fresh clone (14.b)" in readme
     assert "§7.3" in readme
     assert "/usr/lib/le-vibe/bin/codium" in readme
+    assert "lvibe" in readme
+    assert "VSCode-linux-" in readme
+    assert "dev/build.sh" in readme
+    assert "stage-le-vibe-ide-deb.sh" in readme
+    assert "build-le-vibe-ide-deb.sh" in readme
     assert "applications" in readme.lower()
     assert "roadmap" in readme.lower() and "apt-repo-releases" in readme
     desktop = (root / "packaging" / "debian-le-vibe-ide" / "debian" / "le-vibe.desktop").read_text(
