@@ -10,6 +10,8 @@ Canonical specs: `docs/PRODUCT_SPEC.md` (must-ship), `docs/SESSION_ORCHESTRATION
 
 **`.deb` / `apt`:** [`debian/le-vibe.README.Debian`](../debian/le-vibe.README.Debian) installs as **`/usr/share/doc/le-vibe/README.Debian`** — post-install flow, **§5** **`.lvibe/`** consent, pointers to **`PRODUCT_SPEC`** / [`README.md`](README.md).
 
+**Full-product maintainer `.deb`:** [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) — **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** prints **Full-product install** (stack + IDE); default **`ci.yml`** artifact **`le-vibe-deb`** is stack-only — [`apt-repo-releases.md`](apt-repo-releases.md) (*IDE package*).
+
 **Phase 2 honesty:** **[`spec-phase2.md`](../spec-phase2.md) §14** — monorepo: **`le-vibe/`** + **`editor/`** (**H6**); **H7** — **`packaging/flatpak/`** (Flathub-oriented) + **`packaging/appimage/`**; the **0–17** queue runs **in this repository** (**STEP 14** = **`editor/`** work, not a second git remote).
 
 **Prioritization:** **[`PRODUCT_SPEC.md`](PRODUCT_SPEC.md)** *Prioritization* + *Product and project management — in service of the IDE* — **monorepo:** **`editor/`** (IDE, **H6**) + **`le-vibe/`** (stack). Master orchestrator **execution order:** **0 → 1 → 14 → 2–13 → 15–17** — **`editor/README.md`**, **[`vscodium-fork-le-vibe.md`](vscodium-fork-le-vibe.md)**.
