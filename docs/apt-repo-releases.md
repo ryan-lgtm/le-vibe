@@ -102,7 +102,7 @@ Exact **`signed-by`** and URL depend on how you host keys and the repository. Do
 - **Source:** `debian/`, `packaging/`, CI that builds, verifies checksums, and uploads artifacts.
 - **Not required in-tree:** full **reprepro**/**aptly** config for your domain — that is org-specific (DNS, TLS, signing keys, mirror layout).
 
-For product positioning and fork notes, see **`README.md`** and **`docs/vscodium-fork-le-vibe.md`**.
+For product positioning and **`editor/`** / IDE shell notes, see **`README.md`** and **`docs/vscodium-fork-le-vibe.md`**.
 
 ## Related docs
 
