@@ -8,6 +8,7 @@
 #     STEP 14 E1 (metadata / LE_VIBE_EDITOR docs): test_product_spec_section8.py (Prioritization), test_build_le_vibe_ide_workflow_contract.py, test_le_vibe_readme_e1_contract.py — see packaging/scripts/ci-smoke.sh header (same roster intent as editor/smoke.sh).
 #     Optional RAG chunk (docs/rag/le-vibe-phase2-chunks.md, lv-meta-overview): §14 table — not pytest-covered; SECURITY.md Related docs.
 #     .deb end users: /usr/share/doc/le-vibe/README.Debian (debian/le-vibe.README.Debian).
+#     H1 — upload name le-vibe-deb: stack le-vibe .deb + SBOM + SHA256SUMS only (not le-vibe-ide; STEP 14 / §7.3 — docs/apt-repo-releases.md IDE package; build-le-vibe-debs.sh --with-ide).
 name: CI
 
 on:
