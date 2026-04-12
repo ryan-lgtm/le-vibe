@@ -11,6 +11,7 @@ def _repo_root() -> Path:
 
 def test_editor_build_md_contract_vendoring_pointer():
     text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
     assert "VENDORING.md" in text
     assert "git submodule" in text.lower()
     assert "vscodium-linux-build.tar.gz" in text
