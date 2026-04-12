@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# STEP 14 (H6): editor/ vendoring detection — matches .github/workflows/build-le-vibe-ide.yml gate.
+# STEP 14 (H6): editor/ vendoring detection — matches .github/workflows/build-le-vibe-ide.yml
+# (and build-linux.yml, which reuses that workflow) gate.
 # Run from repo root: ./packaging/scripts/ci-editor-gate.sh
 # Exits 0 when layout is none (skip). For layout=vscodium, runs bash syntax on upstream scripts (may exit 1).
 # Authority: editor/VENDORING.md.
@@ -23,7 +24,7 @@ if [[ "${layout}" == "none" ]]; then
   exit 0
 fi
 
-echo "ci-editor-gate: upstream present (${layout}) — wire Linux build in build-le-vibe-ide.yml when ready."
+echo "ci-editor-gate: upstream present (${layout}) — wire Linux build in build-le-vibe-ide.yml (build-linux alias) when ready."
 if [[ "${layout}" == "vscodium" ]]; then
   "${ROOT}/packaging/scripts/ci-vscodium-bash-syntax.sh"
   "${ROOT}/packaging/scripts/ci-editor-nvmrc-sync.sh"
