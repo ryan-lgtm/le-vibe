@@ -20,6 +20,18 @@ def test_ci_qa_hardening_doc_upload_artifact_row_stack_only_vs_ide_deb_step14():
     assert "H1 vs §7.3 .deb bundles" in text
 
 
+def test_ci_qa_hardening_doc_maintainer_full_product_deb_step14():
+    """STEP 10 / STEP 14: H3 doc names build-le-vibe-debs --with-ide Full-product install + PM doc."""
+    text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
+    assert "Maintainer full-product stack + IDE" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "VSCode-linux-*" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "Success output (`--with-ide`)" in text
+    assert "Install both packages" in text
+
+
 def test_ci_qa_hardening_doc_lists_smoke_and_pytest():
     text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
     assert "ci-smoke.sh" in text
