@@ -15,7 +15,7 @@ Then follow upstream’s **prepare / build** docs from **`editor/vscodium/`** (f
 
 ## Branding & About
 
-After the tree builds, apply Lé Vibe naming, icons, and About copy per **`docs/vscodium-fork-le-vibe.md`** and **`docs/PRODUCT_SPEC.md`** §7.2 where choices are material.
+After the tree builds, apply Lé Vibe naming, icons, and About copy per **`docs/vscodium-fork-le-vibe.md`** and **`docs/PRODUCT_SPEC.md`** §7.2 where choices are material. Reserved monorepo path: **[`le-vibe-overrides/README.md`](le-vibe-overrides/README.md)** (empty until branding assets or documented patches land).
 
 ## `LE_VIBE_EDITOR`
 
