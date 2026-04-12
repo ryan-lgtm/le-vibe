@@ -97,6 +97,10 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "build-le-vibe-debs.sh --with-ide" in readme
     assert "PM_DEB_BUILD_ITERATION.md" in readme
     assert "SHA256SUMS" in readme
+    assert "PM_STAGE_MAP.md" in readme
+    assert "H1 vs §7.3 .deb bundles" in readme
+    assert "spec-phase2.md" in readme
+    assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in readme
     desktop = (root / "packaging" / "debian-le-vibe-ide" / "debian" / "le-vibe.desktop").read_text(
         encoding="utf-8"
     )

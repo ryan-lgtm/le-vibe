@@ -14,6 +14,8 @@ This directory is a **separate Debian source** (sibling to the root **`debian/`*
 
 **Stack + IDE in one pass (STEP 14 / demo):** from the monorepo root, **`./packaging/scripts/build-le-vibe-debs.sh --with-ide`** builds **`le-vibe_*_all.deb`** (root **`debian/`**) and then this IDE **`.deb`** when **`VSCode-linux-*`** exists — **[`docs/PM_DEB_BUILD_ITERATION.md`](../../docs/PM_DEB_BUILD_ITERATION.md)**. For releases, attach **`le-vibe_*_all.deb`**, **`le-vibe-ide_*_amd64.deb`**, and **`SHA256SUMS`** — **[`docs/apt-repo-releases.md`](../../docs/apt-repo-releases.md)** (*IDE package*).
 
+**CI vs maintainer .deb bundles:** Default **`ci.yml`** artifact **`le-vibe-deb`** ships the stack **`le-vibe`** **`.deb`**, SBOM, and **`SHA256SUMS`** for those files — **not** **`le-vibe-ide_*_amd64.deb`**. Honesty — **[`docs/PM_STAGE_MAP.md`](../../docs/PM_STAGE_MAP.md)** (*H1 vs §7.3 .deb bundles*); monorepo table — **[`spec-phase2.md`](../../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*.
+
 ## Lintian (optional)
 
 **`./packaging/scripts/build-le-vibe-ide-deb.sh`** runs **`lintian`** automatically when it is on **`PATH`** after **`dpkg-buildpackage`**. Tags are **non-fatal** unless **`LEVIBE_IDE_LINTIAN_STRICT=1`** is set in the environment. Manually, from the monorepo root: **`lintian packaging/le-vibe-ide_*_*.deb`**. Use tags as hints — **[`docs/ci-qa-hardening.md`](../../docs/ci-qa-hardening.md)**; the stack **`debian/`** package may run stricter QA in CI (**STEP 10** / **H3**).
