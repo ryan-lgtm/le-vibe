@@ -9,7 +9,7 @@
 # From repo root:
 #   LE_VIBE_EDITOR="$(./editor/print-ci-tarball-codium-path.sh ~/Downloads/vscodium-linux-build.tar.gz)"
 #
-# Requires: tar, mktemp. Does not leave the tarball extracted in your cwd (temp dir removed after).
+# Requires: realpath (coreutils), tar, mktemp. Does not leave the tarball extracted in your cwd (temp dir removed after).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -21,6 +21,10 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ARG="$1"
 if [[ ! -f "$ARG" ]]; then
   echo "${0##*/}: not a regular file: $ARG — pass the path to vscodium-linux-build.tar.gz from CI (editor/BUILD.md 14.f)." >&2
+  exit 1
+fi
+if ! command -v realpath >/dev/null 2>&1; then
+  echo "${0##*/}: realpath not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md 14.f)." >&2
   exit 1
 fi
 TAR="$(realpath "$ARG")"
