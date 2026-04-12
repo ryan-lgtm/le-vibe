@@ -48,6 +48,8 @@ def test_stage_le_vibe_ide_deb_script_documents_14b_submodule_and_bash_syntax():
     assert "resources/app/product.json" in text
     assert "LEVIBE_STAGE_IDE_ASSERT_BRAND" in text
     assert "LEVIBE_STAGE_IDE_VERBOSE" in text
+    assert "usage()" in text
+    assert "--help" in text
     assert "ci-vscodium-linux-dev-build.sh" in text
     assert "stage-le-vibe-ide-deb: staged" in text
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)

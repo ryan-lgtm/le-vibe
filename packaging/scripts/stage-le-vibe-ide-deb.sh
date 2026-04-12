@@ -9,6 +9,25 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 STAGING="$ROOT/packaging/debian-le-vibe-ide/staging"
 
+usage() {
+  cat <<'EOF'
+Usage: packaging/scripts/stage-le-vibe-ide-deb.sh [PATH]
+
+  PATH   Optional editor/vscodium/VSCode-linux-* directory (default: discover under editor/vscodium/).
+
+Stages the tree into packaging/debian-le-vibe-ide/staging for dpkg-buildpackage (see packaging/debian-le-vibe-ide/README.md).
+
+Environment:
+  LEVIBE_STAGE_IDE_ASSERT_BRAND   When 1, fail if resources/app/product.json lacks Lé Vibe.
+  LEVIBE_STAGE_IDE_VERBOSE        When 1, print when §7.3 identity check passes.
+EOF
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
 if ! command -v find >/dev/null 2>&1; then
   echo "stage-le-vibe-ide-deb: find not on PATH — install findutils (e.g. sudo apt install findutils) (§7.3 IDE .deb staging)." >&2
   exit 1
