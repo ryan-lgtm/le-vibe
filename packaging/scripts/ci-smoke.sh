@@ -72,6 +72,8 @@ if command -v desktop-file-validate >/dev/null 2>&1; then
   echo "ci-smoke: desktop-file-validate"
   desktop-file-validate packaging/applications/le-vibe.desktop
   desktop-file-validate packaging/autostart/le-vibe-continue-setup.desktop
+  # §7.3 IDE .deb — same Freedesktop QA as stack launcher (STEP 14 / packaging/debian-le-vibe-ide)
+  desktop-file-validate packaging/debian-le-vibe-ide/debian/le-vibe.desktop
 elif [[ -n "${GITHUB_ACTIONS:-}" ]]; then
   echo "ci-smoke: desktop-file-validate not found; install desktop-file-utils" >&2
   exit 1

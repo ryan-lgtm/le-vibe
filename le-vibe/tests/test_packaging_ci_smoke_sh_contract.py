@@ -37,3 +37,9 @@ def test_packaging_ci_smoke_sh_header_lists_le_vibe_deb_stack_only_step14():
     assert "apt-repo-releases.md" in text
     assert "PM_STAGE_MAP.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
+
+
+def test_packaging_ci_smoke_sh_validates_ide_deb_desktop_step14():
+    """STEP 14: Freedesktop QA for le-vibe-ide menu template (§7.3)."""
+    text = (_repo_root() / "packaging" / "scripts" / "ci-smoke.sh").read_text(encoding="utf-8")
+    assert "desktop-file-validate packaging/debian-le-vibe-ide/debian/le-vibe.desktop" in text
