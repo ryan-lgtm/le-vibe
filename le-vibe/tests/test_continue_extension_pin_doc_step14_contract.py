@@ -11,6 +11,8 @@ def _repo_root() -> Path:
 
 def test_continue_extension_pin_doc_step14_h_strings():
     text = (_repo_root() / "docs" / "continue-extension-pin.md").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
     assert "### STEP 14.h" in text
     assert "14.h" in text
     assert "LE_VIBE_EDITOR" in text

@@ -12,6 +12,8 @@ After **`dpkg -i`**, the same pin is installed at **`/usr/share/le-vibe/continue
 
 **Phase 2 scope:** This pin story covers **Continue** on **system VSCodium** (or **`LE_VIBE_EDITOR`**) plus **`le-vibe`** configs — not a **published** **Lé Vibe–branded** IDE artifact from **`editor/`** until **H6** release work lands (**VSCodium** sources live under **`editor/vscodium/`** in the monorepo); see **[`spec-phase2.md`](../spec-phase2.md) §14** (**H6**/**H7**).
 
+**Fresh clone (14.b):** from the repository root, run **`git submodule update --init editor/vscodium`** when **`editor/vscodium/`** is empty before **`dev/build.sh`**, **`verify-14c-local-binary.sh`**, or the **14.f** path helpers — **[`editor/README.md`](../editor/README.md)** *Fresh clone (14.b)*.
+
 ### STEP 14.h — same pin when the editor comes from `editor/`
 
 The **Open VSX semver** in **`packaging/continue-openvsx-version`** is the single source of truth for reproducible installs. It does **not** change when **`LE_VIBE_EDITOR`** points at a **locally built** **`VSCode-linux-*/bin/codium`** or a **CI tarball** instead of **`/usr/bin/codium`** — **`packaging/scripts/install-continue-extension.sh`** always runs **`"$LE_VIBE_EDITOR" --install-extension continue.continue@<pin>`** (or override env vars in the table below).
