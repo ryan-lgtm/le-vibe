@@ -18,6 +18,9 @@ def test_master_iteration_loop_fence_extractable():
         "see packaging/scripts/print-master-iteration-loop-prompt.py"
     )
     assert "MODE: ENGINEER" in fence and "MODE: PRODUCT_MANAGER" in fence
+    assert "MODE: PROJECT" in fence
+    assert "OWNER_DIRECTIVES" in fence
+    assert "AGENT_MODE_ORCHESTRATION" in fence
     assert "ORDERED WORK QUEUE" in fence or "PROMPT_BUILD_LE_VIBE" in fence
     assert "USER RESPONSE REQUIRED" in fence
     assert "LÉ VIBE SESSION COMPLETE" in fence

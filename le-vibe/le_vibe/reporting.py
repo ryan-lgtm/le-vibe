@@ -114,7 +114,12 @@ def write_locked_model_json(
     return dest
 
 
-def write_model_decision_json(decision: ModelDecision | None, *, config_dir: Path | None = None) -> Path:
+def write_model_decision_json(
+    decision: ModelDecision | None,
+    *,
+    config_dir: Path | None = None,
+    locked_policy: str | None = None,
+) -> Path:
     out_dir = _resolve_output_dir(config_dir)
     dest = out_dir / "model-decision.json"
     if decision is None:
@@ -123,10 +128,12 @@ def write_model_decision_json(decision: ModelDecision | None, *, config_dir: Pat
     from .models import model_decision_to_json
 
     dest.write_text(json.dumps(model_decision_to_json(decision), indent=2), encoding="utf-8")
+    policy = locked_policy or "hardware_tier_best_fit"
     if decision.selected_model and decision.selected_model.strip():
         write_locked_model_json(
             decision.selected_model,
             reason_excerpt=decision.reason,
             config_dir=config_dir,
+            policy=policy,
         )
     return dest

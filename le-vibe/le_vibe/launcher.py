@@ -1,7 +1,7 @@
 """Lé Vibe session launcher: managed Ollama on open, stop on exit (spec-phase2 §7.1). Linux-first.
 
 Authority: ``docs/PRODUCT_SPEC.md`` (must-ship). Workspace open uses ``prepare_workspaces_for_editor_args`` — **§5**
-consent before ``.lvibe/``; **§7.2** user gate copy lives in Continue rules (``le_vibe.continue_workspace``).
+consent before ``.lvibe/`` (``load_user_settings`` does **not** replace consent); **§7.2** user gate copy lives in Continue rules (``le_vibe.continue_workspace``).
 """
 
 from __future__ import annotations
@@ -16,6 +16,7 @@ import sys
 from .first_run import ensure_product_first_run
 from .managed_ollama import ensure_managed_ollama, stop_managed_ollama
 from .paths import LE_VIBE_MANAGED_OLLAMA_PORT, le_vibe_config_dir
+from .user_settings import load_user_settings
 from .welcome import maybe_print_welcome
 from .structured_log import append_structured_log
 from .workspace_hub import prepare_workspaces_for_editor_args
@@ -128,6 +129,12 @@ def main() -> int:
 
     cfg = le_vibe_config_dir()
     maybe_print_welcome(cfg)
+    us = load_user_settings(config_dir=cfg)
+    append_structured_log(
+        "launcher",
+        "user_settings_loaded",
+        lvibe_cap_default_explicit=us.get("lvibe_cap_mb_default") is not None,
+    )
     prepare_workspaces_for_editor_args(args.editor_args)
 
     cmd = [args.editor, *args.editor_args]

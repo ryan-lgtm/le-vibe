@@ -58,7 +58,7 @@ def _deep_merge(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
 
 
 def effective_default_cap_mb(settings: dict[str, Any] | None) -> int:
-    """Cap MB for new workspaces when policy does not override (PRODUCT_SPEC §5)."""
+    """Cap MB from a settings dict only (null → built-in **50**). Prefer ``workspace_policy.get_cap_mb`` for full merge with policy."""
     if settings is None:
         return DEFAULT_CAP_MB
     raw = settings.get("lvibe_cap_mb_default")

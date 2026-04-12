@@ -100,6 +100,13 @@ def test_le_vibe_readme_lists_step17_ai_pilot_continue():
     assert "continue_workspace" in text
 
 
+def test_le_vibe_readme_lists_pm_ide_settings_contract_tests():
+    text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
+    assert "IDE settings / workflows (PM phase)" in text
+    assert "test_pm_ide_settings_workflows_contract.py" in text
+    assert "test_le_vibe_settings_extension_contract.py" in text
+
+
 def test_le_vibe_readme_lists_core_e1_contract_modules():
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
     assert "Observability (STEP 6 / E5)" in text

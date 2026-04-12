@@ -69,6 +69,8 @@ def main() -> int:
         verbose=args.verbose,
         config_dir=config_dir,
         use_managed_ollama=bool(args.le_vibe_product),
+        allow_pull_if_disk_ok=True,
+        locked_model_policy=("cli_override" if args.model else None),
     )
     code, state = ensure_bootstrap(opts)
 

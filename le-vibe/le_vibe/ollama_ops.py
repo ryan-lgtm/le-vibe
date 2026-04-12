@@ -19,14 +19,56 @@ def is_ollama_running(host: str, port: int) -> bool:
         return False
 
 
-def pull_model(model_tag: str) -> tuple[bool, str]:
+def list_local_model_names(host: str, port: int) -> list[str]:
+    """Names/tags reported by the Ollama HTTP API on this host:port (managed stack must match ``OLLAMA_HOST``)."""
+    try:
+        r = requests.get(f"http://{host}:{port}/api/tags", timeout=5)
+        if r.status_code != 200:
+            return []
+        data = r.json() or {}
+        out: list[str] = []
+        for m in data.get("models", []) or []:
+            if isinstance(m, dict):
+                n = m.get("name") or m.get("model")
+                if isinstance(n, str) and n.strip():
+                    out.append(n.strip())
+        return out
+    except requests.RequestException:
+        return []
+
+
+def model_tag_present_locally(want: str, names: list[str]) -> bool:
+    """Best-effort match for ``ollama list`` / ``/api/tags`` style names."""
+    w = (want or "").strip()
+    if not w:
+        return False
+    if w in names:
+        return True
+    w_base = w.split(":", 1)[0].lower()
+    for n in names:
+        if n == w:
+            return True
+        nb = n.split(":", 1)[0].lower()
+        if nb == w_base:
+            return True
+    return False
+
+
+def pull_model(model_tag: str, host: str | None = None, port: int | None = None) -> tuple[bool, str]:
     """
     Run `ollama pull` with output on the TTY so progress is visible (capturing looked like a hang).
+
+    When ``host`` and ``port`` are set, ``OLLAMA_HOST`` is set so pulls target the same managed instance
+    as ``ensure_managed_ollama`` / the launcher (**PRODUCT_SPEC** §7.2-A).
     """
+    env = os.environ.copy()
+    if host is not None and port is not None:
+        env["OLLAMA_HOST"] = f"{host}:{port}"
     try:
         p = subprocess.run(
             ["ollama", "pull", model_tag],
             timeout=7200,
+            env=env,
         )
         ok = p.returncode == 0
         note = "ok" if ok else f"exit {p.returncode}"

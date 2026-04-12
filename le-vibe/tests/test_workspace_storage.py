@@ -23,6 +23,23 @@ def test_compaction_removes_rag_refs_when_over_cap(tmp_path: Path, monkeypatch) 
     assert fat.exists() is False
 
 
+def test_refresh_cap_from_user_settings_json(tmp_path: Path, monkeypatch) -> None:
+    cfg = tmp_path / "cfg"
+    cfg.mkdir()
+    monkeypatch.setattr("le_vibe.workspace_policy.le_vibe_config_dir", lambda: cfg)
+    (cfg / "user-settings.json").write_text(
+        '{"lvibe_cap_mb_default": 120}',
+        encoding="utf-8",
+    )
+    root = tmp_path / "w"
+    root.mkdir()
+    ensure_lvibe_workspace(root)
+    usage, cap = refresh_storage_metadata(root, config_dir=cfg)
+    assert cap == 120
+    data = (root / ".lvibe" / "storage-state.json").read_text(encoding="utf-8")
+    assert "120" in data
+
+
 def test_refresh_writes_storage_state_json(tmp_path: Path, monkeypatch) -> None:
     cfg = tmp_path / "cfg"
     cfg.mkdir()

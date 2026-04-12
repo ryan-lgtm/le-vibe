@@ -116,12 +116,22 @@ def set_consent(
 
 
 def get_cap_mb(workspace_root: Path, *, config_dir: Path | None = None) -> int:
+    """
+    Effective cap: per-workspace ``cap_mb`` in policy (consent-time override) wins; else
+    optional global ``lvibe_cap_mb_default`` from ``user-settings.json`` (**PM_IDE_SETTINGS_AND_WORKFLOWS**);
+    else ``default_cap_mb`` in ``workspace-policy.json``; else **50** MB.
+    """
     pol = load_policy(config_dir)
-    default = clamp_cap_mb(pol.get("default_cap_mb"))
     entry = get_workspace_entry(workspace_root, config_dir=config_dir)
     if entry and entry.get("cap_mb") is not None:
         return clamp_cap_mb(entry.get("cap_mb"))
-    return default
+    from .user_settings import load_user_settings
+
+    user = load_user_settings(config_dir=config_dir)
+    raw = user.get("lvibe_cap_mb_default")
+    if raw is not None:
+        return clamp_cap_mb(raw)
+    return clamp_cap_mb(pol.get("default_cap_mb"))
 
 
 def set_default_cap_mb(mb: int, *, config_dir: Path | None = None) -> None:

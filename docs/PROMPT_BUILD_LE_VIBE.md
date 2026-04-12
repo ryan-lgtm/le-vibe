@@ -18,11 +18,11 @@ Canonical specs: `docs/PRODUCT_SPEC.md` (must-ship), `docs/SESSION_ORCHESTRATION
 
 ---
 
-## Master iteration loop — **one paste**, **PM ↔ engineer**, **new-agent** chats
+## Master iteration loop — **one paste**, **ENGINEER ↔ PRODUCT ↔ PROJECT**, **new-agent** chats
 
-**When to use:** You want a **single** prompt that routes **ENGINEER** vs **PRODUCT_MANAGER** by optional `MODE:` prefix, keeps **retrieval lean** (manuscript pointers — same shape as future **RAG** in-app), and tells you to open a **new Cursor agent** when switching roles so context stays small.
+**When to use:** You want a **single** prompt that routes **ENGINEER** (senior engineer), **PRODUCT_MANAGER** (product), and **PROJECT** (program / cross-track orchestration) via optional `MODE:` and **`OWNER_DIRECTIVES:`**, keeps **retrieval lean** (manuscript pointers — same shape as future **RAG** in-app), and tells you to open a **new Cursor agent** when switching hats so context stays small. **Stop semantics:** only **`USER_RESPONSE_REQUIRED`** is a true guardrail stop — see **[`AGENT_MODE_ORCHESTRATION.md`](AGENT_MODE_ORCHESTRATION.md)**.
 
-**Print stdout (paste into Cursor):** `python3 packaging/scripts/print-master-iteration-loop-prompt.py` — full spec + manuscript index: **[`MASTER_ITERATION_LOOP.md`](MASTER_ITERATION_LOOP.md)**. Template pointer: [`le-vibe/templates/master-iteration-loop.md`](../le-vibe/templates/master-iteration-loop.md).
+**Print stdout (paste into Cursor):** `python3 packaging/scripts/print-master-iteration-loop-prompt.py` — full spec + manuscript index: **[`MASTER_ITERATION_LOOP.md`](MASTER_ITERATION_LOOP.md)**. Mode contract: **[`AGENT_MODE_ORCHESTRATION.md`](AGENT_MODE_ORCHESTRATION.md)**. Template pointer: [`le-vibe/templates/master-iteration-loop.md`](../le-vibe/templates/master-iteration-loop.md).
 
 ---
 

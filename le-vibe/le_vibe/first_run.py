@@ -10,6 +10,7 @@ from .api import EnsureBootstrapArgs, ensure_bootstrap
 from .models import clear_tag_cache
 from .paths import LE_VIBE_MANAGED_OLLAMA_PORT, le_vibe_config_dir
 from .structured_log import append_structured_log
+from .user_settings import load_user_settings
 
 
 def first_run_marker_path(config_dir: Path | None = None) -> Path:
@@ -36,6 +37,15 @@ def ensure_product_first_run(
 
     clear_tag_cache()
     cfg = config_dir or le_vibe_config_dir()
+    us = load_user_settings(config_dir=cfg)
+    m = us.get("model") or {}
+    model_override: str | None = None
+    if not m.get("use_recommended", True):
+        raw = m.get("override_tag")
+        if isinstance(raw, str) and raw.strip():
+            model_override = raw.strip()
+    allow_pull = bool(m.get("allow_pull_if_disk_ok", True))
+    locked_pol: str | None = "user_settings" if model_override else None
     marker = first_run_marker_path(cfg)
 
     if force and marker.is_file():
@@ -51,7 +61,7 @@ def ensure_product_first_run(
     opts = EnsureBootstrapArgs(
         dry_run=False,
         force_reinstall=False,
-        model=None,
+        model=model_override,
         allow_slow=False,
         host="127.0.0.1",
         port=LE_VIBE_MANAGED_OLLAMA_PORT,
@@ -59,6 +69,8 @@ def ensure_product_first_run(
         verbose=verbose,
         config_dir=cfg,
         use_managed_ollama=True,
+        allow_pull_if_disk_ok=allow_pull,
+        locked_model_policy=locked_pol,
     )
     code, _state = ensure_bootstrap(opts)
     append_structured_log("first_run", "bootstrap_finished", exit_code=code)

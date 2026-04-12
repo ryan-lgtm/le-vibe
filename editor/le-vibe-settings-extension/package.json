@@ -1,0 +1,62 @@
+{
+  "name": "le-vibe-settings",
+  "displayName": "Lé Vibe Settings",
+  "description": "In-IDE configuration for ~/.config/le-vibe/user-settings.json (docs/PM_IDE_SETTINGS_AND_WORKFLOWS.md).",
+  "version": "0.1.0",
+  "publisher": "levibe",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "main": "./extension.js",
+  "activationEvents": ["onStartupFinished", "onCommand:leVibe.showChatCommandsHelp"],
+  "contributes": {
+    "commands": [
+      {
+        "command": "leVibe.showChatCommandsHelp",
+        "title": "Lé Vibe: Chat Commands & Mentions Help",
+        "category": "Lé Vibe"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Lé Vibe",
+        "properties": {
+          "leVibe.lvibeCapMbDefault": {
+            "type": ["integer", "null"],
+            "default": null,
+            "minimum": 10,
+            "maximum": 500,
+            "markdownDescription": "Default **`.lvibe/`** size cap (MB) for new workspaces when workspace policy does not override. **Null** uses stack default (**50 MB**). Range **10–500** per PRODUCT_SPEC §5."
+          },
+          "leVibe.model.useRecommended": {
+            "type": "boolean",
+            "default": true,
+            "description": "Use hardware-tier model from locked-model.json when true; otherwise use override tag."
+          },
+          "leVibe.model.overrideTag": {
+            "type": ["string", "null"],
+            "default": null,
+            "description": "Ollama model tag (e.g. mistral:latest) when not using recommended."
+          },
+          "leVibe.model.allowPullIfDiskOk": {
+            "type": "boolean",
+            "default": true,
+            "description": "Allow pulling a larger model when disk checks pass (first-run / policy)."
+          },
+          "leVibe.ide.showChatCommandsHelp": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Show in-IDE help for **`/setup-workspace`**, **`/agent`**, and **`@role`** (maps to `.lvibe/agents/<id>/skill.md`)."
+          },
+          "leVibe.ide.showNewWorkspaceHints": {
+            "type": "boolean",
+            "default": true,
+            "description": "Show welcome and workflow hints on first open of a new workspace."
+          }
+        }
+      }
+    ]
+  }
+}

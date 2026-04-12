@@ -8,9 +8,12 @@
   },
   "ide": {
     "show_chat_commands_help": true,
-    "show_new_workspace_hints": true
+    "show_new_workspace_hints": true,
+    "help_show_command_id": "leVibe.showChatCommandsHelp"
   },
   "meta": {
-    "note": "Optional ~/.config/le-vibe/user-settings.json — see docs/PM_IDE_SETTINGS_AND_WORKFLOWS.md. Nulls = use launcher / workspace-policy defaults."
+    "note": "Optional ~/.config/le-vibe/user-settings.json — see docs/PM_IDE_SETTINGS_AND_WORKFLOWS.md. Nulls = use launcher / workspace-policy defaults. Model pulls use the managed Ollama port (OLLAMA_HOST) and honor allow_pull_if_disk_ok vs a minimum free-disk check before download.",
+    "contract_tests": "le-vibe/tests/test_pm_ide_settings_workflows_contract.py (§4 settings merge + Continue footer E1 anchors)",
+    "orchestration_doc": "docs/AGENT_MODE_ORCHESTRATION.md — single-prompt ENGINEER | PRODUCT_MANAGER | PROJECT + OWNER_DIRECTIVES; hard stop only USER RESPONSE REQUIRED at guardrail edge"
   }
 }
