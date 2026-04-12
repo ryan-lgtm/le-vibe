@@ -21,8 +21,13 @@ def test_smoke_lvibe_editor_script_contract():
     assert "--version" in text
     assert "LE_VIBE_EDITOR" in text
     assert "ollama" in text
+    assert "managed Ollama" in text
     assert "print-built-codium-path.sh" in text
+    assert "not an executable file" in text
+    assert "editor not on PATH" in text
     assert "python3 not on PATH" in text
+    assert "exit 2" in text
+    assert "exit 3" in text
     assert "exit 4" in text
     assert "exit 5" in text
 
