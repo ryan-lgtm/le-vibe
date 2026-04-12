@@ -17,6 +17,9 @@ def test_stage_le_vibe_ide_deb_script_header_documents_h1_vs_ci_step14():
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "Success output (--with-ide)" in text
 
 
 def test_stage_le_vibe_ide_deb_script_documents_14b_submodule_and_bash_syntax():
