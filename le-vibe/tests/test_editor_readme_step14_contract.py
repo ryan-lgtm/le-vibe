@@ -28,6 +28,14 @@ def test_editor_readme_documents_submodule_init_before_14b():
     assert "Fresh clone (14.b)" in text
 
 
+def test_editor_readme_linux_icons_names_help_entrypoints_step14():
+    """§7.3: editor README points at --help for icon sync + linux dev build wrapper."""
+    text = (_repo_root() / "editor" / "README.md").read_text(encoding="utf-8")
+    assert "sync-linux-icon-assets.sh --help" in text
+    assert "ci-vscodium-linux-dev-build.sh --help" in text
+    assert "CLI discoverability" in text
+
+
 def test_editor_readme_lists_production_deb_pair_step14():
     """§7.3: canonical editor README names build-le-vibe-debs --with-ide + PM/apt release docs."""
     text = (_repo_root() / "editor" / "README.md").read_text(encoding="utf-8")
