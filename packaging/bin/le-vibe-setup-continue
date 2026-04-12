@@ -17,7 +17,9 @@ while [[ $# -gt 0 ]]; do
       shift
       ;;
     -h|--help)
-      cat <<'EOF'
+      while IFS= read -r line || [ -n "${line}" ]; do
+        printf '%s\n' "${line}"
+      done <<'EOF'
 Usage: le-vibe-setup-continue [--gui]
 
   Symlink Lé Vibe’s generated Continue YAML into ~/.continue/config.yaml, then
