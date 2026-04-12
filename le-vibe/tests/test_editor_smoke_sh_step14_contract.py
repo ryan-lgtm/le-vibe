@@ -18,6 +18,8 @@ def test_editor_smoke_sh_bash_syntax() -> None:
 
 def test_editor_smoke_sh_delegates_ci_editor_gate():
     text = (_repo_root() / "editor" / "smoke.sh").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
     assert "STEP 14" in text
     assert "ci-editor-gate.sh" in text
     assert "build-le-vibe-ide.yml" in text or "build-linux.yml" in text

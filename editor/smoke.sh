@@ -4,6 +4,7 @@
 #   docs/PRODUCT_SPEC.md §7.2 (delegates to ci-editor-gate.sh — same fast gate).
 # Run from repository root:
 #   ./editor/smoke.sh
+# Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (when editor/vscodium/ is empty).
 # Authority: editor/README.md, packaging/scripts/ci-editor-gate.sh
 # E1: docs/PRODUCT_SPEC.md *Prioritization* documents this path — le-vibe/tests/test_product_spec_section8.py
 # (same module locks ide-ci-metadata / retention-days / permissions (contents read, actions write) / Pre-binary / editor/BUILD+VENDORING in PRODUCT_SPEC *Prioritization*).
