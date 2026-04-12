@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # STEP 3 (E2): Copy missing Lé Vibe agent templates into .lvibe/agents/<id>/skill.md.
+# Requires: python3 on PATH.
 # Run from a workspace root after pulling the monorepo — idempotent (skips existing skill.md).
 # Continue rules (le_vibe.continue_workspace) point Chat/Agent at .lvibe/; this refreshes skills only.
 # Authority: docs/SESSION_ORCHESTRATION_SPEC.md; docs/PRODUCT_SPEC.md §5–§8.
@@ -9,6 +10,10 @@ ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 WS="${1:-.}"
 export PYTHONPATH="${ROOT}/le-vibe${PYTHONPATH:+:$PYTHONPATH}"
 export LVIBE_WORKSPACE_ROOT="$(cd "$WS" && pwd)"
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "sync-lvibe-agent-skills: python3 not on PATH — install Python 3 (docs/SESSION_ORCHESTRATION_SPEC.md E2)." >&2
+  exit 1
+fi
 python3 - <<'PY'
 from pathlib import Path
 import os

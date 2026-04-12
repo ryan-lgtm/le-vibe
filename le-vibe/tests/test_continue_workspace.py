@@ -50,6 +50,13 @@ def test_sync_lvibe_agent_skills_script_syntax():
     subprocess.run(["bash", "-n", str(script)], check=True)
 
 
+def test_sync_lvibe_agent_skills_requires_python3_documented():
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "packaging" / "scripts" / "sync-lvibe-agent-skills.sh").read_text(encoding="utf-8")
+    assert "python3 not on PATH" in text
+    assert "SESSION_ORCHESTRATION_SPEC" in text
+
+
 def test_workspace_prepare_writes_continue_rules_and_welcome(tmp_path: Path):
     ensure_lvibe_workspace(tmp_path)
     assert (tmp_path / ".continue" / "rules" / LVIBE_CONTINUE_RULE_NAME).is_file()
