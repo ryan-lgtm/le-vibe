@@ -20,6 +20,10 @@ def test_vscodium_fork_doc_bootstrap_lists_production_deb_pair_step14():
     assert "le-vibe-deb" in text
     assert "PM_STAGE_MAP.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
+    assert "Full-product install" in text
+    assert "Success output (`--with-ide`)" in text
+    assert "Install both packages" in text
+    assert "Maintainer build output" in text
 
 
 def test_vscodium_fork_doc_branding_section_honesty_and_overrides():
