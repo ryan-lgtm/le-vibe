@@ -6,8 +6,8 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Tests
 
+- **`test_editor_le_vibe_overrides_readme_contract.py`** — **`editor/le-vibe-overrides/README.md`** retains **H6** / **STEP 14** strings (**`LE_VIBE_EDITOR`**, **`build-linux.yml`**, **`./editor/smoke.sh`**) plus **`ide-ci-metadata.txt`**, **`le_vibe_editor_docs`**, **`test_build_le_vibe_ide_workflow_contract.py`** (STEP 14 metadata ↔ **`LE_VIBE_EDITOR`** docs).
 - **`test_build_le_vibe_ide_workflow_contract.py`** — **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** keeps **`ide-ci-metadata.txt`** **`le_vibe_editor_docs=editor/README.md`** (**`LE_VIBE_EDITOR`** stack pointer).
-- **`test_editor_le_vibe_overrides_readme_contract.py`** — **`editor/le-vibe-overrides/README.md`** retains **H6** / **STEP 14** strings (**`LE_VIBE_EDITOR`**, **`build-linux.yml`**, **`./editor/smoke.sh`**).
 - **`test_session_orchestrator.py`** — bundled **`session-manifest`** example matches **`schemas/session-manifest.v1.example.json`** (STEP 2 / PM workspace parity).
 - **`test_le_vibe_readme_e1_contract.py`** — **`le-vibe/README.md`** *Tests* section keeps core **E1** module names aligned with root **`README.md`** *E1 mapping*.
 - **`test_issue_template_h8_contract.py`** — **`.github/ISSUE_TEMPLATE/*.yml`** and **`config.yml`** retain **STEP 12** / **`config.yml`** / **H8** string anchors (**H8**, §1 audit assist; not a YAML parse).

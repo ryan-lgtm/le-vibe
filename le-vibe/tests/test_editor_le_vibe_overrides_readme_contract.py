@@ -17,3 +17,6 @@ def test_editor_le_vibe_overrides_readme_documents_launcher_and_h6_gate():
     assert "build-linux.yml" in text
     assert "./editor/smoke.sh" in text
     assert "ci-qa-hardening.md" in text
+    assert "ide-ci-metadata.txt" in text
+    assert "le_vibe_editor_docs" in text
+    assert "test_build_le_vibe_ide_workflow_contract.py" in text
