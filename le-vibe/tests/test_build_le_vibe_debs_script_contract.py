@@ -22,6 +22,9 @@ def test_build_le_vibe_debs_script_mentions_submodule_14b():
     assert "fix errors above" in text
     assert "could not locate le-vibe-ide_*.deb" in text
     assert "14.c" in text
+    assert "find not on PATH" in text
+    assert "sort not on PATH" in text
+    assert "head not on PATH" in text
 
 
 def test_pm_deb_build_iteration_doc_submodule_prereq_14b():

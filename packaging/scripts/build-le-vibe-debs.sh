@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # One-shot: build le-vibe (stack) and optionally le-vibe-ide .deb artifacts.
+# Requires: find (findutils), sort, head (coreutils) to locate emitted *.deb files beside the repo.
 # Authority: docs/PM_DEB_BUILD_ITERATION.md — PM-scoped convenience; not a v1 production gate.
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md when building --with-ide and editor/vscodium/ is empty.
 set -euo pipefail
@@ -96,6 +97,19 @@ while [[ $# -gt 0 ]]; do
 done
 
 require_stack_build_deps
+
+if ! command -v find >/dev/null 2>&1; then
+  echo "build-le-vibe-debs: find not on PATH — install findutils (e.g. sudo apt install findutils) (docs/PM_DEB_BUILD_ITERATION.md)." >&2
+  exit 2
+fi
+if ! command -v sort >/dev/null 2>&1; then
+  echo "build-le-vibe-debs: sort not on PATH — install coreutils (e.g. sudo apt install coreutils) (docs/PM_DEB_BUILD_ITERATION.md)." >&2
+  exit 2
+fi
+if ! command -v head >/dev/null 2>&1; then
+  echo "build-le-vibe-debs: head not on PATH — install coreutils (e.g. sudo apt install coreutils) (docs/PM_DEB_BUILD_ITERATION.md)." >&2
+  exit 2
+fi
 
 echo "==> Building stack package (le-vibe) from: $ROOT"
 dpkg-buildpackage -us -uc -b
