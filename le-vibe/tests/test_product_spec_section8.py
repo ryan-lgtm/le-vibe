@@ -112,6 +112,18 @@ def test_product_spec_section9_evidence_row_links_test_build_to_build_linux_alia
     assert "uses:" in row
 
 
+def test_product_spec_prioritization_names_ci_le_vibe_deb_vs_ide_deb_step14():
+    """§ Prioritization — default CI le-vibe-deb vs §7.3 le-vibe-ide (north star releases)."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC.md").read_text(encoding="utf-8")
+    assert "Release bundles (H1 / STEP 8 vs STEP 14 / §7.3)" in text
+    assert "le-vibe-deb" in text
+    assert "le-vibe-ide_*_amd64.deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
+
+
 def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci():
     """§ Prioritization — vendoring gate for editor/ (H6 / STEP 14) stays documented."""
     root = Path(__file__).resolve().parents[2]
@@ -166,6 +178,9 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "H1 CI artifact vs §7.3 IDE `.deb`" in text
     assert "test_spec_phase2_monorepo_lists_ci_le_vibe_deb_vs_le_vibe_ide_step14" in text
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
+    assert "Release bundles (H1 / STEP 8 vs STEP 14 / §7.3)" in text
+    assert "test_product_spec_prioritization_names_ci_le_vibe_deb_vs_ide_deb_step14" in text
+    assert "PM_STAGE_MAP.md" in text
 
 
 def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14():
