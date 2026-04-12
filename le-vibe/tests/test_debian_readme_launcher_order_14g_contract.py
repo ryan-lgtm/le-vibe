@@ -15,6 +15,17 @@ def test_debian_readme_documents_submodule_14b_for_clone_maintainers():
     assert "Fresh clone (14.b)" in text
 
 
+def test_debian_readme_documents_ci_vs_maintainer_deb_bundles_step14():
+    """STEP 14: packaged README names default le-vibe-deb vs le-vibe-ide (§7.3 honesty)."""
+    text = (_repo_root() / "debian" / "le-vibe.README.Debian").read_text(encoding="utf-8")
+    assert "CI vs maintainer .deb bundles" in text
+    assert "le-vibe-deb" in text
+    assert "le-vibe-ide_*_amd64.deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
+
+
 def test_debian_readme_documents_default_editor_resolution_14g():
     text = (_repo_root() / "debian" / "le-vibe.README.Debian").read_text(encoding="utf-8")
     assert "14.g" in text

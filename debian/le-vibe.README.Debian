@@ -11,6 +11,8 @@ Lé Vibe — quick steps after apt install
 
 **`le-vibe-ide` package (14.g / §7.3):** A separate Debian source under **`packaging/debian-le-vibe-ide/`** installs the built **`VSCode-linux-*/`** tree under **`/usr/lib/le-vibe/ide/`** and exposes **`/usr/lib/le-vibe/bin/codium`** for the stack launcher. Build flow: compile in **`editor/vscodium/`** (**`editor/BUILD.md`**), then from the monorepo root **`packaging/scripts/build-le-vibe-ide-deb.sh`** (runs **`stage-le-vibe-ide-deb.sh`**, **`dpkg-buildpackage`**, optional **`lintian`** — **`packaging/debian-le-vibe-ide/README.md`**). One-shot stack + IDE: **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** (**`docs/PM_DEB_BUILD_ITERATION.md`**). **`LE_VIBE_EDITOR`** still overrides for custom layouts (**`~/.config/environment.d/`**, **`/etc/profile.d/`**—same as **`editor/BUILD.md`** *14.g*).
 
+**CI vs maintainer .deb bundles:** Default **`ci.yml`** artifact **`le-vibe-deb`** ships the stack **`le-vibe`** **`.deb`**, SBOM, and **`SHA256SUMS`** for those files — **not** **`le-vibe-ide_*_amd64.deb`**. Full-product release notes — **`docs/apt-repo-releases.md`** (*IDE package*); stage map — **`docs/PM_STAGE_MAP.md`** (*H1 vs §7.3 .deb bundles*).
+
 2. Run the launcher once so first-run can install Ollama (if needed), pull a model, and write configs under ~/.config/le-vibe/:
      lvibe
    (Compatibility: `le-vibe` is the same entrypoint.)
