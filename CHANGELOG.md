@@ -22,6 +22,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Documentation
 
+- **[`docs/SESSION_ORCHESTRATION_SPEC.md`](docs/SESSION_ORCHESTRATION_SPEC.md)** *Phase 2 vs this tree* — **E1 (IDE workflow)** names GitHub Actions **Summary** **Pre-binary artifact** ↔ **`ide-ci-metadata.txt`** / **`LE_VIBE_EDITOR`** (**`editor/README.md`** *CI*).
 - **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)** STEP **14** *Also read* — **`build-le-vibe-ide.yml`** cell names **`ide-ci-metadata.txt`**, Actions **Summary** **Pre-binary artifact** / **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`** (E1 **`test_build_le_vibe_ide_workflow_contract.py`**).
 - **[`spec-phase2.md`](spec-phase2.md)** §14 ships table — **Single “Lé Vibe IDE” shell** row names **`ide-ci-metadata.txt`**, **`le_vibe_editor_docs`**, Actions **Summary** **Pre-binary artifact**, E1 **`test_build_le_vibe_ide_workflow_contract.py`**.
 - **[`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md)** *CI sketch* — **Summary** tab **Pre-binary artifact** / **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`** (aligned with **`editor/README.md`** *CI* and **`docs/ci-qa-hardening.md`**).
