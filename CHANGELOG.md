@@ -6,6 +6,9 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Documentation
 
+- **[`docs/ci-qa-hardening.md`](docs/ci-qa-hardening.md)** — **E1 / acceptance** + **`ci-smoke`** **`pytest`** step list **`test_product_spec_section8.py`** *Prioritization* with **`linux_compile`**, **`actions/cache@v4`**, **`~/.cargo`**, **`spec-phase2.md` §14**; E1 **`test_ci_qa_hardening_prioritization_cargo_contract.py`**.
+- **[`SECURITY.md`](../SECURITY.md)** *Related docs* — **`test_product_spec_section8.py`** *Prioritization* lists **`linux_compile`**, **`actions/cache@v4`**, **`~/.cargo`**, **`spec-phase2.md` §14**; E1 **`test_security_related_docs_prioritization_cargo_contract.py`**.
+- **[`docs/privacy-and-telemetry.md`](docs/privacy-and-telemetry.md)** *E1 contract tests* row, **[`docs/AI_PILOT_AND_CONTINUE.md`](docs/AI_PILOT_AND_CONTINUE.md)** §4 table — **`test_product_spec_section8.py`** *Prioritization* lists **`linux_compile`**, **`actions/cache@v4`**, **`~/.cargo`**, **`spec-phase2.md` §14**; E1 **`test_privacy_and_ai_pilot_prioritization_cargo_contract.py`**.
 - **[`docs/README.md`](docs/README.md)** *Document* table (**`PRODUCT_SPEC_SECTION8_EVIDENCE`**) — *Prioritization* substring lists **`linux_compile`**, **`actions/cache@v4`**, **`~/.cargo`**, **`spec-phase2.md` §14**; E1 **`test_docs_readme_section8_evidence_row_contract.py`**.
 - **[`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`](docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md)** intro — **`test_product_spec_section8.py`** *Prioritization* clause lists **`linux_compile`**, **`actions/cache@v4`**, **`~/.cargo`**, **`spec-phase2.md` §14** (aligned with **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)**); E1 **`test_product_spec_section8.py`** (`test_product_spec_section8_evidence_intro_lists_linux_compile_cargo_cache`).
 - **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** *Prioritization* — **How to sequence work** names opt-in **`linux_compile`**, **`actions/cache@v4`**, **`~/.cargo`**, **`spec-phase2.md` §14** (Cargo cache honesty); E1 **`test_product_spec_section8.py`**, **`test_le_vibe_readme_e1_contract.py`**; root + **`le-vibe/README.md`** *Tests* **E1** parenthetical for **`test_product_spec_section8.py`**.
@@ -41,6 +44,9 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Tests
 
+- **`test_ci_qa_hardening_prioritization_cargo_contract.py`** — **[`docs/ci-qa-hardening.md`](../docs/ci-qa-hardening.md)** (**`test_product_spec_section8.py`** *Prioritization*).
+- **`test_security_related_docs_prioritization_cargo_contract.py`** — **[`SECURITY.md`](../SECURITY.md)** *Related docs* (**`test_product_spec_section8.py`** *Prioritization*).
+- **`test_privacy_and_ai_pilot_prioritization_cargo_contract.py`** — **[`docs/privacy-and-telemetry.md`](../docs/privacy-and-telemetry.md)**, **[`docs/AI_PILOT_AND_CONTINUE.md`](../docs/AI_PILOT_AND_CONTINUE.md)** (*Prioritization* / **`test_product_spec_section8.py`**).
 - **`test_docs_readme_section8_evidence_row_contract.py`** — **[`docs/README.md`](../docs/README.md)** **`PRODUCT_SPEC_SECTION8_EVIDENCE`** table row lists **`linux_compile`** / **`actions/cache@v4`** / **`~/.cargo`** / **`spec-phase2.md` §14** (*Prioritization*).
 - **`test_pm_stage_map_step2_contract.py`** — **[`docs/PM_STAGE_MAP.md`](../docs/PM_STAGE_MAP.md)** STEP **2** row keeps **`session_orchestrator`** + **STEP 2** E1 modules (**STEP 2** vs **STEP 14**).
 - **`test_spec_phase2_section14_snapshot_contract.py`** — **14.j** locks **`STEP 14.j`**, self-reference **`test_spec_phase2_section14_snapshot_contract.py`**, and **§14** honesty strings in **[`spec-phase2.md`](../spec-phase2.md)**.

@@ -1,8 +1,9 @@
 # Lé Vibe
 
-**How it fits together (simple view):** your **editor**, the **Continue** assistant, and a **local model** (via **Ollama**) stay on your computer; you can optionally keep **project notes** in **`.lvibe/`** so the AI does not rely on huge, noisy scans of your whole repo.
+**How it fits together (simple view):** your **editor**, the **Continue** assistant, and a **local model** (via **Ollama**) stay on your computer; you can optionally keep **project notes** in **`.lvibe/`** so the AI does not rely on huge, noisy scans of your whole repo. **Visual theme:** **deep purple** and **ruby red** — the intended feel for **Lé Vibe** branding going forward.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#4527A0', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#B39DDB', 'secondaryColor': '#FCE4EC', 'tertiaryColor': '#EDE7F6', 'lineColor': '#C62828', 'fontFamily': 'system-ui,Segoe UI,sans-serif'}}}%%
 flowchart TB
     subgraph you_and_project[You and your project]
         U[You]
@@ -26,6 +27,17 @@ flowchart TB
     CO <-->|asks / answers| OL
     CO --> IDE
     MEM -.->|extra context when enabled| CO
+
+    style you_and_project fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#4A148C
+    style lv fill:#EDE7F6,stroke:#5E35B1,stroke-width:3px,color:#311B92
+    style local fill:#FFEBEE,stroke:#C62828,stroke-width:2px,color:#B71C1C
+    style U fill:#9575CD,stroke:#4527A0,stroke-width:2px,color:#fff
+    style P fill:#9575CD,stroke:#4527A0,stroke-width:2px,color:#fff
+    style IDE fill:#4527A0,stroke:#D1C4E9,stroke-width:2px,color:#fff
+    style CO fill:#311B92,stroke:#B39DDB,stroke-width:2px,color:#fff
+    style OL fill:#B71C1C,stroke:#FFCDD2,stroke-width:2px,color:#fff
+    style MEM fill:#AD1457,stroke:#F8BBD0,stroke-width:2px,color:#fff
+    linkStyle default stroke:#C62828,stroke-width:2px
 ```
 
 **Lé Vibe** is a **local-first** toolkit for AI-assisted coding: your models run via **Ollama**, your editor is **Code - OSS** lineage (not Microsoft “Visual Studio Code” as the product name), and your assistant flows go through the open **Continue** extension—wired together with honest **hardware-aware** model choice, a **managed Ollama** lifecycle, and optional **workspace memory** under **`.lvibe/`** (consent-gated, size-capped; see [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) §5).
