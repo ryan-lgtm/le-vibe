@@ -24,6 +24,8 @@ def test_print_vsbuild_and_ci_tarball_scripts_bash_syntax() -> None:
 def test_print_vsbuild_codium_path_documents_14f():
     text = (_repo_root() / "editor" / "print-vsbuild-codium-path.sh").read_text(encoding="utf-8")
     assert "14.f" in text
+    assert "14.c" in text
+    assert "no VSCode-linux-*/bin/codium under" in text
     assert "stat not on PATH" in text
     assert "realpath not on PATH" in text
     assert "not a directory:" in text
