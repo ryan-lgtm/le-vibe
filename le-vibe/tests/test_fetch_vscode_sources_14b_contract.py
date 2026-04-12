@@ -18,6 +18,8 @@ def test_fetch_vscode_sources_script_bash_syntax() -> None:
 
 def test_fetch_vscode_sources_script_documents_14b_get_repo_flow() -> None:
     text = (_repo_root() / "editor" / "fetch-vscode-sources.sh").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
     assert "14.b" in text
     assert "get_repo.sh" in text
     assert "howto-build.md" in text

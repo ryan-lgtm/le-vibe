@@ -9,6 +9,7 @@
 #
 # Prereq: Node from editor/.nvmrc — from repo root: source editor/use-node-toolchain.sh (14.a), or (cd editor && nvm install && nvm use)
 # Full local build after fetch: cd editor/vscodium && ./dev/build.sh (see editor/BUILD.md).
+# Fresh clone (14.b): git submodule update --init editor/vscodium from repo root when editor/vscodium/ is empty — editor/README.md.
 # shellcheck disable=SC1091
 set -euo pipefail
 
@@ -16,7 +17,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 [[ -f editor/vscodium/product.json ]] || {
-  echo "fetch-vscode-sources: expected editor/vscodium (init submodule)." >&2
+  echo "fetch-vscode-sources: expected editor/vscodium/ — run: git submodule update --init editor/vscodium (editor/README.md Fresh clone 14.b)." >&2
   exit 1
 }
 
