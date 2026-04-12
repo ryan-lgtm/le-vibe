@@ -16,6 +16,14 @@ def test_ci_editor_gate_script_bash_syntax() -> None:
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 
+def test_ci_editor_gate_header_documents_le_vibe_deb_vs_ide_deb_step14():
+    """STEP 14 / §7.3: editor gate header ties H6 smoke to out-of-band IDE .deb builds."""
+    text = (_repo_root() / "packaging" / "scripts" / "ci-editor-gate.sh").read_text(encoding="utf-8")
+    assert "le-vibe-deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+
+
 def test_ci_editor_gate_documents_step14_smoke_and_overrides_e1():
     text = (_repo_root() / "packaging" / "scripts" / "ci-editor-gate.sh").read_text(encoding="utf-8")
     assert "git submodule update --init editor/vscodium" in text
