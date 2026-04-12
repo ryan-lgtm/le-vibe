@@ -1,0 +1,16 @@
+# Monorepo (root) — keep clones clean for editor vendoring + Debian parent-dir artifacts
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.egg-info/
+
+# Built Debian artifacts (often next to debian/ at repo root)
+*.deb
+*.buildinfo
+*.changes
+
+# Editor (Code OSS / VSCodium) — when populated
+editor/**/node_modules/
+editor/**/out/
+editor/**/.build/

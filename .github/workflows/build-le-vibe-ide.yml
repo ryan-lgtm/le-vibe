@@ -1,0 +1,57 @@
+# STEP 14 (H6): Lé Vibe IDE — Linux build placeholder. Honest until editor/ is vendored
+# (VSCodium / Code OSS). Authority: docs/vscodium-fork-le-vibe.md, editor/README.md,
+# docs/PRODUCT_SPEC.md §7.2, spec-phase2.md §14.
+name: build-le-vibe-ide
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "ide-v*"
+
+concurrency:
+  group: ide-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Gate — upstream sources present
+        id: gate
+        run: |
+          set -euo pipefail
+          if [ -f editor/package.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+            echo "layout=flat" >> "$GITHUB_OUTPUT"
+            echo "editor/: upstream package.json found (flat layout) — build steps can be wired here."
+          elif [ -f editor/vscodium/package.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+            echo "layout=submodule" >> "$GITHUB_OUTPUT"
+            echo "editor/vscodium/: upstream package.json found — build steps can be wired here."
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::editor/ is not vendored yet (no editor/package.json or editor/vscodium/package.json). Skipping compile; see editor/VENDORING.md and docs/vscodium-fork-le-vibe.md."
+          fi
+
+      - name: Smoke (when sources exist)
+        if: steps.gate.outputs.present == 'true'
+        run: |
+          set -euo pipefail
+          if [ "${{ steps.gate.outputs.layout }}" = "flat" ]; then
+            cd editor
+          else
+            cd editor/vscodium
+          fi
+          python3 -c "import json; p=json.load(open('package.json')); print('editor package:', p.get('name','(unnamed)'))"
+          echo "TODO: wire VSCodium prepare/build here (see upstream get_repo / build scripts)."
+
+      - name: Skip summary
+        if: steps.gate.outputs.present != 'true'
+        run: |
+          echo "IDE build skipped — add upstream under editor/ (submodule/subtree) so editor/package.json exists."
