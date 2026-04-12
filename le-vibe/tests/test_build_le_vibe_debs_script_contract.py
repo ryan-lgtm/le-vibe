@@ -13,6 +13,15 @@ def test_build_le_vibe_debs_script_bash_syntax():
     subprocess.run(["bash", "-n", str(script)], check=True)
 
 
+def test_build_le_vibe_debs_script_header_documents_ci_vs_with_ide_step14():
+    """STEP 14 / §7.3: one-shot script header ties ci.yml le-vibe-deb to optional --with-ide."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "packaging" / "scripts" / "build-le-vibe-debs.sh").read_text(encoding="utf-8")
+    assert "le-vibe-deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "IDE package" in text
+
+
 def test_build_le_vibe_debs_script_mentions_submodule_14b():
     root = Path(__file__).resolve().parents[2]
     text = (root / "packaging" / "scripts" / "build-le-vibe-debs.sh").read_text(encoding="utf-8")

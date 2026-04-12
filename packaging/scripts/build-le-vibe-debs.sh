@@ -3,6 +3,7 @@
 # --with-ide delegates to packaging/scripts/build-le-vibe-ide-deb.sh (stage + dpkg-buildpackage + optional lintian).
 # Requires: find (findutils), sort, head (coreutils) to locate emitted *.deb files beside the repo.
 # Authority: docs/PM_DEB_BUILD_ITERATION.md — PM-scoped convenience; not a v1 production gate.
+# H1 / §7.3: default CI uploads le-vibe-deb (stack le-vibe .deb + SBOM + SHA256SUMS only); --with-ide here adds le-vibe-ide_*.deb for full-product drops — docs/apt-repo-releases.md (IDE package).
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md when building --with-ide and editor/vscodium/ is empty.
 set -euo pipefail
 
