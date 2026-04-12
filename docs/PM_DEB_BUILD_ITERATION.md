@@ -5,6 +5,8 @@
 **Implementation:** [`packaging/scripts/build-le-vibe-debs.sh`](../packaging/scripts/build-le-vibe-debs.sh)  
 **Sibling docs:** [`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md), root [`debian/`](../debian/) (stack), [`editor/BUILD.md`](../editor/BUILD.md).
 
+**Fresh clone (14.b / STEP 14):** **`le-vibe-ide`** repacks a compiled **`VSCode-linux-*`** tree from **`editor/vscodium/`** — if that directory is empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the repository root before **`editor/BUILD.md`** fetch/build steps — same as **`editor/README.md`** *Fresh clone (14.b)*.
+
 ## Lazy repeat — paste into Cursor (engineer)
 
 **Print stdout (repo root):** `python3 packaging/scripts/print-pm-deb-build-prompt.py`

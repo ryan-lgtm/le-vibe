@@ -13,6 +13,13 @@ def test_build_le_vibe_debs_script_bash_syntax():
     subprocess.run(["bash", "-n", str(script)], check=True)
 
 
+def test_pm_deb_build_iteration_doc_submodule_prereq_14b():
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b" in text
+
+
 def test_print_pm_deb_build_prompt_extractable():
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
