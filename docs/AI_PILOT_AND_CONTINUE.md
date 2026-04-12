@@ -8,7 +8,7 @@
 
 **`.deb` / `apt`:** [`debian/le-vibe.README.Debian`](../debian/le-vibe.README.Debian) → **`/usr/share/doc/le-vibe/README.Debian`** — post-install flow and **§5** workspace consent on packaged hosts (same **§7**/**§8** guards apply).
 
-**Phase 2 vs this tree:** In-editor **AI Pilot** / rich shell UX may ship in a **fork** or future binary — **[`spec-phase2.md`](../spec-phase2.md) §14** lists what **`r-vibe`** ships today (launcher, **`.lvibe/`**, Continue rules) vs **H6**/**H7** deferrals.
+**Phase 2 vs this tree:** In-editor **AI Pilot** / rich **Continue** on **Code OSS** targets the **Lé Vibe IDE** under **`editor/`** (**H6** — **[`editor/README.md`](../editor/README.md)**, **[`editor/BUILD.md`](../editor/BUILD.md)**). **[`spec-phase2.md`](../spec-phase2.md) §14** lists what **`r-vibe`** ships today (launcher, **`.lvibe/`**, Continue rules, **VSCodium** submodule + IDE CI smoke) vs remaining **H6**/**H7** work.
 
 ---
 
