@@ -85,4 +85,8 @@ def test_verify_14c_local_binary_script_contract():
     assert "print-built-codium-path.sh" in text
     assert "BUILD.md" in text
     assert "smoke-built-codium-lvibe.sh" in text
+    assert "verify-14c-local-binary: (14.c) No built tree yet" in text
+    assert "use-node-toolchain.sh" in text
+    assert "fetch-vscode-sources.sh" in text
+    assert "dev/build.sh" in text
     assert (root / "editor" / "verify-14c-local-binary.sh").is_file()
