@@ -21,6 +21,9 @@ def test_stage_le_vibe_ide_deb_script_documents_14b_submodule_and_bash_syntax():
     assert "restore packaging/debian-le-vibe-ide" in text
     assert "restore packaging/icons from git" in text
     assert "PRODUCT_SPEC §7.3" in text
+    assert "find not on PATH" in text
+    assert "basename not on PATH" in text
+    assert "install not on PATH" in text
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 

@@ -1,10 +1,40 @@
 #!/usr/bin/env bash
 # Stage editor/vscodium/VSCode-linux-* for packaging/debian-le-vibe-ide (PRODUCT_SPEC §7.3).
+# Requires: find (findutils); basename, rm, mkdir, cp, ln, install (coreutils).
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md when editor/vscodium/ is empty.
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 STAGING="$ROOT/packaging/debian-le-vibe-ide/staging"
+
+if ! command -v find >/dev/null 2>&1; then
+  echo "stage-le-vibe-ide-deb: find not on PATH — install findutils (e.g. sudo apt install findutils) (§7.3 IDE .deb staging)." >&2
+  exit 1
+fi
+if ! command -v basename >/dev/null 2>&1; then
+  echo "stage-le-vibe-ide-deb: basename not on PATH — install coreutils (e.g. sudo apt install coreutils) (§7.3 IDE .deb staging)." >&2
+  exit 1
+fi
+if ! command -v rm >/dev/null 2>&1; then
+  echo "stage-le-vibe-ide-deb: rm not on PATH — install coreutils (e.g. sudo apt install coreutils) (§7.3 IDE .deb staging)." >&2
+  exit 1
+fi
+if ! command -v mkdir >/dev/null 2>&1; then
+  echo "stage-le-vibe-ide-deb: mkdir not on PATH — install coreutils (e.g. sudo apt install coreutils) (§7.3 IDE .deb staging)." >&2
+  exit 1
+fi
+if ! command -v cp >/dev/null 2>&1; then
+  echo "stage-le-vibe-ide-deb: cp not on PATH — install coreutils (e.g. sudo apt install coreutils) (§7.3 IDE .deb staging)." >&2
+  exit 1
+fi
+if ! command -v ln >/dev/null 2>&1; then
+  echo "stage-le-vibe-ide-deb: ln not on PATH — install coreutils (e.g. sudo apt install coreutils) (§7.3 IDE .deb staging)." >&2
+  exit 1
+fi
+if ! command -v install >/dev/null 2>&1; then
+  echo "stage-le-vibe-ide-deb: install not on PATH — install coreutils (e.g. sudo apt install coreutils) (§7.3 IDE .deb staging)." >&2
+  exit 1
+fi
 
 find_vsbuild() {
   local arg="${1:-}"
