@@ -3,6 +3,7 @@
 # (and build-linux.yml, which reuses that workflow) gate.
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (same as ci-qa-hardening.md Local clone).
 # Run from repo root: ./packaging/scripts/ci-editor-gate.sh
+# Requires: bash on PATH (for bash -n and downstream packaging/scripts).
 # Exits 0 when layout is none (skip). For layout=vscodium, runs bash syntax on upstream scripts (may exit 1).
 # 14.d: does not validate Lé Vibe–visible IDE branding — editor/le-vibe-overrides/branding-staging.checklist.md;
 #   docs/PRODUCT_SPEC.md §7.2. Fast gate only (same story as ./editor/smoke.sh).
@@ -30,6 +31,11 @@ echo "ci-editor-gate: layout=${layout}"
 if [[ "${layout}" == "none" ]]; then
   echo "ci-editor-gate: IDE sources not vendored — try: git submodule update --init editor/vscodium (editor/README.md Fresh clone 14.b); else see editor/VENDORING.md (interim: LE_VIBE_EDITOR → VSCodium/codium)."
   exit 0
+fi
+
+if ! command -v bash >/dev/null 2>&1; then
+  echo "ci-editor-gate: bash not on PATH — install bash (e.g. sudo apt install bash) (STEP 14 gate)." >&2
+  exit 1
 fi
 
 echo "ci-editor-gate: upstream present (${layout}) — wire Linux build in build-le-vibe-ide.yml (build-linux alias) when ready."

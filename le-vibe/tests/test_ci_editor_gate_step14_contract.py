@@ -27,3 +27,4 @@ def test_ci_editor_gate_documents_step14_smoke_and_overrides_e1():
     assert "test_editor_le_vibe_overrides_readme_contract.py" in text
     assert "14.d" in text
     assert "branding-staging.checklist.md" in text
+    assert "bash not on PATH" in text
