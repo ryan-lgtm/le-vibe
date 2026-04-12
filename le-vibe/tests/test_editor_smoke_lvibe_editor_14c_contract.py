@@ -60,6 +60,8 @@ def test_14c_smoke_and_print_scripts_bash_syntax() -> None:
 def test_print_built_codium_path_documents_14c():
     text = (_repo_root() / "editor" / "print-built-codium-path.sh").read_text(encoding="utf-8")
     assert "14.c" in text
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
     assert "LE_VIBE_EDITOR" in text
     assert "smoke-lvibe-editor.sh" in text
 
