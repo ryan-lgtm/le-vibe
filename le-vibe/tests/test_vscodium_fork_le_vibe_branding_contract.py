@@ -17,6 +17,9 @@ def test_vscodium_fork_doc_bootstrap_lists_production_deb_pair_step14():
     assert "apt-repo-releases.md" in text
     assert "le-vibe-ide_*_amd64.deb" in text
     assert "SHA256SUMS" in text
+    assert "le-vibe-deb" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
 
 
 def test_vscodium_fork_doc_branding_section_honesty_and_overrides():
