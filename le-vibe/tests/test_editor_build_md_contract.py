@@ -150,6 +150,9 @@ def test_editor_build_md_contract_debian_section_stack_ide_one_shot_step14():
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "apt-repo-releases.md" in text
     assert "SHA256SUMS" in text
+    assert "le-vibe-deb" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
 
 
 def test_editor_build_md_contract_default_le_vibe_editor_packaging_14g():
