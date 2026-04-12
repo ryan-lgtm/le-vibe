@@ -163,4 +163,10 @@ if [[ "$DO_INSTALL" -eq 1 ]]; then
   fi
 fi
 
+# §7.3 — stack .deb is beside the repo directory; IDE .deb is under packaging/ (paths differ; apt accepts both).
+if [[ "$WITH_IDE" -eq 1 && -n "$STACK_DEB" && -f "$STACK_DEB" && -n "$IDE_DEB" && -f "$IDE_DEB" ]]; then
+  echo "==> Full-product install (paths printed above): sudo apt install \"$STACK_DEB\" \"$IDE_DEB\""
+  echo "    Post-install: /usr/share/doc/le-vibe/README.Debian — packaging/debian-le-vibe-ide/README.md (*Install both packages*)"
+fi
+
 echo "==> Done."

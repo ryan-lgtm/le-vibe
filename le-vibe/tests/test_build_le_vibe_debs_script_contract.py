@@ -44,6 +44,18 @@ def test_build_le_vibe_debs_script_mentions_submodule_14b():
     assert "stage-le-vibe-ide-deb.sh" in text
 
 
+def test_build_le_vibe_debs_script_prints_full_product_install_hint_step14():
+    """STEP 14: after --with-ide success, script echoes sudo apt install with both resolved .deb paths."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "packaging" / "scripts" / "build-le-vibe-debs.sh").read_text(encoding="utf-8")
+    assert "Full-product install" in text
+    assert "paths printed above" in text
+    assert "sudo apt install" in text
+    assert "$STACK_DEB" in text and "$IDE_DEB" in text
+    assert "/usr/share/doc/le-vibe/README.Debian" in text
+    assert "debian-le-vibe-ide/README.md" in text
+
+
 def test_pm_deb_build_iteration_doc_submodule_prereq_14b():
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
