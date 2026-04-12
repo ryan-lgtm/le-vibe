@@ -88,6 +88,9 @@ def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci()
     assert "ide-ci-metadata.txt" in text
     assert "le_vibe_editor_docs" in text
     assert "retention-days" in text
+    assert "permissions:" in text
+    assert "contents: read" in text
+    assert "actions: write" in text
     assert "Pre-binary artifact" in text
     assert "editor/BUILD.md" in text
     assert "editor/VENDORING.md" in text
