@@ -26,6 +26,7 @@ def _repo_root() -> Path:
         "packaging/scripts/install-linux-vscodium-build-deps.sh",
         "packaging/scripts/verify-linux-vscodium-ci-apt-docker.sh",
         "packaging/scripts/docker-le-vibe-vscodium-prepare-only.sh",
+        "packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh",
     ],
 )
 def test_step14_script_help_exits_zero(relative: str) -> None:
