@@ -16,7 +16,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Documentation
 
-- **`PRODUCT_SPEC` *Prioritization*:** documents **`build-linux.yml`** as a **`workflow_dispatch`** alias reusing **`build-le-vibe-ide.yml`** (STEP 14 / **H6**); **[`docs/ci-qa-hardening.md`](docs/ci-qa-hardening.md)** *Related docs* and **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)** STEP **14** point at the same pair.
+- **`PRODUCT_SPEC` *Prioritization*:** documents **`build-linux.yml`** as a **`workflow_dispatch`** alias reusing **`build-le-vibe-ide.yml`** (STEP 14 / **H6**); **[`docs/ci-qa-hardening.md`](docs/ci-qa-hardening.md)** *Related docs* and **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)** STEP **14** point at the same pair; **[`spec-phase2.md`](spec-phase2.md)** §14 (*Honesty vs CI*, ships table) and **[`editor/BUILD.md`](editor/BUILD.md)** aligned.
 - **E1 roster (broad sweep closure):** maintainer surfaces (**`docs/`**, **`packaging/`**, **`.github/`**, **`.desktop`**, **`README.Debian`**) defer full **`pytest`** contract meaning to root **`README.md`** *Tests* / **E1 mapping** and **`spec-phase2.md` §14** *Honesty vs CI* (not only **`test_issue_template_h8_contract.py`** / **H8**).
 - **[`SECURITY.md`](SECURITY.md)** *Related docs* — **`privacy-and-telemetry`** bullet cites **E1 contract tests** row; **`spec.md`** *Acceptance / E1* — root **`README`** *Tests* + privacy table.
 - **[`docs/privacy-and-telemetry.md`](docs/privacy-and-telemetry.md)** — *Related documentation* table: **E1 contract tests** row (root **`README`** *Tests*, **`le-vibe/README`**, **`le-vibe/tests/`**); E1 evidence §7.1 row cites **`README`** *Tests* + **`le-vibe/README`**.
