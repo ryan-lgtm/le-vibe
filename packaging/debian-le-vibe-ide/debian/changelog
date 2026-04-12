@@ -1,3 +1,9 @@
+le-vibe-ide (0.1.3) unstable; urgency=low
+
+  * Recommend le-vibe stack package for lvibe/Ollama/Continue alongside the IDE (§7.3 demo path).
+
+ -- Le Vibe Maintainers <maintainers@example.invalid>  Sun, 12 Apr 2026 12:00:00 +0000
+
 le-vibe-ide (0.1.2) unstable; urgency=low
 
   * Recommend hicolor-icon-theme so the shipped hicolor icon resolves on minimal desktops.

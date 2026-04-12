@@ -32,7 +32,7 @@ sudo apt install ./le-vibe_*_all.deb ./le-vibe-ide_*_amd64.deb
 
 **`./packaging/scripts/build-le-vibe-ide-deb.sh`** runs **`lintian`** automatically when it is on **`PATH`** after **`dpkg-buildpackage`**. Tags are **non-fatal** unless **`LEVIBE_IDE_LINTIAN_STRICT=1`** is set in the environment. Manually, from the monorepo root: **`lintian packaging/le-vibe-ide_*_*.deb`**. Use tags as hints — **[`docs/ci-qa-hardening.md`](../../docs/ci-qa-hardening.md)**; the stack **`debian/`** package may run stricter QA in CI (**STEP 10** / **H3**).
 
-The **`le-vibe`** package **`Suggests: le-vibe-ide`** so both can install from the same apt suite when published.
+The **`le-vibe`** package **`Suggests: le-vibe-ide`** so both can install from the same apt suite when published. This **`le-vibe-ide`** package **`Recommends: le-vibe`** so **`apt install le-vibe-ide`** (from a repo that carries both) pulls the stack—**`lvibe`**, managed Ollama, Continue helpers—for an end-to-end demo without relying on users to discover the sibling **`.deb`** manually.
 
 ## Updates (roadmap — PRODUCT_SPEC §7.3)
 

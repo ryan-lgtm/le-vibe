@@ -9,11 +9,14 @@ Rules-Requires-Root: no
 Package: le-vibe-ide
 Architecture: amd64
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Recommends: hicolor-icon-theme
+Recommends: le-vibe,
+            hicolor-icon-theme
 Description: Lé Vibe IDE — Code OSS desktop shell (VSCode-linux tree)
  Installs a built VSCode-linux-* directory from editor/vscodium under
  /usr/lib/le-vibe/ide/ and exposes /usr/lib/le-vibe/bin/codium for the
  le-vibe stack launcher (PRODUCT_SPEC §7.3 — internal path; public CLI is lvibe).
+ Recommends the le-vibe stack package so apt can pull lvibe, Ollama wiring,
+ and Continue helpers for a full install-and-demo path alongside this IDE.
  Also ships a Freedesktop menu entry (le-vibe.desktop) and hicolor icon so the
  app appears in the desktop environment alongside the stack package.
  .
