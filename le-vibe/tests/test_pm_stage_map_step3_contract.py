@@ -16,4 +16,5 @@ def test_pm_stage_map_step3_row_lists_continue_workspace_and_e1():
     row = rows[0]
     assert "continue_workspace.py" in row
     assert "test_continue_workspace.py" in row
+    assert "schemas/session-manifest.v1.example.json" in row
     assert "STEP 3" in row or "E2" in row

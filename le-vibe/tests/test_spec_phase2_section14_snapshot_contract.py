@@ -38,3 +38,6 @@ def test_spec_phase2_section14_ide_row_honesty_strings():
     assert "use-node-toolchain.sh" in text
     assert "print-ci-tarball-codium-path.sh" in text
     assert "print-vsbuild-codium-path.sh" in text
+    assert "Queue advance (honest)" in text
+    assert "test_pm_stage_map_step2_contract.py" in text
+    assert "test_pm_stage_map_queue_advance_honest_step14_vs_rest" in text

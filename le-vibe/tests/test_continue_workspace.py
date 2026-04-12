@@ -18,6 +18,7 @@ def test_ensure_continue_rules_idempotent(tmp_path: Path):
     assert {p.name for p in created} == {LVIBE_CONTINUE_RULE_NAME, PRODUCT_WELCOME_RULE_NAME}
     mem = (tmp_path / ".continue" / "rules" / LVIBE_CONTINUE_RULE_NAME).read_text(encoding="utf-8")
     assert "session-manifest.json" in mem
+    assert "schemas/session-manifest.v1.example.json" in mem
     assert "Doc-first staging" in mem
     assert "PM_STAGE_MAP.md" in mem
     assert "Please continue" in mem

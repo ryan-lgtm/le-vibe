@@ -114,3 +114,5 @@ def test_editor_build_md_contract_continue_pin_14h():
     assert "ci-smoke.sh" in text
     assert "_default_editor" in text
     assert "14.g" in text
+    assert "print-ci-tarball-codium-path.sh" in text
+    assert "vscodium-linux-build.tar.gz" in text

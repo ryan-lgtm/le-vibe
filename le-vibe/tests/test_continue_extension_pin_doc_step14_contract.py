@@ -23,5 +23,6 @@ def test_continue_extension_pin_doc_step14_h_strings():
     assert "VSCode-linux-" in text
     assert "print-built-codium-path.sh" in text
     assert "print-vsbuild-codium-path.sh" in text
+    assert "print-ci-tarball-codium-path.sh" in text
     assert "_default_editor" in text
     assert "14.g" in text

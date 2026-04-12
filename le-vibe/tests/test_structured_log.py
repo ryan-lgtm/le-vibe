@@ -1,4 +1,4 @@
-"""Local JSONL structured log — no third-party telemetry."""
+"""Local JSONL structured log — no third-party telemetry (STEP 6)."""
 
 from __future__ import annotations
 

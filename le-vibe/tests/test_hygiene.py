@@ -1,4 +1,4 @@
-"""Maintainer hygiene CLI for ``.lvibe/``."""
+"""Maintainer hygiene CLI for ``.lvibe/`` (STEP 5 — session-manifest.v1 vs ``schemas/``)."""
 
 from __future__ import annotations
 
@@ -21,6 +21,13 @@ def test_hygiene_fails_without_lvibe(tmp_path: Path):
     errs, warns = check_lvibe_workspace(tmp_path)
     assert any("no .lvibe/" in e for e in errs)
     assert main(["--workspace", str(tmp_path)]) == 1
+
+
+def test_hygiene_module_docstring_points_at_schema_and_spec():
+    import le_vibe.hygiene as h
+
+    assert "schemas/session-manifest.v1.example.json" in (h.__doc__ or "")
+    assert "SESSION_ORCHESTRATION_SPEC" in (h.__doc__ or "")
 
 
 def test_hygiene_errors_on_bad_session_json(tmp_path: Path):

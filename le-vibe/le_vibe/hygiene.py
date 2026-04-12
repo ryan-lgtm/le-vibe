@@ -1,4 +1,8 @@
-"""Maintainer checks for ``.lvibe/`` — manifest, session-manifest, chunks (token-efficiency hygiene)."""
+"""Maintainer checks for ``.lvibe/`` — manifest, session-manifest, chunks (token-efficiency hygiene).
+
+Session JSON is expected to match ``schemas/session-manifest.v1.example.json`` (see
+``docs/SESSION_ORCHESTRATION_SPEC.md``; STEP 5 / PM map).
+"""
 
 from __future__ import annotations
 
@@ -142,7 +146,10 @@ def check_lvibe_workspace(workspace_root: Path) -> tuple[list[str], list[str]]:
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
-        description="Lé Vibe: validate .lvibe/ manifest, session-manifest JSON, and chunk path refs (maintainer hygiene).",
+        description=(
+            "Lé Vibe: validate .lvibe/ manifest, session-manifest JSON (session-manifest.v1), "
+            "and chunk path refs — see schemas/session-manifest.v1.example.json and SESSION_ORCHESTRATION_SPEC.md."
+        ),
     )
     p.add_argument(
         "--workspace",

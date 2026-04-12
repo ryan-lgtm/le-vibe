@@ -1,4 +1,7 @@
-"""Append-only JSON lines log under ``~/.config/le-vibe/`` — local only; no third-party telemetry."""
+"""Append-only JSON lines at ``~/.config/le-vibe/le-vibe.log.jsonl`` — local operator diagnostics only.
+
+No third-party telemetry (**PRODUCT_SPEC** §7; **docs/privacy-and-telemetry.md**; STEP 6 / PM map).
+"""
 
 from __future__ import annotations
 

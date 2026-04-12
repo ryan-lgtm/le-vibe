@@ -96,11 +96,11 @@ jobs:
 
 ### Release smoke checklist (14.i)
 
-Use this **before** tagging or publishing IDE-related artifacts; it complements the short list above and **[`editor/BUILD.md`](../editor/BUILD.md)** (**14.f–14.h**).
+Use this **before** tagging or publishing IDE-related artifacts; it complements the short list above and **[`editor/BUILD.md`](../editor/BUILD.md)** (**14.f–14.h**). **PM / queue:** **[`docs/PM_STAGE_MAP.md`](../docs/PM_STAGE_MAP.md)** STEP **14** *Also read* lists E1 modules for **`build-le-vibe-ide.yml`**, **`14.g`**, and related contracts — open it when this checklist changes.
 
 | Step | Command / artifact | Pass criteria |
 |------|---------------------|---------------|
-| **1. Layout + toolchain gate** | From repo root: **`./editor/smoke.sh`** | **`ci-editor-gate`** reports **`layout=vscodium`** (or your supported layout); **`bash -n`** on upstream scripts + monorepo helpers (**`fetch-vscode-sources.sh`**, **`print-built-codium-path.sh`**, **`print-vsbuild-codium-path.sh`**, **`print-ci-tarball-codium-path.sh`**, **`ci-vscodium-linux-dev-build.sh`**) OK; **`editor/.nvmrc`** matches **`editor/vscodium/.nvmrc`**. |
+| **1. Layout + toolchain gate** | From repo root: **`./editor/smoke.sh`** | **`ci-editor-gate`** reports **`layout=vscodium`** (or your supported layout); **`bash -n`** on upstream scripts + monorepo helpers (**`use-node-toolchain.sh`**, **`fetch-vscode-sources.sh`**, **`print-built-codium-path.sh`**, **`print-vsbuild-codium-path.sh`**, **`print-ci-tarball-codium-path.sh`**, **`smoke-built-codium-lvibe.sh`**, **`ci-vscodium-linux-dev-build.sh`**) OK; **`editor/.nvmrc`** matches **`editor/vscodium/.nvmrc`**. |
 | **2. Python E1** | **`cd le-vibe && python3 -m pytest tests/`** | Green — locks launcher, workflows, pin docs. |
 | **3. Continue pin (H4)** | **`./packaging/scripts/verify-continue-pin.sh`** | Semver line in **`packaging/continue-openvsx-version`**. |
 | **4. Stack `.deb` (when packaging changed)** | **`dpkg-buildpackage -us -uc -b`** from repo root | **`le-vibe`** package builds; see **`debian/changelog`**. |
@@ -108,5 +108,6 @@ Use this **before** tagging or publishing IDE-related artifacts; it complements 
 | **6. Launcher ↔ binary** | **`LE_VIBE_EDITOR=<path/to/codium> ./editor/smoke-lvibe-editor.sh`**, or after a local build **`./editor/smoke-built-codium-lvibe.sh`** (or **`LE_VIBE_EDITOR="$(./editor/print-built-codium-path.sh)" ./editor/smoke-lvibe-editor.sh`**) | Needs **`ollama`** on **`PATH`**; editor prints **`--version`** and exits. For a **`vscodium-linux-build.tar.gz`** file, **`LE_VIBE_EDITOR="$(./editor/print-ci-tarball-codium-path.sh …)"`** or unpack and **`./editor/print-vsbuild-codium-path.sh`** (**14.f**). |
 | **7. Product path** | First-run **`lvibe`**, then **`le-vibe-setup-continue`** | **`~/.config/le-vibe/continue-config.yaml`**; pinned Continue per **`docs/continue-extension-pin.md`** (**14.h**). |
 | **8. End-to-end agent** | Open workspace, Continue chat to **managed Ollama** **11435** | Matches root **`README.md`** QA expectations. |
+| **9. §14 honesty gate (14.j prep)** | After IDE-doc / §14 table edits: **`cd le-vibe && python3 -m pytest tests/test_spec_phase2_section14_snapshot_contract.py`** | **`spec-phase2.md` §14** IDE row + *Honesty vs CI* stay aligned with root **`CHANGELOG.md`** **[Unreleased]** — same discipline as **STEP 14.j** (full suite still **`pytest tests/`**). |
 
 Roadmap references: **G-B3**, **H6** in [`PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md).

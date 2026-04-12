@@ -17,3 +17,5 @@ def test_pm_stage_map_step5_row_lists_hygiene_and_e1():
     assert "hygiene.py" in row
     assert "test_hygiene.py" in row
     assert "STEP 5" in row or "E5" in row
+    assert "schemas/session-manifest.v1.example.json" in row
+    assert "session-manifest.v1" in row

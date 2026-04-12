@@ -19,3 +19,4 @@ def test_pm_stage_map_step4_row_lists_editor_welcome_and_e1():
     assert "test_continue_workspace.py" in row
     assert "test_product_spec_section8.py" in row
     assert "STEP 4" in row
+    assert "PRODUCT_SPEC" in row and "§4" in row

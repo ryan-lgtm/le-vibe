@@ -47,6 +47,8 @@ def test_lvibe_editor_welcome_template_section4_positioning():
     assert "Welcome to Lé Vibe" in text
     assert "open source" in text.lower()
     assert "Cursor" in text
+    assert "PRODUCT_SPEC.md" in text
+    assert "§4" in text
 
 
 def test_continue_memory_rule_documents_secrets_policy_section8():
@@ -61,6 +63,7 @@ def test_continue_memory_rule_documents_user_gate_section72():
     assert "PRODUCT_SPEC §7.2" in body
     assert "USER RESPONSE REQUIRED" in body
     assert "numbered questions" in body
+    assert "schemas/session-manifest.v1.example.json" in body
 
 
 def test_workspace_hub_agents_seed_documents_secrets_section8():

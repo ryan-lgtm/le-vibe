@@ -49,6 +49,11 @@ def test_vscodium_fork_doc_release_smoke_checklist_14i():
     text = (_repo_root() / "docs" / "vscodium-fork-le-vibe.md").read_text(encoding="utf-8")
     assert "Release smoke checklist (14.i)" in text
     assert "14.i" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "§14 honesty gate" in text
+    assert "test_spec_phase2_section14_snapshot_contract.py" in text
+    assert "use-node-toolchain.sh" in text
+    assert "smoke-built-codium-lvibe.sh" in text
     assert "./editor/smoke.sh" in text
     assert "smoke-lvibe-editor.sh" in text
     assert "verify-continue-pin.sh" in text

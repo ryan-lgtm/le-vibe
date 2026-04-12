@@ -13,7 +13,9 @@ def test_ensure_lvibe_welcome_md_writes_template_once(tmp_path: Path):
     dest = tmp_path / ".lvibe" / WELCOME_MD_NAME
     assert dest == p
     assert dest.is_file()
-    assert "Welcome to Lé Vibe" in dest.read_text(encoding="utf-8")
+    text = dest.read_text(encoding="utf-8")
+    assert "Welcome to Lé Vibe" in text
+    assert "PRODUCT_SPEC.md" in text and "§4" in text
     assert ensure_lvibe_welcome_md(tmp_path) is None
 
 

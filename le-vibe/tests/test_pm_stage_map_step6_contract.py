@@ -17,3 +17,5 @@ def test_pm_stage_map_step6_row_lists_structured_log_and_e1():
     assert "structured_log.py" in row
     assert "test_structured_log.py" in row
     assert "STEP 6" in row or "E6" in row
+    assert "le-vibe.log.jsonl" in row
+    assert "LE_VIBE_STRUCTURED_LOG" in row
