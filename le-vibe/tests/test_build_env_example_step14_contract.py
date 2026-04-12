@@ -2,11 +2,18 @@
 
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
 
 
 def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
+
+
+def test_build_env_example_bash_syntax() -> None:
+    script = _repo_root() / "editor" / "le-vibe-overrides" / "build-env.sh.example"
+    assert script.is_file(), script
+    subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 
 def test_build_env_example_documents_upstream_dev_build_and_policy():
@@ -15,6 +22,8 @@ def test_build_env_example_documents_upstream_dev_build_and_policy():
     ).read_text(encoding="utf-8")
     assert "ci-vscodium-linux-dev-build.sh" in text
     assert "dev/build.sh" in text
+    assert "build-env.lvibe-defaults.sh" in text
+    assert "product-branding-merge.json" in text
     assert "APP_NAME" in text and "BINARY_NAME" in text
     assert "PRODUCT_SPEC" in text and ("§7.3" in text or "§7.2" in text)
     assert "USER RESPONSE REQUIRED" in text
