@@ -3,6 +3,7 @@
 # Run from repository root:
 #   ./editor/smoke.sh
 # Authority: editor/README.md, packaging/scripts/ci-editor-gate.sh
+# E1: docs/PRODUCT_SPEC.md *Prioritization* documents this path — le-vibe/tests/test_product_spec_section8.py
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 exec "${ROOT}/packaging/scripts/ci-editor-gate.sh"
