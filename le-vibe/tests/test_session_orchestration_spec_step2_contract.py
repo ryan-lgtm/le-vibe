@@ -54,3 +54,10 @@ def test_session_orchestration_spec_phase2_paragraph_lists_14d_branding_honesty(
     assert "branding-staging.checklist.md" in text
     assert "read before overrides" in text
     assert "14.c vs 14.d" in text
+
+
+def test_session_orchestration_spec_lists_step14_closeout_manifest_and_runbook():
+    """STEP 14: optional session-manifest seed + autonomous engineer runbook stay linked."""
+    text = (_repo_root() / "docs" / "SESSION_ORCHESTRATION_SPEC.md").read_text(encoding="utf-8")
+    assert "schemas/session-manifest.step14-closeout.v1.example.json" in text
+    assert "STEP14_AUTONOMOUS_ENGINEER_RUNBOOK.md" in text

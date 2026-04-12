@@ -1,0 +1,140 @@
+{
+  "schema_version": "session-manifest.v1",
+  "meta": {
+    "session_id": "step14-closeout-h6",
+    "created_utc": "2026-04-12T00:00:00Z",
+    "title": "STEP 14 — §7.3 IDE close-out (H6 editor/)",
+    "workspace_summary": "Monorepo Lé Vibe: stack le-vibe/ + IDE editor/. Engineer advances tasks until §7.3 is implemented and verified — not doc-only.",
+    "rag_notes": "Authority: docs/PRODUCT_SPEC.md §7.3, docs/PROMPT_BUILD_LE_VIBE.md ORDERED WORK QUEUE, docs/PM_STAGE_MAP.md STEP 14 row, docs/STEP14_AUTONOMOUS_ENGINEER_RUNBOOK.md.",
+    "current_step_id": "epic_iteration",
+    "continue_construction_note": "Copy to .lvibe/session-manifest.json if you want PM epics in the workspace; ENGINEER mode does not require it to ship code.",
+    "ai_pilot_note": "Default: MODE ENGINEER every turn until §7.3 verified or SKIPPED+reason. Hard stop only USER_RESPONSE_REQUIRED / LÉ VIBE BLOCKED per docs/AGENT_MODE_ORCHESTRATION.md."
+  },
+  "session_steps": [
+    {
+      "id": "opening_intent",
+      "type": "opening_intent",
+      "title": "Intent (optional)",
+      "description": "STEP 14 is already scoped by PRODUCT_SPEC §7.3 — skip if redundant.",
+      "skippable": true,
+      "on_skip": "workspace_scan_if_nonempty"
+    },
+    {
+      "id": "workspace_scan",
+      "type": "workspace_scan",
+      "title": "Repo orientation",
+      "description": "Confirm editor/, packaging/debian-le-vibe-ide/, packaging/scripts/build-le-vibe-debs.sh, docs/brand-assets.md icon path."
+    },
+    {
+      "id": "agent_bootstrap",
+      "type": "agent_bootstrap",
+      "title": "Agents (optional)",
+      "description": "Enable skill agents from le-vibe/templates/agents/ if using .lvibe/ orchestration."
+    },
+    {
+      "id": "epic_iteration",
+      "type": "epic_iteration",
+      "title": "Walk product.epics until STEP 14 done or honestly blocked",
+      "description": "Execute tasks in order; update task status; do not stall for owner orchestration."
+    }
+  ],
+  "agents": {
+    "defaults": {
+      "all_enabled": true,
+      "skill_base": ".lvibe/agents"
+    },
+    "roles": [
+      {
+        "id": "product_manager",
+        "enabled": false,
+        "skill_path": ".lvibe/agents/product-manager/skill.md"
+      },
+      {
+        "id": "project_manager",
+        "enabled": false,
+        "skill_path": ".lvibe/agents/project-manager/skill.md"
+      },
+      {
+        "id": "senior_backend_engineer",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-backend-engineer/skill.md"
+      },
+      {
+        "id": "senior_frontend_engineer",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-frontend-engineer/skill.md"
+      },
+      {
+        "id": "senior_devops_engineer",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-devops-engineer/skill.md"
+      },
+      {
+        "id": "senior_qa_engineer",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-qa-engineer/skill.md"
+      },
+      {
+        "id": "senior_industry_advisor",
+        "enabled": false,
+        "skill_path": ".lvibe/agents/senior-industry-advisor/skill.md"
+      },
+      {
+        "id": "user",
+        "enabled": false,
+        "skill_path": ".lvibe/agents/user/skill.md"
+      }
+    ]
+  },
+  "product": {
+    "epics": [
+      {
+        "id": "epic-h6-step14-001",
+        "title": "H6 — §7.3 Lé Vibe IDE: branded shell + installable .deb + lvibe-only CLI story",
+        "description": "PRODUCT_SPEC §7.3 is fixed — implement. Local/manual builds must reach same outcomes as CI when CI is optional. GitHub Actions are not the v1 completion gate.",
+        "tasks": [
+          {
+            "id": "task-14-gate-smoke",
+            "title": "Fast gate: ./editor/smoke.sh (and ci-editor-gate when packaging IDE .deb)",
+            "status": "pending",
+            "assignee_agent": "senior_devops_engineer",
+            "notes": "editor/smoke.sh forwards to packaging/scripts/ci-editor-gate.sh; LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 before IDE build when enforcing Lé Vibe–visible branding.",
+            "acceptance_criteria": "Smoke passes from repo root; --help documented paths behave; failures are actionable."
+          },
+          {
+            "id": "task-14-brand-assets",
+            "title": "Align IDE chrome with canonical brand assets (no orphan marks)",
+            "status": "pending",
+            "assignee_agent": "senior_frontend_engineer",
+            "notes": "Canonical scalable icon: packaging/icons/hicolor/scalable/apps/le-vibe.svg. Presentation palette reference: docs/brand-assets.md (purple/ruby accents for diagrams; product name Lé Vibe). Sync linux icon assets per editor/le-vibe-overrides/sync-linux-icon-assets.sh when touching icons.",
+            "acceptance_criteria": "Branding layers under editor/le-vibe-overrides/ and packaging icon paths stay consistent; docs/brand-assets.md remains true."
+          },
+          {
+            "id": "task-14-linux-compile-path",
+            "title": "Prove Linux dev build path (local or opt-in CI): node/.nvmrc, dev/build.sh story",
+            "status": "pending",
+            "assignee_agent": "senior_devops_engineer",
+            "notes": "Fail fast: ci-vscodium-bash-syntax.sh + ci-editor-nvmrc-sync.sh before ci-vscodium-linux-dev-build.sh. See editor/BUILD.md, docs/ci-qa-hardening.md 14.e/14.f.",
+            "acceptance_criteria": "Documented path produces VSCode-linux-* (or tarball) when toolchain available; no silent skips — SKIPPED + reason if environment cannot compile."
+          },
+          {
+            "id": "task-14-deb-stack-ide",
+            "title": "Full-product .deb: packaging/scripts/build-le-vibe-debs.sh --with-ide",
+            "status": "pending",
+            "assignee_agent": "senior_devops_engineer",
+            "notes": "Sibling le-vibe-ide .deb + stack le-vibe .deb; PM_DEB_BUILD_ITERATION.md success output; packaging/debian-le-vibe-ide/README.md install both.",
+            "acceptance_criteria": "Script exits 0 with both debs when IDE build succeeds; Recommends: le-vibe on IDE package where specified; install smoke steps documented."
+          },
+          {
+            "id": "task-14-pytest-docs",
+            "title": "Keep E1 green; update PRODUCT_SPEC honesty / PM_STAGE_MAP only with evidence",
+            "status": "pending",
+            "assignee_agent": "senior_qa_engineer",
+            "notes": "cd le-vibe && python3 -m pytest tests/ after Python changes. Do not claim STEP 14 done on tests/docs alone — need real branded IDE output + .deb path verified or SKIPPED.",
+            "acceptance_criteria": "Pytest passes; any STEP deferral uses SKIPPED + reason in the honest place per spec-phase2 §14."
+          }
+        ]
+      }
+    ]
+  }
+}

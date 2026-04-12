@@ -44,6 +44,7 @@ If **`OWNER_DIRECTIVES`** is absent, **PRODUCT** / **PROJECT** still align to **
 | [`PM_STAGE_MAP.md`](PM_STAGE_MAP.md) | **STEP →** primary PM doc |
 | [`SESSION_ORCHESTRATION_SPEC.md`](SESSION_ORCHESTRATION_SPEC.md) | Manifests, orchestration |
 | [`schemas/session-manifest.v1.example.json`](../schemas/session-manifest.v1.example.json) | JSON shape for PM epics/tasks |
+| [`schemas/session-manifest.step14-closeout.v1.example.json`](../schemas/session-manifest.step14-closeout.v1.example.json) + [`STEP14_AUTONOMOUS_ENGINEER_RUNBOOK.md`](STEP14_AUTONOMOUS_ENGINEER_RUNBOOK.md) | **STEP 14 / §7.3** — pre-filled epics + **`OWNER_DIRECTIVES`** / ENGINEER paste blocks (no owner-per-turn orchestration) |
 | [`schemas/user-settings.v1.example.json`](../schemas/user-settings.v1.example.json) | IDE / stack user-settings (PM IDE track) |
 | PM iteration tracks | [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) (**`build-le-vibe-debs.sh --with-ide`**, **Full-product install**; **`le-vibe-deb`** = stack-only in default CI), [`PM_IDE_SETTINGS_AND_WORKFLOWS.md`](PM_IDE_SETTINGS_AND_WORKFLOWS.md) |
 

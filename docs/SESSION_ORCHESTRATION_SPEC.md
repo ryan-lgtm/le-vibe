@@ -8,7 +8,7 @@ It applies in **two places**:
 
 | Context | Where it lives | Purpose |
 |---------|----------------|---------|
-| **Building Lé Vibe** (this repo) | `schemas/session-manifest.v1.example.json`, `le-vibe/templates/agents/*.md` | Dogfood the same format while developing the product; CI and docs reference these paths. |
+| **Building Lé Vibe** (this repo) | `schemas/session-manifest.v1.example.json`, `schemas/session-manifest.step14-closeout.v1.example.json` (optional **STEP 14** backlog seed), `le-vibe/templates/agents/*.md` | Dogfood the same format while developing the product; CI and docs reference these paths. **STEP 14 autonomous engineer kit:** [`STEP14_AUTONOMOUS_ENGINEER_RUNBOOK.md`](STEP14_AUTONOMOUS_ENGINEER_RUNBOOK.md). |
 | **User workspace** | `.lvibe/session-manifest.json`, `.lvibe/agents/<agent_id>/skill.md` | Same schema and agent skills; orchestrator and Continue/agent rules read from here. |
 
 **Master orchestrator STEP 2 (PM session):** Seed **`session-manifest.json`** from **`schemas/session-manifest.v1.example.json`** when running from a clone (**`session_manifest_example_source_path`**), else the bundled example (same JSON — must match **`schemas/`**), copy **`le-vibe/templates/agents/*.md`** into **`.lvibe/agents/<agent_id>/skill.md`**, expose **`session_steps`** / **`product.epics`** iteration, and implement **`opening_intent` → skip → `workspace_scan`** via **`apply_opening_skip`** — **`le_vibe.session_orchestrator`** (**`ensure_pm_session_artifacts`** from workspace prepare). E1: **`le-vibe/tests/test_session_orchestrator.py`**. This is separate from **STEP 14** **H6** (**`editor/`** IDE shell); **`spec-phase2.md` §14** tracks IDE binary / build branding honesty.
