@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # STEP 14 (H6): editor/ vendoring detection — matches .github/workflows/build-le-vibe-ide.yml
 # (and build-linux.yml, which reuses that workflow) gate.
+# Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (same as ci-qa-hardening.md Local clone).
 # Run from repo root: ./packaging/scripts/ci-editor-gate.sh
 # Exits 0 when layout is none (skip). For layout=vscodium, runs bash syntax on upstream scripts (may exit 1).
 # 14.d: does not validate Lé Vibe–visible IDE branding — editor/le-vibe-overrides/branding-staging.checklist.md;
@@ -27,7 +28,7 @@ fi
 
 echo "ci-editor-gate: layout=${layout}"
 if [[ "${layout}" == "none" ]]; then
-  echo "ci-editor-gate: IDE sources not vendored — see editor/VENDORING.md (interim: LE_VIBE_EDITOR → VSCodium/codium)."
+  echo "ci-editor-gate: IDE sources not vendored — try: git submodule update --init editor/vscodium (editor/README.md Fresh clone 14.b); else see editor/VENDORING.md (interim: LE_VIBE_EDITOR → VSCodium/codium)."
   exit 0
 fi
 
