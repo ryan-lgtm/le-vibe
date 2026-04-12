@@ -46,3 +46,8 @@ def test_editor_vendoring_md_documents_smoke_gate_and_metadata():
     assert "PM_STAGE_MAP.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
     assert "Release bundles (H1 / STEP 8 vs STEP 14 / §7.3)" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "Success output (`--with-ide`)" in text
+    assert "Install both packages" in text
