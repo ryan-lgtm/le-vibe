@@ -31,6 +31,8 @@ Populate **`editor/`** by vendoring upstream (e.g. [VSCodium](https://github.com
 
 **Fresh clone (14.b):** if **`editor/vscodium/`** is missing or empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the repository root before **`cd editor/vscodium`** and **`. ./get_repo.sh`**.
 
+**§7.3 Linux icons + `git status`:** **`sync-linux-icon-assets.sh`** writes **`le-vibe.svg`** / **`le-vibe.png`** under **`editor/vscodium/src/stable/resources/linux/`** (untracked inside the submodule — not committed to upstream VSCodium). The monorepo **`.gitmodules`** entry for **`editor/vscodium`** sets **`ignore = untracked`**, so the superproject does **not** show the submodule as “modified” after a sync. Details — **[`VENDORING.md`](VENDORING.md)**; staging map — **`le-vibe-overrides/branding-staging.checklist.md`**.
+
 **Node:** match VSCodium’s toolchain — **[`.nvmrc`](.nvmrc)** mirrors **`vscodium/.nvmrc`**. Prefer **`source editor/use-node-toolchain.sh`** from the repo root (**14.a**) before **`get_repo` / build** steps, or run **`nvm install` / `nvm use`** manually from **`editor/`**.
 
 ## `LE_VIBE_EDITOR` (launcher ↔ IDE binary)
