@@ -23,6 +23,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Documentation
 
+- Root **[`README.md`](README.md)** *Tests* / **E1 mapping** — **`test_product_spec_section8.py`** lists **`ide-ci-metadata.txt`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`**; **[`editor/smoke.sh`](editor/smoke.sh)** header notes the same **E1** lock.
 - **[`docs/README.md`](docs/README.md)** *Document* table (**`PRODUCT_SPEC_SECTION8_EVIDENCE`**) — **`test_product_spec_section8.py`** *Prioritization* (**`ide-ci-metadata`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`**).
 - **[`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`](docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md)** intro — **`test_product_spec_section8.py`** *Prioritization* parenthetical lists **`ide-ci-metadata.txt`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`** (STEP 14 metadata).
 - **`PRODUCT_SPEC` *Prioritization*** — **How to sequence work** names **`ide-ci-metadata.txt`**, **`le_vibe_editor_docs`**, Actions **Summary** **Pre-binary artifact** / **`LE_VIBE_EDITOR`** (**`editor/BUILD.md`**, **`editor/VENDORING.md`**).
