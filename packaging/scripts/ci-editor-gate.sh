@@ -3,6 +3,7 @@
 # Run from repo root: ./packaging/scripts/ci-editor-gate.sh
 # Exits 0 when layout is none (skip). For layout=vscodium, runs bash syntax on upstream scripts (may exit 1).
 # Authority: editor/VENDORING.md.
+# E1: docs/PRODUCT_SPEC.md *Prioritization* documents ./editor/smoke.sh (this gate) — le-vibe/tests/test_product_spec_section8.py.
 # VSCodium’s repo uses product.json + get_repo.sh (no root package.json until vscode is fetched).
 set -euo pipefail
 
