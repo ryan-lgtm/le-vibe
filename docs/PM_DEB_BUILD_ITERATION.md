@@ -13,6 +13,8 @@ When you have both artifacts from **`build-le-vibe-debs.sh`** (stack) and **`--w
 
 **Success output (`--with-ide`):** When **`build-le-vibe-debs.sh`** finishes and both **`.deb`** files are found, it prints a **Full-product install** line — **`sudo apt install`** with the resolved paths (stack **`le-vibe_*_all.deb`** beside the repository directory, IDE **`le-vibe-ide_*_amd64.deb`** under **`packaging/`**), then **`/usr/share/doc/le-vibe/README.Debian`** and **`packaging/debian-le-vibe-ide/README.md`** (*Install both packages*).
 
+**Failure (`--with-ide`):** If **`--with-ide`** is set but **`le-vibe-ide_*.deb`** is not found under **`packaging/`** after the IDE build step, **`build-le-vibe-debs.sh`** exits with status **1** — a stack-only **`.deb`** is not treated as a successful full-product run.
+
 ### §7.3 IDE staging — Lé Vibe identity in the built tree
 
 The **`le-vibe-ide`** package repacks **`editor/vscodium/VSCode-linux-*`**. That directory should be produced after **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** (merge **`product-branding-merge.json`**, **`sync-linux-icon-assets.sh`**, env defaults) **before** **`dev/build.sh`** — not a bare upstream compile — see **`editor/BUILD.md`** *Linux icons*.
@@ -33,7 +35,7 @@ You are the Lé Vibe **packaging / .deb build** engineer for this monorepo. **MO
 
 **CI vs maintainer .deb bundles:** Default **`ci.yml`** artifact **`le-vibe-deb`** is **stack-only**; **`--with-ide`** adds **`le-vibe-ide_*_amd64.deb`** for full-product drops — **[`docs/PM_STAGE_MAP.md`](PM_STAGE_MAP.md)** (*H1 vs §7.3 .deb bundles* — **STEP 14** vs **STEP 8**); monorepo honesty — **[`spec-phase2.md`](../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*.
 
-**Goal:** Keep **`build-le-vibe-debs.sh`** correct: prerequisite detection, **`dpkg-buildpackage`** for stack (repo root) and optional IDE (`--with-ide` → **`build-le-vibe-ide-deb.sh`**: stage + **`dpkg-buildpackage`** + optional **`lintian`**), **`--install`** / **`--yes`**, artifact discovery (`le-vibe_*.deb` in repo parent; `le-vibe-ide_*.deb` under **`packaging/`**). For **`--with-ide`**, document optional **`LEVIBE_STAGE_IDE_ASSERT_BRAND`** / **`LEVIBE_STAGE_IDE_VERBOSE`** (§7.3 IDE staging above; **`stage-le-vibe-ide-deb.sh`**). When both **`.deb`** files are produced, the script echoes **Full-product install** — align with **Success output (`--with-ide`)** above. **Do not** claim GitHub Actions is a v1 production gate.
+**Goal:** Keep **`build-le-vibe-debs.sh`** correct: prerequisite detection, **`dpkg-buildpackage`** for stack (repo root) and optional IDE (`--with-ide` → **`build-le-vibe-ide-deb.sh`**: stage + **`dpkg-buildpackage`** + optional **`lintian`**), **`--install`** / **`--yes`**, artifact discovery (`le-vibe_*.deb` in repo parent; `le-vibe-ide_*.deb` under **`packaging/`**). For **`--with-ide`**, document optional **`LEVIBE_STAGE_IDE_ASSERT_BRAND`** / **`LEVIBE_STAGE_IDE_VERBOSE`** (§7.3 IDE staging above; **`stage-le-vibe-ide-deb.sh`**). When both **`.deb`** files are produced, the script echoes **Full-product install** — align with **Success output (`--with-ide`)** above; if **`--with-ide`** but no **`le-vibe-ide_*.deb`**, exit **1** — **Failure (`--with-ide`)** above. **Do not** claim GitHub Actions is a v1 production gate.
 
 **After shell edits:** `bash -n packaging/scripts/build-le-vibe-debs.sh` and `cd le-vibe && python3 -m pytest tests/test_build_le_vibe_debs_script_contract.py` (or full **`pytest`**).
 
@@ -48,6 +50,6 @@ End with exactly **one** last line, nothing after:
 
 - [ ] Script exits **2** with a clear **`apt install`** line when `dpkg-buildpackage` / `debhelper` is missing.
 - [ ] Default run produces **`le-vibe_*.deb`** (parent of repo root) without IDE artifacts.
-- [ ] `--with-ide` requires **`VSCode-linux-*`** (or **`--vs-build`**) per **`build-le-vibe-ide-deb.sh`** / **`stage-le-vibe-ide-deb.sh`** errors.
+- [ ] `--with-ide` requires **`VSCode-linux-*`** (or **`--vs-build`**) per **`build-le-vibe-ide-deb.sh`** / **`stage-le-vibe-ide-deb.sh`** errors; if the IDE **`.deb`** is still missing under **`packaging/`**, **`build-le-vibe-debs.sh`** exits **1** (not stack-only success).
 - [ ] `--install` uses **`sudo`** only for install, not for compile.
 - [ ] **`print-pm-deb-build-prompt.py`** stdout matches the fenced block above (E1 contract).

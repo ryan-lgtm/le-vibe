@@ -44,6 +44,7 @@ Artifacts:
 Full-product (--with-ide): When both .deb files are produced, the script prints a Full-product install
   line (sudo apt install with both resolved paths) before "Done." — docs/PM_DEB_BUILD_ITERATION.md
   (Success output (--with-ide)); releases — docs/apt-repo-releases.md (IDE package, Maintainer build output).
+  If --with-ide is set but le-vibe-ide_*.deb is not found under packaging/ after the IDE build, the script exits with status 1 (§7.3 full-product expectation).
 
 EOF
 }
@@ -143,6 +144,8 @@ if [[ "$WITH_IDE" -eq 1 ]]; then
     echo "==> IDE .deb: $IDE_DEB"
   else
     echo "build-le-vibe-debs: could not locate le-vibe-ide_*.deb under packaging/ — if staging or dpkg-buildpackage failed, see editor/BUILD.md (14.c); empty editor/vscodium/: git submodule update --init editor/vscodium (Fresh clone 14.b: editor/README.md). CI vs maintainer bundles: docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles); packaging/debian-le-vibe-ide/README.md." >&2
+    echo "build-le-vibe-debs: --with-ide requires a successful le-vibe-ide package — exiting 1 (§7.3 full-product)." >&2
+    exit 1
   fi
 fi
 
