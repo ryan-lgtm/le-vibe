@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Build le-vibe-ide_*.deb after stage-le-vibe-ide-deb.sh (PRODUCT_SPEC §7.3).
+# H1 / §7.3: not included in default ci.yml le-vibe-deb upload (stack-only); publish beside stack .deb — docs/apt-repo-releases.md (IDE package); stack + IDE — packaging/scripts/build-le-vibe-debs.sh --with-ide.
 # Requires: dpkg-buildpackage (dpkg-dev) on PATH after staging.
 # Optional: lintian on the produced .deb if installed — packaging/debian-le-vibe-ide/README.md;
 #   non-fatal unless LEVIBE_IDE_LINTIAN_STRICT=1 (exit code from lintian).
