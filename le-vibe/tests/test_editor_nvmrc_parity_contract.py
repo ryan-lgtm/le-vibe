@@ -31,3 +31,4 @@ def test_ci_editor_nvmrc_sync_script_contract():
     assert "editor/.nvmrc" in text
     assert "editor/vscodium/.nvmrc" in text
     assert "cmp" in text
+    assert "cmp not on PATH" in text
