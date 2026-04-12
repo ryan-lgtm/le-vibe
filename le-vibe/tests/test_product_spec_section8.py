@@ -77,6 +77,24 @@ def test_workspace_policy_reflects_product_spec_section5_defaults():
     assert "workspace-policy.json" in text
 
 
+def test_product_spec_section9_evidence_row_links_test_build_to_build_linux_alias():
+    """§9 table — PRODUCT_SPEC_SECTION8_EVIDENCE row keeps `build-linux.yml` (`uses:`) beside `build-le-vibe-ide.yml`."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC.md").read_text(encoding="utf-8")
+    rows = [
+        ln
+        for ln in text.splitlines()
+        if ln.lstrip().startswith("|")
+        and "PRODUCT_SPEC_SECTION8_EVIDENCE" in ln
+        and "test_build_le_vibe_ide_workflow_contract" in ln
+    ]
+    assert len(rows) == 1, "expected exactly one §9 table row tying SECTION8 evidence to test_build_*"
+    row = rows[0]
+    assert "build-le-vibe-ide.yml" in row
+    assert "build-linux.yml" in row
+    assert "uses:" in row
+
+
 def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci():
     """§ Prioritization — vendoring gate for editor/ (H6 / STEP 14) stays documented."""
     root = Path(__file__).resolve().parents[2]
