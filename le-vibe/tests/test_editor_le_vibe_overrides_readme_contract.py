@@ -14,6 +14,8 @@ def test_branding_staging_checklist_14d_contract():
     text = (
         _repo_root() / "editor" / "le-vibe-overrides" / "branding-staging.checklist.md"
     ).read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
     assert "verify-14c-local-binary.sh" in text
     assert "14.d" in text
     assert "PRODUCT_SPEC §7.2" in text
