@@ -37,9 +37,13 @@ def test_verify_continue_pin_script_documents_pin_file():
     text = (_repo_root() / "packaging" / "scripts" / "verify-continue-pin.sh").read_text(
         encoding="utf-8"
     )
+    assert "STEP 14.h" in text
     assert "continue-openvsx-version" in text
     assert "restore packaging/continue-openvsx-version from git" in text
     assert "add one semver line" in text
+    assert "no non-comment version line" in text
+    assert "expected semver" in text
+    assert "verify-continue-pin: OK" in text
     assert "continue-extension-pin.md" in text
     assert "grep not on PATH" in text
     assert "head not on PATH" in text
