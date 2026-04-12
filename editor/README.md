@@ -29,6 +29,8 @@
 
 Populate **`editor/`** by vendoring upstream (e.g. [VSCodium](https://github.com/VSCodium/vscodium)) via **git submodule**, **subtree**, or a tracked import—see **`docs/vscodium-fork-le-vibe.md`** and **[`VENDORING.md`](VENDORING.md)** (recommended: submodule at **`editor/vscodium/`** so this README stays in-tree). Until sources exist here, developers may point **`LE_VIBE_EDITOR`** at system **VSCodium**; production intent remains **one tree**, one product.
 
+**Fresh clone (14.b):** if **`editor/vscodium/`** is missing or empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the repository root before **`cd editor/vscodium`** and **`. ./get_repo.sh`**.
+
 **Node:** match VSCodium’s toolchain — **[`.nvmrc`](.nvmrc)** mirrors **`vscodium/.nvmrc`**. Prefer **`source editor/use-node-toolchain.sh`** from the repo root (**14.a**) before **`get_repo` / build** steps, or run **`nvm install` / `nvm use`** manually from **`editor/`**.
 
 ## `LE_VIBE_EDITOR` (launcher ↔ IDE binary)

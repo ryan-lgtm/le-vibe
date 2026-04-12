@@ -21,6 +21,13 @@ def test_editor_readme_step14_fine_grain_vs_h6_honesty():
     assert "read before overrides" in text
 
 
+def test_editor_readme_documents_submodule_init_before_14b():
+    """14.b needs VSCodium sources — document submodule init for empty editor/vscodium/."""
+    text = (_repo_root() / "editor" / "README.md").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
+
+
 def test_editor_readme_path_table_lists_fine_grain_scripts():
     text = (_repo_root() / "editor" / "README.md").read_text(encoding="utf-8")
     assert "**14.a**" in text
