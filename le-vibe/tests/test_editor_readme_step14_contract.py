@@ -28,6 +28,16 @@ def test_editor_readme_documents_submodule_init_before_14b():
     assert "Fresh clone (14.b)" in text
 
 
+def test_editor_readme_lists_production_deb_pair_step14():
+    """§7.3: canonical editor README names build-le-vibe-debs --with-ide + PM/apt release docs."""
+    text = (_repo_root() / "editor" / "README.md").read_text(encoding="utf-8")
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "apt-repo-releases.md" in text
+    assert "le-vibe-ide_*_amd64.deb" in text
+    assert "SHA256SUMS" in text
+
+
 def test_editor_readme_path_table_lists_fine_grain_scripts():
     text = (_repo_root() / "editor" / "README.md").read_text(encoding="utf-8")
     assert "**14.a**" in text
