@@ -5,7 +5,7 @@
 # Full E1 contract roster (not only H8): root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI — same pointers as docs/ci-qa-hardening.md and docs/apt-repo-releases.md E1.
 # Product / trust: docs/PRODUCT_SPEC.md §8–§9; spec-phase2.md §14 (H6/H7 vs in-tree); H-theme maintainer docs: docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
 # Optional RAG chunk: docs/rag/le-vibe-phase2-chunks.md (§14 table row; not pytest-gated) — SECURITY.md Related docs; same index as .github/workflows/ci.yml header.
-# STEP 14 / H6: after pytest, ci-editor-gate.sh (same gate as ./editor/smoke.sh and build-le-vibe-ide.yml). E1: test_product_spec_section8.py — PRODUCT_SPEC *Prioritization*.
+# STEP 14 / H6: after pytest, ci-editor-gate.sh (same gate as ./editor/smoke.sh, build-le-vibe-ide.yml, build-linux.yml alias). E1: test_product_spec_section8.py — PRODUCT_SPEC *Prioritization*.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
