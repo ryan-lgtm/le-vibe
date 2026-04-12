@@ -22,7 +22,9 @@ def test_smoke_lvibe_editor_script_contract():
     assert "LE_VIBE_EDITOR" in text
     assert "ollama" in text
     assert "print-built-codium-path.sh" in text
+    assert "python3 not on PATH" in text
     assert "exit 4" in text
+    assert "exit 5" in text
 
 
 def test_ci_editor_gate_bash_n_smoke_lvibe_editor():

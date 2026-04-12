@@ -2,7 +2,7 @@
 # STEP 14 (14.c): smoke Lé Vibe launcher → editor binary (no long-lived UI).
 # Runs: python -m le_vibe.launcher --skip-first-run --editor <bin> -- --version
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (before fetch/build for a repo-local codium path).
-# Prereq: `ollama` on PATH (managed Ollama); see editor/BUILD.md.
+# Prereq: `python3` on PATH (launcher); `ollama` on PATH (managed Ollama); see editor/BUILD.md.
 # Usage from repo root:
 #   LE_VIBE_EDITOR=/path/to/codium ./editor/smoke-lvibe-editor.sh
 #   ./editor/smoke-lvibe-editor.sh /path/to/codium
@@ -32,6 +32,11 @@ else
     echo "smoke-lvibe-editor: editor not on PATH: ${BIN}" >&2
     exit 4
   fi
+fi
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "smoke-lvibe-editor: python3 not on PATH — install Python 3 (editor/BUILD.md 14.c)." >&2
+  exit 5
 fi
 
 if ! command -v ollama >/dev/null 2>&1; then
