@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # STEP 14 (14.f): print absolute path to VSCode-linux-*/bin/codium under a directory tree.
+# If SEARCH_ROOT is repo editor/vscodium: Fresh clone (14.b) — git submodule update --init editor/vscodium — editor/README.md (before 14.a fetch / dev/build.sh).
 # Use after unpacking vscodium-linux-build.tar.gz from linux_compile, or any tree that contains VSCode-linux-*.
 # Usage: ./editor/print-vsbuild-codium-path.sh [SEARCH_ROOT]
 #   SEARCH_ROOT defaults to the current working directory (typical: cd to unpack dir, then run from repo with ../../editor/... or pass the unpack path).
@@ -14,7 +15,7 @@ shopt -s nullglob
 matches=("${SEARCH}"/VSCode-linux-*/bin/codium)
 
 if [[ ${#matches[@]} -eq 0 ]]; then
-  echo "print-vsbuild-codium-path: no VSCode-linux-*/bin/codium under ${SEARCH} — extract vscodium-linux-build.tar.gz or point at editor/vscodium after dev/build.sh (editor/BUILD.md 14.f)." >&2
+  echo "print-vsbuild-codium-path: no VSCode-linux-*/bin/codium under ${SEARCH} — editor/BUILD.md 14.f (artifact) or 14.c (local build). If editor/vscodium/ is empty: git submodule update --init editor/vscodium (Fresh clone 14.b, editor/README.md)." >&2
   exit 1
 fi
 
