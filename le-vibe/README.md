@@ -10,7 +10,7 @@ For **Lé Vibe Phase 2** (managed Ollama on a dedicated port, configs under `~/.
 
 **Phase 2 vs this tree:** [`../spec-phase2.md`](../spec-phase2.md) **§14** — **monorepo:** **`le-vibe/`** (this package) + **[`../editor/`](../editor/)** (Lé Vibe IDE shell, **H6**); **H7** Flatpak may stay out-of-tree by policy.
 
-**IDE shell (H6):** **[`../editor/README.md`](../editor/README.md)** — local build **[`../editor/BUILD.md`](../editor/BUILD.md)**; upstream vendoring **[`../editor/VENDORING.md`](../editor/VENDORING.md)**.
+**IDE shell (H6):** **[`../editor/README.md`](../editor/README.md)** — local build **[`../editor/BUILD.md`](../editor/BUILD.md)**; upstream vendoring **[`../editor/VENDORING.md`](../editor/VENDORING.md)**; CI parity without compiling Electron — **[`../editor/smoke.sh`](../editor/smoke.sh)** from the repository root (**[`../docs/ci-qa-hardening.md`](../docs/ci-qa-hardening.md)** *IDE smoke* vs **`ci-smoke.sh`**).
 
 **Debian `.deb`:** [`../debian/le-vibe.README.Debian`](../debian/le-vibe.README.Debian) installs as **`/usr/share/doc/le-vibe/README.Debian`** — post-install flow, **§5** workspace consent, and **Phase 2** scope (**`docs/spec-phase2.md` §14**) on packaged Linux systems.
 
