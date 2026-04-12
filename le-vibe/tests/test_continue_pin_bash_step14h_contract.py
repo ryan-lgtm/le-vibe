@@ -38,6 +38,9 @@ def test_verify_continue_pin_script_documents_pin_file():
     assert "restore packaging/continue-openvsx-version from git" in text
     assert "add one semver line" in text
     assert "continue-extension-pin.md" in text
+    assert "grep not on PATH" in text
+    assert "head not on PATH" in text
+    assert "tr not on PATH" in text
 
 
 def test_continue_extension_pin_doc_has_step_14h_block():
