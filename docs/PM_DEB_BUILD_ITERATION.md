@@ -16,7 +16,7 @@ You are the Lé Vibe **packaging / .deb build** engineer for this monorepo. **MO
 
 **Authority:** [`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) (this file) → [`packaging/scripts/build-le-vibe-debs.sh`](../packaging/scripts/build-le-vibe-debs.sh) → [`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md) → [`editor/BUILD.md`](../editor/BUILD.md).
 
-**Goal:** Keep **`build-le-vibe-debs.sh`** correct: prerequisite detection, **`dpkg-buildpackage`** for stack (repo root) and optional IDE (`--with-ide` → stage + `packaging/debian-le-vibe-ide`), **`--install`** / **`--yes`**, artifact discovery (`le-vibe_*.deb` in repo parent; `le-vibe-ide_*.deb` under **`packaging/`**). **Do not** claim GitHub Actions is a v1 production gate.
+**Goal:** Keep **`build-le-vibe-debs.sh`** correct: prerequisite detection, **`dpkg-buildpackage`** for stack (repo root) and optional IDE (`--with-ide` → **`build-le-vibe-ide-deb.sh`**: stage + **`dpkg-buildpackage`** + optional **`lintian`**), **`--install`** / **`--yes`**, artifact discovery (`le-vibe_*.deb` in repo parent; `le-vibe-ide_*.deb` under **`packaging/`**). **Do not** claim GitHub Actions is a v1 production gate.
 
 **After shell edits:** `bash -n packaging/scripts/build-le-vibe-debs.sh` and `cd le-vibe && python3 -m pytest tests/test_build_le_vibe_debs_script_contract.py` (or full **`pytest`**).
 
@@ -31,6 +31,6 @@ End with exactly **one** last line, nothing after:
 
 - [ ] Script exits **2** with a clear **`apt install`** line when `dpkg-buildpackage` / `debhelper` is missing.
 - [ ] Default run produces **`le-vibe_*.deb`** (parent of repo root) without IDE artifacts.
-- [ ] `--with-ide` requires **`VSCode-linux-*`** (or **`--vs-build`**) per **`stage-le-vibe-ide-deb.sh`** errors.
+- [ ] `--with-ide` requires **`VSCode-linux-*`** (or **`--vs-build`**) per **`build-le-vibe-ide-deb.sh`** / **`stage-le-vibe-ide-deb.sh`** errors.
 - [ ] `--install` uses **`sudo`** only for install, not for compile.
 - [ ] **`print-pm-deb-build-prompt.py`** stdout matches the fenced block above (E1 contract).

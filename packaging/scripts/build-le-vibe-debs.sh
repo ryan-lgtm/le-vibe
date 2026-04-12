@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # One-shot: build le-vibe (stack) and optionally le-vibe-ide .deb artifacts.
+# --with-ide delegates to packaging/scripts/build-le-vibe-ide-deb.sh (stage + dpkg-buildpackage + optional lintian).
 # Requires: find (findutils), sort, head (coreutils) to locate emitted *.deb files beside the repo.
 # Authority: docs/PM_DEB_BUILD_ITERATION.md — PM-scoped convenience; not a v1 production gate.
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md when building --with-ide and editor/vscodium/ is empty.
@@ -26,7 +27,8 @@ Build Debian binary packages from this monorepo:
   --vs-build PATH  Use this VSCode-linux-* directory for IDE staging (implies --with-ide).
 
 Environment:
-  DEB_BUILD_OPTIONS  Passed through to dpkg-buildpackage when set.
+  DEB_BUILD_OPTIONS           Passed through to dpkg-buildpackage when set.
+  LEVIBE_IDE_LINTIAN_STRICT   When set to 1, fail the IDE build if lintian fails (see packaging/scripts/build-le-vibe-ide-deb.sh).
 
 Prerequisites (stack): debhelper, build-essential, dpkg-dev (sudo apt install build-essential debhelper).
 Prerequisites (IDE):  a successful dev/build.sh under editor/vscodium (see editor/BUILD.md).
@@ -123,13 +125,12 @@ fi
 
 IDE_DEB=""
 if [[ "$WITH_IDE" -eq 1 ]]; then
-  echo "==> Building IDE package (le-vibe-ide)"
+  echo "==> Building IDE package (le-vibe-ide) via build-le-vibe-ide-deb.sh (stage + dpkg-buildpackage + optional lintian)"
   if [[ -n "$VS_BUILD" ]]; then
-    "$ROOT/packaging/scripts/stage-le-vibe-ide-deb.sh" "$VS_BUILD"
+    "$ROOT/packaging/scripts/build-le-vibe-ide-deb.sh" "$VS_BUILD"
   else
-    "$ROOT/packaging/scripts/stage-le-vibe-ide-deb.sh"
+    "$ROOT/packaging/scripts/build-le-vibe-ide-deb.sh"
   fi
-  (cd "$ROOT/packaging/debian-le-vibe-ide" && dpkg-buildpackage -us -uc -b)
   IDE_DEB="$(find_ide_deb)"
   if [[ -n "$IDE_DEB" && -f "$IDE_DEB" ]]; then
     echo "==> IDE .deb: $IDE_DEB"
