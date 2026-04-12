@@ -18,6 +18,9 @@ def test_fetch_vscode_sources_script_bash_syntax() -> None:
 
 def test_fetch_vscode_sources_script_documents_14b_get_repo_flow() -> None:
     text = (_repo_root() / "editor" / "fetch-vscode-sources.sh").read_text(encoding="utf-8")
+    assert "expected editor/vscodium/" in text
+    assert "fetch-vscode-sources: done" in text
+    assert "LE_VIBE_EDITOR" in text
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
     assert "differs from" in text
