@@ -17,6 +17,15 @@ def test_spec_phase2_monorepo_table_h6_row_lists_14d_branding_staging():
     assert "fast smoke" in text
 
 
+def test_spec_phase2_monorepo_lists_ci_le_vibe_deb_vs_le_vibe_ide_step14():
+    """§14 honesty: spec-phase2 names stack CI artifact vs sibling IDE .deb (H1 / §7.3)."""
+    text = (_repo_root() / "spec-phase2.md").read_text(encoding="utf-8")
+    assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide` (H1 / §7.3)" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "apt-repo-releases.md" in text
+    assert "IDE package" in text
+
+
 def test_spec_phase2_section14_ide_row_honesty_strings():
     text = (_repo_root() / "spec-phase2.md").read_text(encoding="utf-8")
     assert "§7.3" in text
