@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # STEP 14: ensure editor/.nvmrc matches editor/vscodium/.nvmrc (Node pin parity).
 # No-op if VSCodium tree is absent. Run from repo root.
+# Called from ci-editor-gate.sh / ./editor/smoke.sh. E1: le-vibe/tests/test_product_spec_section8.py (PRODUCT_SPEC *Prioritization*).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
