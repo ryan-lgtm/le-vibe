@@ -18,7 +18,7 @@ DEFAULTS_SH="${ROOT}/editor/le-vibe-overrides/build-env.lvibe-defaults.sh"
 _lvibe_merge_vscodium_product_json() {
   [[ -f "${MERGE_JSON}" ]] || return 0
   command -v jq >/dev/null 2>&1 || {
-    echo "ci-vscodium-linux-dev-build: jq required for product-branding-merge.json" >&2
+    echo "ci-vscodium-linux-dev-build: jq required for product-branding-merge.json — install: sudo apt install jq (Debian/Ubuntu)" >&2
     exit 1
   }
   local tmp
