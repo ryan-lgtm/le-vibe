@@ -13,3 +13,6 @@ def test_build_le_vibe_ide_workflow_writes_le_vibe_editor_docs_to_metadata():
     text = (_repo_root() / ".github" / "workflows" / "build-le-vibe-ide.yml").read_text(encoding="utf-8")
     assert "ide-ci-metadata.txt" in text
     assert "le_vibe_editor_docs=editor/README.md" in text
+    assert "GITHUB_STEP_SUMMARY" in text
+    assert "**Pre-binary artifact:**" in text
+    assert "LE_VIBE_EDITOR" in text
