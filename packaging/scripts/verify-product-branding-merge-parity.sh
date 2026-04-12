@@ -16,7 +16,8 @@ usage() {
 Usage: packaging/scripts/verify-product-branding-merge-parity.sh
 
 Runs jq -s '.[0] * .[1]' on editor/vscodium/product.json and product-branding-merge.json in a
-temporary file, then asserts .product.nameShort/nameLong/linuxIconName match §7.3 v1 branding.
+temporary file, then asserts top-level and .product nameShort/nameLong/linuxIconName (prepare_vscode.sh
+merges vscode/product.json with ../product.json using top-level keys — §7.3).
 Read-only; exits 0 on success, 1 on assertion failure, 2 if jq missing or inputs missing.
 
 See packaging/scripts/ci-vscodium-linux-dev-build.sh (_lvibe_merge_vscodium_product_json).
@@ -46,15 +47,17 @@ trap 'rm -f "${tmp}"' EXIT
 jq -s '.[0] * .[1]' "$SRC" "$MERGE" >"${tmp}"
 
 if ! jq -e \
-  '.product
-    | type == "object"
+  '
+  (.nameShort == "Lé Vibe" and .nameLong == "Lé Vibe" and .linuxIconName == "le-vibe")
+  and (.product | type == "object"
     and .nameShort == "Lé Vibe"
     and .nameLong == "Lé Vibe"
-    and .linuxIconName == "le-vibe"' \
+    and .linuxIconName == "le-vibe")
+  ' \
   "${tmp}" >/dev/null; then
-  echo "verify-product-branding-merge-parity: merged product block does not match §7.3 v1 — inspect ${MERGE} and upstream ${SRC} (jq object merge)." >&2
-  jq '.product' "${tmp}" >&2 || true
+  echo "verify-product-branding-merge-parity: merged root does not match §7.3 v1 (top-level + .product) — inspect ${MERGE} and upstream ${SRC} (jq object merge)." >&2
+  jq '{nameShort, nameLong, linuxIconName, product}' "${tmp}" >&2 || true
   exit 1
 fi
 
-echo "verify-product-branding-merge-parity: OK — merged .product matches Lé Vibe / le-vibe (read-only)."
+echo "verify-product-branding-merge-parity: OK — merged root matches Lé Vibe / le-vibe (read-only)."

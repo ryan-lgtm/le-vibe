@@ -17,4 +17,5 @@ def test_verify_product_branding_merge_parity_script_bash_syntax() -> None:
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
     text = script.read_text(encoding="utf-8")
     assert "product-branding-merge.json" in text
-    assert 'nameShort == "Lé Vibe"' in text
+    assert ".nameShort == \"Lé Vibe\"" in text
+    assert ".linuxIconName == \"le-vibe\"" in text
