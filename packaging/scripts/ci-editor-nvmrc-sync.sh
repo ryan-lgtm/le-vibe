@@ -12,12 +12,12 @@ cd "$ROOT"
 [[ -f editor/vscodium/product.json ]] || exit 0
 
 [[ -f editor/.nvmrc && -f editor/vscodium/.nvmrc ]] || {
-  echo "ci-editor-nvmrc-sync: expected editor/.nvmrc and editor/vscodium/.nvmrc" >&2
+  echo "ci-editor-nvmrc-sync: expected editor/.nvmrc and editor/vscodium/.nvmrc — if editor/vscodium/.nvmrc is missing: git submodule update --init editor/vscodium (Fresh clone 14.b: editor/README.md)." >&2
   exit 1
 }
 
 if ! cmp -s editor/.nvmrc editor/vscodium/.nvmrc; then
-  echo "ci-editor-nvmrc-sync: editor/.nvmrc must match editor/vscodium/.nvmrc (see editor/README.md)" >&2
+  echo "ci-editor-nvmrc-sync: editor/.nvmrc differs from editor/vscodium/.nvmrc — update editor/.nvmrc to match upstream pin after a vendor bump (14.a); see editor/README.md." >&2
   exit 1
 fi
 

@@ -26,6 +26,8 @@ def test_ci_editor_nvmrc_sync_script_contract():
     text = (_repo_root() / "packaging" / "scripts" / "ci-editor-nvmrc-sync.sh").read_text(encoding="utf-8")
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
+    assert "differs from" in text
+    assert "14.a" in text
     assert "editor/.nvmrc" in text
     assert "editor/vscodium/.nvmrc" in text
     assert "cmp" in text
