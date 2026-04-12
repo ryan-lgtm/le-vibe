@@ -35,6 +35,18 @@ def test_privacy_and_telemetry_e1_row_lists_linux_compile_cargo_cache():
     assert "spec-phase2.md" in text and "§14" in text
 
 
+def test_ai_pilot_doc_lists_maintainer_full_product_deb_step14():
+    """STEP 17 doc context: PM deb full-product vs default ci.yml le-vibe-deb."""
+    text = (_repo_root() / "docs" / "AI_PILOT_AND_CONTINUE.md").read_text(encoding="utf-8")
+    assert "Maintainer full-product" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "le-vibe-deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
+
+
 def test_ai_pilot_and_continue_table_lists_linux_compile_cargo_cache():
     text = (_repo_root() / "docs" / "AI_PILOT_AND_CONTINUE.md").read_text(encoding="utf-8")
     assert "test_product_spec_section8.py" in text
