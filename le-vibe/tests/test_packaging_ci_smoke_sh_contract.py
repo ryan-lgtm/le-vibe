@@ -23,3 +23,6 @@ def test_packaging_ci_smoke_sh_documents_step14_gate_and_submodule_14b():
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
     assert "ci-qa-hardening.md" in text
+    assert "find not on PATH" in text
+    assert "mktemp not on PATH" in text
+    assert "python3 not on PATH" in text

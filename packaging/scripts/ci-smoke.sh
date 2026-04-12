@@ -7,10 +7,24 @@
 # Optional RAG chunk: docs/rag/le-vibe-phase2-chunks.md (§14 table row; not pytest-gated) — SECURITY.md Related docs; same index as .github/workflows/ci.yml header.
 # STEP 14 / H6: after pytest, ci-editor-gate.sh (same gate as ./editor/smoke.sh, build-le-vibe-ide.yml, build-linux.yml alias). E1: test_product_spec_section8.py — PRODUCT_SPEC *Prioritization* (ide-ci-metadata.txt, retention-days, Pre-binary artifact, editor/BUILD.md, editor/VENDORING.md); test_build_le_vibe_ide_workflow_contract.py — ide-ci-metadata + retention-days + permissions (contents read, actions write) + Summary; test_le_vibe_readme_e1_contract.py — le-vibe/README vs root E1.
 # Fresh clone (14.b): git submodule update --init editor/vscodium when editor/vscodium/ is empty — editor/README.md; docs/ci-qa-hardening.md *Local clone (14.b)*.
+# Requires: find (findutils), mktemp (coreutils), python3 on PATH.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
+
+if ! command -v find >/dev/null 2>&1; then
+  echo "ci-smoke: find not on PATH — install findutils (e.g. sudo apt install findutils) (docs/ci-qa-hardening.md)." >&2
+  exit 1
+fi
+if ! command -v mktemp >/dev/null 2>&1; then
+  echo "ci-smoke: mktemp not on PATH — install coreutils (e.g. sudo apt install coreutils) (docs/ci-qa-hardening.md)." >&2
+  exit 1
+fi
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "ci-smoke: python3 not on PATH — install Python 3 (docs/ci-qa-hardening.md)." >&2
+  exit 1
+fi
 
 echo "ci-smoke: verify Continue Open VSX pin (H4)"
 ./packaging/scripts/verify-continue-pin.sh
