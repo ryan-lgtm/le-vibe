@@ -32,6 +32,8 @@ def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
     assert "Success output (`--with-ide`)" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "Install both packages" in text
+    assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
+    assert "ci-editor-gate.sh" in text
 
 
 def test_apt_repo_releases_doc_opens_with_ci_le_vibe_deb_stack_only_step14():

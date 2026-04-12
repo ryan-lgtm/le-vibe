@@ -45,6 +45,8 @@ Default **`ci.yml`** artifacts ship the **stack** **`le-vibe`** **`.deb`** only.
 
 **Maintainer build output:** Successful **`build-le-vibe-debs.sh --with-ide`** prints a **Full-product install** line (**`sudo apt install`** with both resolved **`.deb`** paths) — **[`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** (*Success output (`--with-ide`)*). Installing both from one directory (or equivalent) — **[`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md)** (*Install both packages*).
 
+**Release QA (optional):** **`LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 packaging/scripts/build-le-vibe-debs.sh --with-ide`** runs **`ci-editor-gate.sh`** before IDE staging (§7.3 **`product.json`** identity) — **[`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** (*Pre-staging gate*); **[`editor/BUILD.md`](../editor/BUILD.md)** (*Debian package for the Lé Vibe IDE*).
+
 For a **release** that demos the **full** stack + branded editor, attach **`le-vibe-ide_*_amd64.deb`** alongside **`le-vibe_*_all.deb`** when both exist; add both **`*.deb`** lines to **`SHA256SUMS`** and run **`sha256sum -c SHA256SUMS`** before publishing.
 
 ## GitHub Releases + checksums
