@@ -22,14 +22,14 @@ Canonical specs: **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** (must-ship p
 
 **PM / project management:** Epics, session manifests, and lazy prompts **coordinate delivery of the IDE + stack**—see **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** *Product and project management — in service of the IDE* and **[`docs/PROMPT_BUILD_LE_VIBE.md`](docs/PROMPT_BUILD_LE_VIBE.md)** (orchestrator order **0→1→14→…**).
 
-**Interim dev:** Until **`editor/`** contains a build, **upstream VSCodium** + this **`le-vibe`** `.deb` remains supported for development.
+**Interim dev:** **`editor/vscodium`** vendors **VSCodium** upstream (git submodule); a **compiled, released** Lé Vibe IDE binary is **not** automated here yet—use system **VSCodium** + **`LE_VIBE_EDITOR`**, or build locally per **`editor/README.md`**, alongside this **`le-vibe`** `.deb`.
 
 ### Monorepo layout
 
 | Path | Contents |
 |------|----------|
 | **`le-vibe/`** | Python package, bootstrap, launcher, tests |
-| **`editor/`** | Lé Vibe IDE sources (populate per **`docs/vscodium-fork-le-vibe.md`**) |
+| **`editor/`** | Lé Vibe IDE — **VSCodium** at **`vscodium/`** (submodule), **`le-vibe-overrides/`** for future branding — **`docs/vscodium-fork-le-vibe.md`** |
 | **`debian/`**, **`packaging/`** | Stack **`.deb`** and wrappers |
 
 Single **git** history; release tags can cover stack + IDE drops together.
@@ -202,7 +202,7 @@ python3 -m pytest tests/
 ## Known limitations
 
 - **Product name:** **Lé Vibe** is **not** “Visual Studio Code”; it is a separate product; the editor is **Code - OSS** / **VSCodium**–class tooling.
-- **Bundled IDE:** This repository does **not** ship a custom Electron/Code OSS build; users install **VSCodium** (or set **`LE_VIBE_EDITOR`**).
+- **Bundled IDE:** There is **no** prebuilt **Lé Vibe–branded** Electron release from this repo yet; **VSCodium** sources live under **`editor/vscodium/`**. For daily use, install **VSCodium** (or set **`LE_VIBE_EDITOR`**).
 - **First run:** Model **download** and Ollama install can take a long time and need disk space; cold starts after that should be faster.
 - **Continue / marketplace:** Extension id and Open VSX availability can vary by editor version; use **`LE_VIBE_CONTINUE_EXTENSION`** if install fails.
 - **Icon / brand (Roadmap H5):** Shipped **`hicolor`** SVG (see **[`docs/brand-assets.md`](docs/brand-assets.md)**); optional PNG exports and **`docs/screenshots/`** conventions in **[`docs/screenshots/README.md`](docs/screenshots/README.md)**.
