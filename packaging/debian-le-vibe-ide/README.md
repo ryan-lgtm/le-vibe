@@ -14,7 +14,7 @@ This directory is a **separate Debian source** (sibling to the root **`debian/`*
 
 ## Lintian (optional)
 
-After a successful build, from the monorepo root: **`lintian packaging/le-vibe-ide_*_*.deb`** (install the **`lintian`** package). Use tags as hints — **[`docs/ci-qa-hardening.md`](../../docs/ci-qa-hardening.md)**; the stack **`debian/`** package may run stricter QA in CI (**STEP 10** / **H3**).
+**`./packaging/scripts/build-le-vibe-ide-deb.sh`** runs **`lintian`** automatically when it is on **`PATH`** after **`dpkg-buildpackage`**. Tags are **non-fatal** unless **`LEVIBE_IDE_LINTIAN_STRICT=1`** is set in the environment. Manually, from the monorepo root: **`lintian packaging/le-vibe-ide_*_*.deb`**. Use tags as hints — **[`docs/ci-qa-hardening.md`](../../docs/ci-qa-hardening.md)**; the stack **`debian/`** package may run stricter QA in CI (**STEP 10** / **H3**).
 
 The **`le-vibe`** package **`Suggests: le-vibe-ide`** so both can install from the same apt suite when published.
 
