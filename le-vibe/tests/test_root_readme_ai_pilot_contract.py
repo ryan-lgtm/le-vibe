@@ -26,6 +26,8 @@ def test_root_readme_releases_h1_lists_stack_artifact_vs_ide_deb_step14():
     assert "Full product (STEP 14 / §7.3)" in text
     assert "le-vibe-ide_*_amd64.deb" in text
     assert "IDE package" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
 
 
 def test_root_readme_documents_ai_pilot_and_user_gate():
