@@ -8,6 +8,8 @@
 
 **Debian package (Linux):** [`debian/le-vibe.README.Debian`](debian/le-vibe.README.Debian) installs as **`/usr/share/doc/le-vibe/README.Debian`** — post-install flow, **§5** **`.lvibe/`** consent, **Phase 2** scope (**`editor/`** / Flatpak — **`spec-phase2.md` §14**), pointers to **`docs/PRODUCT_SPEC.md`** / **`docs/README.md`** (see **`PRODUCT_SPEC` §9** *Maintainer index* and **[`spec-phase2.md`](spec-phase2.md)** *Debian install*); [`debian/control`](debian/control) *Description* cross-refs **`README.Debian`** for **`build-le-vibe-ide`** **`ide-ci-metadata`** (**`upload-artifact`** **`retention-days`**, workflow **`permissions:`**) / **`LE_VIBE_EDITOR`** on GitHub Actions **Summary** (clone developers).
 
+**Full-product maintainer build (STEP 14 / §7.3):** From the monorepo root, **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** builds **`le-vibe_*_all.deb`** and **`le-vibe-ide_*_amd64.deb`** when **`editor/vscodium/VSCode-linux-*`** exists and prints **Full-product install** on success — **[`docs/PM_DEB_BUILD_ITERATION.md`](docs/PM_DEB_BUILD_ITERATION.md)** (*Success output (`--with-ide`)*); install both **`.deb`** files — **[`packaging/debian-le-vibe-ide/README.md`](packaging/debian-le-vibe-ide/README.md)** (*Install both packages*).
+
 ## Goal
 
 Build a one-shot bootstrapper that prepares a machine for local AI-assisted coding with Ollama, automatically selects the **best compatible local model based on available hardware**, starts Ollama in the background, and provides the user with a ready-to-use **Code - OSS** + **Continue**-oriented setup for a free local vibe-coding workflow.
