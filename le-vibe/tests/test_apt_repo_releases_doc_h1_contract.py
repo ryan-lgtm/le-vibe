@@ -19,3 +19,12 @@ def test_apt_repo_releases_doc_lists_ci_artifact_and_changelog():
     assert "H1" in text or "Roadmap H1" in text
     assert "PM_STAGE_MAP" in text
     assert "STEP 8" in text
+
+
+def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
+    """STEP 14 / §7.3: H1 doc names sibling le-vibe-ide .deb + build scripts for full demo releases."""
+    text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
+    assert "le-vibe-ide" in text
+    assert "build-le-vibe-ide-deb.sh" in text
+    assert "packaging/debian-le-vibe-ide/README.md" in text
+    assert "STEP 14" in text

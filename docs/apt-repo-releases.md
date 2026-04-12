@@ -37,6 +37,12 @@ Workflow **`.github/workflows/ci.yml`** uploads a single artifact bundle **`le-v
 
 CI runs **`sha256sum -c SHA256SUMS`** after generating the manifest so a corrupted or mismatched tree fails the job.
 
+### IDE package (`le-vibe-ide`, STEP 14 / §7.3)
+
+Default **`ci.yml`** artifacts ship the **stack** **`le-vibe`** **`.deb`** only. The **Lé Vibe IDE** is a **sibling** Debian source under **`packaging/debian-le-vibe-ide/`**: after **`editor/vscodium/VSCode-linux-*`** exists, run **`packaging/scripts/build-le-vibe-ide-deb.sh`** (or **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** with the stack — **[`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)**). Full story — **[`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md)**, **[`editor/BUILD.md`](../editor/BUILD.md)**.
+
+For a **release** that demos the **full** stack + branded editor, attach **`le-vibe-ide_*_amd64.deb`** alongside **`le-vibe_*_all.deb`** when both exist; add both **`*.deb`** lines to **`SHA256SUMS`** and run **`sha256sum -c SHA256SUMS`** before publishing.
+
 ## GitHub Releases + checksums
 
 When you cut a **release** (tag + GitHub Release):
