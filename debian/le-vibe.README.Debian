@@ -15,6 +15,10 @@ Lé Vibe — quick steps after apt install
 
 4. Open the editor, confirm Continue uses apiBase http://127.0.0.1:11435 (managed Ollama).
 
+IDE sources in a clone (developers)
+------------------------------------
+End users who only install this **`.deb`** do not need the monorepo. If you **do** have a full clone with **`editor/vscodium`** initialized (**`git submodule update --init --recursive`**), run **`./editor/smoke.sh`** from the repository root to exercise the same **H6** layout and script checks as **`build-le-vibe-ide.yml`** (no Electron compile). See **`editor/README.md`** and **`docs/ci-qa-hardening.md`** (*IDE smoke*).
+
 Model lock (inspectable)
 ------------------------
 Hardware tiering picks a **concrete** Ollama model tag for this machine. It is stored as:
