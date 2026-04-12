@@ -26,6 +26,7 @@ def test_ci_vscodium_linux_dev_build_documents_overrides_hook():
     assert "le-vibe-overrides/build-env.sh" in text
     assert "build-env.lvibe-defaults.sh" in text
     assert "product-branding-merge.json" in text
+    assert ".[0] * .[1]" in text
     assert "sudo apt install jq" in text
     assert "sync-linux-icon-assets.sh" in text
     assert "APP_NAME:-VSCodium" in text
