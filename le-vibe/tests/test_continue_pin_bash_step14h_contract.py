@@ -28,6 +28,9 @@ def test_sync_continue_config_script_documents_missing_generated_yaml():
     assert "le-vibe/README.md" in text
     assert "PRODUCT_SPEC §5" in text or "PRODUCT_SPEC §5–§8" in text
     assert "~/.config/le-vibe/" in text
+    assert "mkdir not on PATH" in text
+    assert "realpath not on PATH" in text
+    assert "readlink not on PATH" in text
 
 
 def test_verify_continue_pin_script_documents_pin_file():
