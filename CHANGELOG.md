@@ -22,6 +22,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Documentation
 
+- **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** header — STEP **14** **E1** (metadata / **`LE_VIBE_EDITOR`** docs) cites **`test_product_spec_section8.py`**, **`test_build_le_vibe_ide_workflow_contract.py`**, **`test_le_vibe_readme_e1_contract.py`** + **`ci-smoke.sh`** / **`editor/smoke.sh`**.
 - **[`packaging/scripts/ci-smoke.sh`](../packaging/scripts/ci-smoke.sh)** header — STEP **14** / **H6** line names **`test_product_spec_section8.py`**, **`test_build_le_vibe_ide_workflow_contract.py`**, **`test_le_vibe_readme_e1_contract.py`** (*Prioritization* metadata / **`ide-ci-metadata`** / package **`README`**).
 - **[`docs/AI_PILOT_AND_CONTINUE.md`](docs/AI_PILOT_AND_CONTINUE.md)** §4 table — **`PRODUCT_SPEC_SECTION8_EVIDENCE`** row lists **`test_product_spec_section8.py`** *Prioritization* metadata strings.
 - **[`spec-phase2.md`](spec-phase2.md)** §14 *Honesty vs CI* — **`test_le_vibe_readme_e1_contract.py`** clause names **`PRODUCT_SPEC` *Prioritization*** **`ide-ci-metadata.txt`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`** (package **`README`** vs root **E1**).
