@@ -26,3 +26,5 @@ def test_editor_le_vibe_overrides_readme_documents_launcher_and_h6_gate():
     assert "packaging/icons/" in text
     assert "build-env.sh.example" in text
     assert "ci-vscodium-linux-dev-build.sh" in text
+    assert "14.d" in text
+    assert "vscodium-fork-le-vibe.md" in text

@@ -38,7 +38,7 @@ Exact paths follow the VSCodium / `vscode` tree you import:
 
 Upstream VSCodium prepare/build scripts remain the source of truth for **how** to compile; this doc stays a **pointer** and policy shell, not a full upstream mirror.
 
-## Branding & overrides (**`PRODUCT_SPEC`** §7.2)
+## Branding & overrides (**14.d** — **`PRODUCT_SPEC`** §7.2)
 
 **Honest snapshot:** the monorepo does **not** yet ship a **Lé Vibe–branded** IDE binary from CI; interim **`LE_VIBE_EDITOR`** → system **VSCodium** / **`codium`** remains valid for development (**[`spec-phase2.md`](../spec-phase2.md) §14**). Optional **`editor/le-vibe-overrides/build-env.sh`** (template **`build-env.sh.example`**) is sourced by **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** before **`dev/build.sh`** when present — use for upstream env experiments; **§7.2** for material product identity.
 

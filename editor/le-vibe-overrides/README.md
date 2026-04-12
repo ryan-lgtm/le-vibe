@@ -1,6 +1,6 @@
 # Lé Vibe overrides (placeholder)
 
-**Material product naming, icons, desktop id, and About copy** follow **`docs/PRODUCT_SPEC.md`** §7.2. If the orchestrator cannot pick a safe default from the specs, **halt** and print **`USER RESPONSE REQUIRED`** (numbered questions)—do not guess Lé Vibe–visible branding.
+**Fine-grain STEP 14.d:** policy and cross-links live in **`docs/vscodium-fork-le-vibe.md`** (*Branding & overrides*). **Material product naming, icons, desktop id, and About copy** follow **`docs/PRODUCT_SPEC.md`** §7.2. If the orchestrator cannot pick a safe default from the specs, **halt** and print **`USER RESPONSE REQUIRED`** (numbered questions)—do not guess Lé Vibe–visible branding.
 
 This directory is reserved for **Lé Vibe–only** inputs that upstream **VSCodium** does not ship: documented deltas against **`editor/vscodium/product.json`**, Linux **`.desktop`** / app-id notes, icon sources aligned with **[`packaging/icons/`](../../packaging/icons/)**, and maintainer patch notes—policy shell in **`docs/vscodium-fork-le-vibe.md`**.
 

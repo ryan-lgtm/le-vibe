@@ -26,6 +26,18 @@ def test_build_le_vibe_ide_workflow_writes_le_vibe_editor_docs_to_metadata():
     assert "dev/build.sh" in text
 
 
+def test_build_le_vibe_ide_workflow_linux_compile_artifact_14e():
+    """STEP 14.e — opt-in full compile uploads vscodium-linux-build.tar.gz when VSCode-linux-* exists."""
+    text = (_repo_root() / ".github" / "workflows" / "build-le-vibe-ide.yml").read_text(encoding="utf-8")
+    assert "14.e" in text
+    assert "vscodium-linux-build.tar.gz" in text
+    assert "le-vibe-vscodium-linux-" in text
+    assert "VSCode-linux-" in text
+    assert "upload-artifact@v4" in text
+    assert "actions/cache@v4" in text
+    assert "linux_compile-cargo" in text
+
+
 def test_build_linux_yaml_uses_build_le_vibe_ide_and_documents_inherited_metadata():
     text = (_repo_root() / ".github" / "workflows" / "build-linux.yml").read_text(encoding="utf-8")
     assert "uses: ./.github/workflows/build-le-vibe-ide.yml" in text

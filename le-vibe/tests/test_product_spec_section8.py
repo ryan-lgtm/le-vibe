@@ -112,3 +112,18 @@ def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci()
     assert "Pre-binary artifact" in text
     assert "editor/BUILD.md" in text
     assert "editor/VENDORING.md" in text
+    assert "linux_compile" in text
+    assert "actions/cache@v4" in text
+    assert ".cargo" in text
+    assert "spec-phase2.md" in text and "§14" in text
+
+
+def test_product_spec_section8_evidence_intro_lists_linux_compile_cargo_cache():
+    """E1: PRODUCT_SPEC_SECTION8_EVIDENCE intro stays aligned with PRODUCT_SPEC *Prioritization* (STEP 14.e)."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
+    assert "test_product_spec_section8.py" in text
+    assert "linux_compile" in text
+    assert "actions/cache@v4" in text
+    assert ".cargo" in text
+    assert "spec-phase2.md" in text and "§14" in text

@@ -18,6 +18,10 @@ def test_le_vibe_readme_lists_core_e1_contract_modules():
     assert "test_ci_yml_submodules_contract.py" in text
     assert "test_root_readme_ai_pilot_contract.py" in text
     assert "test_build_le_vibe_ide_workflow_contract.py" in text
+    assert "linux_compile" in text
+    assert "actions/cache@v4" in text
+    assert ".cargo" in text
+    assert "spec-phase2.md" in text
     assert "ide-ci-metadata.txt" in text
     assert "retention-days" in text
     assert "permissions:" in text

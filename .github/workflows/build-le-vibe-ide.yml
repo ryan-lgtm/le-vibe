@@ -184,6 +184,17 @@ jobs:
       - name: Install Rust (vscode native modules)
         uses: dtolnay/rust-toolchain@stable
 
+      # H6: speed up repeat linux_compile runs — vscode/ ripgrep and other crates download into ~/.cargo.
+      - name: Cache Cargo registry (linux_compile)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-le-vibe-linux_compile-cargo-${{ hashFiles('editor/vscodium/product.json', 'editor/.nvmrc') }}
+          restore-keys: |
+            ${{ runner.os }}-le-vibe-linux_compile-cargo-
+
       - name: Full VSCodium linux build (dev/build.sh)
         run: ./packaging/scripts/ci-vscodium-linux-dev-build.sh
 

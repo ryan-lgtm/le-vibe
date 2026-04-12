@@ -4,6 +4,16 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ## [Unreleased]
 
+### Documentation
+
+- **[`docs/README.md`](docs/README.md)** *Document* table (**`PRODUCT_SPEC_SECTION8_EVIDENCE`**) — *Prioritization* substring lists **`linux_compile`**, **`actions/cache@v4`**, **`~/.cargo`**, **`spec-phase2.md` §14**; E1 **`test_docs_readme_section8_evidence_row_contract.py`**.
+- **[`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`](docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md)** intro — **`test_product_spec_section8.py`** *Prioritization* clause lists **`linux_compile`**, **`actions/cache@v4`**, **`~/.cargo`**, **`spec-phase2.md` §14** (aligned with **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)**); E1 **`test_product_spec_section8.py`** (`test_product_spec_section8_evidence_intro_lists_linux_compile_cargo_cache`).
+- **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** *Prioritization* — **How to sequence work** names opt-in **`linux_compile`**, **`actions/cache@v4`**, **`~/.cargo`**, **`spec-phase2.md` §14** (Cargo cache honesty); E1 **`test_product_spec_section8.py`**, **`test_le_vibe_readme_e1_contract.py`**; root + **`le-vibe/README.md`** *Tests* **E1** parenthetical for **`test_product_spec_section8.py`**.
+- **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)** — STEP **2** *Also read* lists **`test_session_orchestrator.py`**, **`test_session_orchestration_spec_step2_contract.py`**, **STEP 2** vs **STEP 14** (**H6**) pointer; E1 **`test_pm_stage_map_step2_contract.py`**.
+- **[`spec-phase2.md`](spec-phase2.md) §14** *Honesty vs CI* — **STEP 14.j** names E1 **`test_spec_phase2_section14_snapshot_contract.py`** as the lock for this table vs **`CHANGELOG.md`** (**STEP 14.j**).
+- **[`editor/BUILD.md`](editor/BUILD.md)** *14.h* — **`sync-continue-config.sh`**, **`verify-continue-pin.sh`**, **`ci-smoke.sh`** pointers; **[`docs/continue-extension-pin.md`](docs/continue-extension-pin.md)** — E1 **`test_continue_extension_pin_doc_step14_contract.py`**, **`test_editor_build_md_contract.py`** (**STEP 14.h**).
+- **[`editor/BUILD.md`](editor/BUILD.md)** *14.g* — **`_default_editor`** order documents **`/usr/bin/le-vibe-ide`** before **`/usr/bin/codium`** (matches **`le_vibe.launcher`** and **[`editor/README.md`](editor/README.md)**); E1 **`test_editor_build_md_contract.py`**, **`test_editor_readme_launcher_order_14g_contract.py`** (**STEP 14.g**).
+
 ### Repository
 
 - **`editor/le-vibe-overrides/build-env.sh.example`** — optional upstream env (**`APP_NAME`**, **`BINARY_NAME`**, …) for **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** before **`dev/build.sh`**; local **`editor/le-vibe-overrides/build-env.sh`** gitignored (copy from example). **`spec-phase2.md` §14**, **`docs/vscodium-fork-le-vibe.md`**, **`editor/BUILD.md`**; E1 **`test_ci_vscodium_linux_dev_build_overrides_contract.py`** + related contracts.
@@ -17,11 +27,13 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Phase 2 / §14 honesty (STEP 14.j)
 
-- **[`spec-phase2.md`](spec-phase2.md) §14** — *Single “Lé Vibe IDE” shell* row documents optional **`linux_compile`**, **`vscodium-linux-build.tar.gz`**, maintainer tracks **14.a–14.j**, and remaining gaps (branding in **build** vs **`le-vibe-overrides/`** notes only; **`linux_compile`** not guaranteed green on default runners; **PR** CI still pre-binary metadata). *Honesty vs CI* names **STEP 14.j** + **`CHANGELOG.md`** + E1 **`test_editor_build_md_contract.py`**, **`test_continue_extension_pin_doc_step14_contract.py`**, **`test_vscodium_fork_le_vibe_branding_contract.py`**.
+- **[`spec-phase2.md`](spec-phase2.md) §14** — *Single “Lé Vibe IDE” shell* row documents optional **`linux_compile`**, **`vscodium-linux-build.tar.gz`**, **`actions/cache@v4`** / **`~/.cargo`** (**`linux_compile-cargo`**), maintainer tracks **14.a–14.j**, and remaining gaps (branding in **build** vs **`le-vibe-overrides/`** notes only; **`linux_compile`** not guaranteed green on default runners; **PR** CI still pre-binary metadata). *Honesty vs CI* names **STEP 14.j** + **`CHANGELOG.md`** + E1 **`test_editor_build_md_contract.py`**, **`test_continue_extension_pin_doc_step14_contract.py`**, **`test_vscodium_fork_le_vibe_branding_contract.py`**.
 - **`le-vibe/tests/test_spec_phase2_section14_snapshot_contract.py`** — locks the above substrings.
 
 ### CI
 
+- **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — job **`linux_compile`**: **`actions/cache@v4`** for **`~/.cargo/registry`** + **`~/.cargo/git`** (key **`linux_compile-cargo`**); **[`editor/BUILD.md`](../editor/BUILD.md)** *CI*; E1 **`test_build_le_vibe_ide_workflow_contract.py`** (**STEP 14.e** / **H6** compile reliability).
+- **[`packaging/scripts/ci-editor-gate.sh`](../packaging/scripts/ci-editor-gate.sh)** — **`bash -n`** on **`editor/smoke-lvibe-editor.sh`** when **`editor/`** is vendored (**STEP 14.c**); E1 **`test_editor_smoke_lvibe_editor_14c_contract.py`**.
 - **[`.github/workflows/build-linux.yml`](../.github/workflows/build-linux.yml)** — header comments name inherited **`build-le-vibe-ide`** pre-binary story (**`ide-ci-metadata`**, **`retention-days`**, **`permissions`**).
 - **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — workflow **`permissions:`** **`contents: read`**, **`actions: write`** (E1: **`test_build_le_vibe_ide_workflow_contract.py`**).
 - **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **Job summary** (when sources present) lists **`ide-ci-metadata.txt`** **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`** (matches uploaded artifact; E1: **`test_build_le_vibe_ide_workflow_contract.py`**); **[`editor/README.md`](../editor/README.md)** *CI* and **[`docs/ci-qa-hardening.md`](docs/ci-qa-hardening.md)** (*Scope* + *Related docs*) describe the **GitHub Actions** run **Summary** tab.
@@ -29,6 +41,16 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Tests
 
+- **`test_docs_readme_section8_evidence_row_contract.py`** — **[`docs/README.md`](../docs/README.md)** **`PRODUCT_SPEC_SECTION8_EVIDENCE`** table row lists **`linux_compile`** / **`actions/cache@v4`** / **`~/.cargo`** / **`spec-phase2.md` §14** (*Prioritization*).
+- **`test_pm_stage_map_step2_contract.py`** — **[`docs/PM_STAGE_MAP.md`](../docs/PM_STAGE_MAP.md)** STEP **2** row keeps **`session_orchestrator`** + **STEP 2** E1 modules (**STEP 2** vs **STEP 14**).
+- **`test_spec_phase2_section14_snapshot_contract.py`** — **14.j** locks **`STEP 14.j`**, self-reference **`test_spec_phase2_section14_snapshot_contract.py`**, and **§14** honesty strings in **[`spec-phase2.md`](../spec-phase2.md)**.
+- **`test_vscodium_fork_le_vibe_branding_contract.py`** — **`test_vscodium_fork_doc_release_smoke_checklist_14i`** locks the **14.i** table (**`python3 -m pytest`**, **`dpkg-buildpackage`**, **`debian/changelog`**, tarball, **`continue-config.yaml`**, **`ci-editor-gate`**) in **[`docs/vscodium-fork-le-vibe.md`](../docs/vscodium-fork-le-vibe.md)**.
+- **`test_continue_extension_pin_doc_step14_contract.py`**, **`test_editor_build_md_contract.py`** — **14.h** locks **`### STEP 14.h`**, **`verify-continue-pin.sh`**, **`sync-continue-config.sh`**, **`ci-smoke.sh`** in **[`docs/continue-extension-pin.md`](../docs/continue-extension-pin.md)** + **[`editor/BUILD.md`](../editor/BUILD.md)**.
+- **`test_editor_readme_launcher_order_14g_contract.py`** — **[`editor/README.md`](../editor/README.md)** lists **`/usr/bin/le-vibe-ide`** before **`/usr/bin/codium`** (**STEP 14.g**).
+- **`test_editor_build_md_contract.py`** — **14.f** locks **`Installable layout`**, **`realpath`**, **`vscodium/docs/usage.md`**, **`le-vibe-vscodium-linux-`** in **[`editor/BUILD.md`](../editor/BUILD.md)**; **14.g** locks **`_default_editor`** / **`le_vibe.launcher`** resolution order; **`test_vscodium_fork_le_vibe_branding_contract.py`** — **`test_vscodium_fork_doc_installable_tree_14f`** locks the **14.f** tarball path in **[`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md)** (**STEP 14.f**).
+- **`test_build_le_vibe_ide_workflow_contract.py`** — **`test_build_le_vibe_ide_workflow_linux_compile_artifact_14e`** locks **`14.e`**, **`vscodium-linux-build.tar.gz`**, **`le-vibe-vscodium-linux-`**, **`VSCode-linux-`**, **`upload-artifact@v4`** in **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)**; **`test_editor_build_md_contract_14e.py`** locks the same tarball / artifact name story in **[`editor/BUILD.md`](../editor/BUILD.md)** (**STEP 14.e**).
+- **`test_editor_le_vibe_overrides_readme_contract.py`**, **`test_vscodium_fork_le_vibe_branding_contract.py`** — **14.d** substring lock on **[`editor/le-vibe-overrides/README.md`](editor/le-vibe-overrides/README.md)** + **[`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md)**.
+- **`test_editor_smoke_lvibe_editor_14c_contract.py`** — **`editor/smoke-lvibe-editor.sh`** launcher strings; **`ci-editor-gate.sh`** runs **`bash -n`** on that script (**STEP 14.c**).
 - **`test_editor_build_md_contract.py`** — **14.b** locks **`get_repo.sh`**, **`cwd-sensitive`**, **`vscode/`**, **`dev/build.sh`**, and (when **`editor/vscodium/`** is present) **`get_repo.sh`** + **`docs/howto-build.md`** on disk.
 - **`test_editor_nvmrc_parity_contract.py`** — **`editor/.nvmrc`** matches **`editor/vscodium/.nvmrc`** when the submodule is present; **`ci-editor-nvmrc-sync.sh`** substring lock (**STEP 14.a**).
 - **`test_ci_vscodium_linux_dev_build_overrides_contract.py`** — **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** documents **`editor/le-vibe-overrides/build-env.sh`** before **`dev/build.sh`**.
@@ -53,6 +75,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Documentation
 
+- **[`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md)** — *Branding & overrides* heading names **14.d**; **[`editor/le-vibe-overrides/README.md`](editor/le-vibe-overrides/README.md)** names **14.d** and cross-links the fork doc (**STEP 14.d**); E1 **`test_editor_le_vibe_overrides_readme_contract.py`**, **`test_vscodium_fork_le_vibe_branding_contract.py`**.
 - **`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`** intro — **`test_product_spec_section8.py`** parenthetical names §9 **`PRODUCT_SPEC_SECTION8_EVIDENCE`** ↔ **`test_build_*`** (**`build-linux.yml`** **`uses:`**).
 - **`docs/PRODUCT_SPEC.md`** §9 table + §10 — **`test_build_le_vibe_ide_workflow_contract.py`** ↔ **`build-le-vibe-ide.yml`** + **`build-linux.yml`** (**`uses:`**); **`spec-phase2.md` §14** *Honesty vs CI* — sibling **`build-linux.yml`** **`uses:`** beside **`build-le-vibe-ide.yml`** in the **`test_build_*`** clause.
 - **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** header — *STEP 14* comment names **`build-le-vibe-ide`** pre-binary **`ide-ci-metadata`**, **`retention-days`**, **`permissions`** (**`contents` read**, **`actions` write**); root **`README.md`** *CI* (**Lé Vibe IDE**) — same bundle beside **`upload-artifact`**.

@@ -50,15 +50,22 @@ def test_editor_build_md_contract_ci_compile_pointer():
 def test_editor_build_md_contract_tarball_and_codium_path_14f():
     text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")
     assert "14.f" in text
+    assert "Installable layout" in text
     assert "VSCode-linux-" in text
     assert "bin/codium" in text
     assert "vscodium-linux-build.tar.gz" in text
+    assert "le-vibe-vscodium-linux-" in text
+    assert "realpath" in text
+    assert "vscodium/docs/usage.md" in text
     assert "VSCodium-linux-" in text
 
 
 def test_editor_build_md_contract_default_le_vibe_editor_packaging_14g():
     text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")
     assert "14.g" in text
+    assert "le_vibe.launcher" in text
+    assert "_default_editor" in text
+    assert "/usr/bin/le-vibe-ide" in text
     assert "le-vibe-ide" in text
     assert "Recommends:" in text
     assert "§7.2" in text
@@ -71,3 +78,7 @@ def test_editor_build_md_contract_continue_pin_14h():
     assert "continue-extension-pin.md" in text
     assert "continue-openvsx-version" in text
     assert "install-continue-extension.sh" in text
+    assert "verify-continue-pin.sh" in text
+    assert "sync-continue-config.sh" in text
+    assert "le-vibe-setup-continue" in text
+    assert "ci-smoke.sh" in text

@@ -1,22 +1,82 @@
 # Lé Vibe
 
-**One repository, one product (monorepo):** **`le-vibe/`** — bootstrap, **`lvibe`** launcher, managed **Ollama**, **`.lvibe/`** workspace hub, **`le-vibe`** **`.deb`**; **`editor/`** — **Lé Vibe IDE** (Code - OSS–based desktop app; vendored build per [`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md)). It is **not** “Visual Studio Code”; attribute the editor as **Code - OSS** in About and docs.
+**How it fits together (simple view):** your **editor**, the **Continue** assistant, and a **local model** (via **Ollama**) stay on your computer; you can optionally keep **project notes** in **`.lvibe/`** so the AI does not rely on huge, noisy scans of your whole repo.
 
-## Project status (early access)
+```mermaid
+flowchart TB
+    subgraph you_and_project[You and your project]
+        U[You]
+        P[Your code and files]
+    end
 
-Lé Vibe is **under active development**. The **Python stack** (Debian **`.deb`**, **`lvibe`**, hardware-aware model choice, managed Ollama on a **dedicated port**, Continue integration, and **consent-gated** **`.lvibe/`** workspace memory per **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)**) is the most mature part of the tree. The **branded Lé Vibe IDE** (Electron/Code OSS build from **`editor/`**) is **not** yet shipped as a prebuilt release from CI—today you typically use **VSCodium** (or any Code OSS–class editor) and point **`LE_VIBE_EDITOR`** at it; see **[`editor/README.md`](editor/README.md)**. APIs, docs, and tests may evolve; use **GitHub Issues** in this repository for feedback and contributions. Clone with **`git clone --recurse-submodules`** (or **`git submodule update --init`**) so **`editor/vscodium`** is present for IDE smoke checks.
+    subgraph lv[Lé Vibe]
+        IDE[Lé Vibe IDE<br/>Code OSS–based editor]
+        CO[Continue<br/>AI chat and edits inside the editor]
+    end
 
-Canonical specs: **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** (must-ship product requirements), [`spec.md`](spec.md) (Phase 1 bootstrap), [`spec-phase2.md`](spec-phase2.md) (Phase 2 IDE direction, managed Ollama lifecycle, `.deb` — honest **in-repo** vs deferred scope in **§14**, **H6**/**H7**). **Optional RAG / embeddings** (not canonical): [`docs/rag/le-vibe-phase2-chunks.md`](docs/rag/le-vibe-phase2-chunks.md) (`lv-meta-overview`) — see **`spec-phase2.md`** *RAG / embeddings*.
+    subgraph local[On your machine only]
+        OL[Ollama<br/>runs the local LLM]
+    end
 
-**Formal authority roster (orchestration + evidence + lazy prompts):** [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) §9.
+    MEM[(Optional: .lvibe folder<br/>small project memory you approve)]
 
-**Phased work / lazy prompts for PM & engineering:** [`docs/PROMPT_BUILD_LE_VIBE.md`](docs/PROMPT_BUILD_LE_VIBE.md) (Master orchestrator STEPs **0–17**).
+    U --> IDE
+    P --> IDE
+    IDE --> CO
+    CO <-->|asks / answers| OL
+    CO --> IDE
+    MEM -.->|extra context when enabled| CO
+```
 
-**Orchestration & regression evidence:** [`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md) (STEP → primary PM doc), [`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`](docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md) (E1 / **§1**/**H8** + §5–§10 audit; filename historic).
+**Lé Vibe** is a **local-first** toolkit for AI-assisted coding: your models run via **Ollama**, your editor is **Code - OSS** lineage (not Microsoft “Visual Studio Code” as the product name), and your assistant flows go through the open **Continue** extension—wired together with honest **hardware-aware** model choice, a **managed Ollama** lifecycle, and optional **workspace memory** under **`.lvibe/`** (consent-gated, size-capped; see [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) §5).
 
-**Roadmap H5 (brand / screenshots):** [`docs/brand-assets.md`](docs/brand-assets.md) (**§1** naming, incl. user-visible **H8** **`.github/`** copy — *Naming (must ship)*), [`docs/screenshots/README.md`](docs/screenshots/README.md) — **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md) STEP 11**.
+This **monorepo** holds:
 
-**Documentation index & privacy (Roadmap H8):** **[`docs/README.md`](docs/README.md)** lists maintainer guides (**Roadmap H1–H8**; **E1 / pytest** next to the formal roster; cross-linked from **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** §9 *Maintainer index*); **[`docs/privacy-and-telemetry.md`](docs/privacy-and-telemetry.md)** summarizes localhost-first behavior and upstream (**Continue**, editor) policies; **[`SECURITY.md`](SECURITY.md)** covers vulnerability reporting. **[`docs/SESSION_ORCHESTRATION_SPEC.md`](docs/SESSION_ORCHESTRATION_SPEC.md)** intro documents the same **H8** trust chain (**`docs/README`** *Product surface*, **`privacy-and-telemetry`** *E1 contract tests*, **`SECURITY`** *Related docs*). **`.github/`** (per **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md) STEP 12** — *E1* when editing **[`workflows/ci.yml`](.github/workflows/ci.yml)**, **[`dependabot.yml`](.github/dependabot.yml)**, or **[`ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/)** ([`config.yml`](.github/ISSUE_TEMPLATE/config.yml) **`#` H8** maintainer lines): [`docs/README.md`](docs/README.md) *Product surface*, [`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`](docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md) §10): CI, Dependabot, issue templates (**`README.Debian`** + **`spec-phase2.md` §14** vs **H6**/**H7**; optional **`docs/rag/le-vibe-phase2-chunks.md`** on **bug**/**feature**/**documentation** intros — **`SECURITY`** *Related docs*). **`apt`** / **`.deb`:** on-disk post-install doc **`/usr/share/doc/le-vibe/README.Debian`** ([`debian/le-vibe.README.Debian`](debian/le-vibe.README.Debian)).
+| Part | Role |
+|------|------|
+| **`le-vibe/`** | Python package: bootstrap, **`lvibe`** launcher, tests, Continue/workspace integration |
+| **`debian/`** / **`packaging/`** | **`.deb`** install of the stack (launchers, config hooks) |
+| **`editor/`** | **Lé Vibe IDE** — Code - OSS–based desktop shell; **`vscodium/`** ([VSCodium](https://github.com/VSCodium/vscodium) submodule), **`le-vibe-overrides/`** for branding inputs. Policy and build notes: [`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md) |
+
+**If you are new here:** read **§ What you get · Early access · Limitations** below, then skim **Documentation** for specs and trust docs. The sections after that are **operator- and maintainer-oriented** (install paths, CI, tests)—they evolve as engineering lands.
+
+### What you get today
+
+- **Linux-oriented stack** — Debian **`.deb`**, command-line **`lvibe .`** to open a folder, **managed Ollama** on a **dedicated localhost port** (so quit can tear down *this* session without guessing about other tools), Continue config under **`~/.config/le-vibe/`**, and **`.lvibe/`** workspace hub when you **opt in** to project memory.
+- **Editor story** — The goal is a single installable **Lé Vibe** desktop app from **`editor/`**. **Right now**, CI does **not** ship a finished **Lé Vibe–branded** Electron release; most people use **VSCodium** (or another Code OSS build) and set **`LE_VIBE_EDITOR`** — see [`editor/README.md`](editor/README.md).
+
+### Early access
+
+Lé Vibe is **under active development**: behavior, packaging, and docs **will change** as we ship. The **Python stack and `.deb`** are ahead of the **branded IDE binary** from CI. Use **GitHub Issues** in this repository for questions and contributions. Clone with **`git clone --recurse-submodules`** (or **`git submodule update --init`**) so **`editor/vscodium`** is present for [`./editor/smoke.sh`](editor/smoke.sh) and IDE workflows.
+
+### Limitations (read this before judging a release)
+
+- **Not a VS Code product** — Lé Vibe is a separate name; the editor is **Code - OSS** / **VSCodium**-class tooling.
+- **No prebuilt Lé Vibe–only desktop bundle from CI yet** — use **VSCodium** + **`LE_VIBE_EDITOR`** until **`editor/`** release work catches up.
+- **First run** can take a long time (Ollama install, **model pull**, disk).
+- **Linux** is the primary packaging story today; other platforms are roadmap ([`spec-phase2.md`](spec-phase2.md)).
+- A longer list lives under [**Known limitations**](#known-limitations) later in this file.
+
+## Documentation
+
+| Doc | Purpose |
+|-----|---------|
+| [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) | Must-ship product requirements (naming, **`lvibe`**, **`.lvibe/`**, welcome, secrets, §9 authority roster) |
+| [`spec.md`](spec.md) | Phase 1 — bootstrap and model tiering |
+| [`spec-phase2.md`](spec-phase2.md) | Phase 2 — IDE product, managed Ollama lifecycle, **§14** in-repo honesty vs deferred **H6**/**H7** |
+| [`docs/PROMPT_BUILD_LE_VIBE.md`](docs/PROMPT_BUILD_LE_VIBE.md) | Master orchestrator STEPs **0–17** (engineering queue) |
+| [`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md) | STEP → primary PM doc for implementers |
+| [`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`](docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md) | Regression evidence (E1 / §5–§10; filename historic) |
+| [`docs/SESSION_ORCHESTRATION_SPEC.md`](docs/SESSION_ORCHESTRATION_SPEC.md) | PM session JSON, workspace manifests, orchestration |
+| [`docs/AI_PILOT_AND_CONTINUE.md`](docs/AI_PILOT_AND_CONTINUE.md) | Continue construction, **Please continue**, **AI Pilot** intent |
+| [`docs/README.md`](docs/README.md) | Maintainer index (**Roadmap H1–H8**), **E1 / pytest** pointers |
+| [`docs/privacy-and-telemetry.md`](docs/privacy-and-telemetry.md) | Localhost-first behavior; upstream policies |
+| [`SECURITY.md`](SECURITY.md) | Vulnerability reporting |
+| [`docs/brand-assets.md`](docs/brand-assets.md) | Naming and brand (**Roadmap H5**) |
+| [`docs/screenshots/README.md`](docs/screenshots/README.md) | Screenshot conventions (**STEP 11**) |
+| [`docs/rag/le-vibe-phase2-chunks.md`](docs/rag/le-vibe-phase2-chunks.md) | Optional embeddings chunk file (**not** a second source of truth) |
+
+**`.deb` installs** ship a post-install summary at **`/usr/share/doc/le-vibe/README.Debian`** ([`debian/le-vibe.README.Debian`](debian/le-vibe.README.Debian)). **`.github/`** (CI, Dependabot, issue templates) is part of the product surface per [`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md) **STEP 12** and [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) §10.
 
 ### Prioritization (what ships first)
 
@@ -26,17 +86,7 @@ Canonical specs: **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** (must-ship p
 
 **PM / project management:** Epics, session manifests, and lazy prompts **coordinate delivery of the IDE + stack**—see **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** *Product and project management — in service of the IDE* and **[`docs/PROMPT_BUILD_LE_VIBE.md`](docs/PROMPT_BUILD_LE_VIBE.md)** (orchestrator order **0→1→14→…**).
 
-**Interim dev:** **`editor/vscodium`** vendors **VSCodium** upstream (git submodule); a **compiled, released** Lé Vibe IDE binary is **not** automated here yet—use system **VSCodium** + **`LE_VIBE_EDITOR`**, or build locally per **`editor/README.md`**, alongside this **`le-vibe`** `.deb`.
-
-### Monorepo layout
-
-| Path | Contents |
-|------|----------|
-| **`le-vibe/`** | Python package, bootstrap, launcher, tests |
-| **`editor/`** | Lé Vibe IDE — **VSCodium** at **`vscodium/`** (submodule), **`le-vibe-overrides/`** for future branding — **`docs/vscodium-fork-le-vibe.md`** |
-| **`debian/`**, **`packaging/`** | Stack **`.deb`** and wrappers |
-
-Single **git** history; release tags can cover stack + IDE drops together.
+**Interim dev:** **`editor/vscodium`** vendors **VSCodium** upstream (git submodule); a **compiled, released** Lé Vibe IDE binary is **not** automated here yet—use system **VSCodium** + **`LE_VIBE_EDITOR`**, or build locally per **`editor/README.md`**, alongside this **`le-vibe`** `.deb`. One **git** history in this monorepo; release tags can cover **stack + IDE** drops together.
 
 ## Managed Ollama (dedicated port, §7.2-A)
 
@@ -189,7 +239,7 @@ On **GitHub**, pushes and PRs to `main` / `master` run [`.github/workflows/ci.ym
 
 ## Tests
 
-**E1 mapping:** **[`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`](docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md)** ties **§1** / **H8** naming + §5–§10 to implementation and tests. Notable contracts: **`test_product_spec_section8.py`** (§4 welcome, §7.2 / §8 Continue rule body, § *Prioritization* — **`./editor/smoke.sh`** vs **`build-le-vibe-ide.yml`** / **`build-linux.yml`**; **`ide-ci-metadata.txt`**, **`retention-days`**, **`permissions:`** **`contents: read`**, **`actions: write`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`**), **`test_continue_workspace.py`** / **`test_workspace_hub.py`** (§7.2 — **`.continue/rules`** + **`.lvibe/AGENTS.md`**, **numbered questions**), **`test_session_orchestrator.py`** (**STEP 2** — bundled **`session-manifest`** example ↔ **`schemas/`**, PM workspace hooks), **`test_root_readme_ai_pilot_contract.py`** (§7.1 copy in this file + **E1** roster strings below), **`test_le_vibe_readme_e1_contract.py`** ([**`le-vibe/README.md`**](le-vibe/README.md) *Tests* roster vs this section), **`test_prompt_build_orchestrator_fence.py`** (pasteable Master orchestrator block in **`docs/PROMPT_BUILD_LE_VIBE.md`**), **`test_issue_template_h8_contract.py`** (**H8** — **STEP 12** / **`config.yml`** in **`.github/ISSUE_TEMPLATE/*.yml`**), **`test_ci_yml_submodules_contract.py`** (**H6** — **`ci.yml`** checks out **`editor/vscodium`**), **`test_editor_le_vibe_overrides_readme_contract.py`** (**H6** — **`editor/le-vibe-overrides/README.md`** **STEP 14** pointers), **`test_build_le_vibe_ide_workflow_contract.py`** (**H6** — **`build-le-vibe-ide.yml`** **`ide-ci-metadata.txt`** **`LE_VIBE_EDITOR`** docs key). See also **[`le-vibe/README.md`](le-vibe/README.md)** *Tests*.
+**E1 mapping:** **[`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`](docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md)** ties **§1** / **H8** naming + §5–§10 to implementation and tests. Notable contracts: **`test_product_spec_section8.py`** (§4 welcome, §7.2 / §8 Continue rule body, § *Prioritization* — **`./editor/smoke.sh`** vs **`build-le-vibe-ide.yml`** / **`build-linux.yml`**; **`linux_compile`**, **`actions/cache@v4`**, **`~/.cargo`**, **`spec-phase2.md` §14**; **`ide-ci-metadata.txt`**, **`retention-days`**, **`permissions:`** **`contents: read`**, **`actions: write`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`**), **`test_continue_workspace.py`** / **`test_workspace_hub.py`** (§7.2 — **`.continue/rules`** + **`.lvibe/AGENTS.md`**, **numbered questions**), **`test_session_orchestrator.py`** (**STEP 2** — bundled **`session-manifest`** example ↔ **`schemas/`**, PM workspace hooks), **`test_root_readme_ai_pilot_contract.py`** (§7.1 copy in this file + **E1** roster strings below), **`test_le_vibe_readme_e1_contract.py`** ([**`le-vibe/README.md`**](le-vibe/README.md) *Tests* roster vs this section), **`test_prompt_build_orchestrator_fence.py`** (pasteable Master orchestrator block in **`docs/PROMPT_BUILD_LE_VIBE.md`**), **`test_issue_template_h8_contract.py`** (**H8** — **STEP 12** / **`config.yml`** in **`.github/ISSUE_TEMPLATE/*.yml`**), **`test_ci_yml_submodules_contract.py`** (**H6** — **`ci.yml`** checks out **`editor/vscodium`**), **`test_editor_le_vibe_overrides_readme_contract.py`** (**H6** — **`editor/le-vibe-overrides/README.md`** **STEP 14** pointers), **`test_build_le_vibe_ide_workflow_contract.py`** (**H6** — **`build-le-vibe-ide.yml`** **`ide-ci-metadata.txt`** **`LE_VIBE_EDITOR`** docs key). See also **[`le-vibe/README.md`](le-vibe/README.md)** *Tests*.
 
 ```bash
 cd le-vibe
