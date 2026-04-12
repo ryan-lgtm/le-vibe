@@ -55,6 +55,14 @@ def test_le_vibe_readme_lists_step8_h1_release_channel():
     assert "CHANGELOG.md" in text
 
 
+def test_le_vibe_readme_step8_h1_ties_full_product_to_step14_ide_deb():
+    """H1 row links default CI artifact (stack) to STEP 14 le-vibe-ide for full demo releases."""
+    text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
+    assert "full product (STEP 14 / §7.3)" in text
+    assert "le-vibe-ide_*_amd64.deb" in text
+    assert "IDE package" in text
+
+
 def test_le_vibe_readme_lists_step9_h2_sbom():
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
     assert "Supply chain / SBOM (STEP 9 / H2)" in text
