@@ -1,3 +1,9 @@
+le-vibe (0.1.2) unstable; urgency=low
+
+  * README.Debian: build-le-vibe-ide ide-ci-metadata + Actions Summary LE_VIBE_EDITOR (editor/BUILD, VENDORING).
+
+ -- Le Vibe Maintainers <maintainers@example.invalid>  Sun, 12 Apr 2026 12:00:00 +0000
+
 le-vibe (0.1.1) unstable; urgency=low
 
   * README.Debian: document ./editor/smoke.sh for monorepo clone (H6 gate).

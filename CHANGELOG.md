@@ -20,8 +20,13 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 - **`test_workspace_hub.py`** — seeded **`.lvibe/AGENTS.md`** must include **numbered questions** (§7.2 alignment with Continue rules).
 - Master orchestrator fenced block in **`docs/PROMPT_BUILD_LE_VIBE.md`** remains extractable (**STEP 16** / **`packaging/scripts/print-master-orchestrator-prompt.py`**) — [`le-vibe/tests/test_prompt_build_orchestrator_fence.py`](le-vibe/tests/test_prompt_build_orchestrator_fence.py).
 
+### Debian packaging
+
+- **`debian/changelog`** — **`0.1.2`**: **`README.Debian`** documents **`ide-ci-metadata`** / **Summary** / **`LE_VIBE_EDITOR`** for monorepo clone developers.
+
 ### Documentation
 
+- **[`debian/le-vibe.README.Debian`](debian/le-vibe.README.Debian)** *IDE sources in a clone* — **`build-le-vibe-ide`** **`ide-ci-metadata.txt`**, Actions **Summary** **Pre-binary artifact** / **`LE_VIBE_EDITOR`** (**`editor/BUILD.md`**, **`editor/VENDORING.md`**).
 - **[`docs/privacy-and-telemetry.md`](docs/privacy-and-telemetry.md)** *E1 contract tests* row — **`test_product_spec_section8.py`** (*Prioritization* / **`ide-ci-metadata`*) before **H8** / **STEP 14** modules.
 - **[`SECURITY.md`](SECURITY.md)** *Related docs* — **`PRODUCT_SPEC_SECTION8_EVIDENCE`** bullet lists **`test_product_spec_section8.py`** (*Prioritization* / **`ide-ci-metadata`*) before overrides / **`test_build_*`**.
 - **[`.github/dependabot.yml`](../.github/dependabot.yml)** header — STEP **14** **E1** metadata tests (aligned with **`ci.yml`**, **`ci-smoke.sh`**, **`editor/smoke.sh`**).
