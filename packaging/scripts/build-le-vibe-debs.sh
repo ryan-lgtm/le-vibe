@@ -4,6 +4,7 @@
 # Requires: find (findutils), sort, head (coreutils) to locate emitted *.deb files beside the repo.
 # Authority: docs/PM_DEB_BUILD_ITERATION.md — PM-scoped convenience; not a v1 production gate.
 # H1 / §7.3: default CI uploads le-vibe-deb (stack le-vibe .deb + SBOM + SHA256SUMS only); --with-ide here adds le-vibe-ide_*.deb for full-product drops — docs/apt-repo-releases.md (IDE package).
+# Optional: LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 with --with-ide runs ci-editor-gate.sh before build-le-vibe-ide-deb.sh (§7.3 product.json identity).
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md when building --with-ide and editor/vscodium/ is empty.
 set -euo pipefail
 
@@ -32,6 +33,7 @@ Environment:
   LEVIBE_IDE_LINTIAN_STRICT   When set to 1, fail the IDE build if lintian fails (see packaging/scripts/build-le-vibe-ide-deb.sh).
   LEVIBE_STAGE_IDE_ASSERT_BRAND  When set to 1, fail IDE staging if VSCode-linux-*/resources/app/product.json lacks Lé Vibe strings (§7.3 — packaging/scripts/stage-le-vibe-ide-deb.sh).
   LEVIBE_STAGE_IDE_VERBOSE   When set to 1, print a line when §7.3 identity check passes (same staging script).
+  LEVIBE_EDITOR_GATE_ASSERT_BRAND  When set to 1 with --with-ide, run packaging/scripts/ci-editor-gate.sh first (same §7.3 product.json check as ./editor/smoke.sh — fails fast before staging).
 
 Prerequisites (stack): debhelper, build-essential, dpkg-dev (sudo apt install build-essential debhelper).
 Prerequisites (IDE):  a successful dev/build.sh under editor/vscodium (see editor/BUILD.md).
@@ -133,6 +135,10 @@ fi
 
 IDE_DEB=""
 if [[ "$WITH_IDE" -eq 1 ]]; then
+  if [[ "${LEVIBE_EDITOR_GATE_ASSERT_BRAND:-0}" == "1" ]]; then
+    echo "==> §7.3 pre-check: ci-editor-gate.sh (LEVIBE_EDITOR_GATE_ASSERT_BRAND=1)"
+    LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 "$ROOT/packaging/scripts/ci-editor-gate.sh"
+  fi
   echo "==> Building IDE package (le-vibe-ide) via build-le-vibe-ide-deb.sh (stage + dpkg-buildpackage + optional lintian)"
   if [[ -n "$VS_BUILD" ]]; then
     "$ROOT/packaging/scripts/build-le-vibe-ide-deb.sh" "$VS_BUILD"

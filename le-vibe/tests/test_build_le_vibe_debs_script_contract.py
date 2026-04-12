@@ -41,6 +41,8 @@ def test_build_le_vibe_debs_script_mentions_submodule_14b():
     assert "LEVIBE_IDE_LINTIAN_STRICT" in text
     assert "LEVIBE_STAGE_IDE_ASSERT_BRAND" in text
     assert "LEVIBE_STAGE_IDE_VERBOSE" in text
+    assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
+    assert "ci-editor-gate.sh" in text
     assert "stage-le-vibe-ide-deb.sh" in text
 
 
@@ -111,6 +113,8 @@ def test_pm_deb_build_iteration_doc_731_staging_identity_step14():
     assert "LEVIBE_STAGE_IDE_VERBOSE" in text
     assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
     assert "ci-editor-gate.sh" in text
+    assert "One-shot:" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
     assert "stage-le-vibe-ide-deb.sh" in text
     assert "resources/app/product.json" in text
 

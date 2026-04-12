@@ -24,7 +24,7 @@ The **`le-vibe-ide`** package repacks **`editor/vscodium/VSCode-linux-*`**. That
 - **`LEVIBE_STAGE_IDE_ASSERT_BRAND=1`** — fail staging when identity is missing (use for release or demo drops).
 - **`LEVIBE_STAGE_IDE_VERBOSE=1`** — print a line when the check passes.
 
-**Pre-staging gate (optional):** **`LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 ./editor/smoke.sh`** (same as **`./packaging/scripts/ci-editor-gate.sh`**) fails if a **`VSCode-linux-*`** tree exists under **`editor/vscodium/`** but **`resources/app/product.json`** is missing or lacks **Lé Vibe** — run before **`build-le-vibe-ide-deb.sh`** / **`build-le-vibe-debs.sh --with-ide`** when you want the fast layout gate to enforce §7.3 identity without building **`.deb`**s yet — **[`editor/BUILD.md`](../editor/BUILD.md)** (*Debian package for the Lé Vibe IDE*).
+**Pre-staging gate (optional):** **`LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 ./editor/smoke.sh`** (same as **`./packaging/scripts/ci-editor-gate.sh`**) fails if a **`VSCode-linux-*`** tree exists under **`editor/vscodium/`** but **`resources/app/product.json`** is missing or lacks **Lé Vibe** — run before **`build-le-vibe-ide-deb.sh`** / **`build-le-vibe-debs.sh --with-ide`** when you want the fast layout gate to enforce §7.3 identity without building **`.deb`**s yet — **[`editor/BUILD.md`](../editor/BUILD.md)** (*Debian package for the Lé Vibe IDE*). **One-shot:** **`LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 packaging/scripts/build-le-vibe-debs.sh --with-ide`** runs **`ci-editor-gate.sh`** automatically before **`build-le-vibe-ide-deb.sh`** (same check).
 
 ## Lazy repeat — paste into Cursor (engineer)
 
