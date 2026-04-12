@@ -153,6 +153,11 @@ def test_editor_build_md_contract_debian_section_stack_ide_one_shot_step14():
     assert "le-vibe-deb" in text
     assert "PM_STAGE_MAP.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
+    assert "§7.3 IDE staging" in text
+    assert "resources/app/product.json" in text
+    assert "LEVIBE_STAGE_IDE_ASSERT_BRAND" in text
+    assert "LEVIBE_STAGE_IDE_VERBOSE" in text
+    assert "stage-le-vibe-ide-deb.sh" in text
 
 
 def test_editor_build_md_contract_default_le_vibe_editor_packaging_14g():
