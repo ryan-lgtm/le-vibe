@@ -6,7 +6,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### CI
 
-- **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **Job summary** (when sources present) lists **`ide-ci-metadata.txt`** **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`** (matches uploaded artifact; E1: **`test_build_le_vibe_ide_workflow_contract.py`**).
+- **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **Job summary** (when sources present) lists **`ide-ci-metadata.txt`** **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`** (matches uploaded artifact; E1: **`test_build_le_vibe_ide_workflow_contract.py`**); **[`editor/README.md`](../editor/README.md)** *CI* and **[`docs/ci-qa-hardening.md`](docs/ci-qa-hardening.md)** (*Scope* + *Related docs*) describe the **GitHub Actions** run **Summary** tab.
 
 ### Tests
 
