@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # STEP 14: syntax-check VSCodium entrypoint scripts (no network, no compile).
+# Requires: bash on PATH (for bash -n).
 # Run from repo root. No-op if editor/vscodium is absent. Exits non-zero on bash -n failure.
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (needed before this script runs meaningful checks).
 # Called from ci-editor-gate.sh / ./editor/smoke.sh. E1: le-vibe/tests/test_product_spec_section8.py (PRODUCT_SPEC *Prioritization*).
@@ -10,6 +11,11 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
 
 [[ -f editor/vscodium/product.json ]] || exit 0
+
+if ! command -v bash >/dev/null 2>&1; then
+  echo "ci-vscodium-bash-syntax: bash not on PATH — install bash (e.g. sudo apt install bash) (STEP 14 gate; editor/BUILD.md)." >&2
+  exit 1
+fi
 
 # Core path toward a Linux build (upstream names; keep list short).
 scripts=(

@@ -27,3 +27,4 @@ def test_ci_vscodium_bash_syntax_documents_step14_and_upstream_scripts():
     assert "ci-editor-gate" in text
     assert "editor/vscodium" in text
     assert "repair editor/vscodium" in text
+    assert "bash not on PATH" in text
