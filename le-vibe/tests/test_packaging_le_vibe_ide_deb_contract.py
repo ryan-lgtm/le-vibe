@@ -21,9 +21,17 @@ def test_stage_le_vibe_ide_deb_script_documents_14b_submodule_and_bash_syntax():
     assert "restore packaging/debian-le-vibe-ide" in text
     assert "restore packaging/icons from git" in text
     assert "PRODUCT_SPEC §7.3" in text
+    assert "no VSCode-linux-* under editor/vscodium" in text
     assert "find not on PATH" in text
     assert "basename not on PATH" in text
+    assert "rm not on PATH" in text
+    assert "mkdir not on PATH" in text
+    assert "cp not on PATH" in text
+    assert "ln not on PATH" in text
     assert "install not on PATH" in text
+    assert "ln -sfn" in text
+    assert "usr/share/applications/le-vibe.desktop" in text
+    assert "stage-le-vibe-ide-deb: staged" in text
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 
