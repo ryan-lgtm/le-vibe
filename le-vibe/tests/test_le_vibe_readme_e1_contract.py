@@ -10,6 +10,16 @@ def _le_vibe_dir() -> Path:
     return Path(__file__).resolve().parents[1]
 
 
+def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
+    """STEP 14 / §7.3: package README names IDE .deb build + one-shot stack+IDE script."""
+    text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
+    assert "Production install (STEP 14 / §7.3)" in text
+    assert "build-le-vibe-ide-deb.sh" in text
+    assert "packaging/debian-le-vibe-ide/README.md" in text
+    assert "build-le-vibe-debs.sh" in text
+    assert "--with-ide" in text
+
+
 def test_le_vibe_readme_h6_submodule_init_14b():
     """STEP 14 / 14.b: package README names submodule init for empty editor/vscodium/."""
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
