@@ -1,4 +1,5 @@
 # STEP 14 — Linux IDE build entrypoint (alias). Delegates to build-le-vibe-ide.yml.
+# Out-of-band .deb: same scope as build-le-vibe-ide.yml — no le-vibe-deb (ci.yml stack) or le-vibe-ide_*.deb upload; maintainer — packaging/scripts/build-le-vibe-ide-deb.sh / build-le-vibe-debs.sh --with-ide (§7.3; docs/apt-repo-releases.md IDE package).
 # Use this name in docs/PM when “build-linux” is the expected workflow label.
 # Same job summary as the reusable workflow: open the run → Summary tab for ./editor/smoke.sh parity + skip reasons.
 # Inherits build-le-vibe-ide.yml: ide-ci-metadata.txt, upload-artifact retention-days, permissions (contents read + actions write), Summary Pre-binary artifact / LE_VIBE_EDITOR.

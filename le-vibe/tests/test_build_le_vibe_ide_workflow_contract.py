@@ -69,6 +69,15 @@ def test_build_le_vibe_ide_workflow_linux_compile_artifact_14e():
     assert "max-old-space-size=8192" in text
 
 
+def test_build_linux_yaml_header_out_of_band_deb_matches_ide_workflow_step14():
+    """§7.3: build-linux alias inherits honest .deb scope from build-le-vibe-ide.yml."""
+    text = (_repo_root() / ".github" / "workflows" / "build-linux.yml").read_text(encoding="utf-8")
+    assert "Out-of-band .deb" in text
+    assert "le-vibe-deb" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "apt-repo-releases.md" in text
+
+
 def test_build_linux_yaml_uses_build_le_vibe_ide_and_documents_inherited_metadata():
     text = (_repo_root() / ".github" / "workflows" / "build-linux.yml").read_text(encoding="utf-8")
     assert "STEP 14" in text
