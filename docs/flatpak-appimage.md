@@ -24,6 +24,7 @@
 
 - **Ollama:** Lé Vibe expects **`ollama`** reachable (managed or system). Sandboxed Flatpak apps need explicit **`finish-args`** (e.g. **`--share=network`**, **`--filesystem`** for model paths) — tighten beyond the template as you harden the product.
 - **Editor:** The **Electron IDE** is **not** compiled inside these H7 templates; users install **VSCodium** / **[`com.vscodium.VSCodium`](https://flathub.org/apps/com.vscodium.codium)** on the host or set **`LE_VIBE_EDITOR`** to a reachable binary (same story as [`debian/le-vibe.README.Debian`](../debian/le-vibe.README.Debian) **14.g**).
+- **Monorepo H6 (STEP 14):** The **Lé Vibe IDE** shell is developed under **`editor/vscodium/`** — not in these alternate-bundle templates. **Fresh clone (14.b):** **`git submodule update --init editor/vscodium`** from the repository root when **`editor/vscodium/`** is empty — **[`editor/README.md`](../editor/README.md)** *Fresh clone (14.b)*.
 - **Autostart / Zenity:** Paths differ under sandbox; re-validate **G-A2** / **G-A3** if you ship those entry points inside a bundle.
 
 ## Flatpak (Flathub track)

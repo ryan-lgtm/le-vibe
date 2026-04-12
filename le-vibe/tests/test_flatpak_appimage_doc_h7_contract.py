@@ -11,6 +11,8 @@ def _repo_root() -> Path:
 
 def test_flatpak_appimage_doc_lists_paths_flathub_and_spec_phase2_h7():
     text = (_repo_root() / "docs" / "flatpak-appimage.md").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
     assert "Flathub" in text
     assert "packaging/flatpak" in text
     assert "org.le_vibe.Launcher.yml" in text
