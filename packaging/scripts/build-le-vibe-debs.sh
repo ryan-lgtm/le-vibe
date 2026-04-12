@@ -15,7 +15,7 @@ ASSUME_YES=0
 VS_BUILD=""
 
 usage() {
-  sed -n '1,80p' <<'EOF'
+  cat <<'EOF'
 Usage: packaging/scripts/build-le-vibe-debs.sh [options]
 
 Build Debian binary packages from this monorepo:
