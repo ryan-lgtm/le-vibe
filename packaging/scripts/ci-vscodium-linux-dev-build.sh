@@ -38,7 +38,7 @@ _lvibe_patch_dev_build_sh_for_env_defaults() {
     return 0
   fi
   if ! grep -q '^export APP_NAME="VSCodium"$' "${f}"; then
-    echo "ci-vscodium-linux-dev-build: unexpected APP_NAME line in dev/build.sh — update packaging/scripts/ci-vscodium-linux-dev-build.sh" >&2
+    echo "ci-vscodium-linux-dev-build: unexpected APP_NAME line in dev/build.sh — upstream layout may have changed; update _lvibe_patch_dev_build_sh_for_env_defaults in packaging/scripts/ci-vscodium-linux-dev-build.sh (after an editor/vscodium submodule bump)." >&2
     return 1
   fi
   sed -i.bak_lvibe \
