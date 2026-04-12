@@ -142,6 +142,16 @@ def test_editor_print_ci_tarball_codium_script_exists():
     assert (_repo_root() / "editor" / "print-ci-tarball-codium-path.sh").is_file()
 
 
+def test_editor_build_md_contract_debian_section_stack_ide_one_shot_step14():
+    """§7.3 BUILD.md lists build-le-vibe-debs --with-ide + PM/apt release pointers."""
+    text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "le-vibe_*_all.deb" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "apt-repo-releases.md" in text
+    assert "SHA256SUMS" in text
+
+
 def test_editor_build_md_contract_default_le_vibe_editor_packaging_14g():
     text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")
     assert "14.g" in text
