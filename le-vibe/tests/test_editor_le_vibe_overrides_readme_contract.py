@@ -29,6 +29,8 @@ def test_branding_staging_checklist_14d_contract():
 
 def test_editor_le_vibe_overrides_readme_documents_launcher_and_h6_gate():
     text = (_repo_root() / "editor" / "le-vibe-overrides" / "README.md").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
     assert "Lé Vibe" in text
     assert "§7.3" in text
     assert "product-branding-merge.json" in text

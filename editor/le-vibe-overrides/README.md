@@ -8,6 +8,8 @@ This directory is reserved for **Lé Vibe–only** inputs that upstream **VSCodi
 
 **Staging checklist:** **[`branding-staging.checklist.md`](branding-staging.checklist.md)** — upstream **`product.json`** / desktop / icon touchpoints and **§7.2** gate in one place (**14.d**). Read the checklist section **PRODUCT_SPEC §7.2 (read before overrides)** first; it restates **`docs/PRODUCT_SPEC.md`** §7.2 (*User gate*) and **`spec-phase2.md` §14** honesty—do not treat **`build-env.sh.example`** → **`build-env.sh`** exports or committed patch notes as shipped Lé Vibe identity until that gate is satisfied.
 
+**Fresh clone (14.b):** **`editor/vscodium/`** must exist before **14.a** / **`fetch-vscode-sources.sh`** — run **`git submodule update --init editor/vscodium`** from the monorepo root when the tree is empty — **[`../README.md`](../README.md)** *Fresh clone (14.b)*.
+
 ## Build flow vs branding layers (14.d)
 
 Use this order so **overrides** stay tied to a reproducible tree (**§7.3** applies **`product-branding-merge.json`**, **`build-env.lvibe-defaults.sh`**, and a **`dev/build.sh`** patch via **`ci-vscodium-linux-dev-build.sh`**; upstream binary name stays **`codium`**):
