@@ -39,6 +39,9 @@ def test_build_le_vibe_debs_script_mentions_submodule_14b():
     assert "apt-get not on PATH" in text
     assert "build-le-vibe-ide-deb.sh" in text
     assert "LEVIBE_IDE_LINTIAN_STRICT" in text
+    assert "LEVIBE_STAGE_IDE_ASSERT_BRAND" in text
+    assert "LEVIBE_STAGE_IDE_VERBOSE" in text
+    assert "stage-le-vibe-ide-deb.sh" in text
 
 
 def test_pm_deb_build_iteration_doc_submodule_prereq_14b():

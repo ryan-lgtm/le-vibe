@@ -30,6 +30,8 @@ Build Debian binary packages from this monorepo:
 Environment:
   DEB_BUILD_OPTIONS           Passed through to dpkg-buildpackage when set.
   LEVIBE_IDE_LINTIAN_STRICT   When set to 1, fail the IDE build if lintian fails (see packaging/scripts/build-le-vibe-ide-deb.sh).
+  LEVIBE_STAGE_IDE_ASSERT_BRAND  When set to 1, fail IDE staging if VSCode-linux-*/resources/app/product.json lacks Lé Vibe strings (§7.3 — packaging/scripts/stage-le-vibe-ide-deb.sh).
+  LEVIBE_STAGE_IDE_VERBOSE   When set to 1, print a line when §7.3 identity check passes (same staging script).
 
 Prerequisites (stack): debhelper, build-essential, dpkg-dev (sudo apt install build-essential debhelper).
 Prerequisites (IDE):  a successful dev/build.sh under editor/vscodium (see editor/BUILD.md).

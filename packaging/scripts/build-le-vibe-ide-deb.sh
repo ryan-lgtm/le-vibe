@@ -5,6 +5,7 @@
 # Optional: lintian on the produced .deb if installed — packaging/debian-le-vibe-ide/README.md;
 #   non-fatal unless LEVIBE_IDE_LINTIAN_STRICT=1 (exit code from lintian).
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md; VSCode-linux-* must exist (see stage-le-vibe-ide-deb.sh errors).
+# Staging env (passed through to stage-le-vibe-ide-deb.sh): LEVIBE_STAGE_IDE_ASSERT_BRAND, LEVIBE_STAGE_IDE_VERBOSE — §7.3 product.json identity.
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
