@@ -22,7 +22,7 @@ Session manifests, **`.lvibe/`** epics/tasks, skill agents, and orchestration do
 
 - **Design corpus (do not drift):** **`docs/PRODUCT_SPEC.md`** (this file), **`spec-phase2.md`** (Phase 2 product definition, architecture, managed Ollama, milestones), **`spec.md`** (bootstrap/tiering), **`docs/PROMPT_BUILD_LE_VIBE.md`** (orchestrator queue), **`docs/SESSION_ORCHESTRATION_SPEC.md`**, **`docs/PM_STAGE_MAP.md`**, **`docs/AI_PILOT_AND_CONTINUE.md`**, and **`schemas/session-manifest.v1.example.json`**. PM stages and lazy prompts **prioritize `editor/`** (H6) after baseline regression—see Master orchestrator **order** in **`PROMPT_BUILD_LE_VIBE.md`**.
 - **Owner intent:** The **desktop editor** is the primary product surface; **`lvibe`**, Ollama, Continue, and **`.lvibe/`** implement the **local-first, honest-tier** experience defined in those specs. Material IDE choices (branding scope, update channel, bundling) use **§7.2** (**`USER RESPONSE REQUIRED`**) when specs do not uniquely decide.
-- **Canonical IDE path:** **`editor/README.md`** + **`docs/vscodium-fork-le-vibe.md`**.
+- **Canonical IDE path:** **`editor/README.md`**, **`editor/BUILD.md`** (local compile entrypoint), **`editor/VENDORING.md`**, **`docs/vscodium-fork-le-vibe.md`**.
 
 ---
 
