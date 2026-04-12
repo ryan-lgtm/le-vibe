@@ -1,6 +1,8 @@
 # STEP 14 (H6): Lé Vibe IDE — Linux build placeholder. Honest until editor/ is vendored
 # (VSCodium / Code OSS). Authority: docs/vscodium-fork-le-vibe.md, editor/README.md,
 # docs/PRODUCT_SPEC.md §7.2, *Prioritization* (./editor/smoke.sh), spec-phase2.md §14.
+# Out-of-band .deb: this workflow does not upload le-vibe-deb (ci.yml — stack .deb) or build le-vibe-ide_*.deb;
+#   maintainer path — packaging/scripts/build-le-vibe-ide-deb.sh / build-le-vibe-debs.sh --with-ide (§7.3; docs/apt-repo-releases.md IDE package).
 # E1: le-vibe/tests/test_product_spec_section8.py (PRODUCT_SPEC sequencing vs this gate).
 # 14.e: optional job linux_compile runs packaging/scripts/ci-vscodium-linux-dev-build.sh (upstream dev/build.sh).
 name: build-le-vibe-ide

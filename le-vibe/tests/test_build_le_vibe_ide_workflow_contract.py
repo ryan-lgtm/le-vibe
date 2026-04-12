@@ -9,6 +9,15 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_build_le_vibe_ide_workflow_header_documents_out_of_band_deb_step14():
+    """§7.3: IDE workflow header — not ci.yml le-vibe-deb; .deb via maintainer scripts."""
+    text = (_repo_root() / ".github" / "workflows" / "build-le-vibe-ide.yml").read_text(encoding="utf-8")
+    assert "Out-of-band .deb" in text
+    assert "le-vibe-deb" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "apt-repo-releases.md" in text
+
+
 def test_build_le_vibe_ide_workflow_writes_le_vibe_editor_docs_to_metadata():
     text = (_repo_root() / ".github" / "workflows" / "build-le-vibe-ide.yml").read_text(encoding="utf-8")
     assert "ide-ci-metadata.txt" in text
