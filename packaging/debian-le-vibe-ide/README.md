@@ -4,6 +4,8 @@
 
 This directory is a **separate Debian source** (sibling to the root **`debian/`** for the **`le-vibe`** stack package). It **repacks** a local **`VSCode-linux-*/`** build from **`editor/vscodium/`** after **`./dev/build.sh`**.
 
+**Fresh clone (14.b):** if **`editor/vscodium/`** is empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the monorepo root before compiling — **`editor/README.md`** *Fresh clone (14.b)*, **`editor/BUILD.md`**.
+
 ## Build steps
 
 1. From the monorepo root, complete an IDE compile per [`editor/BUILD.md`](../../editor/BUILD.md) so **`editor/vscodium/VSCode-linux-*/`** exists.
