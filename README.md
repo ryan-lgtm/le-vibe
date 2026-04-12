@@ -1,6 +1,10 @@
 # Lé Vibe
 
-**At a glance:** you work in a normal **Code OSS–class editor**, talk to **Continue**, and run a **local model** through **Ollama**—nothing leaves your machine for the core loop. What makes Lé Vibe **different** is how it **orchestrates** work: an **Operator** coordinates the session and **delegates** to **specialist agents** (product, engineering, QA, and other roles) that **collaborate** and leave **structured notes** in **`.lvibe/`** so you are not paying to re-read the entire repo every time. **Brand colors:** **deep purple** and **ruby red**.
+**Lé Vibe** is an **open-source**, **local-first** coding environment: you use a **Code OSS–class editor** (not Microsoft’s “Visual Studio Code” product), talk to your project through the **Continue** extension, and run models on your own machine with **Ollama**. The goal is **Cursor-like intent**—AI-native editing—without locking you to a proprietary cloud or a surprise API bill for the core loop.
+
+What makes it **distinct** is **orchestration**: an **Operator** coordinates the session and **delegates** to **specialist agents** (product, engineering, QA, and other roles). They **collaborate** and store **structured, consent-given** notes under **`.lvibe/`** so work compounds instead of re-scanning the whole repository every turn.
+
+## How orchestration fits together
 
 ```mermaid
 flowchart TB
@@ -23,62 +27,76 @@ flowchart TB
     linkStyle default stroke:#c62828,stroke-width:2px
 ```
 
-### Why that matters (and why it is “free”)
+- **Operator** — one coordinating thread for the session: it decides when to lean on a **specialist** lens instead of one generic assistant for everything.
+- **Specialists** — role-shaped agents that **work together**; their outputs land in **`.lvibe/`** (with your **consent** and a **size budget**) so the Operator can **reuse** prior reasoning.
+- **Local inference** — **Ollama** uses **your** CPU/GPU. You are not charged per token by a hosted model provider for that path; your tradeoff is **hardware**, **time**, and **honest** model sizing (see [`spec.md`](spec.md)). **Privacy:** defaults keep generation on **localhost**; there is no Lé Vibe–hosted cloud required for the core workflow.
 
-- **Operator (coordinator):** one **session brain** that decides what to do next—**not** a dozen separate chats fighting each other. It **delegates** to the right **specialist** perspective when that helps (for example product direction vs implementation vs review), instead of one generic assistant pretending to be everything at once.
-- **Specialist agents (teamwork):** role-style agents **work together** toward your goal. Their outputs feed **structured, size-bounded** context under **`.lvibe/`** (with your **consent**) so the Operator can **reuse** prior reasoning instead of burning tokens re-scanning noise. That is the opposite of “vibe code the whole repo into the prompt again.”
-- **At no API cost for inference:** **Ollama** runs on **your CPU/GPU**. You are not billed per token by a hosted model provider for that loop—your “cost” is **electricity**, **time**, and **honest** hardware limits (Lé Vibe picks a **realistic** model tier for your machine; see [`spec.md`](spec.md)). The stack is **open source** (MIT for our bootstrap/packaging; Ollama, VSCodium, Continue, and upstream editor parts have their own licenses—see [License](#license)).
-- **Privacy by default:** the default path keeps generation on **localhost**; there is no Lé Vibe–hosted cloud you must send code to for the core workflow.
+## Target experience (what we’re building)
 
-**Lé Vibe** is a **local-first** toolkit for AI-assisted coding: your models run via **Ollama**, your editor is **Code - OSS** lineage (not Microsoft “Visual Studio Code” as the product name), and your assistant flows go through the open **Continue** extension—wired together with honest **hardware-aware** model choice, a **managed Ollama** lifecycle, and optional **workspace memory** under **`.lvibe/`** (consent-gated, size-capped; see [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) §5).
+You install **one** coherent product: a **Lé Vibe** desktop IDE (Code OSS–based), a **managed Ollama** lifecycle tied to the app, **Continue** pre-wired, and **hardware-aware** model selection. You open a folder, get a **welcome** that positions the product honestly, opt into **`.lvibe/`** when you want project memory, and **quit** knowing the heavy **local** workload can **stop** with the session.
 
-This **monorepo** holds:
+```mermaid
+flowchart LR
+    A[Install stack + editor] --> B[First run: tiered local model]
+    B --> C["lvibe . in your repo"]
+    C --> D[Edit with Continue + specialists]
+    D --> E[Quit → managed Ollama torn down]
+```
 
-| Part | Role |
+```mermaid
+sequenceDiagram
+    participant You
+    participant IDE as Lé Vibe IDE
+    participant O as Ollama
+    You->>IDE: Open project
+    IDE->>O: Start managed server on your machine
+    O-->>IDE: Ready for Continue
+    loop Session
+        You->>IDE: Chat / apply edits
+        IDE->>O: Local inference
+    end
+    You->>IDE: Quit
+    IDE->>O: Stop — release GPU/RAM
+```
+
+**Today:** the **Python stack** and **Debian `.deb`** are ahead of a **published Lé Vibe–branded** Electron build from CI; most developers pair the stack with **VSCodium** and **`LE_VIBE_EDITOR`**. See [`editor/README.md`](editor/README.md) and honest scope in [`spec-phase2.md`](spec-phase2.md) §14.
+
+## Current status
+
+| | |
+|--|--|
+| **Works well today** | **`lvibe .`**, managed **Ollama** on a **dedicated port** (default **11435**), **Continue** integration, **consent-gated** **`.lvibe/`**, Debian **`.deb`**, tests and CI. |
+| **In progress** | **Branded IDE** binary from **`editor/`**, fuller first-run polish, broader OS packaging. |
+| **Feedback** | **GitHub Issues** in this repository. Clone with **`git clone --recurse-submodules`** so **`editor/vscodium`** is present for [`./editor/smoke.sh`](editor/smoke.sh). |
+
+### Limitations (snapshot)
+
+- Not the **Visual Studio Code** trademarked product; editor lineage is **Code - OSS** / **VSCodium**.
+- **No** finished **Lé Vibe–only** desktop bundle from CI yet — use **VSCodium** + **`LE_VIBE_EDITOR`** until **`editor/`** ships a release artifact.
+- **First run** can be slow (Ollama install, **model pull**); **Linux** is the primary packaging focus for now.
+
+## Repository layout
+
+| Path | Role |
 |------|------|
-| **`le-vibe/`** | Python package: bootstrap, **`lvibe`** launcher, tests, Continue/workspace integration |
-| **`debian/`** / **`packaging/`** | **`.deb`** install of the stack (launchers, config hooks) |
-| **`editor/`** | **Lé Vibe IDE** — Code - OSS–based desktop shell; **`vscodium/`** ([VSCodium](https://github.com/VSCodium/vscodium) submodule), **`le-vibe-overrides/`** for branding inputs. Policy and build notes: [`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md) |
+| **`le-vibe/`** | Python package: bootstrap, **`lvibe`** launcher, tests, Continue / **`.lvibe/`** integration |
+| **`debian/`**, **`packaging/`** | Stack **`.deb`** and launchers |
+| **`editor/`** | **Lé Vibe IDE** — **`vscodium/`** ([VSCodium](https://github.com/VSCodium/vscodium) submodule), **`le-vibe-overrides/`** — see [`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md) |
 
-**If you are new here:** read **§ What you get · Early access · Limitations** below, then skim **Documentation** for specs and trust docs. The sections after that are **build- and maintainer-oriented** (install paths, CI, tests)—they evolve as engineering lands.
+## Learn more
 
-### What you get today
+| Doc | Why read it |
+|-----|-------------|
+| [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) | Must-ship behavior: **`lvibe`**, **`.lvibe/`**, welcome, secrets |
+| [`spec.md`](spec.md) | Bootstrap and **hardware-aware** model tiers |
+| [`spec-phase2.md`](spec-phase2.md) | IDE product direction and **§14** in-repo snapshot |
+| [`docs/README.md`](docs/README.md) | Full doc index (**Roadmap H1–H8**), maintainer entry points |
+| [`SECURITY.md`](SECURITY.md) | Reporting vulnerabilities |
 
-- **Linux-oriented stack** — Debian **`.deb`**, command-line **`lvibe .`** to open a folder, **managed Ollama** on a **dedicated localhost port** (so quit can tear down *this* session without guessing about other tools), Continue config under **`~/.config/le-vibe/`**, and **`.lvibe/`** workspace hub when you **opt in** to project memory.
-- **Editor story** — The goal is a single installable **Lé Vibe** desktop app from **`editor/`**. **Right now**, CI does **not** ship a finished **Lé Vibe–branded** Electron release; most people use **VSCodium** (or another Code OSS build) and set **`LE_VIBE_EDITOR`** — see [`editor/README.md`](editor/README.md).
+Diagram **color accents** used in this README are documented as a **reference palette** in [`docs/brand-assets.md`](docs/brand-assets.md) (not a promise of shipped UI theming).
 
-### Early access
-
-Lé Vibe is **under active development**: behavior, packaging, and docs **will change** as we ship. The **Python stack and `.deb`** are ahead of the **branded IDE binary** from CI. Use **GitHub Issues** in this repository for questions and contributions. Clone with **`git clone --recurse-submodules`** (or **`git submodule update --init`**) so **`editor/vscodium`** is present for [`./editor/smoke.sh`](editor/smoke.sh) and IDE workflows.
-
-### Limitations (read this before judging a release)
-
-- **Not a VS Code product** — Lé Vibe is a separate name; the editor is **Code - OSS** / **VSCodium**-class tooling.
-- **No prebuilt Lé Vibe–only desktop bundle from CI yet** — use **VSCodium** + **`LE_VIBE_EDITOR`** until **`editor/`** release work catches up.
-- **First run** can take a long time (Ollama install, **model pull**, disk).
-- **Linux** is the primary packaging story today; other platforms are roadmap ([`spec-phase2.md`](spec-phase2.md)).
-- A longer list lives under [**Known limitations**](#known-limitations) later in this file.
-
-## Documentation
-
-| Doc | Purpose |
-|-----|---------|
-| [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) | Must-ship product requirements (naming, **`lvibe`**, **`.lvibe/`**, welcome, secrets, §9 authority roster) |
-| [`spec.md`](spec.md) | Phase 1 — bootstrap and model tiering |
-| [`spec-phase2.md`](spec-phase2.md) | Phase 2 — IDE product, managed Ollama lifecycle, **§14** in-repo honesty vs deferred **H6**/**H7** |
-| [`docs/PROMPT_BUILD_LE_VIBE.md`](docs/PROMPT_BUILD_LE_VIBE.md) | Master orchestrator STEPs **0–17** (engineering queue) |
-| [`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md) | STEP → primary PM doc for implementers |
-| [`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`](docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md) | Regression evidence (E1 / §5–§10; filename historic) |
-| [`docs/SESSION_ORCHESTRATION_SPEC.md`](docs/SESSION_ORCHESTRATION_SPEC.md) | PM session JSON, workspace manifests, orchestration |
-| [`docs/AI_PILOT_AND_CONTINUE.md`](docs/AI_PILOT_AND_CONTINUE.md) | Continue construction, **Please continue**, **AI Pilot** intent |
-| [`docs/README.md`](docs/README.md) | Maintainer index (**Roadmap H1–H8**), **E1 / pytest** pointers |
-| [`docs/privacy-and-telemetry.md`](docs/privacy-and-telemetry.md) | Localhost-first behavior; upstream policies |
-| [`SECURITY.md`](SECURITY.md) | Vulnerability reporting |
-| [`docs/brand-assets.md`](docs/brand-assets.md) | Naming and brand (**Roadmap H5**) |
-| [`docs/screenshots/README.md`](docs/screenshots/README.md) | Screenshot conventions (**STEP 11**) |
-| [`docs/rag/le-vibe-phase2-chunks.md`](docs/rag/le-vibe-phase2-chunks.md) | Optional embeddings chunk file (**not** a second source of truth) |
-
-**`.deb` installs** ship a post-install summary at **`/usr/share/doc/le-vibe/README.Debian`** ([`debian/le-vibe.README.Debian`](debian/le-vibe.README.Debian)). **`.github/`** (CI, Dependabot, issue templates) is part of the product surface per [`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md) **STEP 12** and [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) §10.
+<details>
+<summary><strong>Developer & maintainer reference</strong> (install, APIs, CI, orchestration details)</summary>
 
 ### Prioritization (what ships first)
 
@@ -238,6 +256,8 @@ On **GitHub**, pushes and PRs to `main` / `master` run [`.github/workflows/ci.ym
 **Supply chain (Roadmap H2):** **`le-vibe/requirements.txt`** uses **pinned** versions (`==`) for reproducible SBOMs; CI runs **`pip-audit -r requirements.txt`** (fails on known vulnerabilities) and generates **CycloneDX** **`le-vibe-python.cdx.json`**. Optional **`.deb`** / repo signing and key handling: **[`docs/sbom-signing-audit.md`](docs/sbom-signing-audit.md)**.
 
 **Releases & apt (Roadmap H1):** CI uploads artifact **`le-vibe-deb`** with **`*.deb`**, **`le-vibe-python.cdx.json`** (SBOM), and **`SHA256SUMS`** covering both; the workflow runs **`sha256sum -c SHA256SUMS`** before upload. Maintainers: bump **`debian/changelog`**, promote **[`CHANGELOG.md`](CHANGELOG.md)** **`[Unreleased]`** into a dated section when tagging, and publish **GitHub Releases** / optional apt per **[`docs/apt-repo-releases.md`](docs/apt-repo-releases.md)** (checksum signing, **reprepro** / **aptly**).
+
+</details>
 
 ## Tests
 

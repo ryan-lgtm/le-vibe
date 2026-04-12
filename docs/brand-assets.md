@@ -43,6 +43,10 @@ Then extend **`debian/le-vibe.install`** (or your packaging rules) to install th
 - **This repo’s icon:** Lé Vibe–only mark; do not embed third-party logos.
 - **Contrast:** Aim for recognizable shape at **22×22** (menu) and **48×48** (grid); test on light and dark panels.
 
+### Presentation palette (diagrams & marketing — reference only)
+
+For **Mermaid diagrams in docs**, slides, or future store art, a consistent accent pairing is **deep purple** (roughly `#4527A0`–`#5E35B1`) and **ruby red** (`#B71C1C`–`#C62828`). This is **not** a guarantee of shipped IDE chrome or themes until the **Lé Vibe** desktop shell (**H6**) defines UI tokens; it keeps diagrams and screenshots visually aligned when useful.
+
 ## Screenshots (README / Flatpak / store)
 
 Capture on a **clean** theme at a consistent resolution (e.g. **1920×1080** or **1600×900**). Suggested set (filenames are conventions — adjust to your pipeline):
