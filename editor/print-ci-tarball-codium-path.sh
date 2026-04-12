@@ -36,7 +36,10 @@ if [[ "${_lc}" == *.zip ]]; then
   exit 2
 fi
 
-WORKDIR="$(mktemp -d "${TMPDIR:-/tmp}/le-vibe-ci-artifact.XXXXXX")"
+WORKDIR="$(mktemp -d "${TMPDIR:-/tmp}/le-vibe-ci-artifact.XXXXXX")" || {
+  echo "${0##*/}: mktemp failed — check TMPDIR is writable and not full (editor/BUILD.md 14.f)." >&2
+  exit 1
+}
 cleanup() {
   rm -rf "${WORKDIR}"
 }
