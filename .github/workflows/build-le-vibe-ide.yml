@@ -74,7 +74,7 @@ jobs:
             echo "## Lé Vibe IDE (STEP 14 / H6)"
             echo "Smoke checks only — **no Electron compile** in CI yet."
             echo ""
-            echo "**Local parity:** from the repository root run \`./editor/smoke.sh\` (same gate as this job)."
+            echo "**Local parity:** from the repository root run \`./editor/smoke.sh\` (same gate as this job and \`build-linux.yml\`, which \`uses:\` this workflow)."
             echo ""
             echo "Docs: \`editor/README.md\`, \`docs/ci-qa-hardening.md\` (*IDE smoke*), \`docs/vscodium-fork-le-vibe.md\`."
           } >> "$GITHUB_STEP_SUMMARY"

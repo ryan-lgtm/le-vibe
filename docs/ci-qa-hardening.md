@@ -43,7 +43,7 @@ It executes, in order:
 2. **`bash -n`** on **`packaging/bin/*`** — syntax check for **`lvibe`**, **`le-vibe`**, **`le-vibe-setup-continue`**, **`lvibe-hygiene`**
 3. **Synthetic workspace hygiene** — **`PYTHONPATH=le-vibe`** Python snippet: **`ensure_lvibe_workspace`** + **`check_lvibe_workspace`** on a temp dir (same checks as **`python -m le_vibe.hygiene`** / **`lvibe-hygiene`**, E4). The subprocess sets **`LE_VIBE_LVIBE_CONSENT=accept`** for that snippet only (matches **`le-vibe/tests/conftest.py`**) so §5 automation intent stays explicit.
 4. **`pytest`** for **`le-vibe/tests/`** (installs **`requirements.txt`** + **`pytest`**; full suite — **H8** via **`test_issue_template_h8_contract.py`**; **E1** incl. **`test_product_spec_section8.py`**, **`test_ci_yml_submodules_contract.py`** — **`docs/PRODUCT_SPEC.md`** *Prioritization* / **`ci.yml`** checkout; see root **[`README.md`](../README.md)** *Tests* for **E1** roster)
-5. **`ci-editor-gate.sh`** (STEP 14 / **H6**) — same layout / **`bash -n`** / **`editor/.nvmrc`** checks as **`./editor/smoke.sh`** and **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** (no Electron compile)
+5. **`ci-editor-gate.sh`** (STEP 14 / **H6**) — same layout / **`bash -n`** / **`editor/.nvmrc`** checks as **`./editor/smoke.sh`** and **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** / **[`build-linux.yml`](../.github/workflows/build-linux.yml)** (alias) (no Electron compile)
 6. **`desktop-file-validate`** on **`packaging/applications/le-vibe.desktop`** and **`packaging/autostart/le-vibe-continue-setup.desktop`** (needs **`desktop-file-utils`**)
 
 On **GitHub Actions**, missing **`desktop-file-validate`** is a **failure**. Locally, it **skips** desktop validation with a notice unless you install **`desktop-file-utils`**.
@@ -56,7 +56,7 @@ On **GitHub Actions**, missing **`desktop-file-validate`** is a **failure**. Loc
 ./editor/smoke.sh
 ```
 
-That wrapper **`exec`**s **`packaging/scripts/ci-editor-gate.sh`**, matching **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** when sources are present. See **[`editor/README.md`](../editor/README.md)** and **[`docs/vscodium-fork-le-vibe.md`](vscodium-fork-le-vibe.md)**.
+That wrapper **`exec`**s **`packaging/scripts/ci-editor-gate.sh`**, matching **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** / **[`build-linux.yml`](../.github/workflows/build-linux.yml)** (alias) when sources are present. See **[`editor/README.md`](../editor/README.md)** and **[`docs/vscodium-fork-le-vibe.md`](vscodium-fork-le-vibe.md)**.
 
 ## What is not automated here
 
