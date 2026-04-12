@@ -143,6 +143,10 @@ if [[ "$DO_INSTALL" -eq 1 ]]; then
     echo "build-le-vibe-debs: --install requires sudo" >&2
     exit 2
   fi
+  if ! have_cmd apt-get; then
+    echo "build-le-vibe-debs: apt-get not on PATH — --install requires apt (Debian/Ubuntu)." >&2
+    exit 2
+  fi
   APT_ARGS=()
   [[ "$ASSUME_YES" -eq 1 ]] && APT_ARGS+=("-y")
   if [[ -n "$STACK_DEB" && -f "$STACK_DEB" ]]; then

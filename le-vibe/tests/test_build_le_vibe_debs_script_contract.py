@@ -25,6 +25,7 @@ def test_build_le_vibe_debs_script_mentions_submodule_14b():
     assert "find not on PATH" in text
     assert "sort not on PATH" in text
     assert "head not on PATH" in text
+    assert "apt-get not on PATH" in text
 
 
 def test_pm_deb_build_iteration_doc_submodule_prereq_14b():
