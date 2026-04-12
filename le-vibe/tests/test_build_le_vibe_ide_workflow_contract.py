@@ -1,4 +1,4 @@
-"""Contract: build-le-vibe-ide.yml keeps ide-ci-metadata LE_VIBE_EDITOR docs pointer (STEP 14 / H6)."""
+"""Contract: build-le-vibe-ide.yml + build-linux.yml (alias) keep STEP 14 metadata story (H6)."""
 
 from __future__ import annotations
 
@@ -20,3 +20,12 @@ def test_build_le_vibe_ide_workflow_writes_le_vibe_editor_docs_to_metadata():
     assert "permissions:" in text
     assert "contents: read" in text
     assert "actions: write" in text
+
+
+def test_build_linux_yaml_uses_build_le_vibe_ide_and_documents_inherited_metadata():
+    text = (_repo_root() / ".github" / "workflows" / "build-linux.yml").read_text(encoding="utf-8")
+    assert "uses: ./.github/workflows/build-le-vibe-ide.yml" in text
+    assert "ide-ci-metadata.txt" in text
+    assert "retention-days" in text
+    assert "permissions" in text
+    assert "LE_VIBE_EDITOR" in text
