@@ -6,6 +6,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### CI
 
+- **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — workflow **`permissions:`** **`contents: read`**, **`actions: write`** (E1: **`test_build_le_vibe_ide_workflow_contract.py`**).
 - **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **Job summary** (when sources present) lists **`ide-ci-metadata.txt`** **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`** (matches uploaded artifact; E1: **`test_build_le_vibe_ide_workflow_contract.py`**); **[`editor/README.md`](../editor/README.md)** *CI* and **[`docs/ci-qa-hardening.md`](docs/ci-qa-hardening.md)** (*Scope* + *Related docs*) describe the **GitHub Actions** run **Summary** tab.
 - **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **`upload-artifact`** **retention-days** for pre-binary **`ide-ci-metadata`** (and optional **`vscode-upstream-stable.json`**); **[`editor/BUILD.md`](../editor/BUILD.md)** *CI* names the artifact bundle.
 
@@ -13,7 +14,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 - **`test_le_vibe_readme_e1_contract.py`** — **`le-vibe/README.md`** *Tests* keeps **`ide-ci-metadata.txt`**, **`retention-days`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`** (aligned with root **`README.md`** *E1 mapping*).
 - **`test_product_spec_section8.py`** — *Prioritization* **`How to sequence work`** retains **`ide-ci-metadata.txt`**, **`le_vibe_editor_docs`**, **`retention-days`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`** (STEP 14 metadata story); §7.2 Continue rule — **numbered questions** (**`USER RESPONSE REQUIRED`**).
-- **`test_build_le_vibe_ide_workflow_contract.py`** — **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** **`ide-ci-metadata.txt`** **`le_vibe_editor_docs=editor/README.md`**; **Job summary** (**`GITHUB_STEP_SUMMARY`**, **`Pre-binary artifact`**, **`LE_VIBE_EDITOR`**); **`upload-artifact`** **`retention-days`** (pre-binary store).
+- **`test_build_le_vibe_ide_workflow_contract.py`** — **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** **`ide-ci-metadata.txt`** **`le_vibe_editor_docs=editor/README.md`**; **Job summary** (**`GITHUB_STEP_SUMMARY`**, **`Pre-binary artifact`**, **`LE_VIBE_EDITOR`**); **`upload-artifact`** **`retention-days`** (pre-binary store); workflow **`permissions:`** **`contents: read`**, **`actions: write`**.
 - **`test_editor_le_vibe_overrides_readme_contract.py`** — **`editor/le-vibe-overrides/README.md`** retains **H6** / **STEP 14** strings (**`LE_VIBE_EDITOR`**, **`build-linux.yml`**, **`./editor/smoke.sh`**) plus **`ide-ci-metadata.txt`**, **`le_vibe_editor_docs`**, **`test_build_le_vibe_ide_workflow_contract.py`** (STEP 14 metadata ↔ **`LE_VIBE_EDITOR`** docs).
 - **`test_session_orchestrator.py`** — bundled **`session-manifest`** example matches **`schemas/session-manifest.v1.example.json`** (STEP 2 / PM workspace parity).
 - **`test_issue_template_h8_contract.py`** — **`.github/ISSUE_TEMPLATE/*.yml`** and **`config.yml`** retain **STEP 12** / **`config.yml`** / **H8** string anchors (**H8**, §1 audit assist; not a YAML parse).

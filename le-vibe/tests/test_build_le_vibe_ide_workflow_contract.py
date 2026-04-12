@@ -17,3 +17,6 @@ def test_build_le_vibe_ide_workflow_writes_le_vibe_editor_docs_to_metadata():
     assert "**Pre-binary artifact:**" in text
     assert "LE_VIBE_EDITOR" in text
     assert "retention-days:" in text
+    assert "permissions:" in text
+    assert "contents: read" in text
+    assert "actions: write" in text

@@ -25,6 +25,11 @@ concurrency:
   group: ide-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# checkout + upload-artifact — avoid over-broad default GITHUB_TOKEN scopes (H8-adjacent hygiene).
+permissions:
+  contents: read
+  actions: write
+
 jobs:
   linux:
     runs-on: ubuntu-latest
