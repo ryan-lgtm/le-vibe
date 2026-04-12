@@ -114,7 +114,9 @@ def test_pm_deb_build_iteration_doc_731_staging_identity_step14():
     assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
     assert "ci-editor-gate.sh" in text
     assert "One-shot:" in text
+    assert "IDE-only:" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "build-le-vibe-ide-deb.sh" in text
     assert "stage-le-vibe-ide-deb.sh" in text
     assert "resources/app/product.json" in text
 

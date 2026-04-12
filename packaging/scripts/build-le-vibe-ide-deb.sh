@@ -7,9 +7,14 @@
 #   non-fatal unless LEVIBE_IDE_LINTIAN_STRICT=1 (exit code from lintian).
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md; VSCode-linux-* must exist (see stage-le-vibe-ide-deb.sh errors).
 # Staging env (passed through to stage-le-vibe-ide-deb.sh): LEVIBE_STAGE_IDE_ASSERT_BRAND, LEVIBE_STAGE_IDE_VERBOSE — §7.3 product.json identity.
+# Optional: LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 runs ci-editor-gate.sh before staging (same §7.3 check as build-le-vibe-debs.sh --with-ide).
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+if [[ "${LEVIBE_EDITOR_GATE_ASSERT_BRAND:-0}" == "1" ]]; then
+  echo "build-le-vibe-ide-deb: §7.3 pre-check: ci-editor-gate.sh (LEVIBE_EDITOR_GATE_ASSERT_BRAND=1)"
+  LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 "$ROOT/packaging/scripts/ci-editor-gate.sh"
+fi
 "$ROOT/packaging/scripts/stage-le-vibe-ide-deb.sh" "$@"
 if ! command -v dpkg-buildpackage >/dev/null 2>&1; then
   echo "build-le-vibe-ide-deb: dpkg-buildpackage not on PATH — install dpkg-dev (e.g. sudo apt install dpkg-dev build-essential) (§7.3 IDE .deb)." >&2
