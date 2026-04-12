@@ -37,6 +37,7 @@ def test_ci_vscodium_linux_dev_build_documents_overrides_hook():
     assert "14.a" in text
     assert "editor/.nvmrc" in text
     assert "LEVIBE_SKIP_NODE_VERSION_CHECK" in text
+    assert "LEVIBE_VSCODIUM_PREPARE_ONLY" in text
     assert "node --version" in text
     assert "grep not on PATH" in text
     assert "sed not on PATH" in text

@@ -26,7 +26,9 @@ Run from the repository root. Applies §7.3 Lé Vibe layers then execs editor/vs
   optional Node vs editor/.nvmrc check (14.a).
 
 Environment:
-  LEVIBE_SKIP_NODE_VERSION_CHECK   Set to 1 to skip active node vs editor/.nvmrc check.
+  LEVIBE_SKIP_NODE_VERSION_CHECK      Set to 1 to skip active node vs editor/.nvmrc check.
+  LEVIBE_VSCODIUM_PREPARE_ONLY        Set to 1 to apply §7.3 merge, Linux icons, and dev/build.sh
+                                      patch, then exit without running dev/build.sh (no compile).
 
 Authority: editor/BUILD.md (Linux icons, 14.e), docs/vscodium-fork-le-vibe.md.
 EOF
@@ -98,6 +100,12 @@ fi
 _lvibe_sync_linux_icon_assets
 _lvibe_merge_vscodium_product_json
 _lvibe_patch_dev_build_sh_for_env_defaults
+
+if [[ "${LEVIBE_VSCODIUM_PREPARE_ONLY:-}" == "1" ]]; then
+  echo "ci-vscodium-linux-dev-build: LEVIBE_VSCODIUM_PREPARE_ONLY=1 — §7.3 product merge, Linux icons, and dev/build.sh env patch applied; not invoking dev/build.sh."
+  echo "ci-vscodium-linux-dev-build: Next: ./editor/fetch-vscode-sources.sh if editor/vscodium/vscode/ is missing, then re-run without LEVIBE_VSCODIUM_PREPARE_ONLY for the compile (editor/BUILD.md 14.e)."
+  exit 0
+fi
 
 cd "${VSC}"
 
