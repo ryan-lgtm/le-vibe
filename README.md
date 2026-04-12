@@ -257,7 +257,7 @@ On **GitHub**, pushes and PRs to `main` / `master` run [`.github/workflows/ci.ym
 
 **Supply chain (Roadmap H2):** **`le-vibe/requirements.txt`** uses **pinned** versions (`==`) for reproducible SBOMs; CI runs **`pip-audit -r requirements.txt`** (fails on known vulnerabilities) and generates **CycloneDX** **`le-vibe-python.cdx.json`**. Optional **`.deb`** / repo signing and key handling: **[`docs/sbom-signing-audit.md`](docs/sbom-signing-audit.md)**.
 
-**Releases & apt (Roadmap H1):** CI uploads artifact **`le-vibe-deb`** with **`*.deb`**, **`le-vibe-python.cdx.json`** (SBOM), and **`SHA256SUMS`** covering both; the workflow runs **`sha256sum -c SHA256SUMS`** before upload. Maintainers: bump **`debian/changelog`**, promote **[`CHANGELOG.md`](CHANGELOG.md)** **`[Unreleased]`** into a dated section when tagging, and publish **GitHub Releases** / optional apt per **[`docs/apt-repo-releases.md`](docs/apt-repo-releases.md)** (checksum signing, **reprepro** / **aptly**).
+**Releases & apt (Roadmap H1):** CI uploads artifact **`le-vibe-deb`** with the stack **`le-vibe`** **`.deb`**, **`le-vibe-python.cdx.json`** (SBOM), and **`SHA256SUMS`** for those files; the workflow runs **`sha256sum -c SHA256SUMS`** before upload. **Full product (STEP 14 / §7.3):** default CI does **not** bundle **`le-vibe-ide_*_amd64.deb`** — attach it alongside when you build the branded IDE (**[`docs/apt-repo-releases.md`](docs/apt-repo-releases.md)** *IDE package*). Maintainers: bump **`debian/changelog`**, promote **[`CHANGELOG.md`](CHANGELOG.md)** **`[Unreleased]`** into a dated section when tagging, and publish **GitHub Releases** / optional apt per **[`docs/apt-repo-releases.md`](docs/apt-repo-releases.md)** (checksum signing, **reprepro** / **aptly**).
 
 </details>
 

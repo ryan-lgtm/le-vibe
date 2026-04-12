@@ -18,6 +18,16 @@ def test_root_readme_feedback_row_submodule_init_fallback_14b():
     assert "Fresh clone (14.b)" in text
 
 
+def test_root_readme_releases_h1_lists_stack_artifact_vs_ide_deb_step14():
+    """H1: root README distinguishes CI le-vibe-deb (stack) from optional le-vibe-ide (§7.3)."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "Releases & apt (Roadmap H1)" in text
+    assert "le-vibe-deb" in text
+    assert "Full product (STEP 14 / §7.3)" in text
+    assert "le-vibe-ide_*_amd64.deb" in text
+    assert "IDE package" in text
+
+
 def test_root_readme_documents_ai_pilot_and_user_gate():
     text = (_repo_root() / "README.md").read_text(encoding="utf-8")
     assert "Lé Vibe" in text
