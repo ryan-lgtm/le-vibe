@@ -22,6 +22,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Documentation
 
+- **[`packaging/scripts/ci-smoke.sh`](../packaging/scripts/ci-smoke.sh)** header — STEP **14** / **H6** line names **`test_product_spec_section8.py`**, **`test_build_le_vibe_ide_workflow_contract.py`**, **`test_le_vibe_readme_e1_contract.py`** (*Prioritization* metadata / **`ide-ci-metadata`** / package **`README`**).
 - **[`docs/AI_PILOT_AND_CONTINUE.md`](docs/AI_PILOT_AND_CONTINUE.md)** §4 table — **`PRODUCT_SPEC_SECTION8_EVIDENCE`** row lists **`test_product_spec_section8.py`** *Prioritization* metadata strings.
 - **[`spec-phase2.md`](spec-phase2.md)** §14 *Honesty vs CI* — **`test_le_vibe_readme_e1_contract.py`** clause names **`PRODUCT_SPEC` *Prioritization*** **`ide-ci-metadata.txt`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`** (package **`README`** vs root **E1**).
 - Root **[`README.md`](README.md)** *Tests* / **E1 mapping** — **`test_product_spec_section8.py`** lists **`ide-ci-metadata.txt`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`**; **[`editor/smoke.sh`](editor/smoke.sh)** header notes the same **E1** lock.
