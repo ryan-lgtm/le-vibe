@@ -40,3 +40,9 @@ def test_editor_vendoring_md_documents_smoke_gate_and_metadata():
     assert "NODE_OPTIONS" in text
     assert "max-old-space-size=8192" in text
     assert "When full compile fails" in text
+    assert "le-vibe-deb" in text
+    assert "le-vibe-ide_*_amd64.deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
+    assert "Release bundles (H1 / STEP 8 vs STEP 14 / §7.3)" in text
