@@ -29,7 +29,10 @@ Exact paths follow the VSCodium / `vscode` tree you import:
 | Application name & id | Desktop `Name=`, Linux `.desktop`, internal app id |
 | Icons | `resources/linux`, `hicolor` — align with [`packaging/icons/`](../packaging/icons/) or replace |
 | About / credits | “Built on Code - OSS”; Lé Vibe copy; trademark-safe wording |
+| Lé Vibe–specific overrides | **[`editor/le-vibe-overrides/`](../editor/le-vibe-overrides/README.md)** — reserved branding/build inputs not shipped by upstream; material choices — **`PRODUCT_SPEC` §7.2** |
 | CI | e.g. `.github/workflows/` under repo root or `editor/` — build Linux artifacts on tags |
+
+**Monorepo today:** VSCodium is vendored at **`editor/vscodium/`** (git submodule); Lé Vibe–only layers use **`editor/le-vibe-overrides/`** as above — see **`editor/README.md`**.
 
 Upstream VSCodium prepare/build scripts remain the source of truth for **how** to compile; this doc stays a **pointer** and policy shell, not a full upstream mirror.
 
