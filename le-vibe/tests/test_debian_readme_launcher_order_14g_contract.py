@@ -24,6 +24,10 @@ def test_debian_readme_documents_ci_vs_maintainer_deb_bundles_step14():
     assert "apt-repo-releases.md" in text
     assert "PM_STAGE_MAP.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "Success output (`--with-ide`)" in text
 
 
 def test_debian_readme_documents_default_editor_resolution_14g():
