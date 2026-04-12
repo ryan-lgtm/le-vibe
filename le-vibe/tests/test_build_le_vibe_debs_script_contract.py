@@ -71,3 +71,6 @@ def test_print_pm_deb_build_prompt_extractable():
     assert fence is not None
     assert "build-le-vibe-debs.sh" in fence
     assert "LÉ VIBE PACKAGING COMPLETE" in fence
+    assert "PM_STAGE_MAP.md" in fence
+    assert "H1 vs §7.3 .deb bundles" in fence
+    assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in fence
