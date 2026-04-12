@@ -14,6 +14,8 @@ def test_ci_vscodium_linux_dev_build_documents_overrides_hook():
     text = (_repo_root() / "packaging" / "scripts" / "ci-vscodium-linux-dev-build.sh").read_text(encoding="utf-8")
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
+    assert "restore from git" in text
+    assert "must match editor/vscodium/.nvmrc" in text
     assert "le-vibe-overrides/build-env.sh" in text
     assert "build-env.lvibe-defaults.sh" in text
     assert "product-branding-merge.json" in text

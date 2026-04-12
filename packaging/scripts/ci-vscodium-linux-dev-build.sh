@@ -69,13 +69,13 @@ cd "${VSC}"
 if [[ "${LEVIBE_SKIP_NODE_VERSION_CHECK:-}" != "1" ]]; then
   _nvmrc="${ROOT}/editor/.nvmrc"
   if [[ ! -f "${_nvmrc}" ]]; then
-    echo "ci-vscodium-linux-dev-build: missing ${_nvmrc}" >&2
+    echo "ci-vscodium-linux-dev-build: missing ${_nvmrc} — restore from git; Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md; align pins per packaging/scripts/ci-editor-nvmrc-sync.sh (14.a)." >&2
     exit 1
   fi
   IFS= read -r _want < "${_nvmrc}" || true
   _want="${_want//$'\r'/}"
   if [[ -z "${_want}" ]]; then
-    echo "ci-vscodium-linux-dev-build: empty ${_nvmrc}" >&2
+    echo "ci-vscodium-linux-dev-build: empty ${_nvmrc} — set a Node version line; must match editor/vscodium/.nvmrc after a vendor bump (14.a)." >&2
     exit 1
   fi
   if ! command -v node >/dev/null 2>&1; then
