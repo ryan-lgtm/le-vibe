@@ -6,6 +6,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### CI
 
+- **[`.github/workflows/build-linux.yml`](../.github/workflows/build-linux.yml)** — header comments name inherited **`build-le-vibe-ide`** pre-binary story (**`ide-ci-metadata`**, **`retention-days`**, **`permissions`**).
 - **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — workflow **`permissions:`** **`contents: read`**, **`actions: write`** (E1: **`test_build_le_vibe_ide_workflow_contract.py`**).
 - **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **Job summary** (when sources present) lists **`ide-ci-metadata.txt`** **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`** (matches uploaded artifact; E1: **`test_build_le_vibe_ide_workflow_contract.py`**); **[`editor/README.md`](../editor/README.md)** *CI* and **[`docs/ci-qa-hardening.md`](docs/ci-qa-hardening.md)** (*Scope* + *Related docs*) describe the **GitHub Actions** run **Summary** tab.
 - **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **`upload-artifact`** **retention-days** for pre-binary **`ide-ci-metadata`** (and optional **`vscode-upstream-stable.json`**); **[`editor/BUILD.md`](../editor/BUILD.md)** *CI* names the artifact bundle.
