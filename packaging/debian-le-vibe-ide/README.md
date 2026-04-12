@@ -14,6 +14,18 @@ This directory is a **separate Debian source** (sibling to the root **`debian/`*
 
 **Stack + IDE in one pass (STEP 14 / demo):** from the monorepo root, **`./packaging/scripts/build-le-vibe-debs.sh --with-ide`** builds **`le-vibe_*_all.deb`** (root **`debian/`**) and then this IDE **`.deb`** when **`VSCode-linux-*`** exists — **[`docs/PM_DEB_BUILD_ITERATION.md`](../../docs/PM_DEB_BUILD_ITERATION.md)**. For releases, attach **`le-vibe_*_all.deb`**, **`le-vibe-ide_*_amd64.deb`**, and **`SHA256SUMS`** — **[`docs/apt-repo-releases.md`](../../docs/apt-repo-releases.md)** (*IDE package*).
 
+## Install both packages (owner / demo)
+
+Use the **same version train** for **`le-vibe`** and **`le-vibe-ide`**. From a directory that contains both **`.deb`** files:
+
+```bash
+sudo apt install ./le-vibe_*_all.deb ./le-vibe-ide_*_amd64.deb
+```
+
+**`apt`** pulls declared dependencies; if you use **`dpkg -i`** on both files instead, run **`sudo apt -f install`** afterward if the resolver asks.
+
+**After install:** follow the stack post-install flow in **`/usr/share/doc/le-vibe/README.Debian`** (first-run **`lvibe`**, **`le-vibe-setup-continue`**, **§5** **`.lvibe/`** consent). The IDE binary is **`/usr/lib/le-vibe/bin/codium`**; the desktop environment’s **Lé Vibe** menu entry ( **`le-vibe.desktop`**) starts that binary — see also **`debian/le-vibe.README.Debian`** in the monorepo (*Desktop launcher*).
+
 **CI vs maintainer .deb bundles:** Default **`ci.yml`** artifact **`le-vibe-deb`** ships the stack **`le-vibe`** **`.deb`**, SBOM, and **`SHA256SUMS`** for those files — **not** **`le-vibe-ide_*_amd64.deb`**. Honesty — **[`docs/PM_STAGE_MAP.md`](../../docs/PM_STAGE_MAP.md)** (*H1 vs §7.3 .deb bundles*); monorepo table — **[`spec-phase2.md`](../../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*.
 
 ## Lintian (optional)

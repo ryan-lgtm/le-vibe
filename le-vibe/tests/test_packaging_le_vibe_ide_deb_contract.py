@@ -110,6 +110,9 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "resources/app/product.json" in readme
     assert "spec-phase2.md" in readme
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in readme
+    assert "## Install both packages" in readme
+    assert "sudo apt install ./le-vibe_" in readme
+    assert "/usr/share/doc/le-vibe/README.Debian" in readme
     desktop = (root / "packaging" / "debian-le-vibe-ide" / "debian" / "le-vibe.desktop").read_text(
         encoding="utf-8"
     )
