@@ -18,11 +18,12 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
   exit 2
 }
 
-TAR="$(realpath "$1")"
-[[ -f "$TAR" ]] || {
-  echo "${0##*/}: not a file: $TAR — pass the path to vscodium-linux-build.tar.gz from CI (editor/BUILD.md 14.f)." >&2
+ARG="$1"
+if [[ ! -f "$ARG" ]]; then
+  echo "${0##*/}: not a regular file: $ARG — pass the path to vscodium-linux-build.tar.gz from CI (editor/BUILD.md 14.f)." >&2
   exit 1
-}
+fi
+TAR="$(realpath "$ARG")"
 
 _lc="${TAR,,}"
 if [[ "${_lc}" == *.zip ]]; then

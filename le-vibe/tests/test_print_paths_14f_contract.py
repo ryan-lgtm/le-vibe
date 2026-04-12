@@ -35,7 +35,7 @@ def test_print_vsbuild_codium_path_documents_14f():
 def test_print_ci_tarball_codium_path_documents_14f():
     text = (_repo_root() / "editor" / "print-ci-tarball-codium-path.sh").read_text(encoding="utf-8")
     assert "14.f" in text
-    assert "not a file:" in text
+    assert "not a regular file:" in text
     assert "exactly one argument" in text
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
