@@ -14,4 +14,7 @@ def test_dependabot_yml_header_documents_le_vibe_deb_stack_only_step14():
     text = (_repo_root() / ".github" / "dependabot.yml").read_text(encoding="utf-8")
     assert "le-vibe-deb" in text
     assert "not le-vibe-ide" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "apt-repo-releases.md" in text

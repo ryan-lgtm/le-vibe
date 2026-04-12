@@ -1,5 +1,5 @@
 # Keep GitHub Actions versions current (weekly PRs).
-# H1 — parent ci.yml uploads le-vibe-deb (stack le-vibe .deb + SBOM + SHA256SUMS only; not le-vibe-ide — STEP 14 / §7.3; docs/apt-repo-releases.md IDE package).
+# H1 — parent ci.yml uploads le-vibe-deb (stack le-vibe .deb + SBOM + SHA256SUMS only; not le-vibe-ide — STEP 14 / §7.3; maintainer full product: build-le-vibe-debs.sh --with-ide prints Full-product install — docs/PM_DEB_BUILD_ITERATION.md; docs/apt-repo-releases.md IDE package).
 # Full E1 pytest roster: root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI — same as ci.yml header.
 # STEP 14 E1 (IDE metadata / LE_VIBE_EDITOR docs): test_product_spec_section8.py, test_build_le_vibe_ide_workflow_contract.py, test_le_vibe_readme_e1_contract.py — packaging/scripts/ci-smoke.sh, editor/smoke.sh (same roster intent as ci.yml).
 # H8 (trust / .github/ — CI, Dependabot, ISSUE_TEMPLATE/ + config.yml # H8): docs/README.md Product surface;
