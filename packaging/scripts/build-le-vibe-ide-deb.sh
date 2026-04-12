@@ -18,7 +18,7 @@ dpkg-buildpackage -us -uc -b
 
 _latest="$(ls -t "$ROOT/packaging"/le-vibe-ide_*.deb 2>/dev/null | head -1 || true)"
 if [[ -z "${_latest:-}" ]]; then
-  echo "build-le-vibe-ide-deb: expected packaging/le-vibe-ide_*.deb after dpkg-buildpackage — check build log." >&2
+  echo "build-le-vibe-ide-deb: expected packaging/le-vibe-ide_*.deb after dpkg-buildpackage — check build log. CI vs maintainer bundles: docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles); packaging/debian-le-vibe-ide/README.md." >&2
   exit 1
 fi
 if command -v lintian >/dev/null 2>&1; then

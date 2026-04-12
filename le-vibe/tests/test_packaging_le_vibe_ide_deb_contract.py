@@ -60,6 +60,9 @@ def test_build_le_vibe_ide_deb_script_documents_14b_and_bash_syntax():
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
     assert "stage-le-vibe-ide-deb.sh" in text
+    assert "expected packaging/le-vibe-ide_*.deb" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
     assert "dpkg-buildpackage not on PATH" in text
     assert "lintian" in text
     assert "LEVIBE_IDE_LINTIAN_STRICT" in text
