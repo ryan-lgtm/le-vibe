@@ -16,3 +16,4 @@ def test_build_le_vibe_ide_workflow_writes_le_vibe_editor_docs_to_metadata():
     assert "GITHUB_STEP_SUMMARY" in text
     assert "**Pre-binary artifact:**" in text
     assert "LE_VIBE_EDITOR" in text
+    assert "retention-days:" in text
