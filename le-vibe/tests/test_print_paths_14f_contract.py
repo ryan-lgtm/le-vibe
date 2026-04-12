@@ -39,6 +39,9 @@ def test_print_vsbuild_codium_path_documents_14f():
 def test_print_ci_tarball_codium_path_documents_14f():
     text = (_repo_root() / "editor" / "print-ci-tarball-codium-path.sh").read_text(encoding="utf-8")
     assert "14.f" in text
+    assert "LE_VIBE_EDITOR" in text
+    assert 'exec "${ROOT}/editor/print-vsbuild-codium-path.sh"' in text
+    assert "linux_compile" in text
     assert "not a regular file:" in text
     assert "realpath not on PATH" in text
     assert "tar not on PATH" in text
