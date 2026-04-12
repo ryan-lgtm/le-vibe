@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Stage editor/vscodium/VSCode-linux-* for packaging/debian-le-vibe-ide (PRODUCT_SPEC §7.3).
+# Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md when editor/vscodium/ is empty.
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
@@ -17,7 +18,7 @@ find_vsbuild() {
     echo "$d"
     return 0
   fi
-  echo "stage-le-vibe-ide-deb: no VSCode-linux-* under editor/vscodium/ — run editor/vscodium/dev/build.sh first." >&2
+  echo "stage-le-vibe-ide-deb: no VSCode-linux-* under editor/vscodium/ — vendor sources (Fresh clone 14.b: git submodule update --init editor/vscodium — editor/README.md), fetch/build per editor/BUILD.md, then dev/build.sh." >&2
   exit 1
 }
 
