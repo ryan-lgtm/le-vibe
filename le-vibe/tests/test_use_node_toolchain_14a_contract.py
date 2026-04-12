@@ -26,6 +26,7 @@ def test_use_node_toolchain_script_documents_14a_nvmrc():
     assert ".nvmrc" in text
     assert "ci-editor-nvmrc-sync" in text or "vscodium/.nvmrc" in text
     assert "command -v node" in text
+    assert "node not on PATH after nvm" in text
     assert "stderr" in text.lower()
 
 

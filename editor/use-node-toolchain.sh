@@ -41,6 +41,10 @@ nvm install
 nvm use
 popd >/dev/null
 
+if ! command -v node >/dev/null 2>&1; then
+  _die "node not on PATH after nvm install/use — check nvm and editor/.nvmrc (editor/BUILD.md 14.a)."
+fi
+
 if [[ "${_lev_sourced}" -eq 1 ]]; then
   echo "use-node-toolchain: Node $(node --version) ($(command -v node)) - ${EDITOR_DIR}/.nvmrc" >&2
   return 0
