@@ -6,6 +6,7 @@
 #   SEARCH_ROOT defaults to the current working directory (typical: cd to unpack dir, then run from repo with ../../editor/... or pass the unpack path).
 # Example (artifact in /tmp/vs):
 #   ./editor/print-vsbuild-codium-path.sh /tmp/vs
+# Requires: realpath (coreutils) for the final absolute path line.
 set -euo pipefail
 
 SEARCH="${1:-.}"
@@ -33,4 +34,8 @@ for p in "${matches[@]}"; do
   fi
 done
 
+if ! command -v realpath >/dev/null 2>&1; then
+  echo "print-vsbuild-codium-path: realpath not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md 14.f)." >&2
+  exit 1
+fi
 realpath "$best"
