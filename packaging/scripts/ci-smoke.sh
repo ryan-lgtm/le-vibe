@@ -6,6 +6,7 @@
 # Product / trust: docs/PRODUCT_SPEC.md §8–§9; spec-phase2.md §14 (H6/H7 vs in-tree; STEP 14 E1 — editor/le-vibe-overrides/README.md + le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py); H-theme maintainer docs: docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
 # Optional RAG chunk: docs/rag/le-vibe-phase2-chunks.md (§14 table row; not pytest-gated) — SECURITY.md Related docs; same index as .github/workflows/ci.yml header.
 # STEP 14 / H6: after pytest, ci-editor-gate.sh (same gate as ./editor/smoke.sh, build-le-vibe-ide.yml, build-linux.yml alias). E1: test_product_spec_section8.py — PRODUCT_SPEC *Prioritization* (ide-ci-metadata.txt, retention-days, Pre-binary artifact, editor/BUILD.md, editor/VENDORING.md); test_build_le_vibe_ide_workflow_contract.py — ide-ci-metadata + retention-days + permissions (contents read, actions write) + Summary; test_le_vibe_readme_e1_contract.py — le-vibe/README vs root E1.
+# Fresh clone (14.b): git submodule update --init editor/vscodium when editor/vscodium/ is empty — editor/README.md; docs/ci-qa-hardening.md *Local clone (14.b)*.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
