@@ -50,6 +50,12 @@ def test_pm_stage_map_lists_h1_vs_ide_deb_bundles_step14():
     assert "apt-repo-releases.md" in text
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
     assert "build-le-vibe-debs.sh" in text and "--with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "Success output (`--with-ide`)" in text
+    assert "debian-le-vibe-ide/README.md" in text
+    assert "Install both packages" in text
+    assert "Maintainer build output" in text
 
 
 def test_pm_stage_map_notes_step14_fine_grain_closure_and_remaining_gap():
