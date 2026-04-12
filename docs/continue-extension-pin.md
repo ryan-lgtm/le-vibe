@@ -10,7 +10,7 @@ After **`dpkg -i`**, the same pin is installed at **`/usr/share/le-vibe/continue
 
 **`.deb` / `apt`:** The end-to-end steps below match **`/usr/share/doc/le-vibe/README.Debian`** ([`debian/le-vibe.README.Debian`](../debian/le-vibe.README.Debian)) — first-run, **`le-vibe-setup-continue`**, pinned Open VSX install (**§5**/**§8** unchanged).
 
-**Phase 2 scope:** This pin story covers **Continue** on **system VSCodium** (or **`LE_VIBE_EDITOR`**) plus **`le-vibe`** configs — not a **fork-only** IDE binary from **`r-vibe`** alone; see **[`spec-phase2.md`](../spec-phase2.md) §14** (**H6**/**H7**).
+**Phase 2 scope:** This pin story covers **Continue** on **system VSCodium** (or **`LE_VIBE_EDITOR`**) plus **`le-vibe`** configs — not a **published** **Lé Vibe–branded** IDE artifact from **`editor/`** until **H6** release work lands (**VSCodium** sources live under **`editor/vscodium/`** in the monorepo); see **[`spec-phase2.md`](../spec-phase2.md) §14** (**H6**/**H7**).
 
 **E1 / acceptance:** After changing **`packaging/continue-openvsx-version`**, run **`./packaging/scripts/verify-continue-pin.sh`** and **`cd le-vibe && python3 -m pytest tests/`** (**H4** — **[`test_continue_openvsx_pin.py`](../le-vibe/tests/test_continue_openvsx_pin.py)**; full **E1** roster — root [`README.md`](../README.md) *Tests* / **E1 mapping**, **[`spec-phase2.md`](../spec-phase2.md) §14** *Honesty vs CI*). If Continue install copy or first-run messaging changes, refresh **[`PRODUCT_SPEC_SECTION8_EVIDENCE.md`](PRODUCT_SPEC_SECTION8_EVIDENCE.md)** — same release discipline as **[H1](apt-repo-releases.md)** / **[H2](sbom-signing-audit.md)** / **[H3](ci-qa-hardening.md)** *E1* notes.
 
