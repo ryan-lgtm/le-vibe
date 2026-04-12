@@ -17,7 +17,7 @@ It applies in **two places**:
 
 **`.deb` / `apt`:** [`debian/le-vibe.README.Debian`](../debian/le-vibe.README.Debian) installs as **`/usr/share/doc/le-vibe/README.Debian`** — post-install flow and **§5** workspace memory consent before **`.lvibe/`** on packaged hosts.
 
-**Phase 2 vs this tree:** Session manifests and agents apply to **workspace** **`.lvibe/`** and **Continue** today; a single branded IDE binary is **out of scope** here — **[`spec-phase2.md`](../spec-phase2.md) §14** (**H6**/**H7**).
+**Phase 2 vs this tree:** Session manifests and agents apply to **workspace** **`.lvibe/`** and **Continue** in this document. The **Lé Vibe IDE** desktop shell (Code OSS / **VSCodium** build, CI, packaging) is owned under **`editor/`** — **[`editor/README.md`](../editor/README.md)**, **[`editor/BUILD.md`](../editor/BUILD.md)**, **[`docs/vscodium-fork-le-vibe.md`](vscodium-fork-le-vibe.md)** (**H6**); optional Flatpak/AppImage — **H7** — **[`spec-phase2.md`](../spec-phase2.md) §14**.
 
 ---
 
