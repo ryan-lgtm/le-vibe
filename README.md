@@ -106,7 +106,7 @@ Diagram **color accents** used in this README are documented as a **reference pa
 
 **PM / project management:** Epics, session manifests, and lazy prompts **coordinate delivery of the IDE + stack**—see **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** *Product and project management — in service of the IDE* and **[`docs/PROMPT_BUILD_LE_VIBE.md`](docs/PROMPT_BUILD_LE_VIBE.md)** (orchestrator order **0→1→14→…**).
 
-**Interim dev:** **`editor/vscodium`** vendors **VSCodium** upstream (git submodule). For a **demo install** of the branded shell: compile **`VSCode-linux-*`**, run **`packaging/scripts/build-le-vibe-ide-deb.sh`**, install **`le-vibe`** then **`le-vibe-ide`** **`.deb`** files — **`packaging/debian-le-vibe-ide/README.md`**. Until that build exists on your machine, use system **VSCodium** + **`LE_VIBE_EDITOR`** alongside the **`le-vibe`** **`.deb`**. One **git** history in this monorepo; release tags can cover **stack + IDE** drops together.
+**Interim dev:** **`editor/vscodium`** vendors **VSCodium** upstream (git submodule). For a **demo install** of the branded shell: compile **`VSCode-linux-*`**, run **`packaging/scripts/build-le-vibe-ide-deb.sh`** (or **`packaging/scripts/build-le-vibe-debs.sh --with-ide`**), then install both **`.deb`** files from the same directory, e.g. **`sudo apt install ./le-vibe_*_all.deb ./le-vibe-ide_*_amd64.deb`** — details in **`packaging/debian-le-vibe-ide/README.md`** (*Install both packages*). Until that build exists on your machine, use system **VSCodium** + **`LE_VIBE_EDITOR`** alongside the **`le-vibe`** **`.deb`**. One **git** history in this monorepo; release tags can cover **stack + IDE** drops together.
 
 ## Managed Ollama (dedicated port, §7.2-A)
 

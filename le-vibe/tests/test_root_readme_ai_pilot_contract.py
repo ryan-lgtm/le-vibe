@@ -30,6 +30,14 @@ def test_root_readme_releases_h1_lists_stack_artifact_vs_ide_deb_step14():
     assert "H1 vs §7.3 .deb bundles" in text
 
 
+def test_root_readme_prioritization_demoinstall_apt_install_both_debs_step14():
+    """STEP 14: landing README copies apt install both .debs next to IDE README pointer."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "sudo apt install ./le-vibe_*_all.deb ./le-vibe-ide_*_amd64.deb" in text
+    assert "Install both packages" in text
+    assert "packaging/debian-le-vibe-ide/README.md" in text
+
+
 def test_root_readme_documents_ai_pilot_and_user_gate():
     text = (_repo_root() / "README.md").read_text(encoding="utf-8")
     assert "Lé Vibe" in text
