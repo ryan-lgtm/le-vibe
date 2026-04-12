@@ -109,6 +109,8 @@ def test_pm_deb_build_iteration_doc_731_staging_identity_step14():
     assert "sync-linux-icon-assets.sh" in text
     assert "LEVIBE_STAGE_IDE_ASSERT_BRAND" in text
     assert "LEVIBE_STAGE_IDE_VERBOSE" in text
+    assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
+    assert "ci-editor-gate.sh" in text
     assert "stage-le-vibe-ide-deb.sh" in text
     assert "resources/app/product.json" in text
 
@@ -128,6 +130,7 @@ def test_print_pm_deb_build_prompt_extractable():
     assert "H1 vs §7.3 .deb bundles" in fence
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in fence
     assert "LEVIBE_STAGE_IDE_ASSERT_BRAND" in fence
+    assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in fence
     assert "stage-le-vibe-ide-deb.sh" in fence
     assert "Full-product install" in fence
     assert "Success output (`--with-ide`)" in fence
