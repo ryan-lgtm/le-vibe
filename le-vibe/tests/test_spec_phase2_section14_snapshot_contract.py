@@ -26,6 +26,12 @@ def test_spec_phase2_monorepo_lists_ci_le_vibe_deb_vs_le_vibe_ide_step14():
     assert "IDE package" in text
     assert "PM_STAGE_MAP.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "Success output (`--with-ide`)" in text
+    assert "debian-le-vibe-ide/README.md" in text
+    assert "Install both packages" in text
+    assert "Maintainer build output" in text
 
 
 def test_spec_phase2_section14_ide_row_honesty_strings():
