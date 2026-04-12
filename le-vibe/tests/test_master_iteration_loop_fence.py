@@ -24,3 +24,7 @@ def test_master_iteration_loop_fence_extractable():
     assert "ORDERED WORK QUEUE" in fence or "PROMPT_BUILD_LE_VIBE" in fence
     assert "USER RESPONSE REQUIRED" in fence
     assert "LÉ VIBE SESSION COMPLETE" in fence
+    assert "PM_DEB_BUILD_ITERATION.md" in fence
+    assert "build-le-vibe-debs.sh --with-ide" in fence
+    assert "Full-product install" in fence
+    assert "le-vibe-deb" in fence
