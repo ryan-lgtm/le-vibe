@@ -2,7 +2,7 @@
 # Lé Vibe default CLI — same as le-vibe; opens the editor with optional workspace path (e.g. lvibe .).
 # Product / trust: docs/PRODUCT_SPEC.md (launcher, §5 `.lvibe/` consent); spec-phase2.md §14 (H6/H7 vs in-tree; STEP 14 E1 — editor/le-vibe-overrides/README.md + le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py); docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
 # Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (same pointers as ci.yml, dependabot.yml).
-# H1 / §7.3: default CI artifact le-vibe-deb is the stack le-vibe .deb only; le-vibe-ide_*_amd64.deb is a separate maintainer build — docs/apt-repo-releases.md (IDE package); docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles).
+# H1 / §7.3: default ci.yml le-vibe-deb is stack-only; maintainer full product: build-le-vibe-debs.sh --with-ide prints Full-product install — docs/PM_DEB_BUILD_ITERATION.md; docs/apt-repo-releases.md (IDE package); docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles).
 # Optional RAG: docs/rag/le-vibe-phase2-chunks.md (spec-phase2 §14 table; not pytest) — SECURITY Related docs; packaging/scripts/ci-smoke.sh + .github/workflows/ci.yml headers.
 # Requires: python3 on PATH.
 export PYTHONPATH="/usr/share/le-vibe${PYTHONPATH:+:$PYTHONPATH}"

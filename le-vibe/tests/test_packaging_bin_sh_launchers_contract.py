@@ -15,6 +15,9 @@ def test_lvibe_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -> None:
     root = _repo_root()
     text = (root / "packaging/bin/lvibe").read_text(encoding="utf-8")
     assert "le-vibe-deb" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "apt-repo-releases.md" in text
     assert "IDE package" in text
     assert "PM_STAGE_MAP.md" in text
@@ -26,6 +29,9 @@ def test_le_vibe_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -> None
     root = _repo_root()
     text = (root / "packaging/bin/le-vibe").read_text(encoding="utf-8")
     assert "le-vibe-deb" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "apt-repo-releases.md" in text
     assert "IDE package" in text
     assert "PM_STAGE_MAP.md" in text
@@ -37,6 +43,9 @@ def test_lvibe_hygiene_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -
     root = _repo_root()
     text = (root / "packaging/bin/lvibe-hygiene").read_text(encoding="utf-8")
     assert "le-vibe-deb" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "apt-repo-releases.md" in text
     assert "IDE package" in text
     assert "PM_STAGE_MAP.md" in text
