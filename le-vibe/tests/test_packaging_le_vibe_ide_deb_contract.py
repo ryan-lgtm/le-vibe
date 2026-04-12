@@ -71,6 +71,9 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "build-le-vibe-ide-deb.sh" in readme
     assert "applications" in readme.lower()
     assert "roadmap" in readme.lower() and "apt-repo-releases" in readme
+    assert "build-le-vibe-debs.sh --with-ide" in readme
+    assert "PM_DEB_BUILD_ITERATION.md" in readme
+    assert "SHA256SUMS" in readme
     desktop = (root / "packaging" / "debian-le-vibe-ide" / "debian" / "le-vibe.desktop").read_text(
         encoding="utf-8"
     )

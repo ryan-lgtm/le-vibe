@@ -12,6 +12,8 @@ This directory is a **separate Debian source** (sibling to the root **`debian/`*
 2. **`./packaging/scripts/stage-le-vibe-ide-deb.sh`** — copies the tree into **`staging/`**, creates **`/usr/lib/le-vibe/bin/codium`** (symlink), and stages **`debian/le-vibe.desktop`** plus **`packaging/icons/.../le-vibe.svg`** for **`/usr/share/applications/`** and **`/usr/share/icons/hicolor/`** (§7.3 Freedesktop integration — no second public CLI; **`Exec=`** uses the internal **`codium`** path).
 3. **`./packaging/scripts/build-le-vibe-ide-deb.sh`** — runs **`dpkg-buildpackage`** here; **`*.deb`** artifacts land under **`packaging/`** (gitignored).
 
+**Stack + IDE in one pass (STEP 14 / demo):** from the monorepo root, **`./packaging/scripts/build-le-vibe-debs.sh --with-ide`** builds **`le-vibe_*_all.deb`** (root **`debian/`**) and then this IDE **`.deb`** when **`VSCode-linux-*`** exists — **[`docs/PM_DEB_BUILD_ITERATION.md`](../../docs/PM_DEB_BUILD_ITERATION.md)**. For releases, attach **`le-vibe_*_all.deb`**, **`le-vibe-ide_*_amd64.deb`**, and **`SHA256SUMS`** — **[`docs/apt-repo-releases.md`](../../docs/apt-repo-releases.md)** (*IDE package*).
+
 ## Lintian (optional)
 
 **`./packaging/scripts/build-le-vibe-ide-deb.sh`** runs **`lintian`** automatically when it is on **`PATH`** after **`dpkg-buildpackage`**. Tags are **non-fatal** unless **`LEVIBE_IDE_LINTIAN_STRICT=1`** is set in the environment. Manually, from the monorepo root: **`lintian packaging/le-vibe-ide_*_*.deb`**. Use tags as hints — **[`docs/ci-qa-hardening.md`](../../docs/ci-qa-hardening.md)**; the stack **`debian/`** package may run stricter QA in CI (**STEP 10** / **H3**).
