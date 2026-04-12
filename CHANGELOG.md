@@ -22,6 +22,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Documentation
 
+- **[`editor/BUILD.md`](../editor/BUILD.md)** *CI* — **`ide-ci-metadata.txt`**, Actions **Summary** **Pre-binary artifact** / **`LE_VIBE_EDITOR`** (see **`editor/README.md`**).
 - **[`packaging/scripts/ci-editor-gate.sh`](../packaging/scripts/ci-editor-gate.sh)** header — **`ide-ci-metadata.txt`**, Actions **Summary** **Pre-binary artifact**, **`test_build_le_vibe_ide_workflow_contract.py`** (STEP 14 metadata story beside this gate).
 - **[`docs/PROMPT_BUILD_LE_VIBE.md`](docs/PROMPT_BUILD_LE_VIBE.md)** Master orchestrator **STEP 14** line — **`test_build_*`** locks **`ide-ci-metadata.txt`** + **Summary** **Pre-binary artifact**.
 - **[`docs/SESSION_ORCHESTRATION_SPEC.md`](docs/SESSION_ORCHESTRATION_SPEC.md)** *Phase 2 vs this tree* — **E1 (IDE workflow)** names GitHub Actions **Summary** **Pre-binary artifact** ↔ **`ide-ci-metadata.txt`** / **`LE_VIBE_EDITOR`** (**`editor/README.md`** *CI*).

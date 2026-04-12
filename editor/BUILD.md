@@ -6,7 +6,7 @@ Compile steps are owned by **VSCodium** upstream. In this monorepo:
 2. **Upstream how-to:** **`vscodium/docs/howto-build.md`** inside the submodule — vscode sources are fetched with **`get_repo.sh`** (and friends) before **`build.sh`**; follow that file, not a duplicate guide here.
 3. **Lé Vibe–specific layers:** **[`le-vibe-overrides/README.md`](le-vibe-overrides/README.md)**, **[`../docs/vscodium-fork-le-vibe.md`](../docs/vscodium-fork-le-vibe.md)**, **[`../docs/PRODUCT_SPEC.md`](../docs/PRODUCT_SPEC.md)** §7.2 where branding choices are material.
 
-**CI (smoke only, no full compile yet):** [`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml) — see **[`README.md`](README.md)**. **[`build-linux.yml`](../.github/workflows/build-linux.yml)** is a **`workflow_dispatch`** alias that **`uses:`** the same workflow. **Local:** from the monorepo root, run **`./editor/smoke.sh`** (same gate as CI when **`editor/vscodium`** is present).
+**CI (smoke only, no full compile yet):** [`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml) — see **[`README.md`](README.md)** (pre-binary **`ide-ci-metadata.txt`** with **`le_vibe_editor_docs`**, GitHub Actions run **Summary** **Pre-binary artifact** line for the **`LE_VIBE_EDITOR`** docs pointer). **[`build-linux.yml`](../.github/workflows/build-linux.yml)** is a **`workflow_dispatch`** alias that **`uses:`** the same workflow. **Local:** from the monorepo root, run **`./editor/smoke.sh`** (same gate as CI when **`editor/vscodium`** is present).
 
 ## `LE_VIBE_EDITOR` after a local build
 
