@@ -26,3 +26,12 @@ def test_packaging_ci_smoke_sh_documents_step14_gate_and_submodule_14b():
     assert "find not on PATH" in text
     assert "mktemp not on PATH" in text
     assert "python3 not on PATH" in text
+
+
+def test_packaging_ci_smoke_sh_header_lists_le_vibe_deb_stack_only_step14():
+    """STEP 14 / §7.3: smoke script header matches ci.yml — le-vibe-deb artifact excludes le-vibe-ide."""
+    text = (_repo_root() / "packaging" / "scripts" / "ci-smoke.sh").read_text(encoding="utf-8")
+    assert "le-vibe-deb" in text
+    assert "not le-vibe-ide" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "apt-repo-releases.md" in text
