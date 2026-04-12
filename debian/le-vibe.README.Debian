@@ -17,7 +17,7 @@ Lé Vibe — quick steps after apt install
 
 IDE sources in a clone (developers)
 ------------------------------------
-End users who only install this **`.deb`** do not need the monorepo. If you **do** have a full clone with **`editor/vscodium`** initialized (**`git submodule update --init --recursive`**), run **`./editor/smoke.sh`** from the repository root to exercise the same **H6** layout and script checks as **`build-le-vibe-ide.yml`** / **`build-linux.yml`** (no Electron compile — the latter is a manual **`workflow_dispatch`** alias). On **GitHub Actions**, **`build-le-vibe-ide`** uploads pre-binary **`ide-ci-metadata.txt`** (**`le_vibe_editor_docs`**) and the job **Summary** includes **Pre-binary artifact** / **`LE_VIBE_EDITOR`** (see **`editor/BUILD.md`** *CI*, **`editor/VENDORING.md`**). See **`editor/README.md`** and **`docs/ci-qa-hardening.md`** (*IDE smoke*).
+End users who only install this **`.deb`** do not need the monorepo. If you **do** have a full clone with **`editor/vscodium`** initialized (**`git submodule update --init --recursive`**), run **`./editor/smoke.sh`** from the repository root to exercise the same **H6** layout and script checks as **`build-le-vibe-ide.yml`** / **`build-linux.yml`** (no Electron compile — the latter is a manual **`workflow_dispatch`** alias). On **GitHub Actions**, **`build-le-vibe-ide`** uploads pre-binary **`ide-ci-metadata.txt`** (**`le_vibe_editor_docs`**) with **`upload-artifact`** **`retention-days`**, and the job **Summary** includes **Pre-binary artifact** / **`LE_VIBE_EDITOR`** (see **`editor/BUILD.md`** *CI*, **`editor/VENDORING.md`**). See **`editor/README.md`** and **`docs/ci-qa-hardening.md`** (*IDE smoke*).
 
 Model lock (inspectable)
 ------------------------

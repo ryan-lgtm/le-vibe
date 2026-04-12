@@ -1,3 +1,9 @@
+le-vibe (0.1.4) unstable; urgency=low
+
+  * README.Debian: build-le-vibe-ide upload-artifact retention-days (pre-binary ide-ci-metadata).
+
+ -- Le Vibe Maintainers <maintainers@example.invalid>  Sun, 12 Apr 2026 12:00:00 +0000
+
 le-vibe (0.1.3) unstable; urgency=low
 
   * control Description: README.Debian points at build-le-vibe-ide metadata + Summary LE_VIBE_EDITOR.
