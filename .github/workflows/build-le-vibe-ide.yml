@@ -178,23 +178,8 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -y
-          sudo apt-get install -y \
-            build-essential \
-            pkg-config \
-            libx11-dev \
-            libxkbfile-dev \
-            libsecret-1-dev \
-            libkrb5-dev \
-            fakeroot \
-            dpkg-dev \
-            rpm \
-            jq \
-            librsvg2-bin \
-            git \
-            python3 \
-            python3.11-dev \
-            curl \
-            ca-certificates
+          mapfile -t _pkgs < <(grep -v '^[[:space:]]*#' packaging/linux-vscodium-ci-apt.pkgs | grep -v '^[[:space:]]*$' || true)
+          sudo apt-get install -y "${_pkgs[@]}"
 
       - uses: actions/setup-node@v4
         with:

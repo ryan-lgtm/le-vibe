@@ -111,6 +111,8 @@ def test_editor_build_md_contract_linux_compile_troubleshooting_14e():
     assert "librsvg2-bin" in text
     assert "libxkbfile-dev" in text
     assert "check-linux-vscodium-build-deps.sh" in text
+    assert "linux-vscodium-ci-apt.pkgs" in text
+    assert "install-linux-vscodium-build-deps.sh" in text
     assert "ci-vscodium-linux-dev-build.sh" in text and "LEVIBE_SKIP_HOST_DEPS_CHECK" in text
     assert "spec-phase2.md" in text and "§14" in text
     assert "OOM" in text

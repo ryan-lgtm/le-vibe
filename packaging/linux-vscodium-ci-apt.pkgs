@@ -1,0 +1,20 @@
+# Linux packages for VSCodium / vscode native build — keep in sync with
+# .github/workflows/build-le-vibe-ide.yml *Install Linux build dependencies* (linux_compile job).
+# packaging/scripts/check-linux-vscodium-build-deps.sh reads this list (python3.*-dev lines are
+# checked flexibly — see script). packaging/scripts/install-linux-vscodium-build-deps.sh installs it.
+build-essential
+pkg-config
+libx11-dev
+libxkbfile-dev
+libsecret-1-dev
+libkrb5-dev
+fakeroot
+dpkg-dev
+rpm
+jq
+librsvg2-bin
+git
+python3
+python3.11-dev
+curl
+ca-certificates

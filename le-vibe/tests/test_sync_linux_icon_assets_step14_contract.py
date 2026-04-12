@@ -37,5 +37,7 @@ def test_sync_linux_icon_assets_documents_14b():
 
 
 def test_build_le_vibe_ide_linux_compile_installs_librsvg_for_icon_sync():
-    text = (_repo_root() / ".github" / "workflows" / "build-le-vibe-ide.yml").read_text(encoding="utf-8")
-    assert "librsvg2-bin" in text
+    wf = (_repo_root() / ".github" / "workflows" / "build-le-vibe-ide.yml").read_text(encoding="utf-8")
+    assert "linux-vscodium-ci-apt.pkgs" in wf
+    pkgs = (_repo_root() / "packaging" / "linux-vscodium-ci-apt.pkgs").read_text(encoding="utf-8")
+    assert "librsvg2-bin" in pkgs

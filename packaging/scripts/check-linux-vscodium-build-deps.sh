@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# STEP 14 (14.e): verify Debian/Ubuntu packages aligned with .github/workflows/build-le-vibe-ide.yml
-# *Install Linux build dependencies* before a local dev/build.sh (PRODUCT_SPEC §7.3).
+# STEP 14 (14.e): verify Debian/Ubuntu packages aligned with packaging/linux-vscodium-ci-apt.pkgs
+# (same as .github/workflows/build-le-vibe-ide.yml *Install Linux build dependencies*).
 # Does not install anything — prints `sudo apt-get install ...` when something is missing.
 # Also checks pkg-config modules needed by native npm addons (e.g. @vscodium/native-keymap → xkbfile).
 # Optional: LEVIBE_CHECK_RUST=1 warns when rustc/cargo are absent (vscode ripgrep / native crates).
@@ -8,18 +8,20 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+PKGS_FILE="${ROOT}/packaging/linux-vscodium-ci-apt.pkgs"
 
 usage() {
   cat <<'EOF'
 Usage: packaging/scripts/check-linux-vscodium-build-deps.sh
 
-From the repository root: verify host packages match CI linux_compile (build-le-vibe-ide.yml).
-Exits 0 when all listed packages are installed and pkg-config sees xkbfile; otherwise 1 + remediation.
+From the repository root: verify host packages match packaging/linux-vscodium-ci-apt.pkgs
+(build-le-vibe-ide.yml linux_compile). Exits 0 when all listed packages are installed and
+pkg-config sees xkbfile; otherwise 1 + remediation.
 
 Environment:
   LEVIBE_CHECK_RUST   When set to 1, warn if rustc is not on PATH (Rust installed separately in CI).
 
-See editor/BUILD.md (14.e), .github/workflows/build-le-vibe-ide.yml *Install Linux build dependencies*.
+See editor/BUILD.md (14.e), packaging/scripts/install-linux-vscodium-build-deps.sh.
 EOF
 }
 
@@ -28,26 +30,23 @@ if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   exit 0
 fi
 
-# Keep in sync with build-le-vibe-ide.yml (Install Linux build dependencies).
-# Python headers: CI linux_compile uses ubuntu-22.04 + python3.11-dev; Ubuntu 24.04+ typically ships
-# python3.12-dev only — accept any one of python3.{11,12,13,14}-dev or meta python3-dev.
-DEBS=(
-  build-essential
-  pkg-config
-  libx11-dev
-  libxkbfile-dev
-  libsecret-1-dev
-  libkrb5-dev
-  fakeroot
-  dpkg-dev
-  rpm
-  jq
-  librsvg2-bin
-  git
-  python3
-  curl
-  ca-certificates
-)
+[[ -f "${PKGS_FILE}" ]] || {
+  echo "check-linux-vscodium-build-deps: missing ${PKGS_FILE} — restore from git." >&2
+  exit 1
+}
+
+# Python headers: CI uses python3.11-dev from the pkgs file; Ubuntu 24.04+ often has python3.12-dev
+# only — accept any one of python3.{11,12,13,14}-dev or meta python3-dev (skip those lines below).
+DEBS=()
+while IFS= read -r line || [[ -n "${line}" ]]; do
+  line="${line//$'\r'/}"
+  [[ "${line}" =~ ^[[:space:]]*# ]] && continue
+  [[ -z "${line// }" ]] && continue
+  if [[ "${line}" =~ ^python3(\.[0-9]+)?-dev$ ]] || [[ "${line}" == "python3-dev" ]]; then
+    continue
+  fi
+  DEBS+=("${line}")
+done < "${PKGS_FILE}"
 
 _pkg_ok() {
   dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q 'install ok installed$'
@@ -72,7 +71,7 @@ done
 
 _pydev_ok=1
 if ! _python_dev_headers_ok; then
-  echo "check-linux-vscodium-build-deps: no python3.*-dev (or python3-dev) — CI uses python3.11-dev on ubuntu-22.04; on Ubuntu 24.04 install python3.12-dev." >&2
+  echo "check-linux-vscodium-build-deps: no python3.*-dev (or python3-dev) — CI pkgs list includes python3.11-dev; on Ubuntu 24.04 use python3.12-dev or run install-linux-vscodium-build-deps.sh." >&2
   _pydev_ok=0
 fi
 
@@ -90,15 +89,16 @@ if [[ "${LEVIBE_CHECK_RUST:-0}" == "1" ]] && ! command -v rustc >/dev/null 2>&1;
 fi
 
 if [[ ${#missing[@]} -eq 0 && "${_pc_ok}" -eq 1 && "${_pydev_ok}" -eq 1 ]]; then
-  echo "check-linux-vscodium-build-deps: OK — CI-aligned apt packages and pkg-config xkbfile present."
+  echo "check-linux-vscodium-build-deps: OK — ${PKGS_FILE#"${ROOT}/"} satisfied and pkg-config xkbfile present."
   exit 0
 fi
 
 echo "check-linux-vscodium-build-deps: missing Debian packages: ${missing[*]:-(none)}" >&2
 echo "check-linux-vscodium-build-deps: install (Debian/Ubuntu):" >&2
-echo "  sudo apt-get update && sudo apt-get install -y ${missing[*]}" >&2
+echo "  ./packaging/scripts/install-linux-vscodium-build-deps.sh" >&2
+echo "  # or: sudo apt-get update && sudo apt-get install -y ${missing[*]}" >&2
 if [[ "${_pydev_ok}" -eq 0 ]]; then
-  echo "  # also: sudo apt-get install -y python3.11-dev   # ubuntu-22.04 / CI parity, or python3.12-dev on 24.04+" >&2
+  echo "  # also: sudo apt-get install -y python3.11-dev   # ubuntu-22.04 / CI pkgs, or python3.12-dev on 24.04+" >&2
 fi
-echo "check-linux-vscodium-build-deps: parity: .github/workflows/build-le-vibe-ide.yml *Install Linux build dependencies* — editor/BUILD.md 14.e." >&2
+echo "check-linux-vscodium-build-deps: parity: packaging/linux-vscodium-ci-apt.pkgs — editor/BUILD.md 14.e." >&2
 exit 1

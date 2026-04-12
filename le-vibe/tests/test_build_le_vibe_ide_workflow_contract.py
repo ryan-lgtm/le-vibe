@@ -33,6 +33,7 @@ def test_build_le_vibe_ide_workflow_writes_le_vibe_editor_docs_to_metadata():
     assert "actions: write" in text
     assert "linux_compile:" in text
     assert "ci-vscodium-linux-dev-build.sh" in text
+    assert "linux-vscodium-ci-apt.pkgs" in text
     assert "vscodium_linux_compile" in text
     assert "dev/build.sh" in text
 
@@ -64,9 +65,10 @@ def test_build_le_vibe_ide_workflow_linux_compile_artifact_14e():
     assert "Fail-fast editor gates" in text
     assert "./packaging/scripts/ci-vscodium-bash-syntax.sh" in text
     assert "./packaging/scripts/ci-editor-nvmrc-sync.sh" in text
-    assert "dpkg-dev" in text
-    assert "python3.11-dev" in text
-    assert "rpm" in text
+    assert "linux-vscodium-ci-apt.pkgs" in text
+    _pkgs = (_repo_root() / "packaging" / "linux-vscodium-ci-apt.pkgs").read_text(encoding="utf-8")
+    assert "python3.11-dev" in _pkgs
+    assert "rpm" in _pkgs
     assert "NODE_OPTIONS" in text
     assert "max-old-space-size=8192" in text
 
