@@ -129,3 +129,5 @@ def test_print_pm_deb_build_prompt_extractable():
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in fence
     assert "LEVIBE_STAGE_IDE_ASSERT_BRAND" in fence
     assert "stage-le-vibe-ide-deb.sh" in fence
+    assert "Full-product install" in fence
+    assert "Success output (`--with-ide`)" in fence
