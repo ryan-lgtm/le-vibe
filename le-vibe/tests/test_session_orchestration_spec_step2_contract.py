@@ -22,6 +22,18 @@ def test_session_orchestration_spec_documents_step2_and_e1():
     assert "spec-phase2.md" in text and "§14" in text
 
 
+def test_session_orchestration_spec_lists_maintainer_full_product_deb_step14():
+    """STEP 14: session spec names PM deb doc + Full-product install vs default ci.yml le-vibe-deb."""
+    text = (_repo_root() / "docs" / "SESSION_ORCHESTRATION_SPEC.md").read_text(encoding="utf-8")
+    assert "Maintainer full-product" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "le-vibe-deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
+
+
 def test_session_orchestration_spec_phase2_paragraph_lists_linux_compile_tarball():
     """STEP 14.e / 14.j: Phase 2 vs this tree paragraph stays honest vs build-le-vibe-ide.yml."""
     text = (_repo_root() / "docs" / "SESSION_ORCHESTRATION_SPEC.md").read_text(encoding="utf-8")
