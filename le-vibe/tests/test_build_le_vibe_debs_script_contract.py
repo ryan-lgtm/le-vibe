@@ -77,6 +77,17 @@ def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
 
 
+def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14():
+    """STEP 14: PM deb doc matches build-le-vibe-debs.sh post-success Full-product install output."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    assert "Success output (`--with-ide`)" in text
+    assert "Full-product install" in text
+    assert "sudo apt install" in text
+    assert "/usr/share/doc/le-vibe/README.Debian" in text
+    assert "debian-le-vibe-ide/README.md" in text
+
+
 def test_pm_deb_build_iteration_doc_731_staging_identity_step14():
     """STEP 14: PM deb doc names §7.3 staging env + ci-vscodium path before stage-le-vibe-ide-deb.sh."""
     root = Path(__file__).resolve().parents[2]

@@ -11,6 +11,8 @@
 
 When you have both artifacts from **`build-le-vibe-debs.sh`** (stack) and **`--with-ide`** (or **`build-le-vibe-ide-deb.sh`** alone), ship or attach **`le-vibe_*_all.deb`** and **`le-vibe-ide_*_amd64.deb`** together for an install-and-demo that includes the branded IDE. **Checksums**, default CI artifact **`le-vibe-deb`** (stack-only), and **`SHA256SUMS`** expectations — **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** (*IDE package* subsection, **STEP 8 / H1**). **PM stage map:** **[`docs/PM_STAGE_MAP.md`](PM_STAGE_MAP.md)** (*H1 vs §7.3 .deb bundles* — **STEP 14** vs **STEP 8**); monorepo honesty — **[`spec-phase2.md`](../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*.
 
+**Success output (`--with-ide`):** When **`build-le-vibe-debs.sh`** finishes and both **`.deb`** files are found, it prints a **Full-product install** line — **`sudo apt install`** with the resolved paths (stack **`le-vibe_*_all.deb`** beside the repository directory, IDE **`le-vibe-ide_*_amd64.deb`** under **`packaging/`**), then **`/usr/share/doc/le-vibe/README.Debian`** and **`packaging/debian-le-vibe-ide/README.md`** (*Install both packages*).
+
 ### §7.3 IDE staging — Lé Vibe identity in the built tree
 
 The **`le-vibe-ide`** package repacks **`editor/vscodium/VSCode-linux-*`**. That directory should be produced after **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** (merge **`product-branding-merge.json`**, **`sync-linux-icon-assets.sh`**, env defaults) **before** **`dev/build.sh`** — not a bare upstream compile — see **`editor/BUILD.md`** *Linux icons*.
