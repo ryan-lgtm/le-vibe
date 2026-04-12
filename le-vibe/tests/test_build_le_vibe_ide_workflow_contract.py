@@ -15,6 +15,8 @@ def test_build_le_vibe_ide_workflow_header_documents_out_of_band_deb_step14():
     assert "Out-of-band .deb" in text
     assert "le-vibe-deb" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "apt-repo-releases.md" in text
 
 
@@ -75,6 +77,8 @@ def test_build_linux_yaml_header_out_of_band_deb_matches_ide_workflow_step14():
     assert "Out-of-band .deb" in text
     assert "le-vibe-deb" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "apt-repo-releases.md" in text
 
 
