@@ -1,3 +1,9 @@
+le-vibe (0.1.6) unstable; urgency=low
+
+  * README.Debian + control Description: build-le-vibe-ide workflow permissions (contents read + actions write).
+
+ -- Le Vibe Maintainers <maintainers@example.invalid>  Sun, 12 Apr 2026 12:00:00 +0000
+
 le-vibe (0.1.5) unstable; urgency=low
 
   * control Description: monorepo CI line names upload-artifact retention-days (pre-binary ide-ci-metadata).
