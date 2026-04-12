@@ -28,3 +28,13 @@ def test_ci_editor_gate_documents_step14_smoke_and_overrides_e1():
     assert "14.d" in text
     assert "branding-staging.checklist.md" in text
     assert "bash not on PATH" in text
+    # layout=none skip path — engineers must keep the vendoring hint + interim launcher story
+    assert "IDE sources not vendored" in text
+    assert "LE_VIBE_EDITOR" in text
+    assert "editor/VENDORING.md" in text
+    # vscodium branch: bash -n inventory must stay aligned with editor helper scripts (14.c / 14.f)
+    assert 'bash -n "${ROOT}/editor/smoke-lvibe-editor.sh"' in text
+    assert 'bash -n "${ROOT}/editor/verify-14c-local-binary.sh"' in text
+    assert 'bash -n "${ROOT}/editor/smoke-built-codium-lvibe.sh"' in text
+    assert 'bash -n "${ROOT}/editor/print-ci-tarball-codium-path.sh"' in text
+    assert "ci-vscodium-linux-dev-build.sh" in text
