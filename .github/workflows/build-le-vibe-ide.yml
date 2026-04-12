@@ -89,6 +89,7 @@ jobs:
             echo "ref=${{ github.ref }}"
             echo "sha=${{ github.sha }}"
             echo "run_id=${{ github.run_id }}"
+            echo "le_vibe_editor_docs=editor/README.md"
           } > artifacts/ide-ci-metadata.txt
           if [ -f editor/vscodium/upstream/stable.json ]; then
             cp editor/vscodium/upstream/stable.json artifacts/vscode-upstream-stable.json

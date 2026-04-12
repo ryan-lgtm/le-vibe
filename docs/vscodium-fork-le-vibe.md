@@ -47,7 +47,7 @@ Prefer a **dedicated workflow** (e.g. `.github/workflows/build-le-vibe-ide.yml`)
 1. **Checkout** this repo (optionally with submodules if **`editor/`** uses them).
 2. **cd editor/** (or run upstream’s entrypoint from that path).
 3. **Cache** Node / compiler deps per upstream docs.
-4. **Build** Linux `.deb` / AppImage / artifact and upload as release assets (today **`build-le-vibe-ide`** uploads **metadata** only — `ide-ci-metadata.txt` + pinned **`vscode-upstream-stable.json`** when vendored — as a hook for the real binary drop).
+4. **Build** Linux `.deb` / AppImage / artifact and upload as release assets (today **`build-le-vibe-ide`** uploads **metadata** only — `ide-ci-metadata.txt` (includes **`le_vibe_editor_docs=editor/README.md`** for the **`LE_VIBE_EDITOR`** stack story) + pinned **`vscode-upstream-stable.json`** when vendored — as a hook for the real binary drop).
 5. **Smoke:** `desktop-file-validate`, launch binary, Continue + managed Ollama **11435** per root **[`README.md`](../README.md)**.
 
 Keep signing tokens in GitHub Environments.
