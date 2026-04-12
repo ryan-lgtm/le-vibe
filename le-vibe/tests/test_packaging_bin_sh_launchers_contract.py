@@ -17,6 +17,8 @@ def test_lvibe_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -> None:
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "IDE package" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
 
 
 def test_le_vibe_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -> None:
@@ -26,6 +28,8 @@ def test_le_vibe_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -> None
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "IDE package" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
 
 
 def test_lvibe_hygiene_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -> None:
@@ -35,6 +39,8 @@ def test_lvibe_hygiene_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "IDE package" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
 
 
 def test_packaging_bin_sh_launchers_syntax_and_python3_guard() -> None:
