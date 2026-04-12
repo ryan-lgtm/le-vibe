@@ -21,6 +21,15 @@ def test_verify_continue_pin_and_sync_continue_config_bash_syntax() -> None:
     _bash_n("packaging/scripts/sync-continue-config.sh")
 
 
+def test_sync_continue_config_script_documents_missing_generated_yaml():
+    text = (_repo_root() / "packaging" / "scripts" / "sync-continue-config.sh").read_text(
+        encoding="utf-8"
+    )
+    assert "le-vibe/README.md" in text
+    assert "PRODUCT_SPEC §5" in text or "PRODUCT_SPEC §5–§8" in text
+    assert "~/.config/le-vibe/" in text
+
+
 def test_verify_continue_pin_script_documents_pin_file():
     text = (_repo_root() / "packaging" / "scripts" / "verify-continue-pin.sh").read_text(
         encoding="utf-8"

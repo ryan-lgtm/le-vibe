@@ -12,7 +12,7 @@ DEST_DIR="$DEST_ROOT/continue"
 DEST="$DEST_DIR/config.yaml"
 
 if [[ ! -f "$SRC" ]]; then
-  echo "le-vibe: missing $SRC — complete first-run (launch le-vibe) or run bootstrap with --le-vibe-product (see README)." >&2
+  echo "le-vibe: missing $SRC — complete first-run (launch le-vibe / lvibe) or run bootstrap with --le-vibe-product; generated config lives under ~/.config/le-vibe/ (see le-vibe/README.md; PRODUCT_SPEC §5–§8)." >&2
   exit 1
 fi
 
