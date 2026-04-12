@@ -38,6 +38,16 @@ def test_root_readme_prioritization_demoinstall_apt_install_both_debs_step14():
     assert "packaging/debian-le-vibe-ide/README.md" in text
 
 
+def test_root_readme_current_status_works_well_today_full_product_install_step14():
+    """STEP 14: *Current status* table names Full-product install stdout + PM deb doc."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "**Works well today**" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "Success output (`--with-ide`)" in text
+
+
 def test_root_readme_documents_ai_pilot_and_user_gate():
     text = (_repo_root() / "README.md").read_text(encoding="utf-8")
     assert "Lé Vibe" in text

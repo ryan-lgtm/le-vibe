@@ -65,7 +65,7 @@ sequenceDiagram
 
 | | |
 |--|--|
-| **Works well today** | **`lvibe .`**, managed **Ollama** on a **dedicated port** (default **11435**), **Continue** integration, **consent-gated** **`.lvibe/`**, stack **`le-vibe`** **`.deb`**, tests and CI. **IDE `.deb`:** build path **`build-le-vibe-ide-deb.sh`** / **`build-le-vibe-debs.sh --with-ide`** when **`VSCode-linux-*`** exists — **[`packaging/debian-le-vibe-ide/README.md`](packaging/debian-le-vibe-ide/README.md)**. |
+| **Works well today** | **`lvibe .`**, managed **Ollama** on a **dedicated port** (default **11435**), **Continue** integration, **consent-gated** **`.lvibe/`**, stack **`le-vibe`** **`.deb`**, tests and CI. **IDE `.deb`:** build path **`build-le-vibe-ide-deb.sh`** / **`build-le-vibe-debs.sh --with-ide`** when **`VSCode-linux-*`** exists — **[`packaging/debian-le-vibe-ide/README.md`](packaging/debian-le-vibe-ide/README.md)**; **`build-le-vibe-debs.sh --with-ide`** prints **Full-product install** on success — **[`docs/PM_DEB_BUILD_ITERATION.md`](docs/PM_DEB_BUILD_ITERATION.md)** (*Success output (`--with-ide`)*). |
 | **In progress** | **Published apt** channel / release cadence for both **`.deb`** packages, fuller first-run polish, **optional** green **`linux_compile`** on default GitHub-hosted runners, broader OS packaging. |
 | **Feedback** | **GitHub Issues** in this repository. Clone with **`git clone --recurse-submodules`** so **`editor/vscodium`** is present for [`./editor/smoke.sh`](editor/smoke.sh). If you already cloned without submodules, run **`git submodule update --init editor/vscodium`** from the repo root — [`editor/README.md`](editor/README.md) *Fresh clone (14.b)*. |
 
