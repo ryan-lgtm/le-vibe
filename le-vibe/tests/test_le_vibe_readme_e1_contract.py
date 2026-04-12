@@ -31,6 +31,15 @@ def test_le_vibe_readme_h6_submodule_init_14b():
     assert "Fresh clone (14.b)" in text
 
 
+def test_le_vibe_readme_ide_smoke_help_forwards_ci_editor_gate_step14():
+    """STEP 14: package README states ./editor/smoke.sh --help → ci-editor-gate usage."""
+    text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
+    assert "IDE shell (H6)" in text
+    assert "editor/smoke.sh --help" in text
+    assert "ci-editor-gate" in text
+    assert "forwarded" in text.lower() or "forwards" in text.lower()
+
+
 def test_le_vibe_readme_ide_honesty_14d_matches_root_readme():
     """STEP 14.d: package README states smoke ≠ Lé Vibe branding (parity with root README *CI*)."""
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
