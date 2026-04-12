@@ -24,6 +24,23 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
 
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  cat <<'EOF'
+Usage: packaging/scripts/ci-editor-gate.sh
+
+Run from the repository root (same entry as ./editor/smoke.sh). Detects editor layout
+(flat / vscodium / none); when upstream is present, runs bash -n on IDE/packaging helper scripts.
+Exits 0 when layout=none (no vendored IDE sources).
+
+Environment:
+  LEVIBE_EDITOR_GATE_ASSERT_BRAND   When 1, fail if VSCode-linux-*/resources/app/product.json
+                                    exists but lacks Lé Vibe strings (§7.3 identity).
+
+See editor/VENDORING.md, editor/README.md, .github/workflows/build-le-vibe-ide.yml.
+EOF
+  exit 0
+fi
+
 layout=none
 if [[ -f editor/package.json ]]; then
   layout=flat
