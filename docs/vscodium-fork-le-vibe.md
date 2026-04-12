@@ -36,6 +36,8 @@ Exact paths follow the VSCodium / `vscode` tree you import:
 
 **Monorepo today:** VSCodium is vendored at **`editor/vscodium/`** (git submodule); Lé Vibe–only layers use **`editor/le-vibe-overrides/`** as above — see **`editor/README.md`**, **`editor/BUILD.md`**, and **[`editor/VENDORING.md`](../editor/VENDORING.md)** (submodule init, **`./editor/smoke.sh`** / CI parity, optional **`linux_compile`** + **`vscodium-linux-build.tar.gz`** — **14.e / 14.f**).
 
+**Fresh clone (14.b):** when **`editor/vscodium/`** is missing or empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the repository root — same step as **`editor/README.md`** *Fresh clone (14.b)* before **`get_repo.sh`** / **`fetch-vscode-sources.sh`**.
+
 Upstream VSCodium prepare/build scripts remain the source of truth for **how** to compile; this doc stays a **pointer** and policy shell, not a full upstream mirror.
 
 ## Branding & overrides (**14.d** — **`PRODUCT_SPEC`** §7.2)

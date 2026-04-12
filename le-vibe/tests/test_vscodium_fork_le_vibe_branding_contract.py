@@ -11,6 +11,8 @@ def _repo_root() -> Path:
 
 def test_vscodium_fork_doc_branding_section_honesty_and_overrides():
     text = (_repo_root() / "docs" / "vscodium-fork-le-vibe.md").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
     assert "read before overrides" in text
     assert "Branding & overrides" in text
     assert "VENDORING.md" in text
