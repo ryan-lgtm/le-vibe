@@ -42,7 +42,7 @@ ORDERED WORK QUEUE — do the **first incomplete** step **in the order listed** 
 
   STEP 0 — MUST: Satisfy docs/PRODUCT_SPEC.md must-ship sections through §8 (naming, CLI, model, welcome, .lvibe/, gitignore, runtime/subagent harmony §7 **including §7.2 user gate**, secrets §8); align with §10 acceptance when applicable.
   STEP 1 — E1: Regression proof for §10 acceptance (evidence table + fix any drift; see PRODUCT_SPEC_SECTION8_EVIDENCE.md if present).
-  STEP 14 — H6 (**editor/** — **prioritized**): Branded Lé Vibe IDE from **`editor/`** per docs/vscodium-fork-le-vibe.md + editor/README.md. Vendor upstream (submodule/subtree/import), branding, CI workflow, Linux artifacts path. Do not claim shipped IDE binaries until a real build exists; interim **`LE_VIBE_EDITOR`** → system VSCodium is OK for dev. **USER RESPONSE REQUIRED** for material IDE scope not fixed in specs.
+  STEP 14 — H6 (**editor/** — **prioritized**): **`editor/vscodium`** (VSCodium submodule), IDE **CI** (smoke, **`bash -n`**, **`.nvmrc`** sync, PR paths, metadata artifacts), **`editor/le-vibe-overrides/`** placeholder — next wire **`get_repo`/build**, Lé Vibe branding (**§7.2** where material), and shipping **Linux** artifacts per **`docs/vscodium-fork-le-vibe.md`** + **`editor/README.md`**. Do not claim shipped IDE binaries until a real build exists; interim **`LE_VIBE_EDITOR`** → system VSCodium is OK for dev. **USER RESPONSE REQUIRED** for material IDE scope not fixed in specs.
   STEP 2 — PM SESSION (Product-Managed steps): Implement docs/SESSION_ORCHESTRATION_SPEC.md — seed/sync `.lvibe/session-manifest.json` from schemas/session-manifest.v1.example.json when missing; copy `le-vibe/templates/agents/*.md` into `.lvibe/agents/` during workspace prepare; wire opening_intent vs skip→workspace_scan behavior at least as documented hooks + minimal code path (orchestrator reads manifest session_steps); ensure product.epics/tasks can be iterated (loader/util or documented contract); add tests + README pointer.
   STEP 3 — E2: Continue / agent config so workspace .lvibe/ is reliably the primary memory path and references session manifest + agent skills (templates, sync script, tests as fit).
   STEP 4 — E3: In-editor welcome if still terminal-only (minimal: snippet, opened doc, or Continue onboarding text—PRODUCT_SPEC §4 copy).
@@ -182,7 +182,7 @@ Quality: cd le-vibe && python3 -m pytest tests/; dpkg-buildpackage -us -uc -b wh
 End with exactly ONE last line: PASTE SAME AGAIN | LÉ VIBE SESSION COMPLETE | LÉ VIBE BLOCKED | USER RESPONSE REQUIRED
 ```
 
-**Out of scope for this pass (say so explicitly, don’t fake):** Fully populated **`editor/`** build (until sources land); optional **Flatpak** if policy SKIPPED; anything requiring credentials you don’t have.
+**Out of scope for this pass (say so explicitly, don’t fake):** A **compiled, installable** Lé Vibe IDE binary from **`editor/`** (until **get_repo/build** and release packaging are wired); optional **Flatpak** if policy SKIPPED; anything requiring credentials you don’t have.
 
 ---
 
