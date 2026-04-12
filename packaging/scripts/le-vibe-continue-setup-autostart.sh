@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Roadmap G-A3: optional XDG autostart — one desktop notification to run Continue setup.
+# Requires: mkdir, touch (coreutils) when a notification is shown; notify-send (libnotify) optional (skipped if absent).
 # Idempotent: skips after ~/.continue/config.yaml is linked, or after one successful notify,
 # or if the user disables via ~/.config/le-vibe/.continue-setup-autostart-disable.
 # Product / trust: docs/PRODUCT_SPEC.md (first-run / Continue integration); spec-phase2.md §14 (H6/H7 vs in-tree; STEP 14 E1 — editor/le-vibe-overrides/README.md + le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py); docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
@@ -29,6 +30,15 @@ fi
 
 if ! command -v notify-send >/dev/null 2>&1; then
   exit 0
+fi
+
+if ! command -v mkdir >/dev/null 2>&1; then
+  echo "le-vibe-continue-setup-autostart: mkdir not on PATH — install coreutils (e.g. sudo apt install coreutils) (G-A3 autostart)." >&2
+  exit 1
+fi
+if ! command -v touch >/dev/null 2>&1; then
+  echo "le-vibe-continue-setup-autostart: touch not on PATH — install coreutils (e.g. sudo apt install coreutils) (G-A3 autostart)." >&2
+  exit 1
 fi
 
 mkdir -p "$LV_DIR"

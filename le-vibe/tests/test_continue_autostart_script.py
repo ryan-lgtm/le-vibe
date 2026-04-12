@@ -16,6 +16,14 @@ def test_continue_autostart_bash_syntax() -> None:
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 
+def test_continue_autostart_documents_mkdir_touch_path_checks() -> None:
+    text = (
+        _repo_root() / "packaging" / "scripts" / "le-vibe-continue-setup-autostart.sh"
+    ).read_text(encoding="utf-8")
+    assert "mkdir not on PATH" in text
+    assert "touch not on PATH" in text
+
+
 def test_continue_autostart_desktop_exists() -> None:
     desktop = _repo_root() / "packaging" / "autostart" / "le-vibe-continue-setup.desktop"
     assert desktop.is_file()
