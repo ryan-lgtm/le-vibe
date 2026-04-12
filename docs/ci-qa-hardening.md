@@ -23,7 +23,7 @@ Order of steps on **`ubuntu-latest`**:
 | **Build `.deb`** | **`dpkg-buildpackage -us -uc -b`** |
 | **Checksums (H1)** | **`SHA256SUMS`** over **`.deb`** + SBOM, **`sha256sum -c`** |
 | **Lintian** | **`lintian --fail-on error --color never`** — **errors** fail; warnings/info do not |
-| **Upload artifact** | **`le-vibe-deb`** bundle |
+| **Upload artifact** | **`le-vibe-deb`** — **stack** **`le-vibe`** **`.deb`** + SBOM + **`SHA256SUMS`** (**not** **`le-vibe-ide`**; **§7.3** — [`apt-repo-releases.md`](apt-repo-releases.md) *IDE package*, [`spec-phase2.md`](../spec-phase2.md) *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*) |
 
 **Git checkout:** **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** uses **`actions/checkout@v4`** with **`submodules: recursive`** so **`editor/vscodium`** is present and **`ci-editor-gate.sh`** runs the **VSCodium** script **`bash -n`** / **`editor/.nvmrc`** checks (not a **layout=none** skip).
 

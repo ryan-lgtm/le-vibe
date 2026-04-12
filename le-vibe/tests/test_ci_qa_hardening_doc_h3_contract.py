@@ -9,6 +9,15 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_ci_qa_hardening_doc_upload_artifact_row_stack_only_vs_ide_deb_step14():
+    """STEP 14 / §7.3: H3 doc table states le-vibe-deb artifact excludes le-vibe-ide."""
+    text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
+    assert "| **Upload artifact** |" in text
+    assert "**not** **`le-vibe-ide`**" in text
+    assert "apt-repo-releases.md" in text
+    assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
+
+
 def test_ci_qa_hardening_doc_lists_smoke_and_pytest():
     text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
     assert "ci-smoke.sh" in text
