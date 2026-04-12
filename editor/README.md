@@ -6,6 +6,8 @@
 |------|------|
 | **`editor/`** (here) | Lé Vibe IDE — VSCodium/Code OSS sources, branding, build scripts, CI for the Electron app |
 | **`editor/le-vibe-overrides/`** | Reserved for Lé Vibe–specific branding/overrides (see **`README.md`** there); §7.2 for material choices |
+| **`editor/vscodium/`** | **VSCodium** upstream (recommended git submodule); **`product.json`**, **`get_repo.sh`** / **`build.sh`** per **`BUILD.md`** and upstream **`docs/howto-build.md`** |
+| **`editor/smoke.sh`** | Local **H6** gate — runs **`packaging/scripts/ci-editor-gate.sh`** (layout, **`bash -n`** on upstream scripts, **`editor/.nvmrc`** sync) |
 | **`le-vibe/`** | Python bootstrap, `lvibe` launcher, managed Ollama, `.lvibe/` workspace hub, **`le-vibe`** `.deb` |
 | **`debian/`**, **`packaging/`** | Debian packaging and PATH wrappers for the **stack** package |
 
