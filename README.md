@@ -59,20 +59,20 @@ sequenceDiagram
     IDE->>O: Stop — release GPU/RAM
 ```
 
-**Today:** the **Python stack** and **Debian `.deb`** are ahead of a **published Lé Vibe–branded** Electron build from CI; most developers pair the stack with **VSCodium** and **`LE_VIBE_EDITOR`**. See [`editor/README.md`](editor/README.md) and honest scope in [`spec-phase2.md`](spec-phase2.md) §14.
+**Today:** the **Python stack** ships as a Debian **`.deb`** (**`le-vibe`**). The monorepo also contains **`packaging/debian-le-vibe-ide/`** and **`packaging/scripts/build-le-vibe-ide-deb.sh`** — after you produce **`editor/vscodium/VSCode-linux-*`** (full compile per **[`editor/BUILD.md`](editor/BUILD.md)** §7.3 / optional CI **`linux_compile`** artifact), you get an installable **`le-vibe-ide`** **`.deb`** that exposes **`/usr/lib/le-vibe/bin/codium`** for **`lvibe`**. Until you build that tree, pair the stack with **VSCodium** + **`LE_VIBE_EDITOR`**. See [`editor/README.md`](editor/README.md) and [`spec-phase2.md`](spec-phase2.md) §14.
 
 ## Current status
 
 | | |
 |--|--|
-| **Works well today** | **`lvibe .`**, managed **Ollama** on a **dedicated port** (default **11435**), **Continue** integration, **consent-gated** **`.lvibe/`**, Debian **`.deb`**, tests and CI. |
-| **In progress** | **Branded IDE** binary from **`editor/`**, fuller first-run polish, broader OS packaging. |
+| **Works well today** | **`lvibe .`**, managed **Ollama** on a **dedicated port** (default **11435**), **Continue** integration, **consent-gated** **`.lvibe/`**, stack **`le-vibe`** **`.deb`**, tests and CI. **IDE `.deb`:** build path **`build-le-vibe-ide-deb.sh`** / **`build-le-vibe-debs.sh --with-ide`** when **`VSCode-linux-*`** exists — **[`packaging/debian-le-vibe-ide/README.md`](packaging/debian-le-vibe-ide/README.md)**. |
+| **In progress** | **Published apt** channel / release cadence for both **`.deb`** packages, fuller first-run polish, **optional** green **`linux_compile`** on default GitHub-hosted runners, broader OS packaging. |
 | **Feedback** | **GitHub Issues** in this repository. Clone with **`git clone --recurse-submodules`** so **`editor/vscodium`** is present for [`./editor/smoke.sh`](editor/smoke.sh). If you already cloned without submodules, run **`git submodule update --init editor/vscodium`** from the repo root — [`editor/README.md`](editor/README.md) *Fresh clone (14.b)*. |
 
 ### Limitations (snapshot)
 
 - Not the **Visual Studio Code** trademarked product; editor lineage is **Code - OSS** / **VSCodium**.
-- **No** finished **Lé Vibe–only** desktop bundle from CI yet — use **VSCodium** + **`LE_VIBE_EDITOR`** until **`editor/`** ships a release artifact.
+- **Default PR CI** does **not** upload a pre-built **Lé Vibe** Electron **`.deb`** — produce **`VSCode-linux-*`** locally or via optional **`linux_compile`**, then **`packaging/scripts/build-le-vibe-ide-deb.sh`** (**[`editor/BUILD.md`](editor/BUILD.md)**). Interim: **VSCodium** + **`LE_VIBE_EDITOR`**.
 - **First run** can be slow (Ollama install, **model pull**); **Linux** is the primary packaging focus for now.
 
 ## Repository layout
@@ -106,7 +106,7 @@ Diagram **color accents** used in this README are documented as a **reference pa
 
 **PM / project management:** Epics, session manifests, and lazy prompts **coordinate delivery of the IDE + stack**—see **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** *Product and project management — in service of the IDE* and **[`docs/PROMPT_BUILD_LE_VIBE.md`](docs/PROMPT_BUILD_LE_VIBE.md)** (orchestrator order **0→1→14→…**).
 
-**Interim dev:** **`editor/vscodium`** vendors **VSCodium** upstream (git submodule); a **compiled, released** Lé Vibe IDE binary is **not** automated here yet—use system **VSCodium** + **`LE_VIBE_EDITOR`**, or build locally per **`editor/README.md`**, alongside this **`le-vibe`** `.deb`. One **git** history in this monorepo; release tags can cover **stack + IDE** drops together.
+**Interim dev:** **`editor/vscodium`** vendors **VSCodium** upstream (git submodule). For a **demo install** of the branded shell: compile **`VSCode-linux-*`**, run **`packaging/scripts/build-le-vibe-ide-deb.sh`**, install **`le-vibe`** then **`le-vibe-ide`** **`.deb`** files — **`packaging/debian-le-vibe-ide/README.md`**. Until that build exists on your machine, use system **VSCodium** + **`LE_VIBE_EDITOR`** alongside the **`le-vibe`** **`.deb`**. One **git** history in this monorepo; release tags can cover **stack + IDE** drops together.
 
 ## Managed Ollama (dedicated port, §7.2-A)
 
