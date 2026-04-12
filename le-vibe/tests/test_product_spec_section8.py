@@ -84,3 +84,4 @@ def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci()
     assert "**How to sequence work:**" in text
     assert "./editor/smoke.sh" in text
     assert "build-le-vibe-ide.yml" in text
+    assert "build-linux.yml" in text

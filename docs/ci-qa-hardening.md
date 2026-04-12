@@ -66,7 +66,8 @@ That wrapper **`exec`**s **`packaging/scripts/ci-editor-gate.sh`**, matching **[
 ## Related docs
 
 - **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** — canonical **stack** **CI** job (artifact **`le-vibe-deb`**)  
-- **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **H6** dedicated workflow (**`editor/**`** PRs, metadata artifacts); same **`ci-editor-gate`** as **`ci-smoke.sh`** / **`./editor/smoke.sh`**  
+- **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **H6** dedicated workflow (**`editor/**`** PRs, metadata artifacts); same **`ci-editor-gate`** as **`ci-smoke.sh`** / **`./editor/smoke.sh`**
+- **[`build-linux.yml`](../.github/workflows/build-linux.yml)** — **`workflow_dispatch`** alias; **`uses:`** **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** (same Summary / skip reasons as the reusable workflow)  
 - **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** — artifacts, checksums, Releases (H1), **`CHANGELOG.md`** / **`debian/changelog`** when tagging  
 - **[`docs/sbom-signing-audit.md`](sbom-signing-audit.md)** — **`pip-audit`**, SBOM (H2)  
 - **[`docs/continue-extension-pin.md`](continue-extension-pin.md)** — Open VSX pin verification in smoke (H4)  

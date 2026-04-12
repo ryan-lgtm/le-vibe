@@ -14,7 +14,7 @@ This document is the **single source of truth** for **must-ship** product requir
 
 **Spine vs shell:** **`le-vibe/`** supplies hardware-aware **Ollama**, **`lvibe`**, managed lifecycle, **Continue** wiring, and **`.lvibe/`** policy. **`editor/`** supplies the desktop application. Both share **`~/.config/le-vibe/`** and **`LE_VIBE_EDITOR`** conventions documented here.
 
-**How to sequence work:** populate **`editor/`** (submodule, subtree, or import), run **`./editor/smoke.sh`** from the repository root so the vendored-tree gate matches **`build-le-vibe-ide.yml`** (layout, upstream script syntax, **`editor/.nvmrc`** — see **`docs/ci-qa-hardening.md`** *IDE smoke*), then wire IDE build CI; keep **`le-vibe/`** packages and pins aligned on each release tag.
+**How to sequence work:** populate **`editor/`** (submodule, subtree, or import), run **`./editor/smoke.sh`** from the repository root so the vendored-tree gate matches **`build-le-vibe-ide.yml`** (layout, upstream script syntax, **`editor/.nvmrc`** — see **`docs/ci-qa-hardening.md`** *IDE smoke*). The workflow **`build-linux.yml`** is a **`workflow_dispatch`** alias that **reuses** the same job (labels in PM docs may say “build-linux”). Then wire IDE build CI; keep **`le-vibe/`** packages and pins aligned on each release tag.
 
 ### Product and project management — in service of the IDE
 
