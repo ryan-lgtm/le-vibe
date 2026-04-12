@@ -22,7 +22,7 @@ if command -v rsvg-convert >/dev/null 2>&1; then
 elif command -v convert >/dev/null 2>&1; then
   convert -background none "$SRC_SVG" -resize 512x512 "${DEST}/le-vibe.png"
 else
-  echo "sync-linux-icon-assets: install rsvg-convert (librsvg2-bin) or ImageMagick convert to create le-vibe.png" >&2
+  echo "sync-linux-icon-assets: install rsvg-convert or ImageMagick convert to create le-vibe.png — e.g. sudo apt install librsvg2-bin or sudo apt install imagemagick (Debian/Ubuntu)" >&2
   exit 1
 fi
 echo "sync-linux-icon-assets: updated ${DEST}/le-vibe.svg and le-vibe.png"
