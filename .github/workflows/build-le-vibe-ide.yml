@@ -6,6 +6,15 @@ name: build-le-vibe-ide
 on:
   workflow_dispatch:
   workflow_call:
+  pull_request:
+    branches: [main, master]
+    paths:
+      - ".gitmodules"
+      - "editor/**"
+      - ".github/workflows/build-le-vibe-ide.yml"
+      - ".github/workflows/build-linux.yml"
+      - "packaging/scripts/ci-editor-gate.sh"
+      - "packaging/scripts/ci-vscodium-bash-syntax.sh"
   push:
     tags:
       - "ide-v*"
