@@ -38,6 +38,8 @@ def test_ensure_lvibe_creates_layout(tmp_path: Path):
     assert (root / ".continue" / "rules" / "00-le-vibe-lvibe-memory.md").is_file()
     assert (root / ".continue" / "rules" / "01-le-vibe-product-welcome.md").is_file()
     assert (lv / "WELCOME.md").is_file()
+    assert (lv / "workflows" / "setup-workspace.md").is_file()
+    assert "/setup-workspace" in (lv / "workflows" / "setup-workspace.md").read_text(encoding="utf-8")
     agents_md = (lv / "AGENTS.md").read_text(encoding="utf-8")
     assert "USER RESPONSE REQUIRED" in agents_md
     assert "§7.2" in agents_md

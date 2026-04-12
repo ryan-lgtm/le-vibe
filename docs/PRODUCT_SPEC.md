@@ -222,6 +222,8 @@ Implementation may span Continue rules, extension hooks, and future fork UI—th
 | **`docs/AI_PILOT_AND_CONTINUE.md`** | **Continue construction**, **AI Pilot**, visible coordination, self-coordinated agents (intent). |
 | **`docs/PM_STAGE_MAP.md`** | **Orchestrator STEP → PM docs** (per-stage authority for engineers and auto-style loops). |
 | **`docs/PROMPT_BUILD_LE_VIBE.md`** | **Master orchestrator** queue (STEPS **0–17**; **execution order** **0→1→14→2–13→15–17**), Roadmap H, lazy prompts for engineering |
+| **`docs/PM_DEB_BUILD_ITERATION.md`** | **PM / packaging:** one-shot **`.deb`** build script ([`packaging/scripts/build-le-vibe-debs.sh`](../packaging/scripts/build-le-vibe-debs.sh)), lazy engineer prompt (`print-pm-deb-build-prompt.py`). |
+| **`docs/PM_IDE_SETTINGS_AND_WORKFLOWS.md`** | **PM / phase:** Cursor-like IDE settings, **`user-settings.json`**, **`/setup-workspace`** workflow, mentions — coordinates [`schemas/user-settings.v1.example.json`](../schemas/user-settings.v1.example.json). |
 | **`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`** | E1 regression evidence (**§1**/**H8**, §5–§10) ↔ **`le-vibe/tests/`** (e.g. **STEP 14** / **H6** — **`test_editor_le_vibe_overrides_readme_contract.py`** ↔ **[`editor/le-vibe-overrides/README.md`](../editor/le-vibe-overrides/README.md)**; **`test_build_le_vibe_ide_workflow_contract.py`** ↔ **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** / **[`.github/workflows/build-linux.yml`](../.github/workflows/build-linux.yml)** (**`uses:`**) **`ide-ci-metadata`**); filename **SECTION8** historic |
 | **§7.2** (this file) | **USER RESPONSE REQUIRED** — halt when orchestrator cannot decide; numbered questions; accept “no preference.” |
 

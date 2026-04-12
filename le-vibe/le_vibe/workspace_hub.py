@@ -24,6 +24,19 @@ from .workspace_storage import refresh_storage_metadata
 LVIBE_DIR_NAME = ".lvibe"
 MANIFEST_VERSION = 1
 
+
+def ensure_lvibe_workflow_templates(workspace_root: Path) -> list[Path]:
+    """Seed ``.lvibe/workflows/setup-workspace.md`` from package templates (idempotent)."""
+    wf_dir = workspace_root / LVIBE_DIR_NAME / "workflows"
+    wf_dir.mkdir(parents=True, exist_ok=True)
+    src = Path(__file__).resolve().parent.parent / "templates" / "workflows" / "setup-workspace.md"
+    dest = wf_dir / "setup-workspace.md"
+    written: list[Path] = []
+    if not dest.exists() and src.is_file():
+        dest.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+        written.append(dest)
+    return written
+
 # Skip typical editor flags so we still resolve workspace paths (e.g. codium -n .).
 _EDITOR_FLAG_PREFIXES = ("-",)
 
@@ -195,6 +208,7 @@ def ensure_lvibe_workspace(workspace_root: Path) -> Path:
 
     ensure_pm_session_artifacts(workspace_root)
     ensure_lvibe_welcome_md(workspace_root)
+    ensure_lvibe_workflow_templates(workspace_root)
     ensure_continue_lvibe_rules(workspace_root)
 
     return lvibe

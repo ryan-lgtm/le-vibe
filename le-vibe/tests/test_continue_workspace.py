@@ -30,6 +30,10 @@ def test_ensure_continue_rules_idempotent(tmp_path: Path):
     assert "AI Pilot" in mem
     assert "USER RESPONSE REQUIRED" in mem
     assert "numbered questions" in mem
+    assert "/setup-workspace" in mem
+    assert ".workspace-context-seeded" in mem
+    assert "workflows/setup-workspace.md" in mem
+    assert "/agent" in mem
     welcome = (tmp_path / ".continue" / "rules" / PRODUCT_WELCOME_RULE_NAME).read_text(encoding="utf-8")
     assert "Welcome to Lé Vibe" in welcome
     assert "Cursor" in welcome

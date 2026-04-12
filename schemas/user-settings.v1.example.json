@@ -1,0 +1,16 @@
+{
+  "schema_version": "user-settings.v1",
+  "lvibe_cap_mb_default": null,
+  "model": {
+    "use_recommended": true,
+    "override_tag": null,
+    "allow_pull_if_disk_ok": true
+  },
+  "ide": {
+    "show_chat_commands_help": true,
+    "show_new_workspace_hints": true
+  },
+  "meta": {
+    "note": "Optional ~/.config/le-vibe/user-settings.json — see docs/PM_IDE_SETTINGS_AND_WORKFLOWS.md. Nulls = use launcher / workspace-policy defaults."
+  }
+}

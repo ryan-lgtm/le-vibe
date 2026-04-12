@@ -39,7 +39,14 @@ def _lvibe_continue_rule_body() -> str:
         "**Halt** that branch and print exactly **`USER RESPONSE REQUIRED`** on its own line (all capitals), then **numbered questions** with short context; accept **No preference**, **I don’t care**, **Your call**, or **Surprise me** as delegation to documented defaults—not permission to invent user intent. "
         "Use **blocked** / wait states only for **secrets**, **credentials**, or **out-of-repo** dependencies—not for normal product tradeoffs.\n\n"
         "**Secrets (PRODUCT_SPEC §8):** Default **deny** on **`.env`**, **`.env.local`**, **`.env.*`**, and common secret files—do **not** read them unless the **user explicitly** instructs you for a defined purpose. "
-        "Never paste secret **values** into **`.lvibe/`**, structured logs, or incremental memory; use **references** only.\n"
+        "Never paste secret **values** into **`.lvibe/`**, structured logs, or incremental memory; use **references** only.\n\n"
+        "**Chat commands & mentions:** Users may type **`/setup-workspace`** to walk the onboarding Q&A (see **`.lvibe/workflows/setup-workspace.md`**). "
+        "They may use **`/agent <role_id>`** (e.g. **`/agent product_manager`**) or **mentions** like **`@product_manager`**, **`@senior_qa_engineer`** to steer which "
+        "**.lvibe/agents/<id>/skill.md** lens applies for the next clarification—stay within **§5** consent and **§8** secrets.\n\n"
+        "**Workspace context seeding:** If **`.lvibe/`** exists but **`.lvibe/.workspace-context-seeded`** does **not**, treat project context as **incomplete**. "
+        "Append **at the end** of **every** assistant reply one short **Lé Vibe** notice: that context is not fully seeded, point to **`.lvibe/workflows/setup-workspace.md`**, "
+        "and say the user can run **`/setup-workspace`** and run **`touch .lvibe/.workspace-context-seeded`** when finished. "
+        "If **`.workspace-context-seeded`** is present or **`.lvibe/`** is absent (declined consent), do **not** append this notice.\n"
     )
 
 

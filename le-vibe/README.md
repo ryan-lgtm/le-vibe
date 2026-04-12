@@ -34,6 +34,8 @@ For **Lé Vibe Phase 2** (managed Ollama on a dedicated port, configs under `~/.
 
 **AI Pilot & Continue contracts (STEP 17):** Doc-first staging and mimic UX — [`../docs/AI_PILOT_AND_CONTINUE.md`](../docs/AI_PILOT_AND_CONTINUE.md); **`le_vibe.continue_workspace`** + root [`README.md`](../README.md) §7.1. See [`../docs/PM_STAGE_MAP.md`](../docs/PM_STAGE_MAP.md) STEP **17**.
 
+**Packaging PM track:** **[`../docs/PM_DEB_BUILD_ITERATION.md`](../docs/PM_DEB_BUILD_ITERATION.md)** — one-shot **`le-vibe`** / optional **`le-vibe-ide`** **`.deb`** via [`../packaging/scripts/build-le-vibe-debs.sh`](../packaging/scripts/build-le-vibe-debs.sh); lazy prompt — [`../packaging/scripts/print-pm-deb-build-prompt.py`](../packaging/scripts/print-pm-deb-build-prompt.py). **IDE settings / workflows (PM phase):** [`../docs/PM_IDE_SETTINGS_AND_WORKFLOWS.md`](../docs/PM_IDE_SETTINGS_AND_WORKFLOWS.md); example schema — [`../schemas/user-settings.v1.example.json`](../schemas/user-settings.v1.example.json).
+
 **Phase 2 vs this tree:** [`../spec-phase2.md`](../spec-phase2.md) **§14** — **monorepo:** **`le-vibe/`** (this package) + **[`../editor/`](../editor/)** (Lé Vibe IDE shell, **H6**); **H7** — **`packaging/flatpak/`** + **`packaging/appimage/`** per [`../docs/flatpak-appimage.md`](../docs/flatpak-appimage.md).
 
 **IDE shell (H6):** **[`../editor/README.md`](../editor/README.md)** — local build **[`../editor/BUILD.md`](../editor/BUILD.md)**; upstream vendoring **[`../editor/VENDORING.md`](../editor/VENDORING.md)**; CI parity without compiling Electron — **[`../editor/smoke.sh`](../editor/smoke.sh)** from the repository root (**[`../docs/ci-qa-hardening.md`](../docs/ci-qa-hardening.md)** *IDE smoke* vs **`ci-smoke.sh`**).

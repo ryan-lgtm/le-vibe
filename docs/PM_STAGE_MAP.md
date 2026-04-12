@@ -24,6 +24,8 @@ Engineers and **auto-style** agents **open the listed PM doc first** for the **s
 
 **Queue advance (honest):** **PRODUCT_SPEC §7.3** (2026-04-12) **resolves** material STEP 14 IDE decisions (**Lé Vibe** identity, **`lvibe`-only** public CLI, **full** branding, **Debian IDE `.deb`**, **no GitHub Actions production gate** for v1). Engineers **close STEP 14** by implementing **§7.3** in **`editor/`** + **`debian/`** (not doc-only). They **may** still proceed with **STEP 2–13** / **15–17** in parallel when PM allows—**`editor/`** implementation tracks **§7.3** until done.
 
+**PM iteration tracks (not Master STEP numbers):** **[`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** — one-shot **`.deb`** builds (`build-le-vibe-debs.sh`). **[`PM_IDE_SETTINGS_AND_WORKFLOWS.md`](PM_IDE_SETTINGS_AND_WORKFLOWS.md)** — IDE settings surface, **`user-settings.json`**, **`/setup-workspace`** workflow — see §4 engineer brief checklist.
+
 | Master orchestrator STEP | Primary PM / product doc | Also read |
 |---------------------------|---------------------------|-----------|
 | 0 — MUST baseline | [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md) §§1–8, §10 | [`SESSION_ORCHESTRATION_SPEC.md`](SESSION_ORCHESTRATION_SPEC.md) |
