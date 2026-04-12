@@ -16,6 +16,8 @@ def test_ci_vscodium_linux_dev_build_documents_overrides_hook():
     assert "Fresh clone (14.b)" in text
     assert "restore from git" in text
     assert "must match editor/vscodium/.nvmrc" in text
+    assert "dev/build.sh missing or not executable" in text
+    assert "repair editor/vscodium" in text
     assert "le-vibe-overrides/build-env.sh" in text
     assert "build-env.lvibe-defaults.sh" in text
     assert "product-branding-merge.json" in text

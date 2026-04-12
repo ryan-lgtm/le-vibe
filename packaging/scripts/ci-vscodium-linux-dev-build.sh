@@ -56,7 +56,7 @@ _lvibe_patch_dev_build_sh_for_env_defaults() {
   exit 1
 }
 [[ -x "${VSC}/dev/build.sh" ]] || {
-  echo "ci-vscodium-linux-dev-build: dev/build.sh missing or not executable." >&2
+  echo "ci-vscodium-linux-dev-build: dev/build.sh missing or not executable under ${VSC}/ — repair editor/vscodium (Fresh clone 14.b: git submodule update --init editor/vscodium — editor/README.md)." >&2
   exit 1
 }
 
