@@ -9,7 +9,7 @@
 # From repo root:
 #   LE_VIBE_EDITOR="$(./editor/print-ci-tarball-codium-path.sh ~/Downloads/vscodium-linux-build.tar.gz)"
 #
-# Requires: realpath (coreutils), tar, mktemp. Does not leave the tarball extracted in your cwd (temp dir removed after).
+# Requires: realpath (coreutils), tar, mktemp, find (findutils). Does not leave the tarball extracted in your cwd (temp dir removed after).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -37,6 +37,10 @@ if ! command -v mktemp >/dev/null 2>&1; then
   echo "${0##*/}: mktemp not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md 14.f)." >&2
   exit 1
 fi
+if ! command -v find >/dev/null 2>&1; then
+  echo "${0##*/}: find not on PATH — install findutils (e.g. sudo apt install findutils) (editor/BUILD.md 14.f)." >&2
+  exit 1
+fi
 
 _lc="${TAR,,}"
 if [[ "${_lc}" == *.zip ]]; then
@@ -55,6 +59,10 @@ trap cleanup EXIT
 
 if ! tar -xzf "${TAR}" -C "${WORKDIR}"; then
   echo "${0##*/}: tar extract failed — $TAR may be corrupt or not a .tar.gz from linux_compile (editor/BUILD.md 14.f)." >&2
+  exit 1
+fi
+if [[ -z "$(find "${WORKDIR}" -mindepth 1 -print -quit 2>/dev/null)" ]]; then
+  echo "${0##*/}: extract produced no files — $TAR may be empty or not the linux_compile artifact (editor/BUILD.md 14.f)." >&2
   exit 1
 fi
 exec "${ROOT}/editor/print-vsbuild-codium-path.sh" "${WORKDIR}"
