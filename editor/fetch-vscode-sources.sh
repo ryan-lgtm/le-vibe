@@ -22,7 +22,7 @@ cd "$ROOT"
 }
 
 if ! cmp -s editor/.nvmrc editor/vscodium/.nvmrc 2>/dev/null; then
-  echo "fetch-vscode-sources: editor/.nvmrc must match editor/vscodium/.nvmrc" >&2
+  echo "fetch-vscode-sources: editor/.nvmrc differs from editor/vscodium/.nvmrc — update editor/.nvmrc to match upstream pin after a vendor bump (14.a); see editor/README.md." >&2
   exit 1
 fi
 
