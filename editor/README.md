@@ -12,6 +12,8 @@
 
 Populate **`editor/`** by vendoring upstream (e.g. [VSCodium](https://github.com/VSCodium/vscodium)) via **git submodule**, **subtree**, or a tracked import—see **`docs/vscodium-fork-le-vibe.md`** and **[`VENDORING.md`](VENDORING.md)** (recommended: submodule at **`editor/vscodium/`** so this README stays in-tree). Until sources exist here, developers may point **`LE_VIBE_EDITOR`** at system **VSCodium**; production intent remains **one tree**, one product.
 
+**Node:** match VSCodium’s toolchain — **[`.nvmrc`](.nvmrc)** mirrors **`vscodium/.nvmrc`** (run **`nvm install`** / **`nvm use`** from **`editor/`** before upstream **`get_repo` / build** steps).
+
 ## `LE_VIBE_EDITOR` (launcher ↔ IDE binary)
 
 The Python stack (`lvibe`, `le-vibe` wrappers) resolves the desktop editor in this order (see `le-vibe/le_vibe/launcher.py`):
