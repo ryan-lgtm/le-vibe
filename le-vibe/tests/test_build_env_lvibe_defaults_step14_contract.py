@@ -2,11 +2,18 @@
 
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
 
 
 def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
+
+
+def test_build_env_lvibe_defaults_bash_syntax() -> None:
+    script = _repo_root() / "editor" / "le-vibe-overrides" / "build-env.lvibe-defaults.sh"
+    assert script.is_file(), script
+    subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 
 def test_build_env_lvibe_defaults_documents_7_3_and_compile_hook():
@@ -18,3 +25,5 @@ def test_build_env_lvibe_defaults_documents_7_3_and_compile_hook():
     assert "APP_NAME=" in text and "Lé Vibe" in text
     assert "ORG_NAME=" in text
     assert "codium" in text
+    assert "BINARY_NAME" in text
+    assert "lvibe" in text
