@@ -45,6 +45,8 @@ def test_smoke_built_codium_lvibe_chains_print_built_and_smoke():
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
     assert "14.c" in text or "STEP 14" in text
+    assert "python3 not on PATH" in text
+    assert "exit 5" in text
     assert "print-built-codium-path.sh" in text
     assert "smoke-lvibe-editor.sh" in text
     assert (root / "editor" / "smoke-built-codium-lvibe.sh").is_file()
