@@ -16,6 +16,14 @@ def test_editor_smoke_sh_bash_syntax() -> None:
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 
+def test_editor_smoke_sh_header_documents_le_vibe_deb_vs_ide_deb_step14():
+    """STEP 14: repo-root smoke header states H1 CI scope vs maintainer IDE .deb."""
+    text = (_repo_root() / "editor" / "smoke.sh").read_text(encoding="utf-8")
+    assert "le-vibe-deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+
+
 def test_editor_smoke_sh_delegates_ci_editor_gate():
     text = (_repo_root() / "editor" / "smoke.sh").read_text(encoding="utf-8")
     assert "git submodule update --init editor/vscodium" in text
