@@ -28,6 +28,7 @@ def test_editor_smoke_sh_header_documents_le_vibe_deb_vs_ide_deb_step14():
 
 def test_editor_smoke_sh_delegates_ci_editor_gate():
     text = (_repo_root() / "editor" / "smoke.sh").read_text(encoding="utf-8")
+    assert 'exec "${ROOT}/packaging/scripts/ci-editor-gate.sh" "$@"' in text
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
     assert "STEP 14" in text

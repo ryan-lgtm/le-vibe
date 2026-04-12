@@ -11,4 +11,4 @@
 # (same module locks ide-ci-metadata / retention-days / permissions (contents read, actions write) / Pre-binary / editor/BUILD+VENDORING in PRODUCT_SPEC *Prioritization*).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-exec "${ROOT}/packaging/scripts/ci-editor-gate.sh"
+exec "${ROOT}/packaging/scripts/ci-editor-gate.sh" "$@"
