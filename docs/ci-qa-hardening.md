@@ -45,6 +45,16 @@ It executes, in order:
 
 On **GitHub Actions**, missing **`desktop-file-validate`** is a **failure**. Locally, it **skips** desktop validation with a notice unless you install **`desktop-file-utils`**.
 
+## IDE smoke (`editor/smoke.sh`, H6)
+
+**Not** included in **`ci-smoke.sh`** (stack + **`pytest`**). From the **repository root**:
+
+```bash
+./editor/smoke.sh
+```
+
+This delegates to **`packaging/scripts/ci-editor-gate.sh`**, matching the **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** layout gate, **`bash -n`** on VSCodium scripts, and **`editor/.nvmrc`** sync when **`editor/vscodium`** is checked out. See **[`editor/README.md`](../editor/README.md)** and **[`docs/vscodium-fork-le-vibe.md`](vscodium-fork-le-vibe.md)**.
+
 ## What is not automated here
 
 - **ShellCheck** on every script — optional locally (`shellcheck packaging/scripts/*.sh`); not required in default CI to keep images small.
@@ -53,7 +63,7 @@ On **GitHub Actions**, missing **`desktop-file-validate`** is a **failure**. Loc
 ## Related docs
 
 - **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** — canonical **stack** **CI** job (artifact **`le-vibe-deb`**)  
-- **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **H6** IDE smoke (separate workflow; not **`pytest`**)  
+- **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **H6** IDE smoke (separate workflow; not **`pytest`**); local parity **`./editor/smoke.sh`**  
 - **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** — artifacts, checksums, Releases (H1), **`CHANGELOG.md`** / **`debian/changelog`** when tagging  
 - **[`docs/sbom-signing-audit.md`](sbom-signing-audit.md)** — **`pip-audit`**, SBOM (H2)  
 - **[`docs/continue-extension-pin.md`](continue-extension-pin.md)** — Open VSX pin verification in smoke (H4)  
