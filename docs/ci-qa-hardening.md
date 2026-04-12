@@ -23,7 +23,7 @@ Order of steps on **`ubuntu-latest`**:
 | **Lintian** | **`lintian --fail-on error --color never`** — **errors** fail; warnings/info do not |
 | **Upload artifact** | **`le-vibe-deb`** bundle |
 
-**Scope:** **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** header comments cite **`spec-phase2.md` §14** and **H8** (**`docs/README`** *Product surface* / **`SECURITY`** / **`privacy-and-telemetry`** *E1* — same trust chain as **`packaging/scripts/ci-smoke.sh`**). **[`.github/dependabot.yml`](../.github/dependabot.yml)** and **[`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/)** (**[`config.yml`](../.github/ISSUE_TEMPLATE/config.yml)** **`#` H8**) document the same **H8** chain (weekly **pip** + **Actions** bump PRs; reporter-facing template **`#`** lines; **H2** follow-up per **`sbom-signing-audit.md`**). A green CI run proves **this** tree’s **`.deb`** + Python supply chain, not a separate **H6** editor build or **H7** alternate bundle. **[`SECURITY.md`](../SECURITY.md)** *Related docs* lists optional **[`rag/le-vibe-phase2-chunks.md`](rag/le-vibe-phase2-chunks.md)** (*RAG / embeddings*, non-canonical) alongside the same **H8** index — refresh if **`SECURITY`** / trust copy shifts.
+**Scope:** **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** header comments cite **`spec-phase2.md` §14** and **H8** (**`docs/README`** *Product surface* / **`SECURITY`** / **`privacy-and-telemetry`** *E1* — same trust chain as **`packaging/scripts/ci-smoke.sh`**). **[`.github/dependabot.yml`](../.github/dependabot.yml)** and **[`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/)** (**[`config.yml`](../.github/ISSUE_TEMPLATE/config.yml)** **`#` H8**) document the same **H8** chain (weekly **pip** + **Actions** bump PRs; reporter-facing template **`#`** lines; **H2** follow-up per **`sbom-signing-audit.md`**). A green **`ci.yml`** run proves **this** tree’s **`.deb`** + Python supply chain. **H6** **IDE** smoke (submodule checkout, **`bash -n`**, **`.nvmrc`**, metadata artifact) runs in **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)**, not **`ci.yml`**. **H7** alternate bundles remain outside default **`ci.yml`**. **[`SECURITY.md`](../SECURITY.md)** *Related docs* lists optional **[`rag/le-vibe-phase2-chunks.md`](rag/le-vibe-phase2-chunks.md)** (*RAG / embeddings*, non-canonical) alongside the same **H8** index — refresh if **`SECURITY`** / trust copy shifts.
 
 **Lintian:** `--color never` keeps logs readable in Actions. To fail on **warnings**, change **`--fail-on`** (expect more noise until maintainer fields and policy tags are clean). See **`man lintian`**.
 
@@ -52,9 +52,10 @@ On **GitHub Actions**, missing **`desktop-file-validate`** is a **failure**. Loc
 
 ## Related docs
 
-- **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** — canonical **CI** job (artifact **`le-vibe-deb`**)  
+- **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** — canonical **stack** **CI** job (artifact **`le-vibe-deb`**)  
+- **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** — **H6** IDE smoke (separate workflow; not **`pytest`**)  
 - **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** — artifacts, checksums, Releases (H1), **`CHANGELOG.md`** / **`debian/changelog`** when tagging  
 - **[`docs/sbom-signing-audit.md`](sbom-signing-audit.md)** — **`pip-audit`**, SBOM (H2)  
 - **[`docs/continue-extension-pin.md`](continue-extension-pin.md)** — Open VSX pin verification in smoke (H4)  
-- **[`spec-phase2.md`](../spec-phase2.md) §14** — honest split: default CI validates **this** tree’s **`.deb`** + Python stack, not **H6**/**H7** bundles  
+- **[`spec-phase2.md`](../spec-phase2.md) §14** — honest split: **`ci.yml`** = stack **`.deb`** + **`pytest`**; **`build-le-vibe-ide.yml`** = **H6** submodule/IDE checks; **H7** bundles optional/out-of-tree  
 - **[`CHANGELOG.md`](../CHANGELOG.md)** — promote **`[Unreleased]`** when a green CI build becomes a tagged release (same rhythm as **H1**)  
