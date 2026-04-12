@@ -38,6 +38,8 @@ Exact paths follow the VSCodium / `vscode` tree you import:
 
 **Fresh clone (14.b):** when **`editor/vscodium/`** is missing or empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the repository root — same step as **`editor/README.md`** *Fresh clone (14.b)* before **`get_repo.sh`** / **`fetch-vscode-sources.sh`**.
 
+**Superproject `git status` (§7.3 icons):** **`sync-linux-icon-assets.sh`** writes **`le-vibe.svg`** / **`le-vibe.png`** under **`editor/vscodium/src/stable/resources/linux/`** as **untracked** files. **`.gitmodules`** sets **`ignore = untracked`** for **`editor/vscodium`** so the monorepo root does not show the submodule as modified — **`editor/VENDORING.md`**, **`editor/README.md`**.
+
 Upstream VSCodium prepare/build scripts remain the source of truth for **how** to compile; this doc stays a **pointer** and policy shell, not a full upstream mirror.
 
 ## Branding & overrides (**14.d** — **`PRODUCT_SPEC`** §7.2)
