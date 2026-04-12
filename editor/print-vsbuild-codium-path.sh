@@ -9,6 +9,10 @@
 set -euo pipefail
 
 SEARCH="${1:-.}"
+if [[ ! -d "$SEARCH" ]]; then
+  echo "print-vsbuild-codium-path: not a directory: $SEARCH — pass a path to an unpacked VSCode-linux-* tree or editor/vscodium (editor/BUILD.md 14.f / 14.c)." >&2
+  exit 1
+fi
 SEARCH="$(cd "$SEARCH" && pwd)"
 
 shopt -s nullglob
