@@ -9,6 +9,18 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_privacy_and_telemetry_table_lists_maintainer_full_product_deb_step14():
+    """STEP 14: privacy index row points at PM deb doc + H1 vs §7.3 honesty."""
+    text = (_repo_root() / "docs" / "privacy-and-telemetry.md").read_text(encoding="utf-8")
+    assert "Maintainer stack + IDE" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "Full-product install" in text
+    assert "le-vibe-deb" in text
+    assert "apt-repo-releases.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
+
+
 def test_privacy_and_telemetry_e1_row_lists_linux_compile_cargo_cache():
     text = (_repo_root() / "docs" / "privacy-and-telemetry.md").read_text(encoding="utf-8")
     assert "test_product_spec_section8.py" in text
