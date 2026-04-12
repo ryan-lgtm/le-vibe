@@ -159,6 +159,15 @@ def test_product_spec_section10_regression_evidence_lists_step14_editor_contract
     assert "When full compile fails" in text
 
 
+def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
+    """E1: audit doc states CI le-vibe-deb (stack) vs maintainer le-vibe-ide (§7.3)."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
+    assert "H1 CI artifact vs §7.3 IDE `.deb`" in text
+    assert "test_spec_phase2_monorepo_lists_ci_le_vibe_deb_vs_le_vibe_ide_step14" in text
+    assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
+
+
 def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14():
     """E1: §10 evidence row cites le-vibe-ide Freedesktop file + packaging contract (§7.3)."""
     root = Path(__file__).resolve().parents[2]
