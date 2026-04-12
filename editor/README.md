@@ -5,6 +5,7 @@
 | Path | Role |
 |------|------|
 | **`editor/`** (here) | Lé Vibe IDE — VSCodium/Code OSS sources, branding, build scripts, CI for the Electron app |
+| **`editor/le-vibe-overrides/`** | Reserved for Lé Vibe–specific branding/overrides (see **`README.md`** there); §7.2 for material choices |
 | **`le-vibe/`** | Python bootstrap, `lvibe` launcher, managed Ollama, `.lvibe/` workspace hub, **`le-vibe`** `.deb` |
 | **`debian/`**, **`packaging/`** | Debian packaging and PATH wrappers for the **stack** package |
 
