@@ -52,7 +52,7 @@ _lvibe_patch_dev_build_sh_for_env_defaults() {
 }
 
 [[ -f "${VSC}/product.json" ]] || {
-  echo "ci-vscodium-linux-dev-build: expected editor/vscodium/product.json (init submodule)." >&2
+  echo "ci-vscodium-linux-dev-build: expected editor/vscodium/product.json — run: git submodule update --init editor/vscodium (Fresh clone 14.b: editor/README.md)." >&2
   exit 1
 }
 [[ -x "${VSC}/dev/build.sh" ]] || {
