@@ -20,6 +20,11 @@ def test_sync_linux_icon_assets_documents_14b():
     text = (
         _repo_root() / "editor" / "le-vibe-overrides" / "sync-linux-icon-assets.sh"
     ).read_text(encoding="utf-8")
+    assert "§7.3" in text
+    assert "ci-vscodium-linux-dev-build.sh" in text
+    assert "src/stable/resources/linux" in text
+    assert "expected editor/vscodium/product.json" in text
+    assert "packaging/icons/hicolor/scalable/apps/le-vibe.svg" in text
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
     assert "sudo apt install librsvg2-bin" in text
