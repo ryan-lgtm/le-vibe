@@ -29,6 +29,8 @@ if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
 fi
 
 # Keep in sync with build-le-vibe-ide.yml (Install Linux build dependencies).
+# Python headers: CI linux_compile uses ubuntu-22.04 + python3.11-dev; Ubuntu 24.04+ typically ships
+# python3.12-dev only — accept any one of python3.{11,12,13,14}-dev or meta python3-dev.
 DEBS=(
   build-essential
   pkg-config
@@ -43,7 +45,6 @@ DEBS=(
   librsvg2-bin
   git
   python3
-  python3.11-dev
   curl
   ca-certificates
 )
@@ -52,12 +53,28 @@ _pkg_ok() {
   dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q 'install ok installed$'
 }
 
+_python_dev_headers_ok() {
+  local p
+  for p in python3.11-dev python3.12-dev python3.13-dev python3.14-dev python3-dev; do
+    if _pkg_ok "$p"; then
+      return 0
+    fi
+  done
+  return 1
+}
+
 missing=()
 for p in "${DEBS[@]}"; do
   if ! _pkg_ok "$p"; then
     missing+=("$p")
   fi
 done
+
+_pydev_ok=1
+if ! _python_dev_headers_ok; then
+  echo "check-linux-vscodium-build-deps: no python3.*-dev (or python3-dev) — CI uses python3.11-dev on ubuntu-22.04; on Ubuntu 24.04 install python3.12-dev." >&2
+  _pydev_ok=0
+fi
 
 _pc_ok=1
 if ! command -v pkg-config >/dev/null 2>&1; then
@@ -72,7 +89,7 @@ if [[ "${LEVIBE_CHECK_RUST:-0}" == "1" ]] && ! command -v rustc >/dev/null 2>&1;
   echo "check-linux-vscodium-build-deps: warning: rustc not on PATH — CI linux_compile installs Rust via dtolnay/rust-toolchain; local builds may need: curl https://sh.rustup.rs -sSf | sh -s -- -y" >&2
 fi
 
-if [[ ${#missing[@]} -eq 0 && "${_pc_ok}" -eq 1 ]]; then
+if [[ ${#missing[@]} -eq 0 && "${_pc_ok}" -eq 1 && "${_pydev_ok}" -eq 1 ]]; then
   echo "check-linux-vscodium-build-deps: OK — CI-aligned apt packages and pkg-config xkbfile present."
   exit 0
 fi
@@ -80,5 +97,8 @@ fi
 echo "check-linux-vscodium-build-deps: missing Debian packages: ${missing[*]:-(none)}" >&2
 echo "check-linux-vscodium-build-deps: install (Debian/Ubuntu):" >&2
 echo "  sudo apt-get update && sudo apt-get install -y ${missing[*]}" >&2
+if [[ "${_pydev_ok}" -eq 0 ]]; then
+  echo "  # also: sudo apt-get install -y python3.11-dev   # ubuntu-22.04 / CI parity, or python3.12-dev on 24.04+" >&2
+fi
 echo "check-linux-vscodium-build-deps: parity: .github/workflows/build-le-vibe-ide.yml *Install Linux build dependencies* — editor/BUILD.md 14.e." >&2
 exit 1

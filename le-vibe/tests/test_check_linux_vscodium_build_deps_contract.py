@@ -23,6 +23,8 @@ def test_check_linux_vscodium_build_deps_matches_ci_apt_list() -> None:
     ).read_text(encoding="utf-8")
     assert "build-le-vibe-ide.yml" in text
     assert "libxkbfile-dev" in text
+    assert "_python_dev_headers_ok" in text
+    assert "python3.12-dev" in text
     assert "python3.11-dev" in text
     assert "pkg-config --exists xkbfile" in text
     assert "DEBS=(" in text
