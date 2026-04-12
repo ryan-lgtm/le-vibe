@@ -30,14 +30,14 @@ jobs:
           if [ -f editor/package.json ]; then
             echo "present=true" >> "$GITHUB_OUTPUT"
             echo "layout=flat" >> "$GITHUB_OUTPUT"
-            echo "editor/: upstream package.json found (flat layout) — build steps can be wired here."
-          elif [ -f editor/vscodium/package.json ]; then
+            echo "editor/: vscode-style package.json found (flat layout) — build steps can be wired here."
+          elif [ -f editor/vscodium/product.json ]; then
             echo "present=true" >> "$GITHUB_OUTPUT"
-            echo "layout=submodule" >> "$GITHUB_OUTPUT"
-            echo "editor/vscodium/: upstream package.json found — build steps can be wired here."
+            echo "layout=vscodium" >> "$GITHUB_OUTPUT"
+            echo "editor/vscodium/: VSCodium tree found (product.json) — vscode sources follow get_repo.sh; see upstream build docs."
           else
             echo "present=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::editor/ is not vendored yet (no editor/package.json or editor/vscodium/package.json). Skipping compile; see editor/VENDORING.md and docs/vscodium-fork-le-vibe.md."
+            echo "::notice::editor/ is not vendored yet. Skipping compile; see editor/VENDORING.md and docs/vscodium-fork-le-vibe.md."
           fi
 
       - name: Smoke (when sources exist)
@@ -46,13 +46,14 @@ jobs:
           set -euo pipefail
           if [ "${{ steps.gate.outputs.layout }}" = "flat" ]; then
             cd editor
+            python3 -c "import json; p=json.load(open('package.json')); print('editor package:', p.get('name','(unnamed)'))"
           else
             cd editor/vscodium
+            python3 -c "import json; u=json.load(open('upstream/stable.json')); print('pinned vscode tag:', u.get('tag','?'))"
           fi
-          python3 -c "import json; p=json.load(open('package.json')); print('editor package:', p.get('name','(unnamed)'))"
-          echo "TODO: wire VSCodium prepare/build here (see upstream get_repo / build scripts)."
+          echo "TODO: wire VSCodium prepare/build here (see upstream get_repo.sh / build.sh)."
 
       - name: Skip summary
         if: steps.gate.outputs.present != 'true'
         run: |
-          echo "IDE build skipped — vendor upstream (editor/package.json or editor/vscodium/package.json); see editor/VENDORING.md."
+          echo "IDE build skipped — vendor upstream (editor/package.json flat, or editor/vscodium with VSCodium); see editor/VENDORING.md."

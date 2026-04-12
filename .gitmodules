@@ -1,0 +1,4 @@
+[submodule "editor/vscodium"]
+	path = editor/vscodium
+	url = https://github.com/VSCodium/vscodium.git
+	shallow = true
