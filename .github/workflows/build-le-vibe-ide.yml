@@ -2,10 +2,16 @@
 # (VSCodium / Code OSS). Authority: docs/vscodium-fork-le-vibe.md, editor/README.md,
 # docs/PRODUCT_SPEC.md §7.2, *Prioritization* (./editor/smoke.sh), spec-phase2.md §14.
 # E1: le-vibe/tests/test_product_spec_section8.py (PRODUCT_SPEC sequencing vs this gate).
+# 14.e: optional job linux_compile runs packaging/scripts/ci-vscodium-linux-dev-build.sh (upstream dev/build.sh).
 name: build-le-vibe-ide
 
 on:
   workflow_dispatch:
+    inputs:
+      vscodium_linux_compile:
+        type: boolean
+        description: Run full VSCodium compile (editor/vscodium ./dev/build.sh) — long; may OOM on small runners
+        default: false
   workflow_call:
   pull_request:
     branches: [main, master]
@@ -17,6 +23,7 @@ on:
       - "packaging/scripts/ci-editor-gate.sh"
       - "packaging/scripts/ci-editor-nvmrc-sync.sh"
       - "packaging/scripts/ci-vscodium-bash-syntax.sh"
+      - "packaging/scripts/ci-vscodium-linux-dev-build.sh"
   push:
     tags:
       - "ide-v*"
@@ -77,7 +84,7 @@ jobs:
         run: |
           {
             echo "## Lé Vibe IDE (STEP 14 / H6)"
-            echo "Smoke checks only — **no Electron compile** in CI yet."
+            echo "Default smoke — **no full compile** on pull_request. Optional job **linux_compile** runs \`editor/vscodium/dev/build.sh\` (manual dispatch flag \`vscodium_linux_compile\` or \`ide-v*\` tag push)."
             echo ""
             echo "**Local parity:** from the repository root run \`./editor/smoke.sh\` (same gate as this job and \`build-linux.yml\`, which \`uses:\` this workflow)."
             echo ""
@@ -119,4 +126,104 @@ jobs:
             echo "## Lé Vibe IDE (STEP 14 / H6)"
             echo "Skipped — no \`editor/package.json\` (flat) or \`editor/vscodium/product.json\`."
             echo "See \`editor/VENDORING.md\`."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # Full upstream compile (14.e) — opt-in: manual dispatch flag, workflow_call flag, or ide-v* tag push (not PRs).
+  linux_compile:
+    # inputs context exists only for workflow_call; keep this gate free of `inputs.*` so pull_request stays valid.
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.vscodium_linux_compile == 'true')
+      || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/ide-v'))
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Gate — VSCodium tree
+        id: gate
+        run: |
+          set -euo pipefail
+          if [ ! -f editor/vscodium/product.json ]; then
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::error::editor/vscodium missing — init submodule for compile job."
+            exit 1
+          fi
+          echo "present=true" >> "$GITHUB_OUTPUT"
+
+      - name: Install Linux build dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            build-essential \
+            pkg-config \
+            libx11-dev \
+            libxkbfile-dev \
+            libsecret-1-dev \
+            libkrb5-dev \
+            fakeroot \
+            jq \
+            git \
+            python3 \
+            curl \
+            ca-certificates
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: editor/.nvmrc
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Rust (vscode native modules)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Full VSCodium linux build (dev/build.sh)
+        run: ./packaging/scripts/ci-vscodium-linux-dev-build.sh
+
+      - name: Collect linux output tree
+        id: out
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          dirs=(editor/vscodium/VSCode-linux-*)
+          if [ ${#dirs[@]} -eq 0 ]; then
+            echo "::warning::No VSCode-linux-* directory after build — artifact step may skip."
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "found=true" >> "$GITHUB_OUTPUT"
+          echo "dir=${dirs[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Pack VSCode-linux artifact
+        if: steps.out.outputs.found == 'true'
+        env:
+          OUTDIR: ${{ steps.out.outputs.dir }}
+        run: |
+          set -euo pipefail
+          tar -C "$(dirname "${OUTDIR}")" -czf vscodium-linux-build.tar.gz "$(basename "${OUTDIR}")"
+
+      - name: Upload compile artifact
+        if: steps.out.outputs.found == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: le-vibe-vscodium-linux-${{ github.run_id }}
+          path: vscodium-linux-build.tar.gz
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Job summary — compile
+        if: always()
+        run: |
+          {
+            echo "## Lé Vibe IDE — full linux compile (14.e)"
+            echo "Upstream entrypoint: \`editor/vscodium/dev/build.sh\` via \`packaging/scripts/ci-vscodium-linux-dev-build.sh\`."
+            echo "Trigger: manual **vscodium_linux_compile**, reusable workflow flag, or push tag \`ide-v*\`."
+            echo "PRs keep the fast smoke job only — no compile on pull_request."
           } >> "$GITHUB_STEP_SUMMARY"

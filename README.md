@@ -2,6 +2,10 @@
 
 **One repository, one product (monorepo):** **`le-vibe/`** — bootstrap, **`lvibe`** launcher, managed **Ollama**, **`.lvibe/`** workspace hub, **`le-vibe`** **`.deb`**; **`editor/`** — **Lé Vibe IDE** (Code - OSS–based desktop app; vendored build per [`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md)). It is **not** “Visual Studio Code”; attribute the editor as **Code - OSS** in About and docs.
 
+## Project status (early access)
+
+Lé Vibe is **under active development**. The **Python stack** (Debian **`.deb`**, **`lvibe`**, hardware-aware model choice, managed Ollama on a **dedicated port**, Continue integration, and **consent-gated** **`.lvibe/`** workspace memory per **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)**) is the most mature part of the tree. The **branded Lé Vibe IDE** (Electron/Code OSS build from **`editor/`**) is **not** yet shipped as a prebuilt release from CI—today you typically use **VSCodium** (or any Code OSS–class editor) and point **`LE_VIBE_EDITOR`** at it; see **[`editor/README.md`](editor/README.md)**. APIs, docs, and tests may evolve; use **GitHub Issues** in this repository for feedback and contributions. Clone with **`git clone --recurse-submodules`** (or **`git submodule update --init`**) so **`editor/vscodium`** is present for IDE smoke checks.
+
 Canonical specs: **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** (must-ship product requirements), [`spec.md`](spec.md) (Phase 1 bootstrap), [`spec-phase2.md`](spec-phase2.md) (Phase 2 IDE direction, managed Ollama lifecycle, `.deb` — honest **in-repo** vs deferred scope in **§14**, **H6**/**H7**). **Optional RAG / embeddings** (not canonical): [`docs/rag/le-vibe-phase2-chunks.md`](docs/rag/le-vibe-phase2-chunks.md) (`lv-meta-overview`) — see **`spec-phase2.md`** *RAG / embeddings*.
 
 **Formal authority roster (orchestration + evidence + lazy prompts):** [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) §9.
@@ -152,9 +156,9 @@ ok, msg, st = ensure_managed_ollama()
 stop_managed_ollama()
 ```
 
-## Debian package (skeleton)
+## Debian package (stack)
 
-Source layout includes `debian/` and `packaging/` for a native `.deb` build that installs the Python tree under `/usr/share/le-vibe` and `/usr/bin/le-vibe`. The **Code - OSS / Electron build is not bundled** in this v0 skeleton; point `LE_VIBE_EDITOR` at an upstream build or replace the stub in CI.
+The `debian/` and `packaging/` trees build a native **`.deb`** that installs the Python stack under `/usr/share/le-vibe` and launchers such as `/usr/bin/lvibe`. The **Lé Vibe–branded Electron/Code OSS binary** is **not** bundled in this package; install **VSCodium** (or set **`LE_VIBE_EDITOR`**) until **`editor/`** release builds ship per **[`editor/README.md`](editor/README.md)**.
 
 Editor check for CI/smoke [`packaging/scripts/fetch-code-oss-artifact.sh`](packaging/scripts/fetch-code-oss-artifact.sh): **exits 0** if **`/usr/bin/codium`** is executable or **`codium`** is on `PATH`; otherwise prints install hints and exits 1. The launcher defaults to **`/usr/bin/codium`** when that file exists (override with **`LE_VIBE_EDITOR`**).
 

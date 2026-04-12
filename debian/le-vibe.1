@@ -7,8 +7,9 @@ le-vibe \- Lé Vibe launcher (managed Ollama + Code OSS editor)
 .RI [ editor_args " ...]"
 .SH DESCRIPTION
 Launches the Lé Vibe session: optional product first\-run bootstrap,
-starts a dedicated\-port \fBollama serve\fR, then your editor (default
-\fB/usr/bin/codium\fR via \fBLE_VIBE_EDITOR\fR). On exit, stops the
+starts a dedicated\-port \fBollama serve\fR, then your editor (defaults in
+\fBle_vibe.launcher\fR: \fBLE_VIBE_EDITOR\fR if set, else \fB/usr/bin/le-vibe-ide\fR,
+else \fB/usr/bin/codium\fR, else \fBcodium\fR on \fBPATH\fR). On exit, stops the
 managed Ollama process so GPU VRAM is released.
 .PP
 Product naming: Lé Vibe is not Microsoft Visual Studio Code; use Code \-
@@ -25,7 +26,8 @@ Skip Phase 1 product bootstrap before opening the editor.
 Re\-run first\-run bootstrap even if complete.
 .TP
 .BI \-\-editor " cmd"
-Editor binary (default: \fBLE_VIBE_EDITOR\fR or \fB/usr/bin/codium\fR).
+Editor binary (default: \fBLE_VIBE_EDITOR\fR, else \fB/usr/bin/le-vibe-ide\fR,
+\fB/usr/bin/codium\fR, or \fBcodium\fR on \fBPATH\fR).
 .TP
 .BI \-\-port " N"
 Managed Ollama port (default 11435).

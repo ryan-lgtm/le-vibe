@@ -1,0 +1,11 @@
+# Optional Lé Vibe build hook — copy to `build-env.sh` beside this file to enable.
+# Sourced by `packaging/scripts/ci-vscodium-linux-dev-build.sh` before `editor/vscodium/dev/build.sh`
+# (CI job `linux_compile`, local full compile). Uses `set -a` so assignments export to the child shell.
+#
+# Upstream VSCodium reads env such as APP_NAME, BINARY_NAME, ASSETS_REPOSITORY, ORG_NAME, etc.
+# (see `editor/vscodium/dev/build.sh`). Changing visible product identity or the emitted binary
+# name is a material branding choice — follow `docs/PRODUCT_SPEC.md` §7.2; do not guess in CI.
+#
+# Example (upstream defaults — uncomment only when you intend to override):
+# export APP_NAME="VSCodium"
+# export BINARY_NAME="codium"

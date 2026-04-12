@@ -9,8 +9,9 @@ lvibe \- Lé Vibe launcher (managed Ollama + Code OSS editor)
 Same program as
 .BR le\-vibe (1).
 Launches the Lé Vibe session: optional product first\-run bootstrap,
-starts a dedicated\-port \fBollama serve\fR, then your editor (default
-\fB/usr/bin/codium\fR via \fBLE_VIBE_EDITOR\fR). On exit, stops the
+starts a dedicated\-port \fBollama serve\fR, then your editor (defaults in
+\fBle_vibe.launcher\fR: \fBLE_VIBE_EDITOR\fR if set, else \fB/usr/bin/le-vibe-ide\fR,
+else \fB/usr/bin/codium\fR, else \fBcodium\fR on \fBPATH\fR). On exit, stops the
 managed Ollama process so GPU VRAM is released.
 .PP
 Open the current project in the editor:

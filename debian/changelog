@@ -1,3 +1,15 @@
+le-vibe (0.1.8) unstable; urgency=low
+
+  * Launcher + wrappers: default editor prefers /usr/bin/le-vibe-ide before codium (STEP 14.g); man pages lvibe(1), le-vibe(1).
+
+ -- Le Vibe Maintainers <maintainers@example.invalid>  Sun, 12 Apr 2026 12:00:00 +0000
+
+le-vibe (0.1.7) unstable; urgency=low
+
+  * README.Debian: future le-vibe-ide package + LE_VIBE_EDITOR defaults (STEP 14.g); pointer to editor/BUILD.md.
+
+ -- Le Vibe Maintainers <maintainers@example.invalid>  Sun, 12 Apr 2026 12:00:00 +0000
+
 le-vibe (0.1.6) unstable; urgency=low
 
   * README.Debian + control Description: build-le-vibe-ide workflow permissions (contents read + actions write).

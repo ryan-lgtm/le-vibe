@@ -18,6 +18,8 @@ Engineers and **auto-style** agents **open the listed PM doc first** for the **s
 
 **Execution order ([`PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md) Master orchestrator):** **0 → 1 → 14 → 2–13 → 15–17** — the **Lé Vibe IDE** (`editor/`) is **next after baseline regression** until STEP 14 is satisfied or explicitly gated.
 
+**STEP 14 fine-grain (14.a–14.j) — checklist closure:** The numbered **H6** slices (**toolchain**, **`get_repo`**, **`lvibe`** smoke, overrides + fork doc, **`linux_compile`** artifact, tarball paths, **`LE_VIBE_EDITOR`** packaging story, Continue pin, release smoke table, **`spec-phase2.md` §14** + **`CHANGELOG.md`**) are documented across **[`editor/BUILD.md`](../editor/BUILD.md)**, **[`docs/continue-extension-pin.md`](../docs/continue-extension-pin.md)**, **[`docs/vscodium-fork-le-vibe.md`](../docs/vscodium-fork-le-vibe.md)**, **[`spec-phase2.md`](../spec-phase2.md) §14**, root **[`CHANGELOG.md`](../CHANGELOG.md)**. **Product gap (still STEP 14 / H6):** a **Lé Vibe–branded** installable binary from CI and **build-applied** branding per **`spec-phase2.md` §14** *Gap* — not satisfied by **`./editor/smoke.sh`** or pre-binary metadata alone.
+
 | Master orchestrator STEP | Primary PM / product doc | Also read |
 |---------------------------|---------------------------|-----------|
 | 0 — MUST baseline | [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md) §§1–8, §10 | [`SESSION_ORCHESTRATION_SPEC.md`](SESSION_ORCHESTRATION_SPEC.md) |

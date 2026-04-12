@@ -5,6 +5,8 @@ Lé Vibe — quick steps after apt install
 
 **`LE_VIBE_EDITOR`:** If your editor binary is not the default, set **`LE_VIBE_EDITOR`** to a full path or a command on **`PATH`** before **`lvibe`**. When you build the Lé Vibe IDE from **`editor/`** in the monorepo, point **`LE_VIBE_EDITOR`** at that binary (see **`editor/README.md`** in the source tree). This **`le-vibe`** package does not install the IDE binary by itself.
 
+**Future `le-vibe-ide` package (14.g):** When a separate Debian package installs a branded binary (e.g. **`/usr/bin/le-vibe-ide`**), the stack is expected to **`Recommends:`** or **`Suggests:`** that package and document the default **`LE_VIBE_EDITOR`** story (launcher resolution order vs **`/etc/profile.d/`**—see **`editor/BUILD.md`** *14.g*). That package is **not** built from this source tree yet; until it exists, keep using **`codium`** or an explicit **`LE_VIBE_EDITOR`**.
+
 2. Run the launcher once so first-run can install Ollama (if needed), pull a model, and write configs under ~/.config/le-vibe/:
      lvibe
    (Compatibility: `le-vibe` is the same entrypoint.)

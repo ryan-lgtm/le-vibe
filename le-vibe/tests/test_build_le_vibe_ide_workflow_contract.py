@@ -20,6 +20,10 @@ def test_build_le_vibe_ide_workflow_writes_le_vibe_editor_docs_to_metadata():
     assert "permissions:" in text
     assert "contents: read" in text
     assert "actions: write" in text
+    assert "linux_compile:" in text
+    assert "ci-vscodium-linux-dev-build.sh" in text
+    assert "vscodium_linux_compile" in text
+    assert "dev/build.sh" in text
 
 
 def test_build_linux_yaml_uses_build_le_vibe_ide_and_documents_inherited_metadata():

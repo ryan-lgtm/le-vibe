@@ -20,3 +20,9 @@ def test_editor_le_vibe_overrides_readme_documents_launcher_and_h6_gate():
     assert "ide-ci-metadata.txt" in text
     assert "le_vibe_editor_docs" in text
     assert "test_build_le_vibe_ide_workflow_contract.py" in text
+    assert "USER RESPONSE REQUIRED" in text
+    assert "§7.2" in text
+    assert "product.json" in text
+    assert "packaging/icons/" in text
+    assert "build-env.sh.example" in text
+    assert "ci-vscodium-linux-dev-build.sh" in text

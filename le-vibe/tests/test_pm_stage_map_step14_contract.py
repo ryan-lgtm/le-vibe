@@ -25,3 +25,11 @@ def test_pm_stage_map_step14_lists_ide_workflows_smoke_and_e1_test_build():
     assert "LE_VIBE_EDITOR" in row
     assert "ide-ci-metadata" in row
     assert "./editor/smoke.sh" in row
+
+
+def test_pm_stage_map_notes_step14_fine_grain_closure_and_remaining_gap():
+    text = (_repo_root() / "docs" / "PM_STAGE_MAP.md").read_text(encoding="utf-8")
+    assert "14.a" in text and "14.j" in text
+    assert "CHANGELOG.md" in text
+    assert "spec-phase2.md" in text
+    assert "linux_compile" in text

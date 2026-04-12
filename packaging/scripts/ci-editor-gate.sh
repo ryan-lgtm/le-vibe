@@ -9,6 +9,7 @@
 # build-le-vibe-ide.yml (build-linux alias) uploads ide-ci-metadata.txt (le_vibe_editor_docs=editor/README.md);
 #   upload-artifact retention-days; permissions contents read + actions write — test_build_le_vibe_ide_workflow_contract.py;
 #   GitHub Actions run Summary — Pre-binary artifact line (LE_VIBE_EDITOR pointer) — same test.
+# 14.c: bash -n editor/smoke-lvibe-editor.sh (launcher ↔ LE_VIBE_EDITOR smoke; see editor/BUILD.md).
 # VSCodium’s repo uses product.json + get_repo.sh (no root package.json until vscode is fetched).
 set -euo pipefail
 
@@ -29,8 +30,10 @@ if [[ "${layout}" == "none" ]]; then
 fi
 
 echo "ci-editor-gate: upstream present (${layout}) — wire Linux build in build-le-vibe-ide.yml (build-linux alias) when ready."
+bash -n "${ROOT}/editor/smoke-lvibe-editor.sh"
 if [[ "${layout}" == "vscodium" ]]; then
   "${ROOT}/packaging/scripts/ci-vscodium-bash-syntax.sh"
   "${ROOT}/packaging/scripts/ci-editor-nvmrc-sync.sh"
+  bash -n "${ROOT}/packaging/scripts/ci-vscodium-linux-dev-build.sh"
 fi
 exit 0

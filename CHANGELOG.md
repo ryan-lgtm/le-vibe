@@ -4,6 +4,22 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ## [Unreleased]
 
+### Repository
+
+- **`editor/le-vibe-overrides/build-env.sh.example`** — optional upstream env (**`APP_NAME`**, **`BINARY_NAME`**, …) for **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** before **`dev/build.sh`**; local **`editor/le-vibe-overrides/build-env.sh`** gitignored (copy from example). **`spec-phase2.md` §14**, **`docs/vscodium-fork-le-vibe.md`**, **`editor/BUILD.md`**; E1 **`test_ci_vscodium_linux_dev_build_overrides_contract.py`** + related contracts.
+- **`.gitignore`** — ignore **`/artifacts/`** (CI-generated SBOM, checksums, and other build outputs; do not commit). Removed tracked copies of **`artifacts/le-vibe-python.cdx.json`** and **`artifacts/SHA256SUMS`**.
+- Root **`README.md`** — **Project status (early access)** for public visitors; **Debian package** heading clarified (stack `.deb` vs branded IDE).
+
+### Launcher (STEP 14.g)
+
+- **`le_vibe.launcher._default_editor`** — prefers **`/usr/bin/le-vibe-ide`** when executable, then **`/usr/bin/codium`**, else **`codium`** on **`PATH`**. **`packaging/bin/lvibe`** / **`le-vibe`** no longer force **`LE_VIBE_EDITOR=/usr/bin/codium`** so Python resolution applies. **`install-continue-extension.sh`** and **`le-vibe-setup-continue`** use the same order. Man pages **`debian/lvibe.1`**, **`debian/le-vibe.1`**; **`editor/README.md`**; E1 **`test_launcher_default_editor.py`**.
+- **`spec-phase2.md` §14** — *Single “Lé Vibe IDE” shell* row and *Honesty vs CI* paragraph updated for the same defaults + E1 lock (**`test_spec_phase2_section14_snapshot_contract.py`**).
+
+### Phase 2 / §14 honesty (STEP 14.j)
+
+- **[`spec-phase2.md`](spec-phase2.md) §14** — *Single “Lé Vibe IDE” shell* row documents optional **`linux_compile`**, **`vscodium-linux-build.tar.gz`**, maintainer tracks **14.a–14.j**, and remaining gaps (branding in **build** vs **`le-vibe-overrides/`** notes only; **`linux_compile`** not guaranteed green on default runners; **PR** CI still pre-binary metadata). *Honesty vs CI* names **STEP 14.j** + **`CHANGELOG.md`** + E1 **`test_editor_build_md_contract.py`**, **`test_continue_extension_pin_doc_step14_contract.py`**, **`test_vscodium_fork_le_vibe_branding_contract.py`**.
+- **`le-vibe/tests/test_spec_phase2_section14_snapshot_contract.py`** — locks the above substrings.
+
 ### CI
 
 - **[`.github/workflows/build-linux.yml`](../.github/workflows/build-linux.yml)** — header comments name inherited **`build-le-vibe-ide`** pre-binary story (**`ide-ci-metadata`**, **`retention-days`**, **`permissions`**).
@@ -13,6 +29,11 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 
 ### Tests
 
+- **`test_editor_build_md_contract.py`** — **14.b** locks **`get_repo.sh`**, **`cwd-sensitive`**, **`vscode/`**, **`dev/build.sh`**, and (when **`editor/vscodium/`** is present) **`get_repo.sh`** + **`docs/howto-build.md`** on disk.
+- **`test_editor_nvmrc_parity_contract.py`** — **`editor/.nvmrc`** matches **`editor/vscodium/.nvmrc`** when the submodule is present; **`ci-editor-nvmrc-sync.sh`** substring lock (**STEP 14.a**).
+- **`test_ci_vscodium_linux_dev_build_overrides_contract.py`** — **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** documents **`editor/le-vibe-overrides/build-env.sh`** before **`dev/build.sh`**.
+- **`test_editor_build_md_contract.py`**, **`test_editor_le_vibe_overrides_readme_contract.py`**, **`test_vscodium_fork_le_vibe_branding_contract.py`**, **`test_spec_phase2_section14_snapshot_contract.py`** — **`build-env.sh`** / **`build-env.sh.example`** pointers.
+- **`test_session_orchestration_spec_step2_contract.py`** — **`docs/SESSION_ORCHESTRATION_SPEC.md`** retains **STEP 2**, **`session_orchestrator`**, **`test_session_orchestrator.py`**, and **`spec-phase2.md` §14** (STEP 14 **H6** separation).
 - **`test_pm_stage_map_step14_contract.py`** — **`docs/PM_STAGE_MAP.md`** STEP **14** table row keeps **`build-le-vibe-ide.yml`**, **`build-linux.yml`**, **`test_build_le_vibe_ide_workflow_contract.py`**, **`ide-ci-metadata`**, **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`**, **`./editor/smoke.sh`**.
 - **`test_product_spec_section8.py`** — §9 table row **`PRODUCT_SPEC_SECTION8_EVIDENCE`** ↔ **`test_build_le_vibe_ide_workflow_contract.py`** keeps **`build-linux.yml`** (**`uses:`**) beside **`build-le-vibe-ide.yml`**.
 - **`test_le_vibe_readme_e1_contract.py`** — **`le-vibe/README.md`** *Tests* keeps **`ide-ci-metadata.txt`**, **`retention-days`**, **`permissions:`** **`contents: read`**, **`actions: write`**, **Pre-binary artifact**, **`editor/BUILD.md`**, **`editor/VENDORING.md`** (aligned with root **`README.md`** *E1 mapping*).
@@ -55,7 +76,7 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 - **[`editor/BUILD.md`](../editor/BUILD.md)** *CI* — **`ide-ci-metadata.txt`**, **`permissions:`** **`contents: read`**, **`actions: write`**, Actions **Summary** **Pre-binary artifact** / **`LE_VIBE_EDITOR`** (see **`editor/README.md`**).
 - **[`packaging/scripts/ci-editor-gate.sh`](../packaging/scripts/ci-editor-gate.sh)** header — **`ide-ci-metadata.txt`**, **`upload-artifact`** **`retention-days`**, Actions **Summary** **Pre-binary artifact**, **`test_build_le_vibe_ide_workflow_contract.py`** (STEP 14 metadata story beside this gate).
 - **[`docs/PROMPT_BUILD_LE_VIBE.md`](docs/PROMPT_BUILD_LE_VIBE.md)** Master orchestrator **STEP 14** line — **`test_build_*`** locks **`ide-ci-metadata.txt`**, **`upload-artifact`** **`retention-days`**, + **Summary** **Pre-binary artifact**.
-- **[`docs/SESSION_ORCHESTRATION_SPEC.md`](docs/SESSION_ORCHESTRATION_SPEC.md)** *Phase 2 vs this tree* — **E1 (IDE workflow)** names **`upload-artifact`** **`retention-days`**, workflow **`permissions:`** (**`contents` read**, **`actions` write**), GitHub Actions **Summary** **Pre-binary artifact** ↔ **`ide-ci-metadata.txt`** / **`LE_VIBE_EDITOR`** (**`editor/README.md`** *CI*).
+- **[`docs/SESSION_ORCHESTRATION_SPEC.md`](docs/SESSION_ORCHESTRATION_SPEC.md)** — **Master orchestrator STEP 2 (PM session)** paragraph: **`session-manifest`**, **`apply_opening_skip`**, **`ensure_pm_session_artifacts`**, E1 **`test_session_orchestrator.py`**, vs **STEP 14** **H6** (**`spec-phase2.md` §14**); *Phase 2 vs this tree* — **E1 (IDE workflow)** names **`upload-artifact`** **`retention-days`**, workflow **`permissions:`** (**`contents` read**, **`actions` write**), GitHub Actions **Summary** **Pre-binary artifact** ↔ **`ide-ci-metadata.txt`** / **`LE_VIBE_EDITOR`** (**`editor/README.md`** *CI*).
 - **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)** STEP **14** *Also read* — **`build-le-vibe-ide.yml`** cell names **`ide-ci-metadata.txt`**, **`upload-artifact`** **`retention-days`**, Actions **Summary** **Pre-binary artifact** / **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`** (E1 **`test_build_le_vibe_ide_workflow_contract.py`**).
 - **[`spec-phase2.md`](spec-phase2.md)** §14 ships table — **Single “Lé Vibe IDE” shell** row names **`ide-ci-metadata.txt`**, **`le_vibe_editor_docs`**, **`upload-artifact`** **`retention-days`**, **`permissions:`** **`contents: read`**, **`actions: write`**, Actions **Summary** **Pre-binary artifact**, E1 **`test_build_le_vibe_ide_workflow_contract.py`**; *Honesty vs CI* **`test_build_*`** clause — same.
 - **[`docs/vscodium-fork-le-vibe.md`](docs/vscodium-fork-le-vibe.md)** *CI sketch* — **Summary** tab **Pre-binary artifact** / **`le_vibe_editor_docs`** ↔ **`LE_VIBE_EDITOR`** (aligned with **`editor/README.md`** *CI* and **`docs/ci-qa-hardening.md`**).

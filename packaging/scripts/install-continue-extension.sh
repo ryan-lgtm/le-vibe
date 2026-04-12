@@ -8,7 +8,16 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PIN_DEFAULT="${SCRIPT_DIR}/../continue-openvsx-version"
 PIN_FILE="${LE_VIBE_CONTINUE_PIN_FILE:-$PIN_DEFAULT}"
-BIN="${LE_VIBE_EDITOR:-codium}"
+# Match le_vibe.launcher _default_editor (14.g): prefer packaged Lé Vibe IDE before VSCodium.
+if [[ -n "${LE_VIBE_EDITOR:-}" ]]; then
+  BIN="${LE_VIBE_EDITOR}"
+elif [[ -x /usr/bin/le-vibe-ide ]]; then
+  BIN="/usr/bin/le-vibe-ide"
+elif [[ -x /usr/bin/codium ]]; then
+  BIN="/usr/bin/codium"
+else
+  BIN="codium"
+fi
 # Open VSX default: continue.continue — override if your marketplace uses another id.
 EXT_ID="${LE_VIBE_CONTINUE_EXTENSION:-continue.continue}"
 
