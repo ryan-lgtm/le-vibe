@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Copy Lé Vibe SVG + raster into VSCodium linux resources (PRODUCT_SPEC §7.3 — icons).
+# Requires: mkdir, cp (coreutils); rsvg-convert or ImageMagick convert for PNG (see stderr below).
 # Run from repo root before dev/build.sh if you are not using packaging/scripts/ci-vscodium-linux-dev-build.sh.
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (required before editor/vscodium/src/... exists).
 set -euo pipefail
@@ -15,6 +16,14 @@ DEST="${VSC}/src/stable/resources/linux"
   echo "sync-linux-icon-assets: missing ${SRC_SVG} — restore packaging/icons from git (see packaging/icons/hicolor and docs/brand-assets.md)." >&2
   exit 1
 }
+if ! command -v mkdir >/dev/null 2>&1; then
+  echo "sync-linux-icon-assets: mkdir not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md §7.3 icons)." >&2
+  exit 1
+fi
+if ! command -v cp >/dev/null 2>&1; then
+  echo "sync-linux-icon-assets: cp not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md §7.3 icons)." >&2
+  exit 1
+fi
 mkdir -p "$DEST"
 cp -f "$SRC_SVG" "${DEST}/le-vibe.svg"
 if command -v rsvg-convert >/dev/null 2>&1; then

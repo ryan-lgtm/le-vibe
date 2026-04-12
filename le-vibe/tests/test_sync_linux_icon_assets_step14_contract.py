@@ -25,6 +25,8 @@ def test_sync_linux_icon_assets_documents_14b():
     assert "sudo apt install librsvg2-bin" in text
     assert "sudo apt install imagemagick" in text
     assert "restore packaging/icons from git" in text
+    assert "mkdir not on PATH" in text
+    assert "cp not on PATH" in text
 
 
 def test_build_le_vibe_ide_linux_compile_installs_librsvg_for_icon_sync():
