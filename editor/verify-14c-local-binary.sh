@@ -4,6 +4,7 @@
 #   ./editor/verify-14c-local-binary.sh
 # Exit 0: prints absolute path to bin/codium on stdout (same as print-built-codium-path.sh).
 # Exit 1: stderr lists upstream message plus monorepo next steps (14.a→14.c).
+# Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (before fetch/build under editor/vscodium/).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

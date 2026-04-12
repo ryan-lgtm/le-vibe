@@ -67,6 +67,8 @@ def test_print_built_codium_path_documents_14c():
 def test_verify_14c_local_binary_script_contract():
     root = _repo_root()
     text = (root / "editor" / "verify-14c-local-binary.sh").read_text(encoding="utf-8")
+    assert "git submodule update --init editor/vscodium" in text
+    assert "Fresh clone (14.b)" in text
     assert "14.c" in text or "STEP 14" in text
     assert "print-built-codium-path.sh" in text
     assert "BUILD.md" in text
