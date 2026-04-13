@@ -233,6 +233,8 @@ def test_product_spec_section8_evidence_section10_first_run_observability_step6(
     """E1: §10 narrative cites first-run failure remediation → lvibe logs (STEP 6)."""
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
+    assert "- [x] **First-run / STEP 6**" in text
+    assert "§10 acceptance" in text
     assert "First-run vs observability" in text
     assert "ensure_product_first_run" in text
     assert "test_first_run_bootstrap_failure_message_lists_remediation" in text
@@ -265,6 +267,8 @@ def test_product_spec_section8_evidence_h3_ci_qa_lists_docker_linux_compile_fall
     text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
     assert "Roadmap H1–H3 maintainer guides" in text
     assert "docker-le-vibe-vscodium-linux-compile.sh" in text
+    assert "docker-le-vibe-vscodium-prepare-only.sh" in text
+    assert "Prepare-only (no `dev/build.sh`)" in text
     assert "test_ci_qa_hardening_related_docs_lists_docker_linux_compile_fallback" in text
 
 
@@ -272,6 +276,7 @@ def test_product_spec_section8_evidence_intro_lists_linux_compile_cargo_cache():
     """E1: PRODUCT_SPEC_SECTION8_EVIDENCE intro stays aligned with PRODUCT_SPEC *Prioritization* (STEP 14.d / 14.e)."""
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
+    assert "docker-le-vibe-vscodium-prepare-only.sh" in text
     assert "test_product_spec_section8.py" in text
     assert "14.d" in text
     assert "branding-staging.checklist.md" in text
