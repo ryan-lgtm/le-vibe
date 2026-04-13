@@ -448,6 +448,74 @@ def _cmd_flatpak_appimage(argv: list[str]) -> int:
     return 0
 
 
+def _cmd_ide_prereqs(argv: list[str]) -> int:
+    """STEP 14 (H6 / §7.3): print paths for IDE ``.deb`` packaging and optional VSCode-linux build."""
+    from le_vibe.ide_packaging_paths import (
+        IDE_PREREQ_PATH_ONLY,
+        find_vscode_linux_tree,
+        iter_ide_prereq_paths,
+    )
+    from le_vibe.qa_scripts import find_monorepo_root
+
+    all_keys = sorted(IDE_PREREQ_PATH_ONLY.keys()) + ["vscode"]
+    p = argparse.ArgumentParser(
+        prog="lvibe ide-prereqs",
+        description="List §7.3 IDE packaging paths and whether a VSCode-linux build exists.",
+    )
+    p.add_argument(
+        "--path-only",
+        metavar="KEY",
+        nargs="?",
+        const="branding",
+        default=None,
+        help=(
+            "print one path: vscode, branding, sync-icons, svg, stage, build-ide-deb, "
+            "build-debs, control (default key when flag is present: branding)"
+        ),
+    )
+    args = p.parse_args(argv)
+    root = find_monorepo_root()
+    if root is None:
+        print(
+            "lvibe ide-prereqs: could not find monorepo root "
+            "(set LE_VIBE_REPO_ROOT or run from a git clone). "
+            "See docs/PM_STAGE_MAP.md STEP 14 / H6.",
+            file=sys.stderr,
+        )
+        return 1
+    if args.path_only is not None:
+        k = args.path_only
+        if k not in all_keys:
+            print(
+                f"lvibe ide-prereqs: unknown key {k!r} — use: {', '.join(all_keys)}",
+                file=sys.stderr,
+            )
+            return 2
+        if k == "vscode":
+            vs = find_vscode_linux_tree(root)
+            if vs is None:
+                print(
+                    "lvibe ide-prereqs: no editor/vscodium/VSCode-linux-*/bin/codium — "
+                    "build per editor/BUILD.md (§7.3).",
+                    file=sys.stderr,
+                )
+                return 1
+            print(vs)
+            return 0
+        rel = IDE_PREREQ_PATH_ONLY[k]
+        path = (root / rel).resolve()
+        if not path.is_file():
+            print(f"lvibe ide-prereqs: missing {path}", file=sys.stderr)
+            return 1
+        print(path)
+        return 0
+    print("Authority: PRODUCT_SPEC §7.3, docs/PM_STAGE_MAP.md STEP 14, packaging/debian-le-vibe-ide/README.md")
+    for label, path, ok in iter_ide_prereq_paths(root):
+        status = "OK" if ok else "MISSING"
+        print(f"[{status}] {label}: {path}")
+    return 0
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -494,6 +562,8 @@ def main() -> int:
         return _cmd_product_surface(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "flatpak-appimage":
         return _cmd_flatpak_appimage(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "ide-prereqs":
+        return _cmd_ide_prereqs(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",
