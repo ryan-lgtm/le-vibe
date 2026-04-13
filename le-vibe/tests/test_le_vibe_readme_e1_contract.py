@@ -174,8 +174,11 @@ def test_le_vibe_readme_lists_core_e1_contract_modules():
     assert "sync-agent-skills" in text
     assert "sync-lvibe-agent-skills.sh" in text
     assert "In-editor welcome (STEP 4 / E3)" in text
+    assert "lvibe welcome" in text
+    assert "--text" in text
     assert "open-welcome" in text
     assert "test_launcher_open_welcome.py" in text
+    assert "test_launcher_welcome_cmd.py" in text
     assert "PM session (STEP 2)" in text
     assert "apply-opening-skip" in text
     assert "schemas/session-manifest.v1.example.json" in text

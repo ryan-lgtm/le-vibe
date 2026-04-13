@@ -105,6 +105,50 @@ def _cmd_open_welcome(argv: list[str]) -> int:
     return proc.returncode if proc.returncode is not None else 1
 
 
+def _cmd_welcome(argv: list[str]) -> int:
+    """STEP 4 (E3): ``.lvibe/WELCOME.md`` path or full §4 text for terminal-only sessions."""
+    from le_vibe.editor_welcome import WELCOME_MD_NAME, ensure_lvibe_welcome_md
+
+    p = argparse.ArgumentParser(
+        prog="lvibe welcome",
+        description=(
+            "Print the path to .lvibe/WELCOME.md (default) or the full file with --text "
+            "(PRODUCT_SPEC §4). Requires .lvibe/ from prior consent (§5.1)."
+        ),
+    )
+    p.add_argument(
+        "workspace",
+        nargs="?",
+        default=".",
+        help="workspace root (default: current directory)",
+    )
+    p.add_argument(
+        "--text",
+        action="store_true",
+        help="print WELCOME.md contents to stdout (terminal welcome surface)",
+    )
+    args = p.parse_args(argv)
+    root = Path(args.workspace).resolve()
+    lv = root / ".lvibe"
+    if not lv.is_dir():
+        print(
+            "lvibe welcome: missing .lvibe/ — open this workspace with lvibe once and accept "
+            "workspace memory (PRODUCT_SPEC §5.1).",
+            file=sys.stderr,
+        )
+        return 1
+    ensure_lvibe_welcome_md(root)
+    path = lv / WELCOME_MD_NAME
+    if not path.is_file():
+        print(f"lvibe welcome: missing {path} after seeding.", file=sys.stderr)
+        return 2
+    if args.text:
+        print(path.read_text(encoding="utf-8"), end="")
+        return 0
+    print(path.resolve())
+    return 0
+
+
 def _cmd_hygiene(argv: list[str]) -> int:
     """
     STEP 5 (E4): validate ``.lvibe/`` — same entry as ``lvibe-hygiene`` / ``python3 -m le_vibe.hygiene``.
@@ -616,6 +660,8 @@ def main() -> int:
         return _cmd_sync_agent_skills(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "open-welcome":
         return _cmd_open_welcome(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "welcome":
+        return _cmd_welcome(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "hygiene":
         return _cmd_hygiene(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "logs":
