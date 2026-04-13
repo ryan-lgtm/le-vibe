@@ -38,7 +38,11 @@ assert_file() {
   local label="$2"
   if [[ -z "$path" || ! -f "$path" ]]; then
     echo "manual-step14-install-smoke: missing $label ($path)" >&2
-    exit 1
+    echo "manual-step14-install-smoke: build artifacts first:" >&2
+    echo "  packaging/scripts/build-le-vibe-debs.sh --with-ide" >&2
+    echo "manual-step14-install-smoke: then verify close-out artifacts:" >&2
+    echo "  packaging/scripts/verify-step14-closeout.sh --require-stack-deb" >&2
+    exit 2
   fi
 }
 

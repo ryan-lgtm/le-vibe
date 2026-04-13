@@ -29,6 +29,9 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "/usr/share/applications/le-vibe.desktop" in text
     assert "/usr/share/doc/le-vibe/README.Debian" in text
     assert "lvibe open-welcome" in text
+    assert "build artifacts first" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "verify-step14-closeout.sh --require-stack-deb" in text
 
 
 def test_pm_deb_build_iteration_points_to_manual_step14_install_smoke_script() -> None:
