@@ -212,6 +212,16 @@ def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14()
     assert "roadmap" in text
 
 
+def test_product_spec_section8_evidence_h6_lists_editor_readme_h3_linux_compile_index():
+    """E1: H6/H7 paragraph cites editor/README H3 linux_compile index + test_editor_readme contract."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
+    assert "**H6 / H7:**" in text
+    assert "editor/README.md" in text
+    assert "Optional full Linux compile" in text
+    assert "test_editor_readme_step14_contract.py" in text
+
+
 def test_product_spec_section8_evidence_h3_ci_qa_lists_docker_linux_compile_fallback():
     """E1: H3 maintainer guide row documents ci-qa Related docs docker script (14.e vs flaky linux_compile)."""
     root = Path(__file__).resolve().parents[2]
