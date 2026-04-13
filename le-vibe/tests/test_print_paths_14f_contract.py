@@ -39,6 +39,7 @@ def test_print_vsbuild_codium_path_documents_14f():
     assert "Fresh clone (14.b)" in text
     assert "VSCode-linux-" in text
     assert "vscodium-linux-build.tar.gz" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     assert "linux_compile" in text or "BUILD.md" in text
 
 
