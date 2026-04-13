@@ -290,6 +290,44 @@ def _cmd_ci_editor_gate(argv: list[str]) -> int:
     return rc
 
 
+def _cmd_brand_paths(argv: list[str]) -> int:
+    """STEP 11 (H5): canonical ``le-vibe.svg`` paths — ``docs/brand-assets.md``."""
+    from le_vibe.brand_paths import resolve_scalable_icon_paths
+
+    p = argparse.ArgumentParser(
+        prog="lvibe brand-paths",
+        description="Show paths to the scalable Lé Vibe app icon (le-vibe.svg).",
+    )
+    p.add_argument(
+        "--path-only",
+        action="store_true",
+        help="print one path (monorepo preferred, else packaged hicolor icon)",
+    )
+    args = p.parse_args(argv)
+    mono, pkg = resolve_scalable_icon_paths()
+    if args.path_only:
+        chosen = mono or pkg
+        if chosen is None:
+            print(
+                "lvibe brand-paths: no le-vibe.svg found (git clone or install le-vibe .deb). "
+                "See docs/brand-assets.md (STEP 11 / H5).",
+                file=sys.stderr,
+            )
+            return 1
+        print(chosen)
+        return 0
+    print("Authority: docs/brand-assets.md (Roadmap H5)")
+    if mono:
+        print(f"monorepo (source): {mono}")
+    else:
+        print("monorepo (source): (not found — run inside git clone or set LE_VIBE_REPO_ROOT)")
+    if pkg:
+        print(f"installed .deb icon: {pkg}")
+    else:
+        print("installed .deb icon: (le-vibe package not installed or icon missing)")
+    return 0
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -330,6 +368,8 @@ def main() -> int:
         return _cmd_ci_smoke(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "ci-editor-gate":
         return _cmd_ci_editor_gate(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "brand-paths":
+        return _cmd_brand_paths(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",
