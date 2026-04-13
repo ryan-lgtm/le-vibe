@@ -70,6 +70,8 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     assert "Maintainer build output" in text
     assert "Pre-publish artifact checklist" in text
     assert "Tagging discipline" in text
+    assert "Exit codes:" in text
+    assert "PM_DEB_BUILD_ITERATION.md (Exit codes" in text
 
 
 def test_pm_deb_build_iteration_doc_submodule_prereq_14b():
@@ -93,6 +95,17 @@ def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
     assert "Pre-publish artifact checklist" in text
     assert "Tagging discipline" in text
+
+
+def test_pm_deb_build_iteration_doc_exit_codes_table_step14():
+    """PM doc lists 0/1/2 exit semantics; mirrors build-le-vibe-debs.sh --help."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    assert "### Exit codes (`build-le-vibe-debs.sh`)" in text
+    assert "| **0** |" in text
+    assert "| **1** |" in text
+    assert "| **2** |" in text
+    assert "Same table is summarized" in text
 
 
 def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14():
@@ -145,3 +158,5 @@ def test_print_pm_deb_build_prompt_extractable():
     assert "stage-le-vibe-ide-deb.sh" in fence
     assert "Full-product install" in fence
     assert "Success output (`--with-ide`)" in fence
+    assert "Exit codes:" in fence
+    assert "*Exit codes (`build-le-vibe-debs.sh`)*" in fence

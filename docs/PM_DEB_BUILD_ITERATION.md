@@ -21,6 +21,16 @@ Run these from the clone root (`cd /path/to/r-vibe`). Stack **`le-vibe_*.deb`** 
 
 **Publishing (STEP 8 / H1):** **`SHA256SUMS`**, **`debian/changelog`** ↔ **`CHANGELOG.md`**, and **stack-only** **`ci.yml`** **`le-vibe-deb`** vs **Stack + IDE** attach — **[`apt-repo-releases.md`](apt-repo-releases.md)** *Pre-publish artifact checklist* (same story as *Releases & full-product demo* below). **`ide-v*`** git tags drive optional **`linux_compile`** CI — they do **not** replace bumping **`debian/changelog`** for the stack **`.deb`** — *Tagging discipline* in the same doc.
 
+### Exit codes (`build-le-vibe-debs.sh`)
+
+| Code | Meaning |
+|------|---------|
+| **0** | Success — stack **`le-vibe_*.deb`** built; with **`--with-ide`**, both stack and **`packaging/le-vibe-ide_*.deb`** were found (see *Failure (`--with-ide`)* below). |
+| **1** | **`--with-ide`** set but the IDE build failed or **`le-vibe-ide_*.deb`** was not found under **`packaging/`** after the IDE step — *Failure (`--with-ide`)* above. |
+| **2** | User or environment error: missing **`dpkg-buildpackage`** / **`debhelper`** (install line printed), unknown option, **`--vs-build`** without a path, missing **`find`** / **`sort`** / **`head`**, or **`--install`** without **`sudo`** / **`apt-get`**. |
+
+Same table is summarized in **`packaging/scripts/build-le-vibe-debs.sh`** **`--help`** under **Exit codes**.
+
 ## Releases & full-product demo (H1 / STEP 14 / §7.3)
 
 When you have both artifacts from **`build-le-vibe-debs.sh`** (stack) and **`--with-ide`** (or **`build-le-vibe-ide-deb.sh`** alone), ship or attach **`le-vibe_*_all.deb`** and **`le-vibe-ide_*_amd64.deb`** together for an install-and-demo that includes the branded IDE. **Checksums**, default CI artifact **`le-vibe-deb`** (stack-only), and **`SHA256SUMS`** expectations — **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** (*IDE package* subsection, **STEP 8 / H1**). **PM stage map:** **[`docs/PM_STAGE_MAP.md`](PM_STAGE_MAP.md)** (*H1 vs §7.3 .deb bundles* — **STEP 14** vs **STEP 8**); monorepo honesty — **[`spec-phase2.md`](../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*.
@@ -51,7 +61,7 @@ You are the Lé Vibe **packaging / .deb build** engineer for this monorepo. **MO
 
 **CI vs maintainer .deb bundles:** Default **`ci.yml`** artifact **`le-vibe-deb`** is **stack-only**; **`--with-ide`** adds **`le-vibe-ide_*_amd64.deb`** for full-product drops — **[`docs/PM_STAGE_MAP.md`](PM_STAGE_MAP.md)** (*H1 vs §7.3 .deb bundles* — **STEP 14** vs **STEP 8**); monorepo honesty — **[`spec-phase2.md`](../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*.
 
-**Goal:** Keep **`build-le-vibe-debs.sh`** correct: prerequisite detection, **`dpkg-buildpackage`** for stack (repo root) and optional IDE (`--with-ide` → **`build-le-vibe-ide-deb.sh`**: stage + **`dpkg-buildpackage`** + optional **`lintian`**), **`--install`** / **`--yes`**, artifact discovery (`le-vibe_*.deb` in repo parent; `le-vibe-ide_*.deb` under **`packaging/`**). For **`--with-ide`**, document optional **`LEVIBE_STAGE_IDE_ASSERT_BRAND`** / **`LEVIBE_STAGE_IDE_VERBOSE`** (§7.3 IDE staging above; **`stage-le-vibe-ide-deb.sh`**) and optional **`LEVIBE_EDITOR_GATE_ASSERT_BRAND`** on **`ci-editor-gate.sh`** / **`editor/smoke.sh`** (same §7.3 **`.json`** check before staging). When both **`.deb`** files are produced, the script echoes **Full-product install** — align with **Success output (`--with-ide`)** above; if **`--with-ide`** but no **`le-vibe-ide_*.deb`**, exit **1** — **Failure (`--with-ide`)** above. **Do not** claim GitHub Actions is a v1 production gate.
+**Goal:** Keep **`build-le-vibe-debs.sh`** correct: prerequisite detection, **`dpkg-buildpackage`** for stack (repo root) and optional IDE (`--with-ide` → **`build-le-vibe-ide-deb.sh`**: stage + **`dpkg-buildpackage`** + optional **`lintian`**), **`--install`** / **`--yes`**, artifact discovery (`le-vibe_*.deb` in repo parent; `le-vibe-ide_*.deb` under **`packaging/`**). For **`--with-ide`**, document optional **`LEVIBE_STAGE_IDE_ASSERT_BRAND`** / **`LEVIBE_STAGE_IDE_VERBOSE`** (§7.3 IDE staging above; **`stage-le-vibe-ide-deb.sh`**) and optional **`LEVIBE_EDITOR_GATE_ASSERT_BRAND`** on **`ci-editor-gate.sh`** / **`editor/smoke.sh`** (same §7.3 **`.json`** check before staging). When both **`.deb`** files are produced, the script echoes **Full-product install** — align with **Success output (`--with-ide`)** above; if **`--with-ide`** but no **`le-vibe-ide_*.deb`**, exit **1** — **Failure (`--with-ide`)** above. **Exit codes:** **0** success; **1** **`--with-ide`** without IDE **`.deb`** or IDE build failed; **2** missing stack tools / bad flags / **`--install`** prerequisites — *Exit codes (`build-le-vibe-debs.sh`)* above and **`--help`**. **Do not** claim GitHub Actions is a v1 production gate.
 
 **After shell edits:** `bash -n packaging/scripts/build-le-vibe-debs.sh` and `cd le-vibe && python3 -m pytest tests/test_build_le_vibe_debs_script_contract.py` (or full **`pytest`**).
 

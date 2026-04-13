@@ -61,6 +61,11 @@ Full-product (--with-ide): When both .deb files are produced, the script prints 
   (Success output (--with-ide)); releases — docs/apt-repo-releases.md (IDE package, Maintainer build output).
   If --with-ide is set but le-vibe-ide_*.deb is not found under packaging/ after the IDE build, the script exits with status 1 (§7.3 full-product expectation).
 
+Exit codes:
+  0  Success (stack .deb; with --with-ide, both stack and packaging/le-vibe-ide_*.deb found).
+  1  --with-ide but IDE build failed or le-vibe-ide_*.deb missing under packaging/ — PM_DEB_BUILD_ITERATION.md (Failure (--with-ide)).
+  2  Missing dpkg-buildpackage/debhelper, bad CLI, missing find/sort/head, or --install without sudo/apt-get — PM_DEB_BUILD_ITERATION.md (Exit codes (build-le-vibe-debs.sh)).
+
 EOF
 }
 
