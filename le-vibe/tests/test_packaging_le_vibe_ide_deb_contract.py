@@ -67,6 +67,7 @@ def test_stage_le_vibe_ide_deb_script_documents_14b_submodule_and_bash_syntax():
     assert "print-vsbuild-codium-path.sh" in text
     assert "ci-vscodium-linux-dev-build.sh" in text
     assert "stage-le-vibe-ide-deb: staged" in text
+    assert "desktop-file-validate" in text
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 

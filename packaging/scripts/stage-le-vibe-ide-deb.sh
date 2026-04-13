@@ -145,4 +145,14 @@ if [[ ! -f "$ICON_SRC" ]]; then
 fi
 install -D -m0644 "$DESKTOP_SRC" "$STAGING/usr/share/applications/le-vibe.desktop"
 install -D -m0644 "$ICON_SRC" "$STAGING/usr/share/icons/hicolor/scalable/apps/le-vibe.svg"
+
+# Same Freedesktop check as ci-smoke.sh (packaging/debian-le-vibe-ide/debian/le-vibe.desktop) — validate staged copy.
+STAGED_DESKTOP="$STAGING/usr/share/applications/le-vibe.desktop"
+if command -v desktop-file-validate >/dev/null 2>&1; then
+  echo "stage-le-vibe-ide-deb: desktop-file-validate $STAGED_DESKTOP" >&2
+  desktop-file-validate "$STAGED_DESKTOP"
+else
+  echo "stage-le-vibe-ide-deb: desktop-file-validate not on PATH — skipped (install desktop-file-utils; ci-smoke.sh validates sources)" >&2
+fi
+
 echo "stage-le-vibe-ide-deb: staged $STAGING (launcher $STAGING/usr/lib/le-vibe/bin/codium; menu $STAGING/usr/share/applications/le-vibe.desktop)"
