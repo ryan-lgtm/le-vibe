@@ -11,6 +11,9 @@ def _repo_root() -> Path:
 
 def test_editor_vendoring_md_documents_smoke_gate_and_metadata():
     text = (_repo_root() / "editor" / "VENDORING.md").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "Rolling iteration — prefer continuation" in text
     assert "git submodule update --init editor/vscodium" in text
     assert "editor/vscodium" in text
     assert "howto-build.md" in text
