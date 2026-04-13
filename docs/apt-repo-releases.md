@@ -63,6 +63,15 @@ Use this when deciding what to attach to **GitHub Releases** or copy into an **a
 | **Stack + IDE** (maintainer **§7.3**) | **`le-vibe_*_all.deb`** and **`le-vibe-ide_*_amd64.deb`**, one **`SHA256SUMS`** covering **every** `*.deb` and the SBOM line you ship | **`sha256sum -c SHA256SUMS`**; build both with **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** — **Full-product install** on success — **[`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** (*Success output (`--with-ide`)*); install order — *Install both packages* in **[`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md)** |
 | **Combined drop** (CI stack artifact + **IDE** built separately) | Download **`le-vibe-deb`** for the stack **`.deb`**, **`le-vibe-python.cdx.json`**, and the CI **`SHA256SUMS`**; add **`le-vibe-ide_*_amd64.deb`** from **`build-le-vibe-ide-deb.sh`** (or a prior **`--with-ide`** run) into the **same** directory — then **regenerate** **`SHA256SUMS`** so it lists **every** shipped **`*.deb`** **and** the SBOM (**Integrity** above). The CI manifest alone is **not** valid after you add the second **`.deb`**. | **`sha256sum -c SHA256SUMS`** or **`lvibe verify-checksums`**; same **Publishing** / **Integrity** story as **[`ci-qa-hardening.md`](ci-qa-hardening.md)** *Optional full Linux compile* |
 
+### Minimum directory layout (readiness gate)
+
+Use this **before** **`sha256sum -c SHA256SUMS`**, **`lvibe verify-checksums`**, or **`gh release create`** attachments:
+
+- **Stack-only (matches default CI):** one directory containing **`le-vibe_*_all.deb`**, **`le-vibe-python.cdx.json`**, and **`SHA256SUMS`** — the manifest must list **every** blob you ship (same three path families **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** uploads as **`le-vibe-deb`**).
+- **Stack + IDE:** same folder **plus** **`le-vibe-ide_*_amd64.deb`**, then **rewrite** **`SHA256SUMS`** (do **not** reuse the CI file unchanged after adding the IDE **`.deb`** — *Combined drop* row above).
+
+**Fetch CI artifacts:** **`gh run download <RUN_ID> -n le-vibe-deb -D ./release-dir`** or **Actions → workflow run → Artifacts** — unzip so **`SHA256SUMS`** and the files it names sit together (*GitHub Releases + checksums*).
+
 **Versioning:** bump **`debian/changelog`** and fold **`CHANGELOG.md`** **`[Unreleased]`** into a dated section before tagging — see *Versioned changelog* above. **Hosted apt** server layout stays out of this repo (secrets, DNS, TLS) — use *Private or team apt repo* for tooling only.
 
 ### IDE package (`le-vibe-ide`, STEP 14 / §7.3)

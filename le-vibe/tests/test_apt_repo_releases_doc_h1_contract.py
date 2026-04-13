@@ -9,6 +9,16 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_apt_repo_releases_doc_lists_minimum_directory_layout_gate():
+    """H1: Pre-publish checklist names readiness gate + CI three-file bundle vs stack+IDE rewrite."""
+    text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
+    assert "### Minimum directory layout" in text
+    assert "readiness gate" in text
+    assert "**rewrite** **`SHA256SUMS`**" in text
+    assert "do **not** reuse the CI file unchanged" in text
+    assert "gh run download" in text and "le-vibe-deb" in text
+
+
 def test_apt_repo_releases_doc_lists_ci_artifact_and_changelog():
     text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
     assert "**Combined drop**" in text
