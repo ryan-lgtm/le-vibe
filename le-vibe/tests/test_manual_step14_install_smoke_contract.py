@@ -55,6 +55,8 @@ def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> 
     payload = json.loads(path.read_text(encoding="utf-8"))
     rag = payload["meta"]["rag_notes"]
     assert "verify-step14-closeout.sh --require-stack-deb" in rag
+    assert "preflight-step14-closeout.sh" in rag
+    assert "Preflight (all gaps" in rag
     assert "apt_sim_note" in rag
     assert "print-built-codium-path" in rag
     assert "print-vsbuild-codium-path" in rag
