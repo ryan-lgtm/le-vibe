@@ -71,6 +71,7 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     assert "parallel=$(nproc) for faster stack" in text
     assert "dpkg-parsechangelog" in text
     assert "Dual changelog discipline" in text
+    assert "full-product GitHub Release" in text
     assert "Related docs (H1 index)" in text
     assert "PM_STAGE_MAP" in text
     assert "Full-product (--with-ide)" in text
@@ -116,6 +117,7 @@ def test_pm_deb_build_iteration_doc_links_h1_stack_release_checklist():
     head = text.split("## Invocations", 1)[0]
     assert "**Release checklist (H1):**" in head
     assert "Checklist — stack-only GitHub Release" in head
+    assert "Checklist — full-product GitHub Release" in head
     assert "Dual changelog discipline" in head
     assert "CHANGELOG.md" in head
     assert "le-vibe-deb" in head

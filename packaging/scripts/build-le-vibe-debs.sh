@@ -62,6 +62,7 @@ Publishing / releases (H1):
   default ci.yml le-vibe-deb is stack-only vs full-product Stack + IDE drops.
   Combined drop: CI stack artifact + le-vibe-ide built separately — merge into one folder, regenerate SHA256SUMS
   (CI SHA256SUMS alone is wrong once you add the second .deb) — same doc (Pre-publish — Combined drop).
+  Full-product GitHub Release (both .debs on one Release) — docs/apt-repo-releases.md (Checklist — full-product GitHub Release).
   Tagging discipline — ide-v* (linux_compile CI) vs stack debian/changelog: same doc (Tagging discipline).
   Stack v... release tags vs ide-v* — apt-repo-releases.md (Stack release tags vs ide-v* — publishing).
   CI le-vibe-deb artifact is a .zip — unzip before sha256sum -c or lvibe verify-checksums (same doc — GitHub Releases + checksums).
