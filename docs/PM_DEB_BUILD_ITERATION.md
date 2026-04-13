@@ -44,7 +44,7 @@ Stack **`le-vibe_*.deb`** is emitted **beside** the repo directory (parent of th
 | Code | Meaning |
 |------|---------|
 | **0** | Success — stack **`le-vibe_*.deb`** built; with **`--with-ide`**, both stack and **`packaging/le-vibe-ide_*.deb`** were found (see *Failure (`--with-ide`)* below). |
-| **1** | **`--with-ide`** set but the IDE build failed or **`le-vibe-ide_*.deb`** was not found under **`packaging/`** after the IDE step — *Failure (`--with-ide`)* above. |
+| **1** | **`--with-ide`** set but the IDE build failed or **`le-vibe-ide_*.deb`** was not found under **`packaging/`** after the IDE step — see *Failure (`--with-ide`)* below. |
 | **2** | User or environment error: missing **`dpkg-buildpackage`** / **`debhelper`** (install line printed), unknown option, **`--vs-build`** without a path, missing **`find`** / **`sort`** / **`head`**, or **`--install`** without **`sudo`** / **`apt-get`**. |
 
 Same table is summarized in **`packaging/scripts/build-le-vibe-debs.sh`** **`--help`** under **Exit codes**.

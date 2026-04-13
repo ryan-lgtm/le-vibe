@@ -189,6 +189,7 @@ def test_pm_deb_build_iteration_doc_exit_codes_table_step14():
     assert "| **1** |" in text
     assert "| **2** |" in text
     assert "Same table is summarized" in text
+    assert "see *Failure (`--with-ide`)* below" in text
 
 
 def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14():
