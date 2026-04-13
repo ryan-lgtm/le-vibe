@@ -74,6 +74,9 @@ fi
 
 _vlb="$("$ROOT/packaging/scripts/probe-vscode-linux-build.sh" "$ROOT")"
 echo "vscode_linux_build: ${_vlb}"
+if [[ "${_vlb}" != "ready" ]]; then
+  echo "hint: packaging/scripts/build-le-vibe-debs.sh --with-ide exits before stack dpkg-buildpackage until vscode_linux_build is ready (or use --vs-build PATH with bin/codium) — docs/PM_DEB_BUILD_ITERATION.md (Failure (--with-ide))" >&2
+fi
 
 shopt -s nullglob
 ide_debs=("$ROOT"/packaging/le-vibe-ide_*.deb)

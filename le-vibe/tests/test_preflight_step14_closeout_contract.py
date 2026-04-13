@@ -32,6 +32,8 @@ def test_preflight_step14_closeout_script_documents_checks() -> None:
     assert "--skip-gate" in text
     assert "vscode_linux_build:" in text
     assert "probe-vscode-linux-build.sh" in text
+    assert "build-le-vibe-debs.sh --with-ide exits before stack dpkg-buildpackage" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
 
 
 def test_preflight_step14_closeout_prints_vscode_linux_build_line() -> None:
