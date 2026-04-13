@@ -555,6 +555,41 @@ def _cmd_apply_opening_skip(argv: list[str]) -> int:
     return 0
 
 
+def _cmd_continue_rules(argv: list[str]) -> int:
+    """STEP 3 (E2): ensure Continue workspace rules anchor ``.lvibe/`` as primary memory."""
+    from le_vibe.continue_workspace import (
+        LVIBE_CONTINUE_RULE_NAME,
+        PRODUCT_WELCOME_RULE_NAME,
+        continue_rules_dir,
+        ensure_continue_lvibe_rules,
+    )
+
+    p = argparse.ArgumentParser(
+        prog="lvibe continue-rules",
+        description=(
+            "Create .continue/rules/*.md when missing so Chat/Agent uses .lvibe/ (session manifest, "
+            "agents/*/skill.md). Idempotent — same as workspace prepare."
+        ),
+    )
+    p.add_argument(
+        "workspace",
+        nargs="?",
+        default=".",
+        help="workspace root (default: current directory)",
+    )
+    args = p.parse_args(argv)
+    root = Path(args.workspace).resolve()
+    written = ensure_continue_lvibe_rules(root)
+    written_set = set(written)
+    rules = continue_rules_dir(root)
+    print("Authority: le_vibe.continue_workspace (STEP 3 / E2), docs/PM_STAGE_MAP.md")
+    for fname in (LVIBE_CONTINUE_RULE_NAME, PRODUCT_WELCOME_RULE_NAME):
+        path = rules / fname
+        tag = "NEW" if path in written_set else "OK"
+        print(f"[{tag}] {path.resolve()}")
+    return 0
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -605,6 +640,8 @@ def main() -> int:
         return _cmd_ide_prereqs(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "apply-opening-skip":
         return _cmd_apply_opening_skip(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "continue-rules":
+        return _cmd_continue_rules(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",
