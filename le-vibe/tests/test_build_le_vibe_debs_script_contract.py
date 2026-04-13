@@ -245,6 +245,11 @@ def test_pm_deb_build_iteration_doc_lists_output_paths_table_step14():
     assert "../le-vibe_*_all.deb" in text
     assert "packaging/le-vibe-ide_*.deb" in text
     assert "Full-product install" in text
+    out_paths = text.split("### Output paths (from repo root)", 1)[1].split(
+        "### Exit codes (`build-le-vibe-debs.sh`)", 1
+    )[0]
+    assert "resolve-latest-le-vibe-stack-deb.sh" in out_paths
+    assert "manual-step14-install-smoke.sh" in out_paths
 
 
 def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():

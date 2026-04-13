@@ -171,6 +171,7 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "printed steps" in readme
     assert "repo root" in readme
     assert "default **`STACK_DEB`**" in readme
+    assert "resolve-latest-le-vibe-stack-deb.sh" in readme
     desktop = (root / "packaging" / "debian-le-vibe-ide" / "debian" / "le-vibe.desktop").read_text(
         encoding="utf-8"
     )

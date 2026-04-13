@@ -98,6 +98,8 @@ def test_apt_repo_releases_doc_lists_artifact_sources_at_glance_h1():
     assert "verify-step14-closeout.sh --require-stack-deb" in glance
     assert "repo root" in glance
     assert "PM_DEB_BUILD_ITERATION.md" in glance
+    assert "resolve-latest-le-vibe-stack-deb.sh" in glance
+    assert "manual-step14-install-smoke.sh" in glance
 
 
 def test_apt_repo_releases_doc_lists_ci_artifact_and_changelog():
