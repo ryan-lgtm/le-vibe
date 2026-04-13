@@ -900,6 +900,10 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
                 "/path/to/vscodium-linux-build.tar.gz --yes"
             )
             print(
+                "# OR fetch vscodium-linux-build.tar.gz from CI (linux_compile) — offline hints: "
+                "./packaging/scripts/print-github-linux-compile-artifact-hint.sh"
+            )
+            print(
                 "# packaging/scripts/build-le-vibe-debs.sh --with-ide exits before stack "
                 "dpkg-buildpackage until probe-vscode-linux-build.sh is ready (or use "
                 "--vs-build PATH/bin/codium) — docs/PM_DEB_BUILD_ITERATION.md (*Failure "

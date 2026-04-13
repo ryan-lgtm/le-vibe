@@ -35,6 +35,7 @@ def _repo_root() -> Path:
         "packaging/scripts/preflight-step14-closeout.sh",
         "packaging/scripts/print-step14-vscode-linux-bin-files.sh",
         "packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh",
+        "packaging/scripts/print-github-linux-compile-artifact-hint.sh",
         "packaging/scripts/resolve-latest-le-vibe-stack-deb.sh",
         "packaging/scripts/manual-step14-install-smoke.sh",
         "editor/print-built-codium-path.sh",

@@ -249,7 +249,7 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "test_launcher_ide_prereqs.py" in sec73
     assert "test_verify_step14_closeout_contract.py" in sec73
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in sec73
-    assert "545" in text
+    assert "546" in text
 
 
 def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14():
