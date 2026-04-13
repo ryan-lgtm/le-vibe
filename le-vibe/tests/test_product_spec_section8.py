@@ -222,7 +222,14 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "verify-step14-closeout.sh --require-stack-deb" in sec73
     assert "--json" in sec73
     assert "apt_sim_note" in sec73
-    assert "498" in text
+    assert "Compile fail-fast" in sec73
+    assert "packaging/scripts/ci-vscodium-bash-syntax.sh" in sec73
+    assert "packaging/scripts/ci-editor-nvmrc-sync.sh" in sec73
+    assert "packaging/scripts/ci-vscodium-linux-dev-build.sh" in sec73
+    assert "H1 vs §7.3 .deb bundles" in sec73
+    assert "./editor/smoke.sh" in sec73
+    assert "linux_compile" in sec73
+    assert "511" in text
 
 
 def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14():
