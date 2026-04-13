@@ -27,6 +27,7 @@ Build Debian binary packages from this monorepo:
   --install        After build, sudo apt install the produced .deb files (interactive sudo).
   --yes            Non-interactive apt (adds -y for apt install).
   --vs-build PATH  Use this VSCode-linux-* directory for IDE staging (implies --with-ide).
+  -h, --help       Show this message and exit.
 
 Common invocations (repository root):
   packaging/scripts/build-le-vibe-debs.sh
