@@ -36,6 +36,7 @@ def test_privacy_and_telemetry_table_lists_maintainer_full_product_deb_step14():
     assert "Partial VSCode-linux" in text
     assert "print-built-codium-path" in text
     assert "print-vsbuild-codium-path" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
 
 
@@ -80,6 +81,7 @@ def test_ai_pilot_doc_lists_maintainer_full_product_deb_step14():
     assert "Partial VSCode-linux" in text
     assert "print-built-codium-path" in text
     assert "print-vsbuild-codium-path" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
 
 
