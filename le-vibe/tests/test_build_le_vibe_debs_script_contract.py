@@ -271,6 +271,8 @@ def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14()
     assert "debian-le-vibe-ide/README.md" in text
     assert "verify-step14-closeout.sh" in text
     assert "--require-stack-deb" in text
+    assert "manual-step14-install-smoke.sh" in text
+    assert "--print-install-cmd" in text
     success = text.split("**Success output (`--with-ide`):**", 1)[1].split("**Failure (`--with-ide`):**", 1)[0]
     assert "verify-step14-closeout.sh --require-stack-deb" in success
     assert "--apt-sim" in success
