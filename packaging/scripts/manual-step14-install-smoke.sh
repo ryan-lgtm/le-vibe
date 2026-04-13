@@ -37,7 +37,7 @@ Options:
   --verify-only   Run post-install verification checks now (no install).
   --print-install-cmd
                   Print only: sudo apt install "<stack.deb>" "<ide.deb>".
-  --json          Print resolved stack/IDE deb paths + install command + vscode_linux_build (same field as lvibe ide-prereqs --json) as JSON.
+  --json          Print resolved stack/IDE deb paths + install command + vscode_linux_build (probe-vscode-linux-build.sh; same field as lvibe ide-prereqs --json) as JSON.
   -h, --help      Show this message and exit.
 
 Build machine prerequisites (no .debs yet — partial VSCode-linux / missing bin/codium):
@@ -52,17 +52,6 @@ Ordering (same as docs/apt-repo-releases.md *IDE package*):
     Optional: --apt-sim, --json (apt_sim_note + vscode_linux_build in JSON — docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*).
   Test host — copy .debs here, then use this script for sudo apt install + smoke.
 EOF
-}
-
-# Align with ``lvibe ide-prereqs --json`` / ``verify-step14-closeout.sh --json`` (14.c tree state).
-probe_vscode_linux_build_json() {
-  REPO_ROOT="$ROOT" PYTHONPATH="$ROOT/le-vibe" python3 -c '
-import os
-from pathlib import Path
-from le_vibe.ide_packaging_paths import vscode_linux_build_status
-st, _ = vscode_linux_build_status(Path(os.environ["REPO_ROOT"]))
-print(st)
-' 2>/dev/null || echo "unknown"
 }
 
 assert_file() {
@@ -148,7 +137,7 @@ if [[ "$PRINT_JSON" -eq 1 ]]; then
   stack_json="$(json_escape "$STACK_DEB")"
   ide_json="$(json_escape "$IDE_DEB")"
   install_json="$(json_escape "sudo apt install \"$STACK_DEB\" \"$IDE_DEB\"")"
-  vlb_json="$(json_escape "$(probe_vscode_linux_build_json)")"
+  vlb_json="$(json_escape "$("$ROOT/packaging/scripts/probe-vscode-linux-build.sh" "$ROOT")")"
   printf '{\n'
   printf '  "stack_deb": "%s",\n' "$stack_json"
   printf '  "ide_deb": "%s",\n' "$ide_json"

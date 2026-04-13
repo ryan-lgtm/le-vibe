@@ -7,22 +7,12 @@
 # Docs: docs/PM_DEB_BUILD_ITERATION.md, editor/BUILD.md (14.c)
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md
 #
-# After the 14.c check, prints vscode_linux_build: ready|partial|absent — same classifier as
-# lvibe ide-prereqs --json / verify-step14-closeout.sh --json (le_vibe.ide_packaging_paths).
+# After the 14.c check, prints vscode_linux_build: ready|partial|absent — packaging/scripts/probe-vscode-linux-build.sh
+# (same classifier as lvibe ide-prereqs --json / verify-step14-closeout.sh --json).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
-
-probe_vscode_linux_build() {
-  REPO_ROOT="$ROOT" PYTHONPATH="$ROOT/le-vibe" python3 -c '
-import os
-from pathlib import Path
-from le_vibe.ide_packaging_paths import vscode_linux_build_status
-st, _ = vscode_linux_build_status(Path(os.environ["REPO_ROOT"]))
-print(st)
-' 2>/dev/null || echo "unknown"
-}
 
 REQUIRE_STACK_DEB=0
 SKIP_GATE=0
@@ -82,7 +72,7 @@ else
   failures=$((failures + 1))
 fi
 
-_vlb="$(probe_vscode_linux_build)"
+_vlb="$("$ROOT/packaging/scripts/probe-vscode-linux-build.sh" "$ROOT")"
 echo "vscode_linux_build: ${_vlb}"
 
 shopt -s nullglob

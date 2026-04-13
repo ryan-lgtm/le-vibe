@@ -130,6 +130,7 @@ def test_pm_deb_build_iteration_doc_preflight_verify_stderr_vscode_linux_build_s
     text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
     sec = text.split("**Preflight (all gaps):**", 1)[1].split("**Full-product install**", 1)[0]
     assert "vscode_linux_build:" in sec
+    assert "probe-vscode-linux-build.sh" in sec
     assert "verify-step14-closeout.sh --json" in sec
     assert "verify-step14-closeout.sh" in sec and "stderr" in sec
 
@@ -276,6 +277,7 @@ def test_pm_deb_build_iteration_doc_lists_output_paths_table_step14():
     )[0]
     assert "resolve-latest-le-vibe-stack-deb.sh" in out_paths
     assert "preflight-step14-closeout.sh" in out_paths
+    assert "probe-vscode-linux-build.sh" in out_paths
     assert "manual-step14-install-smoke.sh" in out_paths
 
 

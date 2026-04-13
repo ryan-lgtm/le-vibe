@@ -31,7 +31,7 @@ def test_preflight_step14_closeout_script_documents_checks() -> None:
     assert "--require-stack-deb" in text
     assert "--skip-gate" in text
     assert "vscode_linux_build:" in text
-    assert "ide_packaging_paths" in text
+    assert "probe-vscode-linux-build.sh" in text
 
 
 def test_preflight_step14_closeout_prints_vscode_linux_build_line() -> None:

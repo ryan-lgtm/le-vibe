@@ -29,7 +29,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "verify-14c-local-binary.sh" in text
     assert "STEP 14.c failed" in text
     assert "vscode_linux_build:" in text
-    assert "ide_packaging_paths" in text
+    assert "probe-vscode-linux-build.sh" in text
     assert "preflight-step14-closeout.sh" in text
     assert "ide-prereqs --print-closeout-commands" in text
     assert "packaging/le-vibe-ide_*.deb" in text

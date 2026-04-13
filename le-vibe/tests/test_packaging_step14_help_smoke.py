@@ -31,6 +31,7 @@ def _repo_root() -> Path:
         "packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh",
         "packaging/scripts/verify-product-branding-merge-parity.sh",
         "packaging/scripts/verify-step14-closeout.sh",
+        "packaging/scripts/probe-vscode-linux-build.sh",
         "packaging/scripts/preflight-step14-closeout.sh",
         "packaging/scripts/resolve-latest-le-vibe-stack-deb.sh",
         "packaging/scripts/manual-step14-install-smoke.sh",
