@@ -119,6 +119,7 @@ def test_vscodium_fork_doc_release_smoke_checklist_14i():
     assert "test_docs_readme_ci_qa_hardening_row_contract.py" in text
     assert "print-ci-tarball-codium-path.sh" in text
     assert "print-vsbuild-codium-path.sh" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "print-built-codium-path.sh" in text
     assert "fetch-vscode-sources.sh" in text
     assert "Optional preflight" in text

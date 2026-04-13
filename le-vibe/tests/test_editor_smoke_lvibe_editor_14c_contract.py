@@ -46,6 +46,7 @@ def test_ci_editor_gate_bash_n_smoke_lvibe_editor():
     assert "print-built-codium-path.sh" in text
     assert "print-vsbuild-codium-path.sh" in text
     assert "print-ci-tarball-codium-path.sh" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
 
 
 def test_smoke_built_codium_lvibe_chains_print_built_and_smoke():
