@@ -271,6 +271,7 @@ def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14()
     assert "--require-stack-deb" in text
     success = text.split("**Success output (`--with-ide`):**", 1)[1].split("**Failure (`--with-ide`):**", 1)[0]
     assert "verify-step14-closeout.sh --require-stack-deb" in success
+    assert "--apt-sim" in success
     assert "optional **`--require-stack-deb`**" not in success
 
 
