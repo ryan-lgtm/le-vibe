@@ -2,6 +2,8 @@
 
 **Lé Vibe is one repository.** This directory is the **canonical home** for the **Code - OSS–based desktop application** (branded binary, icons, About, Linux packaging of the editor itself). **Engineering and PM tracks treat `editor/` as P0** after baseline must-ship checks—see **`docs/PROMPT_BUILD_LE_VIBE.md`** (Master orchestrator **STEP 14**, **editor-first** order).
 
+**Master orchestrator order:** **0 → 1 → 14 → 2–13 → 15–17** — **`editor/`** / **§7.3** follows baseline **STEP 0–1**, not deferred to the end of the queue. Same authority chain: **`docs/PROMPT_BUILD_LE_VIBE.md`** (*ORDERED WORK QUEUE*, *Rolling iteration — prefer continuation*); **`docs/PM_STAGE_MAP.md`** *Execution order* / **STEP 16**.
+
 | Path | Role |
 |------|------|
 | **`editor/`** (here) | Lé Vibe IDE — VSCodium/Code OSS sources, branding, build scripts, CI for the Electron app |
