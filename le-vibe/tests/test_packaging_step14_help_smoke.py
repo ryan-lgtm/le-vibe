@@ -37,6 +37,8 @@ def _repo_root() -> Path:
         "editor/smoke-lvibe-editor.sh",
         "editor/smoke-built-codium-lvibe.sh",
         "editor/verify-73-maintainer.sh",
+        "editor/use-node-toolchain.sh",
+        "editor/fetch-vscode-sources.sh",
     ],
 )
 def test_step14_script_help_exits_zero(relative: str) -> None:

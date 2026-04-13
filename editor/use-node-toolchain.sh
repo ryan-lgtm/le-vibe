@@ -18,6 +18,27 @@ EDITOR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 _lev_sourced=0
 [[ "${BASH_SOURCE[0]}" != "${0}" ]] && _lev_sourced=1 || true
 
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  cat <<'EOF'
+Usage: source editor/use-node-toolchain.sh
+   or: editor/use-node-toolchain.sh [COMMAND [ARGS...]]
+
+Load nvm and activate Node from editor/.nvmrc (STEP 14.a — must match
+editor/vscodium/.nvmrc; see packaging/scripts/ci-editor-nvmrc-sync.sh).
+
+When executed (not sourced), runs COMMAND with that Node on PATH, or prints
+the active node path if COMMAND is omitted.
+
+Requires: nvm (default NVM_DIR=~/.nvm).
+
+  -h, --help   Show this message and exit.
+EOF
+  if [[ "${_lev_sourced}" -eq 1 ]]; then
+    return 0
+  fi
+  exit 0
+fi
+
 _die() {
   echo "use-node-toolchain: $*" >&2
   if [[ "${_lev_sourced}" -eq 1 ]]; then

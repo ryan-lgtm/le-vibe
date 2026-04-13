@@ -18,6 +18,7 @@ def test_use_node_toolchain_script_bash_syntax() -> None:
 
 def test_use_node_toolchain_script_documents_14a_nvmrc():
     text = (_repo_root() / "editor" / "use-node-toolchain.sh").read_text(encoding="utf-8")
+    assert "--help" in text
     assert "0 → 1 → 14 → 2–13 → 15–17" in text
     assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "PM_STAGE_MAP.md" in text

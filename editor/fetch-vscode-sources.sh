@@ -14,6 +14,26 @@
 # shellcheck disable=SC1091
 set -euo pipefail
 
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  cat <<'EOF'
+Usage: editor/fetch-vscode-sources.sh
+
+Run upstream get_repo.sh from editor/vscodium (STEP 14.b — network + git).
+Requires: editor/vscodium submodule, cmp and tr on PATH, aligned editor/.nvmrc.
+
+Use Node from editor/.nvmrc first — e.g. source editor/use-node-toolchain.sh (14.a).
+
+After success: cd editor/vscodium && ./dev/build.sh (editor/BUILD.md 14.c).
+
+  -h, --help   Show this message and exit.
+EOF
+  exit 0
+fi
+if [[ $# -gt 0 ]]; then
+  echo "fetch-vscode-sources: unexpected argument(s) — no args except --help (see --help)" >&2
+  exit 2
+fi
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
