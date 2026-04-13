@@ -36,6 +36,16 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "build artifacts first" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
+    assert "apt_sim_note" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+
+
+def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> None:
+    path = _repo_root() / "schemas" / "session-manifest.step14-closeout.v1.example.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    rag = payload["meta"]["rag_notes"]
+    assert "verify-step14-closeout.sh --require-stack-deb" in rag
+    assert "apt_sim_note" in rag
 
 
 def test_pm_deb_build_iteration_points_to_manual_step14_install_smoke_script() -> None:
@@ -63,6 +73,7 @@ def test_manual_step14_install_smoke_missing_artifacts_prints_recovery_commands(
     assert "build artifacts first" in err
     assert "build-le-vibe-debs.sh --with-ide" in err
     assert "verify-step14-closeout.sh --require-stack-deb" in err
+    assert "apt_sim_note" in err
 
 
 def test_manual_step14_install_smoke_print_install_cmd_mode() -> None:

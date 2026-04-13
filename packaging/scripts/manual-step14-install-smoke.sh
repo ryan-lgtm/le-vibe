@@ -35,6 +35,10 @@ Options:
                   Print only: sudo apt install "<stack.deb>" "<ide.deb>".
   --json          Print resolved stack/IDE deb paths + install command as JSON.
   -h, --help      Show this message and exit.
+
+Close-out (on the build host, before copying .debs to a test machine):
+  packaging/scripts/verify-step14-closeout.sh --require-stack-deb
+  Optional: --apt-sim, --json (apt_sim_note in JSON — docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*).
 EOF
 }
 
@@ -46,7 +50,8 @@ assert_file() {
     echo "manual-step14-install-smoke: build artifacts first:" >&2
     echo "  packaging/scripts/build-le-vibe-debs.sh --with-ide" >&2
     echo "manual-step14-install-smoke: then verify close-out artifacts:" >&2
-    echo "  packaging/scripts/verify-step14-closeout.sh --require-stack-deb" >&2
+    echo "  packaging/scripts/verify-step14-closeout.sh --require-stack-deb [--apt-sim] [--json]" >&2
+    echo "manual-step14-install-smoke: (--json includes apt_sim_note; docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*)" >&2
     exit 2
   fi
 }
@@ -128,6 +133,10 @@ fi
 
 cat <<EOF
 ==> STEP 14 manual Ubuntu install smoke
+(This checklist assumes the build host already passed:
+ packaging/scripts/verify-step14-closeout.sh --require-stack-deb
+ optional --apt-sim / --json — apt_sim_note in JSON; see docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*.)
+
 1) Install both packages:
    sudo apt install "$STACK_DEB" "$IDE_DEB"
 
