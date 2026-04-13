@@ -233,6 +233,8 @@ def test_product_spec_section8_evidence_section10_first_run_observability_step6(
     """E1: §10 narrative cites first-run failure remediation → lvibe logs (STEP 6)."""
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
+    assert "debian/lvibe.1" in text
+    assert "test_debian_le_vibe_man_first_run_contract.py" in text
     assert "- [x] **First-run / STEP 6**" in text
     assert "§10 acceptance" in text
     assert "First-run vs observability" in text
