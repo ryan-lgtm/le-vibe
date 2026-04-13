@@ -147,6 +147,8 @@ def test_debian_le_vibe_ide_control_and_scripts():
     )
     assert "usr/share/applications/le-vibe.desktop" in install
     assert "le-vibe.svg" in install
+    # PRODUCT_SPEC §7.3 — only `lvibe` as public PATH CLI; IDE .deb uses Freedesktop + /usr/lib/le-vibe/bin/codium.
+    assert "usr/bin" not in install
     rules = (root / "packaging" / "debian-le-vibe-ide" / "debian" / "rules").read_text(encoding="utf-8")
     assert "staging/usr/share/applications/le-vibe.desktop" in rules
     assert "override_dh_install" in rules

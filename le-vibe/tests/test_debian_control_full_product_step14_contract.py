@@ -16,3 +16,9 @@ def test_debian_control_description_documents_full_product_install_step14():
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product install" in text
+
+
+def test_stack_debian_install_shows_lvibe_on_path_step14():
+    """PRODUCT_SPEC §2 / §7.3 — primary discoverable CLI is ``lvibe`` on PATH (stack .deb)."""
+    inst = (_repo_root() / "debian" / "le-vibe.install").read_text(encoding="utf-8")
+    assert "packaging/bin/lvibe usr/bin" in inst
