@@ -2,6 +2,8 @@
 
 **Authority:** [`docs/PRODUCT_SPEC.md`](../../docs/PRODUCT_SPEC.md) §7.3 — the stack discovers the editor at **`/usr/lib/le-vibe/bin/codium`** (not a second public **`PATH`** CLI; **`lvibe`** remains the user-facing command).
 
+**Master orchestrator order:** **0 → 1 → 14 → 2–13 → 15–17** — this **`.deb`** is the **§7.3** installable for **STEP 14** right after baseline **STEP 0–1**, not an afterthought. See **[`docs/PROMPT_BUILD_LE_VIBE.md`](../../docs/PROMPT_BUILD_LE_VIBE.md)** (*ORDERED WORK QUEUE*, *Rolling iteration — prefer continuation*) and **[`docs/PM_STAGE_MAP.md`](../../docs/PM_STAGE_MAP.md)** *Execution order* / **STEP 16** (same pointer as **[`editor/README.md`](../../editor/README.md)** *Master orchestrator order*).
+
 This directory is a **separate Debian source** (sibling to the root **`debian/`** for the **`le-vibe`** stack package). It **repacks** a local **`VSCode-linux-*/`** tree from **`editor/vscodium/`** produced by **`editor/vscodium/dev/build.sh`** — for **§7.3** layers (merge, icons, defaults), use **`./packaging/scripts/ci-vscodium-linux-dev-build.sh`** from the repo root or repeat those steps manually (**[`editor/BUILD.md`](../../editor/BUILD.md)** *Linux icons*).
 
 **Fresh clone (14.b):** if **`editor/vscodium/`** is empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the monorepo root before compiling — **`editor/README.md`** *Fresh clone (14.b)*, **`editor/BUILD.md`**.

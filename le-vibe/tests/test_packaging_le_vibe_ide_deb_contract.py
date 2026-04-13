@@ -105,6 +105,9 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert (root / "packaging" / "scripts" / "stage-le-vibe-ide-deb.sh").is_file()
     assert (root / "packaging" / "scripts" / "build-le-vibe-ide-deb.sh").is_file()
     readme = (root / "packaging" / "debian-le-vibe-ide" / "README.md").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in readme
+    assert "PROMPT_BUILD_LE_VIBE.md" in readme
+    assert "Rolling iteration — prefer continuation" in readme
     assert "git submodule update --init editor/vscodium" in readme
     assert "Fresh clone (14.b)" in readme
     assert "§7.3" in readme
