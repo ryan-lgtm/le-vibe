@@ -28,6 +28,8 @@ def test_pm_stage_map_intro_paragraph_step16_doc_locked_loop():
     assert "**STEP 16" in head
     assert "print-master-orchestrator-prompt.py" in head
     assert "test_pm_stage_map_step16_contract.py" in head
+    assert "Rolling iteration — prefer continuation" in head
+    assert "PASTE SAME AGAIN" in head and "LÉ VIBE SESSION COMPLETE" in head
 
 
 def test_root_and_docs_readme_link_pm_stage_map():
