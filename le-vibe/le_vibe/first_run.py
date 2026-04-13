@@ -84,5 +84,6 @@ def ensure_product_first_run(
         code,
         "first-run bootstrap failed; fix errors above and retry, or use --force-first-run. "
         "Set LE_VIBE_VERBOSE=1 for more detail. "
+        "`lvibe --help` lists --skip-first-run / --force-first-run (STEP 6). "
         "Structured log path: lvibe logs --path-only (see STEP 6 / lvibe logs --tail N).",
     )

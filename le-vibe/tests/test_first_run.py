@@ -42,6 +42,7 @@ def test_first_run_bootstrap_failure_message_lists_remediation(tmp_path: Path, m
     assert code == 2
     assert "--force-first-run" in msg
     assert "LE_VIBE_VERBOSE" in msg
+    assert "lvibe --help" in msg
     assert "lvibe logs" in msg
     assert "--path-only" in msg
 
