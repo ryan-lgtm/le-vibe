@@ -134,6 +134,7 @@ def test_product_spec_prioritization_names_ci_le_vibe_deb_vs_ide_deb_step14():
     assert "Full-product install" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "Success output (`--with-ide`)" in text
+    assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "debian-le-vibe-ide/README.md" in text
     assert "Install both packages" in text
     assert "apt-repo-releases.md" in text
