@@ -24,4 +24,5 @@ def test_agent_mode_orchestration_lists_step14_full_product_closeout_gate():
     assert "Partial VSCode-linux" in text
     assert "print-built-codium-path" in text
     assert "print-vsbuild-codium-path" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "build-le-vibe-ide-deb.sh --help" in text

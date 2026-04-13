@@ -36,6 +36,7 @@ def test_step14_autonomous_runbook_documents_closeout_verifier():
     assert "Partial tree" in text
     assert "print-built-codium-path" in text
     assert "print-vsbuild-codium-path" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
     assert "resolve-latest-le-vibe-stack-deb.sh" in text
     assert "Compile fail-fast (STEP 14" in text
