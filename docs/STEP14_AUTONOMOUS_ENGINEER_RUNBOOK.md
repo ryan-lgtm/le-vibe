@@ -89,7 +89,7 @@ MODE: ENGINEER
 CONTINUATION: PASTE SAME AGAIN
 
 First incomplete STEP per PROMPT_BUILD_LE_VIBE.md ORDERED WORK QUEUE (0 → 1 → 14 → …). Branch main at recorded sha; cd le-vibe && python3 -m pytest tests/ after Python changes.
-If STEP 14: advance §7.3 — smoke (./editor/smoke.sh), branding/editor overrides, Linux build path per editor/BUILD.md, build-le-vibe-debs.sh --with-ide when toolchain allows, then verify-step14-closeout.sh --require-stack-deb (add --apt-sim / --json as needed); else SKIPPED + reason.
+If STEP 14: advance §7.3 — smoke (./editor/smoke.sh), branding/editor overrides, Linux build path per editor/BUILD.md, build-le-vibe-debs.sh --with-ide when toolchain allows, then verify-step14-closeout.sh --require-stack-deb (add --apt-sim / --json as needed; **`apt_sim_note`** in **`--json`** — [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) *`--json` close-out payload*); else SKIPPED + reason.
 End with PASTE SAME AGAIN if work remains toward §7.3.
 ```
 
