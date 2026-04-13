@@ -218,7 +218,7 @@ if [[ "$WITH_IDE" -eq 1 && -n "$STACK_DEB" && -f "$STACK_DEB" && -n "$IDE_DEB" &
   echo "==> Full-product install (paths printed above): sudo apt install \"$STACK_DEB\" \"$IDE_DEB\""
   echo "    Post-install: /usr/share/doc/le-vibe/README.Debian — packaging/debian-le-vibe-ide/README.md (*Install both packages*)"
   echo "    §7.3 maintainer smoke (ci-editor-gate + lvibe ide-prereqs --json, no new .deb): ./editor/verify-73-maintainer.sh — editor/README.md"
-  echo "    §7.3 close-out verifier (gate + built codium + ide .deb): ./packaging/scripts/verify-step14-closeout.sh [--require-stack-deb]"
+  echo "    §7.3 close-out verifier (gate + built codium + ide .deb + stack .deb): ./packaging/scripts/verify-step14-closeout.sh --require-stack-deb"
 fi
 
 echo "==> Done."

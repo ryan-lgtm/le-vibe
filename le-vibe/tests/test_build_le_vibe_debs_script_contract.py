@@ -61,6 +61,7 @@ def test_build_le_vibe_debs_script_prints_full_product_install_hint_step14():
     assert "debian-le-vibe-ide/README.md" in text
     assert "verify-73-maintainer.sh" in text
     assert "verify-step14-closeout.sh" in text
+    assert "verify-step14-closeout.sh --require-stack-deb" in text
 
 
 def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
