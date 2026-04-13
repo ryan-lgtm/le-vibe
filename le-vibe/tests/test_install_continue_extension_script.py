@@ -36,6 +36,9 @@ def test_install_continue_extension_documents_14g_editor_and_openvsx_ref() -> No
     text = (_repo_root() / "packaging" / "scripts" / "install-continue-extension.sh").read_text(
         encoding="utf-8"
     )
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "14.g" in text
     assert "LE_VIBE_EDITOR" in text
     assert "/usr/lib/le-vibe/bin/codium" in text

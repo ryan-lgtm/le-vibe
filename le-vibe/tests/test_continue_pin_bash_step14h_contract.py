@@ -25,6 +25,9 @@ def test_sync_continue_config_script_documents_missing_generated_yaml():
     text = (_repo_root() / "packaging" / "scripts" / "sync-continue-config.sh").read_text(
         encoding="utf-8"
     )
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "STEP 14.h" in text
     assert "continue-config.yaml" in text
     assert "le-vibe: missing" in text
@@ -44,6 +47,9 @@ def test_verify_continue_pin_script_documents_pin_file():
     text = (_repo_root() / "packaging" / "scripts" / "verify-continue-pin.sh").read_text(
         encoding="utf-8"
     )
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "STEP 14.h" in text
     assert "continue-openvsx-version" in text
     assert "restore packaging/continue-openvsx-version from git" in text

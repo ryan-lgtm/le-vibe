@@ -54,6 +54,9 @@ def test_sync_lvibe_agent_skills_script_syntax():
 def test_sync_lvibe_agent_skills_requires_python3_documented():
     root = Path(__file__).resolve().parents[2]
     text = (root / "packaging" / "scripts" / "sync-lvibe-agent-skills.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "python3 not on PATH" in text
     assert "SESSION_ORCHESTRATION_SPEC" in text
 

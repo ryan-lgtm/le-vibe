@@ -3,6 +3,7 @@
 # Exit 0 when a suitable binary is present so pipelines can "check then proceed".
 # Product / trust: docs/PRODUCT_SPEC.md §8–§9; spec-phase2.md §14 (H6/H7 vs in-tree; STEP 14 E1 — editor/le-vibe-overrides/README.md + le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py); docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
 # Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (ci.yml, dependabot.yml, packaging/bin).
+# Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — interim LE_VIBE_EDITOR / codium probe until §7.3 built binary (STEP 14 after STEP 0–1).
 set -euo pipefail
 BIN="${LE_VIBE_EDITOR:-/usr/bin/codium}"
 if [[ -n "${LE_VIBE_EDITOR:-}" && "$BIN" == */* ]]; then

@@ -4,6 +4,7 @@
 # Run from a workspace root after pulling the monorepo — idempotent (skips existing skill.md).
 # Continue rules (le_vibe.continue_workspace) point Chat/Agent at .lvibe/; this refreshes skills only.
 # Authority: docs/SESSION_ORCHESTRATION_SPEC.md; docs/PRODUCT_SPEC.md §5–§8.
+# Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — STEP 3 (E2) agent skills sync.
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"

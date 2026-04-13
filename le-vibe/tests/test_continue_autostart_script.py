@@ -20,6 +20,9 @@ def test_continue_autostart_documents_mkdir_touch_path_checks() -> None:
     text = (
         _repo_root() / "packaging" / "scripts" / "le-vibe-continue-setup-autostart.sh"
     ).read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "mkdir not on PATH" in text
     assert "touch not on PATH" in text
 
