@@ -86,6 +86,8 @@ That wrapper **`exec`**s **`packaging/scripts/ci-editor-gate.sh`** with the same
 
 **Runner realism:** Default **GitHub-hosted** images may **OOM** or exceed **time** on a full upstream compile — **[`editor/BUILD.md`](../editor/BUILD.md)** (*When full compile fails* / *Runner realism*). For a repeatable local analogue of the CI environment, **`packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh`** documents the same **`ubuntu:22.04`**-style base as job **`linux_compile`**.
 
+**Publishing (H1 / STEP 14):** **`linux_compile`** uploads **`vscodium-linux-build.tar.gz`** — it does **not** replace the stack **`le-vibe`** **`.deb`** from **`ci.yml`** / **`dpkg-buildpackage`**. When you ship **both** **`.deb`** files after staging from a **`linux_compile`** tree, regenerate **`SHA256SUMS`** over **every** **`*.deb`** / SBOM you attach — **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** *Pre-publish artifact checklist* (**Integrity**); one-shot maintainer build — **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** — **[`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** (*Releases & full-product demo*).
+
 ## What is not automated here
 
 - **ShellCheck** on every script — optional locally (`shellcheck packaging/scripts/*.sh`); not required in default CI to keep images small.
