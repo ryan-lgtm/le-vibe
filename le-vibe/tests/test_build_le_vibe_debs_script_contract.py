@@ -86,6 +86,8 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     assert "Pre-publish artifact checklist" in text
     assert "Checklist shorthand" in text
     assert "Pre-publish — Checklist shorthand" in text
+    assert "packaging/debian-le-vibe-ide/debian/changelog" in text
+    assert "IDE le-vibe-ide changelog" in text
     assert "Tagging discipline" in text
     assert "Exit codes:" in text
     assert "PM_DEB_BUILD_ITERATION.md (Exit codes" in text
@@ -129,6 +131,9 @@ def test_pm_deb_build_iteration_doc_links_h1_stack_release_checklist():
     assert "Checklist — stack-only GitHub Release" in head
     assert "Checklist — full-product GitHub Release" in head
     assert "Dual changelog discipline" in head
+    assert "**Stack vs IDE changelogs:**" in head
+    assert "packaging/debian-le-vibe-ide/debian/changelog" in head
+    assert "IDE `le-vibe-ide` changelog" in head
     assert "CHANGELOG.md" in head
     assert "le-vibe-deb" in head
 

@@ -7,6 +7,8 @@
 
 **Release checklist (H1):** After you bump **`debian/changelog`** / **[`CHANGELOG.md`](../CHANGELOG.md)** (same **`x.y.z`** — **[`apt-repo-releases.md`](apt-repo-releases.md)** *Dual changelog discipline*) and want a **stack-only** GitHub Release (artifact **`le-vibe-deb`**, **`gh release create`**, **`SHA256SUMS`** verify) — follow **[`apt-repo-releases.md`](apt-repo-releases.md)** *Checklist — stack-only GitHub Release*. When you **`gh release create`** with **both** **`le-vibe_*_all.deb`** and **`le-vibe-ide_*_amd64.deb`** — **[`apt-repo-releases.md`](apt-repo-releases.md)** *Checklist — full-product GitHub Release* (*Combined drop* / **`SHA256SUMS`**); build both with **`build-le-vibe-debs.sh --with-ide`** — *Success output (`--with-ide`)* below.
 
+**Stack vs IDE changelogs:** Root **`debian/changelog`** versions **`le-vibe_*_all.deb`**; **[`packaging/debian-le-vibe-ide/debian/changelog`](../packaging/debian-le-vibe-ide/debian/changelog)** versions **`le-vibe-ide_*_amd64.deb`** — **[`apt-repo-releases.md`](apt-repo-releases.md)** *IDE `le-vibe-ide` changelog* (same **H1** *Tagging discipline* story as stack **`v…`** vs **`ide-v*`**).
+
 **Fresh clone (14.b / STEP 14):** **`le-vibe-ide`** repacks a compiled **`VSCode-linux-*`** tree from **`editor/vscodium/`** — if that directory is empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the repository root before **`editor/BUILD.md`** fetch/build steps — same as **`editor/README.md`** *Fresh clone (14.b)*.
 
 ## Invocations (repository root)
