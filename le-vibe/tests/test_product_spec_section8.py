@@ -226,6 +226,7 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "verify-step14-closeout.sh --require-stack-deb" in sec73
     assert "preflight-step14-closeout.sh" in sec73
     assert "ide-prereqs --print-closeout-commands" in sec73
+    assert "probe-vscode-linux-build.sh" in sec73
     assert "--json" in sec73
     assert "apt_sim_note" in sec73
     assert "repo root" in sec73
