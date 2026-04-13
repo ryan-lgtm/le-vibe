@@ -110,6 +110,8 @@ def test_verify_14c_local_binary_script_contract():
     assert "smoke-built-codium-lvibe.sh" in text
     assert "verify-14c-local-binary: (14.c) No built tree yet" in text
     assert "verify-14c-local-binary: (14.c) Incomplete VSCode-linux tree" in text
+    assert "preflight-step14-closeout.sh" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "use-node-toolchain.sh" in text
     assert "fetch-vscode-sources.sh" in text
     assert "dev/build.sh" in text

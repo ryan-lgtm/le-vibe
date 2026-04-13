@@ -50,4 +50,5 @@ if [[ "${out}" == *"partial or incomplete"* ]]; then
 else
   echo "verify-14c-local-binary: (14.c) No built tree yet — toolchain → fetch → compile: editor/BUILD.md (14.a use-node-toolchain.sh, 14.b fetch-vscode-sources.sh, then cd editor/vscodium && ./dev/build.sh). Full launcher smoke: ./editor/smoke-built-codium-lvibe.sh (needs ollama on PATH)." >&2
 fi
+echo "verify-14c-local-binary: preflight (gap list before strict verify): ${ROOT}/packaging/scripts/preflight-step14-closeout.sh — docs/PM_DEB_BUILD_ITERATION.md" >&2
 exit 1
