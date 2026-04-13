@@ -63,6 +63,8 @@ When you have both artifacts from **`build-le-vibe-debs.sh`** (stack) and **`--w
 
 **Success output (`--with-ide`):** When **`build-le-vibe-debs.sh`** finishes and both **`.deb`** files are found, it prints a **Full-product install** line — **`sudo apt install`** with the resolved paths (stack **`le-vibe_*_all.deb`** beside the repository directory, IDE **`le-vibe-ide_*_amd64.deb`** under **`packaging/`**), then **`/usr/share/doc/le-vibe/README.Debian`** and **`packaging/debian-le-vibe-ide/README.md`** (*Install both packages*), plus the local close-out check **`packaging/scripts/verify-step14-closeout.sh --require-stack-deb`** (gate + built **`codium`** + both **`.deb`** artifacts; add **`--apt-sim`** when you want explicit **`apt-get -s install`** dependency simulation on this host; add **`--json`** for machine-readable success output). For the remaining manual Ubuntu install/launch smoke, use **`packaging/scripts/manual-step14-install-smoke.sh`** (or **`--print-install-cmd`** for an exact install command line, **`--json`** for machine-readable paths/install command).
 
+**`--json` close-out payload:** **`verify-step14-closeout.sh --json`** includes **`apt_sim_note`** — `not_requested` (default), `ran` (with **`--require-stack-deb`** + **`--apt-sim`**), or `requested_without_stack_requirement` (**`--apt-sim`** without **`--require-stack-deb`**), alongside **`apt_sim_requested`** / **`apt_sim_ran`**.
+
 **Failure (`--with-ide`):** If **`--with-ide`** is set but **`le-vibe-ide_*.deb`** is not found under **`packaging/`** after the IDE build step, **`build-le-vibe-debs.sh`** exits with status **1** — a stack-only **`.deb`** is not treated as a successful full-product run.
 
 ### §7.3 IDE staging — Lé Vibe identity in the built tree

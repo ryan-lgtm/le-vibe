@@ -69,6 +69,8 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert '"codium_path":' in text
     assert '"ide_deb":' in text
     assert '"apt_sim_note":' in text
+    assert "JSON success (--json)" in text
+    assert "requested_without_stack_requirement" in text
 
 
 def test_verify_step14_closeout_json_mode_outputs_parseable_payload() -> None:

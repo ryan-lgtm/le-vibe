@@ -282,6 +282,10 @@ def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14()
     assert "--apt-sim" in success
     assert "--json" in success
     assert "optional **`--require-stack-deb`**" not in success
+    payload = text.split("**`--json` close-out payload:**", 1)[1].split("**Failure (`--with-ide`):**", 1)[0]
+    assert "apt_sim_note" in payload
+    assert "not_requested" in payload
+    assert "requested_without_stack_requirement" in payload
 
 
 def test_pm_deb_build_iteration_doc_731_staging_identity_step14():

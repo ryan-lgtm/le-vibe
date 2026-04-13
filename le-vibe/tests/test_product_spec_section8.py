@@ -218,6 +218,7 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "held broken packages" in sec73
     assert "verify-step14-closeout.sh --require-stack-deb" in sec73
     assert "--json" in sec73
+    assert "apt_sim_note" in sec73
     assert "495" in text
 
 

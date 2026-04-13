@@ -159,6 +159,11 @@ Options:
   --json                Emit machine-readable summary JSON on success.
   -h, --help            Show this message and exit.
 
+JSON success (--json) includes:
+  status, codium_path, ide_deb, stack_deb_required, stack_deb (null when
+  not required), apt_sim_requested, apt_sim_ran, apt_sim_note
+  (not_requested | ran | requested_without_stack_requirement).
+
 See also:
   - packaging/scripts/build-le-vibe-debs.sh --with-ide
   - docs/PM_DEB_BUILD_ITERATION.md
