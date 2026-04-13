@@ -36,6 +36,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "assert_deb_contains_any" in text
     assert "assert_deb_field_equals" in text
     assert "assert_deb_file_contains" in text
+    assert "assert_deb_path_is_executable" in text
     assert "dpkg-deb --contents" in text
     assert "dpkg-deb --field" in text
     assert "dpkg-deb --fsys-tarfile" in text

@@ -82,6 +82,23 @@ assert_deb_file_contains() {
   fi
 }
 
+assert_deb_path_is_executable() {
+  local deb_path="$1"
+  local internal_path="$2"
+  local line
+  line="$(dpkg-deb --contents "$deb_path" | grep -F " $internal_path" || true)"
+  if [[ -z "$line" ]]; then
+    echo "verify-step14-closeout: $deb_path missing payload path: $internal_path" >&2
+    exit 1
+  fi
+  # `dpkg-deb --contents` starts each line with file mode bits.
+  # Launcher paths may be executable files (`-rwx...`) or symlinks (`lrwx...`).
+  if [[ "${line:0:1}" != "-" && "${line:0:1}" != "l" ]]; then
+    echo "verify-step14-closeout: $deb_path path is not an executable file/symlink: $internal_path ($line)" >&2
+    exit 1
+  fi
+}
+
 usage() {
   cat <<'EOF'
 Usage: packaging/scripts/verify-step14-closeout.sh [--require-stack-deb] [--skip-gate]
@@ -140,6 +157,7 @@ echo "    ide deb: $ide_deb_latest"
 echo "    ide deb payload check: /usr/share/applications/le-vibe.desktop + /usr/lib/le-vibe/bin/codium"
 assert_deb_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop"
 assert_deb_contains "$ide_deb_latest" "./usr/lib/le-vibe/bin/codium"
+assert_deb_path_is_executable "$ide_deb_latest" "./usr/lib/le-vibe/bin/codium"
 echo "    ide desktop check: Name=Lé Vibe + Exec=/usr/lib/le-vibe/bin/codium %F"
 assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop" "Name=Lé Vibe"
 assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop" "Exec=/usr/lib/le-vibe/bin/codium %F"
@@ -158,6 +176,7 @@ if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
   echo "    stack deb: $stack_deb_latest"
   echo "    stack deb payload check: /usr/bin/lvibe + /usr/share/doc/le-vibe/README.Debian(.gz)"
   assert_deb_contains "$stack_deb_latest" "./usr/bin/lvibe"
+  assert_deb_path_is_executable "$stack_deb_latest" "./usr/bin/lvibe"
   assert_deb_contains_any \
     "$stack_deb_latest" \
     "./usr/share/doc/le-vibe/README.Debian" \
