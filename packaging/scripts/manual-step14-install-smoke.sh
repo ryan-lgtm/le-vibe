@@ -35,6 +35,9 @@ Environment:
 
 Options:
   --verify-only   Run post-install verification checks now (no install).
+                  When desktop-file-validate is on PATH, also validates
+                  /usr/share/applications/le-vibe.desktop (same Freedesktop QA as
+                  preflight-step14-closeout / verify-step14-closeout / build-le-vibe-ide-deb).
   --print-install-cmd
                   Print only: sudo apt install "<stack.deb>" "<ide.deb>".
   --json          Print resolved stack/IDE deb paths + install command + vscode_linux_build (probe-vscode-linux-build.sh; same field as lvibe ide-prereqs --json) as JSON.
@@ -97,6 +100,14 @@ run_verify_only() {
     echo "manual-step14-install-smoke: missing /usr/share/doc/le-vibe/README.Debian(.gz)" >&2
     exit 1
   }
+  if command -v desktop-file-validate >/dev/null 2>&1; then
+    if ! desktop-file-validate /usr/share/applications/le-vibe.desktop; then
+      echo "manual-step14-install-smoke: desktop-file-validate failed on installed le-vibe.desktop (install desktop-file-utils; see build-le-vibe-ide-deb.sh)" >&2
+      exit 1
+    fi
+  else
+    echo "manual-step14-install-smoke: optional desktop-file-validate not on PATH — skipped (install desktop-file-utils for full Freedesktop QA)" >&2
+  fi
   echo "manual-step14-install-smoke: OK (lvibe + codium + desktop + docs present)."
 }
 
@@ -169,6 +180,7 @@ cat <<EOF
    test -x /usr/lib/le-vibe/bin/codium
    test -f /usr/share/applications/le-vibe.desktop
    test -f /usr/share/doc/le-vibe/README.Debian || test -f /usr/share/doc/le-vibe/README.Debian.gz
+   # Optional (desktop-file-utils): desktop-file-validate /usr/share/applications/le-vibe.desktop
 
 4) Launch UX smoke:
    lvibe open-welcome
