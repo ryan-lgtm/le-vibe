@@ -20,6 +20,9 @@ def test_ci_vscodium_bash_syntax_documents_step14_and_upstream_scripts():
     text = (
         _repo_root() / "packaging" / "scripts" / "ci-vscodium-bash-syntax.sh"
     ).read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
     assert "STEP 14" in text
