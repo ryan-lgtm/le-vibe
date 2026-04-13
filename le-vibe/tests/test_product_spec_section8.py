@@ -253,6 +253,7 @@ def test_product_spec_section8_evidence_section10_first_run_observability_step6(
     assert "lvibe --help" in text
     assert "launcher.py" in text
     assert "test_launcher_argparse_first_run_flags_help_mentions_logs_step6" in text
+    assert "**`LE_VIBE_VERBOSE`**, **`--skip-first-run`**, and **`--force-first-run`**" in text
     checklist_block = text.split("## Checklist (mirrors §10)", 1)[1].split("**§7.3 Full-product", 1)[0]
     first_run_lines = [ln for ln in checklist_block.splitlines() if "**First-run / STEP 6**" in ln]
     assert len(first_run_lines) == 1
@@ -310,6 +311,7 @@ def test_product_spec_section8_evidence_intro_lists_linux_compile_cargo_cache():
     assert "docker-le-vibe-vscodium-linux-compile.sh" in text
     assert "Optional full Linux compile" in text
     assert "(*At a glance*)" in text
+    assert "**`NODE_OPTIONS`** heap parity" in text
     assert "Fork / org tuning" in text
     assert "Maintainer triage" in text
     assert "RUN_ID discovery" in text
