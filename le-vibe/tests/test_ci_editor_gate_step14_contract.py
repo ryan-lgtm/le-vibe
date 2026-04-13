@@ -38,6 +38,9 @@ def test_ci_editor_gate_documents_step14_smoke_and_overrides_e1():
     assert "14.d" in text
     assert "branding-staging.checklist.md" in text
     assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
+    assert "linuxIconName" in text
+    assert "brand-assets.md" in text
+    assert "product-branding-merge.json" in text
     assert "usage()" in text or "Usage:" in text
     assert "--help" in text
     assert "bash not on PATH" in text

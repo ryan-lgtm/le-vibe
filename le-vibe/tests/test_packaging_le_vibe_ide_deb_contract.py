@@ -43,6 +43,9 @@ def test_stage_le_vibe_ide_deb_script_documents_14b_submodule_and_bash_syntax():
     assert "cp not on PATH" in text
     assert "ln not on PATH" in text
     assert "install not on PATH" in text
+    assert "linuxIconName" in text
+    assert "brand-assets.md" in text
+    assert "product-branding-merge.json" in text
     assert "ln -sfn" in text
     assert "usr/share/applications/le-vibe.desktop" in text
     assert "resources/app/product.json" in text

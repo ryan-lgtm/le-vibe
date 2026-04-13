@@ -18,8 +18,8 @@ Usage: packaging/scripts/stage-le-vibe-ide-deb.sh [PATH]
 Stages the tree into packaging/debian-le-vibe-ide/staging for dpkg-buildpackage (see packaging/debian-le-vibe-ide/README.md).
 
 Environment:
-  LEVIBE_STAGE_IDE_ASSERT_BRAND   When 1, fail if resources/app/product.json lacks Lé Vibe.
-  LEVIBE_STAGE_IDE_VERBOSE        When 1, print when §7.3 identity check passes.
+  LEVIBE_STAGE_IDE_ASSERT_BRAND   When 1, fail if resources/app/product.json lacks Lé Vibe or linuxIconName != le-vibe.
+  LEVIBE_STAGE_IDE_VERBOSE        When 1, print when §7.3 identity check passes (Lé Vibe + icon key when python3 is available).
 EOF
 }
 
@@ -91,8 +91,20 @@ if [[ -f "$PRODUCT_JSON" ]]; then
     if [[ "$_assert_brand" == "1" ]]; then
       exit 1
     fi
-  elif [[ "${LEVIBE_STAGE_IDE_VERBOSE:-0}" == "1" ]]; then
-    echo "stage-le-vibe-ide-deb: §7.3 OK — Lé Vibe strings in resources/app/product.json" >&2
+  else
+    # §7.3 linux icon key — must match packaging/icons/hicolor/scalable/apps/le-vibe.svg (docs/brand-assets.md).
+    if command -v python3 >/dev/null 2>&1; then
+      if ! python3 -c "import json,sys; d=json.load(open(sys.argv[1],encoding='utf-8')); sys.exit(0 if d.get('linuxIconName')=='le-vibe' else 1)" "$PRODUCT_JSON" 2>/dev/null; then
+        echo "stage-le-vibe-ide-deb: warning: $PRODUCT_JSON linuxIconName is not le-vibe — align editor/le-vibe-overrides/product-branding-merge.json before dev/build.sh (editor/BUILD.md *Linux icons*)." >&2
+        if [[ "$_assert_brand" == "1" ]]; then
+          exit 1
+        fi
+      elif [[ "${LEVIBE_STAGE_IDE_VERBOSE:-0}" == "1" ]]; then
+        echo "stage-le-vibe-ide-deb: §7.3 OK — Lé Vibe + linuxIconName le-vibe in resources/app/product.json" >&2
+      fi
+    elif [[ "${LEVIBE_STAGE_IDE_VERBOSE:-0}" == "1" ]]; then
+      echo "stage-le-vibe-ide-deb: §7.3 OK — Lé Vibe strings in resources/app/product.json (python3 absent — skipped linuxIconName check)" >&2
+    fi
   fi
 else
   echo "stage-le-vibe-ide-deb: warning: missing $PRODUCT_JSON — cannot verify §7.3 identity in this VSCode-linux-* tree" >&2

@@ -8,7 +8,8 @@
 # 14.d: default path does not validate Lé Vibe–visible IDE branding — editor/le-vibe-overrides/branding-staging.checklist.md;
 #   docs/PRODUCT_SPEC.md §7.2. Fast gate only (same story as ./editor/smoke.sh). Optional release QA: set
 #   LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 to fail when editor/vscodium/VSCode-linux-*/resources/app/product.json exists
-#   but lacks Lé Vibe strings (same check as stage-le-vibe-ide-deb.sh warn path; pair with LEVIBE_STAGE_IDE_ASSERT_BRAND=1 for .deb).
+#   but lacks Lé Vibe strings or linuxIconName != le-vibe (same identity checks as stage-le-vibe-ide-deb.sh warn path;
+#   pair with LEVIBE_STAGE_IDE_ASSERT_BRAND=1 for .deb).
 # Authority: editor/VENDORING.md.
 # H1 / §7.3: default CI uploads le-vibe-deb (stack le-vibe .deb only); this script does not build le-vibe-ide_*.deb —
 #   maintainer — packaging/scripts/build-le-vibe-ide-deb.sh / build-le-vibe-debs.sh --with-ide (Full-product install on success — docs/PM_DEB_BUILD_ITERATION.md; docs/apt-repo-releases.md IDE package).
@@ -34,7 +35,8 @@ Exits 0 when layout=none (no vendored IDE sources).
 
 Environment:
   LEVIBE_EDITOR_GATE_ASSERT_BRAND   When 1, fail if VSCode-linux-*/resources/app/product.json
-                                    exists but lacks Lé Vibe strings (§7.3 identity).
+                                    exists but lacks Lé Vibe strings or linuxIconName is not le-vibe
+                                    (§7.3 identity + hicolor icon key — docs/brand-assets.md).
 
 See editor/VENDORING.md, editor/README.md, .github/workflows/build-le-vibe-ide.yml.
 EOF
@@ -88,6 +90,14 @@ if [[ "${layout}" == "vscodium" && "${LEVIBE_EDITOR_GATE_ASSERT_BRAND:-0}" == "1
     fi
     if ! grep -q 'Lé Vibe' "${_pj}" 2>/dev/null; then
       echo "ci-editor-gate: LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 — ${_pj} has no Lé Vibe strings. Run packaging/scripts/ci-vscodium-linux-dev-build.sh before dev/build.sh (editor/BUILD.md *Linux icons*)." >&2
+      exit 1
+    fi
+    if ! command -v python3 >/dev/null 2>&1; then
+      echo "ci-editor-gate: LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 requires python3 on PATH (linuxIconName check)." >&2
+      exit 1
+    fi
+    if ! python3 -c "import json,sys; d=json.load(open(sys.argv[1],encoding='utf-8')); sys.exit(0 if d.get('linuxIconName')=='le-vibe' else 1)" "${_pj}"; then
+      echo "ci-editor-gate: LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 — ${_pj} must set linuxIconName to le-vibe (editor/le-vibe-overrides/product-branding-merge.json; docs/brand-assets.md)." >&2
       exit 1
     fi
   fi
