@@ -99,6 +99,8 @@ def test_pm_deb_build_iteration_doc_sibling_docs_links_apt_repo_h1_related_round
     text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
     head = text.split("## Invocations", 1)[0]
     assert "**Sibling docs:**" in head
+    assert "PRODUCT_SPEC_SECTION8_EVIDENCE.md" in head
+    assert "Last verified" in head
     assert "apt-repo-releases.md" in head
     assert "Related docs" in head
     assert "PM_STAGE_MAP.md" in head
