@@ -380,28 +380,64 @@ def _cmd_verify_checksums(argv: list[str]) -> int:
 
 def _cmd_pip_audit(argv: list[str]) -> int:
     """STEP 9 (H2): ``pip-audit -r le-vibe/requirements.txt`` — ``docs/sbom-signing-audit.md``."""
+    import json as json_mod
+    import shutil
+
     from le_vibe.supply_chain_check import (
-        EXIT_NO_PIP_AUDIT,
-        EXIT_NO_REQUIREMENTS_TXT,
+        requirements_txt_path,
         run_pip_audit,
+        run_pip_audit_captured,
     )
 
-    rc = run_pip_audit(argv)
-    if rc == EXIT_NO_REQUIREMENTS_TXT:
+    json_mode = False
+    rest: list[str] = []
+    for a in argv:
+        if a == "--json":
+            json_mode = True
+        else:
+            rest.append(a)
+
+    req = requirements_txt_path()
+
+    def _emit_json(**payload: object) -> None:
+        print(json_mod.dumps(payload, indent=2, ensure_ascii=False), file=sys.stdout)
+
+    if not req.is_file():
+        if json_mode:
+            _emit_json(
+                error="requirements_txt_missing",
+                requirements_path=str(req),
+                hint="docs/sbom-signing-audit.md STEP 9 / H2 — git clone; stack .deb omits file",
+            )
+            return 1
         print(
             "lvibe pip-audit: le-vibe/requirements.txt not found — supply-chain audit runs from a "
             "git clone (the stack .deb omits this file). See docs/sbom-signing-audit.md (STEP 9 / H2).",
             file=sys.stderr,
         )
         return 1
-    if rc == EXIT_NO_PIP_AUDIT:
+    if not shutil.which("pip-audit"):
+        if json_mode:
+            _emit_json(error="pip_audit_not_on_path", requirements_path=str(req))
+            return 127
         print(
             "lvibe pip-audit: pip-audit not on PATH — pip install pip-audit "
             "(docs/sbom-signing-audit.md).",
             file=sys.stderr,
         )
         return 127
-    return rc
+    if json_mode:
+        rc, out, err = run_pip_audit_captured(rest)
+        _emit_json(
+            requirements_path=str(req),
+            pip_audit_extra_args=rest,
+            exit_code=rc,
+            ok=(rc == 0),
+            stdout=out.rstrip("\n"),
+            stderr=err.rstrip("\n"),
+        )
+        return rc
+    return run_pip_audit(rest)
 
 
 def _cmd_ci_smoke(argv: list[str]) -> int:

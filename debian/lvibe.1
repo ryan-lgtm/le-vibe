@@ -58,8 +58,8 @@ Print the pinned Open VSX semver for Continue (\fBcontinue.continue@\fIver\fR), 
 Run \fBsha256sum \-c SHA256SUMS\fR in a release directory (artifact extract); \fB\-\-json\fR prints paths, exit code, and captured output. \fBdocs/apt\-repo\-releases.md\fR (H1).
 .TP
 .B lvibe pip-audit
-.RI [ pip\-audit_options ]
-Run \fBpip\-audit \-r\fR against \fBle\-vibe/requirements.txt\fR in a git clone (\fBpip install pip\-audit\fR). Not available when the stack \fB.deb\fR omits \fBrequirements.txt\fR — \fBdocs/sbom\-signing\-audit.md\fR (H2).
+.RI [ \-\-json | pip\-audit_options ]
+Run \fBpip\-audit \-r\fR against \fBle\-vibe/requirements.txt\fR in a git clone (\fBpip install pip\-audit\fR); \fB\-\-json\fR prints paths, exit code, and captured output. Not available when the stack \fB.deb\fR omits \fBrequirements.txt\fR — \fBdocs/sbom\-signing\-audit.md\fR (H2).
 .TP
 .B lvibe ci-smoke
 .RI [ args ]

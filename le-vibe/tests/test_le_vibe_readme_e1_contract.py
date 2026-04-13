@@ -88,6 +88,7 @@ def test_le_vibe_readme_lists_step9_h2_sbom():
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
     assert "Supply chain / SBOM (STEP 9 / H2)" in text
     assert "lvibe pip-audit" in text
+    assert "--json" in text
     assert "sbom-signing-audit.md" in text
     assert "le-vibe-python.cdx.json" in text
     assert "pip-audit" in text

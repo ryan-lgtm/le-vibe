@@ -32,3 +32,15 @@ def run_pip_audit(extra_args: list[str]) -> int:
     cmd = ["pip-audit", "-r", str(req), *extra_args]
     proc = subprocess.run(cmd, cwd=req.parent)
     return int(proc.returncode)
+
+
+def run_pip_audit_captured(extra_args: list[str]) -> tuple[int, str, str]:
+    """
+    Same as ``run_pip_audit`` but capture stdout/stderr (for ``lvibe pip-audit --json``).
+
+    Caller must ensure ``requirements.txt`` exists and ``pip-audit`` is on ``PATH``.
+    """
+    req = requirements_txt_path()
+    cmd = ["pip-audit", "-r", str(req), *extra_args]
+    proc = subprocess.run(cmd, cwd=req.parent, capture_output=True, text=True)
+    return int(proc.returncode), proc.stdout or "", proc.stderr or ""
