@@ -76,6 +76,8 @@ def test_apt_repo_releases_doc_lists_artifact_sources_at_glance_h1():
 
 def test_apt_repo_releases_doc_lists_ci_artifact_and_changelog():
     text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
+    assert "**Checklist shorthand (what lands in one release directory / GitHub Release):**" in text
+    assert "**Stack only** — from **`le-vibe-deb`**" in text
     assert "**Combined drop**" in text
     assert "CI manifest alone" in text
     assert "ci-qa-hardening.md" in text
