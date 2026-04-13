@@ -84,6 +84,8 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     assert "Success output" in text
     assert "Maintainer build output" in text
     assert "Pre-publish artifact checklist" in text
+    assert "Checklist shorthand" in text
+    assert "Pre-publish — Checklist shorthand" in text
     assert "Tagging discipline" in text
     assert "Exit codes:" in text
     assert "PM_DEB_BUILD_ITERATION.md (Exit codes" in text
@@ -187,6 +189,8 @@ def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():
     assert "**Integrity**" in text
     assert "**Combined drop:**" in text
     assert "CI manifest" in text or "CI SHA256SUMS" in text
+    assert "**Checklist shorthand**" in text
+    assert "three lines for stack-only" in text
 
 
 def test_pm_deb_build_iteration_doc_exit_codes_table_step14():
