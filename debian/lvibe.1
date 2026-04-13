@@ -48,6 +48,14 @@ Run \fBsha256sum \-c SHA256SUMS\fR in a release directory (artifact extract). \f
 .B lvibe pip-audit
 .RI [ pip\-audit_options ]
 Run \fBpip\-audit \-r\fR against \fBle\-vibe/requirements.txt\fR in a git clone (\fBpip install pip\-audit\fR). Not available when the stack \fB.deb\fR omits \fBrequirements.txt\fR — \fBdocs/sbom\-signing\-audit.md\fR (H2).
+.TP
+.B lvibe ci-smoke
+.RI [ args ]
+Run \fBpackaging/scripts/ci\-smoke.sh\fR from the monorepo root (\fBLE_VIBE_REPO_ROOT\fR or parent walk). \fBdocs/ci\-qa\-hardening.md\fR (H3).
+.TP
+.B lvibe ci\-editor\-gate
+.RI [ args ]
+Run \fBpackaging/scripts/ci\-editor\-gate.sh\fR (same as \fB./editor/smoke.sh\fR gate). \fBdocs/ci\-qa\-hardening.md\fR (H3).
 .SH OPTIONS
 See
 .BR le\-vibe (1).

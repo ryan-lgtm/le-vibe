@@ -258,6 +258,38 @@ def _cmd_pip_audit(argv: list[str]) -> int:
     return rc
 
 
+def _cmd_ci_smoke(argv: list[str]) -> int:
+    """STEP 10 (H3): ``packaging/scripts/ci-smoke.sh`` — ``docs/ci-qa-hardening.md``."""
+    from le_vibe.qa_scripts import EXIT_NO_MONOREPO, run_ci_smoke
+
+    rc = run_ci_smoke(argv)
+    if rc == EXIT_NO_MONOREPO:
+        print(
+            "lvibe ci-smoke: could not find Lé Vibe monorepo (packaging/scripts/ci-smoke.sh). "
+            "Set LE_VIBE_REPO_ROOT to the git checkout, or run from inside the clone. "
+            "See docs/ci-qa-hardening.md (STEP 10 / H3).",
+            file=sys.stderr,
+        )
+        return 1
+    return rc
+
+
+def _cmd_ci_editor_gate(argv: list[str]) -> int:
+    """STEP 10 (H3): ``packaging/scripts/ci-editor-gate.sh`` (editor/ gate)."""
+    from le_vibe.qa_scripts import EXIT_NO_MONOREPO, run_ci_editor_gate
+
+    rc = run_ci_editor_gate(argv)
+    if rc == EXIT_NO_MONOREPO:
+        print(
+            "lvibe ci-editor-gate: could not find Lé Vibe monorepo "
+            "(packaging/scripts/ci-editor-gate.sh). Set LE_VIBE_REPO_ROOT or run from the clone. "
+            "See docs/ci-qa-hardening.md (STEP 10 / H3).",
+            file=sys.stderr,
+        )
+        return 1
+    return rc
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -294,6 +326,10 @@ def main() -> int:
         return _cmd_verify_checksums(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "pip-audit":
         return _cmd_pip_audit(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "ci-smoke":
+        return _cmd_ci_smoke(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "ci-editor-gate":
+        return _cmd_ci_editor_gate(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",

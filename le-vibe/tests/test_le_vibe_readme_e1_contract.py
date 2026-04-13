@@ -94,6 +94,8 @@ def test_le_vibe_readme_lists_step9_h2_sbom():
 def test_le_vibe_readme_lists_step10_h3_qa_ci():
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
     assert "QA CI (STEP 10 / H3)" in text
+    assert "lvibe ci-smoke" in text
+    assert "ci-editor-gate" in text
     assert "ci-qa-hardening.md" in text
     assert "ci-smoke.sh" in text
     assert "ci-editor-gate.sh" in text
