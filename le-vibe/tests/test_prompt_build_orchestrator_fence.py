@@ -25,6 +25,7 @@ def test_master_orchestrator_fence_extractable():
     assert "Full-product maintainer `.deb`" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "--apt-sim" in text
+    assert "--json" in text
 
 
 def test_print_master_orchestrator_prompt_script_header_mentions_queue():

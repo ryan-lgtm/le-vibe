@@ -29,6 +29,7 @@ def test_master_iteration_loop_fence_extractable():
     assert "Full-product install" in fence
     assert "verify-step14-closeout.sh --require-stack-deb" in fence
     assert "--apt-sim" in fence
+    assert "--json" in fence
     assert "le-vibe-deb" in fence
 
 

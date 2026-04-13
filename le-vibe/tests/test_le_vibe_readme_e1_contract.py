@@ -50,6 +50,7 @@ def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
     assert "Success output (`--with-ide`)" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
+    assert "--json" in text
     assert "Maintainer build output" in text
 
 
