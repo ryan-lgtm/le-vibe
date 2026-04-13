@@ -22,6 +22,10 @@ Usage: editor/print-ci-tarball-codium-path.sh /path/to/vscodium-linux-build.tar.
 Unpack a linux_compile artifact to a temp directory and print the absolute path to
 VSCode-linux-*/bin/codium (STEP 14.f — editor/BUILD.md).
 
+Obtain vscodium-linux-build.tar.gz: packaging/scripts/print-github-linux-compile-artifact-hint.sh
+(browser Actions UI or gh run download). To install into editor/vscodium/ instead of a temp dir,
+use packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh (same tarball).
+
 GitHub Actions wraps vscodium-linux-build.tar.gz in a .zip — unzip first, then pass
 the .tar.gz path to this script.
 
@@ -42,6 +46,7 @@ fi
 ARG="$1"
 if [[ ! -f "$ARG" ]]; then
   echo "${0##*/}: not a regular file: $ARG — pass the path to vscodium-linux-build.tar.gz from CI (editor/BUILD.md 14.f)." >&2
+  echo "${0##*/}: obtain tarball: ${ROOT}/packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser or gh)" >&2
   exit 1
 fi
 if ! command -v realpath >/dev/null 2>&1; then

@@ -56,6 +56,7 @@ def test_print_ci_tarball_codium_path_documents_14f():
     assert 'exec "${ROOT}/editor/print-vsbuild-codium-path.sh"' in text
     assert "linux_compile" in text
     assert "not a regular file:" in text
+    assert "obtain tarball:" in text
     assert "realpath not on PATH" in text
     assert "tar not on PATH" in text
     assert "tar extract failed" in text
@@ -71,3 +72,5 @@ def test_print_ci_tarball_codium_path_documents_14f():
     assert ".zip" in text
     assert "unzip first" in text
     assert "GitHub Actions" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
