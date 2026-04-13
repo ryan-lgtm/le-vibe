@@ -134,6 +134,11 @@ def test_pm_deb_build_iteration_doc_master_orchestrator_queue_step14():
     assert "--apt-sim" in head
     assert "--json" in head
     assert "apt_sim_note" in head
+    assert "Compile fail-fast (STEP 14" in head
+    assert "ci-vscodium-bash-syntax.sh" in head
+    assert "ci-editor-nvmrc-sync.sh" in head
+    assert "ci-vscodium-linux-dev-build.sh" in head
+    assert "apt-repo-releases.md" in head
 
 
 def test_pm_deb_build_iteration_doc_success_output_orders_build_vs_test_host_step14():

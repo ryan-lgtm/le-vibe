@@ -15,6 +15,8 @@
 
 **Fresh clone (14.b / STEP 14):** **`le-vibe-ide`** repacks a compiled **`VSCode-linux-*`** tree from **`editor/vscodium/`** — if that directory is empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the repository root before **`editor/BUILD.md`** fetch/build steps — same as **`editor/README.md`** *Fresh clone (14.b)*.
 
+**Compile fail-fast (STEP 14, same as `./editor/smoke.sh` / `build-le-vibe-ide.yml` *linux_compile*):** **`packaging/scripts/ci-vscodium-bash-syntax.sh`** → **`packaging/scripts/ci-editor-nvmrc-sync.sh`** → **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** (→ **`editor/vscodium/dev/build.sh`**) — **[`PRODUCT_SPEC.md`](PRODUCT_SPEC.md)** *Prioritization*; **[`editor/BUILD.md`](../editor/BUILD.md)** (*CI*); **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** (*IDE package*).
+
 ## Invocations (repository root)
 
 **Working directory:** **`build-le-vibe-debs.sh`** resolves the monorepo root from the script path and **`cd`s there** before **`dpkg-buildpackage`** — you can invoke it **from any cwd** (absolute path to the script, or a relative path from where you are). Examples below still spell **`packaging/scripts/...`** as if **`cd /path/to/r-vibe`** for consistency with **`--help`**.
