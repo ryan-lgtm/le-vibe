@@ -14,6 +14,9 @@ def test_stage_le_vibe_ide_deb_script_header_documents_h1_vs_ci_step14():
     """STEP 14: staging script header matches ci.yml stack-only vs maintainer IDE .deb."""
     root = _repo_root()
     text = (root / "packaging" / "scripts" / "stage-le-vibe-ide-deb.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
@@ -62,6 +65,9 @@ def test_build_le_vibe_ide_deb_script_header_documents_h1_vs_ci_step14():
     """STEP 14: IDE .deb script header states out-of-band vs ci.yml le-vibe-deb."""
     root = _repo_root()
     text = (root / "packaging" / "scripts" / "build-le-vibe-ide-deb.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "build-le-vibe-debs.sh --with-ide" in text

@@ -17,6 +17,9 @@ def test_build_le_vibe_debs_script_header_documents_ci_vs_with_ide_step14():
     """STEP 14 / §7.3: one-shot script header ties ci.yml le-vibe-deb to optional --with-ide."""
     root = Path(__file__).resolve().parents[2]
     text = (root / "packaging" / "scripts" / "build-le-vibe-debs.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "IDE package" in text
