@@ -137,6 +137,7 @@ def test_product_spec_prioritization_names_ci_le_vibe_deb_vs_ide_deb_step14():
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "preflight-step14-closeout.sh" in text
     assert "ide-prereqs --print-closeout-commands" in text
+    assert "probe-vscode-linux-build.sh" in text
     assert "--apt-sim" in text
     assert "--json" in text
     assert "apt_sim_note" in text
