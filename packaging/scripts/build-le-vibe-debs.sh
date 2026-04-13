@@ -54,7 +54,8 @@ Artifacts:
 
 Publishing / releases (H1):
   docs/apt-repo-releases.md — Pre-publish artifact checklist, SHA256SUMS, debian/changelog ↔ CHANGELOG.md
-  when tagging; default ci.yml le-vibe-deb is stack-only vs full-product Stack + IDE drops.
+  when tagging; dpkg-parsechangelog -S Version -l debian/changelog before stack v... tag / gh release — same doc (Versioned changelog).
+  default ci.yml le-vibe-deb is stack-only vs full-product Stack + IDE drops.
   Combined drop: CI stack artifact + le-vibe-ide built separately — merge into one folder, regenerate SHA256SUMS
   (CI SHA256SUMS alone is wrong once you add the second .deb) — same doc (Pre-publish — Combined drop).
   Tagging discipline — ide-v* (linux_compile CI) vs stack debian/changelog: same doc (Tagging discipline).

@@ -65,6 +65,7 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     text = (root / "packaging" / "scripts" / "build-le-vibe-debs.sh").read_text(encoding="utf-8")
     assert "DEB_BUILD_OPTIONS=parallel=$(nproc)" in text
     assert "parallel=$(nproc) for faster stack" in text
+    assert "dpkg-parsechangelog" in text
     assert "Full-product (--with-ide)" in text
     assert "docs/PM_DEB_BUILD_ITERATION.md" in text
     assert "docs/apt-repo-releases.md" in text
@@ -116,6 +117,8 @@ def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():
     assert "GitHub Releases + checksums" in text
     assert "Stack `v…` release tags" in text
     assert "Stack release tags vs `ide-v`*" in text
+    assert "dpkg-parsechangelog" in text
+    assert "*Versioned changelog*" in text
     assert "**Integrity**" in text
     assert "**Combined drop:**" in text
     assert "CI manifest" in text or "CI SHA256SUMS" in text
