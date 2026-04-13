@@ -10,6 +10,8 @@
 | **[`packaging/flatpak/README.md`](../packaging/flatpak/README.md)** | Local build commands; **Flathub** submission notes (separate `flathub` git repo, AppStream, **`flatpak-builder-lint`**). |
 | **[`packaging/appimage/`](../packaging/appimage/)** | **`AppRun`**, **`build-appimage.sh`**, **[`README.md`](../packaging/appimage/README.md)** — stages **`AppDir/`** and runs **`appimagetool`** when available. |
 
+From a git clone, **`lvibe flatpak-appimage`** lists these paths (**`--path-only doc`** / **`flatpak`** / … for one file) — same manifest as **`pytest`** [`test_flatpak_appimage_paths.py`](../le-vibe/tests/test_flatpak_appimage_paths.py).
+
 **Rough target — Flathub:** Use this manifest as the **upstream** source for a Flathub submission (typically a dedicated repo under **`github.com/flathub`**, per Flathub’s workflow). Rename **`app-id`** if required for **reverse-DNS** verification (e.g. **`io.github.<org>.<name>`** once the GitHub namespace is fixed).
 
 **Supported baseline Linux install** remains the **native `.deb`** ([`apt-repo-releases.md`](apt-repo-releases.md), [`sbom-signing-audit.md`](sbom-signing-audit.md)). Flatpak/AppImage are **additional** channels for the **stack**; they do **not** replace the **`.deb`** story for maintainer CI in this repo.

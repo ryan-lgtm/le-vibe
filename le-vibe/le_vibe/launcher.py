@@ -388,6 +388,66 @@ def _cmd_product_surface(argv: list[str]) -> int:
     return 0
 
 
+def _cmd_flatpak_appimage(argv: list[str]) -> int:
+    """STEP 13 (H7): print paths to Flatpak/AppImage templates — ``docs/flatpak-appimage.md``."""
+    from le_vibe.flatpak_appimage_paths import H7_MANIFEST, iter_h7_paths
+    from le_vibe.qa_scripts import find_monorepo_root
+
+    p = argparse.ArgumentParser(
+        prog="lvibe flatpak-appimage",
+        description="List paths for H7 alternate-bundle templates (Flatpak, AppImage).",
+    )
+    p.add_argument(
+        "--path-only",
+        metavar="KEY",
+        nargs="?",
+        const="doc",
+        default=None,
+        help=(
+            "print one path: doc, flatpak, flatpak-readme, apprun, build, appimage-readme "
+            "(default key when flag is present: doc)"
+        ),
+    )
+    args = p.parse_args(argv)
+    root = find_monorepo_root()
+    if root is None:
+        print(
+            "lvibe flatpak-appimage: could not find monorepo root "
+            "(set LE_VIBE_REPO_ROOT or run from a git clone). "
+            "See docs/PM_STAGE_MAP.md STEP 13 / H7.",
+            file=sys.stderr,
+        )
+        return 1
+    key_map = {
+        "doc": H7_MANIFEST[0][1],
+        "flatpak": H7_MANIFEST[1][1],
+        "flatpak-readme": H7_MANIFEST[2][1],
+        "apprun": H7_MANIFEST[3][1],
+        "build": H7_MANIFEST[4][1],
+        "appimage-readme": H7_MANIFEST[5][1],
+    }
+    if args.path_only is not None:
+        k = args.path_only
+        if k not in key_map:
+            print(
+                f"lvibe flatpak-appimage: unknown key {k!r} — use: {', '.join(sorted(key_map))}",
+                file=sys.stderr,
+            )
+            return 2
+        rel = key_map[k]
+        path = (root / rel).resolve()
+        if not path.is_file():
+            print(f"lvibe flatpak-appimage: missing {path}", file=sys.stderr)
+            return 1
+        print(path)
+        return 0
+    print("Authority: docs/flatpak-appimage.md (STEP 13 / H7), docs/PM_STAGE_MAP.md")
+    for label, path, ok in iter_h7_paths(root):
+        status = "OK" if ok else "MISSING"
+        print(f"[{status}] {label}: {path}")
+    return 0
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -432,6 +492,8 @@ def main() -> int:
         return _cmd_brand_paths(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "product-surface":
         return _cmd_product_surface(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "flatpak-appimage":
+        return _cmd_flatpak_appimage(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",
