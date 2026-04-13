@@ -16,6 +16,8 @@ def test_launcher_argparse_first_run_flags_help_mentions_logs_step6():
     assert "--skip-first-run" in text
     assert "--force-first-run" in text
     assert "lvibe logs" in text
+    assert "Live:" in text
+    assert "tail -f" in text
     assert "STEP 6" in text
     assert "LE_VIBE_VERBOSE" in text
 

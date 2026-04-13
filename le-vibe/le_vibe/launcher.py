@@ -1323,7 +1323,7 @@ def main() -> int:
         action="store_true",
         help=(
             "do not run Phase 1 product bootstrap (Ollama install/model pull) before the editor; "
-            "if bootstrap failed earlier: stderr, LE_VIBE_VERBOSE=1, lvibe logs (STEP 6)"
+            "if bootstrap failed earlier: stderr, LE_VIBE_VERBOSE=1, lvibe logs (path + Live: tail -f; STEP 6)"
         ),
     )
     parser.add_argument(
@@ -1331,7 +1331,7 @@ def main() -> int:
         action="store_true",
         help=(
             "re-run first-run bootstrap even if ~/.config/le-vibe/.first-run-complete exists; "
-            "LE_VIBE_VERBOSE=1 and lvibe logs for diagnostics (STEP 6)"
+            "LE_VIBE_VERBOSE=1 and lvibe logs (path + Live: tail -f) for diagnostics (STEP 6)"
         ),
     )
     args = parser.parse_args()
