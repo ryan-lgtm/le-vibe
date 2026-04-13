@@ -146,6 +146,8 @@ Checks local STEP 14 / §7.3 readiness:
   3) packaging/le-vibe-ide_*.deb exists and passes content checks:
      - launcher payload paths exist (`le-vibe.desktop`, `/usr/lib/le-vibe/bin/codium`),
      - desktop content contains `Name=Lé Vibe` and `Exec=/usr/lib/le-vibe/bin/codium %F`,
+     - optional (when desktop-file-validate is on PATH): Freedesktop validation of packaged
+       `le-vibe.desktop` (same extraction as preflight-step14-closeout / build-le-vibe-ide-deb.sh),
      - package metadata is `Package: le-vibe-ide`, `Architecture: amd64`.
 
 Options:
@@ -239,6 +241,30 @@ assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.des
 log_note "    ide deb metadata check: Package=le-vibe-ide, Architecture=amd64"
 assert_deb_field_equals "$ide_deb_latest" "Package" "le-vibe-ide"
 assert_deb_field_equals "$ide_deb_latest" "Architecture" "amd64"
+
+if command -v desktop-file-validate >/dev/null 2>&1; then
+  log_note "    ide desktop Freedesktop check: desktop-file-validate (packaged le-vibe.desktop)"
+  _desk_tmp="$(mktemp "${TMPDIR:-/tmp}/le-vibe-desk-verify-XXXXXXXX.desktop")"
+  _desk_ok=0
+  if dpkg-deb --fsys-tarfile "$ide_deb_latest" | tar -xOf - "usr/share/applications/le-vibe.desktop" > "$_desk_tmp" 2>/dev/null && [[ -s "$_desk_tmp" ]]; then
+    _desk_ok=1
+  elif dpkg-deb --fsys-tarfile "$ide_deb_latest" | tar -xOf - "./usr/share/applications/le-vibe.desktop" > "$_desk_tmp" 2>/dev/null && [[ -s "$_desk_tmp" ]]; then
+    _desk_ok=1
+  fi
+  if [[ "$_desk_ok" -ne 1 ]]; then
+    rm -f "$_desk_tmp"
+    echo "verify-step14-closeout: could not extract usr/share/applications/le-vibe.desktop from $ide_deb_latest for desktop-file-validate" >&2
+    exit 1
+  fi
+  if ! desktop-file-validate "$_desk_tmp"; then
+    rm -f "$_desk_tmp"
+    echo "verify-step14-closeout: desktop-file-validate failed on packaged le-vibe.desktop (install desktop-file-utils; see build-le-vibe-ide-deb.sh)" >&2
+    exit 1
+  fi
+  rm -f "$_desk_tmp"
+else
+  log_note "    ide desktop Freedesktop check: skipped (desktop-file-validate not on PATH — install desktop-file-utils for full QA)"
+fi
 
 if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
   log_note "==> Stack package: le-vibe_*.deb (required; resolve-latest-le-vibe-stack-deb.sh)"

@@ -58,6 +58,8 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "assert_deb_field_equals" in text
     assert "assert_deb_file_contains" in text
     assert "assert_deb_path_is_executable" in text
+    assert "desktop-file-validate" in text
+    assert "le-vibe-desk-verify" in text
     assert "assert_apt_simulated_install" in text
     assert "dpkg-deb --contents" in text
     assert "dpkg-deb --field" in text
@@ -164,6 +166,11 @@ EOF
                 encoding="utf-8",
             )
             os.chmod(stub_dir / "tar", 0o755)
+            (stub_dir / "desktop-file-validate").write_text(
+                "#!/usr/bin/env bash\n# Contract stub: real validator may reject minimal fake .desktop.\nexit 0\n",
+                encoding="utf-8",
+            )
+            os.chmod(stub_dir / "desktop-file-validate", 0o755)
             result = subprocess.run(
                 [str(script), "--skip-gate", "--require-stack-deb", "--json"],
                 cwd=str(root),
@@ -265,6 +272,11 @@ EOF
                 encoding="utf-8",
             )
             os.chmod(stub_dir / "tar", 0o755)
+            (stub_dir / "desktop-file-validate").write_text(
+                "#!/usr/bin/env bash\nexit 0\n",
+                encoding="utf-8",
+            )
+            os.chmod(stub_dir / "desktop-file-validate", 0o755)
             (stub_dir / "apt-get").write_text(
                 """#!/usr/bin/env bash
 set -euo pipefail
@@ -360,6 +372,11 @@ EOF
                 encoding="utf-8",
             )
             os.chmod(stub_dir / "tar", 0o755)
+            (stub_dir / "desktop-file-validate").write_text(
+                "#!/usr/bin/env bash\nexit 0\n",
+                encoding="utf-8",
+            )
+            os.chmod(stub_dir / "desktop-file-validate", 0o755)
             result = subprocess.run(
                 [str(script), "--skip-gate", "--apt-sim", "--json"],
                 cwd=str(root),
@@ -456,6 +473,11 @@ EOF
                 encoding="utf-8",
             )
             os.chmod(stub_dir / "tar", 0o755)
+            (stub_dir / "desktop-file-validate").write_text(
+                "#!/usr/bin/env bash\nexit 0\n",
+                encoding="utf-8",
+            )
+            os.chmod(stub_dir / "desktop-file-validate", 0o755)
             result = subprocess.run(
                 [str(script), "--skip-gate", "--require-stack-deb", "--json"],
                 cwd=str(root),
