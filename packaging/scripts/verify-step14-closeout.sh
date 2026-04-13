@@ -210,6 +210,18 @@ set -e
 if [[ "$verify_14c_ec" -ne 0 ]]; then
   _vlb="$("$ROOT/packaging/scripts/probe-vscode-linux-build.sh" "$ROOT")"
   echo "verify-step14-closeout: vscode_linux_build: ${_vlb} (probe-vscode-linux-build.sh — same field as preflight after 14.c)" >&2
+  if [[ "${_vlb}" == "partial" ]]; then
+    REPO_ROOT="$ROOT" PYTHONPATH="$ROOT/le-vibe" python3 -c '
+import os
+from pathlib import Path
+from le_vibe.ide_packaging_paths import vscode_linux_build_status, vscode_linux_bin_filenames
+root = Path(os.environ["REPO_ROOT"])
+_, vs = vscode_linux_build_status(root)
+if vs is not None:
+    names = vscode_linux_bin_filenames(vs) or []
+    print("verify-step14-closeout: vscode_linux_bin_files: " + ", ".join(names))
+' 2>/dev/null || true
+  fi
   echo "verify-step14-closeout: STEP 14.c failed (built codium missing or incomplete). Preflight: ${ROOT}/packaging/scripts/preflight-step14-closeout.sh — docs/PM_DEB_BUILD_ITERATION.md; lvibe ide-prereqs --print-closeout-commands" >&2
   exit 1
 fi
