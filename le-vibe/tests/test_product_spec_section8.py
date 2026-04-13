@@ -237,7 +237,9 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "H1 vs §7.3 .deb bundles" in sec73
     assert "./editor/smoke.sh" in sec73
     assert "linux_compile" in sec73
-    assert "523" in text
+    assert "vscode_linux_build_status" in sec73
+    assert "test_launcher_ide_prereqs.py" in sec73
+    assert "530" in text
 
 
 def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14():

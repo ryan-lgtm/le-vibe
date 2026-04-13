@@ -893,6 +893,12 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
         print("./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb")
         print("./packaging/scripts/verify-step14-closeout.sh --require-stack-deb")
         print("# optional: add --apt-sim or --json to verify — docs/PM_DEB_BUILD_ITERATION.md")
+        if vs_status == "ready":
+            print(
+                "# when preflight + verify are green — maintainer full-product install (stack + IDE .deb) — "
+                "PM_DEB_BUILD_ITERATION.md (*Success output (`--with-ide`)*)"
+            )
+            print("./packaging/scripts/build-le-vibe-debs.sh --with-ide")
         return 0
 
     if args.json:
