@@ -16,6 +16,8 @@ This document is for **maintainers** who publish the **`.deb`** beyond ad-hoc co
 
 Package version and per-release notes live in **`debian/changelog`** (Debian policy format). For **GitHub Releases** body text, also update the root **[`CHANGELOG.md`](../CHANGELOG.md)** (Keep a Changelog style) so users see the same story without reading Debian policy formatting. Between tags, **`[Unreleased]`** may hold **Documentation** / trust-alignment bullets (e.g. **`spec-phase2.md` §14** cross-links) — fold them into a dated **`[x.y.z]`** section when you bump **`debian/changelog`**.
 
+**Dual changelog discipline:** **`debian/changelog`** is authoritative for the **stack** **`.deb`** version (**`dpkg -l le-vibe`** after install). **`CHANGELOG.md`** is the **Keep a Changelog** narrative you paste into **GitHub Releases** — both must describe the **same** **`x.y.z`** before you run the **stack-only** checklist (*Checklist — stack-only GitHub Release* below).
+
 Bump before tagging a release, for example:
 
 ```bash

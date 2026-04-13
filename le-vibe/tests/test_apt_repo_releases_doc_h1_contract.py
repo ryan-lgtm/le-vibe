@@ -28,6 +28,14 @@ def test_apt_repo_releases_doc_lists_minimum_directory_layout_gate():
     assert "gh run download" in text and "le-vibe-deb" in text
 
 
+def test_apt_repo_releases_doc_dual_changelog_discipline_h1():
+    """H1: debian/changelog vs CHANGELOG.md must match before stack tag + checklist."""
+    text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
+    assert "**Dual changelog discipline:**" in text
+    assert "dpkg -l le-vibe" in text
+    assert "Checklist — stack-only GitHub Release" in text
+
+
 def test_apt_repo_releases_doc_lists_stack_release_checklist_h1():
     """H1: ordered checklist ties changelog, tag, ci artifact, verify, gh release."""
     text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
