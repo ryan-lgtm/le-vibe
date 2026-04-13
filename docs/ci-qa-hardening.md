@@ -90,6 +90,16 @@ That wrapper **`exec`**s **`packaging/scripts/ci-editor-gate.sh`** with the same
 
 **Prepare-only (no `dev/build.sh`):** To apply §7.3 branding layers and get a **`VSCode-linux-*`** tree for **`build-le-vibe-ide-deb.sh`** / **`--with-ide`** without waiting on a full Electron compile, **`packaging/scripts/docker-le-vibe-vscodium-prepare-only.sh`** runs the same prepare path as CI inside Docker — **[`editor/BUILD.md`](../editor/BUILD.md)** (*§7.3 prepare-only* / *Preflight*). Still mutates **`editor/vscodium/`**; heavier full compile remains **`docker-le-vibe-vscodium-linux-compile.sh`** above.
 
+### Maintainer triage (`linux_compile` flaky — **not** a merge gate)
+
+Default **`ci.yml`** / **`ci-smoke.sh`** remains the **stack** **`.deb`** + **`pytest`** + **`ci-editor-gate`** bar — optional **`linux_compile`** does **not** block merging (**[`spec-phase2.md`](../spec-phase2.md)** §14 *Honesty vs CI*). When the job **OOM**s, **times out**, or you only need a narrower path to an IDE **`.deb`**:
+
+| Situation | Where to go |
+|-----------|-------------|
+| **OOM** / process killed on a GitHub-hosted runner | **[`editor/BUILD.md`](../editor/BUILD.md)** *Runner realism* / *When full compile fails*; **`packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh`** (local analogue — *Optional full Linux compile* above) |
+| **Timeout** | Same; or **`packaging/scripts/docker-le-vibe-vscodium-prepare-only.sh`** if §7.3 staging + **`build-le-vibe-ide-deb.sh`** is enough without a full **`dev/build.sh`** |
+| **Download / unpack mistakes** | *Download shape (14.f)* above — outer Actions **`.zip`** must be unzipped before **`print-ci-tarball-codium-path.sh`** or unpacking **`vscodium-linux-build.tar.gz`** |
+
 **Publishing (H1 / STEP 14):** **`linux_compile`** uploads **`vscodium-linux-build.tar.gz`** — it does **not** replace the stack **`le-vibe`** **`.deb`** from **`ci.yml`** / **`dpkg-buildpackage`**. When you ship **both** **`.deb`** files after staging from a **`linux_compile`** tree, regenerate **`SHA256SUMS`** over **every** **`*.deb`** / SBOM you attach — **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** *Pre-publish artifact checklist* (**Integrity**); one-shot maintainer build — **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** — **[`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** (*Releases & full-product demo*).
 
 ## What is not automated here

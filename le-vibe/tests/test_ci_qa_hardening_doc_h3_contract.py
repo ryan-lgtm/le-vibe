@@ -45,6 +45,17 @@ def test_ci_qa_hardening_doc_lists_smoke_and_pytest():
     assert "LEVIBE_IDE_LINTIAN_STRICT" in text
 
 
+def test_ci_qa_hardening_doc_linux_compile_maintainer_triage_step14e():
+    """STEP 14.e: H3 doc triage table when linux_compile OOM/timeout — still not a merge gate."""
+    text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
+    assert "### Maintainer triage" in text
+    assert "**not** a merge gate" in text
+    assert "OOM" in text
+    assert "Timeout" in text
+    assert "Download / unpack mistakes" in text
+    assert "Honesty vs CI" in text
+
+
 def test_ci_qa_hardening_doc_linux_compile_quick_path_triggers_step14e():
     """STEP 14.e: H3 doc lists opt-in linux_compile triggers — not a merge gate; points at BUILD.md + tarball."""
     text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
