@@ -96,6 +96,16 @@ def test_root_readme_continue_section_labels_step3_e2():
     assert "le_vibe.continue_workspace" in text
 
 
+def test_root_readme_welcome_section_labels_step4_e3():
+    """STEP 4 / E3: §4 in-editor welcome surfaces (WELCOME.md, Continue rule 01, lvibe welcome)."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "### In-editor welcome — STEP 4 / E3" in text
+    assert "Master orchestrator STEP 4" in text
+    assert "01-le-vibe-product-welcome.md" in text
+    assert "lvibe open-welcome" in text
+    assert "test_editor_welcome.py" in text
+
+
 def test_root_readme_documents_ai_pilot_and_user_gate():
     text = (_repo_root() / "README.md").read_text(encoding="utf-8")
     assert "Lé Vibe" in text
