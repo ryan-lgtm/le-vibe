@@ -41,6 +41,10 @@ Copy missing agent skill templates into \fB.lvibe/agents/<agent_id>/skill.md\fR 
 .RI [ workspace ]
 Open \fB.lvibe/WELCOME.md\fR (PRODUCT_SPEC §4) in the editor. \fIworkspace\fR defaults to the current directory; \fB.lvibe/\fR must already exist from a prior consent\-gated open. Does not start Ollama or first\-run bootstrap.
 .TP
+.B lvibe apply\-opening\-skip
+.RI [ workspace ]
+PM session skip hook — \fBdocs/SESSION_ORCHESTRATION_SPEC.md\fR STEP 2.
+.TP
 .B lvibe hygiene
 .RI [ hygiene_options ]
 Validate \fB.lvibe/\fR manifest, session JSON, and chunk path refs — same as \fBpython3 \-m le_vibe.hygiene\fR and \fBlvibe\-hygiene\fR(1).

@@ -176,6 +176,7 @@ def test_le_vibe_readme_lists_core_e1_contract_modules():
     assert "open-welcome" in text
     assert "test_launcher_open_welcome.py" in text
     assert "PM session (STEP 2)" in text
+    assert "apply-opening-skip" in text
     assert "schemas/session-manifest.v1.example.json" in text
     assert "session_manifest_example_source_path" in text
     assert "ensure_pm_session_artifacts" in text

@@ -516,6 +516,45 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
     return 0
 
 
+def _cmd_apply_opening_skip(argv: list[str]) -> int:
+    """STEP 2: advance ``opening_intent`` when the user skips — ``SESSION_ORCHESTRATION_SPEC`` §4."""
+    from le_vibe.session_orchestrator import apply_opening_skip
+
+    p = argparse.ArgumentParser(
+        prog="lvibe apply-opening-skip",
+        description=(
+            "If session-manifest meta.current_step_id is opening_intent, advance to workspace_scan "
+            "or agent_bootstrap per on_skip and workspace contents; may write workspace-scan stub."
+        ),
+    )
+    p.add_argument(
+        "workspace",
+        nargs="?",
+        default=".",
+        help="workspace root (default: current directory)",
+    )
+    args = p.parse_args(argv)
+    root = Path(args.workspace).resolve()
+    lv = root / ".lvibe"
+    if not lv.is_dir():
+        print(
+            f"lvibe apply-opening-skip: missing {lv} — open this workspace with lvibe after consent "
+            "(PRODUCT_SPEC §5.1).",
+            file=sys.stderr,
+        )
+        return 1
+    nxt = apply_opening_skip(root, skipped_opening=True)
+    if nxt is None:
+        print(
+            "lvibe apply-opening-skip: no change (not at opening_intent or missing session-manifest.json). "
+            "See docs/SESSION_ORCHESTRATION_SPEC.md STEP 2.",
+            file=sys.stderr,
+        )
+        return 1
+    print(nxt)
+    return 0
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -564,6 +603,8 @@ def main() -> int:
         return _cmd_flatpak_appimage(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "ide-prereqs":
         return _cmd_ide_prereqs(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "apply-opening-skip":
+        return _cmd_apply_opening_skip(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",
