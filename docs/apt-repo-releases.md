@@ -72,7 +72,8 @@ When you cut a **release** (tag + GitHub Release):
 
 1. Pick a **green** workflow run on **`main`** / **`master`** (or build locally with **`dpkg-buildpackage -us -uc -b`** and regenerate checksums as below).
 2. Download artifact **`le-vibe-deb`** (ZIP from **Actions → workflow run → Artifacts**), or use the **`gh`** CLI:  
-   `gh run download <run-id> -n le-vibe-deb -D ./release-dir`
+   `gh run download <run-id> -n le-vibe-deb -D ./release-dir`  
+   Unzip the bundle so **`SHA256SUMS`**, **`*.deb`**, and **`le-vibe-python.cdx.json`** sit in one directory (same layout after **`gh run download`** — the artifact is a **`.zip`** wrapper around those files).
 3. Attach to the GitHub Release: **`*.deb`**, **`SHA256SUMS`**, and optionally **`le-vibe-python.cdx.json`** (already listed in **`SHA256SUMS`**).
 4. Paste **`CHANGELOG.md`** section for that version into the Release description.
 5. **Optional (`gh` CLI):** after you push a **version tag** that matches **`debian/changelog`** / **`CHANGELOG.md`** (see *Tagging discipline* above), you can attach the same files in one step, for example:  
@@ -84,6 +85,8 @@ When you cut a **release** (tag + GitHub Release):
 ```bash
 sha256sum -c SHA256SUMS
 ```
+
+Same check via the **`le-vibe`** CLI after the stack **`.deb`** is installed: **`lvibe verify-checksums -C .`** (or **`-C /path/to/extracted-artifact`**); **`--json`** for scripts — **[`le-vibe/README.md`](../le-vibe/README.md)** *Release channel / checksums (STEP 8 / H1)*.
 
 Then install the **`.deb`**:
 
