@@ -123,6 +123,8 @@ def test_ide_prereqs_print_closeout_partial_hint(
     assert "Partial tree" in out
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in out
     assert "print-github-linux-compile-artifact-hint.sh" in out
+    assert "print-step14-vscode-linux-bin-files.sh" in out
+    assert "print-ci-tarball-codium-path.sh" in out
     assert "./editor/use-node-toolchain.sh" in out
     assert "./editor/fetch-vscode-sources.sh" in out
     assert "(cd editor/vscodium && ./dev/build.sh)" in out

@@ -904,6 +904,14 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
                 "./packaging/scripts/print-github-linux-compile-artifact-hint.sh"
             )
             print(
+                "# bin/ inventory (same as ide-prereqs --json vscode_linux_bin_files): "
+                "./packaging/scripts/print-step14-vscode-linux-bin-files.sh"
+            )
+            print(
+                "# temp unpack tarball → print codium path (does not vendor into editor/vscodium/): "
+                "./editor/print-ci-tarball-codium-path.sh /path/to/vscodium-linux-build.tar.gz"
+            )
+            print(
                 "# packaging/scripts/build-le-vibe-debs.sh --with-ide exits before stack "
                 "dpkg-buildpackage until probe-vscode-linux-build.sh is ready (or use "
                 "--vs-build PATH/bin/codium) — docs/PM_DEB_BUILD_ITERATION.md (*Failure "
