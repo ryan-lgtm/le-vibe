@@ -54,6 +54,8 @@ def test_editor_readme_lists_production_deb_pair_step14():
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "--json" in text
     assert "apt_sim_note" in text
+    assert "build machine" in text
+    assert "test host" in text
 
 
 def test_editor_readme_path_table_lists_fine_grain_scripts():

@@ -144,6 +144,8 @@ def test_product_spec_prioritization_names_ci_le_vibe_deb_vs_ide_deb_step14():
     assert "Maintainer build output" in text
     assert "PM_STAGE_MAP.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
+    assert "build machine" in text
+    assert "test host" in text
 
 
 def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci():

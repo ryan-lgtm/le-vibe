@@ -185,6 +185,8 @@ def test_editor_build_md_contract_debian_section_stack_ide_one_shot_step14():
     assert "--apt-sim" in text
     assert "--json" in text
     assert "apt_sim_note" in text
+    assert "build machine" in text
+    assert "test host" in text
 
 
 def test_editor_build_md_contract_default_le_vibe_editor_packaging_14g():
