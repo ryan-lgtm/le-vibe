@@ -170,6 +170,7 @@ def test_pm_deb_build_iteration_doc_json_closeout_payload_lists_vscode_linux_bui
     assert "vscode_linux_build" in sec
     assert "lvibe ide-prereqs" in sec
     assert "codium_path" in sec
+    assert "desktop_file_validate" in sec
 
 
 def test_pm_deb_build_iteration_doc_success_output_orders_build_vs_test_host_step14():
@@ -359,6 +360,7 @@ def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14()
     assert "apt_sim_note" in payload
     assert "not_requested" in payload
     assert "requested_without_stack_requirement" in payload
+    assert "desktop_file_validate" in payload
 
 
 def test_pm_deb_build_iteration_doc_failure_with_ide_fail_fast_probe_step14():
