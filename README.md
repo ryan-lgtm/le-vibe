@@ -284,7 +284,9 @@ pip install pytest
 python3 -m pytest tests/
 ```
 
-## Operator troubleshooting & observability
+## Operator troubleshooting & observability — STEP 6 / E5
+
+**Master orchestrator STEP 6** (E5 — **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)**): **structured** operator visibility for **managed Ollama**, **first-run**, **launcher**, and **workspace** events — **no third-party telemetry**; local **JSON Lines** only (**[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** §7 / **[`docs/privacy-and-telemetry.md`](docs/privacy-and-telemetry.md)**). Implementation **`le_vibe.structured_log`**; tests **`test_structured_log.py`**. Package README: **[`le-vibe/README.md`](le-vibe/README.md)** *Observability (STEP 6 / E5)*.
 
 - **Structured log (local only):** **`~/.config/le-vibe/le-vibe.log.jsonl`** — append-only **JSON Lines** with UTC **`ts`**, **`component`**, **`event`**, and context fields. Typical **`component`** values: **`managed_ollama`** (serve/stop), **`first_run`** (bootstrap), **`launcher`** (editor spawn, first-run exit), **`workspace`** (**.lvibe/** consent decisions, **`lvibe_storage`** compaction). **Nothing is sent to a Lé Vibe–hosted telemetry endpoint** — see **`docs/privacy-and-telemetry.md`**. Set **`LE_VIBE_STRUCTURED_LOG=0`** to disable logging entirely. Live tail: **`tail -f ~/.config/le-vibe/le-vibe.log.jsonl`** (optionally pipe through **`jq`** if installed). Correlate with **`~/.config/le-vibe/managed_ollama.json`** when debugging port **11435**.
 - **Managed Ollama fails (launcher exit 6):** Port **`11435`** may already be in use by another process; stop it or pass **`lvibe --port N`**. Ensure **`ollama`** is on **`PATH`** (`which ollama`).

@@ -11,6 +11,10 @@ def _repo_root() -> Path:
 
 def test_root_readme_operator_troubleshooting_lists_components_and_tail():
     text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "## Operator troubleshooting & observability — STEP 6 / E5" in text
+    assert "Master orchestrator STEP 6" in text
+    assert "no third-party telemetry" in text
+    assert "test_structured_log.py" in text
     assert "Operator troubleshooting & observability" in text
     assert "le-vibe.log.jsonl" in text
     assert "managed_ollama" in text
