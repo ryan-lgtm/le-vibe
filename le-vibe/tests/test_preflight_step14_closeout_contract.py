@@ -37,6 +37,7 @@ def test_preflight_step14_closeout_script_documents_checks() -> None:
     assert "vscode_linux_bin_files" in text
     assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
 
 
 def test_preflight_step14_closeout_prints_vscode_linux_build_line() -> None:
@@ -56,3 +57,15 @@ def test_preflight_step14_closeout_prints_vscode_linux_build_line() -> None:
 def test_verify_step14_closeout_mentions_preflight() -> None:
     text = (_repo_root() / "packaging" / "scripts" / "verify-step14-closeout.sh").read_text(encoding="utf-8")
     assert "preflight-step14-closeout.sh" in text
+
+
+def test_print_github_linux_compile_artifact_hint_lists_browser_and_gh() -> None:
+    """STEP 14: offline hint documents Actions UI (no gh) and gh run download."""
+    root = _repo_root()
+    script = root / "packaging" / "scripts" / "print-github-linux-compile-artifact-hint.sh"
+    r = subprocess.run([str(script)], cwd=str(root), capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    out = r.stdout
+    assert "Actions" in out
+    assert "gh run" in out
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in out

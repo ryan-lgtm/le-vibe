@@ -14,9 +14,9 @@ Print copy/paste commands to download **vscodium-linux-build.tar.gz** from CI jo
 (workflow **build-le-vibe-ide.yml**). Artifact upload name: **le-vibe-vscodium-linux-<run_id>**
 (same **run_id** appears in the GitHub Actions URL and in that artifact name).
 
-Requires **gh** (GitHub CLI) authenticated for the repo, and a **successful** **linux_compile** run
-(manual **workflow_dispatch** with **vscodium_linux_compile**, **workflow_call** with that input,
-or push tag **ide-v***).
+You do **not** need the GitHub CLI: use the **Actions** tab in the browser (see body output) **or** **gh**
+below. You need a **successful** **linux_compile** run (manual **workflow_dispatch** with
+**vscodium_linux_compile**, **workflow_call** with that input, or push tag **ide-v***).
 
 After download, GitHub may deliver a **.zip** wrapper — unzip to reach **vscodium-linux-build.tar.gz**,
 then vendor it:
@@ -41,14 +41,19 @@ fi
 echo "# === CI tarball — build-le-vibe-ide.yml job linux_compile (14.e) → 14.f ==="
 echo "# Artifact contains: vscodium-linux-build.tar.gz (VSCode-linux-* tree)."
 echo "#"
+echo "# --- A) Browser (no gh): repository → Actions → workflow \"build-le-vibe-ide\" →"
+echo "#    open a run where job \"linux_compile\" succeeded → Artifacts → download"
+echo "#    \"le-vibe-vscodium-linux-<run_id>\" (.zip) → unzip → vscodium-linux-build.tar.gz"
+echo "#"
+echo "# --- B) GitHub CLI (optional) ---"
 echo "# 1) List recent runs (pick a run_id where job linux_compile succeeded):"
 echo "#    gh run list -w build-le-vibe-ide.yml -L 15"
 echo "#"
 echo "# 2) Download (replace RUN_ID twice — same number in -n and in the artifact name):"
 echo "#    gh run download RUN_ID -n le-vibe-vscodium-linux-RUN_ID -D /tmp/lv-vscodium-art"
 echo "#"
-echo "# 3) Unzip if GitHub wrapped the file, then install into editor/vscodium/:"
-echo "#    packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh /tmp/lv-vscodium-art/vscodium-linux-build.tar.gz --yes"
+echo "# --- Install tarball into editor/vscodium/ (after A or B) ---"
+echo "#    packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh /path/to/vscodium-linux-build.tar.gz --yes"
 echo "#"
-echo "# 4) Confirm:"
+echo "# --- Confirm ---"
 echo "#    ./packaging/scripts/probe-vscode-linux-build.sh"
