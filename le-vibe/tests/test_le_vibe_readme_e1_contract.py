@@ -122,6 +122,7 @@ def test_le_vibe_readme_lists_step12_h8_product_surface():
     assert "flatpak-appimage" in text
     assert "Trust / H8 — product surface (STEP 12)" in text
     assert "product-surface" in text
+    assert "--json" in text
     assert "ISSUE_TEMPLATE" in text
     assert "dependabot.yml" in text
 
