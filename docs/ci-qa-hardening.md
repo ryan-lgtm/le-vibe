@@ -70,6 +70,20 @@ That wrapper **`exec`**s **`packaging/scripts/ci-editor-gate.sh`** with the same
 
 **Branding (14.d):** this **IDE smoke** path does **not** prove Lé Vibe–visible product identity — only layout / syntax / toolchain parity. Staging map **[`editor/le-vibe-overrides/branding-staging.checklist.md`](../editor/le-vibe-overrides/branding-staging.checklist.md)** — read *PRODUCT_SPEC §7.2 (read before overrides)* first (**14.d**, **`docs/PRODUCT_SPEC.md` §7.2**); see **`editor/README.md`** *14.c vs 14.d*.
 
+## Optional full Linux compile (`linux_compile`, STEP 14.e)
+
+**Not a default merge gate:** the fast **`linux`** job runs on **`pull_request`**; job **`linux_compile`** is **opt-in** only — green **`ci.yml`** does **not** depend on it. Same **honesty** bar as **[`spec-phase2.md`](../spec-phase2.md)** §14 *Honesty vs CI* (full Electron compile is **additive**, not implied by stack **`.deb`** CI).
+
+| How to run **`linux_compile`** | Details |
+|--------------------------------|---------|
+| **Manual dispatch** | GitHub **Actions** → workflow **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** → **Run workflow** → enable input **`vscodium_linux_compile`** (**boolean** `true`). |
+| **Reusable / alias** | **[`build-linux.yml`](../.github/workflows/build-linux.yml)** **`workflow_dispatch`** forwards **`vscodium_linux_compile`** via **`workflow_call`** — same job definition. |
+| **Tag** | Push a tag matching **`ide-v*`** (e.g. **`ide-v0.1.0`**) — **`linux_compile`** **`if:`** includes **`refs/tags/ide-v`** (see workflow file). |
+
+**Artifact:** **`vscodium-linux-build.tar.gz`** (ZIP name like **`le-vibe-vscodium-linux-<run_id>`**). Unpack so **`VSCode-linux-*`** sits under **`editor/vscodium/`**, then **`packaging/scripts/build-le-vibe-ide-deb.sh`** or **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** — full unpack / **`.deb`** flow — **[`editor/BUILD.md`](../editor/BUILD.md)** (*After a successful `linux_compile`*, *14.f*).
+
+**Runner realism:** Default **GitHub-hosted** images may **OOM** or exceed **time** on a full upstream compile — **[`editor/BUILD.md`](../editor/BUILD.md)** (*When full compile fails* / *Runner realism*). For a repeatable local analogue of the CI environment, **`packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh`** documents the same **`ubuntu:22.04`**-style base as job **`linux_compile`**.
+
 ## What is not automated here
 
 - **ShellCheck** on every script — optional locally (`shellcheck packaging/scripts/*.sh`); not required in default CI to keep images small.

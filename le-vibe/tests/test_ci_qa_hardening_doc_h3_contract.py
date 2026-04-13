@@ -45,6 +45,20 @@ def test_ci_qa_hardening_doc_lists_smoke_and_pytest():
     assert "LEVIBE_IDE_LINTIAN_STRICT" in text
 
 
+def test_ci_qa_hardening_doc_linux_compile_quick_path_triggers_step14e():
+    """STEP 14.e: H3 doc lists opt-in linux_compile triggers — not a merge gate; points at BUILD.md + tarball."""
+    text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
+    assert "Optional full Linux compile" in text
+    assert "`linux_compile`, STEP 14.e" in text
+    assert "vscodium_linux_compile" in text
+    assert "build-linux.yml" in text
+    assert "ide-v" in text
+    assert "refs/tags/ide-v" in text
+    assert "Honesty vs CI" in text
+    assert "vscodium-linux-build.tar.gz" in text
+    assert "docker-le-vibe-vscodium-linux-compile.sh" in text
+
+
 def test_ci_qa_hardening_ide_smoke_section_distinguishes_fast_gate_vs_linux_compile():
     """STEP 14: smoke is fast; vendoring / optional linux_compile + tarball live in editor docs."""
     text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
