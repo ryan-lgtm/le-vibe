@@ -330,6 +330,8 @@ def test_pm_deb_build_iteration_doc_731_staging_identity_step14():
     assert "Partial VSCode-linux tree" in text
     assert "print-built-codium-path.sh" in text
     assert "Incomplete Linux build" in text
+    assert "print-vsbuild-codium-path.sh" in text
+    assert "build-le-vibe-ide-deb.sh --help" in text
 
 
 def test_print_pm_deb_build_prompt_extractable():

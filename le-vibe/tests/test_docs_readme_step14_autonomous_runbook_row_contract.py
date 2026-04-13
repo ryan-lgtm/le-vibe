@@ -28,3 +28,5 @@ def test_step14_autonomous_runbook_documents_closeout_verifier():
     assert "Definition of done (STEP 14 honest)" in text
     assert "Partial tree" in text
     assert "print-built-codium-path" in text
+    assert "print-vsbuild-codium-path" in text
+    assert "build-le-vibe-ide-deb.sh --help" in text
