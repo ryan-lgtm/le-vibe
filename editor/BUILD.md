@@ -1,5 +1,7 @@
 # Building the Lé Vibe IDE (local)
 
+**Master orchestrator order:** **0 → 1 → 14 → 2–13 → 15–17** — this file is the **local compile** entry for **STEP 14** / **§7.3** right after baseline **STEP 0–1**. See **[`docs/PROMPT_BUILD_LE_VIBE.md`](../docs/PROMPT_BUILD_LE_VIBE.md)** (*ORDERED WORK QUEUE*, *Rolling iteration — prefer continuation*) and **[`docs/PM_STAGE_MAP.md`](../docs/PM_STAGE_MAP.md)** *Execution order* / **STEP 16** (same pointer as **[`README.md`](README.md)** *Master orchestrator order*).
+
 Compile steps are owned by **VSCodium** upstream. In this monorepo:
 
 1. **Toolchain (14.a):** **[`.nvmrc`](.nvmrc)** — run **`nvm install` / `nvm use`** from **`editor/`** (matches **`vscodium/.nvmrc`**; see **[`README.md`](README.md)**). **Canonical helper:** from the repo root, **`source editor/use-node-toolchain.sh`** (or **`./editor/use-node-toolchain.sh node --version`**) — **[`use-node-toolchain.sh`](use-node-toolchain.sh)**. **Sourcing** prints the active **`node`** binary, semver, and **`editor/.nvmrc`** path on **stderr** (quick confirmation you are on the VSCodium pin before **`get_repo`** / build).

@@ -9,6 +9,14 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_editor_build_md_master_orchestrator_queue_step14():
+    """STEP 14: BUILD.md states Master queue order at the compile entrypoint."""
+    text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "Rolling iteration — prefer continuation" in text
+
+
 def test_editor_build_md_contract_vendoring_pointer():
     text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")
     assert "git submodule update --init editor/vscodium" in text
