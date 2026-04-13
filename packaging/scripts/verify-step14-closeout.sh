@@ -106,10 +106,16 @@ Usage: packaging/scripts/verify-step14-closeout.sh [--require-stack-deb] [--skip
 Checks local STEP 14 / §7.3 readiness:
   1) packaging/scripts/ci-editor-gate.sh (unless --skip-gate),
   2) editor/verify-14c-local-binary.sh (requires VSCode-linux-*/bin/codium),
-  3) packaging/le-vibe-ide_*.deb exists.
+  3) packaging/le-vibe-ide_*.deb exists and passes content checks:
+     - launcher payload paths exist (`le-vibe.desktop`, `/usr/lib/le-vibe/bin/codium`),
+     - desktop content contains `Name=Lé Vibe` and `Exec=/usr/lib/le-vibe/bin/codium %F`,
+     - package metadata is `Package: le-vibe-ide`, `Architecture: amd64`.
 
 Options:
-  --require-stack-deb   Also require ../le-vibe_*.deb to exist.
+  --require-stack-deb   Also require ../le-vibe_*.deb and verify:
+                        - `/usr/bin/lvibe` exists and is executable (or symlink),
+                        - README.Debian(.gz) doc payload exists,
+                        - metadata is `Package: le-vibe`, `Architecture: all`.
   --skip-gate           Skip ci-editor-gate.sh (faster local check).
   -h, --help            Show this message and exit.
 

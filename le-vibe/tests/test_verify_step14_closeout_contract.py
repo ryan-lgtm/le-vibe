@@ -28,6 +28,12 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "--require-stack-deb" in text
     assert "--skip-gate" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "desktop content contains `Name=Lé Vibe`" in text
+    assert "Exec=/usr/lib/le-vibe/bin/codium %F" in text
+    assert "Package: le-vibe-ide" in text
+    assert "Architecture: amd64" in text
+    assert "Package: le-vibe" in text
+    assert "Architecture: all" in text
     assert "pick_latest_match" in text
     assert "sort -V" in text
     assert 'ide deb: $ide_deb_latest' in text
