@@ -86,7 +86,7 @@ That wrapper **`exec`**s **`packaging/scripts/ci-editor-gate.sh`** with the same
 
 **CLI (`gh`, 14.f):** **`gh run download <RUN_ID> -n le-vibe-vscodium-linux-<RUN_ID> -D ./dir`** pulls the same **`linux_compile`** upload as the Actions UI — **`-n`** must match **`actions/upload-artifact`** in **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** (**`le-vibe-vscodium-linux-${{ github.run_id }}`**). You still get the outer **`.zip`** — unzip, then treat the inner **`.tar.gz`** as above (**`print-ci-tarball-codium-path.sh`** / **`BUILD.md`**).
 
-**Finding `RUN_ID`:** The numeric id is in the browser URL (**`/actions/runs/<RUN_ID>`**) for the **`build-le-vibe-ide`** workflow run, or from the CLI: **`gh run list --workflow build-le-vibe-ide.yml --limit 10`** (then **`gh run download <RUN_ID> …`** as above — requires **`gh auth login`**).
+**Finding `RUN_ID`:** The numeric id is in the browser URL (**`/actions/runs/<RUN_ID>`**) for the **`build-le-vibe-ide`** workflow run, or from the CLI: **`gh run list --workflow build-le-vibe-ide.yml --limit 10`** (then **`gh run download <RUN_ID> …`** as above — requires **`gh auth login`**). On a **failed** run, **`gh run view <RUN_ID> --log-failed`** prints failed-step logs without opening the browser (same **`gh`** auth).
 
 **Runner realism:** Default **GitHub-hosted** images may **OOM** or exceed **time** on a full upstream compile — **[`editor/BUILD.md`](../editor/BUILD.md)** (*When full compile fails* / *Runner realism*). For a repeatable local analogue of the CI environment, **`packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh`** documents the same **`ubuntu:22.04`**-style base as job **`linux_compile`**.
 
