@@ -175,6 +175,7 @@ if [[ "$WITH_IDE" -eq 1 ]]; then
       echo "  packaging/scripts/probe-vscode-linux-build.sh: ${_probe}" >&2
       if [[ "$_probe" == "partial" ]]; then
         echo "  Partial tree — finish: cd editor/vscodium && ./dev/build.sh (editor/BUILD.md *Partial tree*). ./editor/print-built-codium-path.sh" >&2
+        echo "  Or linux_compile tarball: packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh /path/to/vscodium-linux-build.tar.gz --yes (editor/BUILD.md 14.f)" >&2
       elif [[ "$_probe" == "absent" ]]; then
         echo "  No VSCode-linux tree — editor/BUILD.md; git submodule update --init editor/vscodium (14.b)." >&2
       else

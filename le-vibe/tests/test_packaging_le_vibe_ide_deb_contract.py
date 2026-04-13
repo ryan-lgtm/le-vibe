@@ -138,6 +138,7 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "VSCode-linux-" in readme
     assert "Partial VSCode-linux tree" in readme
     assert "print-built-codium-path.sh" in readme
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in readme
     assert "print-vsbuild-codium-path.sh" in readme
     assert "print-step14-vscode-linux-bin-files.sh" in readme
     assert "vscode_linux_bin_files" in readme
