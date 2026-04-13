@@ -36,6 +36,7 @@ def test_root_readme_prioritization_demoinstall_apt_install_both_debs_step14():
     assert "sudo apt install ./le-vibe_*_all.deb ./le-vibe-ide_*_amd64.deb" in text
     assert "Install both packages" in text
     assert "packaging/debian-le-vibe-ide/README.md" in text
+    assert "verify-step14-closeout.sh --require-stack-deb" in text
 
 
 def test_root_readme_current_status_works_well_today_full_product_install_step14():
@@ -46,6 +47,7 @@ def test_root_readme_current_status_works_well_today_full_product_install_step14
     assert "Full-product install" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "Success output (`--with-ide`)" in text
+    assert "verify-step14-closeout.sh --require-stack-deb" in text
 
 
 def test_root_readme_documents_ai_pilot_and_user_gate():
