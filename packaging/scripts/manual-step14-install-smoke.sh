@@ -8,7 +8,14 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
 
-STACK_DEB_DEFAULT="$(ls -1 "$ROOT"/../le-vibe_*.deb 2>/dev/null | sort -V | tail -n1 || true)"
+# Default stack path: same discovery as verify-step14-closeout.sh --require-stack-deb (parent, then repo root).
+STACK_DEB_DEFAULT=""
+shopt -s nullglob
+_stack_cands=("$ROOT"/../le-vibe_*.deb "$ROOT"/le-vibe_*.deb)
+shopt -u nullglob
+if [[ ${#_stack_cands[@]} -gt 0 ]]; then
+  STACK_DEB_DEFAULT="$(printf '%s\n' "${_stack_cands[@]}" | sort -V | tail -n1)"
+fi
 IDE_DEB_DEFAULT="$(ls -1 "$ROOT"/packaging/le-vibe-ide_*.deb 2>/dev/null | sort -V | tail -n1 || true)"
 
 STACK_DEB="${STACK_DEB:-$STACK_DEB_DEFAULT}"
@@ -29,7 +36,7 @@ Purpose:
     3) run focused post-install checks.
 
 Environment:
-  STACK_DEB  Override stack package path (default: latest ../le-vibe_*.deb)
+  STACK_DEB  Override stack package path (default: latest le-vibe_*.deb beside clone, else under repo root)
   IDE_DEB    Override IDE package path   (default: latest packaging/le-vibe-ide_*.deb)
 
 Options:

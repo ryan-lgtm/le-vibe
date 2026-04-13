@@ -44,6 +44,9 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "Partial VSCode-linux tree" in text
     assert "print-vsbuild-codium-path.sh" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
+    assert "beside clone" in text
+    assert "repo root" in text
+    assert '_stack_cands=("$ROOT"/../le-vibe_*.deb "$ROOT"/le-vibe_*.deb)' in text
 
 
 def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> None:

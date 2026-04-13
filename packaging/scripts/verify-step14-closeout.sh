@@ -3,7 +3,7 @@
 #   - ci-editor-gate.sh passes (same as ./editor/smoke.sh fail-fast gates),
 #   - editor/vscodium/VSCode-linux-*/bin/codium exists (14.c),
 #   - packaging/le-vibe-ide_*.deb exists.
-# Optional: also require stack ../le-vibe_*.deb via --require-stack-deb.
+# Optional: also require stack le-vibe_*.deb (parent of clone, then repo root) via --require-stack-deb.
 # When multiple matching artifacts exist, pick the newest version-like filename.
 # Master orchestrator: 0 -> 1 -> 14 -> 2-13 -> 15-17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16).
 set -euo pipefail
