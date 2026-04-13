@@ -85,6 +85,7 @@ def iter_ide_prereq_paths(root: Path) -> list[tuple[str, Path, bool]]:
         ("Build le-vibe-ide .deb", Path("packaging/scripts/build-le-vibe-ide-deb.sh")),
         ("Full-product stack + IDE", Path("packaging/scripts/build-le-vibe-debs.sh")),
         ("IDE debian metadata", Path("packaging/debian-le-vibe-ide/debian/control")),
+        ("Freedesktop desktop entry (§7.3)", Path("packaging/debian-le-vibe-ide/debian/le-vibe.desktop")),
     )
     for label, rel in fixed:
         p = (root / rel).resolve()
@@ -98,6 +99,7 @@ IDE_PREREQ_PATH_ONLY: dict[str, Path] = {
     "sync-icons": Path("editor/le-vibe-overrides/sync-linux-icon-assets.sh"),
     "vsc-linux-svg": Path("editor/vscodium/src/stable/resources/linux/le-vibe.svg"),
     "svg": Path("packaging/icons/hicolor/scalable/apps/le-vibe.svg"),
+    "desktop": Path("packaging/debian-le-vibe-ide/debian/le-vibe.desktop"),
     "stage": Path("packaging/scripts/stage-le-vibe-ide-deb.sh"),
     "build-ide-deb": Path("packaging/scripts/build-le-vibe-ide-deb.sh"),
     "build-debs": Path("packaging/scripts/build-le-vibe-debs.sh"),
@@ -110,6 +112,7 @@ IDE_PREREQ_STATIC_OK_KEYS: tuple[str, ...] = (
     "branding",
     "sync-icons",
     "svg",
+    "desktop",
     "stage",
     "build-ide-deb",
     "build-debs",
