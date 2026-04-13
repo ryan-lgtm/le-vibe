@@ -25,6 +25,10 @@ def test_le_vibe_readme_documents_first_run_launcher_flags():
     assert "argparse" in text
     assert "launcher.py" in text
     assert "test_first_run.py" in text
+    assert "WELCOME_BANNER" in text
+    assert "welcome.py" in text
+    assert "test_product_spec_section8.py" in text
+    assert "test_welcome_banner_matches_product_spec_section4" in text
 
 
 def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
