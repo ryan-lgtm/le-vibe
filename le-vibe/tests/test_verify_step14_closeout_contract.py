@@ -32,3 +32,9 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "sort -V" in text
     assert 'ide deb: $ide_deb_latest' in text
     assert 'stack deb: $stack_deb_latest' in text
+    assert "assert_deb_contains" in text
+    assert "dpkg-deb --contents" in text
+    assert "./usr/share/applications/le-vibe.desktop" in text
+    assert "./usr/lib/le-vibe/bin/codium" in text
+    assert "./usr/bin/lvibe" in text
+    assert "./usr/share/doc/le-vibe/README.Debian.gz" in text
