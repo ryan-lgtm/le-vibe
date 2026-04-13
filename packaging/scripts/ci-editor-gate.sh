@@ -80,6 +80,7 @@ if [[ "${layout}" == "vscodium" ]]; then
   bash -n "${ROOT}/editor/print-vsbuild-codium-path.sh"
   bash -n "${ROOT}/editor/print-ci-tarball-codium-path.sh"
   bash -n "${ROOT}/packaging/scripts/print-step14-vscode-linux-bin-files.sh"
+  bash -n "${ROOT}/packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh"
   bash -n "${ROOT}/packaging/scripts/ci-vscodium-linux-dev-build.sh"
 fi
 
