@@ -28,6 +28,8 @@ Stack **`le-vibe_*.deb`** is emitted **beside** the repo directory (parent of th
 | **`--with-ide`** using a non-default **`VSCode-linux-*`** directory | `packaging/scripts/build-le-vibe-debs.sh --vs-build /path/to/VSCode-linux-x64` |
 | Faster stack **`dpkg-buildpackage`** (parallel **debhelper**) | `DEB_BUILD_OPTIONS=parallel=$(nproc) packaging/scripts/build-le-vibe-debs.sh` — passed through to **`dpkg-buildpackage`** (**`--help`** *Environment*: **`DEB_BUILD_OPTIONS`**) |
 
+**Quick version check (repo root):** Before iterating on **`dpkg-buildpackage`**, read the top stanza versions with **`dpkg-parsechangelog -S Version -l debian/changelog`** (stack) and, for a full-product **`--with-ide`** drop, **`dpkg-parsechangelog -S Version -l packaging/debian-le-vibe-ide/debian/changelog`** — same commands as **`apt-repo-releases.md`** *Before a stack tag / Release* and *Checklist — full-product GitHub Release* step **2**; see **`Stack vs IDE changelogs`** and **`dpkg-parsechangelog` (IDE)** above.
+
 ### Output paths (from repo root)
 
 | Artifact | Where it lands |

@@ -161,6 +161,18 @@ def test_pm_deb_build_iteration_doc_invocations_working_directory_step14():
     assert "from the script path" in sec
 
 
+def test_pm_deb_build_iteration_doc_quick_version_check_pair_h1():
+    """H1: Invocations section pairs stack vs IDE dpkg-parsechangelog before iterating builds."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    sec = text.split("## Invocations (repository root)", 1)[1].split("### Output paths", 1)[0]
+    assert "**Quick version check (repo root):**" in sec
+    assert "dpkg-parsechangelog -S Version -l debian/changelog" in sec
+    assert "dpkg-parsechangelog -S Version -l packaging/debian-le-vibe-ide/debian/changelog" in sec
+    assert "Checklist — full-product GitHub Release" in sec
+    assert "step **2**" in sec
+
+
 def test_pm_deb_build_iteration_doc_lists_output_paths_table_step14():
     """STEP 14: PM doc names stack .deb beside repo vs IDE .deb under packaging/."""
     root = Path(__file__).resolve().parents[2]
