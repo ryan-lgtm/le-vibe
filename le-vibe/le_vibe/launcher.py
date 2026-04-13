@@ -939,6 +939,11 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
         print("./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb")
         print("./packaging/scripts/verify-step14-closeout.sh --require-stack-deb")
         print("# optional: add --apt-sim or --json to verify — docs/PM_DEB_BUILD_ITERATION.md")
+        print(
+            "# test host after apt install stack + IDE .deb (optional desktop-file-utils "
+            "Freedesktop QA — same le-vibe.desktop checks as preflight / verify / "
+            "build-le-vibe-ide-deb): ./packaging/scripts/manual-step14-install-smoke.sh --verify-only"
+        )
         if vs_status == "ready":
             print(
                 "# when preflight + verify are green — maintainer full-product install (stack + IDE .deb) — "

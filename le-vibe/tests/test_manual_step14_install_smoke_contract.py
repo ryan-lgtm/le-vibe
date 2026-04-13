@@ -77,6 +77,8 @@ def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> 
     assert "packaging/scripts/ci-editor-nvmrc-sync.sh" in rag
     assert "packaging/scripts/ci-vscodium-linux-dev-build.sh" in rag
     assert "manual-step14-install-smoke.sh default STACK_DEB" in rag
+    assert "manual-step14-install-smoke.sh --verify-only" in rag
+    assert "desktop-file-validate" in rag
     assert "resolve-latest-le-vibe-stack-deb.sh" in rag
     assert "Output paths (from repo root)" in rag
     assert "dpkg-buildpackage" in rag
