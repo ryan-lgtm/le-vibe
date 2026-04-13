@@ -74,6 +74,8 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     assert "full-product GitHub Release" in text
     assert "Related docs (H1 index)" in text
     assert "CHANGELOG.md" in text
+    assert "ci-qa-hardening" in text
+    assert "editor/README" in text
     assert "H1 quick pointer" in text
     assert "PM_STAGE_MAP" in text
     assert "Full-product (--with-ide)" in text
@@ -109,6 +111,9 @@ def test_pm_deb_build_iteration_doc_sibling_docs_links_apt_repo_h1_related_round
     assert "Last verified" in head
     assert "apt-repo-releases.md" in head
     assert "CHANGELOG.md" in head
+    assert "ci-qa-hardening.md" in head
+    assert "editor/README.md" in head
+    assert "Full Linux compile" in head
     assert "Related docs" in head
     assert "PM_STAGE_MAP.md" in head
 

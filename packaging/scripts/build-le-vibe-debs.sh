@@ -67,7 +67,7 @@ Publishing / releases (H1):
   Stack v... release tags vs ide-v* — apt-repo-releases.md (Stack release tags vs ide-v* — publishing).
   CI le-vibe-deb artifact is a .zip — unzip before sha256sum -c or lvibe verify-checksums (same doc — GitHub Releases + checksums).
   H1 quick pointer (stack-only vs full-product checklists before gh release create) — docs/apt-repo-releases.md (GitHub Releases + checksums).
-  apt-repo-releases.md Related docs (H1 index) — CHANGELOG.md (dual changelog), PM_STAGE_MAP (H1 vs §7.3), PM_DEB_BUILD_ITERATION (this one-shot).
+  apt-repo-releases.md Related docs (H1 index) — CHANGELOG.md (dual changelog), ci-qa-hardening→editor/README (H3 Full Linux compile), PM_STAGE_MAP (H1 vs §7.3), PM_DEB_BUILD_ITERATION (this one-shot).
 
 Full-product (--with-ide): When both .deb files are produced, the script prints a Full-product install
   line (sudo apt install with both resolved paths) before "Done." — docs/PM_DEB_BUILD_ITERATION.md
