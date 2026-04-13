@@ -149,6 +149,10 @@ def test_apt_repo_releases_related_docs_lists_pm_deb_and_stage_map():
     assert "STEP 14" in table
     assert "§7.3" in table
     assert "spec-phase2.md" in table
+    assert "ci-qa-hardening.md" in table
+    assert "editor/README.md" in table
+    assert "Full Linux compile" in table
+    assert "maintainer index" in table
 
 
 def test_apt_repo_releases_doc_opens_with_ci_le_vibe_deb_stack_only_step14():

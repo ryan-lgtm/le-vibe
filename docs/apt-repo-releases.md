@@ -205,7 +205,7 @@ For product positioning and **`editor/`** / IDE shell notes, see **`README.md`**
 | Doc | Role |
 |-----|------|
 | [`PRODUCT_SPEC_SECTION8_EVIDENCE.md`](PRODUCT_SPEC_SECTION8_EVIDENCE.md) | **E1** regression audit + *Last verified* — refresh when **H1** release / packaging copy shifts (same **`pytest`** bar as *E1 / acceptance* above) |
-| [`ci-qa-hardening.md`](ci-qa-hardening.md) | Smoke script, **lintian**, CI step order (H3); **optional `linux_compile`** (*Optional full Linux compile*, STEP 14.e) — opt-in CI **`vscodium-linux-build.tar.gz`** / unpack **`VSCode-linux-*`** before **`le-vibe-ide`** **`.deb`** (not default PR CI) |
+| [`ci-qa-hardening.md`](ci-qa-hardening.md) | Smoke script, **lintian**, CI step order (H3); **optional `linux_compile`** (*Optional full Linux compile*, STEP 14.e) — opt-in CI **`vscodium-linux-build.tar.gz`** / unpack **`VSCode-linux-*`** before **`le-vibe-ide`** **`.deb`** (not default PR CI). *Related docs* in the same file lists **[`editor/README.md`](../editor/README.md)** (*Full Linux compile* / **H3** maintainer index). |
 | [`sbom-signing-audit.md`](sbom-signing-audit.md) | **`pip-audit`**, CycloneDX SBOM next to **`.deb`** (H2) |
 | [`CHANGELOG.md`](../CHANGELOG.md) | **Keep a Changelog** narrative for GitHub Release bodies — same **`x.y.z`** as **`debian/changelog`** before you tag (*Dual changelog discipline* above) |
 | [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) | Maintainer **`packaging/scripts/build-le-vibe-debs.sh`** — stack + optional **`--with-ide`** (STEP 14 / §7.3); **Publishing** / **`DEB_BUILD_OPTIONS`** — pairs with *Pre-publish* / **Combined drop** / **`dpkg-parsechangelog`** above |
