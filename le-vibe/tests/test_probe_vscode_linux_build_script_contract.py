@@ -29,6 +29,9 @@ def test_probe_vscode_linux_build_script_exists_bash_syntax_and_help() -> None:
     assert "ready" in out and "partial" in out
     assert "print-step14-vscode-linux-bin-files.sh" in out
     assert "vscode_linux_bin_files" in out
+    assert "--progress" in out
+    assert "--json" in out
+    assert "compile_gate_pct" in out
 
 
 def test_probe_vscode_linux_build_matches_python_classifier() -> None:
@@ -43,3 +46,37 @@ def test_probe_vscode_linux_build_matches_python_classifier() -> None:
     )
     assert r.returncode == 0
     assert r.stdout.strip() == py_st
+
+
+def test_probe_vscode_linux_build_progress_lists_pct() -> None:
+    root = _repo_root()
+    script = root / "packaging" / "scripts" / "probe-vscode-linux-build.sh"
+    r = subprocess.run(
+        [str(script), "--progress", str(root)],
+        cwd=str(root),
+        capture_output=True,
+        text=True,
+    )
+    assert r.returncode == 0
+    out = f"{r.stdout}\n{r.stderr}"
+    assert "compile_gate_pct:" in out
+    assert "vscode_linux_build:" in out
+    assert "Linux compile gate" in out
+
+
+def test_probe_vscode_linux_build_json_has_milestones() -> None:
+    root = _repo_root()
+    script = root / "packaging" / "scripts" / "probe-vscode-linux-build.sh"
+    r = subprocess.run(
+        [str(script), "--json", str(root)],
+        cwd=str(root),
+        capture_output=True,
+        text=True,
+    )
+    assert r.returncode == 0
+    import json
+
+    data = json.loads(r.stdout)
+    assert "compile_gate_pct" in data
+    assert "compile_gate_milestones" in data
+    assert data["vscode_linux_build"] in ("ready", "partial", "absent")

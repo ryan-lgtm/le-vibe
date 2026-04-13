@@ -10,6 +10,7 @@ from le_vibe.ide_packaging_paths import (
     static_prereq_repo_files_ok,
     vscode_linux_bin_filenames,
     vscode_linux_build_status,
+    vscode_linux_compile_gate_progress,
 )
 
 
@@ -81,6 +82,30 @@ def test_vscode_linux_bin_filenames_empty_when_no_bin_dir(tmp_path: Path) -> Non
     vs = tmp_path / "VSCode-linux-x64"
     vs.mkdir(parents=True)
     assert vscode_linux_bin_filenames(vs) == []
+
+
+def test_vscode_linux_compile_gate_partial_tunnel_is_70_pct(tmp_path: Path) -> None:
+    """Weights 10+15+35+10 = 70 until bin/codium exists."""
+    bindir = tmp_path / "editor" / "vscodium" / "VSCode-linux-x64" / "bin"
+    bindir.mkdir(parents=True)
+    (bindir / "codium-tunnel").write_text("x", encoding="utf-8")
+    (tmp_path / "editor" / "vscodium" / "product.json").write_text("{}", encoding="utf-8")
+    d = vscode_linux_compile_gate_progress(tmp_path)
+    assert d["compile_gate_pct"] == 70
+    assert d["vscode_linux_build"] == "partial"
+    assert len(d["compile_gate_milestones"]) == 5
+
+
+def test_vscode_linux_compile_gate_ready_is_100_pct(tmp_path: Path) -> None:
+    bindir = tmp_path / "editor" / "vscodium" / "VSCode-linux-x64" / "bin"
+    bindir.mkdir(parents=True)
+    (tmp_path / "editor" / "vscodium" / "product.json").write_text("{}", encoding="utf-8")
+    c = bindir / "codium"
+    c.write_text("#!/bin/sh\n", encoding="utf-8")
+    c.chmod(0o755)
+    d = vscode_linux_compile_gate_progress(tmp_path)
+    assert d["compile_gate_pct"] == 100
+    assert d["vscode_linux_build"] == "ready"
 
 
 def test_vscode_linux_bin_filenames_lists_bin_files(tmp_path: Path) -> None:

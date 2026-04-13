@@ -120,3 +120,101 @@ IDE_PREREQ_STATIC_OK_KEYS: tuple[str, ...] = (
 def static_prereq_repo_files_ok(root: Path) -> bool:
     """True when every committed packaging / override file needed for §7.3 automation exists."""
     return all((root / IDE_PREREQ_PATH_ONLY[k]).is_file() for k in IDE_PREREQ_STATIC_OK_KEYS)
+
+
+def vscode_linux_compile_gate_progress(root: Path) -> dict[str, object]:
+    """
+    Weighted **0–100** progress toward ``VSCode-linux-*/bin/codium`` under ``editor/vscodium/``.
+
+    This is the **Linux compile / CI tarball vendor** slice of STEP 14 only — not §7.3 branding
+    checks, static packaging files, or built ``.deb`` artifacts. Use
+    ``packaging/scripts/preflight-step14-closeout.sh`` for a broader maintainer gap list.
+    """
+    vsc = root / "editor" / "vscodium"
+    milestones: list[dict[str, object]] = []
+    score = 0
+
+    ok = vsc.is_dir()
+    w = 10
+    if ok:
+        score += w
+    milestones.append(
+        {
+            "id": "vscodium_dir",
+            "label": "editor/vscodium/ directory exists",
+            "weight": w,
+            "done": ok,
+        }
+    )
+
+    pj = vsc / "product.json"
+    ok = pj.is_file()
+    w = 15
+    if ok:
+        score += w
+    milestones.append(
+        {
+            "id": "product_json",
+            "label": "editor/vscodium/product.json (submodule / checkout)",
+            "weight": w,
+            "done": ok,
+        }
+    )
+
+    vs_tree: Path | None = None
+    if vsc.is_dir():
+        for p in sorted(vsc.glob("VSCode-linux-*")):
+            if p.is_dir():
+                vs_tree = p.resolve()
+                break
+    ok = vs_tree is not None
+    w = 35
+    if ok:
+        score += w
+    milestones.append(
+        {
+            "id": "vscode_linux_tree",
+            "label": "VSCode-linux-* output directory exists",
+            "weight": w,
+            "done": ok,
+        }
+    )
+
+    bin_dir = vs_tree / "bin" if vs_tree is not None else None
+    bin_files: list[str] = []
+    if bin_dir is not None and bin_dir.is_dir():
+        bin_files = sorted(x.name for x in bin_dir.iterdir() if x.is_file())
+    ok = bool(bin_files)
+    w = 10
+    if ok:
+        score += w
+    milestones.append(
+        {
+            "id": "bin_populated",
+            "label": "VSCode-linux-*/bin/ has at least one file",
+            "weight": w,
+            "done": ok,
+        }
+    )
+
+    codium_path = vs_tree / "bin" / "codium" if vs_tree is not None else None
+    ok = codium_path is not None and codium_path.is_file()
+    w = 30
+    if ok:
+        score += w
+    milestones.append(
+        {
+            "id": "codium_binary",
+            "label": "VSCode-linux-*/bin/codium exists (compile gate complete)",
+            "weight": w,
+            "done": ok,
+        }
+    )
+
+    st, st_path = vscode_linux_build_status(root)
+    return {
+        "vscode_linux_build": st,
+        "vscode_linux_path": str(st_path) if st_path is not None else None,
+        "compile_gate_pct": min(100, score),
+        "compile_gate_milestones": milestones,
+    }

@@ -60,4 +60,5 @@ def test_ci_editor_gate_documents_step14_smoke_and_overrides_e1():
     assert 'bash -n "${ROOT}/editor/verify-73-maintainer.sh"' in text
     assert 'bash -n "${ROOT}/editor/print-ci-tarball-codium-path.sh"' in text
     assert 'bash -n "${ROOT}/packaging/scripts/print-step14-vscode-linux-bin-files.sh"' in text
+    assert 'python3 -m py_compile "${ROOT}/packaging/scripts/probe_vscode_linux_build.py"' in text
     assert "ci-vscodium-linux-dev-build.sh" in text
