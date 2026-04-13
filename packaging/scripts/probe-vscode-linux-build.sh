@@ -27,7 +27,8 @@ Print default stdout: one line — ready | partial | absent | unknown
   --progress  Print milestone checklist + compile_gate_pct (0–100) toward bin/codium.
               This is the Linux compile / tarball slice only — not .deb builds; see
               preflight-step14-closeout.sh for a fuller gap list.
-  --json      Print JSON (vscode_linux_build, compile_gate_pct, milestones, paths).
+  --json      Print JSON (vscode_linux_build, vscode_linux_path, compile_gate_pct,
+              compile_gate_milestones).
 
 When partial: packaging/scripts/print-step14-vscode-linux-bin-files.sh [REPO_ROOT]
 prints bin/ filenames (same as lvibe ide-prereqs --json field vscode_linux_bin_files).
