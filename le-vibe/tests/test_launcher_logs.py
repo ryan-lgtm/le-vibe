@@ -51,3 +51,35 @@ def test_lvibe_logs_tail_missing_file(
     monkeypatch.setattr(sys, "argv", ["launcher", "logs", "-n", "5"])
     assert launcher.main() == 1
     assert "no file" in capsys.readouterr().err.lower()
+
+
+def test_lvibe_logs_json_meta(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path))
+    logf = tmp_path / "le-vibe" / STRUCTURED_LOG_FILENAME
+    logf.parent.mkdir(parents=True)
+    logf.write_text(
+        '{"ts":"2026-01-01T00:00:00+00:00","component":"launcher","event":"x"}\n'
+        '{"ts":"2026-01-02T00:00:00+00:00","component":"workspace","event":"y"}\n',
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(sys, "argv", ["launcher", "logs", "--json"])
+    assert launcher.main() == 0
+    data = json.loads(capsys.readouterr().out)
+    assert data["lines"] == 2
+    assert data["first_ts"] == "2026-01-01T00:00:00+00:00"
+    assert data["last_ts"] == "2026-01-02T00:00:00+00:00"
+
+
+def test_lvibe_logs_json_rejects_tail_combo(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path))
+    monkeypatch.setattr(sys, "argv", ["launcher", "logs", "--json", "--tail", "1"])
+    assert launcher.main() == 2
+    assert "cannot" in capsys.readouterr().err.lower()

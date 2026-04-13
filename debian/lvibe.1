@@ -46,8 +46,8 @@ Seed \fB.continue/rules/*.md\fR so Chat/Agent treats \fB.lvibe/\fR as primary me
 Validate \fB.lvibe/\fR manifest, session JSON, \fBstorage\-state.json\fR (if present), chunk path refs — \fB\-\-json\fR for machine output. Same as \fBpython3 \-m le_vibe.hygiene\fR and \fBlvibe\-hygiene\fR(1). See \fBle\-vibe\fR(1) for the stack install.
 .TP
 .B lvibe logs
-.RI [ \-\-path\-only | \-\-tail " N " ]
-Show the local structured log path (\fB~/.config/le\-vibe/le\-vibe.log.jsonl\fR) and optional \fBtail\fR\-style last \fIN\fR lines. Local JSON Lines only — \fBdocs/privacy\-and\-telemetry.md\fR.
+.RI [ \-\-path\-only | \-\-tail " N " | \-\-json ]
+Show the local structured log path (\fB~/.config/le\-vibe/le\-vibe.log.jsonl\fR), optional \fBtail\fR\-style last \fIN\fR lines, or \fB\-\-json\fR metadata. Local JSON Lines only — \fBdocs/privacy\-and\-telemetry.md\fR.
 .TP
 .B lvibe continue-pin
 .RI [ \-\-path\-only ]

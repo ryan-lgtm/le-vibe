@@ -162,6 +162,8 @@ def _cmd_logs(argv: list[str]) -> int:
     """
     STEP 6 (E5): operator surface for local JSONL — path, optional tail (``docs/privacy-and-telemetry.md``).
     """
+    import json as json_mod
+
     from le_vibe.structured_log import structured_log_enabled, structured_log_path
 
     p = argparse.ArgumentParser(
@@ -184,6 +186,11 @@ def _cmd_logs(argv: list[str]) -> int:
         action="store_true",
         help="print the absolute log path only",
     )
+    p.add_argument(
+        "--json",
+        action="store_true",
+        help="print log file metadata as JSON (path, enabled, line count, first/last ts)",
+    )
     args = p.parse_args(argv)
     path = structured_log_path()
     if not structured_log_enabled():
@@ -191,6 +198,34 @@ def _cmd_logs(argv: list[str]) -> int:
             "lvibe logs: LE_VIBE_STRUCTURED_LOG is disabled — no new lines are written.",
             file=sys.stderr,
         )
+    if args.json:
+        if args.tail is not None or args.path_only:
+            print(
+                "lvibe logs: --json cannot be combined with --tail or --path-only",
+                file=sys.stderr,
+            )
+            return 2
+        payload: dict[str, object] = {
+            "path": str(path.resolve()),
+            "structured_log_enabled": structured_log_enabled(),
+            "exists": path.is_file(),
+        }
+        if path.is_file():
+            text = path.read_text(encoding="utf-8", errors="replace")
+            lines = text.splitlines()
+            payload["lines"] = len(lines)
+            if lines:
+                try:
+                    first = json_mod.loads(lines[0])
+                    last = json_mod.loads(lines[-1])
+                    if isinstance(first, dict):
+                        payload["first_ts"] = first.get("ts")
+                    if isinstance(last, dict):
+                        payload["last_ts"] = last.get("ts")
+                except json_mod.JSONDecodeError:
+                    payload["parse_note"] = "first or last line is not valid JSON"
+        print(json_mod.dumps(payload, indent=2, ensure_ascii=False))
+        return 0
     if args.path_only:
         print(path)
         return 0
