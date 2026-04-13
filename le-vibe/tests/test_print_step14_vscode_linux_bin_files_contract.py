@@ -28,6 +28,7 @@ def test_print_step14_vscode_linux_bin_files_uses_ide_packaging_paths() -> None:
     assert "probe-vscode-linux-build.sh" in text
     assert "ide-prereqs" in text
     assert "vscode_linux_bin_files" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
 
 
@@ -43,4 +44,5 @@ def test_print_step14_vscode_linux_bin_files_help_stdout() -> None:
     out = f"{r.stdout}\n{r.stderr}"
     assert "Usage:" in out
     assert "print-step14-vscode-linux-bin-files.sh" in out
+    assert "print-github-linux-compile-artifact-hint.sh" in out
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in out

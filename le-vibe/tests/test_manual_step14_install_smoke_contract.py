@@ -44,6 +44,7 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "Partial VSCode-linux tree" in text
     assert "print-vsbuild-codium-path.sh" in text
     assert "print-step14-vscode-linux-bin-files.sh" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
     assert "beside clone" in text
