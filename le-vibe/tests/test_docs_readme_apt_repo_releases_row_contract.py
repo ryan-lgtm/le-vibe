@@ -21,6 +21,7 @@ def test_docs_readme_apt_repo_releases_row_lists_step14_ide_deb_path():
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "Full-product install" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
+    assert "--apt-sim" in text
     assert "Success output (`--with-ide`)" in text
     assert "debian-le-vibe-ide/README.md" in text
     assert "Install both packages" in text
