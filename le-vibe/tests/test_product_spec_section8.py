@@ -239,8 +239,10 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "linux_compile" in sec73
     assert "vscode_linux_build_status" in sec73
     assert "vscode_linux_build" in sec73
+    assert "verify-step14-closeout.sh --json" in sec73
     assert "test_launcher_ide_prereqs.py" in sec73
-    assert "530" in text
+    assert "test_verify_step14_closeout_contract.py" in sec73
+    assert "531" in text
 
 
 def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14():

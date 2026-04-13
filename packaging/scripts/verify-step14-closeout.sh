@@ -160,9 +160,10 @@ Options:
   -h, --help            Show this message and exit.
 
 JSON success (--json) includes:
-  status, codium_path, ide_deb, stack_deb_required, stack_deb (null when
-  not required), apt_sim_requested, apt_sim_ran, apt_sim_note
-  (not_requested | ran | requested_without_stack_requirement).
+  status, vscode_linux_build (always "ready" on success — matches
+  `lvibe ide-prereqs --json` when 14.c passes), codium_path, ide_deb,
+  stack_deb_required, stack_deb (null when not required), apt_sim_requested,
+  apt_sim_ran, apt_sim_note (not_requested | ran | requested_without_stack_requirement).
 
 See also:
   - packaging/scripts/build-le-vibe-debs.sh --with-ide
@@ -273,6 +274,7 @@ if [[ "$PRINT_JSON" -eq 1 ]]; then
   fi
   printf '{\n'
   printf '  "status": "ok",\n'
+  printf '  "vscode_linux_build": "ready",\n'
   printf '  "codium_path": "%s",\n' "$codium_json"
   printf '  "ide_deb": "%s",\n' "$ide_json"
   printf '  "stack_deb_required": %s,\n' "$([[ "$REQUIRE_STACK_DEB" -eq 1 ]] && echo "true" || echo "false")"

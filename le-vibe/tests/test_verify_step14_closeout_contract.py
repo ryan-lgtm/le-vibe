@@ -71,6 +71,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "held/broken packages" in text
     assert "skipped (use --apt-sim)" in text
     assert '"status": "ok"' in text
+    assert '"vscode_linux_build":' in text
     assert '"codium_path":' in text
     assert '"ide_deb":' in text
     assert '"apt_sim_note":' in text
@@ -170,6 +171,7 @@ EOF
             assert result.returncode == 0, result.stderr
             payload = json.loads(result.stdout)
             assert payload["status"] == "ok"
+            assert payload["vscode_linux_build"] == "ready"
             assert payload["stack_deb_required"] is True
             assert payload["apt_sim_requested"] is False
             assert payload["apt_sim_ran"] is False
@@ -282,6 +284,7 @@ exit 1
             assert result.returncode == 0, result.stderr
             payload = json.loads(result.stdout)
             assert payload["status"] == "ok"
+            assert payload["vscode_linux_build"] == "ready"
             assert payload["stack_deb_required"] is True
             assert payload["apt_sim_requested"] is True
             assert payload["apt_sim_ran"] is True
@@ -364,6 +367,7 @@ EOF
             assert result.returncode == 0, result.stderr
             payload = json.loads(result.stdout)
             assert payload["status"] == "ok"
+            assert payload["vscode_linux_build"] == "ready"
             assert payload["stack_deb_required"] is False
             assert payload["stack_deb"] is None
             assert payload["apt_sim_requested"] is True
@@ -458,6 +462,7 @@ EOF
             )
             assert result.returncode == 0, result.stderr
             payload = json.loads(result.stdout)
+            assert payload["vscode_linux_build"] == "ready"
             assert Path(payload["stack_deb"]).resolve() == stack_deb.resolve()
             assert payload["ide_deb"] == str(ide_deb)
             assert payload["apt_sim_note"] == "not_requested"

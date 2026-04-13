@@ -146,6 +146,16 @@ def test_pm_deb_build_iteration_doc_master_orchestrator_queue_step14():
     assert "apt-repo-releases.md" in head
 
 
+def test_pm_deb_build_iteration_doc_json_closeout_payload_lists_vscode_linux_build():
+    """STEP 14: PM deb doc lists verify --json fields aligned with lvibe ide-prereqs."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    sec = text.split("**`--json` close-out payload:**", 1)[1].split("**Failure (`--with-ide`):**", 1)[0]
+    assert "vscode_linux_build" in sec
+    assert "lvibe ide-prereqs" in sec
+    assert "codium_path" in sec
+
+
 def test_pm_deb_build_iteration_doc_success_output_orders_build_vs_test_host_step14():
     """STEP 14: Success output paragraph distinguishes build machine vs test host."""
     root = Path(__file__).resolve().parents[2]
