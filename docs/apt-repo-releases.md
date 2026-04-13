@@ -51,6 +51,18 @@ Workflow **`.github/workflows/ci.yml`** uploads a single artifact bundle **`le-v
 
 CI runs **`sha256sum -c SHA256SUMS`** after generating the manifest so a corrupted or mismatched tree fails the job.
 
+### Artifact sources at a glance (CI vs maintainer output)
+
+Use this when you know **which** **`.deb`** you have but not **where** it was produced — then align with *Pre-publish artifact checklist* and *Minimum directory layout*.
+
+| Artifact | Default source |
+|----------|----------------|
+| **`le-vibe_*_all.deb`** | **CI:** artifact **`le-vibe-deb`** (unzip). **Maintainer:** sibling **`../le-vibe_*_all.deb`** after **`dpkg-buildpackage -us -uc -b`** from the repo root — **[`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** *Output paths (from repo root)*. |
+| **`le-vibe-python.cdx.json`**, **`SHA256SUMS`** | **CI:** inside **`le-vibe-deb`**. **Local** stack-only builds: regenerate **`SHA256SUMS`** per *Manual checksums* — do not assume the CI manifest without downloading CI. |
+| **`le-vibe-ide_*_amd64.deb`** | **Not** in default **`ci.yml`**. **Maintainer:** **`packaging/le-vibe-ide_*.deb`** after **`build-le-vibe-ide-deb.sh`** or **`build-le-vibe-debs.sh --with-ide`** — same *Output paths* table in **`PM_DEB_BUILD_ITERATION.md`**. |
+
+Before a **Combined drop**, copy every shipped **`*.deb`** (and SBOM if you attach it) into **one** directory, then **regenerate** **`SHA256SUMS`** (*Integrity* / *Combined drop* rows below).
+
 ### Pre-publish artifact checklist (CI vs maintainer)
 
 Use this when deciding what to attach to **GitHub Releases** or copy into an **apt** pool — same files as **[`ci.yml`](../.github/workflows/ci.yml)** vs a **full-product** drop built off-CI.

@@ -28,6 +28,16 @@ def test_apt_repo_releases_doc_lists_minimum_directory_layout_gate():
     assert "gh run download" in text and "le-vibe-deb" in text
 
 
+def test_apt_repo_releases_doc_lists_artifact_sources_at_glance_h1():
+    """H1: doc maps CI le-vibe-deb vs maintainer ../ stack deb + packaging/ IDE deb."""
+    text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
+    assert "### Artifact sources at a glance" in text
+    assert "CI vs maintainer output" in text
+    assert "../le-vibe_*_all.deb" in text
+    assert "packaging/le-vibe-ide_*.deb" in text
+    assert "Output paths (from repo root)" in text
+
+
 def test_apt_repo_releases_doc_lists_ci_artifact_and_changelog():
     text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
     assert "**Combined drop**" in text
