@@ -86,7 +86,7 @@ Global rules (always):
 - If product facts are missing → **USER RESPONSE REQUIRED** + numbered questions.
 
 **MODE: PROJECT:**
-- Orchestrate across **tracks**: Master orchestrator (docs/PROMPT_BUILD_LE_VIBE.md) vs PM iteration docs (e.g. docs/PM_DEB_BUILD_ITERATION.md — maintainer **packaging/scripts/build-le-vibe-debs.sh --with-ide**, **Full-product install** on success vs default **ci.yml** **le-vibe-deb** stack-only; docs/PM_IDE_SETTINGS_AND_WORKFLOWS.md). Do **not** ship code unless the human asked for a doc-only update. Output: **Initiative snapshot** (what is in flight), **Next recommended slice** (one paragraph), risks. Weight **OWNER_DIRECTIVES** when present.
+- Orchestrate across **tracks**: Master orchestrator (docs/PROMPT_BUILD_LE_VIBE.md) vs PM iteration docs (e.g. docs/PM_DEB_BUILD_ITERATION.md — maintainer **packaging/scripts/build-le-vibe-debs.sh --with-ide**, **Full-product install** on success, **packaging/scripts/verify-step14-closeout.sh --require-stack-deb** close-out gate, vs default **ci.yml** **le-vibe-deb** stack-only; docs/PM_IDE_SETTINGS_AND_WORKFLOWS.md). Do **not** ship code unless the human asked for a doc-only update. Output: **Initiative snapshot** (what is in flight), **Next recommended slice** (one paragraph), risks. Weight **OWNER_DIRECTIVES** when present.
 
 **New agent:** When switching ENGINEER ↔ PRODUCT_MANAGER ↔ PROJECT, the human should open a **new Cursor chat** and paste **this same prompt** again with MODE + optional OWNER_DIRECTIVES + CONTINUATION so context stays lean (mirrors autopilot routing fresh workers per phase).
 
