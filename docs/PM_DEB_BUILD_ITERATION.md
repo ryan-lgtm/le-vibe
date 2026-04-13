@@ -19,7 +19,7 @@ Run these from the clone root (`cd /path/to/r-vibe`). Stack **`le-vibe_*.deb`** 
 | **`--with-ide`** with §7.3 **`product.json`** gate (**`ci-editor-gate.sh`**) before staging | `LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 packaging/scripts/build-le-vibe-debs.sh --with-ide` |
 | **`--with-ide`** using a non-default **`VSCode-linux-*`** directory | `packaging/scripts/build-le-vibe-debs.sh --vs-build /path/to/VSCode-linux-x64` |
 
-**Publishing (STEP 8 / H1):** **`SHA256SUMS`**, **`debian/changelog`** ↔ **`CHANGELOG.md`**, and **stack-only** **`ci.yml`** **`le-vibe-deb`** vs **Stack + IDE** attach — **[`apt-repo-releases.md`](apt-repo-releases.md)** *Pre-publish artifact checklist* (same story as *Releases & full-product demo* below).
+**Publishing (STEP 8 / H1):** **`SHA256SUMS`**, **`debian/changelog`** ↔ **`CHANGELOG.md`**, and **stack-only** **`ci.yml`** **`le-vibe-deb`** vs **Stack + IDE** attach — **[`apt-repo-releases.md`](apt-repo-releases.md)** *Pre-publish artifact checklist* (same story as *Releases & full-product demo* below). **`ide-v*`** git tags drive optional **`linux_compile`** CI — they do **not** replace bumping **`debian/changelog`** for the stack **`.deb`** — *Tagging discipline* in the same doc.
 
 ## Releases & full-product demo (H1 / STEP 14 / §7.3)
 

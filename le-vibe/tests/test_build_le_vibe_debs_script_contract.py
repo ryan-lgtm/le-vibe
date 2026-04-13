@@ -69,6 +69,7 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     assert "Success output" in text
     assert "Maintainer build output" in text
     assert "Pre-publish artifact checklist" in text
+    assert "Tagging discipline" in text
 
 
 def test_pm_deb_build_iteration_doc_submodule_prereq_14b():
@@ -91,6 +92,7 @@ def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():
     assert "spec-phase2.md" in text
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
     assert "Pre-publish artifact checklist" in text
+    assert "Tagging discipline" in text
 
 
 def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14():
