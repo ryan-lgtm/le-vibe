@@ -30,7 +30,7 @@ Engineering **does not** require `.lvibe/` to ship **`editor/`** + **`.deb`**; u
 |------------|------|
 | [`PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md) | **STEP 14** row + **do not** artificially cap scope while §7.3 remains open |
 | [`PM_STAGE_MAP.md`](PM_STAGE_MAP.md) | **STEP →** primary PM doc for IDE / `.deb` |
-| [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) | **`packaging/scripts/build-le-vibe-debs.sh --with-ide`**, **Full-product install** |
+| [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) | **`packaging/scripts/build-le-vibe-debs.sh --with-ide`**, **Full-product install**, **`packaging/scripts/verify-step14-closeout.sh --require-stack-deb`** |
 | [`ci-qa-hardening.md`](ci-qa-hardening.md) | **`./editor/smoke.sh`** vs **`linux_compile`** / tarball — honesty |
 | [`vscodium-fork-le-vibe.md`](vscodium-fork-le-vibe.md) | H6 fork, CI, packaging narrative |
 | [`editor/README.md`](../editor/README.md), [`editor/BUILD.md`](../editor/BUILD.md) | Build entrypoints |
@@ -89,7 +89,7 @@ MODE: ENGINEER
 CONTINUATION: PASTE SAME AGAIN
 
 First incomplete STEP per PROMPT_BUILD_LE_VIBE.md ORDERED WORK QUEUE (0 → 1 → 14 → …). Branch main at recorded sha; cd le-vibe && python3 -m pytest tests/ after Python changes.
-If STEP 14: advance §7.3 — smoke (./editor/smoke.sh), branding/editor overrides, Linux build path per editor/BUILD.md, build-le-vibe-debs.sh --with-ide when toolchain allows; else SKIPPED + reason.
+If STEP 14: advance §7.3 — smoke (./editor/smoke.sh), branding/editor overrides, Linux build path per editor/BUILD.md, build-le-vibe-debs.sh --with-ide when toolchain allows, then verify-step14-closeout.sh --require-stack-deb; else SKIPPED + reason.
 End with PASTE SAME AGAIN if work remains toward §7.3.
 ```
 
@@ -98,7 +98,7 @@ End with PASTE SAME AGAIN if work remains toward §7.3.
 ## 7. Definition of done (STEP 14 honest)
 
 - **§7.3** behaviors in [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md) are **implemented** in **`editor/`** and packaging — not merely described in tests.
-- **Installable IDE `.deb`** + stack **`.deb`** per **`PM_DEB_BUILD_ITERATION.md`** / **`build-le-vibe-debs.sh --with-ide`** when the build environment can produce them.
+- **Installable IDE `.deb`** + stack **`.deb`** per **`PM_DEB_BUILD_ITERATION.md`** / **`build-le-vibe-debs.sh --with-ide`** when the build environment can produce them; close-out gate via **`packaging/scripts/verify-step14-closeout.sh --require-stack-deb`**.
 - **Local / manual** reproducibility narrative holds — **GitHub Actions are not** the v1 completion gate.
 - If something cannot be verified in-agent, **`SKIPPED` + reason** — update the honest paragraph per **spec-phase2 §14**, do not claim green.
 
