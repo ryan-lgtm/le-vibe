@@ -32,6 +32,8 @@ def test_master_iteration_loop_fence_extractable():
     assert "--json" in fence
     assert "apt_sim_note" in fence
     assert "le-vibe-deb" in fence
+    assert "build machine" in fence
+    assert "test host" in fence
 
 
 def test_print_master_iteration_loop_prompt_script_header_mentions_queue():

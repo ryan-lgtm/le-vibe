@@ -34,6 +34,8 @@ def test_ci_qa_hardening_doc_maintainer_full_product_deb_step14():
     assert "--json" in text
     assert "apt_sim_note" in text
     assert "Install both packages" in text
+    assert "build machine" in text
+    assert "test host" in text
 
 
 def test_ci_qa_hardening_doc_lists_smoke_and_pytest():
