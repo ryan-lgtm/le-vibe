@@ -51,6 +51,11 @@ def test_apt_repo_releases_doc_lists_stack_release_checklist_h1():
     """H1: ordered checklist ties changelog, tag, ci artifact, verify, gh release."""
     text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
     assert "### Checklist — stack-only GitHub Release" in text
+    stack_only = text.split("### Checklist — stack-only GitHub Release", 1)[1].split(
+        "### Checklist — full-product", 1
+    )[0]
+    assert "*GitHub Releases + checksums* (below)" in stack_only
+    assert "Pre-publish artifact checklist" in stack_only
     assert "minimal ordered path" in text
     assert "dpkg-parsechangelog -S Version" in text
     assert "le-vibe-deb" in text

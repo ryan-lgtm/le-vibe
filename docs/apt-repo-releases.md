@@ -43,7 +43,7 @@ The first line (`le-vibe (0.1.1) unstable; urgency=…`) must match the version 
 
 ### Checklist — stack-only GitHub Release (H1)
 
-Use this as a **minimal ordered path**; details stay in *Versioned changelog* / *GitHub Releases + checksums* / *Pre-publish artifact checklist* above.
+Use this as a **minimal ordered path**; supporting detail spans *Versioned changelog* (above) and *Pre-publish artifact checklist*, *Minimum directory layout*, and *GitHub Releases + checksums* (below).
 
 1. **Bump** **`debian/changelog`** and fold **`CHANGELOG.md`** **`[Unreleased]`** into a dated **`[x.y.z]`** section (*Versioned changelog*).
 2. **Confirm version** — **`dpkg-parsechangelog -S Version -l debian/changelog`** matches the **`v…`** tag you will use (*Before a stack tag / Release* above).
