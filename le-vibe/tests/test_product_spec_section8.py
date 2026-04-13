@@ -21,7 +21,9 @@ def test_welcome_banner_matches_product_spec_section4():
     assert ".lvibe/WELCOME.md" in WELCOME_BANNER
     assert "--skip-first-run" in WELCOME_BANNER
     assert "--force-first-run" in WELCOME_BANNER
+    assert "lvibe --help" in WELCOME_BANNER
     assert "lvibe logs" in WELCOME_BANNER
+    assert "--tail" in WELCOME_BANNER
     assert "STEP 6" in WELCOME_BANNER
 
 

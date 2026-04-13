@@ -23,8 +23,8 @@ WELCOME_BANNER = """
   Tip: In a project folder, `lvibe welcome` prints section-4 workspace copy; `lvibe open-welcome`
   opens `.lvibe/WELCOME.md` in your editor (PRODUCT_SPEC section 4 / STEP 4).
 
-  First-run / logs: `lvibe --skip-first-run` / `--force-first-run`, `LE_VIBE_VERBOSE=1` — see `le-vibe/README.md`
-  (*First-run (launcher)*); structured log path: `lvibe logs --path-only` (STEP 6).
+  First-run / logs: `lvibe --skip-first-run` / `--force-first-run`, `LE_VIBE_VERBOSE=1` — `lvibe --help` (STEP 6); `le-vibe/README.md`
+  (*First-run (launcher)*). Structured log: `lvibe logs --path-only` / `--tail N` (STEP 6).
 """.strip()
 
 
