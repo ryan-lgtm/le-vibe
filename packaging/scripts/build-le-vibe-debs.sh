@@ -61,6 +61,7 @@ Publishing / releases (H1):
   Tagging discipline — ide-v* (linux_compile CI) vs stack debian/changelog: same doc (Tagging discipline).
   Stack v... release tags vs ide-v* — apt-repo-releases.md (Stack release tags vs ide-v* — publishing).
   CI le-vibe-deb artifact is a .zip — unzip before sha256sum -c or lvibe verify-checksums (same doc — GitHub Releases + checksums).
+  apt-repo-releases.md Related docs (H1 index) — PM_STAGE_MAP (H1 vs §7.3), PM_DEB_BUILD_ITERATION (this one-shot).
 
 Full-product (--with-ide): When both .deb files are produced, the script prints a Full-product install
   line (sudo apt install with both resolved paths) before "Done." — docs/PM_DEB_BUILD_ITERATION.md

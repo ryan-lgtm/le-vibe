@@ -3,7 +3,7 @@
 **Owner:** Product / release hygiene. **Goal:** One script builds **`le-vibe`** and optionally **`le-vibe-ide`** `.deb` files with prerequisite checks, optional **`sudo apt install`**, and clear artifact paths.
 
 **Implementation:** [`packaging/scripts/build-le-vibe-debs.sh`](../packaging/scripts/build-le-vibe-debs.sh)  
-**Sibling docs:** [`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md), root [`debian/`](../debian/) (stack), [`editor/BUILD.md`](../editor/BUILD.md).
+**Sibling docs:** [`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md), root [`debian/`](../debian/) (stack), [`editor/BUILD.md`](../editor/BUILD.md), **[`docs/apt-repo-releases.md`](../docs/apt-repo-releases.md)** (H1 / STEP 8 — *Related docs* lists **`PM_DEB_BUILD_ITERATION.md`** + **`PM_STAGE_MAP.md`** next to **`ci-qa-hardening.md`**).
 
 **Fresh clone (14.b / STEP 14):** **`le-vibe-ide`** repacks a compiled **`VSCode-linux-*`** tree from **`editor/vscodium/`** — if that directory is empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the repository root before **`editor/BUILD.md`** fetch/build steps — same as **`editor/README.md`** *Fresh clone (14.b)*.
 
