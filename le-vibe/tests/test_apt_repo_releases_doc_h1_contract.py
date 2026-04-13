@@ -54,6 +54,9 @@ def test_apt_repo_releases_doc_lists_full_product_release_checklist_h1():
     assert "Combined drop" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "Success output (`--with-ide`)" in text
+    full_product = text.split("### Checklist — full-product GitHub Release", 1)[1].split("## CI artifacts", 1)[0]
+    assert "packaging/debian-le-vibe-ide/debian/changelog" in full_product
+    assert "Produce IDE" in full_product
 
 
 def test_apt_repo_releases_doc_lists_stack_release_checklist_h1():
