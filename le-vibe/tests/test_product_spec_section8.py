@@ -207,6 +207,10 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "Success output (`--with-ide`)" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "test_build_le_vibe_debs_script_contract.py" in text
+    sec73 = text.split("**§7.3 Full-product `.deb` (maintainer, non-CI):**", 1)[1].split(
+        "## §10", 1
+    )[0]
+    assert "required close-out gate" in sec73
 
 
 def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14():
