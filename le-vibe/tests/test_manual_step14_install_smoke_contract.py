@@ -41,6 +41,9 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "build machine" in text
     assert "test host" in text
     assert "docs/apt-repo-releases.md" in text
+    assert "Partial VSCode-linux tree" in text
+    assert "print-vsbuild-codium-path.sh" in text
+    assert "build-le-vibe-ide-deb.sh --help" in text
 
 
 def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> None:

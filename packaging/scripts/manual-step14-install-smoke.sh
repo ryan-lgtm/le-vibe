@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # STEP 14 / §7.3 helper: run this on an Ubuntu maintainer host after building
 # stack + IDE .deb artifacts to perform a deterministic manual install smoke.
+# If .debs are missing, fix the Linux IDE build first (partial VSCode-linux tree) — see --help
+# and docs/PM_DEB_BUILD_ITERATION.md (*Partial VSCode-linux tree*).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -36,6 +38,12 @@ Options:
                   Print only: sudo apt install "<stack.deb>" "<ide.deb>".
   --json          Print resolved stack/IDE deb paths + install command as JSON.
   -h, --help      Show this message and exit.
+
+Build machine prerequisites (no .debs yet — partial VSCode-linux / missing bin/codium):
+  docs/PM_DEB_BUILD_ITERATION.md (*Partial VSCode-linux tree*), editor/BUILD.md (*Partial tree*, 14.c),
+  ./editor/print-built-codium-path.sh, ./editor/print-vsbuild-codium-path.sh,
+  packaging/scripts/build-le-vibe-ide-deb.sh --help (triage + verify-step14-closeout.sh),
+  then packaging/scripts/build-le-vibe-debs.sh --with-ide.
 
 Ordering (same as docs/apt-repo-releases.md *IDE package*):
   Build machine — packaging/scripts/verify-step14-closeout.sh --require-stack-deb
