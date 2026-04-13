@@ -105,6 +105,21 @@ def test_ide_prereqs_print_closeout_partial_hint(monkeypatch: pytest.MonkeyPatch
     assert "(cd editor/vscodium && ./dev/build.sh)" in out
 
 
+def test_ide_prereqs_print_closeout_absent_hint(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    def _fake_status(_root: object) -> tuple[str, None]:
+        return "absent", None
+
+    monkeypatch.setattr("le_vibe.ide_packaging_paths.vscode_linux_build_status", _fake_status)
+    monkeypatch.setattr(sys, "argv", ["launcher", "ide-prereqs", "--print-closeout-commands"])
+    assert launcher.main() == 0
+    out = capsys.readouterr().out
+    assert "No VSCode-linux-* output" in out
+    assert "git submodule update --init editor/vscodium" in out
+    assert "./editor/use-node-toolchain.sh" in out
+    assert "./editor/fetch-vscode-sources.sh" in out
+    assert "(cd editor/vscodium && ./dev/build.sh)" in out
+
+
 def test_ide_prereqs_path_only_json_rejected(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     monkeypatch.setattr(sys, "argv", ["launcher", "ide-prereqs", "--path-only", "branding", "--json"])
     with pytest.raises(SystemExit) as exc:

@@ -880,6 +880,16 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             print("./editor/use-node-toolchain.sh")
             print("./editor/fetch-vscode-sources.sh")
             print("(cd editor/vscodium && ./dev/build.sh)")
+        elif vs_status == "absent":
+            print(
+                "# No VSCode-linux-* output under editor/vscodium/ yet — "
+                "editor/BUILD.md 14.b (submodule) → 14.a → 14.c; then preflight + verify below."
+            )
+            print("# golden-path bootstrap:")
+            print("git submodule update --init editor/vscodium")
+            print("./editor/use-node-toolchain.sh")
+            print("./editor/fetch-vscode-sources.sh")
+            print("(cd editor/vscodium && ./dev/build.sh)")
         print("./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb")
         print("./packaging/scripts/verify-step14-closeout.sh --require-stack-deb")
         print("# optional: add --apt-sim or --json to verify — docs/PM_DEB_BUILD_ITERATION.md")
