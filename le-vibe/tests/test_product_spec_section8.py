@@ -153,6 +153,10 @@ def test_product_spec_prioritization_names_ci_le_vibe_deb_vs_ide_deb_step14():
     assert "Failure (`--with-ide`)" in text
     assert "--vs-build" in text
     assert "Fail-fast (`build-le-vibe-debs.sh --with-ide`)" in text
+    assert "partial VSCode-linux tree" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "debian/lvibe.1" in text
+    assert "print-ci-tarball-codium-path.sh" in text
 
 
 def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci():
