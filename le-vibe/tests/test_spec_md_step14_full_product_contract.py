@@ -22,6 +22,7 @@ def test_spec_md_intro_documents_full_product_install_step14():
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "preflight-step14-closeout.sh" in text
     assert "ide-prereqs --print-closeout-commands" in text
+    assert "probe-vscode-linux-build.sh" in text
     assert "--json" in text
     assert "apt_sim_note" in text
     assert "debian-le-vibe-ide/README.md" in text
