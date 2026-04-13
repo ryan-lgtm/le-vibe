@@ -57,6 +57,8 @@ def test_ci_qa_hardening_doc_linux_compile_quick_path_triggers_step14e():
     assert "Honesty vs CI" in text
     assert "vscodium-linux-build.tar.gz" in text
     assert "docker-le-vibe-vscodium-linux-compile.sh" in text
+    assert "docker-le-vibe-vscodium-prepare-only.sh" in text
+    assert "Prepare-only (no `dev/build.sh`)" in text
     assert "Download shape" in text
     assert ".zip" in text
     assert "print-ci-tarball-codium-path.sh" in text
@@ -76,6 +78,7 @@ def test_ci_qa_hardening_related_docs_lists_docker_linux_compile_fallback():
     assert "## Related docs" in text
     related = text.split("## Related docs", 1)[1]
     assert "docker-le-vibe-vscodium-linux-compile.sh" in related
+    assert "docker-le-vibe-vscodium-prepare-only.sh" in related
     assert "ubuntu:22.04" in related
 
 
