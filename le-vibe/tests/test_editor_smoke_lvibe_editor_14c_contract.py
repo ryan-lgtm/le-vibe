@@ -93,6 +93,8 @@ def test_print_built_codium_path_documents_14c():
 def test_verify_14c_local_binary_script_contract():
     root = _repo_root()
     text = (root / "editor" / "verify-14c-local-binary.sh").read_text(encoding="utf-8")
+    assert "--help" in text
+    assert "unexpected argument" in text
     assert "0 → 1 → 14 → 2–13 → 15–17" in text
     assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "PM_STAGE_MAP.md" in text

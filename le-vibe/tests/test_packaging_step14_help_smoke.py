@@ -33,6 +33,7 @@ def _repo_root() -> Path:
         "editor/print-built-codium-path.sh",
         "editor/print-vsbuild-codium-path.sh",
         "editor/print-ci-tarball-codium-path.sh",
+        "editor/verify-14c-local-binary.sh",
     ],
 )
 def test_step14_script_help_exits_zero(relative: str) -> None:

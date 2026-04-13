@@ -11,6 +11,29 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PB="${ROOT}/editor/print-built-codium-path.sh"
 
+usage() {
+  cat <<'EOF'
+Usage: editor/verify-14c-local-binary.sh
+
+Print absolute path to VSCode-linux-*/bin/codium when a local dev/build.sh output
+exists under editor/vscodium/ (STEP 14.c — editor/BUILD.md). On success, same
+stdout as print-built-codium-path.sh; on failure, stderr lists next steps.
+
+Does not require ollama (unlike smoke-built-codium-lvibe.sh).
+
+  -h, --help   Show this message and exit.
+EOF
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+if [[ $# -gt 0 ]]; then
+  echo "verify-14c-local-binary: unexpected argument(s) — run with no args (see --help)" >&2
+  exit 2
+fi
+
 set +e
 out="$("${PB}" 2>&1)"
 ec=$?
