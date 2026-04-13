@@ -26,3 +26,11 @@ def test_spec_md_intro_documents_full_product_install_step14():
     assert "Install both packages" in text
     assert "build machine" in text
     assert "test host" in text
+    assert "docs/PM_STAGE_MAP.md" in text
+    assert "H1 vs §7.3 .deb bundles" in text
+    assert "Compile fail-fast" in text
+    assert "packaging/scripts/ci-vscodium-bash-syntax.sh" in text
+    assert "packaging/scripts/ci-editor-nvmrc-sync.sh" in text
+    assert "packaging/scripts/ci-vscodium-linux-dev-build.sh" in text
+    assert "./editor/smoke.sh" in text
+    assert "linux_compile" in text
