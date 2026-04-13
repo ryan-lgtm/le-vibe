@@ -76,6 +76,8 @@ def test_editor_le_vibe_overrides_readme_documents_launcher_and_h6_gate():
     assert "fetch-vscode-sources.sh" in text
     assert "verify-14c-local-binary.sh" in text
     assert "print-built-codium-path.sh" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
+    assert "Partial tree" in text
     assert "smoke-built-codium-lvibe.sh" in text
     assert "smoke-lvibe-editor.sh" in text
     assert "Upstream touchpoints (14.d)" in text
