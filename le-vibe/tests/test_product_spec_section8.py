@@ -290,4 +290,6 @@ def test_product_spec_section8_evidence_intro_lists_linux_compile_cargo_cache():
     assert "NODE_OPTIONS" in text
     assert "When full compile fails" in text
     assert "test_ci_qa_hardening_doc_h3_contract.py" in text
+    assert "test_docker_le_vibe_vscodium_linux_compile_contract.py" in text
+    assert "docker-le-vibe-vscodium-linux-compile.sh" in text
     assert "Optional full Linux compile" in text
