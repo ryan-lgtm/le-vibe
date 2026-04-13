@@ -79,6 +79,7 @@ Publishing / releases (H1):
 Full-product (--with-ide): When both .deb files are produced, the script prints a Full-product install
   line (sudo apt install with both resolved paths) before "Done." — docs/PM_DEB_BUILD_ITERATION.md
   (Success output (--with-ide)); releases — docs/apt-repo-releases.md (IDE package, Maintainer build output).
+  Preflight (all gaps at once): packaging/scripts/preflight-step14-closeout.sh [--require-stack-deb] [--skip-gate] — docs/PM_DEB_BUILD_ITERATION.md (*Preflight (all gaps)*).
   Local close-out check: packaging/scripts/verify-step14-closeout.sh (gate + built codium + le-vibe-ide_*.deb);
     add --require-stack-deb for full-product; optional --apt-sim, --json (apt_sim_note in JSON — docs/PM_DEB_BUILD_ITERATION.md *--json* close-out payload; see script --help).
   Before attaching to a GitHub Release, regenerate SHA256SUMS over both .deb files + SBOM if shipped — same doc (Pre-publish Integrity).
@@ -216,6 +217,7 @@ if [[ "$WITH_IDE" -eq 1 && -n "$STACK_DEB" && -f "$STACK_DEB" && -n "$IDE_DEB" &
   echo "==> Full-product install (paths printed above): sudo apt install \"$STACK_DEB\" \"$IDE_DEB\""
   echo "    Post-install: /usr/share/doc/le-vibe/README.Debian — packaging/debian-le-vibe-ide/README.md (*Install both packages*)"
   echo "    §7.3 maintainer smoke (ci-editor-gate + lvibe ide-prereqs --json, no new .deb): ./editor/verify-73-maintainer.sh — editor/README.md"
+  echo "    §7.3 preflight (all gaps before strict verifier): ./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb"
   echo "    §7.3 close-out verifier (gate + built codium + ide .deb + stack .deb): ./packaging/scripts/verify-step14-closeout.sh --require-stack-deb (optional --apt-sim, --json; apt_sim_note — docs/PM_DEB_BUILD_ITERATION.md *--json* close-out payload)"
 fi
 

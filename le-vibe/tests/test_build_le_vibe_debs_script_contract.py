@@ -68,6 +68,7 @@ def test_build_le_vibe_debs_script_prints_full_product_install_hint_step14():
     assert "verify-73-maintainer.sh" in text
     assert "verify-step14-closeout.sh" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
+    assert "preflight-step14-closeout.sh" in text
     assert "optional --apt-sim, --json" in text
     assert "apt_sim_note" in text
 
@@ -94,6 +95,7 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     assert "H1 quick pointer" in text
     assert "PM_STAGE_MAP" in text
     assert "Full-product (--with-ide)" in text
+    assert "preflight-step14-closeout.sh" in text
     assert "docs/PM_DEB_BUILD_ITERATION.md" in text
     assert "docs/apt-repo-releases.md" in text
     assert "Success output" in text
@@ -306,6 +308,7 @@ def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14()
     assert "/usr/share/doc/le-vibe/README.Debian" in text
     assert "debian-le-vibe-ide/README.md" in text
     assert "verify-step14-closeout.sh" in text
+    assert "preflight-step14-closeout.sh" in text
     assert "--require-stack-deb" in text
     assert "manual-step14-install-smoke.sh" in text
     assert "--print-install-cmd" in text

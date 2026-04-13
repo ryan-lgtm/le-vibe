@@ -47,6 +47,7 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "beside clone" in text
     assert "repo root" in text
     assert "resolve-latest-le-vibe-stack-deb.sh" in text
+    assert "preflight-step14-closeout.sh" in text
 
 
 def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> None:
@@ -93,6 +94,7 @@ def test_manual_step14_install_smoke_missing_artifacts_prints_recovery_commands(
     assert "build artifacts first" in err
     assert "build-le-vibe-debs.sh --with-ide" in err
     assert "verify-step14-closeout.sh --require-stack-deb" in err
+    assert "preflight-step14-closeout.sh" in err
     assert "apt_sim_note" in err
 
 

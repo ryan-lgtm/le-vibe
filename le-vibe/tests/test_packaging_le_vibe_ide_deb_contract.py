@@ -102,6 +102,7 @@ def test_build_le_vibe_ide_deb_script_documents_14b_and_bash_syntax():
     assert "print-built-codium-path.sh" in text
     assert "print-vsbuild-codium-path.sh" in text
     assert "verify-step14-closeout.sh" in text
+    assert "preflight-step14-closeout.sh" in text
     assert "expected packaging/le-vibe-ide_*.deb" in text
     assert "PM_STAGE_MAP.md" in text
     assert "H1 vs §7.3 .deb bundles" in text

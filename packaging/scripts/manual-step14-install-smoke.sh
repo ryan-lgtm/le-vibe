@@ -47,7 +47,8 @@ Build machine prerequisites (no .debs yet — partial VSCode-linux / missing bin
   then packaging/scripts/build-le-vibe-debs.sh --with-ide.
 
 Ordering (same as docs/apt-repo-releases.md *IDE package*):
-  Build machine — packaging/scripts/verify-step14-closeout.sh --require-stack-deb
+  Build machine — packaging/scripts/preflight-step14-closeout.sh --require-stack-deb (optional; all [ok]/[missing] gaps);
+    then packaging/scripts/verify-step14-closeout.sh --require-stack-deb
     Optional: --apt-sim, --json (apt_sim_note in JSON — docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*).
   Test host — copy .debs here, then use this script for sudo apt install + smoke.
 EOF
@@ -60,6 +61,8 @@ assert_file() {
     echo "manual-step14-install-smoke: missing $label ($path)" >&2
     echo "manual-step14-install-smoke: build artifacts first:" >&2
     echo "  packaging/scripts/build-le-vibe-debs.sh --with-ide" >&2
+    echo "manual-step14-install-smoke: optional preflight (all gaps):" >&2
+    echo "  packaging/scripts/preflight-step14-closeout.sh --require-stack-deb" >&2
     echo "manual-step14-install-smoke: then verify close-out artifacts:" >&2
     echo "  packaging/scripts/verify-step14-closeout.sh --require-stack-deb [--apt-sim] [--json]" >&2
     echo "manual-step14-install-smoke: (--json includes apt_sim_note; docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*)" >&2
