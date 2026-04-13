@@ -58,6 +58,7 @@ def test_apt_repo_releases_doc_lists_full_product_release_checklist_h1():
     assert "packaging/debian-le-vibe-ide/debian/changelog" in full_product
     assert "Produce IDE" in full_product
     assert "dpkg-parsechangelog -S Version -l packaging/debian-le-vibe-ide/debian/changelog" in full_product
+    assert "verify-step14-closeout.sh --require-stack-deb" in full_product
     assert "Before a stack tag / Release" in full_product or "Before a stack tag" in full_product
     assert "le-vibe-python.cdx.json" in full_product
     assert "**`le-vibe-deb`** tree" in full_product
@@ -135,6 +136,7 @@ def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
     assert "Install both packages" in text
     assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
     assert "ci-editor-gate.sh" in text
+    assert "verify-step14-closeout.sh" in text
 
 
 def test_apt_repo_releases_github_releases_section_links_combined_drop_step8():
