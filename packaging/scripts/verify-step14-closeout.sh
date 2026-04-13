@@ -166,6 +166,7 @@ JSON success (--json) includes:
 
 See also:
   - packaging/scripts/build-le-vibe-debs.sh --with-ide
+  - packaging/scripts/preflight-step14-closeout.sh (report all gaps before this strict verifier)
   - docs/PM_DEB_BUILD_ITERATION.md
   - docs/apt-repo-releases.md (*IDE package*) — ordering: run this verifier on the
     build machine; copy .debs to a test host for sudo apt install + smoke
