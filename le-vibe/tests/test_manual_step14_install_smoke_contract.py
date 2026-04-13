@@ -46,7 +46,7 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "build-le-vibe-ide-deb.sh --help" in text
     assert "beside clone" in text
     assert "repo root" in text
-    assert '_stack_cands=("$ROOT"/../le-vibe_*.deb "$ROOT"/le-vibe_*.deb)' in text
+    assert "resolve-latest-le-vibe-stack-deb.sh" in text
 
 
 def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> None:
@@ -64,6 +64,7 @@ def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> 
     assert "packaging/scripts/ci-editor-nvmrc-sync.sh" in rag
     assert "packaging/scripts/ci-vscodium-linux-dev-build.sh" in rag
     assert "manual-step14-install-smoke.sh default STACK_DEB" in rag
+    assert "resolve-latest-le-vibe-stack-deb.sh" in rag
     assert "Output paths (from repo root)" in rag
 
 

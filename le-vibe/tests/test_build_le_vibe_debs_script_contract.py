@@ -31,6 +31,7 @@ def test_build_le_vibe_debs_script_mentions_submodule_14b():
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
     assert "could not locate le-vibe_*.deb" in text
+    assert "resolve-latest-le-vibe-stack-deb.sh" in text
     assert "fix errors above" in text
     assert "could not locate le-vibe-ide_*.deb" in text
     assert "PM_STAGE_MAP.md" in text

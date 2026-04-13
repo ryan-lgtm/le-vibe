@@ -225,15 +225,12 @@ assert_deb_field_equals "$ide_deb_latest" "Package" "le-vibe-ide"
 assert_deb_field_equals "$ide_deb_latest" "Architecture" "amd64"
 
 if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
-  log_note "==> Stack package: le-vibe_*.deb (required; ../ then repo root)"
-  shopt -s nullglob
-  stack_debs=("$ROOT"/../le-vibe_*.deb "$ROOT"/le-vibe_*.deb)
-  shopt -u nullglob
-  if [[ ${#stack_debs[@]} -eq 0 ]]; then
+  log_note "==> Stack package: le-vibe_*.deb (required; resolve-latest-le-vibe-stack-deb.sh)"
+  stack_deb_latest="$("$ROOT/packaging/scripts/resolve-latest-le-vibe-stack-deb.sh" "$ROOT")"
+  if [[ -z "$stack_deb_latest" ]]; then
     echo "verify-step14-closeout: missing le-vibe_*.deb — dpkg-buildpackage emits ../le-vibe_*.deb beside the clone; or copy into repo root; run dpkg-buildpackage -us -uc -b (or build-le-vibe-debs.sh)." >&2
     exit 1
   fi
-  stack_deb_latest="$(pick_latest_match "le-vibe_*.deb" "${stack_debs[@]}")"
   log_note "    stack deb: $stack_deb_latest"
   log_note "    stack deb payload check: /usr/bin/lvibe + /usr/share/doc/le-vibe/README.Debian(.gz)"
   assert_deb_contains "$stack_deb_latest" "./usr/bin/lvibe"

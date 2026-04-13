@@ -8,14 +8,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
 
-# Default stack path: same discovery as verify-step14-closeout.sh --require-stack-deb (parent, then repo root).
-STACK_DEB_DEFAULT=""
-shopt -s nullglob
-_stack_cands=("$ROOT"/../le-vibe_*.deb "$ROOT"/le-vibe_*.deb)
-shopt -u nullglob
-if [[ ${#_stack_cands[@]} -gt 0 ]]; then
-  STACK_DEB_DEFAULT="$(printf '%s\n' "${_stack_cands[@]}" | sort -V | tail -n1)"
-fi
+# Default stack path: packaging/scripts/resolve-latest-le-vibe-stack-deb.sh (same as verify-step14-closeout --require-stack-deb).
+STACK_DEB_DEFAULT="$("$ROOT/packaging/scripts/resolve-latest-le-vibe-stack-deb.sh" "$ROOT")"
 IDE_DEB_DEFAULT="$(ls -1 "$ROOT"/packaging/le-vibe-ide_*.deb 2>/dev/null | sort -V | tail -n1 || true)"
 
 STACK_DEB="${STACK_DEB:-$STACK_DEB_DEFAULT}"
