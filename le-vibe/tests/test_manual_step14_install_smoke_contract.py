@@ -37,3 +37,25 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
 def test_pm_deb_build_iteration_points_to_manual_step14_install_smoke_script() -> None:
     text = (_repo_root() / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
     assert "manual-step14-install-smoke.sh" in text
+
+
+def test_manual_step14_install_smoke_missing_artifacts_prints_recovery_commands() -> None:
+    root = _repo_root()
+    script = root / "packaging" / "scripts" / "manual-step14-install-smoke.sh"
+    result = subprocess.run(
+        [str(script)],
+        cwd=str(root),
+        capture_output=True,
+        text=True,
+        env={
+            "PATH": str(Path("/usr/bin")) + ":" + str(Path("/bin")),
+            "STACK_DEB": "/definitely/missing/stack.deb",
+            "IDE_DEB": "/definitely/missing/ide.deb",
+        },
+    )
+    assert result.returncode == 2
+    err = result.stderr
+    assert "missing stack deb" in err
+    assert "build artifacts first" in err
+    assert "build-le-vibe-debs.sh --with-ide" in err
+    assert "verify-step14-closeout.sh --require-stack-deb" in err
