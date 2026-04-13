@@ -20,6 +20,15 @@ Run these from the clone root (`cd /path/to/r-vibe`). Stack **`le-vibe_*.deb`** 
 | **`--with-ide`** using a non-default **`VSCode-linux-*`** directory | `packaging/scripts/build-le-vibe-debs.sh --vs-build /path/to/VSCode-linux-x64` |
 | Faster stack **`dpkg-buildpackage`** (parallel **debhelper**) | `DEB_BUILD_OPTIONS=parallel=$(nproc) packaging/scripts/build-le-vibe-debs.sh` — passed through to **`dpkg-buildpackage`** (**`--help`** *Environment*: **`DEB_BUILD_OPTIONS`**) |
 
+### Output paths (from repo root)
+
+| Artifact | Where it lands |
+|----------|----------------|
+| Stack **`le-vibe_*_all.deb`** | **Parent of the clone** — `../le-vibe_*_all.deb` (standard **`dpkg-buildpackage`** output from the repo root) |
+| IDE **`le-vibe-ide_*_amd64.deb`** | **`packaging/le-vibe-ide_*.deb`** (sibling Debian source under **`packaging/debian-le-vibe-ide/`**) |
+
+**Full-product install** echoes **absolute** paths when both exist — *Success output (`--with-ide`)* below.
+
 **Script help:** `packaging/scripts/build-le-vibe-debs.sh --help` (alias **`-h`**) prints flags, environments, artifact paths, exit codes, and H1 publishing pointers — same text as in [`packaging/scripts/build-le-vibe-debs.sh`](../packaging/scripts/build-le-vibe-debs.sh).
 
 **Release folder (H1):** Before **`sha256sum -c SHA256SUMS`** / **`lvibe verify-checksums`** on a folder that mixes CI downloads with an IDE **`.deb`**, follow **[`apt-repo-releases.md`](apt-repo-releases.md)** *Minimum directory layout (readiness gate)* — stack-only three files vs **rewrite** **`SHA256SUMS`** for **Stack + IDE**.

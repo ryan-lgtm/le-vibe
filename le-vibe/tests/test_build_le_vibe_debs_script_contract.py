@@ -115,6 +115,16 @@ def test_pm_deb_build_iteration_doc_lists_deb_build_options_parallel_invocation(
     assert "Faster stack" in text
 
 
+def test_pm_deb_build_iteration_doc_lists_output_paths_table_step14():
+    """STEP 14: PM doc names stack .deb beside repo vs IDE .deb under packaging/."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    assert "### Output paths (from repo root)" in text
+    assert "../le-vibe_*_all.deb" in text
+    assert "packaging/le-vibe-ide_*.deb" in text
+    assert "Full-product install" in text
+
+
 def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():
     """STEP 14 / §7.3: PM deb doc points at apt-repo-releases for dual-.deb demo + H1 checksums."""
     root = Path(__file__).resolve().parents[2]
