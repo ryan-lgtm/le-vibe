@@ -59,6 +59,15 @@ def test_ci_qa_hardening_doc_linux_compile_quick_path_triggers_step14e():
     assert "docker-le-vibe-vscodium-linux-compile.sh" in text
 
 
+def test_ci_qa_hardening_related_docs_lists_docker_linux_compile_fallback():
+    """STEP 14.e: Related docs points at docker full-compile script when CI linux_compile is flaky."""
+    text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
+    assert "## Related docs" in text
+    related = text.split("## Related docs", 1)[1]
+    assert "docker-le-vibe-vscodium-linux-compile.sh" in related
+    assert "ubuntu:22.04" in related
+
+
 def test_ci_qa_hardening_ide_smoke_section_distinguishes_fast_gate_vs_linux_compile():
     """STEP 14: smoke is fast; vendoring / optional linux_compile + tarball live in editor docs."""
     text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
