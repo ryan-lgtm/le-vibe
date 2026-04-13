@@ -167,6 +167,36 @@ def _cmd_logs(argv: list[str]) -> int:
     return 0
 
 
+def _cmd_continue_pin(argv: list[str]) -> int:
+    """STEP 7 (H4): print pinned Open VSX semver for Continue — ``docs/continue-extension-pin.md``."""
+    from le_vibe.continue_pin import read_continue_openvsx_version, resolve_continue_openvsx_pin_path
+
+    p = argparse.ArgumentParser(
+        prog="lvibe continue-pin",
+        description="Print the pinned Continue Open VSX version (continue.continue@<semver>).",
+    )
+    p.add_argument(
+        "--path-only",
+        action="store_true",
+        help="print the pin file path only",
+    )
+    args = p.parse_args(argv)
+    try:
+        path = resolve_continue_openvsx_pin_path()
+        if args.path_only:
+            print(path)
+            return 0
+        ver = read_continue_openvsx_version()
+        print(ver)
+        return 0
+    except FileNotFoundError as e:
+        print(f"lvibe continue-pin: missing pin file: {e}", file=sys.stderr)
+        return 1
+    except ValueError as e:
+        print(f"lvibe continue-pin: {e}", file=sys.stderr)
+        return 2
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -197,6 +227,8 @@ def main() -> int:
         return _cmd_hygiene(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "logs":
         return _cmd_logs(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "continue-pin":
+        return _cmd_continue_pin(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",

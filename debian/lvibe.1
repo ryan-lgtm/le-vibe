@@ -36,6 +36,10 @@ Validate \fB.lvibe/\fR manifest, session JSON, and chunk path refs — same as \
 .B lvibe logs
 .RI [ \-\-path\-only | \-\-tail " N " ]
 Show the local structured log path (\fB~/.config/le\-vibe/le\-vibe.log.jsonl\fR) and optional \fBtail\fR\-style last \fIN\fR lines. Local JSON Lines only — \fBdocs/privacy\-and\-telemetry.md\fR.
+.TP
+.B lvibe continue-pin
+.RI [ \-\-path\-only ]
+Print the pinned Open VSX semver for Continue (\fBcontinue.continue@\fIver\fR). Pin file: \fB/usr/share/le\-vibe/continue\-openvsx\-version\fR when installed, else monorepo \fBpackaging/continue\-openvsx\-version\fR; \fBLE_VIBE_CONTINUE_PIN_FILE\fR overrides. \fBdocs/continue\-extension\-pin.md\fR.
 .SH OPTIONS
 See
 .BR le\-vibe (1).

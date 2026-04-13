@@ -53,6 +53,8 @@ def test_le_vibe_readme_lists_step7_h4_continue_pin():
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
     assert "Continue / Open VSX pin (STEP 7 / H4)" in text
     assert "continue-openvsx-version" in text
+    assert "continue-pin" in text
+    assert "--path-only" in text
     assert "verify-continue-pin.sh" in text
     assert "continue-extension-pin.md" in text
     assert "install-continue-extension.sh" in text
