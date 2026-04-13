@@ -212,6 +212,17 @@ def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14()
     assert "roadmap" in text
 
 
+def test_product_spec_section8_evidence_section10_first_run_observability_step6():
+    """E1: §10 narrative cites first-run failure remediation → lvibe logs (STEP 6)."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
+    assert "First-run vs observability" in text
+    assert "ensure_product_first_run" in text
+    assert "lvibe logs" in text
+    assert "test_first_run.py" in text
+    assert "STEP 6" in text
+
+
 def test_product_spec_section8_evidence_h6_lists_editor_readme_h3_linux_compile_index():
     """E1: H6/H7 paragraph cites editor/README H3 linux_compile index + test_editor_readme contract."""
     root = Path(__file__).resolve().parents[2]
