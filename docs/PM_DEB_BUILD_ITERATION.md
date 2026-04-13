@@ -9,7 +9,9 @@
 
 ## Invocations (repository root)
 
-Run these from the clone root (`cd /path/to/r-vibe`). Stack **`le-vibe_*.deb`** is emitted **beside** the repo directory (parent of the root); IDE **`le-vibe-ide_*.deb`** is under **`packaging/`** — see **`build-le-vibe-debs.sh`** **`--help`** and *Artifacts* in that usage.
+**Working directory:** **`build-le-vibe-debs.sh`** resolves the monorepo root from the script path and **`cd`s there** before **`dpkg-buildpackage`** — you can invoke it **from any cwd** (absolute path to the script, or a relative path from where you are). Examples below still spell **`packaging/scripts/...`** as if **`cd /path/to/r-vibe`** for consistency with **`--help`**.
+
+Stack **`le-vibe_*.deb`** is emitted **beside** the repo directory (parent of the root); IDE **`le-vibe-ide_*.deb`** is under **`packaging/`** — see **`build-le-vibe-debs.sh`** **`--help`** and *Artifacts* in that usage.
 
 | Goal | Command |
 |------|---------|

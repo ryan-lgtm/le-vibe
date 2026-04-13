@@ -21,6 +21,9 @@ usage() {
   cat <<'EOF'
 Usage: packaging/scripts/build-le-vibe-debs.sh [options]
 
+The script resolves the monorepo root from its own path and cds there before building —
+your shell cwd does not need to be the clone root (doc examples still use paths from repo root).
+
 Build Debian binary packages from this monorepo:
   (default)        Build the le-vibe stack .deb only.
   --with-ide       Also build le-vibe-ide (requires editor/vscodium/VSCode-linux-*).
