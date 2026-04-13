@@ -23,4 +23,6 @@ def test_step14_autonomous_runbook_documents_closeout_verifier():
     assert "--apt-sim" in text
     assert "--json" in text
     assert "apt_sim_note" in text
+    assert "build machine" in text
+    assert "test host" in text
     assert "Definition of done (STEP 14 honest)" in text

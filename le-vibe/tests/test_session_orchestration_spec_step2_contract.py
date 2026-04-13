@@ -36,6 +36,8 @@ def test_session_orchestration_spec_lists_maintainer_full_product_deb_step14():
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
+    assert "build machine" in text
+    assert "test host" in text
 
 
 def test_session_orchestration_spec_phase2_paragraph_lists_linux_compile_tarball():
