@@ -74,6 +74,7 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     assert "full-product GitHub Release" in text
     assert "Related docs (H1 index)" in text
     assert "CHANGELOG.md" in text
+    assert "H1 quick pointer" in text
     assert "PM_STAGE_MAP" in text
     assert "Full-product (--with-ide)" in text
     assert "docs/PM_DEB_BUILD_ITERATION.md" in text
@@ -173,6 +174,7 @@ def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():
     assert "verify-checksums" in text
     assert ".zip" in text
     assert "GitHub Releases + checksums" in text
+    assert "H1 quick pointer" in text
     assert "Stack `v…` release tags" in text
     assert "Stack release tags vs `ide-v`*" in text
     assert "dpkg-parsechangelog" in text
