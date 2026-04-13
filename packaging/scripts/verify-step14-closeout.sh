@@ -13,6 +13,7 @@ cd "$ROOT"
 
 REQUIRE_STACK_DEB=0
 SKIP_GATE=0
+ENABLE_APT_SIM=0
 
 pick_latest_match() {
   local label="$1"
@@ -99,9 +100,22 @@ assert_deb_path_is_executable() {
   fi
 }
 
+assert_apt_simulated_install() {
+  local stack_deb="$1"
+  local ide_deb="$2"
+  if ! command -v apt-get >/dev/null 2>&1; then
+    echo "verify-step14-closeout: apt-get not found on PATH (cannot simulate install)." >&2
+    exit 2
+  fi
+  if ! apt-get -s install "$stack_deb" "$ide_deb" >/dev/null; then
+    echo "verify-step14-closeout: apt simulation failed for stack+IDE deb pair." >&2
+    exit 1
+  fi
+}
+
 usage() {
   cat <<'EOF'
-Usage: packaging/scripts/verify-step14-closeout.sh [--require-stack-deb] [--skip-gate]
+Usage: packaging/scripts/verify-step14-closeout.sh [--require-stack-deb] [--apt-sim] [--skip-gate]
 
 Checks local STEP 14 / §7.3 readiness:
   1) packaging/scripts/ci-editor-gate.sh (unless --skip-gate),
@@ -116,6 +130,8 @@ Options:
                         - `/usr/bin/lvibe` exists and is executable (or symlink),
                         - README.Debian(.gz) doc payload exists,
                         - metadata is `Package: le-vibe`, `Architecture: all`.
+  --apt-sim             When used with --require-stack-deb, run:
+                        `apt-get -s install <stack.deb> <ide.deb>`.
   --skip-gate           Skip ci-editor-gate.sh (faster local check).
   -h, --help            Show this message and exit.
 
@@ -129,6 +145,7 @@ EOF
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --require-stack-deb) REQUIRE_STACK_DEB=1 ;;
+    --apt-sim) ENABLE_APT_SIM=1 ;;
     --skip-gate) SKIP_GATE=1 ;;
     -h|--help) usage; exit 0 ;;
     *)
@@ -190,6 +207,12 @@ if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
   echo "    stack deb metadata check: Package=le-vibe, Architecture=all"
   assert_deb_field_equals "$stack_deb_latest" "Package" "le-vibe"
   assert_deb_field_equals "$stack_deb_latest" "Architecture" "all"
+  if [[ "$ENABLE_APT_SIM" -eq 1 ]]; then
+    echo "    apt simulation check: apt-get -s install <stack.deb> <ide.deb>"
+    assert_apt_simulated_install "$stack_deb_latest" "$ide_deb_latest"
+  else
+    echo "    apt simulation check: skipped (use --apt-sim)"
+  fi
 fi
 
 echo "verify-step14-closeout: OK (gate + built codium + ide deb${REQUIRE_STACK_DEB:+ + stack deb})."

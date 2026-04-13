@@ -26,6 +26,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "verify-14c-local-binary.sh" in text
     assert "packaging/le-vibe-ide_*.deb" in text
     assert "--require-stack-deb" in text
+    assert "--apt-sim" in text
     assert "--skip-gate" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "desktop content contains `Name=Lé Vibe`" in text
@@ -43,6 +44,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "assert_deb_field_equals" in text
     assert "assert_deb_file_contains" in text
     assert "assert_deb_path_is_executable" in text
+    assert "assert_apt_simulated_install" in text
     assert "dpkg-deb --contents" in text
     assert "dpkg-deb --field" in text
     assert "dpkg-deb --fsys-tarfile" in text
@@ -55,3 +57,5 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "./usr/share/doc/le-vibe/README.Debian.gz" in text
     assert "Package=le-vibe-ide, Architecture=amd64" in text
     assert "Package=le-vibe, Architecture=all" in text
+    assert "apt-get -s install" in text
+    assert "skipped (use --apt-sim)" in text
