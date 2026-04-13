@@ -36,6 +36,7 @@ def test_apt_repo_releases_doc_lists_ci_artifact_and_changelog():
     assert ".zip" in text
     assert "Stack release tags vs `ide-v*`" in text
     assert "dpkg -l le-vibe" in text
+    assert "dpkg-parsechangelog" in text
 
 
 def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():

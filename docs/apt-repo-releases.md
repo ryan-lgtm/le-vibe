@@ -27,6 +27,8 @@ dpkg-buildpackage -us -uc -b
 
 The first line (`le-vibe (0.1.1) unstable; urgency=…`) must match the version users see after **`apt install`** / **`dpkg -l le-vibe`**.
 
+**Before a stack tag / Release:** **`dpkg-parsechangelog -S Version -l debian/changelog`** (from **`dpkg-dev`**) prints the **semver** in the top stanza — it should match the dated section you folded into **[`CHANGELOG.md`](../CHANGELOG.md)** and the **`v…`** tag you intend for **`gh release create`** (*Tagging discipline* / *Stack release tags vs `ide-v`* below).
+
 ### Tagging discipline (stack vs `ide-v*` compile tags)
 
 **Stack `le-vibe` .deb:** Keep **`debian/changelog`**, root **[`CHANGELOG.md`](../CHANGELOG.md)**, and your **Git tag** / **GitHub Release** aligned — that is the primary **H1** version story for the Python stack **`.deb`**.
