@@ -20,3 +20,4 @@ def test_master_orchestrator_fence_extractable():
     assert "ORDERED WORK QUEUE" in fence
     assert "STEP 0" in fence and "STEP 17" in fence
     assert "USER RESPONSE REQUIRED" in fence
+    assert "Rolling iteration — prefer continuation" in fence
