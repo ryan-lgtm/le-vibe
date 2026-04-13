@@ -124,6 +124,16 @@ def test_pm_deb_build_iteration_doc_submodule_prereq_14b():
     assert "Fresh clone (14.b" in text
 
 
+def test_pm_deb_build_iteration_doc_preflight_verify_stderr_vscode_linux_build_step14():
+    """STEP 14: Preflight paragraph documents vscode_linux_build line + verify stderr on 14.c fail."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    sec = text.split("**Preflight (all gaps):**", 1)[1].split("**Full-product install**", 1)[0]
+    assert "vscode_linux_build:" in sec
+    assert "verify-step14-closeout.sh --json" in sec
+    assert "verify-step14-closeout.sh" in sec and "stderr" in sec
+
+
 def test_pm_deb_build_iteration_doc_master_orchestrator_queue_step14():
     """STEP 14: PM deb doc ties --with-ide to Master queue before Invocations."""
     root = Path(__file__).resolve().parents[2]

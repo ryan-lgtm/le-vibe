@@ -34,6 +34,17 @@ json_escape() {
   printf '%s' "$value"
 }
 
+# Same classifier as preflight-step14-closeout.sh / lvibe ide-prereqs --json (le_vibe.ide_packaging_paths).
+probe_vscode_linux_build() {
+  REPO_ROOT="$ROOT" PYTHONPATH="$ROOT/le-vibe" python3 -c '
+import os
+from pathlib import Path
+from le_vibe.ide_packaging_paths import vscode_linux_build_status
+st, _ = vscode_linux_build_status(Path(os.environ["REPO_ROOT"]))
+print(st)
+' 2>/dev/null || echo "unknown"
+}
+
 pick_latest_match() {
   local label="$1"
   shift
@@ -208,6 +219,8 @@ CODIUM_PATH="$("$ROOT/editor/verify-14c-local-binary.sh")"
 verify_14c_ec=$?
 set -e
 if [[ "$verify_14c_ec" -ne 0 ]]; then
+  _vlb="$(probe_vscode_linux_build)"
+  echo "verify-step14-closeout: vscode_linux_build: ${_vlb} (preflight-step14-closeout.sh prints the same field after 14.c)" >&2
   echo "verify-step14-closeout: STEP 14.c failed (built codium missing or incomplete). Preflight: ${ROOT}/packaging/scripts/preflight-step14-closeout.sh — docs/PM_DEB_BUILD_ITERATION.md; lvibe ide-prereqs --print-closeout-commands" >&2
   exit 1
 fi
