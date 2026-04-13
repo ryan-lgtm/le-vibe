@@ -17,6 +17,9 @@ def test_debian_lvibe_man_description_lists_first_run_cross_ref_le_vibe_step6():
     assert "\\-\\-path\\-only" in text
     assert "\\-\\-tail" in text
     assert "STEP 6" in text
+    assert "\\fBlvibe \\-\\-help\\fR" in text
+    assert "\\-\\-skip\\-first\\-run" in text
+    assert "\\-\\-force\\-first\\-run" in text
     assert "\\fBle\\-vibe\\fR(1) OPTIONS" in text
     assert "First\\-run (launcher)" in text
     assert "PRODUCT_SPEC_SECTION8_EVIDENCE.md" in text
