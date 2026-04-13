@@ -74,6 +74,7 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     assert "PM_DEB_BUILD_ITERATION.md (Exit codes" in text
     assert "lvibe verify-checksums" in text
     assert "le-vibe-deb artifact is a .zip" in text
+    assert "Stack v" in text and "ide-v*" in text
 
 
 def test_pm_deb_build_iteration_doc_submodule_prereq_14b():
@@ -100,6 +101,8 @@ def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():
     assert "verify-checksums" in text
     assert ".zip" in text
     assert "GitHub Releases + checksums" in text
+    assert "Stack `v…` release tags" in text
+    assert "Stack release tags vs `ide-v`*" in text
 
 
 def test_pm_deb_build_iteration_doc_exit_codes_table_step14():
@@ -168,3 +171,4 @@ def test_print_pm_deb_build_prompt_extractable():
     assert "**H1 publishing:**" in fence
     assert "lvibe verify-checksums" in fence
     assert "GitHub Releases + checksums" in fence
+    assert "stack `v…` vs `ide-v*`" in fence

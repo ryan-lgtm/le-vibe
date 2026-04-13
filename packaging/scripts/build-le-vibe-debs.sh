@@ -55,6 +55,7 @@ Publishing / releases (H1):
   docs/apt-repo-releases.md — Pre-publish artifact checklist, SHA256SUMS, debian/changelog ↔ CHANGELOG.md
   when tagging; default ci.yml le-vibe-deb is stack-only vs full-product Stack + IDE drops.
   Tagging discipline — ide-v* (linux_compile CI) vs stack debian/changelog: same doc (Tagging discipline).
+  Stack v... release tags vs ide-v* — apt-repo-releases.md (Stack release tags vs ide-v* — publishing).
   CI le-vibe-deb artifact is a .zip — unzip before sha256sum -c or lvibe verify-checksums (same doc — GitHub Releases + checksums).
 
 Full-product (--with-ide): When both .deb files are produced, the script prints a Full-product install
