@@ -36,6 +36,7 @@ def test_stage_le_vibe_ide_deb_script_documents_14b_submodule_and_bash_syntax():
     assert "partial VSCode-linux tree" in text
     assert "print-built-codium-path.sh" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
     assert "14.c" in text
     assert "restore packaging/debian-le-vibe-ide" in text
     assert "restore packaging/icons from git" in text
