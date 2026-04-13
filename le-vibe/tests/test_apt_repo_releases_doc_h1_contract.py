@@ -167,6 +167,7 @@ def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
     assert "print-built-codium-path.sh" in text
     assert "print-vsbuild-codium-path.sh" in text
     assert "print-step14-vscode-linux-bin-files.sh" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     assert "vscode_linux_bin_files" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
     assert "Compile fail-fast (STEP 14" in text
