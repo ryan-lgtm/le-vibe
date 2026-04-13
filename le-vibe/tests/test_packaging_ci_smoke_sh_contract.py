@@ -31,6 +31,8 @@ def test_packaging_ci_smoke_sh_documents_step14_gate_and_submodule_14b():
 def test_packaging_ci_smoke_sh_header_lists_le_vibe_deb_stack_only_step14():
     """STEP 14 / §7.3: smoke script header matches ci.yml — le-vibe-deb artifact excludes le-vibe-ide."""
     text = (_repo_root() / "packaging" / "scripts" / "ci-smoke.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "le-vibe-deb" in text
     assert "not le-vibe-ide" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
