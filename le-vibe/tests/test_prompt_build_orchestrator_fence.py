@@ -31,6 +31,8 @@ def test_master_orchestrator_fence_extractable():
     assert "test host" in text
     assert "Partial VSCode-linux tree" in text
     assert "print-built-codium-path" in text
+    assert "print-vsbuild-codium-path" in text
+    assert "build-le-vibe-ide-deb.sh --help" in text
     assert "Incomplete Linux build" in text
 
 
