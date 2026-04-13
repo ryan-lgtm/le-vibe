@@ -96,6 +96,8 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     assert "lvibe verify-checksums" in text
     assert "le-vibe-deb artifact is a .zip" in text
     assert "Stack v" in text and "ide-v*" in text
+    assert "le-vibe-python.cdx.json" in text
+    assert "full-product checklist step 3" in text
     assert "Pre-publish Integrity" in text
     assert "Combined drop" in text
 
@@ -171,6 +173,18 @@ def test_pm_deb_build_iteration_doc_quick_version_check_pair_h1():
     assert "dpkg-parsechangelog -S Version -l packaging/debian-le-vibe-ide/debian/changelog" in sec
     assert "Checklist — full-product GitHub Release" in sec
     assert "step **2**" in sec
+
+
+def test_pm_deb_build_iteration_doc_release_folder_matches_apt_repo_full_product_step3_h1():
+    """H1: Release folder paragraph ties le-vibe-deb trio + IDE .deb to apt-repo step 3."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    sec = text.split("**Release folder (H1):**", 1)[1].split("**Publishing (STEP 8", 1)[0]
+    assert "Checklist — full-product GitHub Release" in sec
+    assert "step **3**" in sec
+    assert "**`le-vibe-deb`** tree" in sec
+    assert "le-vibe-python.cdx.json" in sec
+    assert "Minimum directory layout (readiness gate)" in sec
 
 
 def test_pm_deb_build_iteration_doc_lists_output_paths_table_step14():

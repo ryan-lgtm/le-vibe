@@ -63,8 +63,8 @@ Publishing / releases (H1):
   dpkg-parsechangelog -S Version -l debian/changelog (stack) / packaging/debian-le-vibe-ide/debian/changelog (IDE) — same doc (Versioned changelog; full-product checklist step 2).
   dpkg-parsechangelog -S Version -l debian/changelog before stack v... tag / gh release — same doc (Versioned changelog).
   default ci.yml le-vibe-deb is stack-only vs full-product Stack + IDE drops.
-  Combined drop: CI stack artifact + le-vibe-ide built separately — merge into one folder, regenerate SHA256SUMS
-  (CI SHA256SUMS alone is wrong once you add the second .deb) — same doc (Pre-publish — Combined drop).
+  Combined drop: le-vibe-deb tree (stack .deb + le-vibe-python.cdx.json + SHA256SUMS) + IDE .deb — one folder, regenerate SHA256SUMS
+  (CI SHA256SUMS alone is wrong once you add the second .deb) — same doc (Pre-publish — Combined drop; full-product checklist step 3).
   Full-product GitHub Release (both .debs on one Release) — docs/apt-repo-releases.md (Checklist — full-product GitHub Release).
   Tagging discipline — ide-v* (linux_compile CI) vs stack debian/changelog: same doc (Tagging discipline).
   Stack v... release tags vs ide-v* — apt-repo-releases.md (Stack release tags vs ide-v* — publishing).
