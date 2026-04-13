@@ -50,8 +50,8 @@ Validate \fB.lvibe/\fR manifest, session JSON, \fBstorage\-state.json\fR (if pre
 Show the local structured log path (\fB~/.config/le\-vibe/le\-vibe.log.jsonl\fR), optional \fBtail\fR\-style last \fIN\fR lines, or \fB\-\-json\fR metadata. Local JSON Lines only — \fBdocs/privacy\-and\-telemetry.md\fR.
 .TP
 .B lvibe continue-pin
-.RI [ \-\-path\-only ]
-Print the pinned Open VSX semver for Continue (\fBcontinue.continue@\fIver\fR). Pin file: \fB/usr/share/le\-vibe/continue\-openvsx\-version\fR when installed, else monorepo \fBpackaging/continue\-openvsx\-version\fR; \fBLE_VIBE_CONTINUE_PIN_FILE\fR overrides. \fBdocs/continue\-extension\-pin.md\fR.
+.RI [ \-\-path\-only | \-\-json ]
+Print the pinned Open VSX semver for Continue (\fBcontinue.continue@\fIver\fR), path only, or JSON (\fBpin_file\fR, \fBsemver\fR, \fBopenvsx_id\fR). Pin file: \fB/usr/share/le\-vibe/continue\-openvsx\-version\fR when installed, else monorepo \fBpackaging/continue\-openvsx\-version\fR; \fBLE_VIBE_CONTINUE_PIN_FILE\fR overrides. \fBdocs/continue\-extension\-pin.md\fR.
 .TP
 .B lvibe verify-checksums
 .RI [ \-C " dir " ]

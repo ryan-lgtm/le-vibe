@@ -248,6 +248,8 @@ def _cmd_logs(argv: list[str]) -> int:
 
 def _cmd_continue_pin(argv: list[str]) -> int:
     """STEP 7 (H4): print pinned Open VSX semver for Continue — ``docs/continue-extension-pin.md``."""
+    import json as json_mod
+
     from le_vibe.continue_pin import read_continue_openvsx_version, resolve_continue_openvsx_pin_path
 
     p = argparse.ArgumentParser(
@@ -259,9 +261,37 @@ def _cmd_continue_pin(argv: list[str]) -> int:
         action="store_true",
         help="print the pin file path only",
     )
+    p.add_argument(
+        "--json",
+        action="store_true",
+        help="print pin file path, semver, and continue.continue@… id as JSON",
+    )
     args = p.parse_args(argv)
+    if args.json and args.path_only:
+        print(
+            "lvibe continue-pin: --json cannot be combined with --path-only",
+            file=sys.stderr,
+        )
+        return 2
     try:
         path = resolve_continue_openvsx_pin_path()
+        if args.json:
+            out: dict[str, object] = {"pin_file": str(path.resolve())}
+            try:
+                ver = read_continue_openvsx_version()
+            except FileNotFoundError:
+                out["error"] = "missing_pin_file"
+                print(json_mod.dumps(out, indent=2, ensure_ascii=False))
+                return 1
+            except ValueError as e:
+                out["error"] = "invalid_pin"
+                out["detail"] = str(e)
+                print(json_mod.dumps(out, indent=2, ensure_ascii=False))
+                return 2
+            out["semver"] = ver
+            out["openvsx_id"] = f"continue.continue@{ver}"
+            print(json_mod.dumps(out, indent=2, ensure_ascii=False))
+            return 0
         if args.path_only:
             print(path)
             return 0

@@ -56,6 +56,7 @@ def test_le_vibe_readme_lists_step7_h4_continue_pin():
     assert "continue-openvsx-version" in text
     assert "continue-pin" in text
     assert "--path-only" in text
+    assert "--json" in text
     assert "verify-continue-pin.sh" in text
     assert "continue-extension-pin.md" in text
     assert "install-continue-extension.sh" in text
