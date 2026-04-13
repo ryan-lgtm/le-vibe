@@ -19,6 +19,9 @@ def test_security_related_docs_lists_pm_deb_maintainer_full_product_step14():
     assert "apt-repo-releases.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
     assert "Partial VSCode-linux" in text
+    assert "print-vsbuild-codium-path" in text
+    assert "build-le-vibe-ide-deb.sh --help" in text
+    assert "privacy-and-telemetry.md" in text
 
 
 def test_security_related_docs_lists_linux_compile_cargo_cache():
