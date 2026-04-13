@@ -61,6 +61,9 @@ def test_ci_qa_hardening_doc_linux_compile_quick_path_triggers_step14e():
     assert ".zip" in text
     assert "print-ci-tarball-codium-path.sh" in text
     assert "CI artifact → `LE_VIBE_EDITOR`" in text
+    assert "gh run download" in text
+    assert "le-vibe-vscodium-linux-<RUN_ID>" in text
+    assert "build-le-vibe-ide.yml" in text
     assert "**Publishing (H1 / STEP 14):**" in text
     assert "Pre-publish artifact checklist" in text
     assert "**Integrity**" in text
