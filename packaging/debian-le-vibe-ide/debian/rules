@@ -5,6 +5,18 @@
 override_dh_auto_build:
 
 override_dh_auto_install:
+
+# Install only from staging/ — do not use override_dh_auto_install for dh_install: the default
+# dh_install pass would re-read debian/le-vibe-ide.install without --sourcedir=staging and fail.
+override_dh_install:
 	@test -e staging/usr/lib/le-vibe/bin/codium || (echo "error: no staging yet — from repo root run ./packaging/scripts/stage-le-vibe-ide-deb.sh (needs editor/vscodium/VSCode-linux-* from a compile; §7.3: packaging/scripts/ci-vscodium-linux-dev-build.sh per editor/BUILD.md). See packaging/debian-le-vibe-ide/README.md." >&2; false)
 	@test -e staging/usr/share/applications/le-vibe.desktop || (echo "error: staging incomplete — re-run ./packaging/scripts/stage-le-vibe-ide-deb.sh from the repository root (same prerequisites as above)." >&2; false)
 	dh_install --sourcedir=staging
+
+# Electron + native addons: multifile dwz fails ("Too few files"); skip compression pass.
+override_dh_dwz:
+	@:
+
+# Tree includes foreign-arch seccomp helpers and other non-host ELF; strip fails — skip.
+override_dh_strip:
+	@:

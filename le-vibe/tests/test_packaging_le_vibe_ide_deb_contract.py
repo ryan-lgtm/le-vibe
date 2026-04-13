@@ -146,3 +146,7 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "le-vibe.svg" in install
     rules = (root / "packaging" / "debian-le-vibe-ide" / "debian" / "rules").read_text(encoding="utf-8")
     assert "staging/usr/share/applications/le-vibe.desktop" in rules
+    assert "override_dh_install" in rules
+    assert "dh_install --sourcedir=staging" in rules
+    assert "override_dh_dwz" in rules
+    assert "override_dh_strip" in rules

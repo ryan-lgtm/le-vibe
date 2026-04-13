@@ -59,7 +59,9 @@ if command -v lintian >/dev/null 2>&1; then
   set -e
   if [[ "${_lio}" -ne 0 ]]; then
     echo "build-le-vibe-ide-deb: lintian exited ${_lio} — see docs/ci-qa-hardening.md; set LEVIBE_IDE_LINTIAN_STRICT=1 to fail the script on lintian." >&2
-    [[ "${LEVIBE_IDE_LINTIAN_STRICT:-}" == "1" ]] && exit "${_lio}"
+    if [[ "${LEVIBE_IDE_LINTIAN_STRICT:-}" == "1" ]]; then
+      exit "${_lio}"
+    fi
   fi
 else
   echo "build-le-vibe-ide-deb: lintian not on PATH — skipped (optional QA per packaging/debian-le-vibe-ide/README.md)." >&2

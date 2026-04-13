@@ -46,3 +46,4 @@ packaging/debian-le-vibe-ide/debian/.debhelper/
 packaging/debian-le-vibe-ide/debian/files
 packaging/debian-le-vibe-ide/debian/*.substvars
 packaging/debian-le-vibe-ide/debian/*.debhelper.log
+packaging/debian-le-vibe-ide/debian/le-vibe-ide/
