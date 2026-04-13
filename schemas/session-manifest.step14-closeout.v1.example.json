@@ -5,7 +5,7 @@
     "created_utc": "2026-04-12T00:00:00Z",
     "title": "STEP 14 — §7.3 IDE close-out (H6 editor/)",
     "workspace_summary": "Monorepo Lé Vibe: stack le-vibe/ + IDE editor/. Engineer advances tasks until §7.3 is implemented and verified — not doc-only.",
-    "rag_notes": "Authority: docs/PRODUCT_SPEC.md §7.3, docs/PROMPT_BUILD_LE_VIBE.md ORDERED WORK QUEUE, docs/PM_STAGE_MAP.md STEP 14 row, docs/STEP14_AUTONOMOUS_ENGINEER_RUNBOOK.md. Local gate: packaging/scripts/verify-step14-closeout.sh --require-stack-deb; optional --apt-sim, --json (apt_sim_note — docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*).",
+    "rag_notes": "Authority: docs/PRODUCT_SPEC.md §7.3, docs/PROMPT_BUILD_LE_VIBE.md ORDERED WORK QUEUE, docs/PM_STAGE_MAP.md STEP 14 row, docs/STEP14_AUTONOMOUS_ENGINEER_RUNBOOK.md. Local gate: packaging/scripts/verify-step14-closeout.sh --require-stack-deb; optional --apt-sim, --json (apt_sim_note — docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*). Partial VSCode-linux (missing bin/codium): editor/BUILD.md *Partial tree*, ./editor/print-built-codium-path.sh, docs/PM_DEB_BUILD_ITERATION.md *Partial VSCode-linux tree*, docs/apt-repo-releases.md *IDE package* (*Incomplete Linux build*).",
     "current_step_id": "epic_iteration",
     "continue_construction_note": "Copy to .lvibe/session-manifest.json if you want PM epics in the workspace; ENGINEER mode does not require it to ship code.",
     "ai_pilot_note": "Default: MODE ENGINEER every turn until §7.3 verified or SKIPPED+reason. Hard stop only USER_RESPONSE_REQUIRED / LÉ VIBE BLOCKED per docs/AGENT_MODE_ORCHESTRATION.md."

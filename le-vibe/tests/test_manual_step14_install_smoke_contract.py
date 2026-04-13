@@ -49,6 +49,8 @@ def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> 
     rag = payload["meta"]["rag_notes"]
     assert "verify-step14-closeout.sh --require-stack-deb" in rag
     assert "apt_sim_note" in rag
+    assert "print-built-codium-path" in rag
+    assert "Partial VSCode-linux" in rag
 
 
 def test_pm_deb_build_iteration_points_to_manual_step14_install_smoke_script() -> None:

@@ -26,3 +26,5 @@ def test_step14_autonomous_runbook_documents_closeout_verifier():
     assert "build machine" in text
     assert "test host" in text
     assert "Definition of done (STEP 14 honest)" in text
+    assert "Partial tree" in text
+    assert "print-built-codium-path" in text
