@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import subprocess
 from pathlib import Path
 
@@ -29,6 +30,22 @@ def test_preflight_step14_closeout_script_documents_checks() -> None:
     assert "le-vibe-ide_*.deb" in text
     assert "--require-stack-deb" in text
     assert "--skip-gate" in text
+    assert "vscode_linux_build:" in text
+    assert "ide_packaging_paths" in text
+
+
+def test_preflight_step14_closeout_prints_vscode_linux_build_line() -> None:
+    """Same classifier as lvibe ide-prereqs --json (ready | partial | absent | unknown)."""
+    root = _repo_root()
+    script = root / "packaging" / "scripts" / "preflight-step14-closeout.sh"
+    result = subprocess.run(
+        [str(script), "--skip-gate"],
+        cwd=str(root),
+        capture_output=True,
+        text=True,
+    )
+    combined = result.stdout + result.stderr
+    assert re.search(r"^vscode_linux_build: (ready|partial|absent|unknown)\s*$", combined, re.MULTILINE), combined
 
 
 def test_verify_step14_closeout_mentions_preflight() -> None:
