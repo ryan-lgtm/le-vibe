@@ -37,6 +37,8 @@ def test_master_orchestrator_fence_extractable():
     assert "vscode_linux_bin_files" in text
     assert "print-built-codium-path" in text
     assert "print-vsbuild-codium-path" in text
+    assert "print-ci-tarball-codium-path.sh" in text
+    assert "debian/lvibe.1" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
     assert "Incomplete Linux build" in text
     assert "resolve-latest-le-vibe-stack-deb.sh" in text
