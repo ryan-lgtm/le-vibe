@@ -59,6 +59,9 @@ def test_stage_le_vibe_ide_deb_script_documents_14b_submodule_and_bash_syntax():
     assert "LEVIBE_STAGE_IDE_VERBOSE" in text
     assert "usage()" in text
     assert "--help" in text
+    assert "Partial VSCode-linux tree" in text
+    assert "verify-step14-closeout.sh" in text
+    assert "print-vsbuild-codium-path.sh" in text
     assert "ci-vscodium-linux-dev-build.sh" in text
     assert "stage-le-vibe-ide-deb: staged" in text
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
@@ -94,7 +97,10 @@ def test_build_le_vibe_ide_deb_script_documents_14b_and_bash_syntax():
     assert "Fresh clone (14.b)" in text
     assert "stage-le-vibe-ide-deb.sh" in text
     assert "Partial tree" in text
+    assert "Partial VSCode-linux tree" in text
     assert "print-built-codium-path.sh" in text
+    assert "print-vsbuild-codium-path.sh" in text
+    assert "verify-step14-closeout.sh" in text
     assert "expected packaging/le-vibe-ide_*.deb" in text
     assert "PM_STAGE_MAP.md" in text
     assert "H1 vs §7.3 .deb bundles" in text

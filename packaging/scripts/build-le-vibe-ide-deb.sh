@@ -21,8 +21,11 @@ Usage: packaging/scripts/build-le-vibe-ide-deb.sh [PATH]
 
 Builds packaging/le-vibe-ide_*.deb via stage-le-vibe-ide-deb.sh + dpkg-buildpackage.
 See packaging/debian-le-vibe-ide/README.md and docs/PM_DEB_BUILD_ITERATION.md.
-If staging fails because VSCode-linux-*/bin/codium is missing (partial build), see
-editor/BUILD.md (Partial tree, 14.c) and ./editor/print-built-codium-path.sh.
+
+Partial VSCode-linux tree (missing VSCode-linux-* or bin/codium before staging succeeds):
+  docs/PM_DEB_BUILD_ITERATION.md (*Partial VSCode-linux tree*), editor/BUILD.md (Partial tree, 14.c),
+  ./editor/print-built-codium-path.sh, ./editor/print-vsbuild-codium-path.sh.
+After both .debs exist on the build machine: packaging/scripts/verify-step14-closeout.sh --require-stack-deb.
 
 Environment:
   LEVIBE_EDITOR_GATE_ASSERT_BRAND   When 1, run ci-editor-gate.sh before staging (§7.3 product.json).
