@@ -14,6 +14,26 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+usage() {
+  cat <<'EOF'
+Usage: editor/print-ci-tarball-codium-path.sh /path/to/vscodium-linux-build.tar.gz
+
+Unpack a linux_compile artifact to a temp directory and print the absolute path to
+VSCode-linux-*/bin/codium (STEP 14.f — editor/BUILD.md).
+
+GitHub Actions wraps vscodium-linux-build.tar.gz in a .zip — unzip first, then pass
+the .tar.gz path to this script.
+
+  -h, --help   Show this message and exit.
+EOF
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
 [[ $# -eq 1 ]] || {
   echo "usage: ${0##*/} /path/to/vscodium-linux-build.tar.gz — exactly one argument (editor/BUILD.md 14.f)." >&2
   exit 2

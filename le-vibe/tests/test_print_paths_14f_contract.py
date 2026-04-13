@@ -44,6 +44,8 @@ def test_print_vsbuild_codium_path_documents_14f():
 
 def test_print_ci_tarball_codium_path_documents_14f():
     text = (_repo_root() / "editor" / "print-ci-tarball-codium-path.sh").read_text(encoding="utf-8")
+    assert "--help" in text
+    assert "-h" in text
     assert "0 → 1 → 14 → 2–13 → 15–17" in text
     assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "PM_STAGE_MAP.md" in text
