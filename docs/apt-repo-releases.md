@@ -51,6 +51,15 @@ Use this as a **minimal ordered path**; details stay in *Versioned changelog* / 
 4. **Download** the **`le-vibe-deb`** artifact, unzip, and run **`sha256sum -c SHA256SUMS`** in that directory (*CI artifacts* / *Minimum directory layout*).
 5. **Publish** — push the **stack** tag, then **`gh release create`** (or the UI) with **`*.deb`**, **`SHA256SUMS`**, and **`le-vibe-python.cdx.json`** as needed — paste **`CHANGELOG.md`** for that version into the Release body (*GitHub Releases + checksums*). **IDE** **`.deb`** is **not** in **`le-vibe-deb`** — *Combined drop* / *Artifact sources at a glance* if you attach **`le-vibe-ide_*_amd64.deb`** too.
 
+### Checklist — full-product GitHub Release (stack + IDE, H1 / STEP 14 / §7.3)
+
+Use when you attach **both** **`le-vibe_*_all.deb`** and **`le-vibe-ide_*_amd64.deb`** to the **same** Release (full Lé Vibe install — **[`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md)** *Install both packages*).
+
+1. **Stack version story** — complete *Dual changelog discipline* and steps **1–2** of the **stack-only** checklist above ( **`debian/changelog`** / **`CHANGELOG.md`** / intended **`v…`** tag). **`ide-v*`** tags are **not** a substitute — *Tagging discipline* / *Stack release tags vs `ide-v`*.
+2. **Produce IDE** **`.deb`** — **`packaging/le-vibe-ide_*.deb`** via **`build-le-vibe-ide-deb.sh`** or **`build-le-vibe-debs.sh --with-ide`** when **`VSCode-linux-*`** exists — **[`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** (*Success output (`--with-ide`)*); paths — *Artifact sources at a glance*.
+3. **One release directory** — copy **CI** **`le-vibe-deb`** contents **and** the IDE **`.deb`** into a **single** folder, then **regenerate** **`SHA256SUMS`** so it lists **every** shipped **`*.deb`** **and** **`le-vibe-python.cdx.json`** (*Pre-publish* **Combined drop** / **Integrity**).
+4. **Verify** — **`sha256sum -c SHA256SUMS`** (or **`lvibe verify-checksums`**) before **`gh release create`** — *GitHub Releases + checksums*.
+
 ## CI artifacts (what ships from each green run)
 
 Workflow **`.github/workflows/ci.yml`** uploads a single artifact bundle **`le-vibe-deb`** containing:

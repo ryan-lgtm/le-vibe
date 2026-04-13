@@ -36,6 +36,17 @@ def test_apt_repo_releases_doc_dual_changelog_discipline_h1():
     assert "Checklist — stack-only GitHub Release" in text
 
 
+def test_apt_repo_releases_doc_lists_full_product_release_checklist_h1():
+    """H1: full-product checklist — dual deb + Combined drop + PM_DEB."""
+    text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
+    assert "### Checklist — full-product GitHub Release" in text
+    assert "stack + IDE" in text
+    assert "Dual changelog discipline" in text
+    assert "Combined drop" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "Success output (`--with-ide`)" in text
+
+
 def test_apt_repo_releases_doc_lists_stack_release_checklist_h1():
     """H1: ordered checklist ties changelog, tag, ci artifact, verify, gh release."""
     text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
