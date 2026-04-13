@@ -43,6 +43,9 @@ def test_debian_lvibe_man_ide_prereqs_synopsis_print_closeout_commands_step14():
     assert "print\\-github\\-linux\\-compile\\-artifact\\-hint.sh" in text
     assert "print\\-step14\\-vscode\\-linux\\-bin\\-files.sh" in text
     assert "print\\-ci\\-tarball\\-codium\\-path.sh" in text
+    assert "manual\\-step14\\-install\\-smoke.sh" in text
+    assert "\\-\\-verify\\-only" in text
+    assert "desktop\\-file\\-validate" in text
 
 
 def test_debian_le_vibe_man_ide_prereqs_synopsis_print_closeout_commands_step14():
@@ -59,6 +62,9 @@ def test_debian_le_vibe_man_ide_prereqs_synopsis_print_closeout_commands_step14(
     assert "print\\-github\\-linux\\-compile\\-artifact\\-hint.sh" in text
     assert "print\\-step14\\-vscode\\-linux\\-bin\\-files.sh" in text
     assert "print\\-ci\\-tarball\\-codium\\-path.sh" in text
+    assert "manual\\-step14\\-install\\-smoke.sh" in text
+    assert "\\-\\-verify\\-only" in text
+    assert "desktop\\-file\\-validate" in text
 
 
 def test_debian_le_vibe_man_lists_first_run_observability_step6():
