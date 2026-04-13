@@ -328,6 +328,66 @@ def _cmd_brand_paths(argv: list[str]) -> int:
     return 0
 
 
+def _cmd_product_surface(argv: list[str]) -> int:
+    """STEP 12 (H8): print paths to ``.github/`` + trust docs — ``docs/PM_STAGE_MAP.md``."""
+    from le_vibe.product_surface_paths import H8_MANIFEST, iter_h8_paths
+    from le_vibe.qa_scripts import find_monorepo_root
+
+    p = argparse.ArgumentParser(
+        prog="lvibe product-surface",
+        description="List paths for H8 product-surface files (CI, Dependabot, issue templates, docs).",
+    )
+    p.add_argument(
+        "--path-only",
+        metavar="KEY",
+        nargs="?",
+        const="ci",
+        default=None,
+        help=(
+            "print one path: ci, dependabot, issues, docs-index, privacy, security "
+            "(default key when flag is present: ci)"
+        ),
+    )
+    args = p.parse_args(argv)
+    root = find_monorepo_root()
+    if root is None:
+        print(
+            "lvibe product-surface: could not find monorepo root "
+            "(set LE_VIBE_REPO_ROOT or run from a git clone). "
+            "See docs/PM_STAGE_MAP.md STEP 12 / H8.",
+            file=sys.stderr,
+        )
+        return 1
+    key_map = {
+        "ci": H8_MANIFEST[0][1],
+        "dependabot": H8_MANIFEST[1][1],
+        "issues": H8_MANIFEST[2][1],
+        "docs-index": H8_MANIFEST[3][1],
+        "privacy": H8_MANIFEST[4][1],
+        "security": H8_MANIFEST[5][1],
+    }
+    if args.path_only is not None:
+        k = args.path_only
+        if k not in key_map:
+            print(
+                f"lvibe product-surface: unknown key {k!r} — use: {', '.join(sorted(key_map))}",
+                file=sys.stderr,
+            )
+            return 2
+        rel = key_map[k]
+        path = (root / rel).resolve()
+        if not path.is_file():
+            print(f"lvibe product-surface: missing {path}", file=sys.stderr)
+            return 1
+        print(path)
+        return 0
+    print("Authority: docs/PM_STAGE_MAP.md (STEP 12 / H8), docs/README.md *Product surface*")
+    for label, path, ok in iter_h8_paths(root):
+        status = "OK" if ok else "MISSING"
+        print(f"[{status}] {label}: {path}")
+    return 0
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -370,6 +430,8 @@ def main() -> int:
         return _cmd_ci_editor_gate(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "brand-paths":
         return _cmd_brand_paths(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "product-surface":
+        return _cmd_product_surface(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",

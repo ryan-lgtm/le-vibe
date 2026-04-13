@@ -113,6 +113,7 @@ def test_le_vibe_readme_lists_step11_h5_brand_assets():
 def test_le_vibe_readme_lists_step12_h8_product_surface():
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
     assert "Trust / H8 — product surface (STEP 12)" in text
+    assert "product-surface" in text
     assert "ISSUE_TEMPLATE" in text
     assert "dependabot.yml" in text
 
