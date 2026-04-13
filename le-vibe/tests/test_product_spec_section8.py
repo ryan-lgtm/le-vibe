@@ -213,6 +213,9 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
         "## §10", 1
     )[0]
     assert "required close-out gate" in sec73
+    assert "Verified 2026-04-13" in sec73
+    assert "held broken packages" in sec73
+    assert "485" in text
 
 
 def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14():
