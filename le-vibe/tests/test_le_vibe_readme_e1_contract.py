@@ -73,6 +73,9 @@ def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
     assert "build-le-vibe-ide-deb.sh --help" in text
     assert "dpkg-buildpackage" in text
     assert "Failure (`--with-ide`)" in text
+    assert "manual-step14-install-smoke.sh" in text
+    assert "--verify-only" in text
+    assert "desktop-file-validate" in text
 
 
 def test_le_vibe_readme_h6_submodule_init_14b():

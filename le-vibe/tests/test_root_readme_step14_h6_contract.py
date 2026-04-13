@@ -17,5 +17,7 @@ def test_root_readme_step14_h6_ide_section():
     assert "vscodium-fork-le-vibe.md" in text
     assert "packaging/debian-le-vibe-ide" in text
     assert "verify-step14-closeout.sh" in text
+    assert "manual-step14-install-smoke.sh" in text
+    assert "--verify-only" in text
     assert "test_editor_readme_step14_contract.py" in text
     assert "test_verify_step14_closeout_contract.py" in text

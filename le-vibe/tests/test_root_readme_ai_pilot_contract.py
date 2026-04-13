@@ -42,6 +42,8 @@ def test_root_readme_prioritization_demoinstall_apt_install_both_debs_step14():
     assert "build machine" in text
     assert "test host" in text
     assert "manual-step14-install-smoke.sh" in text
+    assert "--verify-only" in text
+    assert "desktop-file-validate" in text
 
 
 def test_root_readme_current_status_works_well_today_full_product_install_step14():
