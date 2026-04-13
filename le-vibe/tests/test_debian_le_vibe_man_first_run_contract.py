@@ -32,6 +32,9 @@ def test_debian_lvibe_man_ide_prereqs_synopsis_print_closeout_commands_step14():
     assert "\\-\\-print\\-closeout\\-commands" in text
     assert "preflight\\-step14\\-closeout.sh" in text
     assert "verify\\-step14\\-closeout.sh" in text
+    assert "vscode_linux_partial" in text
+    assert "build\\-le\\-vibe\\-debs.sh" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
 
 
 def test_debian_le_vibe_man_ide_prereqs_synopsis_print_closeout_commands_step14():
@@ -39,6 +42,8 @@ def test_debian_le_vibe_man_ide_prereqs_synopsis_print_closeout_commands_step14(
     text = (_repo_root() / "debian" / "le-vibe.1").read_text(encoding="utf-8")
     assert ".B lvibe ide\\-prereqs" in text
     assert "\\-\\-print\\-closeout\\-commands" in text
+    assert "vscode_linux_partial" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
 
 
 def test_debian_le_vibe_man_lists_first_run_observability_step6():
