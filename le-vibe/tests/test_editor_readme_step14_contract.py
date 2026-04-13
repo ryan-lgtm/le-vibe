@@ -104,5 +104,7 @@ def test_editor_readme_documents_linux_compile_and_tarball_14ef():
     assert "le-vibe-vscodium-linux-<run_id>" in text
     assert "CLI (`gh`, 14.f)" in text
     assert "docker-le-vibe-vscodium-linux-compile.sh" in text
+    assert "docker-le-vibe-vscodium-prepare-only.sh" in text
+    assert "Prepare-only (no `dev/build.sh`)" in text
     assert "refs/tags/ide-v" in text
     assert "Download shape" in text
