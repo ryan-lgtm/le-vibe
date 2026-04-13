@@ -57,6 +57,11 @@ def test_root_readme_current_status_works_well_today_full_product_install_step14
     assert "apt_sim_note" in text
     assert "build machine" in text
     assert "test host" in text
+    assert "Compile fail-fast" in text
+    assert "packaging/scripts/ci-vscodium-bash-syntax.sh" in text
+    assert "packaging/scripts/ci-editor-nvmrc-sync.sh" in text
+    assert "packaging/scripts/ci-vscodium-linux-dev-build.sh" in text
+    assert "linux_compile" in text
     assert "Partial VSCode-linux triage" in text
     assert "print-vsbuild-codium-path" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
