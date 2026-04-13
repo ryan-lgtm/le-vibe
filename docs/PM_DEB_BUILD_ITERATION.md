@@ -67,6 +67,8 @@ When you have both artifacts from **`build-le-vibe-debs.sh`** (stack) and **`--w
 
 **Failure (`--with-ide`):** If **`--with-ide`** is set but **`le-vibe-ide_*.deb`** is not found under **`packaging/`** after the IDE build step, **`build-le-vibe-debs.sh`** exits with status **1** — a stack-only **`.deb`** is not treated as a successful full-product run.
 
+**Partial VSCode-linux tree:** If **`editor/vscodium/VSCode-linux-*`** exists but **`bin/codium`** is missing (e.g. only **`codium-tunnel`** after an interrupted compile), **`packaging/scripts/stage-le-vibe-ide-deb.sh`** and **`./editor/print-built-codium-path.sh`** fail with an explicit hint — finish **`dev/build.sh`** per **`editor/BUILD.md`** (*Partial tree*, **14.c**). Same maintainer story — **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** (*IDE package* — *Incomplete Linux build*); **`packaging/debian-le-vibe-ide/README.md`** (*Build steps*).
+
 ### §7.3 IDE staging — Lé Vibe identity in the built tree
 
 The **`le-vibe-ide`** package repacks **`editor/vscodium/VSCode-linux-*`**. That directory should be produced after **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** (merge **`product-branding-merge.json`**, **`sync-linux-icon-assets.sh`**, env defaults) **before** **`dev/build.sh`** — not a bare upstream compile — see **`editor/BUILD.md`** *Linux icons*.
