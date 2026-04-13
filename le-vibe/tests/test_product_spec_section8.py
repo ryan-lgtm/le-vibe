@@ -224,6 +224,8 @@ def test_product_spec_section8_evidence_section10_welcome_row_lists_welcome_bann
     text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
     assert "| **Welcome to Lé Vibe**" in text
     assert "WELCOME_BANNER" in text
+    assert "terminal onboarding + **`lvibe --help`**" in text
+    assert "`--path-only`** / **`--tail`" in text
     assert "test_product_spec_section8.py" in text
 
 
@@ -233,6 +235,7 @@ def test_product_spec_section8_evidence_section10_first_run_observability_step6(
     text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
     assert "First-run vs observability" in text
     assert "ensure_product_first_run" in text
+    assert "test_first_run_bootstrap_failure_message_lists_remediation" in text
     assert "lvibe logs" in text
     assert "test_first_run.py" in text
     assert "STEP 6" in text
