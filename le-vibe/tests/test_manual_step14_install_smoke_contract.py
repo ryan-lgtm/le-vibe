@@ -53,6 +53,8 @@ def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> 
     assert "verify-step14-closeout.sh --require-stack-deb" in rag
     assert "apt_sim_note" in rag
     assert "print-built-codium-path" in rag
+    assert "print-vsbuild-codium-path" in rag
+    assert "build-le-vibe-ide-deb.sh --help" in rag
     assert "Partial VSCode-linux" in rag
 
 

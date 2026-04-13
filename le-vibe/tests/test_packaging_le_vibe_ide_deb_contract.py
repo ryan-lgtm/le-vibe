@@ -133,6 +133,8 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "VSCode-linux-" in readme
     assert "Partial VSCode-linux tree" in readme
     assert "print-built-codium-path.sh" in readme
+    assert "print-vsbuild-codium-path.sh" in readme
+    assert "build-le-vibe-ide-deb.sh --help" in readme
     assert "Incomplete Linux build" in readme
     assert "dev/build.sh" in readme
     assert "stage-le-vibe-ide-deb.sh" in readme
