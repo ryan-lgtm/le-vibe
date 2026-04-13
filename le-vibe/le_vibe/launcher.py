@@ -114,6 +114,59 @@ def _cmd_hygiene(argv: list[str]) -> int:
     return hygiene_main(argv)
 
 
+def _cmd_logs(argv: list[str]) -> int:
+    """
+    STEP 6 (E5): operator surface for local JSONL — path, optional tail (``docs/privacy-and-telemetry.md``).
+    """
+    from le_vibe.structured_log import structured_log_enabled, structured_log_path
+
+    p = argparse.ArgumentParser(
+        prog="lvibe logs",
+        description=(
+            "Print the path to the local structured log (JSON Lines). "
+            "No third-party telemetry — see docs/privacy-and-telemetry.md."
+        ),
+    )
+    p.add_argument(
+        "--tail",
+        "-n",
+        type=int,
+        metavar="N",
+        default=None,
+        help="print the last N lines if the log file exists",
+    )
+    p.add_argument(
+        "--path-only",
+        action="store_true",
+        help="print the absolute log path only",
+    )
+    args = p.parse_args(argv)
+    path = structured_log_path()
+    if not structured_log_enabled():
+        print(
+            "lvibe logs: LE_VIBE_STRUCTURED_LOG is disabled — no new lines are written.",
+            file=sys.stderr,
+        )
+    if args.path_only:
+        print(path)
+        return 0
+    if args.tail is not None:
+        if args.tail < 0:
+            print("lvibe logs: --tail requires N >= 0", file=sys.stderr)
+            return 2
+        if not path.is_file():
+            print(f"lvibe logs: no file at {path} yet.", file=sys.stderr)
+            return 1
+        lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+        for line in lines[-args.tail :]:
+            print(line)
+        return 0
+    print(path)
+    print(f"Live: tail -f {path}")
+    print(f"Pretty (if jq is installed): tail -f {path} | jq .")
+    return 0
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -142,6 +195,8 @@ def main() -> int:
         return _cmd_open_welcome(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "hygiene":
         return _cmd_hygiene(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "logs":
+        return _cmd_logs(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",
