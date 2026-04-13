@@ -16,6 +16,9 @@ def test_welcome_banner_matches_product_spec_section4():
     assert "Welcome to Lé Vibe" in WELCOME_BANNER
     assert "Cursor" in WELCOME_BANNER
     assert "open source" in WELCOME_BANNER.lower() or "free" in WELCOME_BANNER.lower()
+    assert "lvibe welcome" in WELCOME_BANNER
+    assert "open-welcome" in WELCOME_BANNER
+    assert ".lvibe/WELCOME.md" in WELCOME_BANNER
 
 
 def test_lvibe_workspace_dir_name():

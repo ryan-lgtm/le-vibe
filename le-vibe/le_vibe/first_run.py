@@ -80,4 +80,8 @@ def ensure_product_first_run(
         except OSError as e:
             logging.warning("could not write first-run marker: %s", e)
         return 0, "first-run bootstrap finished"
-    return code, "first-run bootstrap failed; fix errors and retry (or use --force-first-run)"
+    return (
+        code,
+        "first-run bootstrap failed; fix errors above and retry, or use --force-first-run. "
+        "Set LE_VIBE_VERBOSE=1 for more detail.",
+    )

@@ -19,6 +19,9 @@ WELCOME_BANNER = """
 ║  — an alternative to Cursor (AI-assisted coding; not the same     ║
 ║  feature set). Models run on your hardware via Ollama.           ║
 ╚══════════════════════════════════════════════════════════════════╝
+
+  Tip: In a project folder, `lvibe welcome` prints section-4 workspace copy; `lvibe open-welcome`
+  opens `.lvibe/WELCOME.md` in your editor (PRODUCT_SPEC section 4 / STEP 4).
 """.strip()
 
 
