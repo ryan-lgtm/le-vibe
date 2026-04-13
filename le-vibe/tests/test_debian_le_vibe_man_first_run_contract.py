@@ -39,6 +39,7 @@ def test_debian_lvibe_man_ide_prereqs_synopsis_print_closeout_commands_step14():
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "dpkg\\-buildpackage" in text
     assert "not \\fBready" in text
+    assert "install\\-vscodium\\-linux\\-tarball\\-to\\-editor\\-vendor.sh" in text
 
 
 def test_debian_le_vibe_man_ide_prereqs_synopsis_print_closeout_commands_step14():
@@ -51,6 +52,7 @@ def test_debian_le_vibe_man_ide_prereqs_synopsis_print_closeout_commands_step14(
     assert "vscode_linux_build" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "dpkg\\-buildpackage" in text
+    assert "install\\-vscodium\\-linux\\-tarball\\-to\\-editor\\-vendor.sh" in text
 
 
 def test_debian_le_vibe_man_lists_first_run_observability_step6():
