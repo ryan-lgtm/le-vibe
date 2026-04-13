@@ -70,6 +70,8 @@ def test_root_readme_current_status_works_well_today_full_product_install_step14
     assert "linux_compile" in text
     assert "Partial VSCode-linux triage" in text
     assert "print-vsbuild-codium-path" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
+    assert "vscode_linux_bin_files" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
 
 
