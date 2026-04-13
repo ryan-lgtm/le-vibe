@@ -71,6 +71,8 @@ def test_ci_qa_hardening_doc_linux_compile_gh_run_list_finding_run_id_step14f():
     text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
     assert "**Finding `RUN_ID`:**" in text
     assert "gh run list" in text
+    assert "**Branch filter (`gh`):**" in text
+    assert "--branch" in text
     assert "gh run view" in text
     assert "--log-failed" in text
     assert "build-le-vibe-ide.yml" in text
