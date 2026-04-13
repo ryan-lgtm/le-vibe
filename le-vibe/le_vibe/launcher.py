@@ -836,8 +836,8 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
         "--json",
         action="store_true",
         help=(
-            "print monorepo root, vscode_linux_ready / vscode_linux_partial, VSCode-linux path, "
-            "and each §7.3 path with exists flags"
+            "print monorepo root, vscode_linux_build (ready|partial|absent), vscode_linux_ready / "
+            "vscode_linux_partial, VSCode-linux path, and each §7.3 path with exists flags"
         ),
     )
     mode.add_argument(
@@ -913,6 +913,7 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             entries.append({"label": label, "path": str(path), "exists": ok})
         _emit_json(
             monorepo_root=str(root),
+            vscode_linux_build=vs_status,
             vscode_linux_path=str(vs_p) if vs_p is not None else None,
             vscode_linux_ready=vs_status == "ready",
             vscode_linux_partial=vs_status == "partial",

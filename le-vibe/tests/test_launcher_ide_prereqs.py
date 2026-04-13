@@ -61,6 +61,14 @@ def test_ide_prereqs_json_in_checkout(monkeypatch: pytest.MonkeyPatch, capsys: p
     data = json.loads(capsys.readouterr().out)
     assert data["monorepo_root"]
     assert "vscode_linux_ready" in data
+    assert data["vscode_linux_build"] in ("ready", "partial", "absent")
+    assert data["vscode_linux_build"] == (
+        "ready"
+        if data["vscode_linux_ready"]
+        else "partial"
+        if data["vscode_linux_partial"]
+        else "absent"
+    )
     assert data["vscode_linux_partial"] == (
         (not data["vscode_linux_ready"]) and data["vscode_linux_path"] is not None
     )

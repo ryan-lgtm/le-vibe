@@ -43,6 +43,7 @@ def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
     assert "Production install (STEP 14 / §7.3)" in text
     assert "ide-prereqs" in text
     assert "vscode_linux_partial" in text
+    assert "vscode_linux_build" in text
     assert "debian/lvibe.1" in text
     assert "--print-closeout-commands" in text
     assert "preflight-step14-closeout.sh" in text
