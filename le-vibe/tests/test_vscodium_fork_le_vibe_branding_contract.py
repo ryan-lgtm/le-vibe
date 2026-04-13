@@ -23,6 +23,7 @@ def test_vscodium_fork_doc_bootstrap_lists_production_deb_pair_step14():
     assert "Full-product install" in text
     assert "Success output (`--with-ide`)" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
+    assert "--apt-sim" in text
     assert "Install both packages" in text
     assert "Maintainer build output" in text
 
