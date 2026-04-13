@@ -18,6 +18,8 @@ Usage: editor/verify-73-maintainer.sh
 
 Run packaging/scripts/ci-editor-gate.sh then lvibe ide-prereqs --json checks
 (STEP 14 / §7.3 maintainer gate — does not build Electron or .deb).
+After stack + IDE .deb artifacts exist: packaging/scripts/preflight-step14-closeout.sh --require-stack-deb;
+packaging/scripts/verify-step14-closeout.sh --require-stack-deb (see docs/PM_DEB_BUILD_ITERATION.md).
 
 Environment:
   LEVIBE_EDITOR_GATE_ASSERT_BRAND=1   Strict §7.3 branding (same as ci-editor-gate).

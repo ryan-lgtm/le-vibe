@@ -152,6 +152,8 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "Full-product install" in readme
     assert "Success output (`--with-ide`)" in readme
     assert "verify-step14-closeout.sh --require-stack-deb" in readme
+    assert "preflight-step14-closeout.sh" in readme
+    assert "ide-prereqs --print-closeout-commands" in readme
     assert "--json" in readme
     assert "apt_sim_note" in readme
     assert "PM_DEB_BUILD_ITERATION.md" in readme
