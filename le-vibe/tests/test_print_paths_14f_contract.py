@@ -29,6 +29,9 @@ def test_print_vsbuild_codium_path_documents_14f():
     assert "14.f" in text
     assert "14.c" in text
     assert "no VSCode-linux-*/bin/codium under" in text
+    assert "bin/codium is missing" in text
+    assert "partial or incomplete build" in text
+    assert "./dev/build.sh" in text
     assert "stat not on PATH" in text
     assert "realpath not on PATH" in text
     assert "not a directory:" in text

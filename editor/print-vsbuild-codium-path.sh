@@ -21,6 +21,22 @@ shopt -s nullglob
 matches=("${SEARCH}"/VSCode-linux-*/bin/codium)
 
 if [[ ${#matches[@]} -eq 0 ]]; then
+  for treeroot in "${SEARCH}"/VSCode-linux-*/; do
+    [[ -d "$treeroot" ]] || continue
+    bindir="${treeroot}bin"
+    if [[ -d "$bindir" ]] && [[ ! -e "$bindir/codium" ]]; then
+      listing=""
+      if command -v ls >/dev/null 2>&1; then
+        listing="$(ls -1 "$bindir" 2>/dev/null | tr '\n' ' ')"
+      fi
+      echo "print-vsbuild-codium-path: ${treeroot} has bin/ but bin/codium is missing (partial or incomplete build)." >&2
+      if [[ -n "$listing" ]]; then
+        echo "print-vsbuild-codium-path: ${bindir} contains: ${listing}" >&2
+      fi
+      echo "print-vsbuild-codium-path: rerun: cd editor/vscodium && ./dev/build.sh (editor/BUILD.md 14.c), or unpack a full vscodium-linux-build.tar.gz artifact (14.f)." >&2
+      exit 1
+    fi
+  done
   echo "print-vsbuild-codium-path: no VSCode-linux-*/bin/codium under ${SEARCH} — editor/BUILD.md 14.f (artifact) or 14.c (local build). If editor/vscodium/ is empty: git submodule update --init editor/vscodium (Fresh clone 14.b, editor/README.md)." >&2
   exit 1
 fi
