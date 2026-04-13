@@ -57,6 +57,7 @@ def test_build_le_vibe_debs_script_mentions_submodule_14b():
     assert "before building stack + IDE" in text
     assert "Stack-only meanwhile" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
 
 
 def test_build_le_vibe_debs_script_prints_full_product_install_hint_step14():
