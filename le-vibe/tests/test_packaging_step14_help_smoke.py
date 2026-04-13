@@ -21,6 +21,7 @@ def _repo_root() -> Path:
         "packaging/scripts/ci-vscodium-linux-dev-build.sh",
         "packaging/scripts/ci-editor-gate.sh",
         "packaging/scripts/ci-editor-nvmrc-sync.sh",
+        "packaging/scripts/ci-vscodium-bash-syntax.sh",
         "editor/smoke.sh",
         "editor/le-vibe-overrides/sync-linux-icon-assets.sh",
         "packaging/scripts/check-linux-vscodium-build-deps.sh",

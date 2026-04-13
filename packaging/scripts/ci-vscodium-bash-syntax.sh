@@ -11,6 +11,22 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
 
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  cat <<'EOF'
+Usage: packaging/scripts/ci-vscodium-bash-syntax.sh
+
+Run bash -n on core editor/vscodium/*.sh entrypoints (STEP 14 fail-fast gate).
+No-op (exit 0) when editor/vscodium/ is absent. No network, no compile.
+
+  -h, --help   Show this message and exit.
+EOF
+  exit 0
+fi
+if [[ $# -gt 0 ]]; then
+  echo "ci-vscodium-bash-syntax: unexpected argument(s) — no args except --help (see --help)" >&2
+  exit 2
+fi
+
 [[ -f editor/vscodium/product.json ]] || exit 0
 
 if ! command -v bash >/dev/null 2>&1; then
