@@ -137,6 +137,7 @@ def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
     assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
     assert "ci-editor-gate.sh" in text
     assert "verify-step14-closeout.sh" in text
+    assert "verify-step14-closeout.sh --require-stack-deb" in text
 
 
 def test_apt_repo_releases_github_releases_section_links_combined_drop_step8():
