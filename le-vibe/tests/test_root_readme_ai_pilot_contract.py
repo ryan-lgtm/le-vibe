@@ -75,6 +75,16 @@ def test_root_readme_current_status_works_well_today_full_product_install_step14
     assert "build-le-vibe-ide-deb.sh --help" in text
 
 
+def test_root_readme_pm_session_section_labels_master_step2():
+    """STEP 2: landing README names PM session manifest + queue order + orchestration spec."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "### PM session manifest — STEP 2" in text
+    assert "0 → 1 → 14 → 2" in text
+    assert "iter_tasks_in_epic_order" in text
+    assert "session_manifest_example_source_path" in text
+    assert "apply-opening-skip" in text
+
+
 def test_root_readme_documents_ai_pilot_and_user_gate():
     text = (_repo_root() / "README.md").read_text(encoding="utf-8")
     assert "Lé Vibe" in text
