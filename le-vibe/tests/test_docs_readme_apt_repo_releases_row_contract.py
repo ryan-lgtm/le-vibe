@@ -33,5 +33,9 @@ def test_docs_readme_apt_repo_releases_row_lists_step14_ide_deb_path():
     assert "PM_STAGE_MAP.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
     assert "Partial VSCode-linux triage" in text
+    assert "Compile fail-fast" in text
+    assert "ci-vscodium-bash-syntax.sh" in text
+    assert "ci-editor-nvmrc-sync.sh" in text
+    assert "ci-vscodium-linux-dev-build.sh" in text
     assert "print-vsbuild-codium-path" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
