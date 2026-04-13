@@ -8,6 +8,7 @@ from le_vibe.ide_packaging_paths import (
     find_vscode_linux_tree,
     iter_ide_prereq_paths,
     static_prereq_repo_files_ok,
+    vscode_linux_bin_filenames,
     vscode_linux_build_status,
 )
 
@@ -70,3 +71,25 @@ def test_vscode_linux_build_status_ready(tmp_path: Path) -> None:
     st, p = vscode_linux_build_status(tmp_path)
     assert st == "ready"
     assert p == tmp_path / "editor" / "vscodium" / "VSCode-linux-x64"
+
+
+def test_vscode_linux_bin_filenames_none_when_no_tree() -> None:
+    assert vscode_linux_bin_filenames(None) is None
+
+
+def test_vscode_linux_bin_filenames_empty_when_no_bin_dir(tmp_path: Path) -> None:
+    vs = tmp_path / "VSCode-linux-x64"
+    vs.mkdir(parents=True)
+    assert vscode_linux_bin_filenames(vs) == []
+
+
+def test_vscode_linux_bin_filenames_lists_bin_files(tmp_path: Path) -> None:
+    bindir = tmp_path / "editor" / "vscodium" / "VSCode-linux-x64" / "bin"
+    bindir.mkdir(parents=True)
+    (bindir / "codium-tunnel").write_text("x", encoding="utf-8")
+    c = bindir / "codium"
+    c.write_text("#!/bin/sh\n", encoding="utf-8")
+    c.chmod(0o755)
+    st, p = vscode_linux_build_status(tmp_path)
+    assert st == "ready"
+    assert vscode_linux_bin_filenames(p) == ["codium", "codium-tunnel"]

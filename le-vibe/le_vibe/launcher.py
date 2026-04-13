@@ -808,6 +808,7 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
         IDE_PREREQ_PATH_ONLY,
         iter_ide_prereq_paths,
         static_prereq_repo_files_ok,
+        vscode_linux_bin_filenames,
         vscode_linux_build_status,
     )
     from le_vibe.qa_scripts import find_monorepo_root
@@ -837,7 +838,8 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
         action="store_true",
         help=(
             "print monorepo root, vscode_linux_build (ready|partial|absent), vscode_linux_ready / "
-            "vscode_linux_partial, VSCode-linux path, and each §7.3 path with exists flags"
+            "vscode_linux_partial, VSCode-linux path, vscode_linux_bin_files (when a tree path is known), "
+            "and each §7.3 path with exists flags"
         ),
     )
     mode.add_argument(
@@ -882,6 +884,12 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             f'./packaging/scripts/probe-vscode-linux-build.sh "{root}"'
         )
         if vs_status == "partial":
+            names = vscode_linux_bin_filenames(vs_p)
+            if names:
+                print(
+                    "# VSCode-linux bin/ (partial — need bin/codium for ready): "
+                    + ", ".join(names)
+                )
             print(
                 "# VSCode-linux tree exists but bin/codium is missing (partial build) — "
                 "editor/BUILD.md *Partial tree* / 14.c; then preflight + verify below."
@@ -930,6 +938,7 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             monorepo_root=str(root),
             vscode_linux_build=vs_status,
             vscode_linux_path=str(vs_p) if vs_p is not None else None,
+            vscode_linux_bin_files=vscode_linux_bin_filenames(vs_p),
             vscode_linux_ready=vs_status == "ready",
             vscode_linux_partial=vs_status == "partial",
             static_prereq_files_ok=static_ok,

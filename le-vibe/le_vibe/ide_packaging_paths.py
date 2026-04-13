@@ -35,6 +35,21 @@ def find_vscode_linux_tree(root: Path) -> Path | None:
     return p if st == "ready" else None
 
 
+def vscode_linux_bin_filenames(vs_tree: Path | None) -> list[str] | None:
+    """
+    Filenames in ``VSCode-linux-*/bin`` when a tree path is known (partial or ready).
+
+    ``None`` when there is no ``VSCode-linux-*`` directory; empty list when ``bin/`` is missing
+    or empty. Helps diagnose **partial** trees (e.g. only ``codium-tunnel``).
+    """
+    if vs_tree is None:
+        return None
+    bin_dir = vs_tree / "bin"
+    if not bin_dir.is_dir():
+        return []
+    return sorted(p.name for p in bin_dir.iterdir() if p.is_file())
+
+
 def iter_ide_prereq_paths(root: Path) -> list[tuple[str, Path, bool]]:
     """
     Return ``(label, absolute_path, exists)`` for §7.3 packaging touchpoints.

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -72,6 +73,11 @@ def test_ide_prereqs_json_in_checkout(monkeypatch: pytest.MonkeyPatch, capsys: p
     assert data["vscode_linux_partial"] == (
         (not data["vscode_linux_ready"]) and data["vscode_linux_path"] is not None
     )
+    assert "vscode_linux_bin_files" in data
+    if data["vscode_linux_path"] is None:
+        assert data["vscode_linux_bin_files"] is None
+    else:
+        assert isinstance(data["vscode_linux_bin_files"], list)
     assert "static_prereq_files_ok" in data
     assert data["static_prereq_files_ok"] is True
     assert "vscodium_linux_svg_staged" in data
@@ -97,16 +103,22 @@ def test_ide_prereqs_print_closeout_commands(monkeypatch: pytest.MonkeyPatch, ca
     assert "PM_DEB_BUILD_ITERATION.md" in out
 
 
-def test_ide_prereqs_print_closeout_partial_hint(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
-    fake = object()
+def test_ide_prereqs_print_closeout_partial_hint(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    vs = tmp_path / "VSCode-linux-x64"
+    (vs / "bin").mkdir(parents=True)
+    (vs / "bin" / "codium-tunnel").write_text("x", encoding="utf-8")
 
-    def _fake_status(_root: object) -> tuple[str, object]:
-        return "partial", fake
+    def _fake_status(_root: object) -> tuple[str, Path]:
+        return "partial", vs
 
     monkeypatch.setattr("le_vibe.ide_packaging_paths.vscode_linux_build_status", _fake_status)
     monkeypatch.setattr(sys, "argv", ["launcher", "ide-prereqs", "--print-closeout-commands"])
     assert launcher.main() == 0
     out = capsys.readouterr().out
+    assert "VSCode-linux bin/" in out
+    assert "codium-tunnel" in out
     assert "partial build" in out
     assert "Partial tree" in out
     assert "./editor/use-node-toolchain.sh" in out
