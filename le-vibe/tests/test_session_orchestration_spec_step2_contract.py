@@ -40,6 +40,8 @@ def test_session_orchestration_spec_lists_maintainer_full_product_deb_step14():
     assert "test host" in text
     assert "Partial VSCode-linux" in text
     assert "print-built-codium-path" in text
+    assert "print-vsbuild-codium-path" in text
+    assert "build-le-vibe-ide-deb.sh --help" in text
 
 
 def test_session_orchestration_spec_phase2_paragraph_lists_linux_compile_tarball():
