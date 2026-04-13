@@ -75,6 +75,9 @@ def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> 
     assert "manual-step14-install-smoke.sh default STACK_DEB" in rag
     assert "resolve-latest-le-vibe-stack-deb.sh" in rag
     assert "Output paths (from repo root)" in rag
+    assert "dpkg-buildpackage" in rag
+    assert "stderr hint" in rag
+    assert "Failure (--with-ide)" in rag
 
 
 def test_pm_deb_build_iteration_points_to_manual_step14_install_smoke_script() -> None:
