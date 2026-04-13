@@ -7,6 +7,18 @@
 
 **Fresh clone (14.b / STEP 14):** **`le-vibe-ide`** repacks a compiled **`VSCode-linux-*`** tree from **`editor/vscodium/`** — if that directory is empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the repository root before **`editor/BUILD.md`** fetch/build steps — same as **`editor/README.md`** *Fresh clone (14.b)*.
 
+## Invocations (repository root)
+
+Run these from the clone root (`cd /path/to/r-vibe`). Stack **`le-vibe_*.deb`** is emitted **beside** the repo directory (parent of the root); IDE **`le-vibe-ide_*.deb`** is under **`packaging/`** — see **`build-le-vibe-debs.sh`** **`--help`** and *Artifacts* in that usage.
+
+| Goal | Command |
+|------|---------|
+| Stack **`.deb`** only | `packaging/scripts/build-le-vibe-debs.sh` |
+| Stack, then **`sudo apt install`** the built **`.deb`** files | `packaging/scripts/build-le-vibe-debs.sh --install` (add **`--yes`** for non-interactive **`apt`**) |
+| Stack + IDE — **Full-product install** on success — *Success output (`--with-ide`)* below | `packaging/scripts/build-le-vibe-debs.sh --with-ide` |
+| **`--with-ide`** with §7.3 **`product.json`** gate (**`ci-editor-gate.sh`**) before staging | `LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 packaging/scripts/build-le-vibe-debs.sh --with-ide` |
+| **`--with-ide`** using a non-default **`VSCode-linux-*`** directory | `packaging/scripts/build-le-vibe-debs.sh --vs-build /path/to/VSCode-linux-x64` |
+
 ## Releases & full-product demo (H1 / STEP 14 / §7.3)
 
 When you have both artifacts from **`build-le-vibe-debs.sh`** (stack) and **`--with-ide`** (or **`build-le-vibe-ide-deb.sh`** alone), ship or attach **`le-vibe_*_all.deb`** and **`le-vibe-ide_*_amd64.deb`** together for an install-and-demo that includes the branded IDE. **Checksums**, default CI artifact **`le-vibe-deb`** (stack-only), and **`SHA256SUMS`** expectations — **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** (*IDE package* subsection, **STEP 8 / H1**). **PM stage map:** **[`docs/PM_STAGE_MAP.md`](PM_STAGE_MAP.md)** (*H1 vs §7.3 .deb bundles* — **STEP 14** vs **STEP 8**); monorepo honesty — **[`spec-phase2.md`](../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*.

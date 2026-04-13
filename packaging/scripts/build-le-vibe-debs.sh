@@ -28,6 +28,12 @@ Build Debian binary packages from this monorepo:
   --yes            Non-interactive apt (adds -y for apt install).
   --vs-build PATH  Use this VSCode-linux-* directory for IDE staging (implies --with-ide).
 
+Common invocations (repository root):
+  packaging/scripts/build-le-vibe-debs.sh
+  packaging/scripts/build-le-vibe-debs.sh --install [--yes]
+  packaging/scripts/build-le-vibe-debs.sh --with-ide
+  LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 packaging/scripts/build-le-vibe-debs.sh --with-ide
+
 Environment:
   DEB_BUILD_OPTIONS           Passed through to dpkg-buildpackage when set.
   LEVIBE_IDE_LINTIAN_STRICT   When set to 1, fail the IDE build if lintian fails (see packaging/scripts/build-le-vibe-ide-deb.sh).
