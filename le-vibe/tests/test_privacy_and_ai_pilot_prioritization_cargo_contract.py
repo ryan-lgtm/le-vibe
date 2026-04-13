@@ -42,6 +42,7 @@ def test_ai_pilot_doc_lists_maintainer_full_product_deb_step14():
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product install" in text
+    assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
