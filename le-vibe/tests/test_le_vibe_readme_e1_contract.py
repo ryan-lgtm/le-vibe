@@ -55,6 +55,9 @@ def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
     assert "Maintainer build output" in text
     assert "build machine" in text
     assert "test host" in text
+    assert "Partial VSCode-linux triage" in text
+    assert "print-vsbuild-codium-path" in text
+    assert "build-le-vibe-ide-deb.sh --help" in text
 
 
 def test_le_vibe_readme_h6_submodule_init_14b():
