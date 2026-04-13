@@ -62,6 +62,9 @@ def test_pm_stage_map_lists_h1_vs_ide_deb_bundles_step14():
     assert "./editor/smoke.sh" in text
     assert "linux_compile" in text
     assert "build-le-vibe-debs.sh" in text and "--with-ide" in text
+    assert "probe-vscode-linux-build.sh" in text or "vscode_linux_build" in text
+    assert "dpkg-buildpackage" in text
+    assert "Failure (`--with-ide`)" in text
     assert "Full-product install" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "Success output (`--with-ide`)" in text

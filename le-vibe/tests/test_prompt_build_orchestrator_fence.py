@@ -37,6 +37,9 @@ def test_master_orchestrator_fence_extractable():
     assert "build-le-vibe-ide-deb.sh --help" in text
     assert "Incomplete Linux build" in text
     assert "resolve-latest-le-vibe-stack-deb.sh" in text
+    assert "probe-vscode-linux-build.sh" in text
+    assert "dpkg-buildpackage" in text
+    assert "Failure (`--with-ide`)" in text
 
 
 def test_print_master_orchestrator_prompt_script_header_mentions_queue():
