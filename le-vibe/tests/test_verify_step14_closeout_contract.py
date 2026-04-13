@@ -1,0 +1,29 @@
+"""Contract: verify-step14-closeout.sh checks local §7.3 artifacts (STEP 14)."""
+
+from __future__ import annotations
+
+import subprocess
+from pathlib import Path
+
+
+def _repo_root() -> Path:
+    return Path(__file__).resolve().parents[2]
+
+
+def test_verify_step14_closeout_script_bash_syntax() -> None:
+    script = _repo_root() / "packaging" / "scripts" / "verify-step14-closeout.sh"
+    assert script.is_file(), script
+    subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
+
+
+def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
+    text = (_repo_root() / "packaging" / "scripts" / "verify-step14-closeout.sh").read_text(encoding="utf-8")
+    assert "0 -> 1 -> 14 -> 2-13 -> 15-17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
+    assert "ci-editor-gate.sh" in text
+    assert "verify-14c-local-binary.sh" in text
+    assert "packaging/le-vibe-ide_*.deb" in text
+    assert "--require-stack-deb" in text
+    assert "--skip-gate" in text
+    assert "build-le-vibe-debs.sh --with-ide" in text
