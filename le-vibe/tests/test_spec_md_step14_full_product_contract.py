@@ -37,3 +37,7 @@ def test_spec_md_intro_documents_full_product_install_step14():
     assert "packaging/scripts/ci-vscodium-linux-dev-build.sh" in text
     assert "./editor/smoke.sh" in text
     assert "linux_compile" in text
+    assert "bin/codium" in text
+    assert "dpkg-buildpackage" in text
+    assert "Failure (`--with-ide`)" in text
+    assert "Fail-fast (`build-le-vibe-debs.sh --with-ide`)" in text

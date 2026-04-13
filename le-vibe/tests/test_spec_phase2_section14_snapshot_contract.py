@@ -32,6 +32,10 @@ def test_spec_phase2_monorepo_lists_ci_le_vibe_deb_vs_le_vibe_ide_step14():
     assert "debian-le-vibe-ide/README.md" in text
     assert "Install both packages" in text
     assert "Maintainer build output" in text
+    assert "probe-vscode-linux-build.sh" in text
+    assert "dpkg-buildpackage" in text
+    assert "Failure (`--with-ide`)" in text
+    assert "Fail-fast (`build-le-vibe-debs.sh --with-ide`)" in text
 
 
 def test_spec_phase2_section14_ide_row_honesty_strings():
