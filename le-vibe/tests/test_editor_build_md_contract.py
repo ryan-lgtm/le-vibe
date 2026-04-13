@@ -75,6 +75,8 @@ def test_editor_build_md_contract_lvibe_smoke_pointer():
     assert "branding-staging.checklist.md" in text
     assert "read before overrides" in text
     assert "14.c" in text and "14.d" in text
+    assert "**Partial tree:**" in text
+    assert "codium-tunnel" in text
 
 
 def test_editor_print_built_codium_script_exists_when_vscodium_present():

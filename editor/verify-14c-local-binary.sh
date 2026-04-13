@@ -22,5 +22,9 @@ if [[ "${ec}" -eq 0 ]]; then
 fi
 
 printf '%s\n' "${out}" >&2
-echo "verify-14c-local-binary: (14.c) No built tree yet — toolchain → fetch → compile: editor/BUILD.md (14.a use-node-toolchain.sh, 14.b fetch-vscode-sources.sh, then cd editor/vscodium && ./dev/build.sh). Full launcher smoke: ./editor/smoke-built-codium-lvibe.sh (needs ollama on PATH)." >&2
+if [[ "${out}" == *"partial or incomplete"* ]]; then
+  echo "verify-14c-local-binary: (14.c) Incomplete VSCode-linux tree — finish cd editor/vscodium && ./dev/build.sh (editor/BUILD.md 14.c). Full launcher smoke: ./editor/smoke-built-codium-lvibe.sh (needs ollama on PATH)." >&2
+else
+  echo "verify-14c-local-binary: (14.c) No built tree yet — toolchain → fetch → compile: editor/BUILD.md (14.a use-node-toolchain.sh, 14.b fetch-vscode-sources.sh, then cd editor/vscodium && ./dev/build.sh). Full launcher smoke: ./editor/smoke-built-codium-lvibe.sh (needs ollama on PATH)." >&2
+fi
 exit 1
