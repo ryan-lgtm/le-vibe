@@ -440,11 +440,52 @@ def _cmd_pip_audit(argv: list[str]) -> int:
     return run_pip_audit(rest)
 
 
+def _split_lvibe_json_flag(argv: list[str]) -> tuple[bool, list[str]]:
+    """Strip leading ``lvibe``-level ``--json`` (STEP 10 / H3); remaining args go to bash scripts."""
+    json_mode = False
+    rest: list[str] = []
+    for a in argv:
+        if a == "--json":
+            json_mode = True
+        else:
+            rest.append(a)
+    return json_mode, rest
+
+
 def _cmd_ci_smoke(argv: list[str]) -> int:
     """STEP 10 (H3): ``packaging/scripts/ci-smoke.sh`` — ``docs/ci-qa-hardening.md``."""
-    from le_vibe.qa_scripts import EXIT_NO_MONOREPO, run_ci_smoke
+    import json as json_mod
 
-    rc = run_ci_smoke(argv)
+    from le_vibe.qa_scripts import EXIT_NO_MONOREPO, find_monorepo_root, run_ci_smoke, run_ci_smoke_captured
+
+    json_mode, rest = _split_lvibe_json_flag(argv)
+
+    def _emit_json(**payload: object) -> None:
+        print(json_mod.dumps(payload, indent=2, ensure_ascii=False), file=sys.stdout)
+
+    if json_mode:
+        rc, out, err = run_ci_smoke_captured(rest)
+        if rc == EXIT_NO_MONOREPO:
+            _emit_json(
+                error="monorepo_not_found",
+                script="packaging/scripts/ci-smoke.sh",
+                hint="docs/ci-qa-hardening.md STEP 10 / H3 — set LE_VIBE_REPO_ROOT or run from clone",
+            )
+            return 1
+        root = find_monorepo_root()
+        assert root is not None
+        _emit_json(
+            monorepo_root=str(root),
+            script="packaging/scripts/ci-smoke.sh",
+            script_args=rest,
+            exit_code=rc,
+            ok=(rc == 0),
+            stdout=out.rstrip("\n"),
+            stderr=err.rstrip("\n"),
+        )
+        return rc
+
+    rc = run_ci_smoke(rest)
     if rc == EXIT_NO_MONOREPO:
         print(
             "lvibe ci-smoke: could not find Lé Vibe monorepo (packaging/scripts/ci-smoke.sh). "
@@ -458,9 +499,38 @@ def _cmd_ci_smoke(argv: list[str]) -> int:
 
 def _cmd_ci_editor_gate(argv: list[str]) -> int:
     """STEP 10 (H3): ``packaging/scripts/ci-editor-gate.sh`` (editor/ gate)."""
-    from le_vibe.qa_scripts import EXIT_NO_MONOREPO, run_ci_editor_gate
+    import json as json_mod
 
-    rc = run_ci_editor_gate(argv)
+    from le_vibe.qa_scripts import EXIT_NO_MONOREPO, find_monorepo_root, run_ci_editor_gate, run_ci_editor_gate_captured
+
+    json_mode, rest = _split_lvibe_json_flag(argv)
+
+    def _emit_json(**payload: object) -> None:
+        print(json_mod.dumps(payload, indent=2, ensure_ascii=False), file=sys.stdout)
+
+    if json_mode:
+        rc, out, err = run_ci_editor_gate_captured(rest)
+        if rc == EXIT_NO_MONOREPO:
+            _emit_json(
+                error="monorepo_not_found",
+                script="packaging/scripts/ci-editor-gate.sh",
+                hint="docs/ci-qa-hardening.md STEP 10 / H3 — set LE_VIBE_REPO_ROOT or run from clone",
+            )
+            return 1
+        root = find_monorepo_root()
+        assert root is not None
+        _emit_json(
+            monorepo_root=str(root),
+            script="packaging/scripts/ci-editor-gate.sh",
+            script_args=rest,
+            exit_code=rc,
+            ok=(rc == 0),
+            stdout=out.rstrip("\n"),
+            stderr=err.rstrip("\n"),
+        )
+        return rc
+
+    rc = run_ci_editor_gate(rest)
     if rc == EXIT_NO_MONOREPO:
         print(
             "lvibe ci-editor-gate: could not find Lé Vibe monorepo "

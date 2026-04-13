@@ -63,3 +63,45 @@ def run_ci_editor_gate(argv: list[str]) -> int:
         return EXIT_NO_MONOREPO
     proc = subprocess.run(["bash", str(script), *argv], cwd=root)
     return int(proc.returncode)
+
+
+def run_ci_smoke_captured(argv: list[str]) -> tuple[int, str, str]:
+    """
+    Same as ``run_ci_smoke`` but capture stdout/stderr (``lvibe ci-smoke --json``).
+
+    Returns ``(EXIT_NO_MONOREPO, "", "")`` when the monorepo or script is missing.
+    """
+    root = find_monorepo_root()
+    if root is None:
+        return EXIT_NO_MONOREPO, "", ""
+    script = root / SMOKE_REL
+    if not script.is_file():
+        return EXIT_NO_MONOREPO, "", ""
+    proc = subprocess.run(
+        ["bash", str(script), *argv],
+        cwd=root,
+        capture_output=True,
+        text=True,
+    )
+    return int(proc.returncode), proc.stdout or "", proc.stderr or ""
+
+
+def run_ci_editor_gate_captured(argv: list[str]) -> tuple[int, str, str]:
+    """
+    Same as ``run_ci_editor_gate`` but capture stdout/stderr (``lvibe ci-editor-gate --json``).
+
+    Returns ``(EXIT_NO_MONOREPO, "", "")`` when the monorepo or script is missing.
+    """
+    root = find_monorepo_root()
+    if root is None:
+        return EXIT_NO_MONOREPO, "", ""
+    script = root / EDITOR_GATE_REL
+    if not script.is_file():
+        return EXIT_NO_MONOREPO, "", ""
+    proc = subprocess.run(
+        ["bash", str(script), *argv],
+        cwd=root,
+        capture_output=True,
+        text=True,
+    )
+    return int(proc.returncode), proc.stdout or "", proc.stderr or ""
