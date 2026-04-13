@@ -121,6 +121,7 @@ def test_ide_prereqs_print_closeout_partial_hint(
     assert "codium-tunnel" in out
     assert "partial build" in out
     assert "Partial tree" in out
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in out
     assert "./editor/use-node-toolchain.sh" in out
     assert "./editor/fetch-vscode-sources.sh" in out
     assert "(cd editor/vscodium && ./dev/build.sh)" in out

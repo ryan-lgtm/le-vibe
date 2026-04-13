@@ -80,6 +80,9 @@ if [[ "${_vlb}" == "partial" ]]; then
 fi
 if [[ "${_vlb}" != "ready" ]]; then
   echo "hint: packaging/scripts/build-le-vibe-debs.sh --with-ide exits before stack dpkg-buildpackage until vscode_linux_build is ready (or use --vs-build PATH with bin/codium) — docs/PM_DEB_BUILD_ITERATION.md (Failure (--with-ide))" >&2
+  if [[ "${_vlb}" == "partial" ]]; then
+    echo "hint: partial tree — ./packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh /path/to/vscodium-linux-build.tar.gz --yes (editor/BUILD.md 14.f) or finish cd editor/vscodium && ./dev/build.sh (14.c)" >&2
+  fi
 fi
 
 shopt -s nullglob

@@ -36,6 +36,7 @@ def test_preflight_step14_closeout_script_documents_checks() -> None:
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "vscode_linux_bin_files" in text
     assert "print-step14-vscode-linux-bin-files.sh" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
 
 
 def test_preflight_step14_closeout_prints_vscode_linux_build_line() -> None:

@@ -895,6 +895,11 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
                 "editor/BUILD.md *Partial tree* / 14.c; then preflight + verify below."
             )
             print(
+                "# OR replace partial tree with a linux_compile tarball (14.f) — "
+                "./packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh "
+                "/path/to/vscodium-linux-build.tar.gz --yes"
+            )
+            print(
                 "# packaging/scripts/build-le-vibe-debs.sh --with-ide exits before stack "
                 "dpkg-buildpackage until probe-vscode-linux-build.sh is ready (or use "
                 "--vs-build PATH/bin/codium) — docs/PM_DEB_BUILD_ITERATION.md (*Failure "
