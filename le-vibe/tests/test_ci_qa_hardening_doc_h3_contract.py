@@ -56,6 +56,16 @@ def test_ci_qa_hardening_doc_linux_compile_maintainer_triage_step14e():
     assert "Honesty vs CI" in text
 
 
+def test_ci_qa_hardening_doc_linux_compile_fork_org_tuning_step14e():
+    """STEP 14.e: H3 doc names optional runs-on/timeout fork tuning — not a merge gate."""
+    text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
+    assert "**Fork / org tuning (optional):**" in text
+    assert "timeout-minutes" in text
+    assert "runs-on" in text
+    assert "Runner realism" in text
+    assert "Honesty vs CI" in text
+
+
 def test_ci_qa_hardening_doc_linux_compile_gh_run_list_finding_run_id_step14f():
     """STEP 14.f: H3 doc names gh run list + workflow file for linux_compile artifact download."""
     text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
