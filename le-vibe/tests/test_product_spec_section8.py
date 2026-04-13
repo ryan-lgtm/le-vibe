@@ -216,6 +216,15 @@ def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14()
     assert "roadmap" in text
 
 
+def test_product_spec_section8_evidence_section10_welcome_row_lists_welcome_banner_e1():
+    """E1: §10 table Welcome row cites WELCOME_BANNER + test_product_spec_section8."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
+    assert "| **Welcome to Lé Vibe**" in text
+    assert "WELCOME_BANNER" in text
+    assert "test_product_spec_section8.py" in text
+
+
 def test_product_spec_section8_evidence_section10_first_run_observability_step6():
     """E1: §10 narrative cites first-run failure remediation → lvibe logs (STEP 6)."""
     root = Path(__file__).resolve().parents[2]
@@ -225,6 +234,9 @@ def test_product_spec_section8_evidence_section10_first_run_observability_step6(
     assert "lvibe logs" in text
     assert "test_first_run.py" in text
     assert "STEP 6" in text
+    assert "WELCOME_BANNER" in text
+    assert "welcome.py" in text
+    assert "test_welcome_banner_matches_product_spec_section4" in text
 
 
 def test_product_spec_section8_evidence_h6_lists_editor_readme_h3_linux_compile_index():
@@ -235,6 +247,8 @@ def test_product_spec_section8_evidence_h6_lists_editor_readme_h3_linux_compile_
     assert "editor/README.md" in text
     assert "Optional full Linux compile" in text
     assert "test_editor_readme_step14_contract.py" in text
+    assert "Download shape (14.f)" in text
+    assert "test_editor_readme_documents_linux_compile_and_tarball_14ef" in text
 
 
 def test_product_spec_section8_evidence_h3_ci_qa_lists_docker_linux_compile_fallback():
