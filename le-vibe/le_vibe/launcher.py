@@ -1032,6 +1032,100 @@ def _cmd_master_orchestrator(argv: list[str]) -> int:
     return 0
 
 
+def _cmd_ai_pilot_continue(argv: list[str]) -> int:
+    """STEP 17: **Please continue** / **AI Pilot** — ``docs/AI_PILOT_AND_CONTINUE.md``."""
+    import json as json_mod
+
+    from le_vibe.ai_pilot_paths import H17_MANIFEST, iter_h17_paths
+    from le_vibe.qa_scripts import find_monorepo_root
+
+    p = argparse.ArgumentParser(
+        prog="lvibe ai-pilot-continue",
+        description="List STEP 17 paths (AI Pilot scope, Continue rules, root README §7.1).",
+    )
+    mode = p.add_mutually_exclusive_group()
+    mode.add_argument(
+        "--path-only",
+        metavar="KEY",
+        nargs="?",
+        const="doc",
+        default=None,
+        help="print one path: doc, continue, readme (default key when flag is present: doc)",
+    )
+    mode.add_argument(
+        "--json",
+        action="store_true",
+        help="print monorepo root and each STEP 17 path with exists flags",
+    )
+    args = p.parse_args(argv)
+
+    def _emit_json(**payload: object) -> None:
+        print(json_mod.dumps(payload, indent=2, ensure_ascii=False), file=sys.stdout)
+
+    root = find_monorepo_root()
+    if root is None:
+        if args.json:
+            _emit_json(
+                error="monorepo_not_found",
+                hint="docs/PM_STAGE_MAP.md STEP 17 — set LE_VIBE_REPO_ROOT or run from clone",
+            )
+            return 1
+        print(
+            "lvibe ai-pilot-continue: could not find monorepo root "
+            "(set LE_VIBE_REPO_ROOT or run from a git clone). "
+            "See docs/PM_STAGE_MAP.md STEP 17.",
+            file=sys.stderr,
+        )
+        return 1
+
+    key_map = {
+        "doc": H17_MANIFEST[0][1],
+        "continue": H17_MANIFEST[1][1],
+        "readme": H17_MANIFEST[2][1],
+    }
+    if args.json:
+        entries = []
+        for label, rel in H17_MANIFEST:
+            abs_p = (root / rel).resolve()
+            exists = abs_p.is_file()
+            entries.append(
+                {
+                    "label": label,
+                    "relative": str(rel).replace("\\", "/"),
+                    "path": str(abs_p),
+                    "exists": exists,
+                }
+            )
+        all_present = all(e["exists"] for e in entries)
+        _emit_json(
+            monorepo_root=str(root),
+            entries=entries,
+            all_present=all_present,
+        )
+        return 0
+    if args.path_only is not None:
+        k = args.path_only
+        if k not in key_map:
+            print(
+                f"lvibe ai-pilot-continue: unknown key {k!r} — use: {', '.join(sorted(key_map))}",
+                file=sys.stderr,
+            )
+            return 2
+        rel = key_map[k]
+        path = (root / rel).resolve()
+        if not path.is_file():
+            print(f"lvibe ai-pilot-continue: missing {path}", file=sys.stderr)
+            return 1
+        print(path)
+        return 0
+
+    print("Authority: docs/AI_PILOT_AND_CONTINUE.md, docs/PM_STAGE_MAP.md STEP 17")
+    for label, path, ok in iter_h17_paths(root):
+        status = "OK" if ok else "MISSING"
+        print(f"[{status}] {label}: {path}")
+    return 0
+
+
 def _cmd_apply_opening_skip(argv: list[str]) -> int:
     """STEP 2: advance ``opening_intent`` when the user skips — ``SESSION_ORCHESTRATION_SPEC`` §4."""
     from le_vibe.session_orchestrator import apply_opening_skip
@@ -1160,6 +1254,8 @@ def main() -> int:
         return _cmd_workspace_governance(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "master-orchestrator":
         return _cmd_master_orchestrator(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "ai-pilot-continue":
+        return _cmd_ai_pilot_continue(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "apply-opening-skip":
         return _cmd_apply_opening_skip(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "continue-rules":

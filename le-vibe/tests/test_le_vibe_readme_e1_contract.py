@@ -160,6 +160,7 @@ def test_le_vibe_readme_lists_step17_ai_pilot_continue():
     assert "AI Pilot & Continue contracts (STEP 17)" in text
     assert "AI_PILOT_AND_CONTINUE.md" in text
     assert "continue_workspace" in text
+    assert "ai-pilot-continue" in text
 
 
 def test_le_vibe_readme_lists_pm_ide_settings_contract_tests():
