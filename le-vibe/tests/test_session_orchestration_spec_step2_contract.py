@@ -32,6 +32,7 @@ def test_session_orchestration_spec_lists_maintainer_full_product_deb_step14():
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "--apt-sim" in text
     assert "--json" in text
+    assert "apt_sim_note" in text
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "H1 vs §7.3 .deb bundles" in text

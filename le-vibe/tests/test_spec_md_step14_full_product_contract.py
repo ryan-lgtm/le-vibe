@@ -21,5 +21,6 @@ def test_spec_md_intro_documents_full_product_install_step14():
     assert "Success output (`--with-ide`)" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "--json" in text
+    assert "apt_sim_note" in text
     assert "debian-le-vibe-ide/README.md" in text
     assert "Install both packages" in text

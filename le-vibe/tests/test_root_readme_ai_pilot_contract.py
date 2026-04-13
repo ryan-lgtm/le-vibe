@@ -38,6 +38,7 @@ def test_root_readme_prioritization_demoinstall_apt_install_both_debs_step14():
     assert "packaging/debian-le-vibe-ide/README.md" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "--json" in text
+    assert "apt_sim_note" in text
 
 
 def test_root_readme_current_status_works_well_today_full_product_install_step14():
@@ -50,6 +51,7 @@ def test_root_readme_current_status_works_well_today_full_product_install_step14
     assert "Success output (`--with-ide`)" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "--json" in text
+    assert "apt_sim_note" in text
 
 
 def test_root_readme_documents_ai_pilot_and_user_gate():

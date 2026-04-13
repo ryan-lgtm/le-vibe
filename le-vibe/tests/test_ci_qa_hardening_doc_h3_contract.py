@@ -32,6 +32,7 @@ def test_ci_qa_hardening_doc_maintainer_full_product_deb_step14():
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "--apt-sim" in text
     assert "--json" in text
+    assert "apt_sim_note" in text
     assert "Install both packages" in text
 
 
