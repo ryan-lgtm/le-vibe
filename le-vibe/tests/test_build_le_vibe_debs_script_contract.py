@@ -131,6 +131,19 @@ def test_pm_deb_build_iteration_doc_master_orchestrator_queue_step14():
     assert "apt_sim_note" in head
 
 
+def test_pm_deb_build_iteration_doc_success_output_orders_build_vs_test_host_step14():
+    """STEP 14: Success output paragraph distinguishes build machine vs test host."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    sec = text.split("**Success output (`--with-ide`):**", 1)[1].split(
+        "**`--json` close-out payload:**", 1
+    )[0]
+    assert "manual-step14-install-smoke.sh" in sec
+    assert "build machine" in sec
+    assert "test host" in sec
+    assert "apt-repo-releases.md" in sec
+
+
 def test_pm_deb_build_iteration_doc_sibling_docs_links_apt_repo_h1_related_round_trip():
     """H1: PM header lists apt-repo-releases Related docs round-trip (STEP 8)."""
     root = Path(__file__).resolve().parents[2]
