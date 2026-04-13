@@ -29,6 +29,9 @@ def test_master_orchestrator_fence_extractable():
     assert "apt_sim_note" in text
     assert "build machine" in text
     assert "test host" in text
+    assert "Partial VSCode-linux tree" in text
+    assert "print-built-codium-path" in text
+    assert "Incomplete Linux build" in text
 
 
 def test_print_master_orchestrator_prompt_script_header_mentions_queue():
