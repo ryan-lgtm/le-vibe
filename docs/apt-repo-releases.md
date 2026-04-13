@@ -75,6 +75,9 @@ When you cut a **release** (tag + GitHub Release):
    `gh run download <run-id> -n le-vibe-deb -D ./release-dir`
 3. Attach to the GitHub Release: **`*.deb`**, **`SHA256SUMS`**, and optionally **`le-vibe-python.cdx.json`** (already listed in **`SHA256SUMS`**).
 4. Paste **`CHANGELOG.md`** section for that version into the Release description.
+5. **Optional (`gh` CLI):** after you push a **version tag** that matches **`debian/changelog`** / **`CHANGELOG.md`** (see *Tagging discipline* above), you can attach the same files in one step, for example:  
+   `gh release create v0.1.0 ./le-vibe_*_all.deb ./SHA256SUMS ./le-vibe-python.cdx.json --notes-file CHANGELOG-snippet.md`  
+   (paths relative to your release directory; **`gh`** must be authenticated — `gh auth login`. Full-product drops add **`le-vibe-ide_*_amd64.deb`** to the file list.)
 
 **Verify before install** (run inside the directory that contains **`SHA256SUMS`** and the files named on the right-hand side of each line — typically the extracted artifact folder):
 

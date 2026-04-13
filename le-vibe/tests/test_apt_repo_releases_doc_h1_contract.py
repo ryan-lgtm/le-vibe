@@ -25,6 +25,7 @@ def test_apt_repo_releases_doc_lists_ci_artifact_and_changelog():
     assert "ide-v" in text
     assert "Tagging discipline" in text
     assert "Honesty vs CI" in text
+    assert "gh release create" in text
 
 
 def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
