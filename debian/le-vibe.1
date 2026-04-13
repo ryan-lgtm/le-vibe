@@ -31,6 +31,8 @@ Editor binary (default: \fBLE_VIBE_EDITOR\fR, else \fB/usr/lib/le-vibe/bin/codiu
 .TP
 .BI \-\-port " N"
 Managed Ollama port (default 11435).
+.PP
+When first\-run bootstrap fails: set \fBLE_VIBE_VERBOSE\fR for stderr detail, then \fBlvibe logs \-\-path\-only\fR or \fBlvibe logs \-\-tail\fR \fIN\fR (STEP 6 JSON Lines). See \fBle\-vibe/README.md\fR \fIFirst\-run (launcher)\fR and \fBPRODUCT_SPEC_SECTION8_EVIDENCE.md\fR §10.
 .SH COMMANDS
 .TP
 .B lvibe sync-agent-skills
