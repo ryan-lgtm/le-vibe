@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 import tempfile
 from pathlib import Path
@@ -123,7 +124,37 @@ def test_manual_step14_install_smoke_json_mode() -> None:
             },
         )
         assert result.returncode == 0
-        out = result.stdout
-        assert '"stack_deb":' in out
-        assert '"ide_deb":' in out
-        assert '"install_cmd": "sudo apt install' in out
+        payload = json.loads(result.stdout)
+        assert payload["stack_deb"] == str(stack)
+        assert payload["ide_deb"] == str(ide)
+        assert payload["install_cmd"] == f'sudo apt install "{stack}" "{ide}"'
+
+
+def test_manual_step14_install_smoke_json_mode_escapes_special_chars() -> None:
+    root = _repo_root()
+    script = root / "packaging" / "scripts" / "manual-step14-install-smoke.sh"
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_root = Path(tmp_dir)
+        stack_dir = tmp_root / 'dir-with-"quotes"'
+        stack_dir.mkdir()
+        ide_dir = tmp_root / "dir-with-\\slashes"
+        ide_dir.mkdir()
+        stack = stack_dir / "le-vibe_9.9.9_all.deb"
+        ide = ide_dir / "le-vibe-ide_9.9.9_amd64.deb"
+        stack.write_bytes(b"placeholder")
+        ide.write_bytes(b"placeholder")
+        result = subprocess.run(
+            [str(script), "--json"],
+            cwd=str(root),
+            capture_output=True,
+            text=True,
+            env={
+                "PATH": str(Path("/usr/bin")) + ":" + str(Path("/bin")),
+                "STACK_DEB": str(stack),
+                "IDE_DEB": str(ide),
+            },
+        )
+        assert result.returncode == 0
+        payload = json.loads(result.stdout)
+        assert payload["stack_deb"] == str(stack)
+        assert payload["ide_deb"] == str(ide)

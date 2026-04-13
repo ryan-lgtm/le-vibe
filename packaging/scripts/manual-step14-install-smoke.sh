@@ -99,16 +99,29 @@ fi
 assert_file "$STACK_DEB" "stack deb"
 assert_file "$IDE_DEB" "IDE deb"
 
+json_escape() {
+  local value="$1"
+  value="${value//\\/\\\\}"
+  value="${value//\"/\\\"}"
+  value="${value//$'\n'/\\n}"
+  value="${value//$'\r'/\\r}"
+  value="${value//$'\t'/\\t}"
+  printf '%s' "$value"
+}
+
 if [[ "$PRINT_INSTALL_CMD" -eq 1 ]]; then
   printf 'sudo apt install "%s" "%s"\n' "$STACK_DEB" "$IDE_DEB"
   exit 0
 fi
 
 if [[ "$PRINT_JSON" -eq 1 ]]; then
+  stack_json="$(json_escape "$STACK_DEB")"
+  ide_json="$(json_escape "$IDE_DEB")"
+  install_json="$(json_escape "sudo apt install \"$STACK_DEB\" \"$IDE_DEB\"")"
   printf '{\n'
-  printf '  "stack_deb": "%s",\n' "$STACK_DEB"
-  printf '  "ide_deb": "%s",\n' "$IDE_DEB"
-  printf '  "install_cmd": "sudo apt install \\"%s\\" \\"%s\\""\n' "$STACK_DEB" "$IDE_DEB"
+  printf '  "stack_deb": "%s",\n' "$stack_json"
+  printf '  "ide_deb": "%s",\n' "$ide_json"
+  printf '  "install_cmd": "%s"\n' "$install_json"
   printf '}\n'
   exit 0
 fi
