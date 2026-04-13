@@ -25,6 +25,8 @@ def test_privacy_and_telemetry_table_lists_maintainer_full_product_deb_step14():
     assert "H1 vs §7.3 .deb bundles" in text
     assert "build machine" in text
     assert "test host" in text
+    assert "Partial VSCode-linux" in text
+    assert "print-built-codium-path" in text
 
 
 def test_privacy_and_telemetry_e1_row_lists_linux_compile_cargo_cache():
@@ -57,6 +59,8 @@ def test_ai_pilot_doc_lists_maintainer_full_product_deb_step14():
     assert "H1 vs §7.3 .deb bundles" in text
     assert "build machine" in text
     assert "test host" in text
+    assert "Partial VSCode-linux" in text
+    assert "print-built-codium-path" in text
 
 
 def test_ai_pilot_and_continue_table_lists_linux_compile_cargo_cache():
