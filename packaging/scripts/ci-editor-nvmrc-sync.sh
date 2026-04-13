@@ -10,6 +10,22 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
 
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  cat <<'EOF'
+Usage: packaging/scripts/ci-editor-nvmrc-sync.sh
+
+Verify editor/.nvmrc matches editor/vscodium/.nvmrc with cmp (STEP 14.a).
+No-op (exit 0) when editor/vscodium/ is absent.
+
+  -h, --help   Show this message and exit.
+EOF
+  exit 0
+fi
+if [[ $# -gt 0 ]]; then
+  echo "ci-editor-nvmrc-sync: unexpected argument(s) — no args except --help (see --help)" >&2
+  exit 2
+fi
+
 [[ -f editor/vscodium/product.json ]] || exit 0
 
 [[ -f editor/.nvmrc && -f editor/vscodium/.nvmrc ]] || {

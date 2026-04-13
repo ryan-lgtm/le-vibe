@@ -20,6 +20,7 @@ def _repo_root() -> Path:
         "packaging/scripts/stage-le-vibe-ide-deb.sh",
         "packaging/scripts/ci-vscodium-linux-dev-build.sh",
         "packaging/scripts/ci-editor-gate.sh",
+        "packaging/scripts/ci-editor-nvmrc-sync.sh",
         "editor/smoke.sh",
         "editor/le-vibe-overrides/sync-linux-icon-assets.sh",
         "packaging/scripts/check-linux-vscodium-build-deps.sh",
