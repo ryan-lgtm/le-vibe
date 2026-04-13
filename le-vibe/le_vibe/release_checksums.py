@@ -19,3 +19,16 @@ def run_sha256sum_check(root: Path) -> int:
         cwd=root,
     )
     return int(proc.returncode)
+
+
+def run_sha256sum_check_capture(root: Path) -> tuple[int, str, str]:
+    """
+    Same as ``run_sha256sum_check`` but capture stdout/stderr (for ``lvibe verify-checksums --json``).
+    """
+    proc = subprocess.run(
+        ["sha256sum", "-c", SHA256SUMS_NAME],
+        cwd=root,
+        capture_output=True,
+        text=True,
+    )
+    return int(proc.returncode), proc.stdout or "", proc.stderr or ""

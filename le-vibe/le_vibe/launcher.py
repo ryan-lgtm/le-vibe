@@ -308,9 +308,10 @@ def _cmd_continue_pin(argv: list[str]) -> int:
 
 def _cmd_verify_checksums(argv: list[str]) -> int:
     """STEP 8 (H1): ``sha256sum -c SHA256SUMS`` — same as ``docs/apt-repo-releases.md``."""
+    import json as json_mod
     import shutil
 
-    from le_vibe.release_checksums import SHA256SUMS_NAME, run_sha256sum_check
+    from le_vibe.release_checksums import SHA256SUMS_NAME, run_sha256sum_check, run_sha256sum_check_capture
 
     p = argparse.ArgumentParser(
         prog="lvibe verify-checksums",
@@ -322,22 +323,58 @@ def _cmd_verify_checksums(argv: list[str]) -> int:
         default=".",
         help="directory containing SHA256SUMS (default: current directory)",
     )
+    p.add_argument(
+        "--json",
+        action="store_true",
+        help="print directory, paths, exit code, and sha256sum stdout/stderr as JSON",
+    )
     args = p.parse_args(argv)
     try:
         root = Path(args.directory).expanduser().resolve()
     except OSError as e:
+        if args.json:
+            print(
+                json_mod.dumps({"error": "bad_directory", "detail": str(e)}, indent=2),
+                file=sys.stdout,
+            )
+            return 2
         print(f"lvibe verify-checksums: bad --directory: {e}", file=sys.stderr)
         return 2
+    sums_path = root / SHA256SUMS_NAME
+
+    def _json_payload(**extra: object) -> None:
+        base = {"directory": str(root), "sha256sums_path": str(sums_path)}
+        base.update(extra)
+        print(json_mod.dumps(base, indent=2, ensure_ascii=False), file=sys.stdout)
+
     if not root.is_dir():
+        if args.json:
+            _json_payload(error="not_a_directory")
+            return 1
         print(f"lvibe verify-checksums: not a directory: {root}", file=sys.stderr)
         return 1
-    if not (root / SHA256SUMS_NAME).is_file():
+    if not sums_path.is_file():
+        if args.json:
+            _json_payload(error="missing_sha256sums", hint="docs/apt-repo-releases.md STEP 8 / H1")
+            return 1
         print(f"lvibe verify-checksums: no {SHA256SUMS_NAME} in {root}", file=sys.stderr)
         print("See docs/apt-repo-releases.md (STEP 8 / H1).", file=sys.stderr)
         return 1
     if not shutil.which("sha256sum"):
+        if args.json:
+            _json_payload(error="sha256sum_not_on_path")
+            return 127
         print("lvibe verify-checksums: sha256sum not on PATH (install coreutils).", file=sys.stderr)
         return 127
+    if args.json:
+        rc, out, err = run_sha256sum_check_capture(root)
+        _json_payload(
+            exit_code=rc,
+            sha256sum_stdout=out.rstrip("\n"),
+            sha256sum_stderr=err.rstrip("\n"),
+            ok=(rc == 0),
+        )
+        return 0 if rc == 0 else 1
     return run_sha256sum_check(root)
 
 
