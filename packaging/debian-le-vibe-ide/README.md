@@ -26,7 +26,7 @@ sudo apt install ./le-vibe_*_all.deb ./le-vibe-ide_*_amd64.deb
 
 **`apt`** pulls declared dependencies; if you use **`dpkg -i`** on both files instead, run **`sudo apt -f install`** afterward if the resolver asks.
 
-**After install:** follow the stack post-install flow in **`/usr/share/doc/le-vibe/README.Debian`** (first-run **`lvibe`**, **`le-vibe-setup-continue`**, **§5** **`.lvibe/`** consent). The IDE binary is **`/usr/lib/le-vibe/bin/codium`**; the desktop environment’s **Lé Vibe** menu entry ( **`le-vibe.desktop`**) starts that binary — see also **`debian/le-vibe.README.Debian`** in the monorepo (*Desktop launcher*).
+**After install:** follow the stack post-install flow in **`/usr/share/doc/le-vibe/README.Debian`** (first-run **`lvibe`**, **`le-vibe-setup-continue`**, **§5** **`.lvibe/`** consent). The IDE binary is **`/usr/lib/le-vibe/bin/codium`**; the desktop environment’s **Lé Vibe** menu entry ( **`le-vibe.desktop`**) starts that binary — see also **`debian/le-vibe.README.Debian`** in the monorepo (*Desktop launcher*). For the remaining maintainer-host install/launch smoke checklist, run **`packaging/scripts/manual-step14-install-smoke.sh`** from the monorepo root.
 
 **CI vs maintainer .deb bundles:** Default **`ci.yml`** artifact **`le-vibe-deb`** ships the stack **`le-vibe`** **`.deb`**, SBOM, and **`SHA256SUMS`** for those files — **not** **`le-vibe-ide_*_amd64.deb`**. Honesty — **[`docs/PM_STAGE_MAP.md`](../../docs/PM_STAGE_MAP.md)** (*H1 vs §7.3 .deb bundles*); monorepo table — **[`spec-phase2.md`](../../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*.
 
