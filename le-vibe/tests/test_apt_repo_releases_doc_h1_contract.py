@@ -36,6 +36,15 @@ def test_apt_repo_releases_doc_dual_changelog_discipline_h1():
     assert "Checklist — stack-only GitHub Release" in text
 
 
+def test_apt_repo_releases_doc_ide_debian_changelog_separate_from_stack_h1():
+    """H1: le-vibe-ide has packaging/debian-le-vibe-ide/debian/changelog; ide-v* does not replace stack v…"""
+    text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
+    assert "**IDE `le-vibe-ide` changelog:**" in text
+    assert "packaging/debian-le-vibe-ide/debian/changelog" in text
+    assert "ide-v*" in text
+    assert "linux_compile" in text
+
+
 def test_apt_repo_releases_doc_lists_full_product_release_checklist_h1():
     """H1: full-product checklist — dual deb + Combined drop + PM_DEB."""
     text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")

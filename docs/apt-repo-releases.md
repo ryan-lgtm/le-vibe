@@ -18,6 +18,8 @@ Package version and per-release notes live in **`debian/changelog`** (Debian pol
 
 **Dual changelog discipline:** **`debian/changelog`** is authoritative for the **stack** **`.deb`** version (**`dpkg -l le-vibe`** after install). **`CHANGELOG.md`** is the **Keep a Changelog** narrative you paste into **GitHub Releases** — both must describe the **same** **`x.y.z`** before you run the **stack-only** checklist (*Checklist — stack-only GitHub Release* below).
 
+**IDE `le-vibe-ide` changelog:** The **branded IDE** **`.deb`** is versioned from **[`packaging/debian-le-vibe-ide/debian/changelog`](../packaging/debian-le-vibe-ide/debian/changelog)** (separate file at **`dpkg-buildpackage`** time under **`packaging/debian-le-vibe-ide/`**). Bump it when you ship a new **`le-vibe-ide_*_amd64.deb`**; user-facing **root** **`CHANGELOG.md`** entries often emphasize the **stack** story — add IDE packaging notes there when maintainers need the same **Release** narrative for both packages. **`ide-v*`** git tags still **only** opt into **`linux_compile`** — they do **not** replace stack **`debian/changelog`** / **`v…`** tags (*Tagging discipline* below).
+
 Bump before tagging a release, for example:
 
 ```bash
