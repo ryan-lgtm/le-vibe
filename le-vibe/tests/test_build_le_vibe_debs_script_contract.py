@@ -47,6 +47,8 @@ def test_build_le_vibe_debs_script_mentions_submodule_14b():
     assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
     assert "ci-editor-gate.sh" in text
     assert "stage-le-vibe-ide-deb.sh" in text
+    assert "print-built-codium-path.sh" in text
+    assert "Partial tree" in text
 
 
 def test_build_le_vibe_debs_script_prints_full_product_install_hint_step14():

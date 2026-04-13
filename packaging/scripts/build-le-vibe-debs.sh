@@ -51,6 +51,8 @@ Prerequisites (stack): debhelper, build-essential, dpkg-dev (sudo apt install bu
 Prerequisites (IDE):  a successful dev/build.sh under editor/vscodium (see editor/BUILD.md).
   Without editor/vscodium/VSCode-linux-*, --with-ide fails after the stack .deb — fetch vscode
   (./editor/fetch-vscode-sources.sh), then ./packaging/scripts/ci-vscodium-linux-dev-build.sh, or see editor/BUILD.md.
+  If VSCode-linux-* exists but bin/codium is missing (partial build), finish dev/build.sh — editor/BUILD.md (Partial tree, 14.c);
+  ./editor/print-built-codium-path.sh prints diagnostics; stage-le-vibe-ide-deb.sh fails with the same hint.
   Fresh clone (14.b): git submodule update --init editor/vscodium from repo root if editor/vscodium/ is empty — editor/README.md.
 
 Artifacts:
@@ -181,7 +183,7 @@ if [[ "$WITH_IDE" -eq 1 ]]; then
   _ide_args=()
   [[ -n "$VS_BUILD" ]] && _ide_args+=("$VS_BUILD")
   if ! "$ROOT/packaging/scripts/build-le-vibe-ide-deb.sh" "${_ide_args[@]}"; then
-    echo "build-le-vibe-debs: §7.3 remediation — produce VSCode-linux-*: ./editor/fetch-vscode-sources.sh (14.b), then ./packaging/scripts/ci-vscodium-linux-dev-build.sh + dev/build.sh (14.e / editor/BUILD.md 14.c), or Docker ./packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh (full compile) / prepare-only ./packaging/scripts/docker-le-vibe-vscodium-prepare-only.sh (branding layers only); then re-run --with-ide; or pass --vs-build PATH. CI vs maintainer bundles: docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles); packaging/debian-le-vibe-ide/README.md." >&2
+    echo "build-le-vibe-debs: §7.3 remediation — produce VSCode-linux-*: ./editor/fetch-vscode-sources.sh (14.b), then ./packaging/scripts/ci-vscodium-linux-dev-build.sh + dev/build.sh (14.e / editor/BUILD.md 14.c), or Docker ./packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh (full compile) / prepare-only ./packaging/scripts/docker-le-vibe-vscodium-prepare-only.sh (branding layers only); then re-run --with-ide; or pass --vs-build PATH. If the tree exists but bin/codium is missing, see editor/BUILD.md (Partial tree) and ./editor/print-built-codium-path.sh. CI vs maintainer bundles: docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles); packaging/debian-le-vibe-ide/README.md." >&2
     exit 1
   fi
   IDE_DEB="$(find_ide_deb)"
