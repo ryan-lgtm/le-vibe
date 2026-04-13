@@ -237,6 +237,9 @@ def test_product_spec_section8_evidence_section10_first_run_observability_step6(
     assert "WELCOME_BANNER" in text
     assert "welcome.py" in text
     assert "test_welcome_banner_matches_product_spec_section4" in text
+    assert "lvibe --help" in text
+    assert "launcher.py" in text
+    assert "test_launcher_argparse_first_run_flags_help_mentions_logs_step6" in text
 
 
 def test_product_spec_section8_evidence_h6_lists_editor_readme_h3_linux_compile_index():
