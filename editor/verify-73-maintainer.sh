@@ -12,6 +12,29 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 export PYTHONPATH="${ROOT}/le-vibe"
 
+usage() {
+  cat <<'EOF'
+Usage: editor/verify-73-maintainer.sh
+
+Run packaging/scripts/ci-editor-gate.sh then lvibe ide-prereqs --json checks
+(STEP 14 / §7.3 maintainer gate — does not build Electron or .deb).
+
+Environment:
+  LEVIBE_EDITOR_GATE_ASSERT_BRAND=1   Strict §7.3 branding (same as ci-editor-gate).
+
+  -h, --help   Show this message and exit.
+EOF
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+if [[ $# -gt 0 ]]; then
+  echo "verify-73-maintainer: unexpected argument(s) — run with no args (see --help)" >&2
+  exit 2
+fi
+
 if [[ "${LEVIBE_EDITOR_GATE_ASSERT_BRAND:-0}" == "1" ]]; then
   LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 "${ROOT}/packaging/scripts/ci-editor-gate.sh"
 else

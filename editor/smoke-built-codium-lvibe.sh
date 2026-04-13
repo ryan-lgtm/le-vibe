@@ -8,6 +8,28 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+usage() {
+  cat <<'EOF'
+Usage: editor/smoke-built-codium-lvibe.sh
+
+Set LE_VIBE_EDITOR from print-built-codium-path.sh and run smoke-lvibe-editor.sh
+(STEP 14.c — requires a completed dev/build.sh tree under editor/vscodium/).
+
+Requires: python3 and ollama on PATH (same as smoke-lvibe-editor.sh).
+
+  -h, --help   Show this message and exit.
+EOF
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+if [[ $# -gt 0 ]]; then
+  echo "smoke-built-codium-lvibe: unexpected argument(s) — run with no args (see --help)" >&2
+  exit 2
+fi
+
 if ! command -v python3 >/dev/null 2>&1; then
   echo "smoke-built-codium-lvibe: python3 not on PATH — install Python 3 (editor/BUILD.md 14.c)." >&2
   exit 5

@@ -12,6 +12,24 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export PYTHONPATH="${ROOT}/le-vibe"
 
+usage() {
+  cat <<'EOF'
+Usage: editor/smoke-lvibe-editor.sh [PATH/TO/CODIUM]
+
+Run the Lé Vibe launcher against an editor binary with --version (STEP 14.c — editor/BUILD.md).
+PATH defaults to LE_VIBE_EDITOR, else /usr/bin/codium when present.
+
+Requires: python3 and ollama on PATH (managed Ollama).
+
+  -h, --help   Show this message and exit.
+EOF
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
 BIN="${1:-${LE_VIBE_EDITOR:-}}"
 if [[ -z "${BIN}" ]]; then
   if [[ -x /usr/bin/codium ]]; then

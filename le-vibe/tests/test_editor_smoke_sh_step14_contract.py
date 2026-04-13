@@ -37,6 +37,8 @@ def test_verify_73_maintainer_bash_syntax() -> None:
 
 def test_verify_73_maintainer_header_step14():
     text = (_repo_root() / "editor" / "verify-73-maintainer.sh").read_text(encoding="utf-8")
+    assert "--help" in text
+    assert "unexpected argument" in text
     assert "0 → 1 → 14 → 2–13 → 15–17" in text
     assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "PM_STAGE_MAP.md" in text
@@ -44,6 +46,7 @@ def test_verify_73_maintainer_header_step14():
     assert "ide-prereqs" in text
     assert "ci-editor-gate" in text
     assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
+    assert "exit 2" in text
     assert "static_prereq_files_ok" in text
 
 
