@@ -108,6 +108,17 @@ def test_pm_deb_build_iteration_doc_sibling_docs_links_apt_repo_h1_related_round
     assert "PM_STAGE_MAP.md" in head
 
 
+def test_pm_deb_build_iteration_doc_links_h1_stack_release_checklist():
+    """H1: PM doc points at apt-repo-releases stack-only Release checklist."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    head = text.split("## Invocations", 1)[0]
+    assert "**Release checklist (H1):**" in head
+    assert "Checklist — stack-only GitHub Release" in head
+    assert "CHANGELOG.md" in head
+    assert "le-vibe-deb" in head
+
+
 def test_pm_deb_build_iteration_doc_lists_deb_build_options_parallel_invocation():
     """PM doc invocations table documents DEB_BUILD_OPTIONS=parallel for stack builds."""
     root = Path(__file__).resolve().parents[2]
