@@ -12,10 +12,11 @@ IDE_DEB_DEFAULT="$(ls -1 "$ROOT"/packaging/le-vibe-ide_*.deb 2>/dev/null | sort 
 STACK_DEB="${STACK_DEB:-$STACK_DEB_DEFAULT}"
 IDE_DEB="${IDE_DEB:-$IDE_DEB_DEFAULT}"
 RUN_VERIFY=0
+PRINT_INSTALL_CMD=0
 
 usage() {
   cat <<'EOF'
-Usage: packaging/scripts/manual-step14-install-smoke.sh [--verify-only]
+Usage: packaging/scripts/manual-step14-install-smoke.sh [--verify-only] [--print-install-cmd]
 
 Purpose:
   Print copy/paste commands for the remaining manual STEP 14 Ubuntu validation:
@@ -29,6 +30,8 @@ Environment:
 
 Options:
   --verify-only   Run post-install verification checks now (no install).
+  --print-install-cmd
+                  Print only: sudo apt install "<stack.deb>" "<ide.deb>".
   -h, --help      Show this message and exit.
 EOF
 }
@@ -74,6 +77,7 @@ run_verify_only() {
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --verify-only) RUN_VERIFY=1 ;;
+    --print-install-cmd) PRINT_INSTALL_CMD=1 ;;
     -h|--help) usage; exit 0 ;;
     *)
       echo "manual-step14-install-smoke: unknown option: $1" >&2
@@ -91,6 +95,11 @@ fi
 
 assert_file "$STACK_DEB" "stack deb"
 assert_file "$IDE_DEB" "IDE deb"
+
+if [[ "$PRINT_INSTALL_CMD" -eq 1 ]]; then
+  printf 'sudo apt install "%s" "%s"\n' "$STACK_DEB" "$IDE_DEB"
+  exit 0
+fi
 
 cat <<EOF
 ==> STEP 14 manual Ubuntu install smoke

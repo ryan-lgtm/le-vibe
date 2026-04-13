@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import subprocess
+import tempfile
 from pathlib import Path
 
 
@@ -23,6 +24,7 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     )
     assert "STEP 14" in text
     assert "--verify-only" in text
+    assert "--print-install-cmd" in text
     assert "sudo apt install" in text
     assert "lvibe --help" in text
     assert "codium --version" in text
@@ -59,3 +61,41 @@ def test_manual_step14_install_smoke_missing_artifacts_prints_recovery_commands(
     assert "build artifacts first" in err
     assert "build-le-vibe-debs.sh --with-ide" in err
     assert "verify-step14-closeout.sh --require-stack-deb" in err
+
+
+def test_manual_step14_install_smoke_print_install_cmd_mode() -> None:
+    root = _repo_root()
+    script = root / "packaging" / "scripts" / "manual-step14-install-smoke.sh"
+    result = subprocess.run(
+        [str(script), "--print-install-cmd"],
+        cwd=str(root),
+        capture_output=True,
+        text=True,
+        env={
+            "PATH": str(Path("/usr/bin")) + ":" + str(Path("/bin")),
+            "STACK_DEB": "/tmp/le-vibe_1.2.3_all.deb",
+            "IDE_DEB": "/tmp/le-vibe-ide_1.2.3_amd64.deb",
+        },
+    )
+    assert result.returncode == 2
+    assert "build artifacts first" in result.stderr
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_root = Path(tmp_dir)
+        stack = tmp_root / "le-vibe_1.2.3_all.deb"
+        ide = tmp_root / "le-vibe-ide_1.2.3_amd64.deb"
+        stack.write_bytes(b"placeholder")
+        ide.write_bytes(b"placeholder")
+        ok = subprocess.run(
+            [str(script), "--print-install-cmd"],
+            cwd=str(root),
+            capture_output=True,
+            text=True,
+            env={
+                "PATH": str(Path("/usr/bin")) + ":" + str(Path("/bin")),
+                "STACK_DEB": str(stack),
+                "IDE_DEB": str(ide),
+            },
+        )
+        assert ok.returncode == 0
+        assert ok.stdout.strip() == f'sudo apt install "{stack}" "{ide}"'
