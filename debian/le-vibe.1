@@ -32,7 +32,7 @@ Editor binary (default: \fBLE_VIBE_EDITOR\fR, else \fB/usr/lib/le-vibe/bin/codiu
 .BI \-\-port " N"
 Managed Ollama port (default 11435).
 .PP
-When first\-run bootstrap fails: set \fBLE_VIBE_VERBOSE\fR for stderr detail, then \fBlvibe logs \-\-path\-only\fR or \fBlvibe logs \-\-tail\fR \fIN\fR (STEP 6 JSON Lines). See \fBle\-vibe/README.md\fR \fIFirst\-run (launcher)\fR and \fBPRODUCT_SPEC_SECTION8_EVIDENCE.md\fR §10.
+When first\-run bootstrap fails: set \fBLE_VIBE_VERBOSE\fR for stderr detail; \fBlvibe logs\fR prints the path and a \fBtail \-f\fR reminder, or use \fBlvibe logs \-\-path\-only\fR / \fBlvibe logs \-\-tail\fR \fIN\fR (STEP 6 JSON Lines). See \fBle\-vibe/README.md\fR \fIFirst\-run (launcher)\fR and \fBPRODUCT_SPEC_SECTION8_EVIDENCE.md\fR §10.
 .SH COMMANDS
 .TP
 .B lvibe sync-agent-skills
@@ -73,7 +73,7 @@ STEP 17 AI Pilot / Continue paths — \fBdocs/AI_PILOT_AND_CONTINUE.md\fR.
 .TP
 .B lvibe logs
 .RI [ \-\-path\-only | \-\-tail " N " | \-\-json ]
-Structured log path, \fBtail\fR, or JSON metadata (\fBdocs/privacy\-and\-telemetry.md\fR).
+With no flags: path and \fBtail \-f\fR reminder; else path only, last \fIN\fR lines, or JSON (\fBdocs/privacy\-and\-telemetry.md\fR).
 .TP
 .B lvibe continue-pin
 .RI [ \-\-path\-only | \-\-json ]

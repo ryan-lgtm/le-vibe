@@ -20,7 +20,7 @@ Open the current project in the editor:
 Product naming: Lé Vibe is not Microsoft Visual Studio Code; use Code \-
 OSS / VSCodium\-class editors.
 .PP
-When first\-run bootstrap fails: set \fBLE_VIBE_VERBOSE\fR for stderr detail, then \fBlvibe logs \-\-path\-only\fR or \fBlvibe logs \-\-tail\fR \fIN\fR (STEP 6). Same story as \fBle\-vibe\fR(1) OPTIONS; see \fBle\-vibe/README.md\fR \fIFirst\-run (launcher)\fR and \fBPRODUCT_SPEC_SECTION8_EVIDENCE.md\fR §10.
+When first\-run bootstrap fails: set \fBLE_VIBE_VERBOSE\fR for stderr detail; \fBlvibe logs\fR prints the path and a \fBtail \-f\fR reminder, or use \fBlvibe logs \-\-path\-only\fR / \fBlvibe logs \-\-tail\fR \fIN\fR (STEP 6). Same story as \fBle\-vibe\fR(1) OPTIONS; see \fBle\-vibe/README.md\fR \fIFirst\-run (launcher)\fR and \fBPRODUCT_SPEC_SECTION8_EVIDENCE.md\fR §10.
 .SH COMMANDS
 .TP
 .B lvibe sync-agent-skills
@@ -61,7 +61,7 @@ Validate \fB.lvibe/\fR manifest, session JSON, \fBstorage\-state.json\fR (if pre
 .TP
 .B lvibe logs
 .RI [ \-\-path\-only | \-\-tail " N " | \-\-json ]
-Show the local structured log path (\fB~/.config/le\-vibe/le\-vibe.log.jsonl\fR), optional \fBtail\fR\-style last \fIN\fR lines, or \fB\-\-json\fR metadata. Local JSON Lines only — \fBdocs/privacy\-and\-telemetry.md\fR.
+With no flags: print the structured log path (\fB~/.config/le\-vibe/le\-vibe.log.jsonl\fR) and a \fBtail \-f\fR reminder. With \fB\-\-path\-only\fR, \fB\-\-tail\fR \fIN\fR, or \fB\-\-json\fR: path only, last \fIN\fR lines, or metadata. Local JSON Lines only — \fBdocs/privacy\-and\-telemetry.md\fR.
 .TP
 .B lvibe continue-pin
 .RI [ \-\-path\-only | \-\-json ]

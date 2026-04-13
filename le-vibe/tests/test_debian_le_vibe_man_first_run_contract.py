@@ -13,6 +13,7 @@ def test_debian_lvibe_man_description_lists_first_run_cross_ref_le_vibe_step6():
     """lvibe(1) DESCRIPTION echoes first-run observability; defers full OPTIONS to le-vibe(1)."""
     text = (_repo_root() / "debian" / "lvibe.1").read_text(encoding="utf-8")
     assert "LE_VIBE_VERBOSE" in text
+    assert "\\fBtail \\-f\\fR" in text
     assert "\\-\\-path\\-only" in text
     assert "\\-\\-tail" in text
     assert "STEP 6" in text
@@ -25,6 +26,7 @@ def test_debian_le_vibe_man_lists_first_run_observability_step6():
     text = (_repo_root() / "debian" / "le-vibe.1").read_text(encoding="utf-8")
     assert "LE_VIBE_VERBOSE" in text
     assert "lvibe logs" in text
+    assert "\\fBtail \\-f\\fR" in text
     assert "\\-\\-path\\-only" in text
     assert "\\-\\-tail" in text
     assert "STEP 6" in text
