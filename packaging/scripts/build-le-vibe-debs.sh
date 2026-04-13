@@ -182,6 +182,7 @@ fi
 if [[ "$WITH_IDE" -eq 1 && -n "$STACK_DEB" && -f "$STACK_DEB" && -n "$IDE_DEB" && -f "$IDE_DEB" ]]; then
   echo "==> Full-product install (paths printed above): sudo apt install \"$STACK_DEB\" \"$IDE_DEB\""
   echo "    Post-install: /usr/share/doc/le-vibe/README.Debian — packaging/debian-le-vibe-ide/README.md (*Install both packages*)"
+  echo "    §7.3 maintainer smoke (ci-editor-gate + lvibe ide-prereqs --json, no new .deb): ./editor/verify-73-maintainer.sh — editor/README.md"
 fi
 
 echo "==> Done."

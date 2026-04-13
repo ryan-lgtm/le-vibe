@@ -56,6 +56,7 @@ def test_build_le_vibe_debs_script_prints_full_product_install_hint_step14():
     assert "$STACK_DEB" in text and "$IDE_DEB" in text
     assert "/usr/share/doc/le-vibe/README.Debian" in text
     assert "debian-le-vibe-ide/README.md" in text
+    assert "verify-73-maintainer.sh" in text
 
 
 def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
