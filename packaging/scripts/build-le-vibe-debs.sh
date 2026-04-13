@@ -51,6 +51,10 @@ Artifacts:
   Stack:  typically ../le-vibe_*.deb (parent of repo root — standard dpkg-buildpackage).
   IDE:    packaging/le-vibe-ide_*.deb (see packaging/debian-le-vibe-ide/README.md).
 
+Publishing / releases (H1):
+  docs/apt-repo-releases.md — Pre-publish artifact checklist, SHA256SUMS, debian/changelog ↔ CHANGELOG.md
+  when tagging; default ci.yml le-vibe-deb is stack-only vs full-product Stack + IDE drops.
+
 Full-product (--with-ide): When both .deb files are produced, the script prints a Full-product install
   line (sudo apt install with both resolved paths) before "Done." — docs/PM_DEB_BUILD_ITERATION.md
   (Success output (--with-ide)); releases — docs/apt-repo-releases.md (IDE package, Maintainer build output).

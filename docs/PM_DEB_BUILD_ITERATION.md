@@ -19,6 +19,8 @@ Run these from the clone root (`cd /path/to/r-vibe`). Stack **`le-vibe_*.deb`** 
 | **`--with-ide`** with §7.3 **`product.json`** gate (**`ci-editor-gate.sh`**) before staging | `LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 packaging/scripts/build-le-vibe-debs.sh --with-ide` |
 | **`--with-ide`** using a non-default **`VSCode-linux-*`** directory | `packaging/scripts/build-le-vibe-debs.sh --vs-build /path/to/VSCode-linux-x64` |
 
+**Publishing (STEP 8 / H1):** **`SHA256SUMS`**, **`debian/changelog`** ↔ **`CHANGELOG.md`**, and **stack-only** **`ci.yml`** **`le-vibe-deb`** vs **Stack + IDE** attach — **[`apt-repo-releases.md`](apt-repo-releases.md)** *Pre-publish artifact checklist* (same story as *Releases & full-product demo* below).
+
 ## Releases & full-product demo (H1 / STEP 14 / §7.3)
 
 When you have both artifacts from **`build-le-vibe-debs.sh`** (stack) and **`--with-ide`** (or **`build-le-vibe-ide-deb.sh`** alone), ship or attach **`le-vibe_*_all.deb`** and **`le-vibe-ide_*_amd64.deb`** together for an install-and-demo that includes the branded IDE. **Checksums**, default CI artifact **`le-vibe-deb`** (stack-only), and **`SHA256SUMS`** expectations — **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** (*IDE package* subsection, **STEP 8 / H1**). **PM stage map:** **[`docs/PM_STAGE_MAP.md`](PM_STAGE_MAP.md)** (*H1 vs §7.3 .deb bundles* — **STEP 14** vs **STEP 8**); monorepo honesty — **[`spec-phase2.md`](../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`*.
