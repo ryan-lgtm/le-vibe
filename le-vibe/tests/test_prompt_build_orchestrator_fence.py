@@ -45,6 +45,8 @@ def test_master_orchestrator_fence_extractable():
     assert "probe-vscode-linux-build.sh" in text
     assert "dpkg-buildpackage" in text
     assert "Failure (`--with-ide`)" in text
+    assert "manual-step14-install-smoke.sh --verify-only" in text
+    assert "desktop-file-validate" in text
 
 
 def test_print_master_orchestrator_prompt_script_header_mentions_queue():
