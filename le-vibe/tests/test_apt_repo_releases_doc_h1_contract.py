@@ -135,6 +135,9 @@ def test_apt_repo_releases_related_docs_lists_pm_deb_and_stage_map():
     assert "## Related docs" in text
     _, related = text.split("## Related docs", 1)
     table = related.split("\n## ", 1)[0]
+    assert "CHANGELOG.md" in table
+    assert "Keep a Changelog" in table
+    assert "Dual changelog discipline" in table
     assert "PRODUCT_SPEC_SECTION8_EVIDENCE.md" in table
     assert "Last verified" in table
     assert "PM_DEB_BUILD_ITERATION.md" in table
