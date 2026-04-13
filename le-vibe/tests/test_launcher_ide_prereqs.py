@@ -91,6 +91,7 @@ def test_ide_prereqs_print_closeout_commands(monkeypatch: pytest.MonkeyPatch, ca
     monkeypatch.setattr(sys, "argv", ["launcher", "ide-prereqs", "--print-closeout-commands"])
     assert launcher.main() == 0
     out = capsys.readouterr().out
+    assert "probe-vscode-linux-build.sh" in out
     assert "preflight-step14-closeout.sh" in out
     assert "verify-step14-closeout.sh" in out
     assert "PM_DEB_BUILD_ITERATION.md" in out
@@ -111,6 +112,7 @@ def test_ide_prereqs_print_closeout_partial_hint(monkeypatch: pytest.MonkeyPatch
     assert "./editor/use-node-toolchain.sh" in out
     assert "./editor/fetch-vscode-sources.sh" in out
     assert "(cd editor/vscodium && ./dev/build.sh)" in out
+    assert "probe-vscode-linux-build.sh" in out
 
 
 def test_ide_prereqs_print_closeout_absent_hint(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
@@ -126,6 +128,7 @@ def test_ide_prereqs_print_closeout_absent_hint(monkeypatch: pytest.MonkeyPatch,
     assert "./editor/use-node-toolchain.sh" in out
     assert "./editor/fetch-vscode-sources.sh" in out
     assert "(cd editor/vscodium && ./dev/build.sh)" in out
+    assert "probe-vscode-linux-build.sh" in out
 
 
 def test_ide_prereqs_print_closeout_ready_includes_full_product_deb(
@@ -143,6 +146,7 @@ def test_ide_prereqs_print_closeout_ready_includes_full_product_deb(
     assert "preflight + verify are green" in out
     assert "./packaging/scripts/build-le-vibe-debs.sh --with-ide" in out
     assert "PM_DEB_BUILD_ITERATION.md" in out
+    assert "probe-vscode-linux-build.sh" in out
 
 
 def test_ide_prereqs_path_only_json_rejected(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:

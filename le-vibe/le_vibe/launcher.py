@@ -877,6 +877,10 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
     if args.print_closeout_commands:
         print("STEP 14 / §7.3 — maintainer close-out (from repository root)")
         print(f"# monorepo root: {root}")
+        print(
+            "# probe vscode_linux_build (shell — same classifier as --json): "
+            f'./packaging/scripts/probe-vscode-linux-build.sh "{root}"'
+        )
         if vs_status == "partial":
             print(
                 "# VSCode-linux tree exists but bin/codium is missing (partial build) — "
