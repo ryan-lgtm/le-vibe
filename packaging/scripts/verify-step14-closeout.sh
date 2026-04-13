@@ -54,6 +54,18 @@ assert_deb_contains_any() {
   exit 1
 }
 
+assert_deb_field_equals() {
+  local deb_path="$1"
+  local field="$2"
+  local expected="$3"
+  local actual
+  actual="$(dpkg-deb --field "$deb_path" "$field" | tr -d '\r')"
+  if [[ "$actual" != "$expected" ]]; then
+    echo "verify-step14-closeout: $deb_path field $field expected '$expected' but got '$actual'" >&2
+    exit 1
+  fi
+}
+
 usage() {
   cat <<'EOF'
 Usage: packaging/scripts/verify-step14-closeout.sh [--require-stack-deb] [--skip-gate]
@@ -112,6 +124,9 @@ echo "    ide deb: $ide_deb_latest"
 echo "    ide deb payload check: /usr/share/applications/le-vibe.desktop + /usr/lib/le-vibe/bin/codium"
 assert_deb_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop"
 assert_deb_contains "$ide_deb_latest" "./usr/lib/le-vibe/bin/codium"
+echo "    ide deb metadata check: Package=le-vibe-ide, Architecture=amd64"
+assert_deb_field_equals "$ide_deb_latest" "Package" "le-vibe-ide"
+assert_deb_field_equals "$ide_deb_latest" "Architecture" "amd64"
 
 if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
   echo "==> Stack package: ../le-vibe_*.deb (required)"
@@ -128,6 +143,9 @@ if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
     "$stack_deb_latest" \
     "./usr/share/doc/le-vibe/README.Debian" \
     "./usr/share/doc/le-vibe/README.Debian.gz"
+  echo "    stack deb metadata check: Package=le-vibe, Architecture=all"
+  assert_deb_field_equals "$stack_deb_latest" "Package" "le-vibe"
+  assert_deb_field_equals "$stack_deb_latest" "Architecture" "all"
 fi
 
 echo "verify-step14-closeout: OK (gate + built codium + ide deb${REQUIRE_STACK_DEB:+ + stack deb})."
