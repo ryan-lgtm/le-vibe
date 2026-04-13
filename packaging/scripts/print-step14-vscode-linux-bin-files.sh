@@ -19,8 +19,9 @@ vscode_linux_build is partial — same list as:
 Prints nothing (stdout) when the tree is not partial, absent, or the Python
 probe fails. Classifier: packaging/scripts/probe-vscode-linux-build.sh
 
-See: editor/BUILD.md (*Partial tree*, 14.c), docs/PM_DEB_BUILD_ITERATION.md
-(*Partial VSCode-linux tree*).
+See: editor/BUILD.md (*Partial tree*, 14.c / 14.f), docs/PM_DEB_BUILD_ITERATION.md
+(*Partial VSCode-linux tree*). Recovery without recompiling: packaging/scripts/
+install-vscodium-linux-tarball-to-editor-vendor.sh (linux_compile artifact).
 EOF
   exit 0
 fi
