@@ -133,6 +133,8 @@ def test_le_vibe_readme_lists_step13_h7_flatpak_appimage():
     assert "flatpak-appimage.md" in text
     assert "org.le_vibe.Launcher.yml" in text
     assert "Flathub" in text
+    assert "flatpak-appimage" in text
+    assert "--json" in text
 
 
 def test_le_vibe_readme_lists_step15_lvibe_governance():

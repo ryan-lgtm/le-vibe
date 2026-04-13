@@ -704,6 +704,8 @@ def _cmd_product_surface(argv: list[str]) -> int:
 
 def _cmd_flatpak_appimage(argv: list[str]) -> int:
     """STEP 13 (H7): print paths to Flatpak/AppImage templates — ``docs/flatpak-appimage.md``."""
+    import json as json_mod
+
     from le_vibe.flatpak_appimage_paths import H7_MANIFEST, iter_h7_paths
     from le_vibe.qa_scripts import find_monorepo_root
 
@@ -711,7 +713,8 @@ def _cmd_flatpak_appimage(argv: list[str]) -> int:
         prog="lvibe flatpak-appimage",
         description="List paths for H7 alternate-bundle templates (Flatpak, AppImage).",
     )
-    p.add_argument(
+    mode = p.add_mutually_exclusive_group()
+    mode.add_argument(
         "--path-only",
         metavar="KEY",
         nargs="?",
@@ -722,9 +725,24 @@ def _cmd_flatpak_appimage(argv: list[str]) -> int:
             "(default key when flag is present: doc)"
         ),
     )
+    mode.add_argument(
+        "--json",
+        action="store_true",
+        help="print monorepo root and each H7 path with exists flags (machine-readable)",
+    )
     args = p.parse_args(argv)
+
+    def _emit_json(**payload: object) -> None:
+        print(json_mod.dumps(payload, indent=2, ensure_ascii=False), file=sys.stdout)
+
     root = find_monorepo_root()
     if root is None:
+        if args.json:
+            _emit_json(
+                error="monorepo_not_found",
+                hint="docs/PM_STAGE_MAP.md STEP 13 / H7 — set LE_VIBE_REPO_ROOT or run from clone",
+            )
+            return 1
         print(
             "lvibe flatpak-appimage: could not find monorepo root "
             "(set LE_VIBE_REPO_ROOT or run from a git clone). "
@@ -740,6 +758,26 @@ def _cmd_flatpak_appimage(argv: list[str]) -> int:
         "build": H7_MANIFEST[4][1],
         "appimage-readme": H7_MANIFEST[5][1],
     }
+    if args.json:
+        entries = []
+        for label, rel in H7_MANIFEST:
+            abs_p = (root / rel).resolve()
+            exists = abs_p.is_file()
+            entries.append(
+                {
+                    "label": label,
+                    "relative": str(rel).replace("\\", "/"),
+                    "path": str(abs_p),
+                    "exists": exists,
+                }
+            )
+        all_present = all(e["exists"] for e in entries)
+        _emit_json(
+            monorepo_root=str(root),
+            entries=entries,
+            all_present=all_present,
+        )
+        return 0
     if args.path_only is not None:
         k = args.path_only
         if k not in key_map:

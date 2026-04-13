@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import sys
 
 import pytest
@@ -27,3 +28,29 @@ def test_flatpak_appimage_no_monorepo(monkeypatch: pytest.MonkeyPatch, capsys: p
     monkeypatch.setattr(sys, "argv", ["launcher", "flatpak-appimage"])
     assert launcher.main() == 1
     assert "PM_STAGE_MAP" in capsys.readouterr().err
+
+
+def test_flatpak_appimage_json_in_checkout(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    monkeypatch.setattr(sys, "argv", ["launcher", "flatpak-appimage", "--json"])
+    assert launcher.main() == 0
+    data = json.loads(capsys.readouterr().out)
+    assert len(data["entries"]) == 6
+    assert "all_present" in data
+    assert data["entries"][0]["relative"] == "docs/flatpak-appimage.md"
+
+
+def test_flatpak_appimage_json_no_monorepo(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    monkeypatch.setattr("le_vibe.qa_scripts.find_monorepo_root", lambda: None)
+    monkeypatch.setattr(sys, "argv", ["launcher", "flatpak-appimage", "--json"])
+    assert launcher.main() == 1
+    data = json.loads(capsys.readouterr().out)
+    assert data["error"] == "monorepo_not_found"
+
+
+def test_flatpak_appimage_path_only_json_rejected(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    monkeypatch.setattr(sys, "argv", ["launcher", "flatpak-appimage", "--path-only", "doc", "--json"])
+    with pytest.raises(SystemExit) as exc:
+        launcher.main()
+    assert exc.value.code == 2
+    err = capsys.readouterr().err.lower()
+    assert "not allowed" in err or "path-only" in err
