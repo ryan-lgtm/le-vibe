@@ -24,3 +24,5 @@ def test_spec_md_intro_documents_full_product_install_step14():
     assert "apt_sim_note" in text
     assert "debian-le-vibe-ide/README.md" in text
     assert "Install both packages" in text
+    assert "build machine" in text
+    assert "test host" in text
