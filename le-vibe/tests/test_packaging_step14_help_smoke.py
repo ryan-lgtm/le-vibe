@@ -28,6 +28,10 @@ def _repo_root() -> Path:
         "packaging/scripts/docker-le-vibe-vscodium-prepare-only.sh",
         "packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh",
         "packaging/scripts/verify-product-branding-merge-parity.sh",
+        "packaging/scripts/verify-step14-closeout.sh",
+        "packaging/scripts/manual-step14-install-smoke.sh",
+        "editor/print-built-codium-path.sh",
+        "editor/print-vsbuild-codium-path.sh",
     ],
 )
 def test_step14_script_help_exits_zero(relative: str) -> None:

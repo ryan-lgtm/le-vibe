@@ -8,6 +8,20 @@
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.c built codium path after STEP 0–1.
 set -euo pipefail
 
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  cat <<'EOF'
+Usage: editor/print-built-codium-path.sh
+
+Print absolute path to editor/vscodium/VSCode-linux-*/bin/codium after a local
+dev/build.sh run (STEP 14.c — editor/BUILD.md).
+
+Requires: git submodule editor/vscodium initialized (14.b — editor/README.md).
+
+For an unpacked CI tarball or other tree, use editor/print-vsbuild-codium-path.sh (see --help there).
+EOF
+  exit 0
+fi
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VSC="${ROOT}/editor/vscodium"
 

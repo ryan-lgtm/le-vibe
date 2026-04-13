@@ -10,6 +10,25 @@
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.f VSCode-linux path resolution after STEP 0–1.
 set -euo pipefail
 
+usage() {
+  cat <<'EOF'
+Usage: editor/print-vsbuild-codium-path.sh [SEARCH_ROOT]
+
+Print absolute path to VSCode-linux-*/bin/codium under SEARCH_ROOT (default: .).
+SEARCH_ROOT may be editor/vscodium, an unpacked linux_compile tarball tree, or any
+directory containing VSCode-linux-* (STEP 14 — editor/BUILD.md 14.f / 14.c).
+
+  -h, --help   Show this message and exit.
+
+Exits 1 if no matching codium binary exists (partial build — see editor/BUILD.md *Partial tree*).
+EOF
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
 SEARCH="${1:-.}"
 if [[ ! -d "$SEARCH" ]]; then
   echo "print-vsbuild-codium-path: not a directory: $SEARCH — pass a path to an unpacked VSCode-linux-* tree or editor/vscodium (editor/BUILD.md 14.f / 14.c)." >&2
