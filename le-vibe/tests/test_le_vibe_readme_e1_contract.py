@@ -111,6 +111,7 @@ def test_le_vibe_readme_lists_step11_h5_brand_assets():
     assert "Brand assets (STEP 11 / H5)" in text
     assert "brand-paths" in text
     assert "--path-only" in text
+    assert "--json" in text
     assert "brand-assets.md" in text
     assert "packaging/icons/hicolor/scalable/apps/le-vibe.svg" in text
 

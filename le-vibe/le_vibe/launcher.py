@@ -544,19 +544,43 @@ def _cmd_ci_editor_gate(argv: list[str]) -> int:
 
 def _cmd_brand_paths(argv: list[str]) -> int:
     """STEP 11 (H5): canonical ``le-vibe.svg`` paths — ``docs/brand-assets.md``."""
-    from le_vibe.brand_paths import resolve_scalable_icon_paths
+    import json as json_mod
+
+    from le_vibe.brand_paths import SCALABLE_SVG_REL, resolve_scalable_icon_paths
 
     p = argparse.ArgumentParser(
         prog="lvibe brand-paths",
         description="Show paths to the scalable Lé Vibe app icon (le-vibe.svg).",
     )
-    p.add_argument(
+    mode = p.add_mutually_exclusive_group()
+    mode.add_argument(
         "--path-only",
         action="store_true",
         help="print one path (monorepo preferred, else packaged hicolor icon)",
     )
+    mode.add_argument(
+        "--json",
+        action="store_true",
+        help="print monorepo and packaged paths as JSON (docs/brand-assets.md table)",
+    )
     args = p.parse_args(argv)
     mono, pkg = resolve_scalable_icon_paths()
+
+    if args.json:
+        chosen = mono or pkg
+        payload = {
+            "scalable_svg_relpath": str(SCALABLE_SVG_REL).replace("\\", "/"),
+            "monorepo_svg": str(mono) if mono else None,
+            "packaged_svg": str(pkg) if pkg else None,
+            "chosen_for_scripts": str(chosen) if chosen else None,
+            "ok": chosen is not None,
+        }
+        if chosen is None:
+            payload["error"] = "no_le_vibe_svg"
+            payload["hint"] = "docs/brand-assets.md STEP 11 / H5 — git clone or install le-vibe .deb"
+        print(json_mod.dumps(payload, indent=2, ensure_ascii=False), file=sys.stdout)
+        return 0 if chosen is not None else 1
+
     if args.path_only:
         chosen = mono or pkg
         if chosen is None:
