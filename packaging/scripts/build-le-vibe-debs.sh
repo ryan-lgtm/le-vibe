@@ -61,6 +61,7 @@ Publishing / releases (H1):
 Full-product (--with-ide): When both .deb files are produced, the script prints a Full-product install
   line (sudo apt install with both resolved paths) before "Done." — docs/PM_DEB_BUILD_ITERATION.md
   (Success output (--with-ide)); releases — docs/apt-repo-releases.md (IDE package, Maintainer build output).
+  Before attaching to a GitHub Release, regenerate SHA256SUMS over both .deb files + SBOM if shipped — same doc (Pre-publish Integrity).
   If --with-ide is set but le-vibe-ide_*.deb is not found under packaging/ after the IDE build, the script exits with status 1 (§7.3 full-product expectation).
 
 Exit codes:
