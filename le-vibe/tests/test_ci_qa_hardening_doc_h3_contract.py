@@ -109,6 +109,9 @@ def test_ci_qa_hardening_related_docs_lists_docker_linux_compile_fallback():
     text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
     assert "## Related docs" in text
     related = text.split("## Related docs", 1)[1]
+    assert "editor/README.md" in related
+    assert "Full Linux compile" in related
+    assert "H3 maintainer index" in related
     assert "docker-le-vibe-vscodium-linux-compile.sh" in related
     assert "docker-le-vibe-vscodium-prepare-only.sh" in related
     assert "ubuntu:22.04" in related
