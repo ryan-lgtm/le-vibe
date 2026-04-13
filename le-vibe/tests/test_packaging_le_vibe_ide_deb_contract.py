@@ -127,6 +127,9 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "Rolling iteration — prefer continuation" in readme
     assert "git submodule update --init editor/vscodium" in readme
     assert "Fresh clone (14.b)" in readme
+    assert "Compile fail-fast (STEP 14" in readme
+    assert "ci-vscodium-bash-syntax.sh" in readme
+    assert "ci-editor-nvmrc-sync.sh" in readme
     assert "§7.3" in readme
     assert "/usr/lib/le-vibe/bin/codium" in readme
     assert "lvibe" in readme

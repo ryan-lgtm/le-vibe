@@ -6,6 +6,8 @@
 
 This directory is a **separate Debian source** (sibling to the root **`debian/`** for the **`le-vibe`** stack package). It **repacks** a local **`VSCode-linux-*/`** tree from **`editor/vscodium/`** produced by **`editor/vscodium/dev/build.sh`** — for **§7.3** layers (merge, icons, defaults), use **`./packaging/scripts/ci-vscodium-linux-dev-build.sh`** from the repo root or repeat those steps manually (**[`editor/BUILD.md`](../../editor/BUILD.md)** *Linux icons*).
 
+**Compile fail-fast (STEP 14):** **`packaging/scripts/ci-vscodium-bash-syntax.sh`** → **`packaging/scripts/ci-editor-nvmrc-sync.sh`** → **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** — same ordering as **`./editor/smoke.sh`** / **`build-le-vibe-ide.yml`** *linux_compile*; **[`docs/PM_DEB_BUILD_ITERATION.md`](../../docs/PM_DEB_BUILD_ITERATION.md)**; **[`docs/apt-repo-releases.md`](../../docs/apt-repo-releases.md)** (*IDE package*).
+
 **Fresh clone (14.b):** if **`editor/vscodium/`** is empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the monorepo root before compiling — **`editor/README.md`** *Fresh clone (14.b)*, **`editor/BUILD.md`**.
 
 ## Build steps
