@@ -213,6 +213,7 @@ if [[ "$verify_14c_ec" -ne 0 ]]; then
   if [[ "${_vlb}" == "partial" ]]; then
     _bf="$("$ROOT/packaging/scripts/print-step14-vscode-linux-bin-files.sh" "$ROOT")"
     echo "verify-step14-closeout: vscode_linux_bin_files: ${_bf}" >&2
+    echo "verify-step14-closeout: linux_compile tarball — ${ROOT}/packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser Actions or gh); then ${ROOT}/packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh … — editor/BUILD.md 14.f" >&2
   fi
   echo "verify-step14-closeout: STEP 14.c failed (built codium missing or incomplete). Preflight: ${ROOT}/packaging/scripts/preflight-step14-closeout.sh — docs/PM_DEB_BUILD_ITERATION.md; lvibe ide-prereqs --print-closeout-commands" >&2
   exit 1

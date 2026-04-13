@@ -373,6 +373,8 @@ def test_pm_deb_build_iteration_doc_failure_with_ide_fail_fast_probe_step14():
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in partial
     assert "vscodium-linux-build.tar.gz" in partial
     assert "print-step14-vscode-linux-bin-files.sh" in partial
+    assert "print-github-linux-compile-artifact-hint.sh" in partial
+    assert "Artifacts" in partial
     assert "vscode_linux_bin_files" in partial
 
 
