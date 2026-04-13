@@ -30,3 +30,7 @@ def test_step14_autonomous_runbook_documents_closeout_verifier():
     assert "print-built-codium-path" in text
     assert "print-vsbuild-codium-path" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
+    assert "Compile fail-fast (STEP 14" in text
+    assert "ci-vscodium-bash-syntax.sh" in text
+    assert "ci-editor-nvmrc-sync.sh" in text
+    assert "ci-vscodium-linux-dev-build.sh" in text

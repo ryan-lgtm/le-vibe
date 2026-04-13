@@ -34,6 +34,7 @@ Engineering **does not** require `.lvibe/` to ship **`editor/`** + **`.deb`**; u
 | [`ci-qa-hardening.md`](ci-qa-hardening.md) | **`./editor/smoke.sh`** vs **`linux_compile`** / tarball — honesty |
 | [`vscodium-fork-le-vibe.md`](vscodium-fork-le-vibe.md) | H6 fork, CI, packaging narrative |
 | [`editor/README.md`](../editor/README.md), [`editor/BUILD.md`](../editor/BUILD.md) | Build entrypoints; if **`VSCode-linux-*/bin/codium`** is missing, see **BUILD.md** (*Partial tree*), **`./editor/print-built-codium-path.sh`**, **`./editor/print-vsbuild-codium-path.sh`**, [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) (*Partial VSCode-linux tree*), **`packaging/scripts/build-le-vibe-ide-deb.sh --help`**, [`apt-repo-releases.md`](apt-repo-releases.md) (*IDE package* — *Incomplete Linux build*). |
+| **Compile fail-fast (STEP 14)** | [`ci-vscodium-bash-syntax.sh`](../packaging/scripts/ci-vscodium-bash-syntax.sh) → [`ci-editor-nvmrc-sync.sh`](../packaging/scripts/ci-editor-nvmrc-sync.sh) → [`ci-vscodium-linux-dev-build.sh`](../packaging/scripts/ci-vscodium-linux-dev-build.sh) (→ **`editor/vscodium/dev/build.sh`**) — same ordering as **`./editor/smoke.sh`** / **`build-le-vibe-ide.yml`** *linux_compile*; [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md), [`apt-repo-releases.md`](apt-repo-releases.md) (*IDE package*), [`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md). |
 | [`AGENT_MODE_ORCHESTRATION.md`](AGENT_MODE_ORCHESTRATION.md) | **`PASTE SAME AGAIN`** until done; stops below |
 
 ---
