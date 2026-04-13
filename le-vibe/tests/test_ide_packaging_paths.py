@@ -8,6 +8,7 @@ from le_vibe.ide_packaging_paths import (
     find_vscode_linux_tree,
     iter_ide_prereq_paths,
     static_prereq_repo_files_ok,
+    vscode_linux_build_status,
 )
 
 
@@ -33,8 +34,39 @@ def test_static_prereq_repo_files_ok_in_clone():
 def test_vscode_tree_row_matches_find():
     root = _root()
     vs = find_vscode_linux_tree(root)
+    st, pth = vscode_linux_build_status(root)
     first = iter_ide_prereq_paths(root)[0]
     assert "VSCode-linux" in first[0]
-    assert first[2] is (vs is not None)
-    if vs is not None:
-        assert first[1] == vs
+    if st == "ready":
+        assert vs is not None and first[2] and first[1] == vs == pth
+    elif st == "partial":
+        assert vs is None and not first[2] and "partial" in first[0].lower() and first[1] == pth
+    else:
+        assert vs is None and not first[2] and st == "absent"
+
+
+def test_vscode_linux_build_status_absent(tmp_path: Path) -> None:
+    (tmp_path / "editor" / "vscodium").mkdir(parents=True)
+    st, p = vscode_linux_build_status(tmp_path)
+    assert st == "absent"
+    assert p is None
+
+
+def test_vscode_linux_build_status_partial(tmp_path: Path) -> None:
+    bindir = tmp_path / "editor" / "vscodium" / "VSCode-linux-x64" / "bin"
+    bindir.mkdir(parents=True)
+    (bindir / "codium-tunnel").write_text("x", encoding="utf-8")
+    st, p = vscode_linux_build_status(tmp_path)
+    assert st == "partial"
+    assert p == tmp_path / "editor" / "vscodium" / "VSCode-linux-x64"
+
+
+def test_vscode_linux_build_status_ready(tmp_path: Path) -> None:
+    bindir = tmp_path / "editor" / "vscodium" / "VSCode-linux-x64" / "bin"
+    bindir.mkdir(parents=True)
+    c = bindir / "codium"
+    c.write_text("#!/bin/sh\n", encoding="utf-8")
+    c.chmod(0o755)
+    st, p = vscode_linux_build_status(tmp_path)
+    assert st == "ready"
+    assert p == tmp_path / "editor" / "vscodium" / "VSCode-linux-x64"

@@ -18,11 +18,28 @@ def test_ide_prereqs_path_only_branding(monkeypatch: pytest.MonkeyPatch, capsys:
 
 
 def test_ide_prereqs_path_only_vscode_missing(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
-    monkeypatch.setattr("le_vibe.ide_packaging_paths.find_vscode_linux_tree", lambda _root: None)
+    monkeypatch.setattr(
+        "le_vibe.ide_packaging_paths.vscode_linux_build_status",
+        lambda _root: ("absent", None),
+    )
     monkeypatch.setattr(sys, "argv", ["launcher", "ide-prereqs", "--path-only", "vscode"])
     rc = launcher.main()
     assert rc == 1
-    assert "VSCode-linux" in capsys.readouterr().err
+    err = capsys.readouterr().err
+    assert "VSCode-linux" in err
+    assert "Partial" not in err
+
+
+def test_ide_prereqs_path_only_vscode_partial(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    monkeypatch.setattr(
+        "le_vibe.ide_packaging_paths.vscode_linux_build_status",
+        lambda _root: ("partial", None),
+    )
+    monkeypatch.setattr(sys, "argv", ["launcher", "ide-prereqs", "--path-only", "vscode"])
+    assert launcher.main() == 1
+    err = capsys.readouterr().err
+    assert "Partial VSCode-linux tree present" in err
+    assert "Partial tree" in err
 
 
 def test_ide_prereqs_unknown_key(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
@@ -44,6 +61,9 @@ def test_ide_prereqs_json_in_checkout(monkeypatch: pytest.MonkeyPatch, capsys: p
     data = json.loads(capsys.readouterr().out)
     assert data["monorepo_root"]
     assert "vscode_linux_ready" in data
+    assert data["vscode_linux_partial"] == (
+        (not data["vscode_linux_ready"]) and data["vscode_linux_path"] is not None
+    )
     assert "static_prereq_files_ok" in data
     assert data["static_prereq_files_ok"] is True
     assert "vscodium_linux_svg_staged" in data
@@ -66,6 +86,20 @@ def test_ide_prereqs_print_closeout_commands(monkeypatch: pytest.MonkeyPatch, ca
     assert "preflight-step14-closeout.sh" in out
     assert "verify-step14-closeout.sh" in out
     assert "PM_DEB_BUILD_ITERATION.md" in out
+
+
+def test_ide_prereqs_print_closeout_partial_hint(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    fake = object()
+
+    def _fake_status(_root: object) -> tuple[str, object]:
+        return "partial", fake
+
+    monkeypatch.setattr("le_vibe.ide_packaging_paths.vscode_linux_build_status", _fake_status)
+    monkeypatch.setattr(sys, "argv", ["launcher", "ide-prereqs", "--print-closeout-commands"])
+    assert launcher.main() == 0
+    out = capsys.readouterr().out
+    assert "partial build" in out
+    assert "Partial tree" in out
 
 
 def test_ide_prereqs_path_only_json_rejected(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:

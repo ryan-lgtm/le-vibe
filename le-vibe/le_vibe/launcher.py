@@ -806,9 +806,9 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
 
     from le_vibe.ide_packaging_paths import (
         IDE_PREREQ_PATH_ONLY,
-        find_vscode_linux_tree,
         iter_ide_prereq_paths,
         static_prereq_repo_files_ok,
+        vscode_linux_build_status,
     )
     from le_vibe.qa_scripts import find_monorepo_root
 
@@ -863,13 +863,19 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
         )
         return 1
 
-    vs_tree = find_vscode_linux_tree(root)
+    vs_status, vs_p = vscode_linux_build_status(root)
+    vs_tree = vs_p if vs_status == "ready" else None
     static_ok = static_prereq_repo_files_ok(root)
     vsc_svg = root / IDE_PREREQ_PATH_ONLY["vsc-linux-svg"]
 
     if args.print_closeout_commands:
         print("STEP 14 / §7.3 — maintainer close-out (from repository root)")
         print(f"# monorepo root: {root}")
+        if vs_status == "partial":
+            print(
+                "# VSCode-linux tree exists but bin/codium is missing (partial build) — "
+                "editor/BUILD.md *Partial tree* / 14.c; then preflight + verify below."
+            )
         print("./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb")
         print("./packaging/scripts/verify-step14-closeout.sh --require-stack-deb")
         print("# optional: add --apt-sim or --json to verify — docs/PM_DEB_BUILD_ITERATION.md")
@@ -881,8 +887,9 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             entries.append({"label": label, "path": str(path), "exists": ok})
         _emit_json(
             monorepo_root=str(root),
-            vscode_linux_path=str(vs_tree) if vs_tree else None,
-            vscode_linux_ready=vs_tree is not None,
+            vscode_linux_path=str(vs_p) if vs_p is not None else None,
+            vscode_linux_ready=vs_status == "ready",
+            vscode_linux_partial=vs_status == "partial",
             static_prereq_files_ok=static_ok,
             vscodium_linux_svg_staged=vsc_svg.is_file(),
             entries=entries,
@@ -899,11 +906,13 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             return 2
         if k == "vscode":
             if vs_tree is None:
-                print(
+                msg = (
                     "lvibe ide-prereqs: no editor/vscodium/VSCode-linux-*/bin/codium — "
-                    "build per editor/BUILD.md (§7.3).",
-                    file=sys.stderr,
+                    "build per editor/BUILD.md (§7.3)."
                 )
+                if vs_status == "partial":
+                    msg += " Partial VSCode-linux tree present — editor/BUILD.md *Partial tree* / 14.c."
+                print(msg, file=sys.stderr)
                 return 1
             print(vs_tree)
             return 0

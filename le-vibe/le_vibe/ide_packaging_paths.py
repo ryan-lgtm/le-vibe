@@ -3,17 +3,36 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Literal
+
+VscodeLinuxBuildStatus = Literal["ready", "partial", "absent"]
+
+
+def vscode_linux_build_status(root: Path) -> tuple[VscodeLinuxBuildStatus, Path | None]:
+    """
+    Classify the local VSCode-linux output under ``editor/vscodium/``.
+
+    * **ready** — ``VSCode-linux-*/bin/codium`` exists (14.c complete).
+    * **partial** — a ``VSCode-linux-*`` directory exists but ``bin/codium`` is missing
+      (incomplete compile; see ``editor/BUILD.md`` *Partial tree*).
+    * **absent** — no usable tree (fresh submodule or no build yet).
+    """
+    vsc = root / "editor" / "vscodium"
+    if not vsc.is_dir():
+        return "absent", None
+    for p in sorted(vsc.glob("VSCode-linux-*")):
+        if p.is_dir() and (p / "bin" / "codium").is_file():
+            return "ready", p.resolve()
+    for p in sorted(vsc.glob("VSCode-linux-*")):
+        if p.is_dir():
+            return "partial", p.resolve()
+    return "absent", None
 
 
 def find_vscode_linux_tree(root: Path) -> Path | None:
     """Return ``editor/vscodium/VSCode-linux-*`` when it contains ``bin/codium``."""
-    vsc = root / "editor" / "vscodium"
-    if not vsc.is_dir():
-        return None
-    for p in sorted(vsc.glob("VSCode-linux-*")):
-        if p.is_dir() and (p / "bin" / "codium").is_file():
-            return p.resolve()
-    return None
+    st, p = vscode_linux_build_status(root)
+    return p if st == "ready" else None
 
 
 def iter_ide_prereq_paths(root: Path) -> list[tuple[str, Path, bool]]:
@@ -24,9 +43,17 @@ def iter_ide_prereq_paths(root: Path) -> list[tuple[str, Path, bool]]:
     """
     out: list[tuple[str, Path, bool]] = []
 
-    vs = find_vscode_linux_tree(root)
-    if vs is not None:
+    st, vs = vscode_linux_build_status(root)
+    if st == "ready":
         out.append(("VSCode-linux tree (for le-vibe-ide .deb)", vs, True))
+    elif st == "partial":
+        out.append(
+            (
+                "VSCode-linux tree — partial (bin/codium missing); editor/BUILD.md *Partial tree* / 14.c",
+                vs,
+                False,
+            )
+        )
     else:
         pending = (root / "editor" / "vscodium").resolve()
         out.append(("VSCode-linux tree (for le-vibe-ide .deb) — run editor/BUILD.md", pending, False))
