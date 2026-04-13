@@ -84,6 +84,9 @@ def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> 
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in rag
     assert "print-github-linux-compile-artifact-hint.sh" in rag
     assert "browser Actions UI or gh" in rag
+    assert "lvibe ide-prereqs --print-closeout-commands" in rag
+    assert "print-step14-vscode-linux-bin-files.sh" in rag
+    assert "print-ci-tarball-codium-path.sh" in rag
 
 
 def test_pm_deb_build_iteration_points_to_manual_step14_install_smoke_script() -> None:
