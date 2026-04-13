@@ -39,6 +39,16 @@ The first line (`le-vibe (0.1.1) unstable; urgency=…`) must match the version 
 
 **Stack `le-vibe` .deb + GitHub Release:** After **`debian/changelog`** / **`CHANGELOG.md`** match the version you are shipping, tag **`main`** with a **stack** version tag aligned with that story (common pattern: **`v`** plus the same **semver** as **`dpkg -l le-vibe`** — e.g. **`v0.1.1`** when the package is **`0.1.1`**). Use that tag with **`gh release create <tag>`** / attach **`le-vibe-deb`** artifacts — *GitHub Releases + checksums* below. **`ide-v*`** tags **only** drive optional **`linux_compile`**; they do **not** replace a **`debian/changelog`** bump or a **stack** release tag for the Python **`.deb`**.
 
+### Checklist — stack-only GitHub Release (H1)
+
+Use this as a **minimal ordered path**; details stay in *Versioned changelog* / *GitHub Releases + checksums* / *Pre-publish artifact checklist* above.
+
+1. **Bump** **`debian/changelog`** and fold **`CHANGELOG.md`** **`[Unreleased]`** into a dated **`[x.y.z]`** section (*Versioned changelog*).
+2. **Confirm version** — **`dpkg-parsechangelog -S Version -l debian/changelog`** matches the **`v…`** tag you will use (*Before a stack tag / Release* above).
+3. **Green build** — a successful **`.github/workflows/ci.yml`** run on **`main`** (artifact **`le-vibe-deb`**) or a local **`dpkg-buildpackage -us -uc -b`** with the same tree.
+4. **Download** the **`le-vibe-deb`** artifact, unzip, and run **`sha256sum -c SHA256SUMS`** in that directory (*CI artifacts* / *Minimum directory layout*).
+5. **Publish** — push the **stack** tag, then **`gh release create`** (or the UI) with **`*.deb`**, **`SHA256SUMS`**, and **`le-vibe-python.cdx.json`** as needed — paste **`CHANGELOG.md`** for that version into the Release body (*GitHub Releases + checksums*). **IDE** **`.deb`** is **not** in **`le-vibe-deb`** — *Combined drop* / *Artifact sources at a glance* if you attach **`le-vibe-ide_*_amd64.deb`** too.
+
 ## CI artifacts (what ships from each green run)
 
 Workflow **`.github/workflows/ci.yml`** uploads a single artifact bundle **`le-vibe-deb`** containing:

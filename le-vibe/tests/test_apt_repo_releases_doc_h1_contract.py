@@ -28,6 +28,18 @@ def test_apt_repo_releases_doc_lists_minimum_directory_layout_gate():
     assert "gh run download" in text and "le-vibe-deb" in text
 
 
+def test_apt_repo_releases_doc_lists_stack_release_checklist_h1():
+    """H1: ordered checklist ties changelog, tag, ci artifact, verify, gh release."""
+    text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
+    assert "### Checklist — stack-only GitHub Release" in text
+    assert "minimal ordered path" in text
+    assert "dpkg-parsechangelog -S Version" in text
+    assert "le-vibe-deb" in text
+    assert "sha256sum -c SHA256SUMS" in text
+    assert "gh release create" in text
+    assert "le-vibe-ide_*_amd64.deb" in text
+
+
 def test_apt_repo_releases_doc_lists_artifact_sources_at_glance_h1():
     """H1: doc maps CI le-vibe-deb vs maintainer ../ stack deb + packaging/ IDE deb."""
     text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
