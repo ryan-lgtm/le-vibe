@@ -53,6 +53,16 @@ def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
     assert "ci-editor-gate.sh" in text
 
 
+def test_apt_repo_releases_github_releases_section_links_combined_drop_step8():
+    """STEP 8 / H1: GitHub Releases flow reminds Combined drop before verify / gh release create."""
+    text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
+    head, rest = text.split("## GitHub Releases + checksums", 1)
+    gh_section = rest.split("\n## ", 1)[0]
+    assert "Combined drop" in gh_section
+    assert "gh release create" in gh_section
+    assert "Pre-publish artifact checklist" in gh_section
+
+
 def test_apt_repo_releases_doc_opens_with_ci_le_vibe_deb_stack_only_step14():
     """STEP 14: H1 doc states ci.yml artifact excludes le-vibe-ide; points at spec-phase2 honesty."""
     text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
