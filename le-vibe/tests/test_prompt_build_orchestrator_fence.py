@@ -21,3 +21,11 @@ def test_master_orchestrator_fence_extractable():
     assert "STEP 0" in fence and "STEP 17" in fence
     assert "USER RESPONSE REQUIRED" in fence
     assert "Rolling iteration — prefer continuation" in fence
+
+
+def test_print_master_orchestrator_prompt_script_header_mentions_queue():
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "packaging" / "scripts" / "print-master-orchestrator-prompt.py").read_text(encoding="utf-8")
+    assert "0 -> 1 -> 14 -> 2-13 -> 15-17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text

@@ -28,3 +28,11 @@ def test_master_iteration_loop_fence_extractable():
     assert "build-le-vibe-debs.sh --with-ide" in fence
     assert "Full-product install" in fence
     assert "le-vibe-deb" in fence
+
+
+def test_print_master_iteration_loop_prompt_script_header_mentions_queue():
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "packaging" / "scripts" / "print-master-iteration-loop-prompt.py").read_text(encoding="utf-8")
+    assert "0 -> 1 -> 14 -> 2-13 -> 15-17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text

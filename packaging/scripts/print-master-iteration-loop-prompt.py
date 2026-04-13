@@ -2,6 +2,7 @@
 """Print the Master iteration loop fenced block from docs/MASTER_ITERATION_LOOP.md (stdout = paste into Cursor).
 
 E1: le-vibe/tests/test_master_iteration_loop_fence.py
+Master orchestrator: 0 -> 1 -> 14 -> 2-13 -> 15-17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16).
 """
 
 from __future__ import annotations
