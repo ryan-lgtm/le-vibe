@@ -39,6 +39,21 @@ assert_deb_contains() {
   fi
 }
 
+assert_deb_contains_any() {
+  local deb_path="$1"
+  shift
+  local contents
+  contents="$(dpkg-deb --contents "$deb_path")"
+  local needle
+  for needle in "$@"; do
+    if grep -Fq "$needle" <<<"$contents"; then
+      return 0
+    fi
+  done
+  echo "verify-step14-closeout: $deb_path missing expected payload entries (any of): $*" >&2
+  exit 1
+}
+
 usage() {
   cat <<'EOF'
 Usage: packaging/scripts/verify-step14-closeout.sh [--require-stack-deb] [--skip-gate]
@@ -107,9 +122,12 @@ if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
   fi
   stack_deb_latest="$(pick_latest_match "../le-vibe_*.deb" "${stack_debs[@]}")"
   echo "    stack deb: $stack_deb_latest"
-  echo "    stack deb payload check: /usr/bin/lvibe + /usr/share/doc/le-vibe/README.Debian.gz"
+  echo "    stack deb payload check: /usr/bin/lvibe + /usr/share/doc/le-vibe/README.Debian(.gz)"
   assert_deb_contains "$stack_deb_latest" "./usr/bin/lvibe"
-  assert_deb_contains "$stack_deb_latest" "./usr/share/doc/le-vibe/README.Debian.gz"
+  assert_deb_contains_any \
+    "$stack_deb_latest" \
+    "./usr/share/doc/le-vibe/README.Debian" \
+    "./usr/share/doc/le-vibe/README.Debian.gz"
 fi
 
 echo "verify-step14-closeout: OK (gate + built codium + ide deb${REQUIRE_STACK_DEB:+ + stack deb})."
