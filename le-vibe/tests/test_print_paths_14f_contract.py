@@ -44,6 +44,16 @@ def test_print_vsbuild_codium_path_documents_14f():
     assert "linux_compile" in text or "BUILD.md" in text
 
 
+def test_install_vscodium_linux_tarball_to_editor_vendor_documents_14f():
+    text = (
+        _repo_root() / "packaging" / "scripts" / "install-vscodium-linux-tarball-to-editor-vendor.sh"
+    ).read_text(encoding="utf-8")
+    assert "14.f" in text or "§7.3" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "obtain tarball:" in text
+    assert "not a regular file:" in text
+
+
 def test_print_ci_tarball_codium_path_documents_14f():
     text = (_repo_root() / "editor" / "print-ci-tarball-codium-path.sh").read_text(encoding="utf-8")
     assert "--help" in text

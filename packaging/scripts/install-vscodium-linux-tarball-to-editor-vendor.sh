@@ -20,6 +20,9 @@ After success, packaging/scripts/probe-vscode-linux-build.sh should print ready.
 
 GitHub Actions wraps the tarball in a .zip — unzip first, then pass the .tar.gz path.
 
+Obtain the tarball from CI: packaging/scripts/print-github-linux-compile-artifact-hint.sh
+(browser Actions UI or gh run download).
+
 Options:
   -y, --yes     Remove existing VSCode-linux-* without prompting (required when stdin is not a TTY).
   -h, --help    Show this message and exit.
@@ -61,6 +64,7 @@ fi
 
 if [[ ! -f "$TAR_ARG" ]]; then
   echo "${0##*/}: not a regular file: $TAR_ARG" >&2
+  echo "${0##*/}: obtain tarball: ${ROOT}/packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser or gh)" >&2
   exit 1
 fi
 
