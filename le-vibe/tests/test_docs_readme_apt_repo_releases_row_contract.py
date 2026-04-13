@@ -23,6 +23,7 @@ def test_docs_readme_apt_repo_releases_row_lists_step14_ide_deb_path():
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "--apt-sim" in text
     assert "--json" in text
+    assert "apt_sim_note" in text
     assert "manual-step14-install-smoke.sh" in text
     assert "Success output (`--with-ide`)" in text
     assert "debian-le-vibe-ide/README.md" in text
