@@ -27,6 +27,9 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "PM_STAGE_MAP.md" in text
     assert "ci-editor-gate.sh" in text
     assert "verify-14c-local-binary.sh" in text
+    assert "STEP 14.c failed" in text
+    assert "preflight-step14-closeout.sh" in text
+    assert "ide-prereqs --print-closeout-commands" in text
     assert "packaging/le-vibe-ide_*.deb" in text
     assert "--require-stack-deb" in text
     assert "--apt-sim" in text

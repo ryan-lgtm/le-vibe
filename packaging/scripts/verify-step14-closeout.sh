@@ -202,7 +202,14 @@ else
 fi
 
 log_note "==> STEP 14 built binary: verify-14c-local-binary.sh"
+set +e
 CODIUM_PATH="$("$ROOT/editor/verify-14c-local-binary.sh")"
+verify_14c_ec=$?
+set -e
+if [[ "$verify_14c_ec" -ne 0 ]]; then
+  echo "verify-step14-closeout: STEP 14.c failed (built codium missing or incomplete). Preflight: ${ROOT}/packaging/scripts/preflight-step14-closeout.sh — docs/PM_DEB_BUILD_ITERATION.md; lvibe ide-prereqs --print-closeout-commands" >&2
+  exit 1
+fi
 log_note "    built codium: $CODIUM_PATH"
 
 log_note "==> STEP 14 IDE package: packaging/le-vibe-ide_*.deb"
