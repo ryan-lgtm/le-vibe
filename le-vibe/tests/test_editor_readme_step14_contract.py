@@ -102,3 +102,4 @@ def test_editor_readme_documents_linux_compile_and_tarball_14ef():
     assert "Optional full Linux compile" in text
     assert "docker-le-vibe-vscodium-linux-compile.sh" in text
     assert "refs/tags/ide-v" in text
+    assert "Download shape" in text
