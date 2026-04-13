@@ -106,6 +106,17 @@ def test_root_readme_welcome_section_labels_step4_e3():
     assert "test_editor_welcome.py" in text
 
 
+def test_root_readme_hygiene_section_labels_step5_e4():
+    """STEP 5 / E4: lvibe-hygiene manifest + session-manifest + chunk/rag path checks."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "### Maintainer hygiene — STEP 5 / E4" in text
+    assert "Master orchestrator STEP 5" in text
+    assert "--seed-missing" in text
+    assert "--json" in text
+    assert "storage-state.json" in text
+    assert "test_hygiene.py" in text
+
+
 def test_root_readme_documents_ai_pilot_and_user_gate():
     text = (_repo_root() / "README.md").read_text(encoding="utf-8")
     assert "Lé Vibe" in text

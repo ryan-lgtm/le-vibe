@@ -143,9 +143,15 @@ Lé Vibe picks a **concrete Ollama model tag** for **this machine** using the ha
 
 On **material** product or architecture choices—or **unresolved disagreement** between roles—the orchestrator **halts** and shows **`USER RESPONSE REQUIRED`** (all capitals) with **numbered questions**; **No preference** / **your call** counts as delegation. Protocol: **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** §7.2, **[`docs/SESSION_ORCHESTRATION_SPEC.md`](docs/SESSION_ORCHESTRATION_SPEC.md)** §5.1. Workspace rules under **`.continue/rules/`** restate this for Continue.
 
-### Maintainer: `.lvibe/` hygiene (`lvibe-hygiene`)
+### Maintainer hygiene — STEP 5 / E4 (`lvibe-hygiene`)
 
-Run from the **workspace root** when **`.lvibe/`** exists (after **`lvibe .`** with **§5** consent **accept**): **`lvibe-hygiene`** (on `PATH` from the `.deb`) or **`python3 -m le_vibe.hygiene`** with **`PYTHONPATH`** set to the **`le-vibe/`** tree in development. Checks **`manifest.yaml`** sanity, **`session-manifest.json`** structure, skill paths under **`agents/`**, **`path:`** references in **`chunks/*.yaml`**, and warns if **`memory/incremental.md`** grows large. Exit code **0** = no errors (warnings may print to stderr), **1** = validation errors. Implementation: **`le_vibe.hygiene`**.
+**Master orchestrator STEP 5** (E4 — **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)**): validate **`.lvibe/`** layout for PM manifests and RAG hygiene (**[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** §5). Run from the **workspace root** when **`.lvibe/`** exists (after **`lvibe .`** with **§5** consent **accept**): **`lvibe-hygiene`** (on `PATH` from the `.deb`) or **`python3 -m le_vibe.hygiene`** with **`PYTHONPATH`** set to the **`le-vibe/`** tree in development.
+
+**Checks:** **`manifest.yaml`** sanity; **`session-manifest.json`** (**`session-manifest.v1`** vs **[`schemas/session-manifest.v1.example.json`](schemas/session-manifest.v1.example.json)**); manifest **`skill_path`** entries under **`agents/`**; **`path:`** references in **`.lvibe/chunks/`** and **`.lvibe/rag/`**; optional **`storage-state.json`** (**`lvibe-storage-state.v1`** — §5.4 usage vs cap); large **`memory/incremental.md`** warning.
+
+**Flags:** **`--seed-missing`** — copy missing **`session-manifest.json`** and agent **`skill.md`** files from templates (same as workspace prepare; idempotent). **`--json`** — machine-readable **`errors`** / **`warnings`** (and optional **`seed`** lines).
+
+Exit **0** = no errors (warnings may print to **stderr**), **1** = validation errors. Implementation **`le_vibe.hygiene`**; tests **`test_hygiene.py`**. Package README: **[`le-vibe/README.md`](le-vibe/README.md)** *Maintainer hygiene (STEP 5 / E4)*.
 
 ## Install (development tree)
 
