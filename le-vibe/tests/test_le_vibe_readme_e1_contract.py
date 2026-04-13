@@ -151,6 +151,7 @@ def test_le_vibe_readme_lists_step16_pm_map_orchestrator():
     assert "PM map & master orchestrator (STEP 16)" in text
     assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "print-master-orchestrator-prompt.py" in text
+    assert "master-orchestrator" in text
     assert "continue_construction_note" in text
 
 

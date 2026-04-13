@@ -49,6 +49,10 @@ Validate \fB.lvibe/\fR manifest, session JSON, \fBstorage\-state.json\fR (if pre
 .RI [ \-C " dir " | \-\-json ]
 §5 consent, storage cap, \fB.lvibe/\fR usage vs cap — \fBPRODUCT_SPEC\fR §5; \fBdocs/PM_STAGE_MAP.md\fR STEP 15.
 .TP
+.B lvibe master\-orchestrator
+.RI [ \-\-print | \-\-json ]
+\fBdocs/PM_STAGE_MAP.md\fR STEP 16 — paths to queue docs; \fB\-\-print\fR emits fenced Master prompt (same as \fBprint\-master\-orchestrator\-prompt.py\fR).
+.TP
 .B lvibe logs
 .RI [ \-\-path\-only | \-\-tail " N " | \-\-json ]
 Show the local structured log path (\fB~/.config/le\-vibe/le\-vibe.log.jsonl\fR), optional \fBtail\fR\-style last \fIN\fR lines, or \fB\-\-json\fR metadata. Local JSON Lines only — \fBdocs/privacy\-and\-telemetry.md\fR.

@@ -945,6 +945,93 @@ def _cmd_workspace_governance(argv: list[str]) -> int:
     return 0
 
 
+def _cmd_master_orchestrator(argv: list[str]) -> int:
+    """STEP 16: PM map + ``PROMPT_BUILD_LE_VIBE.md`` paths; optional fenced Master prompt — ``docs/PM_STAGE_MAP.md``."""
+    import json as json_mod
+
+    from le_vibe.master_orchestrator import extract_master_orchestrator_fence
+    from le_vibe.qa_scripts import find_monorepo_root
+
+    p = argparse.ArgumentParser(
+        prog="lvibe master-orchestrator",
+        description="Locate STEP 16 docs and optionally print the fenced Master queue prompt.",
+    )
+    mode = p.add_mutually_exclusive_group()
+    mode.add_argument(
+        "--print",
+        action="store_true",
+        help="print the fenced Master orchestrator block (same as print-master-orchestrator-prompt.py)",
+    )
+    mode.add_argument(
+        "--json",
+        action="store_true",
+        help="print monorepo paths and whether the fence is extractable",
+    )
+    args = p.parse_args(argv)
+
+    root = find_monorepo_root()
+    if root is None:
+        if args.json:
+            print(
+                json_mod.dumps(
+                    {
+                        "error": "monorepo_not_found",
+                        "hint": "docs/PM_STAGE_MAP.md STEP 16 — set LE_VIBE_REPO_ROOT or run from clone",
+                    },
+                    indent=2,
+                    ensure_ascii=False,
+                ),
+                file=sys.stdout,
+            )
+            return 1
+        print(
+            "lvibe master-orchestrator: could not find monorepo root "
+            "(set LE_VIBE_REPO_ROOT or run from a git clone). "
+            "See docs/PM_STAGE_MAP.md STEP 16.",
+            file=sys.stderr,
+        )
+        return 1
+
+    prompt_md = root / "docs" / "PROMPT_BUILD_LE_VIBE.md"
+    pm_map_md = root / "docs" / "PM_STAGE_MAP.md"
+    extract_py = root / "packaging" / "scripts" / "print-master-orchestrator-prompt.py"
+    fence = extract_master_orchestrator_fence(root)
+
+    if args.print:
+        if fence is None:
+            print(
+                "lvibe master-orchestrator: fenced block not found in docs/PROMPT_BUILD_LE_VIBE.md",
+                file=sys.stderr,
+            )
+            return 1
+        print(fence)
+        return 0
+
+    if args.json:
+        payload: dict[str, object] = {
+            "monorepo_root": str(root),
+            "prompt_build_le_vibe_md": str(prompt_md),
+            "pm_stage_map_md": str(pm_map_md),
+            "print_master_orchestrator_prompt_py": str(extract_py),
+            "master_fence_extractable": fence is not None,
+        }
+        if fence is not None:
+            payload["fence_char_count"] = len(fence)
+        print(json_mod.dumps(payload, indent=2, ensure_ascii=False), file=sys.stdout)
+        return 0
+
+    print("Authority: docs/PM_STAGE_MAP.md STEP 16, docs/PROMPT_BUILD_LE_VIBE.md")
+    print(f"Monorepo root: {root}")
+    print(f"PM stage map:  {pm_map_md}")
+    print(f"Master queue:  {prompt_md}")
+    print(f"Extract script: {extract_py}")
+    if fence is None:
+        print("Master fence:  MISSING (see test_prompt_build_orchestrator_fence.py)")
+    else:
+        print(f"Master fence:  OK ({len(fence)} chars) — lvibe master-orchestrator --print")
+    return 0
+
+
 def _cmd_apply_opening_skip(argv: list[str]) -> int:
     """STEP 2: advance ``opening_intent`` when the user skips — ``SESSION_ORCHESTRATION_SPEC`` §4."""
     from le_vibe.session_orchestrator import apply_opening_skip
@@ -1071,6 +1158,8 @@ def main() -> int:
         return _cmd_ide_prereqs(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "workspace-governance":
         return _cmd_workspace_governance(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "master-orchestrator":
+        return _cmd_master_orchestrator(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "apply-opening-skip":
         return _cmd_apply_opening_skip(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "continue-rules":
