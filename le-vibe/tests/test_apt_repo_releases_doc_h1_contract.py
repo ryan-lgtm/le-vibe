@@ -61,6 +61,7 @@ def test_apt_repo_releases_doc_lists_full_product_release_checklist_h1():
     assert "verify-step14-closeout.sh --require-stack-deb" in full_product
     assert "--apt-sim" in full_product
     assert "--json" in full_product
+    assert "apt_sim_note" in full_product
     assert "Before a stack tag / Release" in full_product or "Before a stack tag" in full_product
     assert "le-vibe-python.cdx.json" in full_product
     assert "**`le-vibe-deb`** tree" in full_product
