@@ -244,8 +244,14 @@ if [[ "$PRINT_JSON" -eq 1 ]]; then
   codium_json="$(json_escape "$CODIUM_PATH")"
   ide_json="$(json_escape "$ide_deb_latest")"
   stack_json=""
+  apt_sim_note="not_requested"
   if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
     stack_json="$(json_escape "$stack_deb_latest")"
+    if [[ "$ENABLE_APT_SIM" -eq 1 ]]; then
+      apt_sim_note="ran"
+    fi
+  elif [[ "$ENABLE_APT_SIM" -eq 1 ]]; then
+    apt_sim_note="requested_without_stack_requirement"
   fi
   printf '{\n'
   printf '  "status": "ok",\n'
@@ -254,7 +260,8 @@ if [[ "$PRINT_JSON" -eq 1 ]]; then
   printf '  "stack_deb_required": %s,\n' "$([[ "$REQUIRE_STACK_DEB" -eq 1 ]] && echo "true" || echo "false")"
   printf '  "stack_deb": %s,\n' "$([[ "$REQUIRE_STACK_DEB" -eq 1 ]] && printf '"%s"' "$stack_json" || echo "null")"
   printf '  "apt_sim_requested": %s,\n' "$([[ "$ENABLE_APT_SIM" -eq 1 ]] && echo "true" || echo "false")"
-  printf '  "apt_sim_ran": %s\n' "$([[ "$REQUIRE_STACK_DEB" -eq 1 && "$ENABLE_APT_SIM" -eq 1 ]] && echo "true" || echo "false")"
+  printf '  "apt_sim_ran": %s,\n' "$([[ "$REQUIRE_STACK_DEB" -eq 1 && "$ENABLE_APT_SIM" -eq 1 ]] && echo "true" || echo "false")"
+  printf '  "apt_sim_note": "%s"\n' "$apt_sim_note"
   printf '}\n'
 else
   echo "verify-step14-closeout: OK (gate + built codium + ide deb${REQUIRE_STACK_DEB:+ + stack deb})."

@@ -68,6 +68,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert '"status": "ok"' in text
     assert '"codium_path":' in text
     assert '"ide_deb":' in text
+    assert '"apt_sim_note":' in text
 
 
 def test_verify_step14_closeout_json_mode_outputs_parseable_payload() -> None:
@@ -158,6 +159,7 @@ EOF
             assert payload["stack_deb_required"] is True
             assert payload["apt_sim_requested"] is False
             assert payload["apt_sim_ran"] is False
+            assert payload["apt_sim_note"] == "not_requested"
             assert payload["ide_deb"].endswith("le-vibe-ide_9999.0.0_amd64.deb")
             assert payload["stack_deb"].endswith("le-vibe_9999.0.0_all.deb")
             assert payload["codium_path"].endswith("editor/vscodium/VSCode-linux-x64/bin/codium")
@@ -244,6 +246,7 @@ EOF
             assert payload["stack_deb"] is None
             assert payload["apt_sim_requested"] is True
             assert payload["apt_sim_ran"] is False
+            assert payload["apt_sim_note"] == "requested_without_stack_requirement"
         finally:
             fake_codium.unlink(missing_ok=True)
             ide_deb.unlink(missing_ok=True)
@@ -335,6 +338,7 @@ EOF
             payload = json.loads(result.stdout)
             assert Path(payload["stack_deb"]).resolve() == stack_deb.resolve()
             assert payload["ide_deb"] == str(ide_deb)
+            assert payload["apt_sim_note"] == "not_requested"
         finally:
             fake_codium.unlink(missing_ok=True)
             ide_deb.unlink(missing_ok=True)
