@@ -55,13 +55,17 @@ else
 fi
 
 set +e
+# Capture verify-14c combined output; on failure relay it (partial VSCode-linux tree vs no tree).
 _codium_out="$("$ROOT/editor/verify-14c-local-binary.sh" 2>&1)"
 _codium_ec=$?
 set -e
 if [[ "${_codium_ec}" -eq 0 ]]; then
   echo "[ok] editor/vscodium VSCode-linux-*/bin/codium (${_codium_out})"
 else
-  echo "[missing] VSCode-linux-*/bin/codium (14.c) — cd editor/vscodium && ./dev/build.sh (editor/BUILD.md)" >&2
+  if [[ -n "${_codium_out}" ]]; then
+    printf '%s\n' "${_codium_out}" >&2
+  fi
+  echo "[missing] VSCode-linux-*/bin/codium (14.c) — cd editor/vscodium && ./dev/build.sh (editor/BUILD.md *Partial tree* / 14.c)" >&2
   failures=$((failures + 1))
 fi
 

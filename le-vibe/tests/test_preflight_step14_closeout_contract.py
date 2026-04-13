@@ -24,6 +24,7 @@ def test_preflight_step14_closeout_script_documents_checks() -> None:
     assert "verify-step14-closeout.sh" in text
     assert "ci-editor-gate.sh" in text
     assert "verify-14c-local-binary.sh" in text
+    assert "*Partial tree*" in text or "Partial tree" in text
     assert "resolve-latest-le-vibe-stack-deb.sh" in text
     assert "le-vibe-ide_*.deb" in text
     assert "--require-stack-deb" in text
