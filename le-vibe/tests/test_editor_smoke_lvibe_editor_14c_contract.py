@@ -112,6 +112,7 @@ def test_verify_14c_local_binary_script_contract():
     assert "verify-14c-local-binary: (14.c) No built tree yet" in text
     assert "verify-14c-local-binary: (14.c) Incomplete VSCode-linux tree" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
     assert "preflight-step14-closeout.sh" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "use-node-toolchain.sh" in text
