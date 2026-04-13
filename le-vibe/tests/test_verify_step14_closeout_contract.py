@@ -35,10 +35,14 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "assert_deb_contains" in text
     assert "assert_deb_contains_any" in text
     assert "assert_deb_field_equals" in text
+    assert "assert_deb_file_contains" in text
     assert "dpkg-deb --contents" in text
     assert "dpkg-deb --field" in text
+    assert "dpkg-deb --fsys-tarfile" in text
     assert "./usr/share/applications/le-vibe.desktop" in text
     assert "./usr/lib/le-vibe/bin/codium" in text
+    assert "Name=Lé Vibe" in text
+    assert "Exec=/usr/lib/le-vibe/bin/codium %F" in text
     assert "./usr/bin/lvibe" in text
     assert "./usr/share/doc/le-vibe/README.Debian" in text
     assert "./usr/share/doc/le-vibe/README.Debian.gz" in text

@@ -66,6 +66,22 @@ assert_deb_field_equals() {
   fi
 }
 
+assert_deb_file_contains() {
+  local deb_path="$1"
+  local internal_path="$2"
+  local needle="$3"
+  local content
+  content="$(dpkg-deb --fsys-tarfile "$deb_path" | tar -xOf - "$internal_path" 2>/dev/null || true)"
+  if [[ -z "$content" ]]; then
+    echo "verify-step14-closeout: $deb_path missing payload file: $internal_path" >&2
+    exit 1
+  fi
+  if ! grep -Fq "$needle" <<<"$content"; then
+    echo "verify-step14-closeout: $deb_path payload $internal_path missing expected text: $needle" >&2
+    exit 1
+  fi
+}
+
 usage() {
   cat <<'EOF'
 Usage: packaging/scripts/verify-step14-closeout.sh [--require-stack-deb] [--skip-gate]
@@ -124,6 +140,9 @@ echo "    ide deb: $ide_deb_latest"
 echo "    ide deb payload check: /usr/share/applications/le-vibe.desktop + /usr/lib/le-vibe/bin/codium"
 assert_deb_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop"
 assert_deb_contains "$ide_deb_latest" "./usr/lib/le-vibe/bin/codium"
+echo "    ide desktop check: Name=Lé Vibe + Exec=/usr/lib/le-vibe/bin/codium %F"
+assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop" "Name=Lé Vibe"
+assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop" "Exec=/usr/lib/le-vibe/bin/codium %F"
 echo "    ide deb metadata check: Package=le-vibe-ide, Architecture=amd64"
 assert_deb_field_equals "$ide_deb_latest" "Package" "le-vibe-ide"
 assert_deb_field_equals "$ide_deb_latest" "Architecture" "amd64"
