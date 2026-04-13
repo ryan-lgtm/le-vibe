@@ -161,6 +161,7 @@ def test_le_vibe_readme_lists_core_e1_contract_modules():
     assert "session_manifest_example_source_path" in text
     assert "ensure_pm_session_artifacts" in text
     assert "apply_opening_skip" in text
+    assert "resolve_next_step_after_opening_skip" in text
     assert "PRODUCT_SPEC_SECTION8_EVIDENCE.md" in text
     assert "test_session_orchestrator.py" in text
     assert "test_session_orchestration_spec_step2_contract.py" in text

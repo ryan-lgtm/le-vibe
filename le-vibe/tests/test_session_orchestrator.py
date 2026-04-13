@@ -115,3 +115,9 @@ def test_ensure_pm_session_artifacts_idempotent(tmp_path: Path):
     lv = tmp_path / ".lvibe"
     assert (lv / SESSION_MANIFEST_FILENAME).is_file()
     assert len(list((lv / "agents").glob("*/skill.md"))) == 8
+
+
+def test_public_package_exports_resolve_next_step_after_opening_skip():
+    import le_vibe as lv
+
+    assert lv.resolve_next_step_after_opening_skip is resolve_next_step_after_opening_skip
