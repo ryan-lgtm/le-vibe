@@ -53,6 +53,12 @@ def test_pm_stage_map_lists_h1_vs_ide_deb_bundles_step14():
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
+    assert "Compile fail-fast (STEP 14, before IDE `.deb`)" in text
+    assert "packaging/scripts/ci-vscodium-bash-syntax.sh" in text
+    assert "packaging/scripts/ci-editor-nvmrc-sync.sh" in text
+    assert "packaging/scripts/ci-vscodium-linux-dev-build.sh" in text
+    assert "./editor/smoke.sh" in text
+    assert "linux_compile" in text
     assert "build-le-vibe-debs.sh" in text and "--with-ide" in text
     assert "Full-product install" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
