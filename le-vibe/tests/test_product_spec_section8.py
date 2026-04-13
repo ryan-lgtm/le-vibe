@@ -149,6 +149,10 @@ def test_product_spec_prioritization_names_ci_le_vibe_deb_vs_ide_deb_step14():
     assert "H1 vs §7.3 .deb bundles" in text
     assert "build machine" in text
     assert "test host" in text
+    assert "dpkg-buildpackage" in text
+    assert "Failure (`--with-ide`)" in text
+    assert "--vs-build" in text
+    assert "Fail-fast (`build-le-vibe-debs.sh --with-ide`)" in text
 
 
 def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci():
