@@ -802,6 +802,8 @@ def _cmd_flatpak_appimage(argv: list[str]) -> int:
 
 def _cmd_ide_prereqs(argv: list[str]) -> int:
     """STEP 14 (H6 / §7.3): print paths for IDE ``.deb`` packaging and optional VSCode-linux build."""
+    import json as json_mod
+
     from le_vibe.ide_packaging_paths import (
         IDE_PREREQ_PATH_ONLY,
         find_vscode_linux_tree,
@@ -814,7 +816,8 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
         prog="lvibe ide-prereqs",
         description="List §7.3 IDE packaging paths and whether a VSCode-linux build exists.",
     )
-    p.add_argument(
+    mode = p.add_mutually_exclusive_group()
+    mode.add_argument(
         "--path-only",
         metavar="KEY",
         nargs="?",
@@ -825,9 +828,24 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             "build-debs, control (default key when flag is present: branding)"
         ),
     )
+    mode.add_argument(
+        "--json",
+        action="store_true",
+        help="print monorepo root, VSCode-linux status, and each §7.3 path with exists flags",
+    )
     args = p.parse_args(argv)
+
+    def _emit_json(**payload: object) -> None:
+        print(json_mod.dumps(payload, indent=2, ensure_ascii=False), file=sys.stdout)
+
     root = find_monorepo_root()
     if root is None:
+        if args.json:
+            _emit_json(
+                error="monorepo_not_found",
+                hint="docs/PM_STAGE_MAP.md STEP 14 / H6 — set LE_VIBE_REPO_ROOT or run from clone",
+            )
+            return 1
         print(
             "lvibe ide-prereqs: could not find monorepo root "
             "(set LE_VIBE_REPO_ROOT or run from a git clone). "
@@ -835,6 +853,23 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             file=sys.stderr,
         )
         return 1
+
+    vs_tree = find_vscode_linux_tree(root)
+    static_ok = all((root / rel).is_file() for rel in IDE_PREREQ_PATH_ONLY.values())
+
+    if args.json:
+        entries = []
+        for label, path, ok in iter_ide_prereq_paths(root):
+            entries.append({"label": label, "path": str(path), "exists": ok})
+        _emit_json(
+            monorepo_root=str(root),
+            vscode_linux_path=str(vs_tree) if vs_tree else None,
+            vscode_linux_ready=vs_tree is not None,
+            static_prereq_files_ok=static_ok,
+            entries=entries,
+        )
+        return 0
+
     if args.path_only is not None:
         k = args.path_only
         if k not in all_keys:
@@ -844,15 +879,14 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             )
             return 2
         if k == "vscode":
-            vs = find_vscode_linux_tree(root)
-            if vs is None:
+            if vs_tree is None:
                 print(
                     "lvibe ide-prereqs: no editor/vscodium/VSCode-linux-*/bin/codium — "
                     "build per editor/BUILD.md (§7.3).",
                     file=sys.stderr,
                 )
                 return 1
-            print(vs)
+            print(vs_tree)
             return 0
         rel = IDE_PREREQ_PATH_ONLY[k]
         path = (root / rel).resolve()
