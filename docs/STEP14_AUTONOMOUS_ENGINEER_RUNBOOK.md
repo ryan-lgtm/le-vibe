@@ -37,6 +37,10 @@ Engineering **does not** require `.lvibe/` to ship **`editor/`** + **`.deb`**; u
 | **Compile fail-fast (STEP 14)** | [`ci-vscodium-bash-syntax.sh`](../packaging/scripts/ci-vscodium-bash-syntax.sh) → [`ci-editor-nvmrc-sync.sh`](../packaging/scripts/ci-editor-nvmrc-sync.sh) → [`ci-vscodium-linux-dev-build.sh`](../packaging/scripts/ci-vscodium-linux-dev-build.sh) (→ **`editor/vscodium/dev/build.sh`**) — same ordering as **`./editor/smoke.sh`** / **`build-le-vibe-ide.yml`** *linux_compile*; [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md), [`apt-repo-releases.md`](apt-repo-releases.md) (*IDE package*), [`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md). |
 | [`AGENT_MODE_ORCHESTRATION.md`](AGENT_MODE_ORCHESTRATION.md) | **`PASTE SAME AGAIN`** until done; stops below |
 
+### 2.1 Full-product `.deb` fail-fast (probe before stack `dpkg-buildpackage`)
+
+**[`packaging/scripts/build-le-vibe-debs.sh`](../packaging/scripts/build-le-vibe-debs.sh)** **`--with-ide`** runs **`packaging/scripts/probe-vscode-linux-build.sh`** first (unless you pass **`--vs-build`** to a **`VSCode-linux-*`** tree that already has **`bin/codium`**). If the probe is not **`ready`**, the script **exits before** the stack **`dpkg-buildpackage`** — do not expect a **`le-vibe_*.deb`** rebuild when **14.c** is still incomplete. See **`docs/PM_DEB_BUILD_ITERATION.md`** *Failure (`--with-ide`)*. **`packaging/scripts/preflight-step14-closeout.sh`** prints a **stderr hint** after **`vscode_linux_build:`** when not **`ready`** (same maintainer story). **`lvibe ide-prereqs --print-closeout-commands`** includes the same ordering in its status blocks.
+
 ---
 
 ## 3. Stock / canonical assets (theme = Lé Vibe IDE + stack)
@@ -90,7 +94,7 @@ MODE: ENGINEER
 CONTINUATION: PASTE SAME AGAIN
 
 First incomplete STEP per PROMPT_BUILD_LE_VIBE.md ORDERED WORK QUEUE (0 → 1 → 14 → …). Branch main at recorded sha; cd le-vibe && python3 -m pytest tests/ after Python changes.
-If STEP 14: advance §7.3 — smoke (./editor/smoke.sh), branding/editor overrides, Linux build path per editor/BUILD.md, build-le-vibe-debs.sh --with-ide when toolchain allows, then verify-step14-closeout.sh --require-stack-deb (add --apt-sim / --json as needed; **`apt_sim_note`** in **`--json`** — [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) *`--json` close-out payload*); stack **`le-vibe_*.deb`** discovery — **`packaging/scripts/resolve-latest-le-vibe-stack-deb.sh`** (*Output paths* in [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)); **Ordering:** close-out on **build machine**, install/smoke on **test host** — [`apt-repo-releases.md`](apt-repo-releases.md) (*IDE package*); else SKIPPED + reason.
+If STEP 14: advance §7.3 — smoke (./editor/smoke.sh), branding/editor overrides, Linux build path per editor/BUILD.md, **`probe-vscode-linux-build.sh` ready** then **`build-le-vibe-debs.sh --with-ide`** (probe-before-stack **`dpkg-buildpackage`** — [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) *Failure (`--with-ide`)*; **`--vs-build`** when staging from a non-default tree), then **`verify-step14-closeout.sh --require-stack-deb`** (add **`--apt-sim`** / **`--json`** as needed; **`apt_sim_note`** in **`--json`** — [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) *`--json` close-out payload*); stack **`le-vibe_*.deb`** discovery — **`packaging/scripts/resolve-latest-le-vibe-stack-deb.sh`** (*Output paths* in [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)); **Ordering:** close-out on **build machine**, install/smoke on **test host** — [`apt-repo-releases.md`](apt-repo-releases.md) (*IDE package*); else SKIPPED + reason.
 End with PASTE SAME AGAIN if work remains toward §7.3.
 ```
 

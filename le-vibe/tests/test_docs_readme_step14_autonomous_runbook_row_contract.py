@@ -44,3 +44,9 @@ def test_step14_autonomous_runbook_documents_closeout_verifier():
     assert "ci-vscodium-bash-syntax.sh" in text
     assert "ci-editor-nvmrc-sync.sh" in text
     assert "ci-vscodium-linux-dev-build.sh" in text
+    assert "2.1 Full-product" in text
+    assert "probe-vscode-linux-build.sh" in text
+    assert "dpkg-buildpackage" in text
+    assert "Failure (`--with-ide`)" in text
+    assert "preflight-step14-closeout.sh" in text
+    assert "stderr hint" in text
