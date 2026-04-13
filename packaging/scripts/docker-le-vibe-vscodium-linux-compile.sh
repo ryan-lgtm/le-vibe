@@ -5,6 +5,7 @@
 #
 # This is a long-running, disk-heavy path (hours; may OOM on small machines). Prefer CI
 # workflow_dispatch (vscodium_linux_compile) or a self-hosted runner when available.
+# Maintainer index: docs/ci-qa-hardening.md — *Optional full Linux compile* (Runner realism; Related docs).
 #
 # Mutates editor/vscodium/ (§7.3 merge, icons, dev/build.sh patch) and produces
 # editor/vscodium/VSCode-linux-* when successful. Restores UID/GID on editor/vscodium after
