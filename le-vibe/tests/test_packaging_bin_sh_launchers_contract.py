@@ -14,6 +14,8 @@ def test_lvibe_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -> None:
     """STEP 14 / §7.3: lvibe wrapper trust header matches H1 stack vs IDE .deb story."""
     root = _repo_root()
     text = (root / "packaging/bin/lvibe").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "le-vibe-deb" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product install" in text
@@ -28,6 +30,8 @@ def test_le_vibe_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -> None
     """STEP 14 / §7.3: le-vibe alias wrapper keeps same H1 / §7.3 trust line as lvibe."""
     root = _repo_root()
     text = (root / "packaging/bin/le-vibe").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "le-vibe-deb" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product install" in text
@@ -42,6 +46,8 @@ def test_lvibe_hygiene_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -
     """STEP 14 / §7.3: lvibe-hygiene wrapper keeps same H1 trust line as lvibe."""
     root = _repo_root()
     text = (root / "packaging/bin/lvibe-hygiene").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "le-vibe-deb" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product install" in text

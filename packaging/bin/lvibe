@@ -5,6 +5,7 @@
 # Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (same pointers as ci.yml, dependabot.yml).
 # H1 / §7.3: default ci.yml le-vibe-deb is stack-only; maintainer full product: build-le-vibe-debs.sh --with-ide prints Full-product install — docs/PM_DEB_BUILD_ITERATION.md; docs/apt-repo-releases.md (IDE package); docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles).
 # Optional RAG: docs/rag/le-vibe-phase2-chunks.md (spec-phase2 §14 table; not pytest) — SECURITY Related docs; packaging/scripts/ci-smoke.sh + .github/workflows/ci.yml headers.
+# Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — primary PATH CLI `lvibe` (§2 / §7.3 stack + IDE story).
 # Requires: python3 on PATH.
 export PYTHONPATH="/usr/share/le-vibe${PYTHONPATH:+:$PYTHONPATH}"
 # Default editor resolution lives in le_vibe.launcher (14.g): /usr/lib/le-vibe/bin/codium, then codium — do not force LE_VIBE_EDITOR here.
