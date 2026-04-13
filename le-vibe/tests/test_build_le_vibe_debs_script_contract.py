@@ -328,6 +328,8 @@ def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14()
     assert "--print-install-cmd" in text
     assert "--json" in text
     success = text.split("**Success output (`--with-ide`):**", 1)[1].split("**Failure (`--with-ide`):**", 1)[0]
+    assert "vscode_linux_build" in success
+    assert "ide-prereqs --json" in success
     assert "verify-step14-closeout.sh --require-stack-deb" in success
     assert "--apt-sim" in success
     assert "--json" in success

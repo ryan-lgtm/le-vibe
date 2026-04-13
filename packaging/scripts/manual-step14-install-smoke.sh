@@ -37,7 +37,7 @@ Options:
   --verify-only   Run post-install verification checks now (no install).
   --print-install-cmd
                   Print only: sudo apt install "<stack.deb>" "<ide.deb>".
-  --json          Print resolved stack/IDE deb paths + install command as JSON.
+  --json          Print resolved stack/IDE deb paths + install command + vscode_linux_build (same field as lvibe ide-prereqs --json) as JSON.
   -h, --help      Show this message and exit.
 
 Build machine prerequisites (no .debs yet — partial VSCode-linux / missing bin/codium):
@@ -49,9 +49,20 @@ Build machine prerequisites (no .debs yet — partial VSCode-linux / missing bin
 Ordering (same as docs/apt-repo-releases.md *IDE package*):
   Build machine — packaging/scripts/preflight-step14-closeout.sh --require-stack-deb (optional; all [ok]/[missing] gaps);
     then packaging/scripts/verify-step14-closeout.sh --require-stack-deb
-    Optional: --apt-sim, --json (apt_sim_note in JSON — docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*).
+    Optional: --apt-sim, --json (apt_sim_note + vscode_linux_build in JSON — docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*).
   Test host — copy .debs here, then use this script for sudo apt install + smoke.
 EOF
+}
+
+# Align with ``lvibe ide-prereqs --json`` / ``verify-step14-closeout.sh --json`` (14.c tree state).
+probe_vscode_linux_build_json() {
+  REPO_ROOT="$ROOT" PYTHONPATH="$ROOT/le-vibe" python3 -c '
+import os
+from pathlib import Path
+from le_vibe.ide_packaging_paths import vscode_linux_build_status
+st, _ = vscode_linux_build_status(Path(os.environ["REPO_ROOT"]))
+print(st)
+' 2>/dev/null || echo "unknown"
 }
 
 assert_file() {
@@ -65,7 +76,7 @@ assert_file() {
     echo "  packaging/scripts/preflight-step14-closeout.sh --require-stack-deb" >&2
     echo "manual-step14-install-smoke: then verify close-out artifacts:" >&2
     echo "  packaging/scripts/verify-step14-closeout.sh --require-stack-deb [--apt-sim] [--json]" >&2
-    echo "manual-step14-install-smoke: (--json includes apt_sim_note; docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*)" >&2
+    echo "manual-step14-install-smoke: (--json includes apt_sim_note + vscode_linux_build; docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*)" >&2
     exit 2
   fi
 }
@@ -137,10 +148,12 @@ if [[ "$PRINT_JSON" -eq 1 ]]; then
   stack_json="$(json_escape "$STACK_DEB")"
   ide_json="$(json_escape "$IDE_DEB")"
   install_json="$(json_escape "sudo apt install \"$STACK_DEB\" \"$IDE_DEB\"")"
+  vlb_json="$(json_escape "$(probe_vscode_linux_build_json)")"
   printf '{\n'
   printf '  "stack_deb": "%s",\n' "$stack_json"
   printf '  "ide_deb": "%s",\n' "$ide_json"
-  printf '  "install_cmd": "%s"\n' "$install_json"
+  printf '  "install_cmd": "%s",\n' "$install_json"
+  printf '  "vscode_linux_build": "%s"\n' "$vlb_json"
   printf '}\n'
   exit 0
 fi
@@ -149,7 +162,7 @@ cat <<EOF
 ==> STEP 14 manual Ubuntu install smoke
 (This checklist assumes the build host already passed:
  packaging/scripts/verify-step14-closeout.sh --require-stack-deb
- optional --apt-sim / --json — apt_sim_note in JSON; see docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*.)
+ optional --apt-sim / --json — apt_sim_note + vscode_linux_build in JSON; this script --json also prints vscode_linux_build for the clone; see docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*.)
 
 1) Install both packages:
    sudo apt install "$STACK_DEB" "$IDE_DEB"

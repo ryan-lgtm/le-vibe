@@ -48,6 +48,8 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "repo root" in text
     assert "resolve-latest-le-vibe-stack-deb.sh" in text
     assert "preflight-step14-closeout.sh" in text
+    assert "vscode_linux_build" in text
+    assert "ide-prereqs --json" in text
 
 
 def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> None:
@@ -163,6 +165,7 @@ def test_manual_step14_install_smoke_json_mode() -> None:
         assert payload["stack_deb"] == str(stack)
         assert payload["ide_deb"] == str(ide)
         assert payload["install_cmd"] == f'sudo apt install "{stack}" "{ide}"'
+        assert payload["vscode_linux_build"] in ("ready", "partial", "absent", "unknown")
 
 
 def test_manual_step14_install_smoke_json_mode_escapes_special_chars() -> None:
@@ -193,3 +196,4 @@ def test_manual_step14_install_smoke_json_mode_escapes_special_chars() -> None:
         payload = json.loads(result.stdout)
         assert payload["stack_deb"] == str(stack)
         assert payload["ide_deb"] == str(ide)
+        assert payload["vscode_linux_build"] in ("ready", "partial", "absent", "unknown")
