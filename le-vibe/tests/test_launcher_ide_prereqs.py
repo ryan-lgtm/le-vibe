@@ -59,6 +59,15 @@ def test_ide_prereqs_json_no_monorepo(monkeypatch: pytest.MonkeyPatch, capsys: p
     assert data["error"] == "monorepo_not_found"
 
 
+def test_ide_prereqs_print_closeout_commands(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    monkeypatch.setattr(sys, "argv", ["launcher", "ide-prereqs", "--print-closeout-commands"])
+    assert launcher.main() == 0
+    out = capsys.readouterr().out
+    assert "preflight-step14-closeout.sh" in out
+    assert "verify-step14-closeout.sh" in out
+    assert "PM_DEB_BUILD_ITERATION.md" in out
+
+
 def test_ide_prereqs_path_only_json_rejected(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     monkeypatch.setattr(sys, "argv", ["launcher", "ide-prereqs", "--path-only", "branding", "--json"])
     with pytest.raises(SystemExit) as exc:

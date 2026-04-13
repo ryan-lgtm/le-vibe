@@ -42,6 +42,8 @@ def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
     assert "Production install (STEP 14 / §7.3)" in text
     assert "ide-prereqs" in text
+    assert "--print-closeout-commands" in text
+    assert "preflight-step14-closeout.sh" in text
     assert "build-le-vibe-ide-deb.sh" in text
     assert "packaging/debian-le-vibe-ide/README.md" in text
     assert "build-le-vibe-debs.sh" in text

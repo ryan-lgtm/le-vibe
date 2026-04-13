@@ -834,6 +834,14 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
         action="store_true",
         help="print monorepo root, VSCode-linux status, and each §7.3 path with exists flags",
     )
+    mode.add_argument(
+        "--print-closeout-commands",
+        action="store_true",
+        help=(
+            "print packaging/scripts/preflight-step14-closeout.sh and verify-step14-closeout.sh "
+            "invocations (STEP 14 maintainer close-out; run from repository root)"
+        ),
+    )
     args = p.parse_args(argv)
 
     def _emit_json(**payload: object) -> None:
@@ -858,6 +866,14 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
     vs_tree = find_vscode_linux_tree(root)
     static_ok = static_prereq_repo_files_ok(root)
     vsc_svg = root / IDE_PREREQ_PATH_ONLY["vsc-linux-svg"]
+
+    if args.print_closeout_commands:
+        print("STEP 14 / §7.3 — maintainer close-out (from repository root)")
+        print(f"# monorepo root: {root}")
+        print("./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb")
+        print("./packaging/scripts/verify-step14-closeout.sh --require-stack-deb")
+        print("# optional: add --apt-sim or --json to verify — docs/PM_DEB_BUILD_ITERATION.md")
+        return 0
 
     if args.json:
         entries = []
