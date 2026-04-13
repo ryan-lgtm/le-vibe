@@ -53,6 +53,9 @@ def test_build_le_vibe_debs_script_mentions_submodule_14b():
     assert "Partial VSCode-linux tree" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
     assert "Partial tree" in text
+    assert "probe-vscode-linux-build.sh" in text
+    assert "before building stack + IDE" in text
+    assert "Stack-only meanwhile" in text
 
 
 def test_build_le_vibe_debs_script_prints_full_product_install_hint_step14():
@@ -320,6 +323,8 @@ def test_pm_deb_build_iteration_doc_exit_codes_table_step14():
     assert "| **0** |" in text
     assert "| **1** |" in text
     assert "| **2** |" in text
+    row1 = text.split("| **1** |", 1)[1].split("\n", 1)[0]
+    assert "probe-vscode-linux-build.sh" in row1
     assert "Same table is summarized" in text
     assert "see *Failure (`--with-ide`)* below" in text
 
@@ -350,6 +355,20 @@ def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14()
     assert "apt_sim_note" in payload
     assert "not_requested" in payload
     assert "requested_without_stack_requirement" in payload
+
+
+def test_pm_deb_build_iteration_doc_failure_with_ide_fail_fast_probe_step14():
+    """STEP 14: PM doc documents exit 1 before stack dpkg when probe is not ready."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    fail = text.split("**Failure (`--with-ide`):**", 1)[1].split("**Partial VSCode-linux tree:**", 1)[0]
+    assert "probe-vscode-linux-build.sh" in fail
+    assert "before" in fail and "dpkg-buildpackage" in fail
+    assert "fail fast" in fail.lower()
+    partial = text.split("**Partial VSCode-linux tree:**", 1)[1].split("###", 1)[0]
+    assert "build-le-vibe-debs.sh --with-ide" in partial
+    assert "probe-vscode-linux-build.sh" in partial
+    assert "partial" in partial.lower()
 
 
 def test_pm_deb_build_iteration_doc_731_staging_identity_step14():
@@ -398,6 +417,7 @@ def test_print_pm_deb_build_prompt_extractable():
     assert "Success output (`--with-ide`)" in fence
     assert "Exit codes:" in fence
     assert "*Exit codes (`build-le-vibe-debs.sh`)*" in fence
+    assert "probe-vscode-linux-build.sh" in fence
     assert "**H1 publishing:**" in fence
     assert "lvibe verify-checksums" in fence
     assert "GitHub Releases + checksums" in fence

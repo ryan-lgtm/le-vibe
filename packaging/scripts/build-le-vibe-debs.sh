@@ -53,6 +53,7 @@ Prerequisites (IDE):  a successful dev/build.sh under editor/vscodium (see edito
   (./editor/fetch-vscode-sources.sh), then ./packaging/scripts/ci-vscodium-linux-dev-build.sh, or see editor/BUILD.md.
   If VSCode-linux-* exists but bin/codium is missing (partial build), finish dev/build.sh — editor/BUILD.md (Partial tree, 14.c);
   docs/PM_DEB_BUILD_ITERATION.md (*Partial VSCode-linux tree*); ./editor/print-built-codium-path.sh; ./editor/print-vsbuild-codium-path.sh;
+  With --with-ide, build-le-vibe-debs.sh runs packaging/scripts/probe-vscode-linux-build.sh before the stack dpkg-buildpackage when no --vs-build is set — fail fast (exit 1) if the probe is not ready, so you do not spend time on the stack .deb when 14.c is incomplete. Override with --vs-build PATH to a tree that already contains bin/codium.
   stage-le-vibe-ide-deb.sh fails with the same hint. packaging/scripts/build-le-vibe-ide-deb.sh --help lists full triage + verify-step14-closeout.sh --require-stack-deb.
   Fresh clone (14.b): git submodule update --init editor/vscodium from repo root if editor/vscodium/ is empty — editor/README.md.
 
@@ -87,7 +88,7 @@ Full-product (--with-ide): When both .deb files are produced, the script prints 
 
 Exit codes:
   0  Success (stack .deb; with --with-ide, both stack and packaging/le-vibe-ide_*.deb found).
-  1  --with-ide but IDE build failed or le-vibe-ide_*.deb missing under packaging/ — PM_DEB_BUILD_ITERATION.md (Failure (--with-ide)).
+  1  --with-ide but VSCode-linux 14.c not ready (probe-vscode-linux-build.sh before stack build, unless --vs-build points at bin/codium), IDE build failed, or le-vibe-ide_*.deb missing under packaging/ — PM_DEB_BUILD_ITERATION.md (Failure (--with-ide)).
   2  Missing dpkg-buildpackage/debhelper, bad CLI, missing find/sort/head, or --install without sudo/apt-get — PM_DEB_BUILD_ITERATION.md (Exit codes (build-le-vibe-debs.sh)).
 
 EOF
@@ -157,6 +158,32 @@ fi
 if ! command -v head >/dev/null 2>&1; then
   echo "build-le-vibe-debs: head not on PATH — install coreutils (e.g. sudo apt install coreutils) (docs/PM_DEB_BUILD_ITERATION.md)." >&2
   exit 2
+fi
+
+# --with-ide: fail fast before stack dpkg-buildpackage when the default VSCode-linux tree is not 14.c-ready (saves maintainer time).
+if [[ "$WITH_IDE" -eq 1 ]]; then
+  if [[ -n "$VS_BUILD" ]]; then
+    if [[ ! -f "$VS_BUILD/bin/codium" ]]; then
+      echo "build-le-vibe-debs: --vs-build missing bin/codium: $VS_BUILD/bin/codium" >&2
+      echo "  Pass a full VSCode-linux-* tree (editor/BUILD.md 14.c) or omit --vs-build to use editor/vscodium/VSCode-linux-*." >&2
+      exit 1
+    fi
+  else
+    _probe="$("$ROOT/packaging/scripts/probe-vscode-linux-build.sh" "$ROOT" 2>/dev/null | tr -d '\r\n' || echo unknown)"
+    if [[ "$_probe" != "ready" ]]; then
+      echo "build-le-vibe-debs: --with-ide requires editor/vscodium/VSCode-linux-*/bin/codium (14.c) before building stack + IDE." >&2
+      echo "  packaging/scripts/probe-vscode-linux-build.sh: ${_probe}" >&2
+      if [[ "$_probe" == "partial" ]]; then
+        echo "  Partial tree — finish: cd editor/vscodium && ./dev/build.sh (editor/BUILD.md *Partial tree*). ./editor/print-built-codium-path.sh" >&2
+      elif [[ "$_probe" == "absent" ]]; then
+        echo "  No VSCode-linux tree — editor/BUILD.md; git submodule update --init editor/vscodium (14.b)." >&2
+      else
+        echo "  Probe failed (unknown) — run: packaging/scripts/probe-vscode-linux-build.sh" >&2
+      fi
+      echo "  Stack-only meanwhile: packaging/scripts/build-le-vibe-debs.sh (no --with-ide). Preflight: packaging/scripts/preflight-step14-closeout.sh — docs/PM_DEB_BUILD_ITERATION.md" >&2
+      exit 1
+    fi
+  fi
 fi
 
 echo "==> Building stack package (le-vibe) from: $ROOT"
