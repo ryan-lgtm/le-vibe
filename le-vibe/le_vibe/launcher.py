@@ -876,6 +876,10 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
                 "# VSCode-linux tree exists but bin/codium is missing (partial build) — "
                 "editor/BUILD.md *Partial tree* / 14.c; then preflight + verify below."
             )
+            print("# quick recovery (14.a → 14.b → 14.c):")
+            print("./editor/use-node-toolchain.sh")
+            print("./editor/fetch-vscode-sources.sh")
+            print("(cd editor/vscodium && ./dev/build.sh)")
         print("./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb")
         print("./packaging/scripts/verify-step14-closeout.sh --require-stack-deb")
         print("# optional: add --apt-sim or --json to verify — docs/PM_DEB_BUILD_ITERATION.md")

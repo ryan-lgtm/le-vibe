@@ -100,6 +100,9 @@ def test_ide_prereqs_print_closeout_partial_hint(monkeypatch: pytest.MonkeyPatch
     out = capsys.readouterr().out
     assert "partial build" in out
     assert "Partial tree" in out
+    assert "./editor/use-node-toolchain.sh" in out
+    assert "./editor/fetch-vscode-sources.sh" in out
+    assert "(cd editor/vscodium && ./dev/build.sh)" in out
 
 
 def test_ide_prereqs_path_only_json_rejected(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
