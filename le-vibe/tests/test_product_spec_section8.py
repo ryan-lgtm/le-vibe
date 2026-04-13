@@ -222,6 +222,7 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "verify-step14-closeout.sh --require-stack-deb" in sec73
     assert "--json" in sec73
     assert "apt_sim_note" in sec73
+    assert "repo root" in sec73
     assert "Compile fail-fast" in sec73
     assert "packaging/scripts/ci-vscodium-bash-syntax.sh" in sec73
     assert "packaging/scripts/ci-editor-nvmrc-sync.sh" in sec73

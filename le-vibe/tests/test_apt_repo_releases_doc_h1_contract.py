@@ -92,6 +92,12 @@ def test_apt_repo_releases_doc_lists_artifact_sources_at_glance_h1():
     assert "../le-vibe_*_all.deb" in text
     assert "packaging/le-vibe-ide_*.deb" in text
     assert "Output paths (from repo root)" in text
+    glance = text.split("### Artifact sources at a glance", 1)[1].split(
+        "### Pre-publish artifact checklist", 1
+    )[0]
+    assert "verify-step14-closeout.sh --require-stack-deb" in glance
+    assert "repo root" in glance
+    assert "PM_DEB_BUILD_ITERATION.md" in glance
 
 
 def test_apt_repo_releases_doc_lists_ci_artifact_and_changelog():

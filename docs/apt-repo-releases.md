@@ -84,6 +84,8 @@ Use this when you know **which** **`.deb`** you have but not **where** it was pr
 | **`le-vibe-python.cdx.json`**, **`SHA256SUMS`** | **CI:** inside **`le-vibe-deb`**. **Local** stack-only builds: regenerate **`SHA256SUMS`** per *Manual checksums* — do not assume the CI manifest without downloading CI. |
 | **`le-vibe-ide_*_amd64.deb`** | **Not** in default **`ci.yml`**. **Maintainer:** **`packaging/le-vibe-ide_*.deb`** after **`build-le-vibe-ide-deb.sh`** or **`build-le-vibe-debs.sh --with-ide`** — same *Output paths* table in **`PM_DEB_BUILD_ITERATION.md`**. |
 
+**Stack `.deb` path (close-out / Full-product install line):** **`packaging/scripts/verify-step14-closeout.sh --require-stack-deb`** and **`build-le-vibe-debs.sh`** resolve **`le-vibe_*.deb`** beside the clone **first**, then **`./le-vibe_*.deb`** under the **repo root** if you copied it there — **[`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** *Output paths (from repo root)*.
+
 Before a **Combined drop**, copy every shipped **`*.deb`** (and SBOM if you attach it) into **one** directory, then **regenerate** **`SHA256SUMS`** (*Integrity* / *Combined drop* rows below).
 
 ### Pre-publish artifact checklist (CI vs maintainer)
