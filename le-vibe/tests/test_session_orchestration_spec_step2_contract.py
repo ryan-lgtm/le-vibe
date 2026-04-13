@@ -38,6 +38,12 @@ def test_session_orchestration_spec_lists_maintainer_full_product_deb_step14():
     assert "H1 vs §7.3 .deb bundles" in text
     assert "build machine" in text
     assert "test host" in text
+    assert "Compile fail-fast" in text
+    assert "packaging/scripts/ci-vscodium-bash-syntax.sh" in text
+    assert "packaging/scripts/ci-editor-nvmrc-sync.sh" in text
+    assert "packaging/scripts/ci-vscodium-linux-dev-build.sh" in text
+    assert "./editor/smoke.sh" in text
+    assert "linux_compile" in text
     assert "Partial VSCode-linux" in text
     assert "print-built-codium-path" in text
     assert "print-vsbuild-codium-path" in text
