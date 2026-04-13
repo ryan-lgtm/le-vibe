@@ -148,6 +148,8 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "sudo apt install ./le-vibe_" in readme
     assert "/usr/share/doc/le-vibe/README.Debian" in readme
     assert "manual-step14-install-smoke.sh" in readme
+    assert "build machine" in readme
+    assert "printed steps" in readme
     desktop = (root / "packaging" / "debian-le-vibe-ide" / "debian" / "le-vibe.desktop").read_text(
         encoding="utf-8"
     )
