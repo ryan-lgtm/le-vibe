@@ -153,6 +153,10 @@ On **material** product or architecture choices—or **unresolved disagreement**
 
 Exit **0** = no errors (warnings may print to **stderr**), **1** = validation errors. Implementation **`le_vibe.hygiene`**; tests **`test_hygiene.py`**. Package README: **[`le-vibe/README.md`](le-vibe/README.md)** *Maintainer hygiene (STEP 5 / E4)*.
 
+### Continue extension pin — STEP 7 / H4 (Roadmap H4)
+
+**Master orchestrator STEP 7** (H4 — **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)**): reproducible **Continue** installs via Open VSX **`continue.continue@<semver>`**. Single source of truth **[`packaging/continue-openvsx-version`](packaging/continue-openvsx-version)**; **`packaging/scripts/install-continue-extension.sh`** consumes it (also **`/usr/share/le-vibe/continue-openvsx-version`** after **`dpkg -i`**). Validate with **`packaging/scripts/verify-continue-pin.sh`** (runs from **`ci-smoke.sh`** before **`pytest`**). Authority **[`docs/continue-extension-pin.md`](docs/continue-extension-pin.md)** (**§14.h** table when **`LE_VIBE_EDITOR`** points at a local **`codium`**). Tests **`test_continue_openvsx_pin.py`**. Package README: **[`le-vibe/README.md`](le-vibe/README.md)** *Continue / Open VSX pin (STEP 7 / H4)*.
+
 ## Install (development tree)
 
 ```bash
