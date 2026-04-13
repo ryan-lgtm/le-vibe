@@ -29,7 +29,7 @@ Engineering **does not** require `.lvibe/` to ship **`editor/`** + **`.deb`**; u
 | Manuscript | Role |
 |------------|------|
 | [`PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md) | **STEP 14** row + **do not** artificially cap scope while §7.3 remains open |
-| [`PM_STAGE_MAP.md`](PM_STAGE_MAP.md) | **STEP →** primary PM doc for IDE / `.deb` |
+| [`PM_STAGE_MAP.md`](PM_STAGE_MAP.md) | **STEP →** primary PM doc for IDE / `.deb`; **H1 vs §7.3 .deb bundles** (stack **`ci.yml`** **`le-vibe-deb`** vs maintainer **`--with-ide`**) + **Compile fail-fast (STEP 14, before IDE `.deb`)** — same three scripts as the *Compile fail-fast* row below |
 | [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) | **`packaging/scripts/build-le-vibe-debs.sh --with-ide`**, **Full-product install**, **`packaging/scripts/verify-step14-closeout.sh --require-stack-deb`** (+ optional **`--apt-sim`** / **`--json`**; **`apt_sim_note`** in **`--json`** — *`--json` close-out payload*). **Ordering:** **build machine** close-out, **test host** install/smoke — [`apt-repo-releases.md`](apt-repo-releases.md) (*IDE package*). |
 | [`ci-qa-hardening.md`](ci-qa-hardening.md) | **`./editor/smoke.sh`** vs **`linux_compile`** / tarball — honesty |
 | [`vscodium-fork-le-vibe.md`](vscodium-fork-le-vibe.md) | H6 fork, CI, packaging narrative |
