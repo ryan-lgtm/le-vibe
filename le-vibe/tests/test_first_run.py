@@ -45,6 +45,7 @@ def test_first_run_bootstrap_failure_message_lists_remediation(tmp_path: Path, m
     assert "lvibe --help" in msg
     assert "lvibe logs" in msg
     assert "--path-only" in msg
+    assert "tail -f" in msg
     assert "lvibe logs --tail 50" in msg
 
 
