@@ -6,6 +6,7 @@
 # Strict §7.3 identity (product.json + linuxIconName + sync-linux-icon-assets --check):
 #   LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 ./editor/verify-73-maintainer.sh
 # Authority: docs/PRODUCT_SPEC.md §7.3, editor/BUILD.md, packaging/scripts/ci-editor-gate.sh
+# Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — §7.3 maintainer gate after STEP 0–1.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"

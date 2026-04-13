@@ -12,6 +12,9 @@ def _repo_root() -> Path:
 
 def test_ci_vscodium_linux_dev_build_documents_overrides_hook():
     text = (_repo_root() / "packaging" / "scripts" / "ci-vscodium-linux-dev-build.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "14.e" in text
     assert "howto-build.md" in text
     assert "verify-14c-local-binary.sh" in text
