@@ -7,6 +7,24 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  cat <<'EOF'
+Usage: packaging/scripts/print-step14-vscode-linux-bin-files.sh [REPO_ROOT]
+
+Print comma-separated filenames under editor/vscodium/VSCode-linux-*/bin when
+vscode_linux_build is partial — same list as:
+  lvibe ide-prereqs --json  →  field "vscode_linux_bin_files"
+
+Prints nothing (stdout) when the tree is not partial, absent, or the Python
+probe fails. Classifier: packaging/scripts/probe-vscode-linux-build.sh
+
+See: editor/BUILD.md (*Partial tree*, 14.c), docs/PM_DEB_BUILD_ITERATION.md
+(*Partial VSCode-linux tree*).
+EOF
+  exit 0
+fi
+
 ROOT="${1:-$DEFAULT_ROOT}"
 
 REPO_ROOT="$ROOT" PYTHONPATH="$ROOT/le-vibe" python3 -c '

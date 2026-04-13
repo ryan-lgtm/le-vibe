@@ -24,3 +24,21 @@ def test_print_step14_vscode_linux_bin_files_uses_ide_packaging_paths() -> None:
     assert "ide_packaging_paths" in text
     assert "vscode_linux_build_status" in text
     assert "vscode_linux_bin_filenames" in text
+    assert "--help" in text
+    assert "probe-vscode-linux-build.sh" in text
+    assert "ide-prereqs" in text
+    assert "vscode_linux_bin_files" in text
+
+
+def test_print_step14_vscode_linux_bin_files_help_stdout() -> None:
+    script = _repo_root() / "packaging" / "scripts" / "print-step14-vscode-linux-bin-files.sh"
+    r = subprocess.run(
+        [str(script), "--help"],
+        cwd=str(_repo_root()),
+        capture_output=True,
+        text=True,
+    )
+    assert r.returncode == 0
+    out = f"{r.stdout}\n{r.stderr}"
+    assert "Usage:" in out
+    assert "print-step14-vscode-linux-bin-files.sh" in out
