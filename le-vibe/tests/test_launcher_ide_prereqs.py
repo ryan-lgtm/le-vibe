@@ -45,6 +45,8 @@ def test_ide_prereqs_json_in_checkout(monkeypatch: pytest.MonkeyPatch, capsys: p
     assert data["monorepo_root"]
     assert "vscode_linux_ready" in data
     assert "static_prereq_files_ok" in data
+    assert data["static_prereq_files_ok"] is True
+    assert "vscodium_linux_svg_staged" in data
     assert len(data["entries"]) == 9
     assert all("label" in e and "path" in e and "exists" in e for e in data["entries"])
 

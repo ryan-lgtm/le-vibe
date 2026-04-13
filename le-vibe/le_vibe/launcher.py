@@ -808,6 +808,7 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
         IDE_PREREQ_PATH_ONLY,
         find_vscode_linux_tree,
         iter_ide_prereq_paths,
+        static_prereq_repo_files_ok,
     )
     from le_vibe.qa_scripts import find_monorepo_root
 
@@ -855,7 +856,8 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
         return 1
 
     vs_tree = find_vscode_linux_tree(root)
-    static_ok = all((root / rel).is_file() for rel in IDE_PREREQ_PATH_ONLY.values())
+    static_ok = static_prereq_repo_files_ok(root)
+    vsc_svg = root / IDE_PREREQ_PATH_ONLY["vsc-linux-svg"]
 
     if args.json:
         entries = []
@@ -866,6 +868,7 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             vscode_linux_path=str(vs_tree) if vs_tree else None,
             vscode_linux_ready=vs_tree is not None,
             static_prereq_files_ok=static_ok,
+            vscodium_linux_svg_staged=vsc_svg.is_file(),
             entries=entries,
         )
         return 0

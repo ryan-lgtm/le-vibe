@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from le_vibe.ide_packaging_paths import find_vscode_linux_tree, iter_ide_prereq_paths
+from le_vibe.ide_packaging_paths import (
+    find_vscode_linux_tree,
+    iter_ide_prereq_paths,
+    static_prereq_repo_files_ok,
+)
 
 
 def _root() -> Path:
@@ -20,6 +24,10 @@ def test_fixed_prereq_files_exist_in_repo():
         if "VSCodium linux le-vibe.svg" in label:
             continue
         assert ok, f"{label}: {path}"
+
+
+def test_static_prereq_repo_files_ok_in_clone():
+    assert static_prereq_repo_files_ok(_root())
 
 
 def test_vscode_tree_row_matches_find():

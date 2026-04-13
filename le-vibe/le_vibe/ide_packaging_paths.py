@@ -61,3 +61,20 @@ IDE_PREREQ_PATH_ONLY: dict[str, Path] = {
     "build-debs": Path("packaging/scripts/build-le-vibe-debs.sh"),
     "control": Path("packaging/debian-le-vibe-ide/debian/control"),
 }
+
+# Keys for ``static_prereq_files_ok`` in ``lvibe ide-prereqs --json``: repo-shipped §7.3 inputs only.
+# ``vsc-linux-svg`` is produced by sync-linux-icon-assets.sh before dev/build.sh — omit from the static gate.
+IDE_PREREQ_STATIC_OK_KEYS: tuple[str, ...] = (
+    "branding",
+    "sync-icons",
+    "svg",
+    "stage",
+    "build-ide-deb",
+    "build-debs",
+    "control",
+)
+
+
+def static_prereq_repo_files_ok(root: Path) -> bool:
+    """True when every committed packaging / override file needed for §7.3 automation exists."""
+    return all((root / IDE_PREREQ_PATH_ONLY[k]).is_file() for k in IDE_PREREQ_STATIC_OK_KEYS)
