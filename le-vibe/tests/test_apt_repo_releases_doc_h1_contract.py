@@ -9,6 +9,15 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_apt_repo_releases_doc_lists_release_assets_vs_sha256sums_sanity_h1():
+    """H1: optional attachments must not leave dangling SHA256SUMS lines."""
+    text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
+    assert "### Release assets vs `SHA256SUMS` (sanity)" in text
+    assert "right-hand side" in text
+    assert "le-vibe-python.cdx.json" in text
+    assert "Integrity" in text
+
+
 def test_apt_repo_releases_doc_lists_minimum_directory_layout_gate():
     """H1: Pre-publish checklist names readiness gate + CI three-file bundle vs stack+IDE rewrite."""
     text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")

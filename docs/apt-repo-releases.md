@@ -108,6 +108,10 @@ sha256sum -c SHA256SUMS
 
 Same check via the **`le-vibe`** CLI after the stack **`.deb`** is installed: **`lvibe verify-checksums -C .`** (or **`-C /path/to/extracted-artifact`**); **`--json`** for scripts — **[`le-vibe/README.md`](../le-vibe/README.md)** *Release channel / checksums (STEP 8 / H1)*.
 
+### Release assets vs `SHA256SUMS` (sanity)
+
+Every file named on the **right-hand side** of **`SHA256SUMS`** must exist **beside** **`SHA256SUMS`** in the release directory before **`sha256sum -c`** (or **`lvibe verify-checksums`**) succeeds. If you **omit** an optional attachment (e.g. **`le-vibe-python.cdx.json`**) from a GitHub Release, **regenerate** **`SHA256SUMS`** so it does not reference a missing path — same **Integrity** rule as *Pre-publish* above.
+
 Then install the **`.deb`**:
 
 ```bash
