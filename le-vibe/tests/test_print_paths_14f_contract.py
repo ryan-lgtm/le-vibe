@@ -23,6 +23,9 @@ def test_print_vsbuild_and_ci_tarball_scripts_bash_syntax() -> None:
 
 def test_print_vsbuild_codium_path_documents_14f():
     text = (_repo_root() / "editor" / "print-vsbuild-codium-path.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "14.f" in text
     assert "14.c" in text
     assert "no VSCode-linux-*/bin/codium under" in text
@@ -38,6 +41,9 @@ def test_print_vsbuild_codium_path_documents_14f():
 
 def test_print_ci_tarball_codium_path_documents_14f():
     text = (_repo_root() / "editor" / "print-ci-tarball-codium-path.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "14.f" in text
     assert "LE_VIBE_EDITOR" in text
     assert 'exec "${ROOT}/editor/print-vsbuild-codium-path.sh"' in text

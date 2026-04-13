@@ -12,6 +12,9 @@ def _repo_root() -> Path:
 
 def test_smoke_lvibe_editor_script_contract():
     text = (_repo_root() / "editor" / "smoke-lvibe-editor.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
     assert "14.c" in text or "STEP 14" in text
@@ -47,6 +50,9 @@ def test_ci_editor_gate_bash_n_smoke_lvibe_editor():
 def test_smoke_built_codium_lvibe_chains_print_built_and_smoke():
     root = _repo_root()
     text = (root / "editor" / "smoke-built-codium-lvibe.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
     assert "14.c" in text or "STEP 14" in text
@@ -72,6 +78,9 @@ def test_14c_smoke_and_print_scripts_bash_syntax() -> None:
 
 def test_print_built_codium_path_documents_14c():
     text = (_repo_root() / "editor" / "print-built-codium-path.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "14.c" in text
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
@@ -84,6 +93,9 @@ def test_print_built_codium_path_documents_14c():
 def test_verify_14c_local_binary_script_contract():
     root = _repo_root()
     text = (root / "editor" / "verify-14c-local-binary.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text
     assert "14.c" in text or "STEP 14" in text

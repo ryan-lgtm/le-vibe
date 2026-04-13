@@ -3,6 +3,7 @@
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (before toolchain / fetch / build under editor/vscodium/).
 # From repo root: ./editor/smoke-built-codium-lvibe.sh
 # Requires: python3 and ollama on PATH (same as smoke-lvibe-editor.sh). Exits 1 if no built codium (print-built-codium-path).
+# Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.c built tree + launcher smoke after STEP 0–1.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

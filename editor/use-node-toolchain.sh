@@ -11,6 +11,7 @@
 #
 # Requires nvm: https://github.com/nvm-sh/nvm (default NVM_DIR=~/.nvm)
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (editor/.nvmrc tracks editor/vscodium/.nvmrc).
+# Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.a Node toolchain after STEP 0–1.
 set -euo pipefail
 
 EDITOR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

@@ -20,6 +20,9 @@ def test_sync_linux_icon_assets_documents_14b():
     text = (
         _repo_root() / "editor" / "le-vibe-overrides" / "sync-linux-icon-assets.sh"
     ).read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "§7.3" in text
     assert "ci-vscodium-linux-dev-build.sh" in text
     assert "src/stable/resources/linux" in text

@@ -5,6 +5,7 @@
 # Use: export LE_VIBE_EDITOR="$(./editor/print-built-codium-path.sh)" && ./editor/smoke-lvibe-editor.sh
 # For an unpacked CI tarball or any other tree, use ./editor/print-vsbuild-codium-path.sh [DIR] (14.f).
 # No-op network; exits 1 if no match (build not run or different layout).
+# Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.c built codium path after STEP 0–1.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

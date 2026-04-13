@@ -7,6 +7,7 @@
 # Example (artifact in /tmp/vs):
 #   ./editor/print-vsbuild-codium-path.sh /tmp/vs
 # Requires: stat and realpath (coreutils).
+# Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.f VSCode-linux path resolution after STEP 0–1.
 set -euo pipefail
 
 SEARCH="${1:-.}"

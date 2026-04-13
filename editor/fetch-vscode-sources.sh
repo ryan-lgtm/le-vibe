@@ -10,6 +10,7 @@
 # Prereq: cmp and tr (coreutils), Node from editor/.nvmrc — from repo root: source editor/use-node-toolchain.sh (14.a), or (cd editor && nvm install && nvm use)
 # Full local build after fetch: cd editor/vscodium && ./dev/build.sh (see editor/BUILD.md).
 # Fresh clone (14.b): git submodule update --init editor/vscodium from repo root when editor/vscodium/ is empty — editor/README.md.
+# Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.b get_repo / vscode fetch after STEP 0–1.
 # shellcheck disable=SC1091
 set -euo pipefail
 
