@@ -82,6 +82,8 @@ That wrapper **`exec`**s **`packaging/scripts/ci-editor-gate.sh`** with the same
 
 **Artifact:** **`vscodium-linux-build.tar.gz`** (ZIP name like **`le-vibe-vscodium-linux-<run_id>`**). Unpack so **`VSCode-linux-*`** sits under **`editor/vscodium/`**, then **`packaging/scripts/build-le-vibe-ide-deb.sh`** or **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** — full unpack / **`.deb`** flow — **[`editor/BUILD.md`](../editor/BUILD.md)** (*After a successful `linux_compile`*, *14.f*).
 
+**Download shape (14.f):** the workflow **artifact** you get from **Actions → run → Artifacts** (or a CLI download) is a **`.zip`** **around** **`vscodium-linux-build.tar.gz`** — **unzip first**, then pass the **`.tar.gz`** to **`./editor/print-ci-tarball-codium-path.sh`** for a temp **`bin/codium`** / **`LE_VIBE_EDITOR`** path, or unpack into **`editor/vscodium/`** as in **[`editor/BUILD.md`](../editor/BUILD.md)** (*CI artifact → `LE_VIBE_EDITOR`*). Passing the outer **`.zip`** to **`print-ci-tarball-codium-path.sh`** fails by design — same guard as **`editor/BUILD.md`** / **`editor/print-ci-tarball-codium-path.sh`**.
+
 **Runner realism:** Default **GitHub-hosted** images may **OOM** or exceed **time** on a full upstream compile — **[`editor/BUILD.md`](../editor/BUILD.md)** (*When full compile fails* / *Runner realism*). For a repeatable local analogue of the CI environment, **`packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh`** documents the same **`ubuntu:22.04`**-style base as job **`linux_compile`**.
 
 ## What is not automated here
