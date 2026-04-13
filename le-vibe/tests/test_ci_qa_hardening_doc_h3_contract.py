@@ -80,6 +80,9 @@ def test_ci_qa_hardening_doc_linux_compile_gh_run_list_finding_run_id_step14f():
 def test_ci_qa_hardening_doc_linux_compile_quick_path_triggers_step14e():
     """STEP 14.e: H3 doc lists opt-in linux_compile triggers — not a merge gate; points at BUILD.md + tarball."""
     text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
+    assert "**At a glance:**" in text
+    assert "docker-le-vibe-vscodium-prepare-only.sh" in text
+    assert "Checklist shorthand" in text
     assert "Optional full Linux compile" in text
     assert "`linux_compile`, STEP 14.e" in text
     assert "vscodium_linux_compile" in text

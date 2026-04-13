@@ -304,6 +304,7 @@ def test_product_spec_section8_evidence_intro_lists_linux_compile_cargo_cache():
     assert "test_docker_le_vibe_vscodium_linux_compile_contract.py" in text
     assert "docker-le-vibe-vscodium-linux-compile.sh" in text
     assert "Optional full Linux compile" in text
+    assert "(*At a glance*)" in text
     assert "Fork / org tuning" in text
     assert "Maintainer triage" in text
     assert "RUN_ID discovery" in text

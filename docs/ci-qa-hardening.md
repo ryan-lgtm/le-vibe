@@ -72,6 +72,8 @@ That wrapper **`exec`**s **`packaging/scripts/ci-editor-gate.sh`** with the same
 
 ## Optional full Linux compile (`linux_compile`, STEP 14.e)
 
+**At a glance:** Merge-quality CI is **`ci.yml`** only — **`linux_compile`** never blocks **`pull_request`** merges (*Honesty vs CI* below). Need **`VSCode-linux-*`** for **`build-le-vibe-ide-deb.sh`** / **`--with-ide`** without a full **`dev/build.sh`**? Prefer **`packaging/scripts/docker-le-vibe-vscodium-prepare-only.sh`** (*Prepare-only* below) before spending runner time on **`linux_compile`**. When you publish **both** **`.deb`** files after any path, use one folder and one regenerated **`SHA256SUMS`** — **[`apt-repo-releases.md`](apt-repo-releases.md)** *Pre-publish artifact checklist* **Checklist shorthand** (*Publishing* below).
+
 **Not a default merge gate:** the fast **`linux`** job runs on **`pull_request`**; job **`linux_compile`** is **opt-in** only — green **`ci.yml`** does **not** depend on it. Same **honesty** bar as **[`spec-phase2.md`](../spec-phase2.md)** §14 *Honesty vs CI* (full Electron compile is **additive**, not implied by stack **`.deb`** CI).
 
 | How to run **`linux_compile`** | Details |
@@ -104,7 +106,7 @@ Default **`ci.yml`** / **`ci-smoke.sh`** remains the **stack** **`.deb`** + **`p
 | **Timeout** | Same; or **`packaging/scripts/docker-le-vibe-vscodium-prepare-only.sh`** if §7.3 staging + **`build-le-vibe-ide-deb.sh`** is enough without a full **`dev/build.sh`** |
 | **Download / unpack mistakes** | *Download shape (14.f)* above — outer Actions **`.zip`** must be unzipped before **`print-ci-tarball-codium-path.sh`** or unpacking **`vscodium-linux-build.tar.gz`** |
 
-**Publishing (H1 / STEP 14):** **`linux_compile`** uploads **`vscodium-linux-build.tar.gz`** — it does **not** replace the stack **`le-vibe`** **`.deb`** from **`ci.yml`** / **`dpkg-buildpackage`**. When you ship **both** **`.deb`** files after staging from a **`linux_compile`** tree, regenerate **`SHA256SUMS`** over **every** **`*.deb`** / SBOM you attach — **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** *Pre-publish artifact checklist* (**Integrity**); one-shot maintainer build — **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** — **[`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** (*Releases & full-product demo*).
+**Publishing (H1 / STEP 14):** **`linux_compile`** uploads **`vscodium-linux-build.tar.gz`** — it does **not** replace the stack **`le-vibe`** **`.deb`** from **`ci.yml`** / **`dpkg-buildpackage`**. When you ship **both** **`.deb`** files after staging from a **`linux_compile`** tree, regenerate **`SHA256SUMS`** over **every** **`*.deb`** / SBOM you attach — **[`docs/apt-repo-releases.md`](apt-repo-releases.md)** *Pre-publish artifact checklist* / **Checklist shorthand** (**Integrity**); one-shot maintainer build — **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** — **[`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** (*Releases & full-product demo*).
 
 ## What is not automated here
 
