@@ -28,6 +28,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "--require-stack-deb" in text
     assert "--apt-sim" in text
     assert "--skip-gate" in text
+    assert "--json" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "desktop content contains `Name=Lé Vibe`" in text
     assert "Exec=/usr/lib/le-vibe/bin/codium %F" in text
@@ -61,3 +62,6 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "apt-get -s output follows" in text
     assert "held/broken packages" in text
     assert "skipped (use --apt-sim)" in text
+    assert '"status": "ok"' in text
+    assert '"codium_path":' in text
+    assert '"ide_deb":' in text

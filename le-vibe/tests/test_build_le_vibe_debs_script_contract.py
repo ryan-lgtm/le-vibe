@@ -125,6 +125,7 @@ def test_pm_deb_build_iteration_doc_master_orchestrator_queue_step14():
     assert "build-le-vibe-debs.sh --with-ide" in head
     assert "verify-step14-closeout.sh --require-stack-deb" in head
     assert "--apt-sim" in head
+    assert "--json" in head
 
 
 def test_pm_deb_build_iteration_doc_sibling_docs_links_apt_repo_h1_related_round_trip():
@@ -162,6 +163,7 @@ def test_pm_deb_build_iteration_doc_links_h1_stack_release_checklist():
     assert "le-vibe-deb" in head
     assert "verify-step14-closeout.sh --require-stack-deb" in head
     assert "--apt-sim" in head
+    assert "--json" in head
 
 
 def test_pm_deb_build_iteration_doc_lists_deb_build_options_parallel_invocation():
@@ -277,6 +279,7 @@ def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14()
     success = text.split("**Success output (`--with-ide`):**", 1)[1].split("**Failure (`--with-ide`):**", 1)[0]
     assert "verify-step14-closeout.sh --require-stack-deb" in success
     assert "--apt-sim" in success
+    assert "--json" in success
     assert "optional **`--require-stack-deb`**" not in success
 
 

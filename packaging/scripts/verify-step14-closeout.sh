@@ -14,6 +14,25 @@ cd "$ROOT"
 REQUIRE_STACK_DEB=0
 SKIP_GATE=0
 ENABLE_APT_SIM=0
+PRINT_JSON=0
+
+log_note() {
+  if [[ "$PRINT_JSON" -eq 1 ]]; then
+    printf '%s\n' "$*" >&2
+  else
+    printf '%s\n' "$*"
+  fi
+}
+
+json_escape() {
+  local value="$1"
+  value="${value//\\/\\\\}"
+  value="${value//\"/\\\"}"
+  value="${value//$'\n'/\\n}"
+  value="${value//$'\r'/\\r}"
+  value="${value//$'\t'/\\t}"
+  printf '%s' "$value"
+}
 
 pick_latest_match() {
   local label="$1"
@@ -119,7 +138,7 @@ assert_apt_simulated_install() {
 
 usage() {
   cat <<'EOF'
-Usage: packaging/scripts/verify-step14-closeout.sh [--require-stack-deb] [--apt-sim] [--skip-gate]
+Usage: packaging/scripts/verify-step14-closeout.sh [--require-stack-deb] [--apt-sim] [--skip-gate] [--json]
 
 Checks local STEP 14 / §7.3 readiness:
   1) packaging/scripts/ci-editor-gate.sh (unless --skip-gate),
@@ -137,6 +156,7 @@ Options:
   --apt-sim             When used with --require-stack-deb, run:
                         `apt-get -s install <stack.deb> <ide.deb>`.
   --skip-gate           Skip ci-editor-gate.sh (faster local check).
+  --json                Emit machine-readable summary JSON on success.
   -h, --help            Show this message and exit.
 
 See also:
@@ -151,6 +171,7 @@ while [[ $# -gt 0 ]]; do
     --require-stack-deb) REQUIRE_STACK_DEB=1 ;;
     --apt-sim) ENABLE_APT_SIM=1 ;;
     --skip-gate) SKIP_GATE=1 ;;
+    --json) PRINT_JSON=1 ;;
     -h|--help) usage; exit 0 ;;
     *)
       echo "verify-step14-closeout: unknown option: $1" >&2
@@ -162,17 +183,17 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "$SKIP_GATE" -eq 0 ]]; then
-  echo "==> STEP 14 gate: ci-editor-gate.sh"
+  log_note "==> STEP 14 gate: ci-editor-gate.sh"
   "$ROOT/packaging/scripts/ci-editor-gate.sh"
 else
-  echo "==> STEP 14 gate: skipped (--skip-gate)"
+  log_note "==> STEP 14 gate: skipped (--skip-gate)"
 fi
 
-echo "==> STEP 14 built binary: verify-14c-local-binary.sh"
+log_note "==> STEP 14 built binary: verify-14c-local-binary.sh"
 CODIUM_PATH="$("$ROOT/editor/verify-14c-local-binary.sh")"
-echo "    built codium: $CODIUM_PATH"
+log_note "    built codium: $CODIUM_PATH"
 
-echo "==> STEP 14 IDE package: packaging/le-vibe-ide_*.deb"
+log_note "==> STEP 14 IDE package: packaging/le-vibe-ide_*.deb"
 shopt -s nullglob
 ide_debs=("$ROOT"/packaging/le-vibe-ide_*.deb)
 if [[ ${#ide_debs[@]} -eq 0 ]]; then
@@ -180,43 +201,61 @@ if [[ ${#ide_debs[@]} -eq 0 ]]; then
   exit 1
 fi
 ide_deb_latest="$(pick_latest_match "packaging/le-vibe-ide_*.deb" "${ide_debs[@]}")"
-echo "    ide deb: $ide_deb_latest"
-echo "    ide deb payload check: /usr/share/applications/le-vibe.desktop + /usr/lib/le-vibe/bin/codium"
+log_note "    ide deb: $ide_deb_latest"
+log_note "    ide deb payload check: /usr/share/applications/le-vibe.desktop + /usr/lib/le-vibe/bin/codium"
 assert_deb_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop"
 assert_deb_contains "$ide_deb_latest" "./usr/lib/le-vibe/bin/codium"
 assert_deb_path_is_executable "$ide_deb_latest" "./usr/lib/le-vibe/bin/codium"
-echo "    ide desktop check: Name=Lé Vibe + Exec=/usr/lib/le-vibe/bin/codium %F"
+log_note "    ide desktop check: Name=Lé Vibe + Exec=/usr/lib/le-vibe/bin/codium %F"
 assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop" "Name=Lé Vibe"
 assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop" "Exec=/usr/lib/le-vibe/bin/codium %F"
-echo "    ide deb metadata check: Package=le-vibe-ide, Architecture=amd64"
+log_note "    ide deb metadata check: Package=le-vibe-ide, Architecture=amd64"
 assert_deb_field_equals "$ide_deb_latest" "Package" "le-vibe-ide"
 assert_deb_field_equals "$ide_deb_latest" "Architecture" "amd64"
 
 if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
-  echo "==> Stack package: ../le-vibe_*.deb (required)"
+  log_note "==> Stack package: ../le-vibe_*.deb (required)"
   stack_debs=("$ROOT"/../le-vibe_*.deb)
   if [[ ${#stack_debs[@]} -eq 0 ]]; then
     echo "verify-step14-closeout: missing ../le-vibe_*.deb — run dpkg-buildpackage -us -uc -b (or build-le-vibe-debs.sh)." >&2
     exit 1
   fi
   stack_deb_latest="$(pick_latest_match "../le-vibe_*.deb" "${stack_debs[@]}")"
-  echo "    stack deb: $stack_deb_latest"
-  echo "    stack deb payload check: /usr/bin/lvibe + /usr/share/doc/le-vibe/README.Debian(.gz)"
+  log_note "    stack deb: $stack_deb_latest"
+  log_note "    stack deb payload check: /usr/bin/lvibe + /usr/share/doc/le-vibe/README.Debian(.gz)"
   assert_deb_contains "$stack_deb_latest" "./usr/bin/lvibe"
   assert_deb_path_is_executable "$stack_deb_latest" "./usr/bin/lvibe"
   assert_deb_contains_any \
     "$stack_deb_latest" \
     "./usr/share/doc/le-vibe/README.Debian" \
     "./usr/share/doc/le-vibe/README.Debian.gz"
-  echo "    stack deb metadata check: Package=le-vibe, Architecture=all"
+  log_note "    stack deb metadata check: Package=le-vibe, Architecture=all"
   assert_deb_field_equals "$stack_deb_latest" "Package" "le-vibe"
   assert_deb_field_equals "$stack_deb_latest" "Architecture" "all"
   if [[ "$ENABLE_APT_SIM" -eq 1 ]]; then
-    echo "    apt simulation check: apt-get -s install <stack.deb> <ide.deb>"
+    log_note "    apt simulation check: apt-get -s install <stack.deb> <ide.deb>"
     assert_apt_simulated_install "$stack_deb_latest" "$ide_deb_latest"
   else
-    echo "    apt simulation check: skipped (use --apt-sim)"
+    log_note "    apt simulation check: skipped (use --apt-sim)"
   fi
 fi
 
-echo "verify-step14-closeout: OK (gate + built codium + ide deb${REQUIRE_STACK_DEB:+ + stack deb})."
+if [[ "$PRINT_JSON" -eq 1 ]]; then
+  codium_json="$(json_escape "$CODIUM_PATH")"
+  ide_json="$(json_escape "$ide_deb_latest")"
+  stack_json=""
+  if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
+    stack_json="$(json_escape "$stack_deb_latest")"
+  fi
+  printf '{\n'
+  printf '  "status": "ok",\n'
+  printf '  "codium_path": "%s",\n' "$codium_json"
+  printf '  "ide_deb": "%s",\n' "$ide_json"
+  printf '  "stack_deb_required": %s,\n' "$([[ "$REQUIRE_STACK_DEB" -eq 1 ]] && echo "true" || echo "false")"
+  printf '  "stack_deb": %s,\n' "$([[ "$REQUIRE_STACK_DEB" -eq 1 ]] && printf '"%s"' "$stack_json" || echo "null")"
+  printf '  "apt_sim_requested": %s,\n' "$([[ "$ENABLE_APT_SIM" -eq 1 ]] && echo "true" || echo "false")"
+  printf '  "apt_sim_ran": %s\n' "$([[ "$REQUIRE_STACK_DEB" -eq 1 && "$ENABLE_APT_SIM" -eq 1 ]] && echo "true" || echo "false")"
+  printf '}\n'
+else
+  echo "verify-step14-closeout: OK (gate + built codium + ide deb${REQUIRE_STACK_DEB:+ + stack deb})."
+fi
