@@ -72,6 +72,8 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     assert "Tagging discipline" in text
     assert "Exit codes:" in text
     assert "PM_DEB_BUILD_ITERATION.md (Exit codes" in text
+    assert "lvibe verify-checksums" in text
+    assert "le-vibe-deb artifact is a .zip" in text
 
 
 def test_pm_deb_build_iteration_doc_submodule_prereq_14b():
@@ -95,6 +97,9 @@ def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
     assert "Pre-publish artifact checklist" in text
     assert "Tagging discipline" in text
+    assert "verify-checksums" in text
+    assert ".zip" in text
+    assert "GitHub Releases + checksums" in text
 
 
 def test_pm_deb_build_iteration_doc_exit_codes_table_step14():
@@ -160,3 +165,6 @@ def test_print_pm_deb_build_prompt_extractable():
     assert "Success output (`--with-ide`)" in fence
     assert "Exit codes:" in fence
     assert "*Exit codes (`build-le-vibe-debs.sh`)*" in fence
+    assert "**H1 publishing:**" in fence
+    assert "lvibe verify-checksums" in fence
+    assert "GitHub Releases + checksums" in fence
