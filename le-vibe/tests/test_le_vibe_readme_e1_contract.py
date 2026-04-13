@@ -63,6 +63,7 @@ def test_le_vibe_readme_lists_step7_h4_continue_pin():
 def test_le_vibe_readme_lists_step8_h1_release_channel():
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
     assert "Release channel / checksums (STEP 8 / H1)" in text
+    assert "verify-checksums" in text
     assert "apt-repo-releases.md" in text
     assert "le-vibe-deb" in text
     assert "SHA256SUMS" in text

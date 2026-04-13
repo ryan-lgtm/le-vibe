@@ -197,6 +197,41 @@ def _cmd_continue_pin(argv: list[str]) -> int:
         return 2
 
 
+def _cmd_verify_checksums(argv: list[str]) -> int:
+    """STEP 8 (H1): ``sha256sum -c SHA256SUMS`` — same as ``docs/apt-repo-releases.md``."""
+    import shutil
+
+    from le_vibe.release_checksums import SHA256SUMS_NAME, run_sha256sum_check
+
+    p = argparse.ArgumentParser(
+        prog="lvibe verify-checksums",
+        description="Verify SHA256SUMS in a release directory (sha256sum -c).",
+    )
+    p.add_argument(
+        "--directory",
+        "-C",
+        default=".",
+        help="directory containing SHA256SUMS (default: current directory)",
+    )
+    args = p.parse_args(argv)
+    try:
+        root = Path(args.directory).expanduser().resolve()
+    except OSError as e:
+        print(f"lvibe verify-checksums: bad --directory: {e}", file=sys.stderr)
+        return 2
+    if not root.is_dir():
+        print(f"lvibe verify-checksums: not a directory: {root}", file=sys.stderr)
+        return 1
+    if not (root / SHA256SUMS_NAME).is_file():
+        print(f"lvibe verify-checksums: no {SHA256SUMS_NAME} in {root}", file=sys.stderr)
+        print("See docs/apt-repo-releases.md (STEP 8 / H1).", file=sys.stderr)
+        return 1
+    if not shutil.which("sha256sum"):
+        print("lvibe verify-checksums: sha256sum not on PATH (install coreutils).", file=sys.stderr)
+        return 127
+    return run_sha256sum_check(root)
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -229,6 +264,8 @@ def main() -> int:
         return _cmd_logs(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "continue-pin":
         return _cmd_continue_pin(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "verify-checksums":
+        return _cmd_verify_checksums(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",

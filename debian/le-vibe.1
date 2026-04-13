@@ -52,6 +52,10 @@ Show the local structured log path and optional last \fIN\fR lines (\fBdocs/priv
 .B lvibe continue-pin
 .RI [ \-\-path\-only ]
 Print the pinned Open VSX semver for Continue. \fBdocs/continue\-extension\-pin.md\fR; \fBLE_VIBE_CONTINUE_PIN_FILE\fR overrides the pin file path.
+.TP
+.B lvibe verify-checksums
+.RI [ \-C " dir " ]
+Verify \fBSHA256SUMS\fR with \fBsha256sum \-c\fR — \fBdocs/apt\-repo\-releases.md\fR (H1).
 .SH FILES
 .TP
 .I ~/.config/le\-vibe/

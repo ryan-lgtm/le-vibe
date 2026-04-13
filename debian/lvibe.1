@@ -40,6 +40,10 @@ Show the local structured log path (\fB~/.config/le\-vibe/le\-vibe.log.jsonl\fR)
 .B lvibe continue-pin
 .RI [ \-\-path\-only ]
 Print the pinned Open VSX semver for Continue (\fBcontinue.continue@\fIver\fR). Pin file: \fB/usr/share/le\-vibe/continue\-openvsx\-version\fR when installed, else monorepo \fBpackaging/continue\-openvsx\-version\fR; \fBLE_VIBE_CONTINUE_PIN_FILE\fR overrides. \fBdocs/continue\-extension\-pin.md\fR.
+.TP
+.B lvibe verify-checksums
+.RI [ \-C " dir " ]
+Run \fBsha256sum \-c SHA256SUMS\fR in a release directory (artifact extract). \fBdocs/apt\-repo\-releases.md\fR (H1).
 .SH OPTIONS
 See
 .BR le\-vibe (1).
