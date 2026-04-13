@@ -142,6 +142,7 @@ def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
     assert "--apt-sim" in text
     assert "manual-step14-install-smoke.sh" in text
     assert "--print-install-cmd" in text
+    assert "--json" in text
 
 
 def test_apt_repo_releases_github_releases_section_links_combined_drop_step8():

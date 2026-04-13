@@ -25,6 +25,7 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "STEP 14" in text
     assert "--verify-only" in text
     assert "--print-install-cmd" in text
+    assert "--json" in text
     assert "sudo apt install" in text
     assert "lvibe --help" in text
     assert "codium --version" in text
@@ -99,3 +100,30 @@ def test_manual_step14_install_smoke_print_install_cmd_mode() -> None:
         )
         assert ok.returncode == 0
         assert ok.stdout.strip() == f'sudo apt install "{stack}" "{ide}"'
+
+
+def test_manual_step14_install_smoke_json_mode() -> None:
+    root = _repo_root()
+    script = root / "packaging" / "scripts" / "manual-step14-install-smoke.sh"
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_root = Path(tmp_dir)
+        stack = tmp_root / "le-vibe_9.9.9_all.deb"
+        ide = tmp_root / "le-vibe-ide_9.9.9_amd64.deb"
+        stack.write_bytes(b"placeholder")
+        ide.write_bytes(b"placeholder")
+        result = subprocess.run(
+            [str(script), "--json"],
+            cwd=str(root),
+            capture_output=True,
+            text=True,
+            env={
+                "PATH": str(Path("/usr/bin")) + ":" + str(Path("/bin")),
+                "STACK_DEB": str(stack),
+                "IDE_DEB": str(ide),
+            },
+        )
+        assert result.returncode == 0
+        out = result.stdout
+        assert '"stack_deb":' in out
+        assert '"ide_deb":' in out
+        assert '"install_cmd": "sudo apt install' in out

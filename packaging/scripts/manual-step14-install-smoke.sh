@@ -13,10 +13,11 @@ STACK_DEB="${STACK_DEB:-$STACK_DEB_DEFAULT}"
 IDE_DEB="${IDE_DEB:-$IDE_DEB_DEFAULT}"
 RUN_VERIFY=0
 PRINT_INSTALL_CMD=0
+PRINT_JSON=0
 
 usage() {
   cat <<'EOF'
-Usage: packaging/scripts/manual-step14-install-smoke.sh [--verify-only] [--print-install-cmd]
+Usage: packaging/scripts/manual-step14-install-smoke.sh [--verify-only] [--print-install-cmd] [--json]
 
 Purpose:
   Print copy/paste commands for the remaining manual STEP 14 Ubuntu validation:
@@ -32,6 +33,7 @@ Options:
   --verify-only   Run post-install verification checks now (no install).
   --print-install-cmd
                   Print only: sudo apt install "<stack.deb>" "<ide.deb>".
+  --json          Print resolved stack/IDE deb paths + install command as JSON.
   -h, --help      Show this message and exit.
 EOF
 }
@@ -78,6 +80,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --verify-only) RUN_VERIFY=1 ;;
     --print-install-cmd) PRINT_INSTALL_CMD=1 ;;
+    --json) PRINT_JSON=1 ;;
     -h|--help) usage; exit 0 ;;
     *)
       echo "manual-step14-install-smoke: unknown option: $1" >&2
@@ -98,6 +101,15 @@ assert_file "$IDE_DEB" "IDE deb"
 
 if [[ "$PRINT_INSTALL_CMD" -eq 1 ]]; then
   printf 'sudo apt install "%s" "%s"\n' "$STACK_DEB" "$IDE_DEB"
+  exit 0
+fi
+
+if [[ "$PRINT_JSON" -eq 1 ]]; then
+  printf '{\n'
+  printf '  "stack_deb": "%s",\n' "$STACK_DEB"
+  printf '  "ide_deb": "%s",\n' "$IDE_DEB"
+  printf '  "install_cmd": "sudo apt install \\"%s\\" \\"%s\\""\n' "$STACK_DEB" "$IDE_DEB"
+  printf '}\n'
   exit 0
 fi
 
