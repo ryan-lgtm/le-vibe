@@ -85,6 +85,17 @@ def test_root_readme_pm_session_section_labels_master_step2():
     assert "apply-opening-skip" in text
 
 
+def test_root_readme_continue_section_labels_step3_e2():
+    """STEP 3 / E2: landing README names Continue rules + primary .lvibe/ memory path."""
+    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    assert "### Continue workspace rules — STEP 3 / E2" in text
+    assert "Master orchestrator STEP 3" in text
+    assert "00-le-vibe-lvibe-memory.md" in text
+    assert "continue-rules" in text
+    assert "sync-lvibe-agent-skills.sh" in text
+    assert "le_vibe.continue_workspace" in text
+
+
 def test_root_readme_documents_ai_pilot_and_user_gate():
     text = (_repo_root() / "README.md").read_text(encoding="utf-8")
     assert "Lé Vibe" in text
