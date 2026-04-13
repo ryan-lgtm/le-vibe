@@ -185,6 +185,18 @@ Exit **0** = no errors (warnings may print to **stderr**), **1** = validation er
 
 **Master orchestrator STEP 13** (H7 — **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)**): in-tree **alternate** Linux bundles for the **Python stack** + **`lvibe`** — **[`docs/flatpak-appimage.md`](docs/flatpak-appimage.md)**; **[`packaging/flatpak/org.le_vibe.Launcher.yml`](packaging/flatpak/org.le_vibe.Launcher.yml)** (rough **Flathub** track); **[`packaging/appimage/`](packaging/appimage/)** (**`AppRun`**, **`build-appimage.sh`**). **Baseline** ship remains the **native `.deb`**; **H7** does **not** compile the **Lé Vibe IDE** (**H6** / **STEP 14** — **[`editor/`](editor/)**). Honesty — **[`spec-phase2.md`](spec-phase2.md) §14**. **`lvibe flatpak-appimage`** exposes paths (**`--json`**). Tests **`test_flatpak_appimage_doc_h7_contract.py`**, **`test_pm_stage_map_step13_contract.py`** (**`pytest`** does not build bundles). Package README: **[`le-vibe/README.md`](le-vibe/README.md)** *Alternate packages / Flatpak & AppImage (STEP 13 / H7)*.
 
+### `.lvibe/` governance — STEP 15 (**[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md)** §5.1–5.6)
+
+**Master orchestrator STEP 15** (governance — **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)**): consent **before** creating **`.lvibe/`** (decline → no folder; persist opt-out); **50 MB** default storage cap (user-set); per-agent **`agents/<agent_id>/`** + shared **`rag/`**; compaction at cap (**§5.5** order). **`prepare_workspaces_for_editor_args`** gates **`ensure_lvibe_workspace`** via **`resolve_lvibe_creation`**. **`lvibe workspace-governance`** (**`-C`** / **`--workspace`**, **`--json`**) surfaces consent, cap, and usage. Tests **`test_workspace_consent.py`**, **`test_workspace_storage.py`**, **`test_workspace_hub.py`**, **`test_pm_stage_map_step15_contract.py`**. Package README: **[`le-vibe/README.md`](le-vibe/README.md)** *`.lvibe/` governance (STEP 15)*.
+
+### PM stage map — STEP 16 (doc-locked loop)
+
+**Master orchestrator STEP 16** — **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)** (this file): Master queue **0–17** ↔ primary PM doc per stage; **`docs/PROMPT_BUILD_LE_VIBE.md`** fence + **`packaging/scripts/print-master-orchestrator-prompt.py`** (**`lvibe master-orchestrator --print`** / **`--json`**). Keep **[`docs/README.md`](docs/README.md)** and root **`README.md`** linked. Tests **`test_prompt_build_orchestrator_fence.py`**, **`test_pm_stage_map_step16_contract.py`**.
+
+### AI Pilot & Continue contracts — STEP 17
+
+**Master orchestrator STEP 17** (contracts — **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)**): **[`docs/AI_PILOT_AND_CONTINUE.md`](docs/AI_PILOT_AND_CONTINUE.md)** — **Please continue** / **AI Pilot** mimic, doc-first staging, **§8** secrets discipline. Product copy also under **Please continue & AI Pilot (§7.1)** earlier in this README; Continue rules from **`le_vibe.continue_workspace`**. Tests **`test_root_readme_ai_pilot_contract.py`**, **`test_pm_stage_map_step17_contract.py`**, **`test_privacy_and_ai_pilot_prioritization_cargo_contract.py`**. Package README: **[`le-vibe/README.md`](le-vibe/README.md)** *AI Pilot & Continue contracts (STEP 17)*.
+
 ## Install (development tree)
 
 ```bash
