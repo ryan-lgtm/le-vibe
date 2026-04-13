@@ -20,7 +20,8 @@ usage() {
 Usage: packaging/scripts/manual-step14-install-smoke.sh [--verify-only] [--print-install-cmd] [--json]
 
 Purpose:
-  Print copy/paste commands for the remaining manual STEP 14 Ubuntu validation:
+  Print copy/paste commands for the remaining manual STEP 14 Ubuntu validation
+  on a test host (after verify-step14-closeout.sh on the build machine):
     1) install stack + IDE .deb pair,
     2) launch `lvibe` and IDE,
     3) run focused post-install checks.
@@ -36,9 +37,10 @@ Options:
   --json          Print resolved stack/IDE deb paths + install command as JSON.
   -h, --help      Show this message and exit.
 
-Close-out (on the build host, before copying .debs to a test machine):
-  packaging/scripts/verify-step14-closeout.sh --require-stack-deb
-  Optional: --apt-sim, --json (apt_sim_note in JSON — docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*).
+Ordering (same as docs/apt-repo-releases.md *IDE package*):
+  Build machine — packaging/scripts/verify-step14-closeout.sh --require-stack-deb
+    Optional: --apt-sim, --json (apt_sim_note in JSON — docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*).
+  Test host — copy .debs here, then use this script for sudo apt install + smoke.
 EOF
 }
 

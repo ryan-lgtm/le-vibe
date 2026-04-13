@@ -71,6 +71,10 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert '"apt_sim_note":' in text
     assert "JSON success (--json)" in text
     assert "requested_without_stack_requirement" in text
+    assert "build machine" in text
+    assert "test host" in text
+    assert "manual-step14-install-smoke.sh" in text
+    assert "docs/apt-repo-releases.md" in text
 
 
 def test_verify_step14_closeout_json_mode_outputs_parseable_payload() -> None:

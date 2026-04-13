@@ -38,6 +38,9 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "apt_sim_note" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "build machine" in text
+    assert "test host" in text
+    assert "docs/apt-repo-releases.md" in text
 
 
 def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> None:
