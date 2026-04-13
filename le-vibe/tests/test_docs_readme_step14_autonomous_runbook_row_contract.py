@@ -20,4 +20,5 @@ def test_step14_autonomous_runbook_documents_closeout_verifier():
     text = (_repo_root() / "docs" / "STEP14_AUTONOMOUS_ENGINEER_RUNBOOK.md").read_text(encoding="utf-8")
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
+    assert "--apt-sim" in text
     assert "Definition of done (STEP 14 honest)" in text

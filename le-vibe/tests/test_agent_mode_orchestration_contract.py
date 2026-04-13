@@ -15,4 +15,5 @@ def test_agent_mode_orchestration_lists_step14_full_product_closeout_gate():
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product install" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
+    assert "--apt-sim" in text
     assert "le-vibe-deb" in text

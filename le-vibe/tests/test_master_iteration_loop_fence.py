@@ -28,6 +28,7 @@ def test_master_iteration_loop_fence_extractable():
     assert "build-le-vibe-debs.sh --with-ide" in fence
     assert "Full-product install" in fence
     assert "verify-step14-closeout.sh --require-stack-deb" in fence
+    assert "--apt-sim" in fence
     assert "le-vibe-deb" in fence
 
 
