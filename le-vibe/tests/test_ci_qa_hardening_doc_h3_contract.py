@@ -29,6 +29,7 @@ def test_ci_qa_hardening_doc_maintainer_full_product_deb_step14():
     assert "Full-product install" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "Success output (`--with-ide`)" in text
+    assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "Install both packages" in text
 
 
