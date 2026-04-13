@@ -24,3 +24,6 @@ def test_ci_yml_header_documents_le_vibe_deb_artifact_stack_only_step14():
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product install" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "0 -> 1 -> 14 -> 2-13 -> 15-17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text

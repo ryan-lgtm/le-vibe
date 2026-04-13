@@ -5,6 +5,7 @@
 #   maintainer path — packaging/scripts/build-le-vibe-ide-deb.sh / build-le-vibe-debs.sh --with-ide (§7.3; Full-product install on success — docs/PM_DEB_BUILD_ITERATION.md; docs/apt-repo-releases.md IDE package).
 # E1: le-vibe/tests/test_product_spec_section8.py (PRODUCT_SPEC sequencing vs this gate).
 # 14.e: optional job linux_compile runs packaging/scripts/ci-vscodium-linux-dev-build.sh (upstream dev/build.sh).
+# Master orchestrator: 0 -> 1 -> 14 -> 2-13 -> 15-17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16).
 name: build-le-vibe-ide
 
 on:

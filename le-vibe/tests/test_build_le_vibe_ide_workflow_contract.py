@@ -18,6 +18,9 @@ def test_build_le_vibe_ide_workflow_header_documents_out_of_band_deb_step14():
     assert "Full-product install" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "apt-repo-releases.md" in text
+    assert "0 -> 1 -> 14 -> 2-13 -> 15-17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
 
 
 def test_build_le_vibe_ide_workflow_writes_le_vibe_editor_docs_to_metadata():
@@ -82,6 +85,9 @@ def test_build_linux_yaml_header_out_of_band_deb_matches_ide_workflow_step14():
     assert "Full-product install" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "apt-repo-releases.md" in text
+    assert "0 -> 1 -> 14 -> 2-13 -> 15-17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
 
 
 def test_build_linux_yaml_uses_build_le_vibe_ide_and_documents_inherited_metadata():
