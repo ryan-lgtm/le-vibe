@@ -161,6 +161,10 @@ Exit **0** = no errors (warnings may print to **stderr**), **1** = validation er
 
 **Master orchestrator STEP 8** (H1 — **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)** *H1 vs §7.3 .deb bundles*): stack releases use **GitHub Actions** artifact **`le-vibe-deb`** — **`le-vibe`** **`.deb`**, SBOM **`le-vibe-python.cdx.json`**, **`SHA256SUMS`** (CI runs **`sha256sum -c`** before upload). **IDE** **`le-vibe-ide_*_amd64.deb`** is **not** in default CI — ship beside the stack **`.deb`** when you build §7.3 (**[`docs/apt-repo-releases.md`](docs/apt-repo-releases.md)** *IDE package*). Local verify: **`lvibe verify-checksums`**. Versioning: **`debian/changelog`**, **[`CHANGELOG.md`](CHANGELOG.md)**. Tests **`test_apt_repo_releases_doc_h1_contract.py`**, **`test_pm_stage_map_step8_contract.py`**. Workflow **[`.github/workflows/ci.yml`](.github/workflows/ci.yml)**. Package README: **[`le-vibe/README.md`](le-vibe/README.md)** *Release channel / checksums (STEP 8 / H1)*.
 
+### Supply chain & SBOM — STEP 9 / H2 (Roadmap H2)
+
+**Master orchestrator STEP 9** (H2 — **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)**): Python stack **pins** (**[`le-vibe/requirements.txt`](le-vibe/requirements.txt)**), **`pip-audit`** (OSV), and **CycloneDX** **`le-vibe-python.cdx.json`** (in **`le-vibe-deb`** / **`SHA256SUMS`**). CI **Python supply chain (H2)** in **[`.github/workflows/ci.yml`](.github/workflows/ci.yml)**; weekly bumps — **[`.github/dependabot.yml`](.github/dependabot.yml)**. Signing / maintainer story — **[`docs/sbom-signing-audit.md`](docs/sbom-signing-audit.md)** (**§14** honesty: H6/H7 have separate SBOM needs). Tests **`test_sbom_signing_audit_doc_h2_contract.py`**, **`test_requirements_pins.py`**, **`test_pm_stage_map_step9_contract.py`**. Package README: **[`le-vibe/README.md`](le-vibe/README.md)** *Supply chain / SBOM (STEP 9 / H2)*.
+
 ## Install (development tree)
 
 ```bash
