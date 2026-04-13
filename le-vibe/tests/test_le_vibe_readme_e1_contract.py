@@ -19,6 +19,7 @@ def test_le_vibe_readme_documents_first_run_launcher_flags():
     assert "--force-first-run" in text
     assert "LE_VIBE_VERBOSE" in text
     assert "lvibe logs" in text
+    assert "Live:" in text
     assert "tail -f" in text
     assert "--path-only" in text
     assert "lvibe logs --tail 50" in text

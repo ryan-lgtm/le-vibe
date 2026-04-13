@@ -23,6 +23,7 @@ def test_welcome_banner_matches_product_spec_section4():
     assert "--force-first-run" in WELCOME_BANNER
     assert "lvibe --help" in WELCOME_BANNER
     assert "lvibe logs" in WELCOME_BANNER
+    assert "Live:" in WELCOME_BANNER
     assert "tail -f" in WELCOME_BANNER
     assert "lvibe logs --tail 50" in WELCOME_BANNER
     assert "STEP 6" in WELCOME_BANNER
@@ -226,7 +227,7 @@ def test_product_spec_section8_evidence_section10_welcome_row_lists_welcome_bann
     assert "| **Welcome to Lé Vibe**" in text
     assert "WELCOME_BANNER" in text
     assert "terminal onboarding + **`lvibe --help`**" in text
-    assert "`tail -f`** hint" in text
+    assert "`Live:`** / **`tail -f`**" in text
     assert "`--path-only`**; concrete **`lvibe logs --tail 50`" in text
     assert "test_product_spec_section8.py" in text
 

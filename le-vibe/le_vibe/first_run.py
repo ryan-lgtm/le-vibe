@@ -85,5 +85,6 @@ def ensure_product_first_run(
         "first-run bootstrap failed; fix errors above and retry, or use --force-first-run. "
         "Set LE_VIBE_VERBOSE=1 for more detail. "
         "`lvibe --help` lists --skip-first-run / --force-first-run (STEP 6). "
-        "Inspect logs: `lvibe logs` (path + `tail -f` hint), `lvibe logs --path-only`, or `lvibe logs --tail 50` (adjust N; STEP 6).",
+        "Inspect logs: `lvibe logs` prints the path and `Live: tail -f …` lines (same as the command); "
+        "`lvibe logs --path-only`, or `lvibe logs --tail 50` (adjust N; STEP 6).",
     )
