@@ -95,6 +95,35 @@ else
   failures=$((failures + 1))
 fi
 
+# When an IDE .deb is present: Freedesktop QA on packaged le-vibe.desktop (same extraction as build-le-vibe-ide-deb.sh post-build).
+if [[ ${#ide_debs[@]} -gt 0 ]]; then
+  _ide_deb="$(printf '%s\n' "${ide_debs[@]}" | sort -V | tail -n1)"
+  if command -v desktop-file-validate >/dev/null 2>&1; then
+    _desk_tmp="$(mktemp "${TMPDIR:-/tmp}/le-vibe-desk-XXXXXXXX.desktop")"
+    _ok=0
+    if dpkg-deb --fsys-tarfile "$_ide_deb" | tar -xOf - "usr/share/applications/le-vibe.desktop" > "$_desk_tmp" 2>/dev/null && [[ -s "$_desk_tmp" ]]; then
+      _ok=1
+    elif dpkg-deb --fsys-tarfile "$_ide_deb" | tar -xOf - "./usr/share/applications/le-vibe.desktop" > "$_desk_tmp" 2>/dev/null && [[ -s "$_desk_tmp" ]]; then
+      _ok=1
+    fi
+    if [[ "$_ok" -eq 1 ]]; then
+      if desktop-file-validate "$_desk_tmp" >/dev/null 2>&1; then
+        echo "[ok] desktop-file-validate (le-vibe.desktop inside ${_ide_deb})"
+      else
+        desktop-file-validate "$_desk_tmp" >&2 || true
+        echo "[missing] desktop-file-validate failed on le-vibe.desktop extracted from ${_ide_deb}" >&2
+        failures=$((failures + 1))
+      fi
+    else
+      echo "[missing] could not extract usr/share/applications/le-vibe.desktop from ${_ide_deb} for desktop-file-validate" >&2
+      failures=$((failures + 1))
+    fi
+    rm -f "$_desk_tmp"
+  else
+    echo "[optional] desktop-file-validate not on PATH — skipped packaged .desktop check (install desktop-file-utils; build-le-vibe-ide-deb.sh runs this after dpkg-buildpackage)"
+  fi
+fi
+
 if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
   _stack="$("$ROOT/packaging/scripts/resolve-latest-le-vibe-stack-deb.sh" "$ROOT" || true)"
   if [[ -n "$_stack" && -f "$_stack" ]]; then

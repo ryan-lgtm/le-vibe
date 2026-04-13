@@ -80,7 +80,8 @@ fi
 
 # Freedesktop QA on the packaged payload (staging already runs desktop-file-validate — §7.3 menu entry).
 if command -v desktop-file-validate >/dev/null 2>&1; then
-  _desk_tmp="$(mktemp)"
+  # desktop-file-validate requires the path to end in .desktop (Freedesktop spec tool).
+  _desk_tmp="$(mktemp "${TMPDIR:-/tmp}/le-vibe-desk-XXXXXXXX.desktop")"
   _ok=0
   if dpkg-deb --fsys-tarfile "$_latest" | tar -xOf - "usr/share/applications/le-vibe.desktop" > "$_desk_tmp" 2>/dev/null && [[ -s "$_desk_tmp" ]]; then
     _ok=1
