@@ -19,6 +19,11 @@ Open the current project in the editor:
 .PP
 Product naming: Lé Vibe is not Microsoft Visual Studio Code; use Code \-
 OSS / VSCodium\-class editors.
+.SH COMMANDS
+.TP
+.B lvibe sync-agent-skills
+.RI [ workspace ]
+Copy missing agent skill templates into \fB.lvibe/agents/<agent_id>/skill.md\fR (e.g. after upgrading the \fBle\-vibe\fR stack). \fIworkspace\fR defaults to the current directory; \fB.lvibe/\fR must already exist. Does not start Ollama or the editor.
 .SH OPTIONS
 See
 .BR le\-vibe (1).

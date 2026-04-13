@@ -31,6 +31,11 @@ Editor binary (default: \fBLE_VIBE_EDITOR\fR, else \fB/usr/lib/le-vibe/bin/codiu
 .TP
 .BI \-\-port " N"
 Managed Ollama port (default 11435).
+.SH COMMANDS
+.TP
+.B lvibe sync-agent-skills
+.RI [ workspace ]
+Copy missing agent skill templates into \fB.lvibe/agents/<agent_id>/skill.md\fR (e.g. after upgrading the \fBle\-vibe\fR stack). \fIworkspace\fR defaults to the current directory; \fB.lvibe/\fR must already exist. Does not start Ollama or the editor.
 .SH FILES
 .TP
 .I ~/.config/le\-vibe/

@@ -23,6 +23,7 @@ def test_ensure_continue_rules_idempotent(tmp_path: Path):
     assert "session_manifest_example_source_path" in mem
     assert "schemas/session-manifest.v1.example.json" in mem
     assert "le-vibe/templates/agents" in mem
+    assert "lvibe sync-agent-skills" in mem
     assert "sync-lvibe-agent-skills.sh" in mem
     assert "Doc-first staging" in mem
     assert "PM_STAGE_MAP.md" in mem

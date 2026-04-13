@@ -12,6 +12,7 @@ import os
 import signal
 import subprocess
 import sys
+from pathlib import Path
 
 from .first_run import ensure_product_first_run
 from .managed_ollama import ensure_managed_ollama, stop_managed_ollama
@@ -22,6 +23,45 @@ from .structured_log import append_structured_log
 from .workspace_hub import prepare_workspaces_for_editor_args
 
 _stopped = False
+
+
+def _cmd_sync_agent_skills(argv: list[str]) -> int:
+    """
+    STEP 3 (E2): copy missing ``templates/agents/*.md`` into ``.lvibe/agents/<id>/skill.md``.
+    Same behavior as ``packaging/scripts/sync-lvibe-agent-skills.sh`` — no editor or Ollama.
+    """
+    from le_vibe.session_orchestrator import sync_agent_skills_from_templates
+
+    p = argparse.ArgumentParser(
+        prog="lvibe sync-agent-skills",
+        description="Copy missing Lé Vibe agent skill templates into .lvibe/agents/<id>/skill.md (idempotent).",
+    )
+    p.add_argument(
+        "workspace",
+        nargs="?",
+        default=".",
+        help="workspace root (default: current directory)",
+    )
+    args = p.parse_args(argv)
+    root = Path(args.workspace).resolve()
+    lv = root / ".lvibe"
+    if not lv.is_dir():
+        print(
+            f"lvibe sync-agent-skills: missing {lv} — run lvibe on this workspace first.",
+            file=sys.stderr,
+        )
+        return 1
+    written = sync_agent_skills_from_templates(lv)
+    if written:
+        print(f"lvibe sync-agent-skills: wrote {len(written)} skill.md file(s)")
+        for path in written:
+            print(f"  {path}")
+    else:
+        print(
+            "lvibe sync-agent-skills: no missing skill.md "
+            "(delete a file under .lvibe/agents/*/ to force re-copy)",
+        )
+    return 0
 
 
 def _default_editor() -> str:
@@ -46,6 +86,9 @@ def _cleanup() -> None:
 
 
 def main() -> int:
+    if len(sys.argv) >= 2 and sys.argv[1] == "sync-agent-skills":
+        return _cmd_sync_agent_skills(sys.argv[2:])
+
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",
     )

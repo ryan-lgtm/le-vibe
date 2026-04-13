@@ -155,6 +155,7 @@ def test_le_vibe_readme_lists_core_e1_contract_modules():
     assert "le_vibe.hygiene" in text
     assert "--seed-missing" in text
     assert "Continue (STEP 3 / E2)" in text
+    assert "sync-agent-skills" in text
     assert "sync-lvibe-agent-skills.sh" in text
     assert "PM session (STEP 2)" in text
     assert "schemas/session-manifest.v1.example.json" in text
