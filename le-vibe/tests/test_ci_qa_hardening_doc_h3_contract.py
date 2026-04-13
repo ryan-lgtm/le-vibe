@@ -66,6 +66,18 @@ def test_ci_qa_hardening_doc_linux_compile_fork_org_tuning_step14e():
     assert "Honesty vs CI" in text
 
 
+def test_ci_qa_hardening_doc_linux_compile_node_options_heap_parity_step14e():
+    """STEP 14.e: H3 doc names NODE_OPTIONS heap parity — linux_compile vs dev/build.sh."""
+    text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
+    assert "**`NODE_OPTIONS` (heap parity):**" in text
+    assert "NODE_OPTIONS=--max-old-space-size=8192" in text
+    assert "dev/build.sh" in text
+    assert "build-le-vibe-ide.yml" in text
+    assert "Job summary — compile" in text
+    assert "Toolchain" in text
+    assert "env.NODE_OPTIONS" in text
+
+
 def test_ci_qa_hardening_doc_linux_compile_gh_run_list_finding_run_id_step14f():
     """STEP 14.f: H3 doc names gh run list + workflow file for linux_compile artifact download."""
     text = (_repo_root() / "docs" / "ci-qa-hardening.md").read_text(encoding="utf-8")
