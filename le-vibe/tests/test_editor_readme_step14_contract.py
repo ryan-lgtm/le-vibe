@@ -52,6 +52,8 @@ def test_editor_readme_lists_production_deb_pair_step14():
     assert "Install both packages" in text
     assert "Maintainer build output" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
+    assert "preflight-step14-closeout.sh" in text
+    assert "ide-prereqs --print-closeout-commands" in text
     assert "--json" in text
     assert "apt_sim_note" in text
     assert "build machine" in text

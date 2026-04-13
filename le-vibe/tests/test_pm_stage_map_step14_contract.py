@@ -41,6 +41,8 @@ def test_pm_stage_map_step14_lists_ide_workflows_smoke_and_e1_test_build():
     assert "test_spec_phase2_section14_snapshot_contract.py" in row
     assert "test_editor_readme_step14_contract.py" in row
     assert "test_editor_vendoring_md_contract.py" in row
+    assert "preflight-step14-closeout.sh" in row
+    assert "ide-prereqs --print-closeout-commands" in row
     assert "verify-step14-closeout.sh" in row
     assert "--require-stack-deb" in row
     assert "test_verify_step14_closeout_contract.py" in row
