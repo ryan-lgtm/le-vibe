@@ -19,6 +19,9 @@ def test_editor_smoke_sh_bash_syntax() -> None:
 def test_editor_smoke_sh_header_documents_le_vibe_deb_vs_ide_deb_step14():
     """STEP 14: repo-root smoke header states H1 CI scope vs maintainer IDE .deb."""
     text = (_repo_root() / "editor" / "smoke.sh").read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
