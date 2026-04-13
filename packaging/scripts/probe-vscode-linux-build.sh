@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # STEP 14 / §7.3: print VSCode-linux tree state for the monorepo (14.c).
 # Same values as lvibe ide-prereqs --json / verify-step14-closeout.sh --json (vscode_linux_build).
-# Used by preflight-step14-closeout.sh, verify-step14-closeout.sh, manual-step14-install-smoke.sh.
+# Used by preflight-step14-closeout.sh, verify-step14-closeout.sh, manual-step14-install-smoke.sh,
+# build-le-vibe-debs.sh (--with-ide probe). Pair with print-step14-vscode-linux-bin-files.sh when partial.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -17,6 +18,9 @@ Print one line to stdout: ready | partial | absent | unknown
   partial  — VSCode-linux-* exists but bin/codium missing
   absent   — no usable tree
   unknown  — Python probe failed
+
+When partial: packaging/scripts/print-step14-vscode-linux-bin-files.sh [REPO_ROOT]
+prints bin/ filenames (same as lvibe ide-prereqs --json field vscode_linux_bin_files).
 
 Same classifier as le_vibe.ide_packaging_paths.vscode_linux_build_status().
 EOF

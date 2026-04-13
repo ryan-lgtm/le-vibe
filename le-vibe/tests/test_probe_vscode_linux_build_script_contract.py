@@ -27,6 +27,8 @@ def test_probe_vscode_linux_build_script_exists_bash_syntax_and_help() -> None:
     out = f"{r.stdout}\n{r.stderr}"
     assert "Usage" in out
     assert "ready" in out and "partial" in out
+    assert "print-step14-vscode-linux-bin-files.sh" in out
+    assert "vscode_linux_bin_files" in out
 
 
 def test_probe_vscode_linux_build_matches_python_classifier() -> None:
