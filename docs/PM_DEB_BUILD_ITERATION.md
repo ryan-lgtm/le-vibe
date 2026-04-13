@@ -43,6 +43,8 @@ Stack **`le-vibe_*.deb`** is emitted **beside** the repo directory (parent of th
 
 Implementation: **`packaging/scripts/resolve-latest-le-vibe-stack-deb.sh`** prints the newest matching path (parent of the clone, then **repo root**). **`verify-step14-closeout.sh --require-stack-deb`**, **`build-le-vibe-debs.sh`** (**`find_stack_deb`**), and **`manual-step14-install-smoke.sh`** (default **`STACK_DEB`**) all use it. **`build-le-vibe-debs.sh`** uses the same resolution when printing **Full-product install**.
 
+**Preflight (all gaps):** **`packaging/scripts/preflight-step14-closeout.sh`** prints **`[ok]`** / **`[missing]`** for **`ci-editor-gate.sh`**, **14.c** **`editor/vscodium/VSCode-linux-*/bin/codium`**, **`packaging/le-vibe-ide_*.deb`**, and (with **`--require-stack-deb`**) stack **`le-vibe_*.deb`** — run before **`verify-step14-closeout.sh`** when iterating long **`dev/build.sh`** compiles so every blocker is visible at once.
+
 **Full-product install** echoes **absolute** paths when both exist — *Success output (`--with-ide`)* below.
 
 **Script help:** `packaging/scripts/build-le-vibe-debs.sh --help` (alias **`-h`**) prints flags, environments, artifact paths, exit codes, and H1 publishing pointers — same text as in [`packaging/scripts/build-le-vibe-debs.sh`](../packaging/scripts/build-le-vibe-debs.sh).

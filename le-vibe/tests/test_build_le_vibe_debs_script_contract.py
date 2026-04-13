@@ -249,6 +249,7 @@ def test_pm_deb_build_iteration_doc_lists_output_paths_table_step14():
         "### Exit codes (`build-le-vibe-debs.sh`)", 1
     )[0]
     assert "resolve-latest-le-vibe-stack-deb.sh" in out_paths
+    assert "preflight-step14-closeout.sh" in out_paths
     assert "manual-step14-install-smoke.sh" in out_paths
 
 

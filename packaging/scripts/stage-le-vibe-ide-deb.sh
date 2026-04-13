@@ -21,7 +21,8 @@ Stages the tree into packaging/debian-le-vibe-ide/staging for dpkg-buildpackage 
 Partial VSCode-linux tree (missing VSCode-linux-* or bin/codium): same triage as
 packaging/scripts/build-le-vibe-ide-deb.sh --help — docs/PM_DEB_BUILD_ITERATION.md (*Partial VSCode-linux tree*),
 editor/BUILD.md (14.c *Partial tree*), ./editor/print-built-codium-path.sh, ./editor/print-vsbuild-codium-path.sh;
-full close-out after stack + IDE .debs: packaging/scripts/verify-step14-closeout.sh --require-stack-deb.
+all gaps at once: packaging/scripts/preflight-step14-closeout.sh; full close-out after stack + IDE .debs:
+packaging/scripts/verify-step14-closeout.sh --require-stack-deb.
 
 Environment:
   LEVIBE_STAGE_IDE_ASSERT_BRAND   When 1, fail if resources/app/product.json lacks Lé Vibe or linuxIconName != le-vibe.
