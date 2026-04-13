@@ -26,6 +26,21 @@ def test_editor_smoke_sh_header_documents_le_vibe_deb_vs_ide_deb_step14():
     assert "PM_DEB_BUILD_ITERATION.md" in text
 
 
+def test_verify_73_maintainer_bash_syntax() -> None:
+    script = _repo_root() / "editor" / "verify-73-maintainer.sh"
+    assert script.is_file(), script
+    subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
+
+
+def test_verify_73_maintainer_header_step14():
+    text = (_repo_root() / "editor" / "verify-73-maintainer.sh").read_text(encoding="utf-8")
+    assert "§7.3" in text
+    assert "ide-prereqs" in text
+    assert "ci-editor-gate" in text
+    assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
+    assert "static_prereq_files_ok" in text
+
+
 def test_editor_smoke_sh_delegates_ci_editor_gate():
     text = (_repo_root() / "editor" / "smoke.sh").read_text(encoding="utf-8")
     assert 'exec "${ROOT}/packaging/scripts/ci-editor-gate.sh" "$@"' in text

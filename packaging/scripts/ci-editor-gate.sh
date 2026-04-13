@@ -75,6 +75,7 @@ if [[ "${layout}" == "vscodium" ]]; then
   bash -n "${ROOT}/editor/print-built-codium-path.sh"
   bash -n "${ROOT}/editor/verify-14c-local-binary.sh"
   bash -n "${ROOT}/editor/smoke-built-codium-lvibe.sh"
+  bash -n "${ROOT}/editor/verify-73-maintainer.sh"
   bash -n "${ROOT}/editor/print-vsbuild-codium-path.sh"
   bash -n "${ROOT}/editor/print-ci-tarball-codium-path.sh"
   bash -n "${ROOT}/packaging/scripts/ci-vscodium-linux-dev-build.sh"

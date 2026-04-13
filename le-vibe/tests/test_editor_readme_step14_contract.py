@@ -62,6 +62,7 @@ def test_editor_readme_path_table_lists_fine_grain_scripts():
     assert "**14.c**" in text
     assert "**14.f**" in text
     assert "| **`editor/smoke.sh`** |" in text
+    assert "| **`editor/verify-73-maintainer.sh`** |" in text
     assert "ci-editor-gate.sh" in text
     assert "print-ci-tarball-codium-path.sh" in text
 
