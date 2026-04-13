@@ -212,6 +212,15 @@ def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14()
     assert "roadmap" in text
 
 
+def test_product_spec_section8_evidence_h3_ci_qa_lists_docker_linux_compile_fallback():
+    """E1: H3 maintainer guide row documents ci-qa Related docs docker script (14.e vs flaky linux_compile)."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
+    assert "Roadmap H1–H3 maintainer guides" in text
+    assert "docker-le-vibe-vscodium-linux-compile.sh" in text
+    assert "test_ci_qa_hardening_related_docs_lists_docker_linux_compile_fallback" in text
+
+
 def test_product_spec_section8_evidence_intro_lists_linux_compile_cargo_cache():
     """E1: PRODUCT_SPEC_SECTION8_EVIDENCE intro stays aligned with PRODUCT_SPEC *Prioritization* (STEP 14.d / 14.e)."""
     root = Path(__file__).resolve().parents[2]
