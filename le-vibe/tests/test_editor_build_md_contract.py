@@ -180,6 +180,8 @@ def test_editor_build_md_contract_debian_section_stack_ide_one_shot_step14():
     assert "Success output (`--with-ide`)" in text
     assert "Install both packages" in text
     assert "Maintainer build output" in text
+    assert "verify-step14-closeout.sh" in text
+    assert "--require-stack-deb" in text
 
 
 def test_editor_build_md_contract_default_le_vibe_editor_packaging_14g():

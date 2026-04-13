@@ -76,6 +76,7 @@ Publishing / releases (H1):
 Full-product (--with-ide): When both .deb files are produced, the script prints a Full-product install
   line (sudo apt install with both resolved paths) before "Done." — docs/PM_DEB_BUILD_ITERATION.md
   (Success output (--with-ide)); releases — docs/apt-repo-releases.md (IDE package, Maintainer build output).
+  Local close-out check: packaging/scripts/verify-step14-closeout.sh (gate + built codium + le-vibe-ide_*.deb).
   Before attaching to a GitHub Release, regenerate SHA256SUMS over both .deb files + SBOM if shipped — same doc (Pre-publish Integrity).
   If --with-ide is set but le-vibe-ide_*.deb is not found under packaging/ after the IDE build, the script exits with status 1 (§7.3 full-product expectation).
 
@@ -217,6 +218,7 @@ if [[ "$WITH_IDE" -eq 1 && -n "$STACK_DEB" && -f "$STACK_DEB" && -n "$IDE_DEB" &
   echo "==> Full-product install (paths printed above): sudo apt install \"$STACK_DEB\" \"$IDE_DEB\""
   echo "    Post-install: /usr/share/doc/le-vibe/README.Debian — packaging/debian-le-vibe-ide/README.md (*Install both packages*)"
   echo "    §7.3 maintainer smoke (ci-editor-gate + lvibe ide-prereqs --json, no new .deb): ./editor/verify-73-maintainer.sh — editor/README.md"
+  echo "    §7.3 close-out verifier (gate + built codium + ide .deb): ./packaging/scripts/verify-step14-closeout.sh [--require-stack-deb]"
 fi
 
 echo "==> Done."

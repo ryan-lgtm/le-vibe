@@ -60,6 +60,7 @@ def test_build_le_vibe_debs_script_prints_full_product_install_hint_step14():
     assert "/usr/share/doc/le-vibe/README.Debian" in text
     assert "debian-le-vibe-ide/README.md" in text
     assert "verify-73-maintainer.sh" in text
+    assert "verify-step14-closeout.sh" in text
 
 
 def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
@@ -263,6 +264,8 @@ def test_pm_deb_build_iteration_doc_documents_full_product_install_echo_step14()
     assert "sudo apt install" in text
     assert "/usr/share/doc/le-vibe/README.Debian" in text
     assert "debian-le-vibe-ide/README.md" in text
+    assert "verify-step14-closeout.sh" in text
+    assert "--require-stack-deb" in text
 
 
 def test_pm_deb_build_iteration_doc_731_staging_identity_step14():
