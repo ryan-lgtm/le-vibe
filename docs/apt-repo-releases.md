@@ -133,6 +133,6 @@ For product positioning and **`editor/`** / IDE shell notes, see **`README.md`**
 
 | Doc | Role |
 |-----|------|
-| [`ci-qa-hardening.md`](ci-qa-hardening.md) | Smoke script, **lintian**, CI step order (H3) |
+| [`ci-qa-hardening.md`](ci-qa-hardening.md) | Smoke script, **lintian**, CI step order (H3); **optional `linux_compile`** (*Optional full Linux compile*, STEP 14.e) — opt-in CI **`vscodium-linux-build.tar.gz`** / unpack **`VSCode-linux-*`** before **`le-vibe-ide`** **`.deb`** (not default PR CI) |
 | [`sbom-signing-audit.md`](sbom-signing-audit.md) | **`pip-audit`**, CycloneDX SBOM next to **`.deb`** (H2) |
 | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | Canonical workflow; artifact bundle **`le-vibe-deb`** |

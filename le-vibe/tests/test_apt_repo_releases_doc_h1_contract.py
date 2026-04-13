@@ -19,6 +19,9 @@ def test_apt_repo_releases_doc_lists_ci_artifact_and_changelog():
     assert "H1" in text or "Roadmap H1" in text
     assert "PM_STAGE_MAP" in text
     assert "STEP 8" in text
+    assert "linux_compile" in text
+    assert "vscodium-linux-build.tar.gz" in text
+    assert "Optional full Linux compile" in text
 
 
 def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
