@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from le_vibe.workspace_hub import ensure_lvibe_workspace
-from le_vibe.workspace_storage import compact_lvibe_tree, refresh_storage_metadata
+from le_vibe.workspace_storage import compact_lvibe_tree, lvibe_tree_usage_bytes, refresh_storage_metadata
 
 
 def test_compaction_removes_rag_refs_when_over_cap(tmp_path: Path, monkeypatch) -> None:
@@ -53,3 +53,14 @@ def test_refresh_writes_storage_state_json(tmp_path: Path, monkeypatch) -> None:
     data = (root / ".lvibe" / "storage-state.json").read_text(encoding="utf-8")
     assert "usage_bytes" in data
     assert "50" in data
+
+
+def test_lvibe_tree_usage_bytes_zero_without_dot_lvibe(tmp_path: Path) -> None:
+    assert lvibe_tree_usage_bytes(tmp_path) == 0
+
+
+def test_lvibe_tree_usage_bytes_sums_files(tmp_path: Path) -> None:
+    lv = tmp_path / ".lvibe"
+    lv.mkdir()
+    (lv / "x.txt").write_bytes(b"abc")
+    assert lvibe_tree_usage_bytes(tmp_path) == 3

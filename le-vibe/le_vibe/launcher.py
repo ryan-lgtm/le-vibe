@@ -868,6 +868,83 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
     return 0
 
 
+def _cmd_workspace_governance(argv: list[str]) -> int:
+    """STEP 15: consent, cap, usage vs cap — ``PRODUCT_SPEC`` §5, ``docs/PM_STAGE_MAP.md`` STEP 15."""
+    import json as json_mod
+
+    from le_vibe.workspace_policy import cap_mb_from_environ, get_cap_mb, get_consent, policy_path
+    from le_vibe.workspace_storage import lvibe_tree_usage_bytes
+
+    p = argparse.ArgumentParser(
+        prog="lvibe workspace-governance",
+        description="Show §5 workspace consent, storage cap, and .lvibe/ usage (read-only).",
+    )
+    p.add_argument(
+        "--workspace",
+        "-C",
+        default=".",
+        help="workspace root (default: current directory)",
+    )
+    p.add_argument(
+        "--json",
+        action="store_true",
+        help="print consent, caps, usage, and storage-state as JSON",
+    )
+    args = p.parse_args(argv)
+    try:
+        ws = Path(args.workspace).expanduser().resolve()
+    except OSError as e:
+        print(f"lvibe workspace-governance: bad --workspace: {e}", file=sys.stderr)
+        return 2
+
+    env_cap = cap_mb_from_environ()
+    effective_cap = env_cap if env_cap is not None else get_cap_mb(ws)
+    consent = get_consent(ws)
+    usage = lvibe_tree_usage_bytes(ws)
+    cap_bytes = effective_cap * 1024 * 1024
+    within_cap = usage <= cap_bytes
+    state_path = ws / ".lvibe" / "storage-state.json"
+    storage_state: dict[str, object] | None = None
+    if state_path.is_file():
+        try:
+            raw = json_mod.loads(state_path.read_text(encoding="utf-8"))
+            if isinstance(raw, dict):
+                storage_state = raw
+        except (OSError, json_mod.JSONDecodeError):
+            storage_state = None
+
+    payload = {
+        "workspace_root": str(ws),
+        "policy_file": str(policy_path()),
+        "consent": consent,
+        "cap_mb_effective": effective_cap,
+        "cap_mb_env_override": env_cap,
+        "usage_bytes": usage,
+        "cap_bytes": cap_bytes,
+        "within_cap": within_cap,
+        "storage_state_path": str(state_path),
+        "storage_state": storage_state,
+    }
+
+    if args.json:
+        print(json_mod.dumps(payload, indent=2, ensure_ascii=False), file=sys.stdout)
+        return 0
+
+    print("Authority: PRODUCT_SPEC §5, docs/PM_STAGE_MAP.md STEP 15")
+    print(f"Workspace: {ws}")
+    print(f"Policy file: {payload['policy_file']}")
+    c = consent
+    print(f"Consent: {c if c is not None else 'undecided'}")
+    if env_cap is not None:
+        print(f"Cap (effective): {effective_cap} MB (LE_VIBE_LVIBE_CAP_MB={env_cap})")
+    else:
+        print(f"Cap (effective): {effective_cap} MB")
+    print(f"Usage: {usage} bytes ({usage / (1024 * 1024):.2f} MB) / {effective_cap} MB budget")
+    print(f"Within cap: {'yes' if within_cap else 'no'}")
+    print(f"storage-state.json: {state_path} ({'present' if state_path.is_file() else 'absent'})")
+    return 0
+
+
 def _cmd_apply_opening_skip(argv: list[str]) -> int:
     """STEP 2: advance ``opening_intent`` when the user skips — ``SESSION_ORCHESTRATION_SPEC`` §4."""
     from le_vibe.session_orchestrator import apply_opening_skip
@@ -992,6 +1069,8 @@ def main() -> int:
         return _cmd_flatpak_appimage(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "ide-prereqs":
         return _cmd_ide_prereqs(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "workspace-governance":
+        return _cmd_workspace_governance(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "apply-opening-skip":
         return _cmd_apply_opening_skip(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "continue-rules":

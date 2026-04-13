@@ -141,6 +141,7 @@ def test_le_vibe_readme_lists_step15_lvibe_governance():
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
     assert "`.lvibe/` governance (STEP 15)" in text
     assert "workspace_consent" in text
+    assert "workspace-governance" in text
     assert "50 MB" in text
     assert "STEP **15**" in text
 

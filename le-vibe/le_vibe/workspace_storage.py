@@ -51,6 +51,14 @@ def _format_mb(nbytes: int) -> str:
     return f"{mb:.2f} MB"
 
 
+def lvibe_tree_usage_bytes(workspace_root: Path) -> int:
+    """Return total bytes under ``.lvibe/`` (0 if absent). Read-only (STEP 15 / §5.4)."""
+    lvibe = workspace_root / _LVIBE
+    if not lvibe.is_dir():
+        return 0
+    return _dir_size_bytes(lvibe)
+
+
 def compact_lvibe_tree(workspace_root: Path, cap_mb: int) -> list[str]:
     """
     Deterministic compaction when usage exceeds cap (PRODUCT_SPEC §5.5).
