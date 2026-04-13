@@ -115,6 +115,8 @@ def test_build_le_vibe_ide_deb_script_documents_14b_and_bash_syntax():
     assert "lintian" in text
     assert "LEVIBE_IDE_LINTIAN_STRICT" in text
     assert "ci-qa-hardening.md" in text
+    assert "desktop-file-validate" in text
+    assert "usr/share/applications/le-vibe.desktop" in text
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 

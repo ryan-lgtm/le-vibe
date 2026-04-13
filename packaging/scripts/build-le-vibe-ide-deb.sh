@@ -34,6 +34,9 @@ Environment:
   LEVIBE_STAGE_IDE_ASSERT_BRAND     Fail staging if product.json lacks Lé Vibe (stage-le-vibe-ide-deb.sh).
   LEVIBE_STAGE_IDE_VERBOSE          Print when §7.3 identity check passes (staging script).
   LEVIBE_IDE_LINTIAN_STRICT         When 1, fail the script if lintian fails after build.
+
+Post-build: when desktop-file-validate is on PATH, validates le-vibe.desktop extracted from the
+  produced .deb (staging already validates the staged copy — stage-le-vibe-ide-deb.sh).
 EOF
 }
 
@@ -73,4 +76,24 @@ if command -v lintian >/dev/null 2>&1; then
   fi
 else
   echo "build-le-vibe-ide-deb: lintian not on PATH — skipped (optional QA per packaging/debian-le-vibe-ide/README.md)." >&2
+fi
+
+# Freedesktop QA on the packaged payload (staging already runs desktop-file-validate — §7.3 menu entry).
+if command -v desktop-file-validate >/dev/null 2>&1; then
+  _desk_tmp="$(mktemp)"
+  _ok=0
+  if dpkg-deb --fsys-tarfile "$_latest" | tar -xOf - "usr/share/applications/le-vibe.desktop" > "$_desk_tmp" 2>/dev/null && [[ -s "$_desk_tmp" ]]; then
+    _ok=1
+  elif dpkg-deb --fsys-tarfile "$_latest" | tar -xOf - "./usr/share/applications/le-vibe.desktop" > "$_desk_tmp" 2>/dev/null && [[ -s "$_desk_tmp" ]]; then
+    _ok=1
+  fi
+  if [[ "$_ok" -eq 1 ]]; then
+    echo "build-le-vibe-ide-deb: desktop-file-validate (usr/share/applications/le-vibe.desktop inside ${_latest})" >&2
+    desktop-file-validate "$_desk_tmp"
+  else
+    echo "build-le-vibe-ide-deb: warning: could not extract le-vibe.desktop from ${_latest} for validation" >&2
+  fi
+  rm -f "$_desk_tmp"
+else
+  echo "build-le-vibe-ide-deb: desktop-file-validate not on PATH — skipped post-build .deb desktop check (install desktop-file-utils)" >&2
 fi
