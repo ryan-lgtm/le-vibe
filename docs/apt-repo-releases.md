@@ -33,6 +33,10 @@ The first line (`le-vibe (0.1.1) unstable; urgency=…`) must match the version 
 
 **`ide-v*` tags:** Pushing a tag like **`ide-v0.1.0`** opts into job **`linux_compile`** in **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** (STEP **14.e**) — it does **not** replace bumping **`debian/changelog`** for the stack package. Treat IDE compile tags as an **additive** maintainer/CI track, not the same release lever as **`le-vibe`** versioning — **[`spec-phase2.md`](../spec-phase2.md)** *Honesty vs CI*; triggers — **[`docs/ci-qa-hardening.md`](ci-qa-hardening.md)** *Optional full Linux compile*.
 
+### Stack release tags vs `ide-v*` (publishing)
+
+**Stack `le-vibe` .deb + GitHub Release:** After **`debian/changelog`** / **`CHANGELOG.md`** match the version you are shipping, tag **`main`** with a **stack** version tag aligned with that story (common pattern: **`v`** plus the same **semver** as **`dpkg -l le-vibe`** — e.g. **`v0.1.1`** when the package is **`0.1.1`**). Use that tag with **`gh release create <tag>`** / attach **`le-vibe-deb`** artifacts — *GitHub Releases + checksums* below. **`ide-v*`** tags **only** drive optional **`linux_compile`**; they do **not** replace a **`debian/changelog`** bump or a **stack** release tag for the Python **`.deb`**.
+
 ## CI artifacts (what ships from each green run)
 
 Workflow **`.github/workflows/ci.yml`** uploads a single artifact bundle **`le-vibe-deb`** containing:
