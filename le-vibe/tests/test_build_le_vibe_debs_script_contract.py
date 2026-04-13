@@ -369,6 +369,8 @@ def test_pm_deb_build_iteration_doc_failure_with_ide_fail_fast_probe_step14():
     assert "build-le-vibe-debs.sh --with-ide" in partial
     assert "probe-vscode-linux-build.sh" in partial
     assert "partial" in partial.lower()
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in partial
+    assert "vscodium-linux-build.tar.gz" in partial
     assert "print-step14-vscode-linux-bin-files.sh" in partial
     assert "vscode_linux_bin_files" in partial
 
