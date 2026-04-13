@@ -2,6 +2,7 @@
 # STEP 14 (14.e): verify packaging/linux-vscodium-ci-apt.pkgs installs on ubuntu:22.04 (linux_compile runner)
 # without needing sudo on the host — uses Docker. PRODUCT_SPEC §7.3 CI parity for native npm / pkg-config.
 # Requires: docker on PATH, network for image pull + apt.
+# Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.e CI apt list check in Docker (STEP 14 after STEP 0–1).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"

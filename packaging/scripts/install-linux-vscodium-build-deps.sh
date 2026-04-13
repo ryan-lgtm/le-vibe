@@ -2,6 +2,7 @@
 # STEP 14 (14.e): apt-get install the same set as build-le-vibe-ide.yml *Install Linux build dependencies*.
 # Source of truth: packaging/linux-vscodium-ci-apt.pkgs (PRODUCT_SPEC §7.3 local full compile path).
 # Requires: apt-get (Debian/Ubuntu). Run as root (e.g. Docker) or with sudo on PATH. Run from repository root.
+# Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.e install linux_compile deps (STEP 14 after STEP 0–1).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"

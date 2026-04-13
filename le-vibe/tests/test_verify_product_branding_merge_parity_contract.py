@@ -16,6 +16,9 @@ def test_verify_product_branding_merge_parity_script_bash_syntax() -> None:
     assert script.stat().st_mode & 0o111, "script should be executable"
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
     text = script.read_text(encoding="utf-8")
+    assert "0 → 1 → 14 → 2–13 → 15–17" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "PM_STAGE_MAP.md" in text
     assert "product-branding-merge.json" in text
     assert ".nameShort == \"Lé Vibe\"" in text
     assert ".linuxIconName == \"le-vibe\"" in text

@@ -5,6 +5,7 @@
 # Also checks pkg-config modules needed by native npm addons (e.g. @vscodium/native-keymap → xkbfile).
 # Optional: LEVIBE_CHECK_RUST=1 warns when rustc/cargo are absent (vscode ripgrep / native crates).
 # Authority: editor/BUILD.md *When full compile fails*, build-le-vibe-ide.yml linux_compile job.
+# Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.e host preflight vs CI apt list (STEP 14 after STEP 0–1).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
