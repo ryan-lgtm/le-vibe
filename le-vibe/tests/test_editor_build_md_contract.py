@@ -184,6 +184,8 @@ def test_editor_build_md_contract_debian_section_stack_ide_one_shot_step14():
     assert "Maintainer build output" in text
     assert "verify-step14-closeout.sh" in text
     assert "--require-stack-deb" in text
+    assert "preflight-step14-closeout.sh" in text
+    assert "ide-prereqs --print-closeout-commands" in text
     assert "--apt-sim" in text
     assert "--json" in text
     assert "apt_sim_note" in text
