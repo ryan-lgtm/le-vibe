@@ -16,6 +16,13 @@ def test_docs_readme_step14_autonomous_runbook_row():
     assert "packaging/icons/.../le-vibe.svg" in text
 
 
+def test_docs_readme_apt_repo_releases_row_lists_stack_deb_resolver():
+    text = (_repo_root() / "docs" / "README.md").read_text(encoding="utf-8")
+    assert "| [`apt-repo-releases.md`]" in text
+    assert "resolve-latest-le-vibe-stack-deb.sh" in text
+    assert "PM_DEB_BUILD_ITERATION.md" in text
+
+
 def test_step14_autonomous_runbook_documents_closeout_verifier():
     text = (_repo_root() / "docs" / "STEP14_AUTONOMOUS_ENGINEER_RUNBOOK.md").read_text(encoding="utf-8")
     assert "build-le-vibe-debs.sh --with-ide" in text
@@ -30,6 +37,7 @@ def test_step14_autonomous_runbook_documents_closeout_verifier():
     assert "print-built-codium-path" in text
     assert "print-vsbuild-codium-path" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
+    assert "resolve-latest-le-vibe-stack-deb.sh" in text
     assert "Compile fail-fast (STEP 14" in text
     assert "H1 vs §7.3 .deb bundles" in text
     assert "Compile fail-fast (STEP 14, before IDE `.deb`)" in text

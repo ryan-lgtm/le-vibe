@@ -34,6 +34,7 @@ def test_master_iteration_loop_fence_extractable():
     assert "le-vibe-deb" in fence
     assert "build machine" in fence
     assert "test host" in fence
+    assert "resolve-latest-le-vibe-stack-deb.sh" in fence
 
 
 def test_print_master_iteration_loop_prompt_script_header_mentions_queue():

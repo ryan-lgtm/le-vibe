@@ -34,6 +34,7 @@ def test_master_orchestrator_fence_extractable():
     assert "print-vsbuild-codium-path" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
     assert "Incomplete Linux build" in text
+    assert "resolve-latest-le-vibe-stack-deb.sh" in text
 
 
 def test_print_master_orchestrator_prompt_script_header_mentions_queue():
