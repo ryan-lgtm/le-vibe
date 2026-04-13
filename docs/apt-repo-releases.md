@@ -158,4 +158,6 @@ For product positioning and **`editor/`** / IDE shell notes, see **`README.md`**
 |-----|------|
 | [`ci-qa-hardening.md`](ci-qa-hardening.md) | Smoke script, **lintian**, CI step order (H3); **optional `linux_compile`** (*Optional full Linux compile*, STEP 14.e) — opt-in CI **`vscodium-linux-build.tar.gz`** / unpack **`VSCode-linux-*`** before **`le-vibe-ide`** **`.deb`** (not default PR CI) |
 | [`sbom-signing-audit.md`](sbom-signing-audit.md) | **`pip-audit`**, CycloneDX SBOM next to **`.deb`** (H2) |
+| [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) | Maintainer **`packaging/scripts/build-le-vibe-debs.sh`** — stack + optional **`--with-ide`** (STEP 14 / §7.3); **Publishing** / **`DEB_BUILD_OPTIONS`** — pairs with *Pre-publish* / **Combined drop** / **`dpkg-parsechangelog`** above |
+| [`PM_STAGE_MAP.md`](PM_STAGE_MAP.md) | Roadmap **H1** (STEP 8) vs §7.3 **`.deb`** bundles (STEP 14) — same honesty bar as **[`spec-phase2.md`](../spec-phase2.md)** *CI `le-vibe-deb` vs maintainer `le-vibe-ide`* |
 | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | Canonical workflow; artifact bundle **`le-vibe-deb`** |

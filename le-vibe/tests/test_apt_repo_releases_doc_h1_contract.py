@@ -64,6 +64,20 @@ def test_apt_repo_releases_github_releases_section_links_combined_drop_step8():
     assert "Pre-publish artifact checklist" in gh_section
 
 
+def test_apt_repo_releases_related_docs_lists_pm_deb_and_stage_map():
+    """H1 Related docs table links PM_DEB one-shot + PM_STAGE_MAP H1 vs §7.3."""
+    text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
+    assert "## Related docs" in text
+    _, related = text.split("## Related docs", 1)
+    table = related.split("\n## ", 1)[0]
+    assert "PM_DEB_BUILD_ITERATION.md" in table
+    assert "build-le-vibe-debs.sh" in table
+    assert "PM_STAGE_MAP.md" in table
+    assert "STEP 14" in table
+    assert "§7.3" in table
+    assert "spec-phase2.md" in table
+
+
 def test_apt_repo_releases_doc_opens_with_ci_le_vibe_deb_stack_only_step14():
     """STEP 14: H1 doc states ci.yml artifact excludes le-vibe-ide; points at spec-phase2 honesty."""
     text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
