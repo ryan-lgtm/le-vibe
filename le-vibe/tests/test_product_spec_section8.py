@@ -233,3 +233,5 @@ def test_product_spec_section8_evidence_intro_lists_linux_compile_cargo_cache():
     assert "test_spec_phase2_section14_snapshot_contract.py" in text
     assert "NODE_OPTIONS" in text
     assert "When full compile fails" in text
+    assert "test_ci_qa_hardening_doc_h3_contract.py" in text
+    assert "Optional full Linux compile" in text
