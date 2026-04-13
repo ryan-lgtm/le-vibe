@@ -117,6 +117,8 @@ Use this **before** **`sha256sum -c SHA256SUMS`**, **`lvibe verify-checksums`**,
 
 ### IDE package (`le-vibe-ide`, STEP 14 / §7.3)
 
+**Engineering queue:** The Master orchestrator runs **0 → 1 → 14 → 2–13 → 15–17** — **STEP 14** (**§7.3** IDE **`.deb`**) is **next after baseline regression**, not a late add-on. See **[`PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md)** (*ORDERED WORK QUEUE*, *Rolling iteration — prefer continuation*) and **[`PM_STAGE_MAP.md`](PM_STAGE_MAP.md)** *Execution order* / **STEP 16**. This H1 document covers **publishing** the IDE **`.deb`** once it exists.
+
 Default **`ci.yml`** artifacts ship the **stack** **`le-vibe`** **`.deb`** only. The **Lé Vibe IDE** is a **sibling** Debian source under **`packaging/debian-le-vibe-ide/`**: after **`editor/vscodium/VSCode-linux-*`** exists, run **`packaging/scripts/build-le-vibe-ide-deb.sh`** (or **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** with the stack — **[`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)**). Full story — **[`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md)**, **[`editor/BUILD.md`](../editor/BUILD.md)**.
 
 **Maintainer build output:** Successful **`build-le-vibe-debs.sh --with-ide`** prints a **Full-product install** line (**`sudo apt install`** with both resolved **`.deb`** paths) — **[`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** (*Success output (`--with-ide`)*). Installing both from one directory (or equivalent) — **[`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md)** (*Install both packages*).
