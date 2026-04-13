@@ -13,6 +13,7 @@ def _repo_root() -> Path:
 def test_verify_step14_closeout_script_bash_syntax() -> None:
     script = _repo_root() / "packaging" / "scripts" / "verify-step14-closeout.sh"
     assert script.is_file(), script
+    assert script.stat().st_mode & 0o111, "script should be executable"
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 
