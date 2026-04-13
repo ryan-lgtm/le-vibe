@@ -27,6 +27,12 @@ dpkg-buildpackage -us -uc -b
 
 The first line (`le-vibe (0.1.1) unstable; urgency=…`) must match the version users see after **`apt install`** / **`dpkg -l le-vibe`**.
 
+### Tagging discipline (stack vs `ide-v*` compile tags)
+
+**Stack `le-vibe` .deb:** Keep **`debian/changelog`**, root **[`CHANGELOG.md`](../CHANGELOG.md)**, and your **Git tag** / **GitHub Release** aligned — that is the primary **H1** version story for the Python stack **`.deb`**.
+
+**`ide-v*` tags:** Pushing a tag like **`ide-v0.1.0`** opts into job **`linux_compile`** in **[`build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** (STEP **14.e**) — it does **not** replace bumping **`debian/changelog`** for the stack package. Treat IDE compile tags as an **additive** maintainer/CI track, not the same release lever as **`le-vibe`** versioning — **[`spec-phase2.md`](../spec-phase2.md)** *Honesty vs CI*; triggers — **[`docs/ci-qa-hardening.md`](ci-qa-hardening.md)** *Optional full Linux compile*.
+
 ## CI artifacts (what ships from each green run)
 
 Workflow **`.github/workflows/ci.yml`** uploads a single artifact bundle **`le-vibe-deb`** containing:

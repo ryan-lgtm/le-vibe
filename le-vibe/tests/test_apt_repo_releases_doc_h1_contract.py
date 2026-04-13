@@ -22,6 +22,9 @@ def test_apt_repo_releases_doc_lists_ci_artifact_and_changelog():
     assert "linux_compile" in text
     assert "vscodium-linux-build.tar.gz" in text
     assert "Optional full Linux compile" in text
+    assert "ide-v" in text
+    assert "Tagging discipline" in text
+    assert "Honesty vs CI" in text
 
 
 def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
