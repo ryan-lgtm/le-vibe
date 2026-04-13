@@ -25,6 +25,8 @@ def test_docs_readme_apt_repo_releases_row_lists_step14_ide_deb_path():
     assert "--json" in text
     assert "apt_sim_note" in text
     assert "manual-step14-install-smoke.sh" in text
+    assert "resolve-latest-le-vibe-stack-deb.sh" in text
+    assert "preflight-step14-closeout.sh" in text
     assert "build machine" in text
     assert "test host" in text
     assert "Success output (`--with-ide`)" in text
