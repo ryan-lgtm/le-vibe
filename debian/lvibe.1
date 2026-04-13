@@ -24,6 +24,10 @@ OSS / VSCodium\-class editors.
 .B lvibe sync-agent-skills
 .RI [ workspace ]
 Copy missing agent skill templates into \fB.lvibe/agents/<agent_id>/skill.md\fR (e.g. after upgrading the \fBle\-vibe\fR stack). \fIworkspace\fR defaults to the current directory; \fB.lvibe/\fR must already exist. Does not start Ollama or the editor.
+.TP
+.B lvibe open-welcome
+.RI [ workspace ]
+Open \fB.lvibe/WELCOME.md\fR (PRODUCT_SPEC §4) in the editor. \fIworkspace\fR defaults to the current directory; \fB.lvibe/\fR must already exist from a prior consent\-gated open. Does not start Ollama or first\-run bootstrap.
 .SH OPTIONS
 See
 .BR le\-vibe (1).

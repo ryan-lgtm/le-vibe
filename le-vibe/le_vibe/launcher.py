@@ -20,6 +20,7 @@ from .paths import LE_VIBE_MANAGED_OLLAMA_PORT, le_vibe_config_dir
 from .user_settings import load_user_settings
 from .welcome import maybe_print_welcome
 from .structured_log import append_structured_log
+from .editor_welcome import WELCOME_MD_NAME, ensure_lvibe_welcome_md
 from .workspace_hub import prepare_workspaces_for_editor_args
 
 _stopped = False
@@ -64,6 +65,46 @@ def _cmd_sync_agent_skills(argv: list[str]) -> int:
     return 0
 
 
+def _cmd_open_welcome(argv: list[str]) -> int:
+    """
+    STEP 4 (E3): open ``.lvibe/WELCOME.md`` in the resolved editor — PRODUCT_SPEC §4 running welcome surface.
+    Does not start Ollama or run first-run bootstrap. Requires an existing ``.lvibe/`` (§5.1 consent path).
+    """
+    p = argparse.ArgumentParser(
+        prog="lvibe open-welcome",
+        description="Open .lvibe/WELCOME.md in the editor (PRODUCT_SPEC §4); no Ollama session.",
+    )
+    p.add_argument(
+        "workspace",
+        nargs="?",
+        default=".",
+        help="workspace root (default: current directory)",
+    )
+    args = p.parse_args(argv)
+    root = Path(args.workspace).resolve()
+    lv = root / ".lvibe"
+    if not lv.is_dir():
+        print(
+            "lvibe open-welcome: missing .lvibe/ — open this workspace with lvibe once and accept "
+            "workspace memory (PRODUCT_SPEC §5.1).",
+            file=sys.stderr,
+        )
+        return 1
+    ensure_lvibe_welcome_md(root)
+    welcome = lv / WELCOME_MD_NAME
+    if not welcome.is_file():
+        print(f"lvibe open-welcome: missing {welcome} after seeding.", file=sys.stderr)
+        return 2
+    editor = _default_editor()
+    append_structured_log("launcher", "open_welcome", editor=editor, path=str(welcome))
+    try:
+        proc = subprocess.run([editor, str(welcome)])
+    except OSError as e:
+        print(f"lvibe open-welcome: failed to start {editor}: {e}", file=sys.stderr)
+        return 127
+    return proc.returncode if proc.returncode is not None else 1
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -88,6 +129,8 @@ def _cleanup() -> None:
 def main() -> int:
     if len(sys.argv) >= 2 and sys.argv[1] == "sync-agent-skills":
         return _cmd_sync_agent_skills(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "open-welcome":
+        return _cmd_open_welcome(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",
