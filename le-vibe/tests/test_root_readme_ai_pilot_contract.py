@@ -54,6 +54,7 @@ def test_root_readme_current_status_works_well_today_full_product_install_step14
     assert "Success output (`--with-ide`)" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "print-closeout-commands" in text
+    assert "probe-vscode-linux-build.sh" in text
     assert "preflight-step14-closeout.sh" in text
     assert "le-vibe/README.md" in text
     assert "--json" in text
