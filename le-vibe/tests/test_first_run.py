@@ -19,6 +19,20 @@ def test_first_run_skips_when_marker_and_model_decision(tmp_path: Path):
     assert "already" in msg.lower()
 
 
+def test_first_run_bootstrap_failure_message_lists_remediation(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    cfg = tmp_path / "le-vibe"
+    cfg.mkdir(parents=True)
+
+    def fake_bootstrap(_args):
+        return (2, None)  # type: ignore
+
+    monkeypatch.setattr("le_vibe.first_run.ensure_bootstrap", fake_bootstrap)
+    code, msg = ensure_product_first_run(config_dir=cfg, yes=True)
+    assert code == 2
+    assert "--force-first-run" in msg
+    assert "LE_VIBE_VERBOSE" in msg
+
+
 def test_first_run_force_removes_marker(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     cfg = tmp_path / "le-vibe"
     cfg.mkdir(parents=True)
