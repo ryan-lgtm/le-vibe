@@ -70,6 +70,8 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     assert "DEB_BUILD_OPTIONS=parallel=$(nproc)" in text
     assert "parallel=$(nproc) for faster stack" in text
     assert "dpkg-parsechangelog" in text
+    assert "dpkg-parsechangelog -S Version -l debian/changelog (stack) / packaging/debian-le-vibe-ide/debian/changelog (IDE)" in text
+    assert "full-product checklist step 2" in text
     assert "Dual changelog discipline" in text
     assert "full-product GitHub Release" in text
     assert "Related docs (H1 index)" in text
@@ -134,6 +136,8 @@ def test_pm_deb_build_iteration_doc_links_h1_stack_release_checklist():
     assert "**Stack vs IDE changelogs:**" in head
     assert "packaging/debian-le-vibe-ide/debian/changelog" in head
     assert "IDE `le-vibe-ide` changelog" in head
+    assert "**`dpkg-parsechangelog` (IDE):**" in head
+    assert "dpkg-parsechangelog -S Version -l packaging/debian-le-vibe-ide/debian/changelog" in head
     assert "CHANGELOG.md" in head
     assert "le-vibe-deb" in head
 

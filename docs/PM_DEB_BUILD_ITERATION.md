@@ -9,6 +9,8 @@
 
 **Stack vs IDE changelogs:** Root **`debian/changelog`** versions **`le-vibe_*_all.deb`**; **[`packaging/debian-le-vibe-ide/debian/changelog`](../packaging/debian-le-vibe-ide/debian/changelog)** versions **`le-vibe-ide_*_amd64.deb`** — **[`apt-repo-releases.md`](apt-repo-releases.md)** *IDE `le-vibe-ide` changelog* (same **H1** *Tagging discipline* story as stack **`v…`** vs **`ide-v*`**).
 
+**`dpkg-parsechangelog` (IDE):** From the repository root, **`dpkg-parsechangelog -S Version -l packaging/debian-le-vibe-ide/debian/changelog`** prints the top **`le-vibe-ide`** package version — same **`dpkg-dev`** tool as **`dpkg-parsechangelog -S Version -l debian/changelog`** for the stack (*Publishing* below). Use it when verifying a full-product drop before **`--with-ide`** — **[`apt-repo-releases.md`](apt-repo-releases.md)** *Checklist — full-product GitHub Release* step **2**.
+
 **Fresh clone (14.b / STEP 14):** **`le-vibe-ide`** repacks a compiled **`VSCode-linux-*`** tree from **`editor/vscodium/`** — if that directory is empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the repository root before **`editor/BUILD.md`** fetch/build steps — same as **`editor/README.md`** *Fresh clone (14.b)*.
 
 ## Invocations (repository root)
