@@ -24,6 +24,8 @@ def test_master_orchestrator_fence_extractable():
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product maintainer `.deb`" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
+    assert "preflight-step14-closeout.sh" in text
+    assert "ide-prereqs --print-closeout-commands" in text
     assert "--apt-sim" in text
     assert "--json" in text
     assert "apt_sim_note" in text

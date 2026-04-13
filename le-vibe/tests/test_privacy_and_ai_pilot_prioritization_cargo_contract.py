@@ -16,6 +16,8 @@ def test_privacy_and_telemetry_table_lists_maintainer_full_product_deb_step14():
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product install" in text
+    assert "preflight-step14-closeout.sh" in text
+    assert "ide-prereqs --print-closeout-commands" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "--apt-sim" in text
     assert "--json" in text
@@ -58,6 +60,8 @@ def test_ai_pilot_doc_lists_maintainer_full_product_deb_step14():
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product install" in text
+    assert "preflight-step14-closeout.sh" in text
+    assert "ide-prereqs --print-closeout-commands" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "--apt-sim" in text
     assert "--json" in text

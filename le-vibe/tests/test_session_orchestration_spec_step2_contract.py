@@ -30,6 +30,8 @@ def test_session_orchestration_spec_lists_maintainer_full_product_deb_step14():
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product install" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
+    assert "preflight-step14-closeout.sh" in text
+    assert "ide-prereqs --print-closeout-commands" in text
     assert "--apt-sim" in text
     assert "--json" in text
     assert "apt_sim_note" in text
