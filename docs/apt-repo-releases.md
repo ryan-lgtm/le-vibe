@@ -53,6 +53,8 @@ CI runs **`sha256sum -c SHA256SUMS`** after generating the manifest so a corrupt
 
 Use this when deciding what to attach to **GitHub Releases** or copy into an **apt** pool — same files as **[`ci.yml`](../.github/workflows/ci.yml)** vs a **full-product** drop built off-CI.
 
+**Integrity:** Regenerate **`SHA256SUMS`** whenever you add, replace, or combine **`*.deb`** / SBOM files from more than one directory or build step — the manifest must list **every** file you attach (same command family as *Manual checksums* below).
+
 | Scenario | What to publish | Verify before users install |
 |----------|-----------------|----------------------------|
 | **Stack only** (default PR CI) | Download artifact **`le-vibe-deb`**: **`le-vibe_*_all.deb`**, **`SHA256SUMS`**, **`le-vibe-python.cdx.json`** | In the extracted folder: **`sha256sum -c SHA256SUMS`** |
