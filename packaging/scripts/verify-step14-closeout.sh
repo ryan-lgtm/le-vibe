@@ -149,7 +149,7 @@ Checks local STEP 14 / §7.3 readiness:
      - package metadata is `Package: le-vibe-ide`, `Architecture: amd64`.
 
 Options:
-  --require-stack-deb   Also require ../le-vibe_*.deb and verify:
+  --require-stack-deb   Also require le-vibe_*.deb (search repo parent then repo root) and verify:
                         - `/usr/bin/lvibe` exists and is executable (or symlink),
                         - README.Debian(.gz) doc payload exists,
                         - metadata is `Package: le-vibe`, `Architecture: all`.
@@ -225,13 +225,15 @@ assert_deb_field_equals "$ide_deb_latest" "Package" "le-vibe-ide"
 assert_deb_field_equals "$ide_deb_latest" "Architecture" "amd64"
 
 if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
-  log_note "==> Stack package: ../le-vibe_*.deb (required)"
-  stack_debs=("$ROOT"/../le-vibe_*.deb)
+  log_note "==> Stack package: le-vibe_*.deb (required; ../ then repo root)"
+  shopt -s nullglob
+  stack_debs=("$ROOT"/../le-vibe_*.deb "$ROOT"/le-vibe_*.deb)
+  shopt -u nullglob
   if [[ ${#stack_debs[@]} -eq 0 ]]; then
-    echo "verify-step14-closeout: missing ../le-vibe_*.deb — run dpkg-buildpackage -us -uc -b (or build-le-vibe-debs.sh)." >&2
+    echo "verify-step14-closeout: missing le-vibe_*.deb — dpkg-buildpackage emits ../le-vibe_*.deb beside the clone; or copy into repo root; run dpkg-buildpackage -us -uc -b (or build-le-vibe-debs.sh)." >&2
     exit 1
   fi
-  stack_deb_latest="$(pick_latest_match "../le-vibe_*.deb" "${stack_debs[@]}")"
+  stack_deb_latest="$(pick_latest_match "le-vibe_*.deb" "${stack_debs[@]}")"
   log_note "    stack deb: $stack_deb_latest"
   log_note "    stack deb payload check: /usr/bin/lvibe + /usr/share/doc/le-vibe/README.Debian(.gz)"
   assert_deb_contains "$stack_deb_latest" "./usr/bin/lvibe"

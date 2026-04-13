@@ -43,6 +43,9 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "sort -V" in text
     assert 'ide deb: $ide_deb_latest' in text
     assert 'stack deb: $stack_deb_latest' in text
+    assert "search repo parent then repo root" in text
+    assert "../ then repo root" in text
+    assert 'stack_debs=("$ROOT"/../le-vibe_*.deb "$ROOT"/le-vibe_*.deb)' in text
     assert "assert_deb_contains" in text
     assert "assert_deb_contains_any" in text
     assert "assert_deb_field_equals" in text

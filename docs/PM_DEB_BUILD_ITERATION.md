@@ -41,6 +41,8 @@ Stack **`le-vibe_*.deb`** is emitted **beside** the repo directory (parent of th
 | Stack **`le-vibe_*_all.deb`** | **Parent of the clone** — `../le-vibe_*_all.deb` (standard **`dpkg-buildpackage`** output from the repo root) |
 | IDE **`le-vibe-ide_*_amd64.deb`** | **`packaging/le-vibe-ide_*.deb`** (sibling Debian source under **`packaging/debian-le-vibe-ide/`**) |
 
+**`verify-step14-closeout.sh --require-stack-deb`** searches for **`le-vibe_*.deb`** in the **parent of the clone** first, then under the **repo root** (for example if you copied the stack package into the tree). **`build-le-vibe-debs.sh`** resolves the stack **`.deb`** the same way when printing **Full-product install**.
+
 **Full-product install** echoes **absolute** paths when both exist — *Success output (`--with-ide`)* below.
 
 **Script help:** `packaging/scripts/build-le-vibe-debs.sh --help` (alias **`-h`**) prints flags, environments, artifact paths, exit codes, and H1 publishing pointers — same text as in [`packaging/scripts/build-le-vibe-debs.sh`](../packaging/scripts/build-le-vibe-debs.sh).

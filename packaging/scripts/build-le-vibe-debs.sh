@@ -106,15 +106,20 @@ require_stack_build_deps() {
 }
 
 find_stack_deb() {
-  # dpkg-buildpackage from repo root writes *.deb to the parent directory.
+  # dpkg-buildpackage from repo root writes *.deb to the parent directory; some workflows copy le-vibe_*.deb into the repo root.
   local p
-  p="$(find "$(cd "$ROOT/.." && pwd)" -maxdepth 1 -name 'le-vibe_*.deb' -type f 2>/dev/null | sort -r | head -1)"
+  p="$(find "$(cd "$ROOT/.." && pwd)" -maxdepth 1 -name 'le-vibe_*.deb' -type f 2>/dev/null | sort -V | tail -1)"
   if [[ -n "$p" ]]; then
     echo "$p"
     return 0
   fi
   # Some workflows run from a subdir; search repo root parent only.
-  p="$(find "$ROOT/.." -maxdepth 1 -name 'le-vibe_*.deb' -type f 2>/dev/null | sort -r | head -1)"
+  p="$(find "$ROOT/.." -maxdepth 1 -name 'le-vibe_*.deb' -type f 2>/dev/null | sort -V | tail -1)"
+  if [[ -n "$p" ]]; then
+    echo "$p"
+    return 0
+  fi
+  p="$(find "$ROOT" -maxdepth 1 -name 'le-vibe_*.deb' -type f 2>/dev/null | sort -V | tail -1)"
   if [[ -n "$p" ]]; then
     echo "$p"
     return 0
