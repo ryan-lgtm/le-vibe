@@ -180,6 +180,8 @@ def test_pm_deb_build_iteration_doc_success_output_orders_build_vs_test_host_ste
         "**`--json` close-out payload:**", 1
     )[0]
     assert "manual-step14-install-smoke.sh" in sec
+    assert "--verify-only" in sec
+    assert "desktop-file-validate" in sec
     assert "build machine" in sec
     assert "test host" in sec
     assert "apt-repo-releases.md" in sec
