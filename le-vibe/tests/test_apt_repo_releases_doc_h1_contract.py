@@ -186,6 +186,10 @@ def test_apt_repo_releases_related_docs_lists_pm_deb_and_stage_map():
     assert "Last verified" in table
     assert "PM_DEB_BUILD_ITERATION.md" in table
     assert "build-le-vibe-debs.sh" in table
+    assert "Compile fail-fast" in table
+    assert "ci-vscodium-bash-syntax.sh" in table
+    assert "ci-editor-nvmrc-sync.sh" in table
+    assert "ci-vscodium-linux-dev-build.sh" in table
     assert "PM_STAGE_MAP.md" in table
     assert "STEP 14" in table
     assert "§7.3" in table
