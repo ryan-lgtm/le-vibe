@@ -4,6 +4,8 @@ Hardware-aware one-shot **launcher** for local vibe coding with [Ollama](https:/
 
 For **Lé Vibe Phase 2** (managed Ollama on a dedicated port, configs under `~/.config/le-vibe/`), see the [repository README](../README.md).
 
+**First-run (launcher):** Before the main **`lvibe …`** session, **`ensure_product_first_run`** may run once (Ollama / model bootstrap under **`~/.config/le-vibe/`**). Use **`lvibe --skip-first-run`** to open the editor without that step; **`lvibe --force-first-run`** re-runs bootstrap even when **`~/.config/le-vibe/.first-run-complete`** exists; set **`LE_VIBE_VERBOSE=1`** for more detail when bootstrap fails. Implementation — **`le_vibe.first_run`**; tests — **`tests/test_first_run.py`**.
+
 **Authority:** Must-ship behavior — [`../docs/PRODUCT_SPEC.md`](../docs/PRODUCT_SPEC.md). Phase 1/2 specs — [`../spec.md`](../spec.md), [`../spec-phase2.md`](../spec-phase2.md). **Optional RAG / embeddings** (not canonical): [`../docs/rag/le-vibe-phase2-chunks.md`](../docs/rag/le-vibe-phase2-chunks.md) (`lv-meta-overview`) — see **`spec-phase2.md`** *RAG / embeddings*. PM session & orchestration — [`../docs/SESSION_ORCHESTRATION_SPEC.md`](../docs/SESSION_ORCHESTRATION_SPEC.md), [`../docs/PM_STAGE_MAP.md`](../docs/PM_STAGE_MAP.md). Maintainer doc index (Roadmap **H1–H8**) — [`../docs/README.md`](../docs/README.md) (**`PRODUCT_SPEC` §9** *Maintainer index*).
 
 **Alternate bundles / H7 (STEP 13):** Flatpak + AppImage templates — [`../docs/flatpak-appimage.md`](../docs/flatpak-appimage.md) (`packaging/flatpak/`, `packaging/appimage/`). **`lvibe flatpak-appimage`** lists those paths from a monorepo checkout (**`--path-only doc`** / **`flatpak`** / …; **`--json`** for **`monorepo_root`**, per-file **`exists`**, **`all_present`**).

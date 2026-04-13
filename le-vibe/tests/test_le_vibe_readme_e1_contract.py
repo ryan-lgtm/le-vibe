@@ -10,6 +10,17 @@ def _le_vibe_dir() -> Path:
     return Path(__file__).resolve().parents[1]
 
 
+def test_le_vibe_readme_documents_first_run_launcher_flags():
+    """Launcher first-run skip/force + verbose — onboarding (E1)."""
+    text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
+    assert "First-run (launcher)" in text
+    assert "ensure_product_first_run" in text
+    assert "--skip-first-run" in text
+    assert "--force-first-run" in text
+    assert "LE_VIBE_VERBOSE" in text
+    assert "test_first_run.py" in text
+
+
 def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
     """STEP 14 / §7.3: package README names IDE .deb build + one-shot stack+IDE script."""
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
