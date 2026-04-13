@@ -165,6 +165,7 @@ For product positioning and **`editor/`** / IDE shell notes, see **`README.md`**
 
 | Doc | Role |
 |-----|------|
+| [`PRODUCT_SPEC_SECTION8_EVIDENCE.md`](PRODUCT_SPEC_SECTION8_EVIDENCE.md) | **E1** regression audit + *Last verified* — refresh when **H1** release / packaging copy shifts (same **`pytest`** bar as *E1 / acceptance* above) |
 | [`ci-qa-hardening.md`](ci-qa-hardening.md) | Smoke script, **lintian**, CI step order (H3); **optional `linux_compile`** (*Optional full Linux compile*, STEP 14.e) — opt-in CI **`vscodium-linux-build.tar.gz`** / unpack **`VSCode-linux-*`** before **`le-vibe-ide`** **`.deb`** (not default PR CI) |
 | [`sbom-signing-audit.md`](sbom-signing-audit.md) | **`pip-audit`**, CycloneDX SBOM next to **`.deb`** (H2) |
 | [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md) | Maintainer **`packaging/scripts/build-le-vibe-debs.sh`** — stack + optional **`--with-ide`** (STEP 14 / §7.3); **Publishing** / **`DEB_BUILD_OPTIONS`** — pairs with *Pre-publish* / **Combined drop** / **`dpkg-parsechangelog`** above |
