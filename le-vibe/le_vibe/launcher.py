@@ -815,7 +815,10 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
     all_keys = sorted(IDE_PREREQ_PATH_ONLY.keys()) + ["vscode"]
     p = argparse.ArgumentParser(
         prog="lvibe ide-prereqs",
-        description="List §7.3 IDE packaging paths and whether a VSCode-linux build exists.",
+        description=(
+            "List §7.3 IDE packaging paths and editor/vscodium VSCode-linux-* status "
+            "(ready / partial / absent — see debian/lvibe.1 COMMANDS)."
+        ),
     )
     mode = p.add_mutually_exclusive_group()
     mode.add_argument(
@@ -832,14 +835,17 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
     mode.add_argument(
         "--json",
         action="store_true",
-        help="print monorepo root, VSCode-linux status, and each §7.3 path with exists flags",
+        help=(
+            "print monorepo root, vscode_linux_ready / vscode_linux_partial, VSCode-linux path, "
+            "and each §7.3 path with exists flags"
+        ),
     )
     mode.add_argument(
         "--print-closeout-commands",
         action="store_true",
         help=(
-            "print packaging/scripts/preflight-step14-closeout.sh and verify-step14-closeout.sh "
-            "invocations (STEP 14 maintainer close-out; run from repository root)"
+            "print preflight + verify close-out script lines and status-specific maintainer commands "
+            "(STEP 14; run from repository root; see debian/lvibe.1 COMMANDS)"
         ),
     )
     args = p.parse_args(argv)
