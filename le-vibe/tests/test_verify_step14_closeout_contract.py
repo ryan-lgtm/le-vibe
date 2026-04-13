@@ -27,3 +27,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "--require-stack-deb" in text
     assert "--skip-gate" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
+    assert "pick_latest_match" in text
+    assert "sort -V" in text
+    assert 'ide deb: $ide_deb_latest' in text
+    assert 'stack deb: $stack_deb_latest' in text
