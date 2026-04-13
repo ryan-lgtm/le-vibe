@@ -232,6 +232,32 @@ def _cmd_verify_checksums(argv: list[str]) -> int:
     return run_sha256sum_check(root)
 
 
+def _cmd_pip_audit(argv: list[str]) -> int:
+    """STEP 9 (H2): ``pip-audit -r le-vibe/requirements.txt`` — ``docs/sbom-signing-audit.md``."""
+    from le_vibe.supply_chain_check import (
+        EXIT_NO_PIP_AUDIT,
+        EXIT_NO_REQUIREMENTS_TXT,
+        run_pip_audit,
+    )
+
+    rc = run_pip_audit(argv)
+    if rc == EXIT_NO_REQUIREMENTS_TXT:
+        print(
+            "lvibe pip-audit: le-vibe/requirements.txt not found — supply-chain audit runs from a "
+            "git clone (the stack .deb omits this file). See docs/sbom-signing-audit.md (STEP 9 / H2).",
+            file=sys.stderr,
+        )
+        return 1
+    if rc == EXIT_NO_PIP_AUDIT:
+        print(
+            "lvibe pip-audit: pip-audit not on PATH — pip install pip-audit "
+            "(docs/sbom-signing-audit.md).",
+            file=sys.stderr,
+        )
+        return 127
+    return rc
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -266,6 +292,8 @@ def main() -> int:
         return _cmd_continue_pin(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "verify-checksums":
         return _cmd_verify_checksums(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "pip-audit":
+        return _cmd_pip_audit(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",
