@@ -215,6 +215,10 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
     assert "Release bundles (H1 / STEP 8 vs STEP 14 / §7.3)" in text
     assert "test_product_spec_prioritization_names_ci_le_vibe_deb_vs_ide_deb_step14" in text
+    assert "partial VSCode-linux tree" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "debian/lvibe.1" in text
+    assert "editor/print-ci-tarball-codium-path.sh" in text
     assert "PM_STAGE_MAP.md" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product install" in text
