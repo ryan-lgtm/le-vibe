@@ -32,6 +32,7 @@ def test_master_orchestrator_fence_extractable():
     assert "build machine" in text
     assert "test host" in text
     assert "Partial VSCode-linux tree" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
     assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "vscode_linux_bin_files" in text
     assert "print-built-codium-path" in text
