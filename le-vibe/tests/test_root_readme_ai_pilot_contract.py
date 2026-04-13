@@ -58,6 +58,8 @@ def test_root_readme_current_status_works_well_today_full_product_install_step14
     assert "le-vibe/README.md" in text
     assert "--json" in text
     assert "apt_sim_note" in text
+    assert "vscode_linux_build" in text
+    assert "ide-prereqs --json" in text
     assert "build machine" in text
     assert "test host" in text
     assert "Compile fail-fast" in text
