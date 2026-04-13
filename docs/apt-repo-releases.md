@@ -39,6 +39,17 @@ Workflow **`.github/workflows/ci.yml`** uploads a single artifact bundle **`le-v
 
 CI runs **`sha256sum -c SHA256SUMS`** after generating the manifest so a corrupted or mismatched tree fails the job.
 
+### Pre-publish artifact checklist (CI vs maintainer)
+
+Use this when deciding what to attach to **GitHub Releases** or copy into an **apt** pool — same files as **[`ci.yml`](../.github/workflows/ci.yml)** vs a **full-product** drop built off-CI.
+
+| Scenario | What to publish | Verify before users install |
+|----------|-----------------|----------------------------|
+| **Stack only** (default PR CI) | Download artifact **`le-vibe-deb`**: **`le-vibe_*_all.deb`**, **`SHA256SUMS`**, **`le-vibe-python.cdx.json`** | In the extracted folder: **`sha256sum -c SHA256SUMS`** |
+| **Stack + IDE** (maintainer **§7.3**) | **`le-vibe_*_all.deb`** and **`le-vibe-ide_*_amd64.deb`**, one **`SHA256SUMS`** covering **every** `*.deb` and the SBOM line you ship | **`sha256sum -c SHA256SUMS`**; build both with **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** — **Full-product install** on success — **[`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)** (*Success output (`--with-ide`)*); install order — *Install both packages* in **[`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md)** |
+
+**Versioning:** bump **`debian/changelog`** and fold **`CHANGELOG.md`** **`[Unreleased]`** into a dated section before tagging — see *Versioned changelog* above. **Hosted apt** server layout stays out of this repo (secrets, DNS, TLS) — use *Private or team apt repo* for tooling only.
+
 ### IDE package (`le-vibe-ide`, STEP 14 / §7.3)
 
 Default **`ci.yml`** artifacts ship the **stack** **`le-vibe`** **`.deb`** only. The **Lé Vibe IDE** is a **sibling** Debian source under **`packaging/debian-le-vibe-ide/`**: after **`editor/vscodium/VSCode-linux-*`** exists, run **`packaging/scripts/build-le-vibe-ide-deb.sh`** (or **`packaging/scripts/build-le-vibe-debs.sh --with-ide`** with the stack — **[`docs/PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md)**). Full story — **[`packaging/debian-le-vibe-ide/README.md`](../packaging/debian-le-vibe-ide/README.md)**, **[`editor/BUILD.md`](../editor/BUILD.md)**.
