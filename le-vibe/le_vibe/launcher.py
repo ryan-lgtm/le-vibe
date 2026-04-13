@@ -886,6 +886,12 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
                 "# VSCode-linux tree exists but bin/codium is missing (partial build) — "
                 "editor/BUILD.md *Partial tree* / 14.c; then preflight + verify below."
             )
+            print(
+                "# packaging/scripts/build-le-vibe-debs.sh --with-ide exits before stack "
+                "dpkg-buildpackage until probe-vscode-linux-build.sh is ready (or use "
+                "--vs-build PATH/bin/codium) — docs/PM_DEB_BUILD_ITERATION.md (*Failure "
+                "(`--with-ide`)*)"
+            )
             print("# quick recovery (14.a → 14.b → 14.c):")
             print("./editor/use-node-toolchain.sh")
             print("./editor/fetch-vscode-sources.sh")
@@ -894,6 +900,11 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             print(
                 "# No VSCode-linux-* output under editor/vscodium/ yet — "
                 "editor/BUILD.md 14.b (submodule) → 14.a → 14.c; then preflight + verify below."
+            )
+            print(
+                "# packaging/scripts/build-le-vibe-debs.sh --with-ide exits before stack "
+                "dpkg-buildpackage until probe-vscode-linux-build.sh is ready — "
+                "docs/PM_DEB_BUILD_ITERATION.md (*Failure (`--with-ide`)*)"
             )
             print("# golden-path bootstrap:")
             print("git submodule update --init editor/vscodium")

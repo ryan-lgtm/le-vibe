@@ -113,6 +113,8 @@ def test_ide_prereqs_print_closeout_partial_hint(monkeypatch: pytest.MonkeyPatch
     assert "./editor/fetch-vscode-sources.sh" in out
     assert "(cd editor/vscodium && ./dev/build.sh)" in out
     assert "probe-vscode-linux-build.sh" in out
+    assert "exits before stack" in out
+    assert "dpkg-buildpackage" in out
 
 
 def test_ide_prereqs_print_closeout_absent_hint(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
@@ -129,6 +131,7 @@ def test_ide_prereqs_print_closeout_absent_hint(monkeypatch: pytest.MonkeyPatch,
     assert "./editor/fetch-vscode-sources.sh" in out
     assert "(cd editor/vscodium && ./dev/build.sh)" in out
     assert "probe-vscode-linux-build.sh" in out
+    assert "exits before stack" in out
 
 
 def test_ide_prereqs_print_closeout_ready_includes_full_product_deb(
