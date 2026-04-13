@@ -150,7 +150,10 @@ def test_apt_repo_releases_doc_lists_le_vibe_ide_release_path_step14():
     assert "test host" in text
     assert "Incomplete Linux build" in text
     assert "Partial tree" in text
+    assert "Partial VSCode-linux tree" in text
     assert "print-built-codium-path.sh" in text
+    assert "print-vsbuild-codium-path.sh" in text
+    assert "build-le-vibe-ide-deb.sh --help" in text
 
 
 def test_apt_repo_releases_github_releases_section_links_combined_drop_step8():

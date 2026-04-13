@@ -52,7 +52,8 @@ Prerequisites (IDE):  a successful dev/build.sh under editor/vscodium (see edito
   Without editor/vscodium/VSCode-linux-*, --with-ide fails after the stack .deb — fetch vscode
   (./editor/fetch-vscode-sources.sh), then ./packaging/scripts/ci-vscodium-linux-dev-build.sh, or see editor/BUILD.md.
   If VSCode-linux-* exists but bin/codium is missing (partial build), finish dev/build.sh — editor/BUILD.md (Partial tree, 14.c);
-  ./editor/print-built-codium-path.sh prints diagnostics; stage-le-vibe-ide-deb.sh fails with the same hint.
+  docs/PM_DEB_BUILD_ITERATION.md (*Partial VSCode-linux tree*); ./editor/print-built-codium-path.sh; ./editor/print-vsbuild-codium-path.sh;
+  stage-le-vibe-ide-deb.sh fails with the same hint. packaging/scripts/build-le-vibe-ide-deb.sh --help lists full triage + verify-step14-closeout.sh --require-stack-deb.
   Fresh clone (14.b): git submodule update --init editor/vscodium from repo root if editor/vscodium/ is empty — editor/README.md.
 
 Artifacts:

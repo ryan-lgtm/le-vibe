@@ -48,6 +48,9 @@ def test_build_le_vibe_debs_script_mentions_submodule_14b():
     assert "ci-editor-gate.sh" in text
     assert "stage-le-vibe-ide-deb.sh" in text
     assert "print-built-codium-path.sh" in text
+    assert "print-vsbuild-codium-path.sh" in text
+    assert "Partial VSCode-linux tree" in text
+    assert "build-le-vibe-ide-deb.sh --help" in text
     assert "Partial tree" in text
 
 
