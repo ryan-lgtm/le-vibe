@@ -24,7 +24,7 @@ WELCOME_BANNER = """
   opens `.lvibe/WELCOME.md` in your editor (PRODUCT_SPEC section 4 / STEP 4).
 
   First-run / logs: `lvibe --skip-first-run` / `--force-first-run`, `LE_VIBE_VERBOSE=1` — `lvibe --help` (STEP 6); `le-vibe/README.md`
-  (*First-run (launcher)*). Structured log: `lvibe logs --path-only`; `lvibe logs --tail 50` for recent lines (adjust N; STEP 6).
+  (*First-run (launcher)*). Structured log: `lvibe logs` (path + `tail -f` hint), `lvibe logs --path-only`, or `lvibe logs --tail 50` (adjust N; STEP 6).
 """.strip()
 
 
