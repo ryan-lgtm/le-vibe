@@ -133,6 +133,8 @@ def test_pm_deb_build_iteration_doc_master_orchestrator_queue_step14():
     assert "PROMPT_BUILD_LE_VIBE.md" in head
     assert "Rolling iteration — prefer continuation" in head
     assert "build-le-vibe-debs.sh --with-ide" in head
+    assert "preflight-step14-closeout.sh" in head
+    assert "ide-prereqs --print-closeout-commands" in head
     assert "verify-step14-closeout.sh --require-stack-deb" in head
     assert "--apt-sim" in head
     assert "--json" in head
@@ -190,6 +192,8 @@ def test_pm_deb_build_iteration_doc_links_h1_stack_release_checklist():
     assert "dpkg-parsechangelog -S Version -l packaging/debian-le-vibe-ide/debian/changelog" in head
     assert "CHANGELOG.md" in head
     assert "le-vibe-deb" in head
+    assert "preflight-step14-closeout.sh" in head
+    assert "ide-prereqs --print-closeout-commands" in head
     assert "verify-step14-closeout.sh --require-stack-deb" in head
     assert "--apt-sim" in head
     assert "--json" in head
