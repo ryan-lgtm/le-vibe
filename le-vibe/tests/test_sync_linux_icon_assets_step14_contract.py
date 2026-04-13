@@ -34,6 +34,7 @@ def test_sync_linux_icon_assets_documents_14b():
     assert "cp not on PATH" in text
     assert "Usage:" in text
     assert "--help" in text
+    assert "--check" in text
 
 
 def test_build_le_vibe_ide_linux_compile_installs_librsvg_for_icon_sync():

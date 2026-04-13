@@ -7,13 +7,18 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 VSC="${ROOT}/editor/vscodium"
 
-if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
-  cat <<'EOF'
-Usage: editor/le-vibe-overrides/sync-linux-icon-assets.sh
+CHECK=0
+case "${1:-}" in
+  -h | --help)
+    cat <<'EOF'
+Usage: editor/le-vibe-overrides/sync-linux-icon-assets.sh [--check]
 
 Copy packaging/icons/hicolor/scalable/apps/le-vibe.svg into
 editor/vscodium/src/stable/resources/linux/ and generate le-vibe.png
 (rsvg-convert preferred, or ImageMagick convert).
+
+  --check    Read-only: exit 0 if staged le-vibe.svg matches the packaging canonical
+             (docs/brand-assets.md); exit 1 if missing or different — no writes.
 
 Requires editor/vscodium/product.json — git submodule update --init editor/vscodium
 (Fresh clone 14.b: editor/README.md).
@@ -21,8 +26,15 @@ Requires editor/vscodium/product.json — git submodule update --init editor/vsc
 Usually invoked via packaging/scripts/ci-vscodium-linux-dev-build.sh before dev/build.sh.
 See editor/BUILD.md (*Linux icons*).
 EOF
-  exit 0
-fi
+    exit 0
+    ;;
+  --check) CHECK=1 ;;
+  "") ;;
+  *)
+    echo "sync-linux-icon-assets: unknown argument: ${1:-} (try --help)" >&2
+    exit 2
+    ;;
+esac
 
 [[ -f "${VSC}/product.json" ]] || {
   echo "sync-linux-icon-assets: expected editor/vscodium/product.json — run: git submodule update --init editor/vscodium (Fresh clone 14.b: editor/README.md)." >&2
@@ -34,6 +46,25 @@ DEST="${VSC}/src/stable/resources/linux"
   echo "sync-linux-icon-assets: missing ${SRC_SVG} — restore packaging/icons from git (see packaging/icons/hicolor and docs/brand-assets.md)." >&2
   exit 1
 }
+
+if [[ "$CHECK" -eq 1 ]]; then
+  if ! command -v cmp >/dev/null 2>&1; then
+    echo "sync-linux-icon-assets: --check requires cmp (coreutils)." >&2
+    exit 1
+  fi
+  dest_svg="${DEST}/le-vibe.svg"
+  if [[ ! -f "$dest_svg" ]]; then
+    echo "sync-linux-icon-assets: --check: missing ${dest_svg} — run sync without --check first (editor/BUILD.md *Linux icons*)." >&2
+    exit 1
+  fi
+  if ! cmp -s "$SRC_SVG" "$dest_svg"; then
+    echo "sync-linux-icon-assets: --check: ${dest_svg} differs from ${SRC_SVG} — run sync to refresh (docs/brand-assets.md)." >&2
+    exit 1
+  fi
+  echo "sync-linux-icon-assets: --check OK (le-vibe.svg matches packaging canonical)"
+  exit 0
+fi
+
 if ! command -v mkdir >/dev/null 2>&1; then
   echo "sync-linux-icon-assets: mkdir not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md §7.3 icons)." >&2
   exit 1
