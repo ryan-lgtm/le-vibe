@@ -165,6 +165,10 @@ Exit **0** = no errors (warnings may print to **stderr**), **1** = validation er
 
 **Master orchestrator STEP 9** (H2 — **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)**): Python stack **pins** (**[`le-vibe/requirements.txt`](le-vibe/requirements.txt)**), **`pip-audit`** (OSV), and **CycloneDX** **`le-vibe-python.cdx.json`** (in **`le-vibe-deb`** / **`SHA256SUMS`**). CI **Python supply chain (H2)** in **[`.github/workflows/ci.yml`](.github/workflows/ci.yml)**; weekly bumps — **[`.github/dependabot.yml`](.github/dependabot.yml)**. Signing / maintainer story — **[`docs/sbom-signing-audit.md`](docs/sbom-signing-audit.md)** (**§14** honesty: H6/H7 have separate SBOM needs). Tests **`test_sbom_signing_audit_doc_h2_contract.py`**, **`test_requirements_pins.py`**, **`test_pm_stage_map_step9_contract.py`**. Package README: **[`le-vibe/README.md`](le-vibe/README.md)** *Supply chain / SBOM (STEP 9 / H2)*.
 
+### QA CI & smoke — STEP 10 / H3 (Roadmap H3)
+
+**Master orchestrator STEP 10** (H3 — **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)**): **[`packaging/scripts/ci-smoke.sh`](packaging/scripts/ci-smoke.sh)** (**`verify-continue-pin`**, full **`pytest`**, **`ci-editor-gate.sh`** — same fast gate as **[`./editor/smoke.sh`](editor/smoke.sh)**), **`desktop-file-validate`**, **`dpkg-buildpackage`**, **`lintian`** — see **[`docs/ci-qa-hardening.md`](docs/ci-qa-hardening.md)** (**14.e / 14.f** *Optional full Linux compile*, IDE smoke vs **`linux_compile`**). **`lvibe ci-smoke`** / **`lvibe ci-editor-gate`** wrap the same scripts (**`LE_VIBE_REPO_ROOT`**). Tests **`test_ci_qa_hardening_doc_h3_contract.py`**, **`test_pm_stage_map_step10_contract.py`**, **`test_docs_readme_ci_qa_hardening_row_contract.py`**. Workflow **[`.github/workflows/ci.yml`](.github/workflows/ci.yml)** — detail in **[## CI](#ci)** below. Package README: **[`le-vibe/README.md`](le-vibe/README.md)** *QA CI (STEP 10 / H3)*.
+
 ## Install (development tree)
 
 ```bash
