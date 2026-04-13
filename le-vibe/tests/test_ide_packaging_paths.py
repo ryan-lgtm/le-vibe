@@ -18,6 +18,14 @@ def _root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_ide_packaging_paths_module_doc_mentions_freedesktop_closeout_chain() -> None:
+    import le_vibe.ide_packaging_paths as m
+
+    assert m.__doc__ is not None
+    assert "manual-step14-install-smoke" in m.__doc__
+    assert "desktop-file-validate" in m.__doc__
+
+
 def test_fixed_prereq_files_exist_in_repo():
     root = _root()
     rows = iter_ide_prereq_paths(root)

@@ -54,3 +54,6 @@ def test_step14_autonomous_runbook_documents_closeout_verifier():
     assert "Failure (`--with-ide`)" in text
     assert "preflight-step14-closeout.sh" in text
     assert "stderr hint" in text
+    assert "manual-step14-install-smoke.sh" in text
+    assert "--verify-only" in text
+    assert "desktop-file-validate" in text

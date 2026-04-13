@@ -1,4 +1,9 @@
-"""STEP 14 / H6: paths for §7.3 IDE packaging — VSCode-linux tree, branding, staging scripts."""
+"""STEP 14 / H6: paths for §7.3 IDE packaging — VSCode-linux tree, branding, staging scripts.
+
+Freedesktop ``.desktop`` QA (packaged or installed): see ``preflight-step14-closeout.sh``,
+``verify-step14-closeout.sh``, ``build-le-vibe-ide-deb.sh``, and test-host
+``manual-step14-install-smoke.sh --verify-only`` (``desktop-file-validate`` when available).
+"""
 
 from __future__ import annotations
 
