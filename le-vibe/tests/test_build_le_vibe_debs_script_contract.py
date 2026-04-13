@@ -63,6 +63,8 @@ def test_build_le_vibe_debs_usage_documents_full_product_output_step14():
     """STEP 14: --help text documents Full-product stdout vs PM_DEB / apt-repo-releases."""
     root = Path(__file__).resolve().parents[2]
     text = (root / "packaging" / "scripts" / "build-le-vibe-debs.sh").read_text(encoding="utf-8")
+    assert "DEB_BUILD_OPTIONS=parallel=$(nproc)" in text
+    assert "parallel=$(nproc) for faster stack" in text
     assert "Full-product (--with-ide)" in text
     assert "docs/PM_DEB_BUILD_ITERATION.md" in text
     assert "docs/apt-repo-releases.md" in text
@@ -84,6 +86,15 @@ def test_pm_deb_build_iteration_doc_submodule_prereq_14b():
     text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b" in text
+
+
+def test_pm_deb_build_iteration_doc_lists_deb_build_options_parallel_invocation():
+    """PM doc invocations table documents DEB_BUILD_OPTIONS=parallel for stack builds."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    assert "DEB_BUILD_OPTIONS=parallel=" in text
+    assert "$(nproc)" in text
+    assert "Faster stack" in text
 
 
 def test_pm_deb_build_iteration_doc_releases_h1_step14_pointer():

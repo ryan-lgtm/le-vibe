@@ -33,9 +33,10 @@ Common invocations (repository root):
   packaging/scripts/build-le-vibe-debs.sh --install [--yes]
   packaging/scripts/build-le-vibe-debs.sh --with-ide
   LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 packaging/scripts/build-le-vibe-debs.sh --with-ide
+  DEB_BUILD_OPTIONS=parallel=$(nproc) packaging/scripts/build-le-vibe-debs.sh
 
 Environment:
-  DEB_BUILD_OPTIONS           Passed through to dpkg-buildpackage when set.
+  DEB_BUILD_OPTIONS           Passed through to dpkg-buildpackage when set (e.g. parallel=$(nproc) for faster stack builds).
   LEVIBE_IDE_LINTIAN_STRICT   When set to 1, fail the IDE build if lintian fails (see packaging/scripts/build-le-vibe-ide-deb.sh).
   LEVIBE_STAGE_IDE_ASSERT_BRAND  When set to 1, fail IDE staging if VSCode-linux-*/resources/app/product.json lacks Lé Vibe strings (§7.3 — packaging/scripts/stage-le-vibe-ide-deb.sh).
   LEVIBE_STAGE_IDE_VERBOSE   When set to 1, print a line when §7.3 identity check passes (same staging script).
