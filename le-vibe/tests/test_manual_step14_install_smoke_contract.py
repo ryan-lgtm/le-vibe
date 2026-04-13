@@ -56,9 +56,10 @@ def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> 
     assert "print-vsbuild-codium-path" in rag
     assert "build-le-vibe-ide-deb.sh --help" in rag
     assert "Partial VSCode-linux" in rag
-    assert "ci-vscodium-bash-syntax.sh" in rag
-    assert "ci-editor-nvmrc-sync.sh" in rag
-    assert "ci-vscodium-linux-dev-build.sh" in rag
+    assert "H1 vs §7.3 .deb bundles" in rag
+    assert "packaging/scripts/ci-vscodium-bash-syntax.sh" in rag
+    assert "packaging/scripts/ci-editor-nvmrc-sync.sh" in rag
+    assert "packaging/scripts/ci-vscodium-linux-dev-build.sh" in rag
 
 
 def test_pm_deb_build_iteration_points_to_manual_step14_install_smoke_script() -> None:
