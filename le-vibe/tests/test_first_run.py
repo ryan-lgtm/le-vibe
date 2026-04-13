@@ -9,6 +9,17 @@ import pytest
 from le_vibe.first_run import ensure_product_first_run
 
 
+def test_launcher_argparse_first_run_flags_help_mentions_logs_step6():
+    """lvibe --help lists first-run flags with STEP 6 / lvibe logs (E1 onboarding)."""
+    launcher = Path(__file__).resolve().parents[1] / "le_vibe" / "launcher.py"
+    text = launcher.read_text(encoding="utf-8")
+    assert "--skip-first-run" in text
+    assert "--force-first-run" in text
+    assert "lvibe logs" in text
+    assert "STEP 6" in text
+    assert "LE_VIBE_VERBOSE" in text
+
+
 def test_first_run_skips_when_marker_and_model_decision(tmp_path: Path):
     cfg = tmp_path / "le-vibe"
     cfg.mkdir(parents=True)

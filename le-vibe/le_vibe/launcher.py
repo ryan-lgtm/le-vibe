@@ -1321,12 +1321,18 @@ def main() -> int:
     parser.add_argument(
         "--skip-first-run",
         action="store_true",
-        help="do not run Phase 1 product bootstrap (Ollama install/model pull) before the editor",
+        help=(
+            "do not run Phase 1 product bootstrap (Ollama install/model pull) before the editor; "
+            "if bootstrap failed earlier: stderr, LE_VIBE_VERBOSE=1, lvibe logs (STEP 6)"
+        ),
     )
     parser.add_argument(
         "--force-first-run",
         action="store_true",
-        help="re-run first-run bootstrap even if ~/.config/le-vibe/.first-run-complete exists",
+        help=(
+            "re-run first-run bootstrap even if ~/.config/le-vibe/.first-run-complete exists; "
+            "LE_VIBE_VERBOSE=1 and lvibe logs for diagnostics (STEP 6)"
+        ),
     )
     args = parser.parse_args()
     port = args.port if args.port is not None else LE_VIBE_MANAGED_OLLAMA_PORT
