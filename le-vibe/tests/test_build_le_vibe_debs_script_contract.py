@@ -369,6 +369,8 @@ def test_pm_deb_build_iteration_doc_failure_with_ide_fail_fast_probe_step14():
     assert "build-le-vibe-debs.sh --with-ide" in partial
     assert "probe-vscode-linux-build.sh" in partial
     assert "partial" in partial.lower()
+    assert "print-step14-vscode-linux-bin-files.sh" in partial
+    assert "vscode_linux_bin_files" in partial
 
 
 def test_pm_deb_build_iteration_doc_731_staging_identity_step14():
@@ -391,6 +393,7 @@ def test_pm_deb_build_iteration_doc_731_staging_identity_step14():
     assert "resources/app/product.json" in text
     assert "Partial VSCode-linux tree" in text
     assert "print-built-codium-path.sh" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "Incomplete Linux build" in text
     assert "print-vsbuild-codium-path.sh" in text
     assert "build-le-vibe-ide-deb.sh --help" in text

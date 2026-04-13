@@ -44,6 +44,7 @@ def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
     assert "ide-prereqs" in text
     assert "vscode_linux_partial" in text
     assert "vscode_linux_build" in text
+    assert "vscode_linux_bin_files" in text
     assert "debian/lvibe.1" in text
     assert "--print-closeout-commands" in text
     assert "probe-vscode-linux-build.sh" in text
@@ -68,6 +69,7 @@ def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
     assert "linux_compile" in text
     assert "Partial VSCode-linux triage" in text
     assert "print-vsbuild-codium-path" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
     assert "dpkg-buildpackage" in text
     assert "Failure (`--with-ide`)" in text

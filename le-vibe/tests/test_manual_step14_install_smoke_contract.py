@@ -43,6 +43,7 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "docs/apt-repo-releases.md" in text
     assert "Partial VSCode-linux tree" in text
     assert "print-vsbuild-codium-path.sh" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
     assert "beside clone" in text
     assert "repo root" in text

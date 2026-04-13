@@ -77,6 +77,8 @@ def test_editor_build_md_contract_lvibe_smoke_pointer():
     assert "14.c" in text and "14.d" in text
     assert "**Partial tree:**" in text
     assert "codium-tunnel" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
+    assert "vscode_linux_bin_files" in text
 
 
 def test_editor_print_built_codium_script_exists_when_vscodium_present():
