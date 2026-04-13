@@ -27,4 +27,6 @@ def test_agent_mode_orchestration_lists_step14_full_product_closeout_gate():
     assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "print-github-linux-compile-artifact-hint.sh" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
+    assert "print-ci-tarball-codium-path.sh" in text
+    assert "debian/lvibe.1" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
