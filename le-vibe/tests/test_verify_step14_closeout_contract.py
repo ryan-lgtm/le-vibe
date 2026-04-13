@@ -75,6 +75,9 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "test host" in text
     assert "manual-step14-install-smoke.sh" in text
     assert "docs/apt-repo-releases.md" in text
+    assert "Partial VSCode-linux" in text
+    assert "print-vsbuild-codium-path.sh" in text
+    assert "print-built-codium-path.sh" in text
 
 
 def test_verify_step14_closeout_json_mode_outputs_parseable_payload() -> None:

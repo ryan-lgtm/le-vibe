@@ -170,6 +170,10 @@ See also:
   - docs/apt-repo-releases.md (*IDE package*) — ordering: run this verifier on the
     build machine; copy .debs to a test host for sudo apt install + smoke
     (packaging/scripts/manual-step14-install-smoke.sh).
+  - Partial VSCode-linux tree (missing VSCode-linux-*/bin/codium before this script
+    reaches step 2): docs/PM_DEB_BUILD_ITERATION.md (*Partial VSCode-linux tree*),
+    editor/BUILD.md (*Partial tree*, 14.c), editor/print-vsbuild-codium-path.sh,
+    editor/print-built-codium-path.sh.
 EOF
 }
 
