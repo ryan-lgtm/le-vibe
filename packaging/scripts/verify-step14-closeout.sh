@@ -103,12 +103,16 @@ assert_deb_path_is_executable() {
 assert_apt_simulated_install() {
   local stack_deb="$1"
   local ide_deb="$2"
+  local apt_output
   if ! command -v apt-get >/dev/null 2>&1; then
     echo "verify-step14-closeout: apt-get not found on PATH (cannot simulate install)." >&2
     exit 2
   fi
-  if ! apt-get -s install "$stack_deb" "$ide_deb" >/dev/null; then
+  if ! apt_output="$(apt-get -s install "$stack_deb" "$ide_deb" 2>&1)"; then
     echo "verify-step14-closeout: apt simulation failed for stack+IDE deb pair." >&2
+    echo "verify-step14-closeout: apt-get -s output follows:" >&2
+    printf '%s\n' "$apt_output" >&2
+    echo "verify-step14-closeout: this usually indicates host apt state issues (held/broken packages), not .deb payload drift." >&2
     exit 1
   fi
 }

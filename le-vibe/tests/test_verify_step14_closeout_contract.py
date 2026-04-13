@@ -58,4 +58,6 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "Package=le-vibe-ide, Architecture=amd64" in text
     assert "Package=le-vibe, Architecture=all" in text
     assert "apt-get -s install" in text
+    assert "apt-get -s output follows" in text
+    assert "held/broken packages" in text
     assert "skipped (use --apt-sim)" in text
