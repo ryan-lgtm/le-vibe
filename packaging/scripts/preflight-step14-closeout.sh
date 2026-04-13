@@ -75,17 +75,8 @@ fi
 _vlb="$("$ROOT/packaging/scripts/probe-vscode-linux-build.sh" "$ROOT")"
 echo "vscode_linux_build: ${_vlb}"
 if [[ "${_vlb}" == "partial" ]]; then
-  # Same inventory as lvibe ide-prereqs --json (vscode_linux_bin_files) — STEP 14 partial diagnostics.
-  REPO_ROOT="$ROOT" PYTHONPATH="$ROOT/le-vibe" python3 -c '
-import os
-from pathlib import Path
-from le_vibe.ide_packaging_paths import vscode_linux_build_status, vscode_linux_bin_filenames
-root = Path(os.environ["REPO_ROOT"])
-_, vs = vscode_linux_build_status(root)
-if vs is not None:
-    names = vscode_linux_bin_filenames(vs) or []
-    print("vscode_linux_bin_files: " + ", ".join(names))
-' 2>/dev/null || true
+  _bf="$("$ROOT/packaging/scripts/print-step14-vscode-linux-bin-files.sh" "$ROOT")"
+  echo "vscode_linux_bin_files: ${_bf}"
 fi
 if [[ "${_vlb}" != "ready" ]]; then
   echo "hint: packaging/scripts/build-le-vibe-debs.sh --with-ide exits before stack dpkg-buildpackage until vscode_linux_build is ready (or use --vs-build PATH with bin/codium) — docs/PM_DEB_BUILD_ITERATION.md (Failure (--with-ide))" >&2

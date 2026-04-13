@@ -30,7 +30,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "STEP 14.c failed" in text
     assert "vscode_linux_build:" in text
     assert "vscode_linux_bin_files" in text
-    assert "vscode_linux_bin_filenames" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "probe-vscode-linux-build.sh" in text
     assert "preflight-step14-closeout.sh" in text
     assert "ide-prereqs --print-closeout-commands" in text

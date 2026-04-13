@@ -35,7 +35,7 @@ def test_preflight_step14_closeout_script_documents_checks() -> None:
     assert "build-le-vibe-debs.sh --with-ide exits before stack dpkg-buildpackage" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "vscode_linux_bin_files" in text
-    assert "vscode_linux_bin_filenames" in text
+    assert "print-step14-vscode-linux-bin-files.sh" in text
 
 
 def test_preflight_step14_closeout_prints_vscode_linux_build_line() -> None:
