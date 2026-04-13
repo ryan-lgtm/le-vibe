@@ -109,6 +109,17 @@ def test_pm_deb_build_iteration_doc_submodule_prereq_14b():
     assert "Fresh clone (14.b" in text
 
 
+def test_pm_deb_build_iteration_doc_master_orchestrator_queue_step14():
+    """STEP 14: PM deb doc ties --with-ide to Master queue before Invocations."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PM_DEB_BUILD_ITERATION.md").read_text(encoding="utf-8")
+    head = text.split("## Invocations", 1)[0]
+    assert "0 → 1 → 14 → 2–13 → 15–17" in head
+    assert "PROMPT_BUILD_LE_VIBE.md" in head
+    assert "Rolling iteration — prefer continuation" in head
+    assert "build-le-vibe-debs.sh --with-ide" in head
+
+
 def test_pm_deb_build_iteration_doc_sibling_docs_links_apt_repo_h1_related_round_trip():
     """H1: PM header lists apt-repo-releases Related docs round-trip (STEP 8)."""
     root = Path(__file__).resolve().parents[2]
