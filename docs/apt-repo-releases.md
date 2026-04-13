@@ -119,6 +119,8 @@ For a **release** that demos the **full** stack + branded editor, attach **`le-v
 
 ## GitHub Releases + checksums
 
+> **H1 quick pointer:** Use the ordered checklists *Checklist — stack-only GitHub Release* and *Checklist — full-product GitHub Release* (above) before you **`gh release create`** — same *Dual changelog discipline* / *Pre-publish* / **Combined drop** story as the sections above.
+
 **Combined drop (same as *Pre-publish* above):** If the stack **`le-vibe_*_all.deb`** comes from downloading CI **`le-vibe-deb`** and **`le-vibe-ide_*_amd64.deb`** from a **separate** maintainer build, **regenerate** **`SHA256SUMS`** in your release directory **before** **`sha256sum -c`**, **`lvibe verify-checksums`**, or **`gh release create`** — the CI **`SHA256SUMS`** alone is wrong once the second **`*.deb`** is present (*Pre-publish artifact checklist* — **Combined drop**).
 
 When you cut a **release** (tag + GitHub Release):

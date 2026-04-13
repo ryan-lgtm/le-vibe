@@ -124,6 +124,9 @@ def test_apt_repo_releases_github_releases_section_links_combined_drop_step8():
     text = (_repo_root() / "docs" / "apt-repo-releases.md").read_text(encoding="utf-8")
     head, rest = text.split("## GitHub Releases + checksums", 1)
     gh_section = rest.split("\n## ", 1)[0]
+    assert "H1 quick pointer" in gh_section
+    assert "Checklist — stack-only GitHub Release" in gh_section
+    assert "Checklist — full-product GitHub Release" in gh_section
     assert "Combined drop" in gh_section
     assert "gh release create" in gh_section
     assert "Pre-publish artifact checklist" in gh_section
