@@ -14,8 +14,11 @@ def _root() -> Path:
 def test_fixed_prereq_files_exist_in_repo():
     root = _root()
     rows = iter_ide_prereq_paths(root)
-    # All file-backed rows except the first (VSCode-linux) must be OK when tree missing
+    # All file-backed rows except the first (VSCode-linux) must be OK when tree missing.
+    # VSCodium-staged le-vibe.svg is optional until sync-linux-icon-assets.sh (editor/BUILD.md).
     for label, path, ok in rows[1:]:
+        if "VSCodium linux le-vibe.svg" in label:
+            continue
         assert ok, f"{label}: {path}"
 
 

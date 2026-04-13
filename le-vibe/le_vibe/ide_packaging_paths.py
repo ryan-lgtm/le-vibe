@@ -34,6 +34,10 @@ def iter_ide_prereq_paths(root: Path) -> list[tuple[str, Path, bool]]:
     fixed: tuple[tuple[str, Path], ...] = (
         ("Branding merge (§7.3)", Path("editor/le-vibe-overrides/product-branding-merge.json")),
         ("Linux icon sync", Path("editor/le-vibe-overrides/sync-linux-icon-assets.sh")),
+        (
+            "VSCodium linux le-vibe.svg (after sync; LEVIBE_EDITOR_GATE_ASSERT_BRAND)",
+            Path("editor/vscodium/src/stable/resources/linux/le-vibe.svg"),
+        ),
         ("Canonical app icon (stack)", Path("packaging/icons/hicolor/scalable/apps/le-vibe.svg")),
         ("Stage IDE → deb staging", Path("packaging/scripts/stage-le-vibe-ide-deb.sh")),
         ("Build le-vibe-ide .deb", Path("packaging/scripts/build-le-vibe-ide-deb.sh")),
@@ -50,6 +54,7 @@ def iter_ide_prereq_paths(root: Path) -> list[tuple[str, Path, bool]]:
 IDE_PREREQ_PATH_ONLY: dict[str, Path] = {
     "branding": Path("editor/le-vibe-overrides/product-branding-merge.json"),
     "sync-icons": Path("editor/le-vibe-overrides/sync-linux-icon-assets.sh"),
+    "vsc-linux-svg": Path("editor/vscodium/src/stable/resources/linux/le-vibe.svg"),
     "svg": Path("packaging/icons/hicolor/scalable/apps/le-vibe.svg"),
     "stage": Path("packaging/scripts/stage-le-vibe-ide-deb.sh"),
     "build-ide-deb": Path("packaging/scripts/build-le-vibe-ide-deb.sh"),
