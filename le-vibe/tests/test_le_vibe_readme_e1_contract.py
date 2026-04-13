@@ -24,6 +24,7 @@ def test_le_vibe_readme_documents_first_run_launcher_flags():
     assert "--path-only" in text
     assert "lvibe logs --tail 50" in text
     assert "lvibe --help" in text
+    assert "path + **`Live: tail -f`**" in text
     assert "argparse" in text
     assert "launcher.py" in text
     assert "test_first_run.py" in text
