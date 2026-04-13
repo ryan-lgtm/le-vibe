@@ -169,6 +169,8 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "manual-step14-install-smoke.sh" in readme
     assert "build machine" in readme
     assert "printed steps" in readme
+    assert "repo root" in readme
+    assert "default **`STACK_DEB`**" in readme
     desktop = (root / "packaging" / "debian-le-vibe-ide" / "debian" / "le-vibe.desktop").read_text(
         encoding="utf-8"
     )

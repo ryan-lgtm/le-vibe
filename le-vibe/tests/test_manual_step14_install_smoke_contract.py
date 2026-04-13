@@ -63,6 +63,8 @@ def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> 
     assert "packaging/scripts/ci-vscodium-bash-syntax.sh" in rag
     assert "packaging/scripts/ci-editor-nvmrc-sync.sh" in rag
     assert "packaging/scripts/ci-vscodium-linux-dev-build.sh" in rag
+    assert "manual-step14-install-smoke.sh default STACK_DEB" in rag
+    assert "Output paths (from repo root)" in rag
 
 
 def test_pm_deb_build_iteration_points_to_manual_step14_install_smoke_script() -> None:
