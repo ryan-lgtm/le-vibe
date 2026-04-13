@@ -51,6 +51,8 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "vscode_linux_build" in text
     assert "ide-prereqs --json" in text
     assert "probe-vscode-linux-build.sh" in text
+    assert "dpkg-buildpackage" in text
+    assert "stderr hint" in text
 
 
 def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> None:

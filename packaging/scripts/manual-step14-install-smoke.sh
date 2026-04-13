@@ -44,10 +44,12 @@ Build machine prerequisites (no .debs yet — partial VSCode-linux / missing bin
   docs/PM_DEB_BUILD_ITERATION.md (*Partial VSCode-linux tree*), editor/BUILD.md (*Partial tree*, 14.c),
   ./editor/print-built-codium-path.sh, ./editor/print-vsbuild-codium-path.sh,
   packaging/scripts/build-le-vibe-ide-deb.sh --help (triage + verify-step14-closeout.sh),
-  then packaging/scripts/build-le-vibe-debs.sh --with-ide.
+  then packaging/scripts/build-le-vibe-debs.sh --with-ide (exits before stack dpkg-buildpackage until
+  vscode_linux_build is ready, or use --vs-build PATH — *Failure (--with-ide)* in PM_DEB_BUILD_ITERATION.md).
 
 Ordering (same as docs/apt-repo-releases.md *IDE package*):
-  Build machine — packaging/scripts/preflight-step14-closeout.sh --require-stack-deb (optional; all [ok]/[missing] gaps);
+  Build machine — packaging/scripts/preflight-step14-closeout.sh --require-stack-deb (optional; all [ok]/[missing] gaps;
+    stderr hint when probe is not ready matches build-le-vibe-debs.sh --with-ide fail-fast);
     then packaging/scripts/verify-step14-closeout.sh --require-stack-deb
     Optional: --apt-sim, --json (apt_sim_note + vscode_linux_build in JSON — docs/PM_DEB_BUILD_ITERATION.md *--json close-out payload*).
   Test host — copy .debs here, then use this script for sudo apt install + smoke.
