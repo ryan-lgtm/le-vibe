@@ -24,6 +24,7 @@ def test_master_orchestrator_fence_extractable():
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product maintainer `.deb`" in text
     assert "verify-step14-closeout.sh --require-stack-deb" in text
+    assert "--apt-sim" in text
 
 
 def test_print_master_orchestrator_prompt_script_header_mentions_queue():
