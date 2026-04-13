@@ -152,6 +152,7 @@ def test_le_vibe_readme_lists_core_e1_contract_modules():
     assert "Observability (STEP 6 / E5)" in text
     assert "le-vibe.log.jsonl" in text
     assert "Maintainer hygiene (STEP 5 / E4)" in text
+    assert "lvibe hygiene" in text
     assert "le_vibe.hygiene" in text
     assert "--seed-missing" in text
     assert "Continue (STEP 3 / E2)" in text

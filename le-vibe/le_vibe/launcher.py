@@ -105,6 +105,15 @@ def _cmd_open_welcome(argv: list[str]) -> int:
     return proc.returncode if proc.returncode is not None else 1
 
 
+def _cmd_hygiene(argv: list[str]) -> int:
+    """
+    STEP 5 (E4): validate ``.lvibe/`` — same entry as ``lvibe-hygiene`` / ``python3 -m le_vibe.hygiene``.
+    """
+    from le_vibe.hygiene import main as hygiene_main
+
+    return hygiene_main(argv)
+
+
 def _default_editor() -> str:
     env = os.environ.get("LE_VIBE_EDITOR")
     if env:
@@ -131,6 +140,8 @@ def main() -> int:
         return _cmd_sync_agent_skills(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "open-welcome":
         return _cmd_open_welcome(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "hygiene":
+        return _cmd_hygiene(sys.argv[2:])
 
     parser = argparse.ArgumentParser(
         description="Lé Vibe: start managed Ollama, then run the editor; stops Ollama on quit.",
