@@ -1,8 +1,10 @@
-"""Maintainer checks for ``.lvibe/`` — manifest, session-manifest, chunks (token-efficiency hygiene).
+"""Maintainer checks for ``.lvibe/`` — manifest, session-manifest, storage-state, chunks.
 
 Session JSON is expected to match ``schemas/session-manifest.v1.example.json`` (see
-``docs/SESSION_ORCHESTRATION_SPEC.md``; STEP 5 / E4, PM map). Use ``--seed-missing`` to
-idempotently add a missing ``session-manifest.json`` and agent ``skill.md`` files.
+``docs/SESSION_ORCHESTRATION_SPEC.md``; STEP 5 / E4, PM map). Optional ``storage-state.json``
+is checked for ``lvibe-storage-state.v1`` (PRODUCT_SPEC §5.4). Use ``--seed-missing`` to
+idempotently add a missing ``session-manifest.json`` and agent ``skill.md`` files; ``--json``
+for machine-readable reports.
 """
 
 from __future__ import annotations
@@ -113,6 +115,31 @@ def _incremental_size_warning(lvibe: Path) -> list[str]:
     return warnings
 
 
+def _storage_state_checks(lvibe: Path) -> tuple[list[str], list[str]]:
+    """Validate ``storage-state.json`` when present (PRODUCT_SPEC §5.4 — STEP 5 / E4)."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    p = lvibe / "storage-state.json"
+    if not p.is_file():
+        return errors, warnings
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        errors.append(f"storage-state.json: invalid JSON ({e})")
+        return errors, warnings
+    if not isinstance(data, dict):
+        errors.append("storage-state.json: root must be an object")
+        return errors, warnings
+    if data.get("schema") != "lvibe-storage-state.v1":
+        warnings.append(
+            f"storage-state.json: expected schema lvibe-storage-state.v1 (got {data.get('schema')!r})"
+        )
+    for key in ("cap_mb", "usage_bytes"):
+        if key in data and not isinstance(data[key], int):
+            warnings.append(f"storage-state.json: {key} should be int")
+    return errors, warnings
+
+
 def seed_missing_pm_artifacts(workspace_root: Path) -> list[str]:
     """
     If ``.lvibe/`` exists, seed ``session-manifest.json`` when absent and copy any missing
@@ -169,6 +196,10 @@ def check_lvibe_workspace(workspace_root: Path) -> tuple[list[str], list[str]]:
     warnings.extend(w2)
     warnings.extend(_incremental_size_warning(lvibe))
 
+    e3, w3 = _storage_state_checks(lvibe)
+    errors.extend(e3)
+    warnings.extend(w3)
+
     return errors, warnings
 
 
@@ -194,16 +225,30 @@ def main(argv: list[str] | None = None) -> int:
             "agent skill.md files from le-vibe/templates/agents/ (idempotent). Then run checks."
         ),
     )
+    p.add_argument(
+        "--json",
+        action="store_true",
+        help="Print errors and warnings as a JSON object on stdout (exit 1 if any errors).",
+    )
     args = p.parse_args(argv)
     try:
         root = args.workspace.expanduser().resolve()
     except OSError as e:
         print(f"lvibe-hygiene: bad --workspace: {e}", file=sys.stderr)
         return 2
+    seed_log: list[str] = []
     if args.seed_missing:
-        for line in seed_missing_pm_artifacts(root):
-            print(f"lvibe-hygiene: {line}", file=sys.stdout)
+        seed_log = seed_missing_pm_artifacts(root)
+        if not args.json:
+            for line in seed_log:
+                print(f"lvibe-hygiene: {line}", file=sys.stdout)
     errs, warns = check_lvibe_workspace(root)
+    if args.json:
+        payload: dict[str, object] = {"errors": errs, "warnings": warns}
+        if seed_log:
+            payload["seed"] = seed_log
+        print(json.dumps(payload, indent=2, ensure_ascii=False), file=sys.stdout)
+        return 1 if errs else 0
     for w in warns:
         print(f"warning: {w}", file=sys.stderr)
     for e in errs:

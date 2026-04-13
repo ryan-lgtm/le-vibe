@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from le_vibe.hygiene import check_lvibe_workspace, main
 from le_vibe.session_orchestrator import SESSION_MANIFEST_FILENAME
 from le_vibe.workspace_hub import ensure_lvibe_workspace
@@ -60,3 +62,32 @@ def test_hygiene_warns_chunk_missing_path(tmp_path: Path):
     errs, warns = check_lvibe_workspace(tmp_path)
     assert errs == []
     assert any("missing" in w.lower() for w in warns)
+
+
+def test_hygiene_errors_on_bad_storage_state_json(tmp_path: Path):
+    ensure_lvibe_workspace(tmp_path)
+    st = tmp_path / ".lvibe" / "storage-state.json"
+    st.write_text("{", encoding="utf-8")
+    errs, _ = check_lvibe_workspace(tmp_path)
+    assert any("storage-state.json" in e and "JSON" in e for e in errs)
+
+
+def test_hygiene_warns_storage_state_wrong_schema(tmp_path: Path):
+    ensure_lvibe_workspace(tmp_path)
+    st = tmp_path / ".lvibe" / "storage-state.json"
+    st.write_text(
+        '{"schema":"other","cap_mb":50,"usage_bytes":0}',
+        encoding="utf-8",
+    )
+    errs, warns = check_lvibe_workspace(tmp_path)
+    assert errs == []
+    assert any("lvibe-storage-state.v1" in w for w in warns)
+
+
+def test_hygiene_json_mode_ok(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    ensure_lvibe_workspace(tmp_path)
+    assert main(["--workspace", str(tmp_path), "--json"]) == 0
+    out = capsys.readouterr().out
+    data = json.loads(out)
+    assert data["errors"] == []
+    assert "warnings" in data
