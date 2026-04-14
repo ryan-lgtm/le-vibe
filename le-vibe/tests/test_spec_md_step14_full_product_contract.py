@@ -25,6 +25,8 @@ def test_spec_md_intro_documents_full_product_install_step14():
     assert "probe-vscode-linux-build.sh" in text
     assert "--json" in text
     assert "apt_sim_note" in text
+    assert "desktop_file_validate" in text
+    assert "desktop_file_validate_on_path" in text
     assert "debian-le-vibe-ide/README.md" in text
     assert "Install both packages" in text
     assert "build machine" in text

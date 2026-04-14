@@ -193,6 +193,7 @@ def test_editor_build_md_contract_debian_section_stack_ide_one_shot_step14():
     assert "--apt-sim" in text
     assert "--json" in text
     assert "apt_sim_note" in text
+    assert "desktop_file_validate" in text
     assert "build machine" in text
     assert "test host" in text
 
