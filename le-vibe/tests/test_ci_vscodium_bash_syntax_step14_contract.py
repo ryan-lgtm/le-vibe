@@ -42,3 +42,6 @@ def test_ci_vscodium_bash_syntax_documents_step14_and_upstream_scripts():
     assert "prepare_vscode.sh" in text
     assert 'bash -n "$p"' in text
     assert "ci-vscodium-bash-syntax: OK" in text
+    assert "test_ci_vscodium_bash_syntax_step14_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
