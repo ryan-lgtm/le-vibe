@@ -52,6 +52,8 @@ def test_install_vscodium_linux_tarball_to_editor_vendor_documents_14f():
     ).read_text(encoding="utf-8")
     assert "14.f" in text or "§7.3" in text
     assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
     assert "obtain tarball:" in text
     assert "not a regular file:" in text
 

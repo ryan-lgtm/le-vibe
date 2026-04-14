@@ -93,6 +93,8 @@ def test_print_built_codium_path_documents_14c():
     assert "smoke-lvibe-editor.sh" in text
     assert "print-built-codium-path: expected editor/vscodium" in text
     assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     assert 'exec "${ROOT}/editor/print-vsbuild-codium-path.sh"' in text
 

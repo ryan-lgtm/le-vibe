@@ -21,8 +21,10 @@ probe fails. Classifier: packaging/scripts/probe-vscode-linux-build.sh
 
 See: editor/BUILD.md (*Partial tree*, 14.c / 14.f), docs/PM_DEB_BUILD_ITERATION.md
 (*Partial VSCode-linux tree*). Obtain CI tarball: packaging/scripts/
-print-github-linux-compile-artifact-hint.sh. Recovery without recompiling:
-packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh (linux_compile artifact).
+print-github-linux-compile-artifact-hint.sh; maintainer:
+packaging/scripts/trigger-le-vibe-ide-linux-compile.sh;
+packaging/scripts/download-vscodium-linux-compile-artifact.sh --install. Recovery without
+recompiling: packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh (linux_compile artifact).
 EOF
   exit 0
 fi

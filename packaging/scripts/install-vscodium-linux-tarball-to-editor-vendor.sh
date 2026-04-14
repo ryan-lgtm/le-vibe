@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # STEP 14.f / §7.3 — unpack linux_compile vscodium-linux-build.tar.gz into editor/vscodium/
 # so editor/vscodium/VSCode-linux-*/bin/codium exists (recovers partial / interrupted builds).
+# Tarball discovery: print-github-linux-compile-artifact-hint.sh, trigger-le-vibe-ide-linux-compile.sh,
+#   download-vscodium-linux-compile-artifact.sh --install (same family as verify-step14-closeout.sh).
 # Authority: docs/PRODUCT_SPEC.md §7.3, editor/BUILD.md (*Partial tree*, *14.f*), docs/PM_DEB_BUILD_ITERATION.md.
 # E1: le-vibe/tests/test_packaging_step14_help_smoke.py; packaging/scripts/ci-editor-gate.sh (bash -n).
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md
@@ -21,7 +23,9 @@ After success, packaging/scripts/probe-vscode-linux-build.sh should print ready.
 GitHub Actions wraps the tarball in a .zip — unzip first, then pass the .tar.gz path.
 
 Obtain the tarball from CI: packaging/scripts/print-github-linux-compile-artifact-hint.sh
-(browser Actions UI or gh run download).
+(browser Actions UI or gh run download); maintainer:
+packaging/scripts/trigger-le-vibe-ide-linux-compile.sh;
+packaging/scripts/download-vscodium-linux-compile-artifact.sh --install.
 
 Options:
   -y, --yes     Remove existing VSCode-linux-* without prompting (required when stdin is not a TTY).
@@ -64,7 +68,7 @@ fi
 
 if [[ ! -f "$TAR_ARG" ]]; then
   echo "${0##*/}: not a regular file: $TAR_ARG" >&2
-  echo "${0##*/}: obtain tarball: ${ROOT}/packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser or gh)" >&2
+  echo "${0##*/}: obtain tarball: ${ROOT}/packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser or gh); ${ROOT}/packaging/scripts/trigger-le-vibe-ide-linux-compile.sh; ${ROOT}/packaging/scripts/download-vscodium-linux-compile-artifact.sh --install" >&2
   exit 1
 fi
 

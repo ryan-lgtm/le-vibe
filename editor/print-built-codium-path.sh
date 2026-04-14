@@ -19,7 +19,9 @@ Requires: git submodule editor/vscodium initialized (14.b — editor/README.md).
 
 Partial tree (bin/codium missing): finish dev/build.sh (14.c), or obtain
 linux_compile vscodium-linux-build.tar.gz — packaging/scripts/
-print-github-linux-compile-artifact-hint.sh (browser Actions or gh), then
+print-github-linux-compile-artifact-hint.sh (browser Actions or gh);
+packaging/scripts/trigger-le-vibe-ide-linux-compile.sh;
+packaging/scripts/download-vscodium-linux-compile-artifact.sh --install; then
 packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh — editor/BUILD.md 14.f.
 
 For an unpacked CI tarball or other tree, use editor/print-vsbuild-codium-path.sh (see --help there).
