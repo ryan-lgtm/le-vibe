@@ -50,6 +50,9 @@ def test_ci_vscodium_linux_dev_build_documents_overrides_hook():
     assert "mv not on PATH" in text
     assert "Usage:" in text
     assert "--help" in text
+    assert "test_ci_vscodium_linux_dev_build_overrides_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_ci_vscodium_linux_dev_build_script_bash_syntax() -> None:

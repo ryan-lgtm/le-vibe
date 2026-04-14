@@ -10,6 +10,8 @@
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.e linux_compile / local full compile after STEP 0–1.
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (requires editor/vscodium/ with product.json).
 # Requires: grep, sed, mktemp, mv on PATH for §7.3 merge/patch helpers (before dev/build.sh).
+# Pytest: le-vibe/tests/test_ci_vscodium_linux_dev_build_overrides_contract.py (this script); verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
