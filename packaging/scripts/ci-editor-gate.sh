@@ -43,7 +43,8 @@ Environment:
                                     (§7.3 identity + hicolor icon key — docs/brand-assets.md). When a
                                     VSCode-linux-* tree exists, also requires
                                     editor/vscodium/src/stable/resources/linux/le-vibe.svg present and
-                                    matching packaging canonical (sync-linux-icon-assets.sh --check).
+                                    matching packaging canonical (sync-linux-icon-assets.sh --check;
+                                    needs cmp, sed, mktemp on PATH — editor/BUILD.md *Linux icons*).
 
 See editor/VENDORING.md, editor/README.md, .github/workflows/build-le-vibe-ide.yml.
 EOF

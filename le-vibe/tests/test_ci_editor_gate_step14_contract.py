@@ -48,6 +48,7 @@ def test_ci_editor_gate_documents_step14_smoke_and_overrides_e1():
     assert "brand-assets.md" in text
     assert "product-branding-merge.json" in text
     assert "sync-linux-icon-assets.sh" in text
+    assert "mktemp" in text
     assert "workbench code-icon" in text
     assert "src/stable/resources/linux/le-vibe.svg" in text
     assert "usage()" in text or "Usage:" in text
