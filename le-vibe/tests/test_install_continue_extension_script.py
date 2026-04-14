@@ -47,6 +47,9 @@ def test_install_continue_extension_documents_14g_editor_and_openvsx_ref() -> No
     assert "continue-openvsx-version" in text
     assert "LE_VIBE_CONTINUE_OPENVSX_VERSION" in text
     assert "continue.continue" in text
+    assert "test_install_continue_extension_script.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_continue_openvsx_pin_file_exists_and_semver() -> None:

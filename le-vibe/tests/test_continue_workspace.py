@@ -60,6 +60,9 @@ def test_sync_lvibe_agent_skills_requires_python3_documented():
     assert "PM_STAGE_MAP.md" in text
     assert "python3 not on PATH" in text
     assert "SESSION_ORCHESTRATION_SPEC" in text
+    assert "test_continue_workspace.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_workspace_prepare_writes_continue_rules_and_welcome(tmp_path: Path):

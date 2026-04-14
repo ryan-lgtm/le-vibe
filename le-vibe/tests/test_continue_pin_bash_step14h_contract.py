@@ -41,6 +41,9 @@ def test_sync_continue_config_script_documents_missing_generated_yaml():
     assert "readlink not on PATH" in text
     assert "ln -sfn" in text
     assert "config.yaml.bak" in text or ".bak" in text
+    assert "test_continue_pin_bash_step14h_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_verify_continue_pin_script_documents_pin_file():
@@ -61,6 +64,9 @@ def test_verify_continue_pin_script_documents_pin_file():
     assert "grep not on PATH" in text
     assert "head not on PATH" in text
     assert "tr not on PATH" in text
+    assert "test_continue_pin_bash_step14h_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_continue_extension_pin_doc_has_step_14h_block():

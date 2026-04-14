@@ -26,3 +26,6 @@ def test_fetch_code_oss_artifact_documents_le_vibe_editor_path_errors() -> None:
     assert "LE_VIBE_EDITOR not found:" in text
     assert "LE_VIBE_EDITOR not executable:" in text
     assert "no codium found" in text
+    assert "test_fetch_code_oss_artifact_script_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text

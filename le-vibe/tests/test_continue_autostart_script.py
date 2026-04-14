@@ -25,6 +25,9 @@ def test_continue_autostart_documents_mkdir_touch_path_checks() -> None:
     assert "PM_STAGE_MAP.md" in text
     assert "mkdir not on PATH" in text
     assert "touch not on PATH" in text
+    assert "test_continue_autostart_script.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_continue_autostart_desktop_exists() -> None:
