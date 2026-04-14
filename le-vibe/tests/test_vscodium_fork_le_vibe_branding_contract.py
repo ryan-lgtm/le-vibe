@@ -74,6 +74,16 @@ def test_vscodium_fork_doc_branding_section_honesty_and_overrides():
     assert "brand-assets.md" in text
 
 
+def test_vscodium_fork_doc_partial_tree_lists_linux_compile_maintainer_scripts_step14():
+    """H6 policy doc names hint/trigger/download/install when bin/codium is missing."""
+    text = (_repo_root() / "docs" / "vscodium-fork-le-vibe.md").read_text(encoding="utf-8")
+    assert "Partial VSCode-linux tree (missing `bin/codium`)" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
+
+
 def test_vscodium_fork_doc_installable_tree_14f():
     text = (_repo_root() / "docs" / "vscodium-fork-le-vibe.md").read_text(encoding="utf-8")
     assert "Tarball / installable tree (14.f)" in text
