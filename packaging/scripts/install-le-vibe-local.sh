@@ -135,15 +135,19 @@ require_submodule() {
 warn_if_vscodium_submodule_dirty() {
   local sub="$ROOT/editor/vscodium"
   local dirty=""
+  VSCODIUM_SUBMODULE_STATE="unknown"
   if [[ ! -e "$sub/.git" ]]; then
+    VSCODIUM_SUBMODULE_STATE="unknown"
     return 0
   fi
   dirty="$(git -C "$sub" status --porcelain 2>/dev/null || true)"
   if [[ -n "$dirty" ]]; then
+    VSCODIUM_SUBMODULE_STATE="dirty"
     log_tee "==> VSCodium submodule state: DIRTY (non-blocking warning)"
     log_tee "    editor/vscodium has local modifications. Builds may be non-reproducible."
     log_tee "    Before a release-quality run, clean/reset the submodule to its pinned commit."
   else
+    VSCODIUM_SUBMODULE_STATE="clean"
     log_tee "==> VSCodium submodule state: clean"
   fi
 }
@@ -198,15 +202,23 @@ emit_preflight_json() {
   local status="$1"
   local vlb="$2"
   local edeps="$3"
-  local msg="$4"
+  local substate="$4"
+  local nodestate="$5"
+  local diskstate="$6"
+  local msg="$7"
   vj="$(json_escape "$vlb")"
   ej="$(json_escape "$edeps")"
+  sj="$(json_escape "$substate")"
+  nj="$(json_escape "$nodestate")"
+  dj="$(json_escape "$diskstate")"
   mj="$(json_escape "$msg")"
-  printf '{"mode":"preflight","status":"%s","vscode_linux_build":"%s","editor_host_deps":"%s","message":"%s"}\n' \
-    "$status" "$vj" "$ej" "$mj"
+  printf '{"mode":"preflight","status":"%s","vscode_linux_build":"%s","editor_host_deps":"%s","submodule_state":"%s","node_state":"%s","disk_state":"%s","message":"%s"}\n' \
+    "$status" "$vj" "$ej" "$sj" "$nj" "$dj" "$mj"
 }
 
 run_preflight_only() {
+  local node_state="unknown"
+  local disk_state="ok"
   require_linux
   require_submodule
   require_stack_packaging_tools
@@ -215,7 +227,7 @@ run_preflight_only() {
   if ! have_cmd python3; then
     echo "install-le-vibe-local: python3 is required for VSCode-linux probe — install python3." >&2
     if [[ "$PRINT_JSON" -eq 1 ]]; then
-      emit_preflight_json "error" "unknown" "unknown" "python3 missing"
+      emit_preflight_json "error" "unknown" "unknown" "${VSCODIUM_SUBMODULE_STATE:-unknown}" "$node_state" "$disk_state" "python3 missing"
     fi
     exit 2
   fi
@@ -234,6 +246,14 @@ run_preflight_only() {
   fi
   log_tee "    Disk (repo + /tmp):"
   while IFS= read -r _ln; do log_tee "    $_ln"; done < <(df -Ph "$ROOT" /tmp 2>/dev/null || df -Ph 2>/dev/null | head -8 || true)
+  local avail_gb
+  avail_gb="$(df -BG "$ROOT" 2>/dev/null | awk 'NR==2 {gsub(/G/, "", $4); print $4}' || true)"
+  if [[ -n "${avail_gb:-}" && "$avail_gb" =~ ^[0-9]+$ ]]; then
+    if (( avail_gb < 25 )); then
+      disk_state="low"
+      log_tee "WARN: low free disk on repo volume (${avail_gb}G available; recommended >=25G for compile headroom)."
+    fi
+  fi
 
   if [[ -f "$ROOT/editor/.nvmrc" ]]; then
     local want have
@@ -242,11 +262,14 @@ run_preflight_only() {
     if have_cmd node; then
       have="$(node --version 2>/dev/null | sed 's/^v//' || echo "?")"
       if [[ -n "$want" && "$have" == "$want" ]]; then
+        node_state="ok"
         log_tee "==> Node: OK (matches editor/.nvmrc $want)"
       else
+        node_state="mismatch"
         log_tee "==> Node: editor/.nvmrc wants ${want:-?}, active $have — run: source editor/use-node-toolchain.sh (editor/BUILD.md 14.a)"
       fi
     else
+      node_state="missing"
       log_tee "==> Node: not on PATH — install Node ${want:-from editor/.nvmrc} or source editor/use-node-toolchain.sh"
     fi
   fi
@@ -277,7 +300,7 @@ run_preflight_only() {
       echo "  Docker full compile (OOM-prone hosts): packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh" >&2
       echo "  Read: editor/BUILD.md (14.e), docs/LOCAL_INSTALL_ONE_SHOT.md" >&2
       if [[ "$PRINT_JSON" -eq 1 ]]; then
-        emit_preflight_json "error" "$vlb" "$edeps" "check-linux-vscodium-build-deps.sh failed"
+        emit_preflight_json "error" "$vlb" "$edeps" "${VSCODIUM_SUBMODULE_STATE:-unknown}" "$node_state" "$disk_state" "check-linux-vscodium-build-deps.sh failed"
       fi
       exit 2
     fi
@@ -292,7 +315,7 @@ run_preflight_only() {
   log_tee ""
   log_tee "PASS — preflight (ready to run full install without --preflight-only)"
   if [[ "$PRINT_JSON" -eq 1 ]]; then
-    emit_preflight_json "ok" "$vlb" "$edeps" "preflight checks passed (see editor_host_deps for dep parity)"
+    emit_preflight_json "ok" "$vlb" "$edeps" "${VSCODIUM_SUBMODULE_STATE:-unknown}" "$node_state" "$disk_state" "preflight checks passed (see editor_host_deps/node_state/disk_state)"
   fi
   exit 0
 }

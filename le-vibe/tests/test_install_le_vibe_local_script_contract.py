@@ -47,6 +47,14 @@ def test_install_le_vibe_local_warns_on_dirty_vscodium_submodule():
     assert "non-reproducible" in text
 
 
+def test_install_le_vibe_local_preflight_json_includes_determinism_fields():
+    text = (_root() / "packaging" / "scripts" / "install-le-vibe-local.sh").read_text(encoding="utf-8")
+    assert "\"submodule_state\"" in text
+    assert "\"node_state\"" in text
+    assert "\"disk_state\"" in text
+    assert "preflight checks passed (see editor_host_deps/node_state/disk_state)" in text
+
+
 def test_install_le_vibe_local_usage_documents_flags_and_exit_codes():
     text = (_root() / "packaging" / "scripts" / "install-le-vibe-local.sh").read_text(encoding="utf-8")
     assert "--preflight-only" in text

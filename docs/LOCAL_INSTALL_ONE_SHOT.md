@@ -12,6 +12,12 @@
 
 Fresh clone: initialize the editor submodule first — `git submodule update --init editor/vscodium` (**14.b** — [`editor/README.md`](../editor/README.md)).
 
+Preflight also surfaces deterministic-run signals before long compiles:
+- **Submodule state** (`clean` / `dirty`) so release-quality runs can avoid local vendored drift.
+- **Node state** vs `editor/.nvmrc` (`ok` / `mismatch` / `missing`).
+- **Disk risk** warning when repo volume free space is below the recommended compile headroom.
+- With `--json`, these appear as `submodule_state`, `node_state`, and `disk_state`.
+
 **Authority:** [`PM_DEB_BUILD_ITERATION.md`](PM_DEB_BUILD_ITERATION.md), [`editor/BUILD.md`](../editor/BUILD.md), STEP **14** close-out — [`verify-step14-closeout.sh`](../packaging/scripts/verify-step14-closeout.sh).
 
 ---
