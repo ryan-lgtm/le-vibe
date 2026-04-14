@@ -41,6 +41,8 @@ def test_debian_lvibe_man_ide_prereqs_synopsis_print_closeout_commands_step14():
     assert "not \\fBready" in text
     assert "install\\-vscodium\\-linux\\-tarball\\-to\\-editor\\-vendor.sh" in text
     assert "print\\-github\\-linux\\-compile\\-artifact\\-hint.sh" in text
+    assert "trigger\\-le\\-vibe\\-ide\\-linux\\-compile.sh" in text
+    assert "download\\-vscodium\\-linux\\-compile\\-artifact.sh" in text
     assert "print\\-step14\\-vscode\\-linux\\-bin\\-files.sh" in text
     assert "print\\-ci\\-tarball\\-codium\\-path.sh" in text
     assert "manual\\-step14\\-install\\-smoke.sh" in text
@@ -62,6 +64,8 @@ def test_debian_le_vibe_man_ide_prereqs_synopsis_print_closeout_commands_step14(
     assert "dpkg\\-buildpackage" in text
     assert "install\\-vscodium\\-linux\\-tarball\\-to\\-editor\\-vendor.sh" in text
     assert "print\\-github\\-linux\\-compile\\-artifact\\-hint.sh" in text
+    assert "trigger\\-le\\-vibe\\-ide\\-linux\\-compile.sh" in text
+    assert "download\\-vscodium\\-linux\\-compile\\-artifact.sh" in text
     assert "print\\-step14\\-vscode\\-linux\\-bin\\-files.sh" in text
     assert "print\\-ci\\-tarball\\-codium\\-path.sh" in text
     assert "manual\\-step14\\-install\\-smoke.sh" in text
