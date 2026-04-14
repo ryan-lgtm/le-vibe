@@ -71,6 +71,7 @@ _lvibe_patch_dev_build_sh_for_env_defaults() {
     -e 's/^export GH_REPO_PATH="VSCodium\/vscodium"$/export GH_REPO_PATH="${GH_REPO_PATH:-VSCodium\/vscodium}"/' \
     -e 's/^export ORG_NAME="VSCodium"$/export ORG_NAME="${ORG_NAME:-VSCodium}"/' \
     "${f}"
+  rm -f "${f}.bak_lvibe"
   echo "ci-vscodium-linux-dev-build: patched editor/vscodium/dev/build.sh so APP_NAME/ORG_NAME/etc. honor environment (§7.3)"
 }
 
