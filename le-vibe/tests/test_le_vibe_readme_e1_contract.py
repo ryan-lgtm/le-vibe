@@ -73,6 +73,10 @@ def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
     assert "print-vsbuild-codium-path" in text
     assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     assert "dpkg-buildpackage" in text
     assert "Failure (`--with-ide`)" in text
     assert "manual-step14-install-smoke.sh" in text

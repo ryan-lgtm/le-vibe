@@ -166,3 +166,7 @@ def test_ci_qa_hardening_ide_smoke_section_distinguishes_fast_gate_vs_linux_comp
     assert "NODE_OPTIONS" in text
     assert "max-old-space-size=8192" in text
     assert "When full compile fails" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
