@@ -50,6 +50,8 @@ def test_verify_73_maintainer_header_step14():
     assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
     assert "exit 2" in text
     assert "static_prereq_files_ok" in text
+    assert "sync-linux-icon-assets.sh --check" in text
+    assert "mktemp" in text
 
 
 def test_editor_smoke_sh_delegates_ci_editor_gate():

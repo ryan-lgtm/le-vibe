@@ -24,7 +24,10 @@ After stack + IDE .deb artifacts exist: packaging/scripts/preflight-step14-close
 packaging/scripts/verify-step14-closeout.sh --require-stack-deb (see docs/PM_DEB_BUILD_ITERATION.md).
 
 Environment:
-  LEVIBE_EDITOR_GATE_ASSERT_BRAND=1   Strict §7.3 branding (same as ci-editor-gate).
+  LEVIBE_EDITOR_GATE_ASSERT_BRAND=1   Strict §7.3 branding (same as ci-editor-gate). That path runs
+                                     packaging/scripts/ci-editor-gate.sh, which may invoke
+                                     sync-linux-icon-assets.sh --check — needs cmp, sed, mktemp on PATH
+                                     (editor/BUILD.md *Linux icons*, docs/brand-assets.md).
 
   -h, --help   Show this message and exit.
 EOF
