@@ -70,3 +70,6 @@ def test_debian_readme_documents_partial_tree_maintainer_scripts_14f():
     assert "trigger-le-vibe-ide-linux-compile.sh" in text
     assert "download-vscodium-linux-compile-artifact.sh" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
+    assert "hicolor_icon_in_deb" in text
+    assert "preflight-step14-closeout.sh" in text
+    assert "verify-step14-closeout.sh" in text

@@ -182,6 +182,7 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "--json" in readme
     assert "apt_sim_note" in readme
     assert "desktop_file_validate" in readme
+    assert "hicolor_icon_in_deb" in readme
     assert "desktop_file_validate_on_path" in readme
     assert "PM_DEB_BUILD_ITERATION.md" in readme
     assert "SHA256SUMS" in readme
