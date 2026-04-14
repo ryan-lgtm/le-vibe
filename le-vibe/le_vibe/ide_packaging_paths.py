@@ -5,6 +5,10 @@ Freedesktop ``.desktop`` QA (packaged or installed): see ``preflight-step14-clos
 ``manual-step14-install-smoke.sh --verify-only`` (``desktop-file-validate`` when available).
 ``ide_deb_hicolor_icon_status`` / ``lvibe ide-prereqs --json`` field ``hicolor_icon_in_deb`` match
 preflight/verify hicolor payload checks on ``packaging/le-vibe-ide_*.deb``.
+
+Maintainer brand gate: ``sync-linux-icon-assets.sh --check`` (invoked from ``ci-editor-gate.sh`` when
+``LEVIBE_EDITOR_GATE_ASSERT_BRAND=1`` and a ``VSCode-linux-*`` tree exists) needs ``cmp``, ``sed``, and
+``mktemp`` on ``PATH`` — ``editor/BUILD.md`` (*Linux icons*).
 """
 
 from __future__ import annotations

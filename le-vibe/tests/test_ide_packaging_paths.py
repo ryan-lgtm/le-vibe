@@ -27,6 +27,9 @@ def test_ide_packaging_paths_module_doc_mentions_freedesktop_closeout_chain() ->
     assert "manual-step14-install-smoke" in m.__doc__
     assert "desktop-file-validate" in m.__doc__
     assert "hicolor_icon_in_deb" in m.__doc__
+    assert "sync-linux-icon-assets.sh --check" in m.__doc__
+    assert "mktemp" in m.__doc__
+    assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in m.__doc__
 
 
 def test_fixed_prereq_files_exist_in_repo():
