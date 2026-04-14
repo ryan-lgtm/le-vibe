@@ -17,6 +17,16 @@ def test_spec_phase2_monorepo_table_h6_row_lists_14d_branding_staging():
     assert "fast smoke" in text
 
 
+def test_spec_phase2_monorepo_partial_tree_lists_linux_compile_maintainer_scripts_step14():
+    """§1 monorepo snapshot — partial VSCode-linux tree names hint/trigger/download/vendor (14.f)."""
+    text = (_repo_root() / "spec-phase2.md").read_text(encoding="utf-8")
+    assert "Partial VSCode-linux tree (STEP 14 — missing" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
+
+
 def test_spec_phase2_monorepo_lists_ci_le_vibe_deb_vs_le_vibe_ide_step14():
     """§14 honesty: spec-phase2 names stack CI artifact vs sibling IDE .deb (H1 / §7.3)."""
     text = (_repo_root() / "spec-phase2.md").read_text(encoding="utf-8")
