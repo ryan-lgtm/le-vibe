@@ -36,3 +36,6 @@ def test_continue_autostart_desktop_exists() -> None:
     text = desktop.read_text(encoding="utf-8")
     assert "le-vibe-continue-setup-autostart.sh" in text
     assert "etc/xdg/autostart" not in text  # installed path is Exec= under /usr/share
+    assert "test_continue_autostart_script.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text

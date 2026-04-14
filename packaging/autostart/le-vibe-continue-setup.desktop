@@ -1,4 +1,6 @@
 [Desktop Entry]
+# Pytest: le-vibe/tests/test_continue_autostart_script.py; verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 # Post-install flow: /usr/share/doc/le-vibe/README.Debian (step 3 — le-vibe-setup-continue).
 # Upstream: docs/PRODUCT_SPEC.md, docs/README.md (§9 Maintainer index; H8 — .github/ (ci.yml, dependabot.yml, ISSUE_TEMPLATE + config.yml # H8); SECURITY; privacy-and-telemetry E1).
 # Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (ci.yml, dependabot.yml, packaging/bin).
