@@ -176,6 +176,10 @@ def test_pm_deb_build_iteration_doc_json_closeout_payload_lists_vscode_linux_bui
     assert "lvibe ide-prereqs" in sec
     assert "codium_path" in sec
     assert "desktop_file_validate" in sec
+    assert "status" in sec and "error" in sec
+    assert "14c" in sec
+    assert "vscode_linux_bin_files" in sec
+    assert "preflight-step14-closeout.sh" in sec
 
 
 def test_pm_deb_build_iteration_doc_success_output_orders_build_vs_test_host_step14():
