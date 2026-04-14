@@ -29,6 +29,7 @@ def test_vscodium_fork_doc_bootstrap_lists_production_deb_pair_step14():
     assert "--apt-sim" in text
     assert "--json" in text
     assert "apt_sim_note" in text
+    assert "desktop_file_validate" in text
     assert "Install both packages" in text
     assert "Maintainer build output" in text
 
