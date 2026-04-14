@@ -100,6 +100,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "dpkg-deb --field" in text
     assert "dpkg-deb --fsys-tarfile" in text
     assert "./usr/share/applications/le-vibe.desktop" in text
+    assert "./usr/share/icons/hicolor/scalable/apps/le-vibe.svg" in text
     assert "./usr/lib/le-vibe/bin/codium" in text
     assert "Name=Lé Vibe" in text
     assert "Exec=/usr/lib/le-vibe/bin/codium %F" in text
@@ -165,6 +166,7 @@ if [[ "$1" == "--contents" ]]; then
 -rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/lib/le-vibe/bin/codium
 -rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/bin/lvibe
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/applications/le-vibe.desktop
+-rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/doc/le-vibe/README.Debian
 EOF
   exit 0
@@ -275,6 +277,7 @@ if [[ "$1" == "--contents" ]]; then
 -rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/lib/le-vibe/bin/codium
 -rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/bin/lvibe
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/applications/le-vibe.desktop
+-rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/doc/le-vibe/README.Debian
 EOF
   exit 0
@@ -391,6 +394,7 @@ if [[ "$1" == "--contents" ]]; then
   cat <<'EOF'
 -rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/lib/le-vibe/bin/codium
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/applications/le-vibe.desktop
+-rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg
 EOF
   exit 0
 fi
@@ -489,6 +493,7 @@ if [[ "$1" == "--contents" ]]; then
 -rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/lib/le-vibe/bin/codium
 -rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/bin/lvibe
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/applications/le-vibe.desktop
+-rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/doc/le-vibe/README.Debian
 EOF
   exit 0

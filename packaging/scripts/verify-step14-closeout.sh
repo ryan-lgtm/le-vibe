@@ -2,7 +2,7 @@
 # STEP 14 / §7.3 close-out verifier (maintainer): require the local artifacts that docs call "done":
 #   - ci-editor-gate.sh passes (same as ./editor/smoke.sh fail-fast gates),
 #   - editor/vscodium/VSCode-linux-*/bin/codium exists (14.c),
-#   - packaging/le-vibe-ide_*.deb exists.
+#   - packaging/le-vibe-ide_*.deb exists (desktop + launcher + hicolor icon paths).
 # On 14.c failure: hints include print-github-linux-compile-artifact-hint.sh, trigger-le-vibe-ide-linux-compile.sh,
 #   download-vscodium-linux-compile-artifact.sh --install (partial or absent tree) — same family as lvibe ide-prereqs --print-closeout-commands.
 # Optional: also require stack le-vibe_*.deb (parent of clone, then repo root) via --require-stack-deb.
@@ -186,7 +186,8 @@ Checks local STEP 14 / §7.3 readiness:
   1) packaging/scripts/ci-editor-gate.sh (unless --skip-gate),
   2) editor/verify-14c-local-binary.sh (requires VSCode-linux-*/bin/codium),
   3) packaging/le-vibe-ide_*.deb exists and passes content checks:
-     - launcher payload paths exist (`le-vibe.desktop`, `/usr/lib/le-vibe/bin/codium`),
+     - launcher payload paths exist (`le-vibe.desktop`, `/usr/lib/le-vibe/bin/codium`,
+       `hicolor/scalable/apps/le-vibe.svg`),
      - desktop content contains `Name=Lé Vibe` and `Exec=/usr/lib/le-vibe/bin/codium %F`,
      - optional (when desktop-file-validate is on PATH): Freedesktop validation of packaged
        `le-vibe.desktop` (same extraction as preflight-step14-closeout / build-le-vibe-ide-deb.sh),
@@ -299,9 +300,10 @@ if [[ ${#ide_debs[@]} -eq 0 ]]; then
 fi
 ide_deb_latest="$(pick_latest_match "packaging/le-vibe-ide_*.deb" "${ide_debs[@]}")"
 log_note "    ide deb: $ide_deb_latest"
-log_note "    ide deb payload check: /usr/share/applications/le-vibe.desktop + /usr/lib/le-vibe/bin/codium"
+log_note "    ide deb payload check: /usr/share/applications/le-vibe.desktop + /usr/lib/le-vibe/bin/codium + hicolor icon"
 assert_deb_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop"
 assert_deb_contains "$ide_deb_latest" "./usr/lib/le-vibe/bin/codium"
+assert_deb_contains "$ide_deb_latest" "./usr/share/icons/hicolor/scalable/apps/le-vibe.svg"
 assert_deb_path_is_executable "$ide_deb_latest" "./usr/lib/le-vibe/bin/codium"
 log_note "    ide desktop check: Name=Lé Vibe + Exec=/usr/lib/le-vibe/bin/codium %F"
 assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop" "Name=Lé Vibe"
