@@ -105,6 +105,7 @@ def test_ide_prereqs_print_closeout_commands(monkeypatch: pytest.MonkeyPatch, ca
     assert launcher.main() == 0
     out = capsys.readouterr().out
     assert "probe-vscode-linux-build.sh" in out
+    assert "probe_vscode_linux_build.py" in out
     assert "preflight-step14-closeout.sh" in out
     assert "verify-step14-closeout.sh" in out
     assert "manual-step14-install-smoke.sh --verify-only" in out
@@ -142,6 +143,7 @@ def test_ide_prereqs_print_closeout_partial_hint(
     assert "./editor/fetch-vscode-sources.sh" in out
     assert "(cd editor/vscodium && ./dev/build.sh)" in out
     assert "probe-vscode-linux-build.sh" in out
+    assert "probe_vscode_linux_build.py" in out
     assert "exits before stack" in out
     assert "dpkg-buildpackage" in out
     assert "manual-step14-install-smoke.sh --verify-only" in out
@@ -163,6 +165,7 @@ def test_ide_prereqs_print_closeout_absent_hint(monkeypatch: pytest.MonkeyPatch,
     assert "trigger-le-vibe-ide-linux-compile.sh" in out
     assert "download-vscodium-linux-compile-artifact.sh --install" in out
     assert "probe-vscode-linux-build.sh" in out
+    assert "probe_vscode_linux_build.py" in out
     assert "exits before stack" in out
     assert "manual-step14-install-smoke.sh --verify-only" in out
 
@@ -183,6 +186,7 @@ def test_ide_prereqs_print_closeout_ready_includes_full_product_deb(
     assert "./packaging/scripts/build-le-vibe-debs.sh --with-ide" in out
     assert "PM_DEB_BUILD_ITERATION.md" in out
     assert "probe-vscode-linux-build.sh" in out
+    assert "probe_vscode_linux_build.py" in out
     assert "manual-step14-install-smoke.sh --verify-only" in out
 
 

@@ -31,6 +31,7 @@ def test_debian_lvibe_man_ide_prereqs_synopsis_print_closeout_commands_step14():
     assert ".B lvibe ide\\-prereqs" in text
     assert "\\-\\-print\\-closeout\\-commands" in text
     assert "probe\\-vscode\\-linux\\-build.sh" in text
+    assert "probe\\_vscode\\_linux\\_build.py" in text
     assert "preflight\\-step14\\-closeout.sh" in text
     assert "verify\\-step14\\-closeout.sh" in text
     assert "vscode_linux_partial" in text
@@ -58,6 +59,7 @@ def test_debian_le_vibe_man_ide_prereqs_synopsis_print_closeout_commands_step14(
     assert ".B lvibe ide\\-prereqs" in text
     assert "\\-\\-print\\-closeout\\-commands" in text
     assert "probe\\-vscode\\-linux\\-build.sh" in text
+    assert "probe\\_vscode\\_linux\\_build.py" in text
     assert "vscode_linux_partial" in text
     assert "vscode_linux_build" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text

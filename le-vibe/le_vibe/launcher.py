@@ -883,6 +883,10 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             "# probe vscode_linux_build (shell — same classifier as --json): "
             f'./packaging/scripts/probe-vscode-linux-build.sh "{root}"'
         )
+        print(
+            "# probe — Python (same classifier; `-h` mirrors shell `--help` recovery list): "
+            "PYTHONPATH=le-vibe python3 packaging/scripts/probe_vscode_linux_build.py -h"
+        )
         if vs_status == "partial":
             names = vscode_linux_bin_filenames(vs_p)
             if names:
