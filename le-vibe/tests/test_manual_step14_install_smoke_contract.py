@@ -60,6 +60,9 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "dpkg-buildpackage" in text
     assert "stderr hint" in text
     assert "desktop-file-validate" in text
+    assert "test_manual_step14_install_smoke_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> None:

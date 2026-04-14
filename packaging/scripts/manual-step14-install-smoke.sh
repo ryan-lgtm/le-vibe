@@ -3,6 +3,8 @@
 # stack + IDE .deb artifacts to perform a deterministic manual install smoke.
 # If .debs are missing, fix the Linux IDE build first (partial VSCode-linux tree) — see --help
 # and docs/PM_DEB_BUILD_ITERATION.md (*Partial VSCode-linux tree*).
+# Pytest contracts: le-vibe/tests/test_manual_step14_install_smoke_contract.py (this script); verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
