@@ -39,6 +39,8 @@ def test_root_readme_prioritization_demoinstall_apt_install_both_debs_step14():
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "--json" in text
     assert "apt_sim_note" in text
+    assert "desktop_file_validate" in text
+    assert "desktop_file_validate_on_path" in text
     assert "build machine" in text
     assert "test host" in text
     assert "manual-step14-install-smoke.sh" in text
@@ -61,6 +63,7 @@ def test_root_readme_current_status_works_well_today_full_product_install_step14
     assert "le-vibe/README.md" in text
     assert "--json" in text
     assert "apt_sim_note" in text
+    assert "desktop_file_validate" in text
     assert "vscode_linux_build" in text
     assert "ide-prereqs --json" in text
     assert "build machine" in text
