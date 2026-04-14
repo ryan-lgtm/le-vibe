@@ -40,6 +40,13 @@ def test_install_le_vibe_local_script_asserts_deb_artifacts_when_install():
     assert "IDE package .deb missing" in text
 
 
+def test_install_le_vibe_local_warns_on_dirty_vscodium_submodule():
+    text = (_root() / "packaging" / "scripts" / "install-le-vibe-local.sh").read_text(encoding="utf-8")
+    assert "warn_if_vscodium_submodule_dirty" in text
+    assert "VSCodium submodule state: DIRTY" in text
+    assert "non-reproducible" in text
+
+
 def test_install_le_vibe_local_usage_documents_flags_and_exit_codes():
     text = (_root() / "packaging" / "scripts" / "install-le-vibe-local.sh").read_text(encoding="utf-8")
     assert "--preflight-only" in text

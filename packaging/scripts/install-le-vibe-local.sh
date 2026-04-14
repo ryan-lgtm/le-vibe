@@ -132,6 +132,22 @@ require_submodule() {
   fi
 }
 
+warn_if_vscodium_submodule_dirty() {
+  local sub="$ROOT/editor/vscodium"
+  local dirty=""
+  if [[ ! -e "$sub/.git" ]]; then
+    return 0
+  fi
+  dirty="$(git -C "$sub" status --porcelain 2>/dev/null || true)"
+  if [[ -n "$dirty" ]]; then
+    log_tee "==> VSCodium submodule state: DIRTY (non-blocking warning)"
+    log_tee "    editor/vscodium has local modifications. Builds may be non-reproducible."
+    log_tee "    Before a release-quality run, clean/reset the submodule to its pinned commit."
+  else
+    log_tee "==> VSCodium submodule state: clean"
+  fi
+}
+
 require_stack_packaging_tools() {
   local missing=()
   if ! have_cmd dpkg-buildpackage; then missing+=("dpkg-dev"); fi
@@ -194,6 +210,7 @@ run_preflight_only() {
   require_linux
   require_submodule
   require_stack_packaging_tools
+  warn_if_vscodium_submodule_dirty
 
   if ! have_cmd python3; then
     echo "install-le-vibe-local: python3 is required for VSCode-linux probe — install python3." >&2
@@ -344,6 +361,7 @@ fi
 require_linux
 require_submodule
 require_stack_packaging_tools
+warn_if_vscodium_submodule_dirty
 
 PROBE_OUT="$("$ROOT/packaging/scripts/probe-vscode-linux-build.sh" "$ROOT" 2>/dev/null | tr -d '\r\n' || echo unknown)"
 
