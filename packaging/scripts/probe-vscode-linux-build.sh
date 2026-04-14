@@ -33,6 +33,14 @@ Print default stdout: one line — ready | partial | absent | unknown
 When partial: packaging/scripts/print-step14-vscode-linux-bin-files.sh [REPO_ROOT]
 prints bin/ filenames (same as lvibe ide-prereqs --json field vscode_linux_bin_files).
 
+When partial — recover toward bin/codium (linux_compile tarball or local dev/build.sh):
+  packaging/scripts/print-github-linux-compile-artifact-hint.sh
+  packaging/scripts/trigger-le-vibe-ide-linux-compile.sh
+  packaging/scripts/download-vscodium-linux-compile-artifact.sh  (--install)
+  packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh
+  See editor/BUILD.md (Partial tree, 14.f); lvibe ide-prereqs --print-closeout-commands;
+  packaging/scripts/preflight-step14-closeout.sh.
+
 Same classifier as le_vibe.ide_packaging_paths.vscode_linux_build_status().
 EOF
   exit 0

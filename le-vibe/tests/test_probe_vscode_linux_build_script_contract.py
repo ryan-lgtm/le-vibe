@@ -77,6 +77,11 @@ def test_probe_vscode_linux_build_script_exists_bash_syntax_and_help() -> None:
     assert "Usage" in out
     assert "ready" in out and "partial" in out
     assert "print-step14-vscode-linux-bin-files.sh" in out
+    assert "print-github-linux-compile-artifact-hint.sh" in out
+    assert "trigger-le-vibe-ide-linux-compile.sh" in out
+    assert "download-vscodium-linux-compile-artifact.sh" in out
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in out
+    assert "preflight-step14-closeout.sh" in out
     assert "vscode_linux_bin_files" in out
     assert "--progress" in out
     assert "--json" in out
