@@ -60,3 +60,13 @@ def test_debian_readme_documents_optional_linux_compile_node_parity_14e():
     assert "node --version" in text
     assert "LEVIBE_SKIP_NODE_VERSION_CHECK" in text
     assert "Compile wrapper vs Node" in text
+
+
+def test_debian_readme_documents_partial_tree_maintainer_scripts_14f():
+    """STEP 14.f: installed README.Debian lists linux_compile tarball maintainer path."""
+    text = (_repo_root() / "debian" / "le-vibe.README.Debian").read_text(encoding="utf-8")
+    assert "Partial `VSCode-linux` tree" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
