@@ -113,8 +113,11 @@ def test_verify_14c_local_binary_script_contract():
     assert "smoke-built-codium-lvibe.sh" in text
     assert "verify-14c-local-binary: (14.c) No built tree yet" in text
     assert "verify-14c-local-binary: (14.c) Incomplete VSCode-linux tree" in text
+    assert "verify-14c-local-binary: or linux_compile tarball:" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
     assert "preflight-step14-closeout.sh" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "use-node-toolchain.sh" in text

@@ -41,6 +41,8 @@ def test_print_vsbuild_codium_path_documents_14f():
     assert "vscodium-linux-build.tar.gz" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
     assert "linux_compile" in text or "BUILD.md" in text
 
 

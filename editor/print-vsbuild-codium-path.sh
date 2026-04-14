@@ -54,6 +54,7 @@ if [[ ${#matches[@]} -eq 0 ]]; then
       fi
       echo "print-vsbuild-codium-path: rerun: cd editor/vscodium && ./dev/build.sh (editor/BUILD.md 14.c), or unpack a full vscodium-linux-build.tar.gz artifact (14.f)." >&2
       echo "print-vsbuild-codium-path: CI tarball (browser or gh): packaging/scripts/print-github-linux-compile-artifact-hint.sh" >&2
+      echo "print-vsbuild-codium-path: maintainer CI: packaging/scripts/trigger-le-vibe-ide-linux-compile.sh; packaging/scripts/download-vscodium-linux-compile-artifact.sh --install" >&2
       echo "print-vsbuild-codium-path: monorepo: packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh /path/to/vscodium-linux-build.tar.gz --yes (replaces partial VSCode-linux-* under editor/vscodium/)" >&2
       exit 1
     fi

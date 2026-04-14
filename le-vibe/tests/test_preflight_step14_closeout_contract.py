@@ -38,6 +38,8 @@ def test_preflight_step14_closeout_script_documents_checks() -> None:
     assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
     assert "desktop-file-validate" in text
     assert "build-le-vibe-ide-deb.sh" in text
 

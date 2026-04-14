@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # STEP 14.c — confirm local dev/build.sh produced VSCode-linux-*/bin/codium under editor/vscodium/.
+# Failure stderr: same CI maintainer family as verify-step14-closeout.sh — print-github-linux-compile-artifact-hint.sh,
+#   trigger-le-vibe-ide-linux-compile.sh, download-vscodium-linux-compile-artifact.sh --install.
 # No network; does not start Ollama (unlike smoke-built-codium-lvibe.sh). From repo root:
 #   ./editor/verify-14c-local-binary.sh
 # Exit 0: prints absolute path to bin/codium on stdout (same as print-built-codium-path.sh).
@@ -48,9 +50,11 @@ printf '%s\n' "${out}" >&2
 if [[ "${out}" == *"partial or incomplete"* ]]; then
   echo "verify-14c-local-binary: (14.c) Incomplete VSCode-linux tree — finish cd editor/vscodium && ./dev/build.sh (editor/BUILD.md 14.c). Full launcher smoke: ./editor/smoke-built-codium-lvibe.sh (needs ollama on PATH)." >&2
   echo "verify-14c-local-binary: or get linux_compile tarball (browser or gh): packaging/scripts/print-github-linux-compile-artifact-hint.sh" >&2
+  echo "verify-14c-local-binary: maintainer CI: packaging/scripts/trigger-le-vibe-ide-linux-compile.sh; packaging/scripts/download-vscodium-linux-compile-artifact.sh --install" >&2
   echo "verify-14c-local-binary: then replace partial tree: packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh /path/to/vscodium-linux-build.tar.gz --yes (editor/BUILD.md 14.f)" >&2
 else
   echo "verify-14c-local-binary: (14.c) No built tree yet — toolchain → fetch → compile: editor/BUILD.md (14.a use-node-toolchain.sh, 14.b fetch-vscode-sources.sh, then cd editor/vscodium && ./dev/build.sh). Full launcher smoke: ./editor/smoke-built-codium-lvibe.sh (needs ollama on PATH)." >&2
+  echo "verify-14c-local-binary: or linux_compile tarball: packaging/scripts/print-github-linux-compile-artifact-hint.sh; packaging/scripts/trigger-le-vibe-ide-linux-compile.sh; packaging/scripts/download-vscodium-linux-compile-artifact.sh --install — editor/BUILD.md 14.f" >&2
 fi
 echo "verify-14c-local-binary: preflight (gap list before strict verify): ${ROOT}/packaging/scripts/preflight-step14-closeout.sh — docs/PM_DEB_BUILD_ITERATION.md" >&2
 exit 1
