@@ -119,6 +119,7 @@ if [[ "${layout}" == "vscodium" && "${LEVIBE_EDITOR_GATE_ASSERT_BRAND:-0}" == "1
       echo "ci-editor-gate: LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 — missing ${_vsc_linux_svg} — run editor/le-vibe-overrides/sync-linux-icon-assets.sh before dev/build.sh (docs/brand-assets.md; editor/BUILD.md *Linux icons*)." >&2
       exit 1
     fi
+    # sync-linux-icon-assets.sh --check: packaging SVG vs linux le-vibe.svg and workbench code-icon.svg (stable + insider).
     if ! bash "${ROOT}/editor/le-vibe-overrides/sync-linux-icon-assets.sh" --check; then
       exit 1
     fi

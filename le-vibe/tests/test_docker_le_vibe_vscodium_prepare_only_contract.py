@@ -21,6 +21,7 @@ def test_docker_le_vibe_vscodium_prepare_only_script_bash_syntax() -> None:
     assert "PM_STAGE_MAP.md" in text
     assert "linux-vscodium-ci-apt.pkgs" in text
     assert "LEVIBE_VSCODIUM_PREPARE_ONLY=1" in text
+    assert "code-icon" in text
     assert "chown" in text and "HOST_UID" in text
     assert "test_docker_le_vibe_vscodium_prepare_only_contract.py" in text
     assert "test_verify_step14_closeout_contract.py" in text

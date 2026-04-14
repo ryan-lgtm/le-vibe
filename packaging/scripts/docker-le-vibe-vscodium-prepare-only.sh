@@ -3,7 +3,7 @@
 # build-le-vibe-ide.yml — merge branding, sync Linux icons, patch dev/build.sh — without a host
 # full compile and without host sudo for apt (Docker runs apt as root in the container).
 #
-# Mutates editor/vscodium/ (product.json, dev/build.sh, linux resources). Restores UID/GID on
+# Mutates editor/vscodium/ (product.json, dev/build.sh, linux resources, workbench code-icon.svg). Restores UID/GID on
 # editor/vscodium to HOST_UID/HOST_GID (defaults: caller id) after the script so the bind mount
 # is not left root-owned.
 #

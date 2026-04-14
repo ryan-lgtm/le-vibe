@@ -32,6 +32,8 @@ def test_ci_vscodium_linux_dev_build_documents_overrides_hook():
     assert ".[0] * .[1]" in text
     assert "sudo apt install jq" in text
     assert "sync-linux-icon-assets.sh" in text
+    assert "workbench" in text
+    assert "code-icon" in text
     assert "APP_NAME:-VSCodium" in text
     assert "submodule bump" in text
     assert "§7.3" in text

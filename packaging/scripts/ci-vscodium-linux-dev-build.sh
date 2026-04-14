@@ -4,8 +4,9 @@
 # After success: ./editor/verify-14c-local-binary.sh (14.c) or ./editor/print-built-codium-path.sh — editor/BUILD.md.
 # CI: build-le-vibe-ide.yml job linux_compile — not run on pull_request (too slow for default runners).
 # 14.a: active node must match editor/.nvmrc before dev/build.sh unless LEVIBE_SKIP_NODE_VERSION_CHECK=1.
-# PRODUCT_SPEC §7.3: merge Lé Vibe product strings; patch dev/build.sh to honor env; source
-#   editor/le-vibe-overrides/build-env.lvibe-defaults.sh, then optional build-env.sh (see build-env.sh.example).
+# PRODUCT_SPEC §7.3: merge Lé Vibe product strings; sync-linux-icon-assets.sh (linux resources + workbench
+#   code-icon.svg); patch dev/build.sh to honor env; source editor/le-vibe-overrides/build-env.lvibe-defaults.sh,
+#   then optional build-env.sh (see build-env.sh.example).
 # Authority: editor/BUILD.md, docs/vscodium-fork-le-vibe.md.
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.e linux_compile / local full compile after STEP 0–1.
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (requires editor/vscodium/ with product.json).
@@ -25,13 +26,14 @@ Usage: packaging/scripts/ci-vscodium-linux-dev-build.sh
 
 Run from the repository root. Applies §7.3 Lé Vibe layers then execs editor/vscodium/dev/build.sh:
   merge product-branding-merge.json into editor/vscodium/product.json (jq),
-  sync-linux-icon-assets.sh, patch dev/build.sh for env-driven APP_NAME, optional build-env*.sh,
+  sync-linux-icon-assets.sh (src/stable/resources/linux + workbench code-icon.svg stable/insider),
+  patch dev/build.sh for env-driven APP_NAME, optional build-env*.sh,
   optional Node vs editor/.nvmrc check (14.a).
 
 Environment:
   LEVIBE_SKIP_NODE_VERSION_CHECK      Set to 1 to skip active node vs editor/.nvmrc check.
-  LEVIBE_VSCODIUM_PREPARE_ONLY        Set to 1 to apply §7.3 merge, Linux icons, and dev/build.sh
-                                      patch, then exit without running dev/build.sh (no compile).
+  LEVIBE_VSCODIUM_PREPARE_ONLY        Set to 1 to apply §7.3 merge, icon sync (linux + workbench), and
+                                      dev/build.sh patch, then exit without running dev/build.sh (no compile).
   LEVIBE_SKIP_HOST_DEPS_CHECK         Set to 1 to skip packaging/scripts/check-linux-vscodium-build-deps.sh
                                       (Linux full compile only; CI installs apt deps before this script).
 
@@ -118,7 +120,7 @@ _lvibe_merge_vscodium_product_json
 _lvibe_patch_dev_build_sh_for_env_defaults
 
 if [[ "${LEVIBE_VSCODIUM_PREPARE_ONLY:-}" == "1" ]]; then
-  echo "ci-vscodium-linux-dev-build: LEVIBE_VSCODIUM_PREPARE_ONLY=1 — §7.3 product merge, Linux icons, and dev/build.sh env patch applied; not invoking dev/build.sh."
+  echo "ci-vscodium-linux-dev-build: LEVIBE_VSCODIUM_PREPARE_ONLY=1 — §7.3 product merge, sync-linux-icon-assets.sh (linux + workbench code-icon), and dev/build.sh env patch applied; not invoking dev/build.sh."
   echo "ci-vscodium-linux-dev-build: Next: ./editor/fetch-vscode-sources.sh if editor/vscodium/vscode/ is missing, then re-run without LEVIBE_VSCODIUM_PREPARE_ONLY for the compile (editor/BUILD.md 14.e)."
   exit 0
 fi
