@@ -260,7 +260,9 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "test_verify_step14_closeout_contract.py" in sec73
     assert "test_manual_step14_install_smoke_contract.py" in sec73
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in sec73
-    assert "571" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in sec73
+    assert "download-vscodium-linux-compile-artifact.sh" in sec73
+    assert "575" in text
 
 
 def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14():
