@@ -36,6 +36,12 @@ def _run_with_step14_contract_artifact_lock(fn: Callable[[], None]) -> None:
         _unlock_artifact_lock(fd)
 
 
+def test_verify_step14_contract_flock_lock_path_is_gitignored() -> None:
+    """fcntl lock for parallel-safe JSON contract tests — path must stay out of version control."""
+    gi = (_repo_root() / ".gitignore").read_text(encoding="utf-8")
+    assert "le-vibe/.pytest-verify-step14-contract.lock" in gi
+
+
 def test_verify_step14_closeout_script_bash_syntax() -> None:
     script = _repo_root() / "packaging" / "scripts" / "verify-step14-closeout.sh"
     assert script.is_file(), script
