@@ -124,6 +124,8 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "Partial VSCode-linux" in text
     assert "print-vsbuild-codium-path.sh" in text
     assert "print-built-codium-path.sh" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def _verify_step14_closeout_json_mode_outputs_parseable_payload_impl() -> None:
