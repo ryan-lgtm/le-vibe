@@ -41,6 +41,7 @@ Options:
 Environment:
   GITHUB_TOKEN, GH_TOKEN   Required to **download** the artifact archive (not for public list APIs).
   GITHUB_API_URL           Override API host (default https://api.github.com).
+  LEVIBE_DOWNLOAD_ARTIFACT_MAX_PAGES  Workflow-run list pages to scan (default 10; 100 runs/page).
 
 After success, vendor the tree:
   packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh /path/to/vscodium-linux-build.tar.gz --yes
@@ -138,28 +139,41 @@ if [[ -n "$RUN_ID" ]]; then
   ARTIFACT_ID="${line%%$'\t'*}"
   ARTIFACT_NAME="${line#*$'\t'}"
 else
-  runs_json="$(_github_api_get "${API}/repos/${OWNER}/${REPO}/actions/workflows/build-le-vibe-ide.yml/runs?per_page=50")"
-  if jq -e '.message' >/dev/null 2>&1 <<<"$runs_json"; then
-    echo "${0##*/}: GitHub API: $(jq -r .message <<<"$runs_json") — private repo or rate limit; set GITHUB_TOKEN" >&2
-    exit 1
-  fi
-  if ! jq -e '.workflow_runs' >/dev/null 2>&1 <<<"$runs_json"; then
-    echo "${0##*/}: workflow runs API error — check network and repo access (${OWNER}/${REPO})" >&2
-    printf '%s\n' "$runs_json" >&2
-    exit 1
-  fi
-  while read -r rid; do
-    [[ -z "$rid" ]] && continue
-    line="$(_pick_artifact_from_run "$rid" || true)"
-    if [[ -n "$line" ]]; then
-      RESOLVED_RUN="$rid"
-      ARTIFACT_ID="${line%%$'\t'*}"
-      ARTIFACT_NAME="${line#*$'\t'}"
+  MAX_PAGES="${LEVIBE_DOWNLOAD_ARTIFACT_MAX_PAGES:-10}"
+  PER_PAGE=100
+  _page=1
+  while [[ "$_page" -le "$MAX_PAGES" ]]; do
+    runs_json="$(_github_api_get "${API}/repos/${OWNER}/${REPO}/actions/workflows/build-le-vibe-ide.yml/runs?per_page=${PER_PAGE}&page=${_page}")"
+    if jq -e '.message' >/dev/null 2>&1 <<<"$runs_json"; then
+      echo "${0##*/}: GitHub API: $(jq -r .message <<<"$runs_json") — private repo or rate limit; set GITHUB_TOKEN" >&2
+      exit 1
+    fi
+    if ! jq -e '.workflow_runs' >/dev/null 2>&1 <<<"$runs_json"; then
+      echo "${0##*/}: workflow runs API error — check network and repo access (${OWNER}/${REPO}) page=${_page}" >&2
+      printf '%s\n' "$runs_json" >&2
+      exit 1
+    fi
+    _n="$(jq '.workflow_runs | length' <<<"$runs_json")"
+    if [[ "${_n}" -eq 0 ]]; then
       break
     fi
-  done < <(jq -r '.workflow_runs[] | select(.conclusion == "success") | .id' <<<"$runs_json")
-  if [[ -z "$RESOLVED_RUN" || -z "$ARTIFACT_ID" ]]; then
-    echo "${0##*/}: no successful run with le-vibe-vscodium-linux-* artifact found — trigger workflow_dispatch with vscodium_linux_compile, push ide-v* tag, or use --run-id" >&2
+    while read -r rid; do
+      [[ -z "$rid" ]] && continue
+      line="$(_pick_artifact_from_run "$rid" || true)"
+      if [[ -n "$line" ]]; then
+        RESOLVED_RUN="$rid"
+        ARTIFACT_ID="${line%%$'\t'*}"
+        ARTIFACT_NAME="${line#*$'\t'}"
+        break
+      fi
+    done < <(jq -r '.workflow_runs[] | select(.conclusion == "success") | .id' <<<"$runs_json")
+    if [[ -n "${RESOLVED_RUN:-}" && -n "${ARTIFACT_ID:-}" ]]; then
+      break
+    fi
+    ((_page++))
+  done
+  if [[ -z "${RESOLVED_RUN:-}" || -z "${ARTIFACT_ID:-}" ]]; then
+    echo "${0##*/}: no successful run with le-vibe-vscodium-linux-* artifact found (scanned up to ${MAX_PAGES} page(s) × ${PER_PAGE} runs; set LEVIBE_DOWNLOAD_ARTIFACT_MAX_PAGES to go deeper) — trigger workflow_dispatch with vscodium_linux_compile, push ide-v* tag, or use --run-id" >&2
     echo "${0##*/}: hint: packaging/scripts/print-github-linux-compile-artifact-hint.sh" >&2
     exit 1
   fi

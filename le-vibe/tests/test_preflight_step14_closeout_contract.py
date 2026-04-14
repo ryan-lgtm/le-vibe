@@ -70,6 +70,7 @@ def test_download_vscodium_linux_compile_artifact_script_contract() -> None:
     assert "le-vibe-vscodium-linux-" in text
     assert "GITHUB_TOKEN" in text
     assert "_github_api_get" in text
+    assert "LEVIBE_DOWNLOAD_ARTIFACT_MAX_PAGES" in text
     assert "archive download requires" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     subprocess.run(
