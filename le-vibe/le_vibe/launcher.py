@@ -954,6 +954,11 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             print("./editor/fetch-vscode-sources.sh")
             print("(cd editor/vscodium && ./dev/build.sh)")
         print("./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb")
+        print(
+            "# optional: preflight --json (structured gap summary on stdout; human lines on stderr) — "
+            "docs/PM_DEB_BUILD_ITERATION.md *Preflight (all gaps)*: "
+            "./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb --json"
+        )
         print("./packaging/scripts/verify-step14-closeout.sh --require-stack-deb")
         print(
             "# optional: add --apt-sim or --json to verify "

@@ -107,6 +107,7 @@ def test_ide_prereqs_print_closeout_commands(monkeypatch: pytest.MonkeyPatch, ca
     assert "probe-vscode-linux-build.sh" in out
     assert "probe_vscode_linux_build.py" in out
     assert "preflight-step14-closeout.sh" in out
+    assert "preflight-step14-closeout.sh --require-stack-deb --json" in out
     assert "verify-step14-closeout.sh" in out
     assert "manual-step14-install-smoke.sh --verify-only" in out
     assert "manual-step14-install-smoke.sh --json" in out
