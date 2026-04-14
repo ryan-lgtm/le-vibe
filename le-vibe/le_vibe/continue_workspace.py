@@ -59,7 +59,7 @@ def _product_welcome_rule_body() -> str:
         "alwaysApply: true\n"
         "---\n\n"
         "**Welcome to Lé Vibe.** Lé Vibe is an **open source** and **free** coding environment. "
-        "It is a **local-first alternative** to **Cursor** (AI-assisted coding in the same spirit—not feature parity). "
+        "Your primary agent runs on your hardware, and an Operator can coordinate specialist agents around your project memory in **`.lvibe/`**. "
         "**In-editor welcome (must ship §4):** open **`.lvibe/WELCOME.md`** now—Explorer → **`.lvibe`**, or Quick Open (**Ctrl+P** / **Cmd+P**) → **`.lvibe/WELCOME.md`**. "
         "That file is the full §4 paragraph; keep Chat/Agent answers consistent with it.\n"
     )

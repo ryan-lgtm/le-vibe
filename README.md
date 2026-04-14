@@ -1,8 +1,18 @@
 # Lé Vibe
 
-**Lé Vibe** is an **open-source**, **local-first** coding environment: you use a **Code OSS–class editor** (not Microsoft’s “Visual Studio Code” product), talk to your project through the **Continue** extension, and run models on your own machine with **Ollama**. The goal is **Cursor-like intent**—AI-native editing—without locking you to a proprietary cloud or a surprise API bill for the core loop.
+<p align="center">
+  <img src="packaging/icons/hicolor/scalable/apps/le-vibe.svg" alt="Lé Vibe logo" width="120" />
+</p>
 
-What makes it **distinct** is **orchestration**: an **Operator** coordinates the session and **delegates** to **specialist agents** (product, engineering, QA, and other roles). They **collaborate** and store **structured, consent-given** notes under **`.lvibe/`** so work compounds instead of re-scanning the whole repository every turn.
+Welcome to **Lé Vibe**.
+
+**Lé Vibe** is an **open-source**, **local-first**, agentic development environment built for people who want deep AI assistance without giving up control of their machine, workflow, or project context. You use a **Code OSS–class editor**, chat and apply edits through **Continue**, and run inference through **Ollama** on your own hardware.
+
+What makes Lé Vibe special is the combination of:
+
+- **Hardware-paired intelligence** — your primary agent is selected and tuned to your available CPU/GPU/RAM profile, from lightweight setups to larger local rigs.
+- **An orchestrated team model** — one **Operator** coordinates a crew of **specialist agents** (product, engineering, QA, and more) instead of forcing one assistant to wear every hat.
+- **Compounding project memory** — specialists write structured, consent-given notes in **`.lvibe/`**, so the system learns your project over time, debates tradeoffs with clearer role boundaries, and improves handoffs instead of starting from scratch each turn.
 
 ## How orchestration fits together
 
@@ -28,8 +38,31 @@ flowchart TB
 ```
 
 - **Operator** — one coordinating thread for the session: it decides when to lean on a **specialist** lens instead of one generic assistant for everything.
-- **Specialists** — role-shaped agents that **work together**; their outputs land in **`.lvibe/`** (with your **consent** and a **size budget**) so the Operator can **reuse** prior reasoning.
+- **Specialists** — role-shaped agents that **work together**, challenge one another, and converge on stronger decisions; their outputs land in **`.lvibe/`** (with your **consent** and a **size budget**) so the Operator can **reuse** prior reasoning.
 - **Local inference** — **Ollama** uses **your** CPU/GPU. You are not charged per token by a hosted model provider for that path; your tradeoff is **hardware**, **time**, and **honest** model sizing (see [`spec.md`](spec.md)). **Privacy:** defaults keep generation on **localhost**; there is no Lé Vibe–hosted cloud required for the core workflow.
+
+## What Makes Lé Vibe Different
+
+```mermaid
+flowchart LR
+    H[Your hardware profile] --> M[Primary local model choice]
+    M --> O[Operator]
+    O --> PM[Product specialist]
+    O --> ENG[Engineering specialist]
+    O --> QA[QA specialist]
+    PM <--> ENG
+    ENG <--> QA
+    PM <--> QA
+    PM --> MEM[(.lvibe memory)]
+    ENG --> MEM
+    QA --> MEM
+    MEM --> O
+```
+
+- **Primary agent matched to your hardware:** Lé Vibe does not pretend every machine should run the same giant model. It picks an honest local tier and keeps that decision explicit and inspectable.
+- **Role-based orchestration over generic chat:** The Operator can delegate to focused specialists, compare their recommendations, and drive decisions with clearer accountability.
+- **Learning over time, not just over turns:** Agent notes, manifests, and skill files let each role deepen context in its own lane while still participating in shared project reasoning.
+- **Debate with convergence:** Specialists can disagree, surface tradeoffs, and then align through orchestrated handoffs, with user gating for material decisions.
 
 ## Target experience (what we’re building)
 
@@ -136,12 +169,12 @@ Lé Vibe picks a **concrete Ollama model tag** for **this machine** using the ha
 
 ### In-editor welcome — STEP 4 / E3
 
-**Master orchestrator STEP 4** (E3): **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) §4** — **Welcome to Lé Vibe**, open/free, local-first vs **Cursor** (intent, not parity). **Surfaces:** (1) **`.lvibe/WELCOME.md`** — full paragraph for humans (**Explorer** / **Quick Open**); seeded on workspace prepare from **`le-vibe/templates/lvibe-editor-welcome.md`** (`le_vibe.editor_welcome`). (2) **`.continue/rules/01-le-vibe-product-welcome.md`** — same positioning for Continue (**`alwaysApply`**). The **terminal** may still print a one-time banner on first launch; §4 **running** copy is the markdown + rule. **CLI:** **`lvibe welcome`** (path or **`--text`**) and **`lvibe open-welcome`** (open in the resolved editor) — **[`le-vibe/README.md`](le-vibe/README.md)** *In-editor welcome (STEP 4 / E3)*; tests **`test_editor_welcome.py`**, **`test_continue_workspace.py`**.
+**Master orchestrator STEP 4** (E3): **[`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) §4** — **Welcome to Lé Vibe**, open/free, local-first, and built for orchestrated agentic development on your own hardware. **Surfaces:** (1) **`.lvibe/WELCOME.md`** — full paragraph for humans (**Explorer** / **Quick Open**); seeded on workspace prepare from **`le-vibe/templates/lvibe-editor-welcome.md`** (`le_vibe.editor_welcome`). (2) **`.continue/rules/01-le-vibe-product-welcome.md`** — same positioning for Continue (**`alwaysApply`**). The **terminal** may still print a one-time banner on first launch; §4 **running** copy is the markdown + rule. **CLI:** **`lvibe welcome`** (path or **`--text`**) and **`lvibe open-welcome`** (open in the resolved editor) — **[`le-vibe/README.md`](le-vibe/README.md)** *In-editor welcome (STEP 4 / E3)*; tests **`test_editor_welcome.py`**, **`test_continue_workspace.py`**.
 
 ### Please continue & AI Pilot (§7.1)
 
 - **Please continue** — Resume construction from the **current** PM state: **`.lvibe/session-manifest.json`** (`session_steps`, **`product.epics`** / tasks) and **`.lvibe/`** RAG—not a blank restart. Intent and guards: **[`docs/AI_PILOT_AND_CONTINUE.md`](docs/AI_PILOT_AND_CONTINUE.md)**.
-- **AI Pilot** — Sustained, coordinated advancement (mimicked in Cursor by re-pasting the **self-coordinating engineer** loop in **[`docs/PROMPT_BUILD_LE_VIBE.md`](docs/PROMPT_BUILD_LE_VIBE.md)**). **§5** consent/storage and **§8** secrets still apply; doc authority per stage: **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)**.
+- **AI Pilot** — Sustained, coordinated advancement driven by the **self-coordinating engineer** loop in **[`docs/PROMPT_BUILD_LE_VIBE.md`](docs/PROMPT_BUILD_LE_VIBE.md)**. **§5** consent/storage and **§8** secrets still apply; doc authority per stage: **[`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md)**.
 
 ### User gate (§7.2)
 

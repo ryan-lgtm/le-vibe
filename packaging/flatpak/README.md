@@ -1,5 +1,7 @@
 # Flatpak — Lé Vibe stack (`org.le_vibe.Launcher`)
 
+Welcome — this is the Flatpak packaging entry point for the Lé Vibe stack.
+
 **Roadmap H7 / STEP 13.** **Rough target:** [Flathub](https://flathub.org/) (submit a dedicated repo under `github.com/flathub` per Flathub workflow; this file is the **upstream manifest** in the monorepo).
 
 **Authority:** [`docs/flatpak-appimage.md`](../../docs/flatpak-appimage.md), [`docs/PRODUCT_SPEC.md`](../../docs/PRODUCT_SPEC.md) §8–§9.

@@ -360,7 +360,7 @@ Deliver: template and/or workspace-level rules (e.g. .continue/rules, or documen
 ### E3 — In-editor welcome (if not shipped)
 
 ```
-You are the engineer. If welcome is terminal-only, add a minimal in-editor surface: e.g. Continue onboarding snippet, markdown in .lvibe opened on first workspace open, or documented one-shot command. Must preserve Lé Vibe naming and OSS/free vs Cursor copy from docs/PRODUCT_SPEC.md §4. Run pytest if you touch Python. Session end lines per the Master orchestrator.
+You are the engineer. If welcome is terminal-only, add a minimal in-editor surface: e.g. Continue onboarding snippet, markdown in .lvibe opened on first workspace open, or documented one-shot command. Must preserve Lé Vibe naming and OSS/free, local-first agentic copy from docs/PRODUCT_SPEC.md §4. Run pytest if you touch Python. Session end lines per the Master orchestrator.
 ```
 
 ### E4 — RAG / chunk maintenance helper (optional)

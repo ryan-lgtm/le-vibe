@@ -1,5 +1,7 @@
 # Lé Vibe overrides
 
+Welcome — this folder tracks Lé Vibe-specific branding and identity layers for the editor build.
+
 **Fine-grain STEP 14.d:** policy and cross-links live in **`docs/vscodium-fork-le-vibe.md`** (*Branding & overrides*). **§7.3** fixes material IDE naming for v1 — **`product-branding-merge.json`**, **`build-env.lvibe-defaults.sh`**, **`sync-linux-icon-assets.sh`**, and **`ci-vscodium-linux-dev-build.sh`** apply **Lé Vibe** name + Linux icon wiring on every full compile path; deeper desktop/About polish still tracks **`branding-staging.checklist.md`**. Choices **outside** §7.3 follow **`docs/PRODUCT_SPEC.md`** §7.2 — **halt** with **`USER RESPONSE REQUIRED`** when specs do not decide.
 
 **Master orchestrator order:** **0 → 1 → 14 → 2–13 → 15–17** — branding work here serves **STEP 14** immediately after baseline **STEP 0–1**, not as a backlog tail. See **`docs/PROMPT_BUILD_LE_VIBE.md`** (*ORDERED WORK QUEUE*, *Rolling iteration — prefer continuation*) and **`docs/PM_STAGE_MAP.md`** *Execution order* / **STEP 16** (same pointer as **`editor/README.md`** *Master orchestrator order*).

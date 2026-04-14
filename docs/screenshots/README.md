@@ -1,5 +1,7 @@
 # Lé Vibe — screenshots (optional)
 
+Welcome — this folder is for curated screenshots used in README and release-facing materials.
+
 **Orchestrator:** **[`PM_STAGE_MAP.md`](../PM_STAGE_MAP.md) STEP 11** (Roadmap **H5** — same stage as **[`../brand-assets.md`](../brand-assets.md)**).
 
 **E1 / acceptance:** Adding or renaming images that root **`README.md`** or store copy reference — keep **§1** / **§14** framing honest (**§1** also covers user-visible **H8** **`.github/`** copy — **[`../brand-assets.md`](../brand-assets.md)** *Naming (must ship)* and *E1*); update **[`../PRODUCT_SPEC_SECTION8_EVIDENCE.md`](../PRODUCT_SPEC_SECTION8_EVIDENCE.md)** §10 if “primary UI/docs” acceptance shifts. **[`privacy-and-telemetry.md`](../privacy-and-telemetry.md)** (*Related documentation* → **E1 contract tests**) lists the same **§10** roster as root **`README`** *Tests* / **`le-vibe/tests/`**; full **`pytest`** module story — **[`../spec-phase2.md`](../spec-phase2.md) §14** *Honesty vs CI*. No extra **`pytest`** for PNGs alone.

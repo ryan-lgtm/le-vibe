@@ -6,7 +6,7 @@
 
 **Section numbering:** In **`docs/PRODUCT_SPEC.md`**, **§7** is runtime harmony (**§7.1** Continue / AI Pilot, **§7.2** user gate / **`USER RESPONSE REQUIRED`**). In **this file**, **§7** is **Phase 2 launch and managed-Ollama lifecycle** (§7.1–7.3, plus coexistence). The numbers are **not** interchangeable—cite the file when debugging or cross-linking.
 
-Phase 1 (`spec.md`, `le-vibe/` bootstrap) defines **machine preparation**: detect hardware, install/launch Ollama, pick a model, emit Continue-oriented config. Phase 2 defines **the product shell** around that stack: a installable desktop application named **Lé Vibe** that feels comparable in *intent* to Cursor—an IDE tuned for local, agentic coding—but built on **open components**, **Ollama**, and the Phase 1 bootstrap logic.
+Phase 1 (`spec.md`, `le-vibe/` bootstrap) defines **machine preparation**: detect hardware, install/launch Ollama, pick a model, emit Continue-oriented config. Phase 2 defines **the product shell** around that stack: an installable desktop application named **Lé Vibe** tuned for local, agentic coding with **open components**, **Ollama**, and Phase 1 bootstrap logic.
 
 This spec is intentionally **Debian-based Linux first**; other OSes are out of scope until Phase 2.1+.
 
@@ -35,7 +35,7 @@ This repository ships the **bootstrap + launcher + `.deb`**, **managed Ollama** 
 
 ---
 
-## 1. How realistic is a “Cursor-like” VS Code wrapper?
+## 1. How realistic is a Lé Vibe VS Code wrapper?
 
 ### What Cursor (and similar products) generally do
 
@@ -49,10 +49,10 @@ This repository ships the **bootstrap + launcher + `.deb`**, **managed Ollama** 
 | **Embedding Code OSS / VSCodium-style base** | High | Many projects build on `microsoft/vscode` OSS; license is MIT with trademark constraints—**branding must not imply official Microsoft/VS Code endorsement**. “Lé Vibe” as distinct product name helps. |
 | **Shipping a branded, updatable Linux app** | High | `.deb`, AppImage, or Flatpak; CI builds are well-trodden. |
 | **Pre-installing an open-source AI extension** | High | Continue, Cline, Roo Code, etc.—must verify license compatibility and embedding rules per extension. |
-| **Deep IDE integration rivaling Cursor** | Medium–long term | Cursor adds proprietary UI, models, and sync; matching *parity* is not required for Phase 2. **Goal:** solid **local Ollama + one strong agent UX**, not feature parity. |
+| **Deep IDE integration with richer native workflows** | Medium–long term | Mature agentic IDEs add proprietary UI, models, and sync; exact parity is not required for Phase 2. **Goal:** strong **local Ollama + orchestrated agent UX** with Lé Vibe’s own product identity. |
 | **Maintenance burden** | Medium | Tracking upstream VS Code releases, security patches, and extension API drift is ongoing work—plan for a small release train. |
 
-**Bottom line:** Building a **Linux desktop app** that is “VS Code–compatible + our bootstrap + our defaults” is **realistic**. Calling it a full Cursor clone is not the goal; **“local-first vibe coding IDE”** is.
+**Bottom line:** Building a **Linux desktop app** that is “VS Code–compatible + our bootstrap + our defaults” is **realistic**. The goal is a **local-first, orchestrated agentic IDE** with Lé Vibe’s own approach.
 
 ---
 
@@ -75,7 +75,7 @@ This repository ships the **bootstrap + launcher + `.deb`**, **managed Ollama** 
 - Windows / macOS installers (defer to Phase 2.x).
 - Hosted models or accounts as a requirement.
 - Proprietary cloud backends as default.
-- Full duplication of Cursor’s unique product features (rules engine parity, etc.) unless an open extension provides them.
+- Full duplication of every feature from other agentic editors unless it strengthens Lé Vibe’s own local-first orchestration model.
 
 ---
 

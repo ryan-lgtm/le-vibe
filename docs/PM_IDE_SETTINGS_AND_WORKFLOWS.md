@@ -1,6 +1,6 @@
 # PM — IDE settings surface & workspace workflows (next phase)
 
-**Role:** Senior product manager scope for **in-IDE** configuration (Cursor-like), **global user settings**, **`/setup-workspace`** onboarding, and **agent mention** affordances. **Engineering** implements in **`editor/`** (Code OSS / VSCodium shell), **`le-vibe/`** (launcher, policy, Continue rules), and **`schemas/`**.
+**Role:** Senior product manager scope for **in-IDE** configuration (Lé Vibe-native), **global user settings**, **`/setup-workspace`** onboarding, and **agent mention** affordances. **Engineering** implements in **`editor/`** (Code OSS / VSCodium shell), **`le-vibe/`** (launcher, policy, Continue rules), and **`schemas/`**.
 
 **Authority:** [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md) §5 (storage), §7 (orchestration), [`SESSION_ORCHESTRATION_SPEC.md`](SESSION_ORCHESTRATION_SPEC.md), [`docs/PM_STAGE_MAP.md`](PM_STAGE_MAP.md), [`AGENT_MODE_ORCHESTRATION.md`](AGENT_MODE_ORCHESTRATION.md) (ENGINEER / PRODUCT / PROJECT, **`OWNER_DIRECTIVES`**, continuation vs **`USER RESPONSE REQUIRED`** / **`LÉ VIBE BLOCKED`**).
 

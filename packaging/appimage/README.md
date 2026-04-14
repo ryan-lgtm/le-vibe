@@ -1,5 +1,7 @@
 # AppImage — Lé Vibe stack (H7)
 
+Welcome — this is the AppImage packaging guide for the Lé Vibe stack.
+
 **Rough target:** self-contained-ish Linux bundle; **production** users should still prefer the **`.deb`** or **[Flatpak](../flatpak/README.md)** (Flathub track) when available.
 
 **Authority:** [`docs/flatpak-appimage.md`](../../docs/flatpak-appimage.md).

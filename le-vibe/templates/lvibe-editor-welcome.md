@@ -2,7 +2,7 @@
 
 **Lé Vibe** is an **open source** and **free** coding environment.
 
-It is positioned as a **local-first alternative** to **Cursor** (same general intent—AI-assisted coding—not feature parity). This workspace includes a **`.lvibe/`** hub for project memory, PM session data, and agent skills—see **`README.md`** in that folder.
+It is a **local-first**, open environment for agentic development: your primary agent runs on your hardware, and an Operator can coordinate a team of specialist agents that collaborate through **`.lvibe/`** project memory. This workspace includes that **`.lvibe/`** hub for PM session data and agent skills—see **`README.md`** in that folder.
 
 Must-ship wording for this welcome lives in **`docs/PRODUCT_SPEC.md`** §4 in the Lé Vibe product repository.
 

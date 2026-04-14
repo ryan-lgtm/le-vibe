@@ -22,7 +22,7 @@
 
 **Meaning (product):** Resume **construction** from the **current** PM state—**session manifest** (`session_steps`, `meta.current_step_id` where implemented), **`product.epics` / tasks**, and **`.lvibe/`** RAG—without re-onboarding. The app **does not** start from zero; it **advances** the next **incomplete** epic/task or session step per **`docs/SESSION_ORCHESTRATION_SPEC.md`**.
 
-**Engineering mimic (Cursor today):** Re-paste the **self-coordinating engineer lazy prompt** from **`docs/PROMPT_BUILD_LE_VIBE.md`** (or the Master orchestrator block). Same **authority chain**: **`docs/PRODUCT_SPEC.md`** → **`docs/SESSION_ORCHESTRATION_SPEC.md`** → queue in **`PROMPT_BUILD_LE_VIBE.md`**.
+**Engineering mirror (today):** Re-paste the **self-coordinating engineer lazy prompt** from **`docs/PROMPT_BUILD_LE_VIBE.md`** (or the Master orchestrator block). Same **authority chain**: **`docs/PRODUCT_SPEC.md`** → **`docs/SESSION_ORCHESTRATION_SPEC.md`** → queue in **`PROMPT_BUILD_LE_VIBE.md`**.
 
 ---
 
@@ -34,7 +34,7 @@
 
 **Guards:** **§8 secrets** and **§5** storage/consent still apply. **AI Pilot** does **not** bypass user **decline** of **`.lvibe/`** or **env** policy.
 
-**Engineering mimic (Cursor today):** The engineer uses the **persistent loop** prompt: **multiple** queue steps per session when safe, **PASTE SAME AGAIN** until **LÉ VIBE SESSION COMPLETE**, with **explicit** “which agent hat” in messages when helpful—**simulating** visible coordination until the fork/extension provides a real transcript panel.
+**Engineering mirror (today):** The engineer uses the **persistent loop** prompt: **multiple** queue steps per session when safe, **PASTE SAME AGAIN** until **LÉ VIBE SESSION COMPLETE**, with **explicit** “which agent hat” in messages when helpful—**simulating** visible coordination until the fork/extension provides a real transcript panel.
 
 ---
 

@@ -15,7 +15,7 @@ source: spec-phase2.md
 
 **Lé Vibe** is a Debian-first Linux desktop IDE built on **Code OSS** (open-source VS Code lineage), branded as a distinct product. It ships with a preconfigured **open-source agent extension** (e.g. Continue) and integrates the **le-vibe** bootstrap stack: hardware-aware **Ollama** model selection, local API at localhost, and Continue-style YAML config.
 
-It is **not** a full clone of Cursor; the goal is **local-first vibe coding** with honest model tiers and minimal manual setup.
+It is a **local-first, orchestrated agentic environment** with honest model tiers and minimal manual setup.
 
 **Cross-links:** Phase 1 bootstrap (`le-vibe/`) — **`spec.md`**; authority roster — **`docs/PRODUCT_SPEC.md` §9**; E1 regression — **`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`** (**§1**/**H8** + §5–§10); **H8** trust surface — **`docs/README.md`** *Product surface* (**`.github/`** — **`ci.yml`**, **`dependabot.yml`**, **`ISSUE_TEMPLATE/`** + **`config.yml`** **`#` H8**); in-repo vs fork/Flatpak — **§14** in **`spec-phase2.md`** (table row *Optional RAG / embeddings chunk file* — this **`lv-meta-overview`** chunk is **not** exercised by **`pytest`**); **`SECURITY.md`** *Related docs* lists **`docs/rag/le-vibe-phase2-chunks.md`** for discoverability.
 
@@ -26,11 +26,11 @@ tags: [feasibility, vscode-oss, licensing, electron, debian]
 source: spec-phase2.md
 ---
 
-# Feasibility: “Cursor-like” wrapper
+# Feasibility: Lé Vibe wrapper
 
 Shipping a **branded Code OSS distribution** with custom extensions and installers is **realistic** for Linux (e.g. `.deb`). Upstream is MIT; **do not** use “VS Code” as the product name—use **Lé Vibe** and attribute “built on Code - OSS.”
 
-Matching **Cursor feature parity** is **not** a Phase 2 goal. Ongoing cost: merging upstream security fixes and extension API updates.
+Matching every feature from other agentic editors is **not** a Phase 2 goal. Ongoing cost: merging upstream security fixes and extension API updates.
 
 ---
 chunk_id: lv-platform-debian

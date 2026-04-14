@@ -15,9 +15,9 @@ WELCOME_BANNER = """
 ╔══════════════════════════════════════════════════════════════════╗
 ║  Welcome to Lé Vibe                                              ║
 ╠══════════════════════════════════════════════════════════════════╣
-║  Lé Vibe is a free, open source, local-first coding environment  ║
-║  — an alternative to Cursor (AI-assisted coding; not the same     ║
-║  feature set). Models run on your hardware via Ollama.           ║
+║  Lé Vibe is a free, open source, local-first coding environment. ║
+║  Your primary agent runs on your hardware via Ollama, and an      ║
+║  Operator can coordinate specialist agents for your project.      ║
 ╚══════════════════════════════════════════════════════════════════╝
 
   Tip: In a project folder, `lvibe welcome` prints section-4 workspace copy; `lvibe open-welcome`

@@ -1,6 +1,6 @@
 # le-vibe
 
-Hardware-aware one-shot **launcher** for local vibe coding with [Ollama](https://ollama.com) and the [Continue](https://continue.dev) extension (Code - OSS / **Lé Vibe**, not Microsoft’s VS Code distribution). It detects your OS and hardware, installs Ollama if needed, **starts the Ollama API** on `127.0.0.1:11434` by default (platform script, then `ollama serve` if needed), picks a **best-fit** model from the DeepSeek R1 ladder (with Qwen coder fallbacks), pulls it, and writes a ready-to-import Continue config under `output/`.
+Welcome to the `le-vibe` package. This is the hardware-aware **launcher stack** behind Lé Vibe for local agentic development with [Ollama](https://ollama.com) and the [Continue](https://continue.dev) extension (Code - OSS / **Lé Vibe**, not Microsoft’s VS Code distribution). It detects your OS and hardware, installs Ollama if needed, **starts the Ollama API** on `127.0.0.1:11434` by default (platform script, then `ollama serve` if needed), picks a **best-fit** model from the DeepSeek R1 ladder (with Qwen coder fallbacks), pulls it, and writes a ready-to-import Continue config under `output/`.
 
 For **Lé Vibe Phase 2** (managed Ollama on a dedicated port, configs under `~/.config/le-vibe/`), see the [repository README](../README.md).
 

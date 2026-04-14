@@ -1,5 +1,7 @@
 # `le-vibe-ide` — Debian package for the Lé Vibe IDE tree
 
+Welcome — this README covers the IDE-side Debian package that pairs with the `le-vibe` stack package.
+
 **Authority:** [`docs/PRODUCT_SPEC.md`](../../docs/PRODUCT_SPEC.md) §7.3 — the stack discovers the editor at **`/usr/lib/le-vibe/bin/codium`** (not a second public **`PATH`** CLI; **`lvibe`** remains the user-facing command).
 
 **Master orchestrator order:** **0 → 1 → 14 → 2–13 → 15–17** — this **`.deb`** is the **§7.3** installable for **STEP 14** right after baseline **STEP 0–1**, not an afterthought. See **[`docs/PROMPT_BUILD_LE_VIBE.md`](../../docs/PROMPT_BUILD_LE_VIBE.md)** (*ORDERED WORK QUEUE*, *Rolling iteration — prefer continuation*) and **[`docs/PM_STAGE_MAP.md`](../../docs/PM_STAGE_MAP.md)** *Execution order* / **STEP 16** (same pointer as **[`editor/README.md`](../../editor/README.md)** *Master orchestrator order*).

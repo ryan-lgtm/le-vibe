@@ -6,11 +6,11 @@
 # Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (ci.yml, dependabot.yml, packaging/bin).
 # Phase 2 scope: spec-phase2.md §14 (H6/H7 vs in-tree — launcher + .deb ship here; STEP 14 E1 — editor/le-vibe-overrides/README.md + le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py).
 Name=Lé Vibe
-Comment=Free, open source, local-first IDE shell (Code OSS + Continue; alternative to Cursor)
+Comment=Free, open source, local-first IDE shell with orchestrated agent workflows
 Exec=/usr/bin/lvibe %F
 Icon=le-vibe
 Type=Application
-Categories=Development;IDE;
+Categories=Development;IDE;Utility;
 Keywords=IDE;Development;Ollama;AI;Continue;Local;
 Terminal=false
 StartupNotify=true

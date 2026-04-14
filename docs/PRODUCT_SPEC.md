@@ -79,7 +79,7 @@ lvibe .
 **Must ship:** When the app is running (first launch or dedicated welcome surface), show **Welcome to Lé Vibe** and explain:
 
 - **Lé Vibe** is an **open source** and **free** coding environment.
-- It is positioned as a **local-first alternative** to **Cursor** (same general intent—AI-assisted coding—not feature parity).
+- It is built for **local-first agentic development**: a primary agent paired to your hardware, plus an orchestrated team of specialists that collaborate through **`.lvibe/`** memory.
 - Short, honest paragraph; expandable later in docs.
 
 **Surface:** Implement where the product actually controls UI (Continue onboarding, small extension webview, or forked editor first-run)—pick one path and ship it.
@@ -230,7 +230,7 @@ Implementation may span Continue rules, extension hooks, and future fork UI—th
 | **`docs/PROMPT_BUILD_LE_VIBE.md`** | **Master orchestrator** queue (STEPS **0–17**; **execution order** **0→1→14→2–13→15–17**), Roadmap H, lazy prompts for engineering |
 | **`docs/AGENT_MODE_ORCHESTRATION.md`** | **Single-prompt** routing: **ENGINEER** / **PRODUCT_MANAGER** / **PROJECT** + optional **`OWNER_DIRECTIVES`**; manuscript index; continuation vs **`USER_RESPONSE_REQUIRED`** (only hard stop at **§7.2** guardrail edge). Pairs with [`docs/MASTER_ITERATION_LOOP.md`](MASTER_ITERATION_LOOP.md). |
 | **`docs/PM_DEB_BUILD_ITERATION.md`** | **PM / packaging:** one-shot **`.deb`** build script ([`packaging/scripts/build-le-vibe-debs.sh`](../packaging/scripts/build-le-vibe-debs.sh)), lazy engineer prompt (`print-pm-deb-build-prompt.py`). |
-| **`docs/PM_IDE_SETTINGS_AND_WORKFLOWS.md`** | **PM / phase:** Cursor-like IDE settings, **`user-settings.json`**, **`/setup-workspace`** workflow, mentions — coordinates [`schemas/user-settings.v1.example.json`](../schemas/user-settings.v1.example.json). |
+| **`docs/PM_IDE_SETTINGS_AND_WORKFLOWS.md`** | **PM / phase:** Lé Vibe IDE settings, **`user-settings.json`**, **`/setup-workspace`** workflow, mentions — coordinates [`schemas/user-settings.v1.example.json`](../schemas/user-settings.v1.example.json). |
 | **`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`** | E1 regression evidence (**§1**/**H8**, §5–§10) ↔ **`le-vibe/tests/`** (e.g. **STEP 14** / **H6** — **`test_editor_le_vibe_overrides_readme_contract.py`** ↔ **[`editor/le-vibe-overrides/README.md`](../editor/le-vibe-overrides/README.md)**; **`test_build_le_vibe_ide_workflow_contract.py`** ↔ **[`.github/workflows/build-le-vibe-ide.yml`](../.github/workflows/build-le-vibe-ide.yml)** / **[`.github/workflows/build-linux.yml`](../.github/workflows/build-linux.yml)** (**`uses:`**) **`ide-ci-metadata`**); filename **SECTION8** historic |
 | **§7.2** (this file) | **USER RESPONSE REQUIRED** — halt when orchestrator cannot decide; numbered questions; accept “no preference.” |
 
@@ -247,7 +247,7 @@ Regression evidence (**§1** / **H8** naming, §7, §8, §10): **[`PRODUCT_SPEC_
 - [x] User sees **Lé Vibe** in primary UI/docs copy (with **é**) where Unicode is used.
 - [x] **`lvibe .`** opens the editor with the current directory as workspace.
 - [x] **Concrete model** is selected and **locked** per policy; config is inspectable.
-- [x] **Welcome to Lé Vibe** copy ships with OSS/free vs Cursor positioning.
+- [x] **Welcome to Lé Vibe** copy ships with OSS/free, local-first agentic positioning.
 - [x] **§5 Consent & storage:** First-use **explanation + accept/decline**; **decline** → **no** **`.lvibe/`**, bare-bones editor behavior; **accept** → **`.lvibe/`** with **50 MB** default budget (user-configurable), **per-agent** subfolders + **shared RAG** layout (**§5.2**), **compaction** policy (**§5.5**), usage vs cap visible.
 - [x] **`.lvibe/`** hub (when enabled): agent defaults reference it; incremental, token-efficient artifacts (**legacy paths** may exist until migration to §5.2 layout).
 - [x] **§7.2 User gate:** **`USER RESPONSE REQUIRED`** (all caps) + **numbered questions** when the orchestrator must not assume; **no-preference** answers are valid delegation—see **`docs/SESSION_ORCHESTRATION_SPEC.md`** §5.1.
