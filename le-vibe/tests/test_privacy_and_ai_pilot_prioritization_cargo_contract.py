@@ -67,6 +67,9 @@ def test_ai_pilot_doc_lists_maintainer_full_product_deb_step14():
     assert "--apt-sim" in text
     assert "--json" in text
     assert "apt_sim_note" in text
+    assert "desktop_file_validate" in text
+    assert "desktop_file_validate_on_path" in text
+    assert "manual-step14-install-smoke.sh" in text
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
