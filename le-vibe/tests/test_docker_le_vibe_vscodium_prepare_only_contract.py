@@ -22,3 +22,6 @@ def test_docker_le_vibe_vscodium_prepare_only_script_bash_syntax() -> None:
     assert "linux-vscodium-ci-apt.pkgs" in text
     assert "LEVIBE_VSCODIUM_PREPARE_ONLY=1" in text
     assert "chown" in text and "HOST_UID" in text
+    assert "test_docker_le_vibe_vscodium_prepare_only_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text

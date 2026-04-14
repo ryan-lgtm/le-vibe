@@ -28,6 +28,9 @@ def test_install_linux_vscodium_build_deps_script_bash_syntax() -> None:
     assert "PM_STAGE_MAP.md" in text
     assert "EUID" in text
     assert "_apt" in text
+    assert "test_check_linux_vscodium_build_deps_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_check_linux_vscodium_build_deps_matches_ci_apt_list() -> None:
@@ -45,3 +48,6 @@ def test_check_linux_vscodium_build_deps_matches_ci_apt_list() -> None:
     assert "python3.11-dev" in text
     assert "pkg-config --exists xkbfile" in text
     assert "DEBS+=(" in text
+    assert "test_check_linux_vscodium_build_deps_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text

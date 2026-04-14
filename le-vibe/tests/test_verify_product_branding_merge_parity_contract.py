@@ -22,3 +22,6 @@ def test_verify_product_branding_merge_parity_script_bash_syntax() -> None:
     assert "product-branding-merge.json" in text
     assert ".nameShort == \"Lé Vibe\"" in text
     assert ".linuxIconName == \"le-vibe\"" in text
+    assert "test_verify_product_branding_merge_parity_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text

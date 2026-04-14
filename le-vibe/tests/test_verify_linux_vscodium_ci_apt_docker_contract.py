@@ -21,3 +21,6 @@ def test_verify_linux_vscodium_ci_apt_docker_script_bash_syntax() -> None:
     assert "PM_STAGE_MAP.md" in text
     assert "linux-vscodium-ci-apt.pkgs" in text
     assert "ubuntu:22.04" in text or "LEVIBE_VERIFY_APT_DOCKER_IMAGE" in text
+    assert "test_verify_linux_vscodium_ci_apt_docker_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text

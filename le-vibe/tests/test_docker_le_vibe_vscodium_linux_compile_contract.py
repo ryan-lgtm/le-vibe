@@ -27,3 +27,6 @@ def test_docker_le_vibe_vscodium_linux_compile_script_bash_syntax() -> None:
     assert "LEVIBE_DOCKER_COMPILE_CARGO_VOLUME" in text
     assert "ci-qa-hardening.md" in text
     assert "Optional full Linux compile" in text
+    assert "test_docker_le_vibe_vscodium_linux_compile_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
