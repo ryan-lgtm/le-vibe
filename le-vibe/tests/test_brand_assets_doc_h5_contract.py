@@ -16,3 +16,5 @@ def test_brand_assets_doc_lists_icons_and_h5():
     assert "STEP 11" in text or "screenshots" in text.lower()
     assert "PM_STAGE_MAP" in text
     assert "le-vibe.svg" in text
+    assert "sync-linux-icon-assets.sh" in text
+    assert "workbench" in text

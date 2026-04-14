@@ -16,7 +16,7 @@ This document is the **handoff** for design and marketing: what ships in-repo to
 
 | Item | State |
 |------|--------|
-| **App icon (Linux)** | **Scalable SVG** at [`packaging/icons/hicolor/scalable/apps/le-vibe.svg`](../packaging/icons/hicolor/scalable/apps/le-vibe.svg) — Lé Vibe product mark (rounded tile, stylized **L** + curve). Comment in file may still say “swap for final brand guidelines”; functionally it is the **shipping** menu/launcher icon until design replaces it. |
+| **App icon (Linux)** | **Scalable SVG** at [`packaging/icons/hicolor/scalable/apps/le-vibe.svg`](../packaging/icons/hicolor/scalable/apps/le-vibe.svg) — Lé Vibe product mark (diamond, deep purple → ruby red gradient; matches **H6** workbench staging). It is the **shipping** menu/launcher / **`.deb`** icon until design replaces it. |
 | **Raster PNGs** | **Not** committed — optional for stores/legacy themes (see export checklist below). |
 | **README / store screenshots** | **Not** committed by default — use **`docs/screenshots/`** (see [`screenshots/README.md`](screenshots/README.md)) or attach to **GitHub Releases** only. |
 
@@ -66,3 +66,5 @@ When adding images to **`README.md`**, use repo-relative paths, for example **`d
 ## Monorepo alignment (H6)
 
 The **Lé Vibe IDE** shell is developed under **`editor/`** in **this** repository (**VSCodium** at **`editor/vscodium/`**, overrides **`editor/le-vibe-overrides/`**) — see **[`vscodium-fork-le-vibe.md`](vscodium-fork-le-vibe.md)**. Keep **`packaging/icons/`** (launcher / **`.deb`**) visually consistent with the IDE branding where possible.
+
+**IDE window / workbench chrome:** On every full compile path, **[`editor/le-vibe-overrides/sync-linux-icon-assets.sh`](../editor/le-vibe-overrides/sync-linux-icon-assets.sh)** (invoked by **`packaging/scripts/ci-vscodium-linux-dev-build.sh`**) copies the same canonical **`le-vibe.svg`** into **`src/stable`** and **`src/insider`** **`.../vs/workbench/browser/media/code-icon.svg`** — **`editor/BUILD.md`** (*Linux icons*). Edit the **packaging** SVG when refreshing the product mark; do not treat the vendored submodule copies as the source of truth.

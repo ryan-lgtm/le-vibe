@@ -50,6 +50,8 @@ def test_vscodium_fork_doc_branding_section_honesty_and_overrides():
     assert "branding-staging.checklist.md" in text
     assert "Upstream touchpoints (14.d)" in text
     assert "src/stable/resources/linux" in text
+    assert "workbench/browser/media" in text
+    assert "code-icon.svg" in text
     assert "spec-phase2.md" in text and "§14" in text
     assert "USER RESPONSE REQUIRED" in text
     assert "CHANGELOG.md" in text

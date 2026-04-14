@@ -40,7 +40,7 @@ Exact paths follow the VSCodium / `vscode` tree you import:
 
 **Fresh clone (14.b):** when **`editor/vscodium/`** is missing or empty after **`git clone`**, run **`git submodule update --init editor/vscodium`** from the repository root — same step as **`editor/README.md`** *Fresh clone (14.b)* before **`get_repo.sh`** / **`fetch-vscode-sources.sh`**.
 
-**Superproject `git status` (§7.3 icons):** **`sync-linux-icon-assets.sh`** writes **`le-vibe.svg`** / **`le-vibe.png`** under **`editor/vscodium/src/stable/resources/linux/`** as **untracked** files. **`.gitmodules`** sets **`ignore = untracked`** for **`editor/vscodium`** so the monorepo root does not show the submodule as modified — **`editor/VENDORING.md`**, **`editor/README.md`**.
+**Superproject `git status` (§7.3 icons):** **`sync-linux-icon-assets.sh`** writes **`le-vibe.svg`** / **`le-vibe.png`** under **`editor/vscodium/src/stable/resources/linux/`** as **untracked** files. **`.gitmodules`** sets **`ignore = untracked`** for **`editor/vscodium`** so the monorepo root does not show the submodule as modified for those paths — **`editor/VENDORING.md`**, **`editor/README.md`**. The same script overwrites **tracked** upstream **`src/stable`** and **`src/insider`** **`.../vs/workbench/browser/media/code-icon.svg`** from the packaging canonical SVG (1024×1024); after a full sync, **`git status`** inside **`editor/vscodium`** may list those files as **modified** — do **not** commit them to the upstream submodule; they are regenerated on each **`ci-vscodium-linux-dev-build.sh`** / sync run (**`editor/BUILD.md`** *Linux icons*).
 
 Upstream VSCodium prepare/build scripts remain the source of truth for **how** to compile; this doc stays a **pointer** and policy shell, not a full upstream mirror.
 
