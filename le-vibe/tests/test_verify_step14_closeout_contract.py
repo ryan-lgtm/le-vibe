@@ -6,6 +6,8 @@ import fcntl
 import json
 import os
 import subprocess
+
+import pytest
 import tempfile
 from collections.abc import Callable
 from pathlib import Path
@@ -126,6 +128,9 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "print-built-codium-path.sh" in text
     assert "test_verify_step14_closeout_contract.py" in text
     assert ".pytest-verify-step14-contract.lock" in text
+    assert "emit_json_error_14c" in text
+    assert '{"status":"error"' in text
+    assert '"step":"14c"' in text
 
 
 def _verify_step14_closeout_json_mode_outputs_parseable_payload_impl() -> None:
@@ -460,8 +465,8 @@ def _verify_step14_closeout_json_mode_escapes_special_chars_in_paths_impl() -> N
         stub_dir = tmp_root / "bin"
         stub_dir.mkdir()
         packaging_dir = root / "packaging"
-        stack_deb = root.parent / 'le-vibe_9999.0.2_"quotes"_all.deb'
-        ide_deb = packaging_dir / 'le-vibe-ide_9999.0.2_"quotes"_amd64.deb'
+        stack_deb = root.parent / 'le-vibe_9999.9.9_"quotes"_all.deb'
+        ide_deb = packaging_dir / 'le-vibe-ide_9999.9.9_"quotes"_amd64.deb'
         fake_codium = root / "editor" / "vscodium" / "VSCode-linux-x64" / "bin" / "codium"
         fake_codium.parent.mkdir(parents=True, exist_ok=True)
         fake_codium.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
@@ -543,7 +548,7 @@ EOF
             payload = json.loads(result.stdout)
             assert payload["vscode_linux_build"] == "ready"
             assert Path(payload["stack_deb"]).resolve() == stack_deb.resolve()
-            assert payload["ide_deb"] == str(ide_deb)
+            assert Path(payload["ide_deb"]).resolve() == ide_deb.resolve()
             assert payload["apt_sim_note"] == "not_requested"
             assert payload["desktop_file_validate"] == "ran"
         finally:
@@ -554,3 +559,39 @@ EOF
 
 def test_verify_step14_closeout_json_mode_escapes_special_chars_in_paths() -> None:
     _run_with_step14_contract_artifact_lock(_verify_step14_closeout_json_mode_escapes_special_chars_in_paths_impl)
+
+
+def _verify_step14_closeout_json_emits_error_payload_when_14c_not_ready_impl() -> None:
+    """When 14.c fails, --json prints one machine-parseable line on stdout (status=error) before exit 1."""
+    root = _repo_root()
+    probe = subprocess.run(
+        [str(root / "packaging" / "scripts" / "probe-vscode-linux-build.sh"), str(root)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    state = probe.stdout.strip()
+    if state == "ready":
+        pytest.skip("VSCode-linux tree has bin/codium — 14.c passes; skip failure-JSON integration check")
+    script = root / "packaging" / "scripts" / "verify-step14-closeout.sh"
+    result = subprocess.run(
+        [str(script), "--skip-gate", "--json"],
+        cwd=str(root),
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 1, result.stderr
+    payload = json.loads(result.stdout)
+    assert payload["status"] == "error"
+    assert payload["step"] == "14c"
+    assert payload["vscode_linux_build"] == state
+    assert "message" in payload
+    if state == "partial":
+        assert isinstance(payload["vscode_linux_bin_files"], str)
+    else:
+        assert payload["vscode_linux_bin_files"] is None
+
+
+def test_verify_step14_closeout_json_emits_error_payload_when_14c_not_ready() -> None:
+    """Serialize with other verify JSON tests — avoids pick_latest_match seeing another worker's *.deb."""
+    _run_with_step14_contract_artifact_lock(_verify_step14_closeout_json_emits_error_payload_when_14c_not_ready_impl)

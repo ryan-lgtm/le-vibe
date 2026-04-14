@@ -38,6 +38,22 @@ json_escape() {
   printf '%s' "$value"
 }
 
+# Machine-readable failure when --json and 14.c does not pass (partial/absent/unknown tree).
+emit_json_error_14c() {
+  local vlb="$1"
+  local partial_bin_files="${2:-}"
+  local vj msg
+  vj="$(json_escape "$vlb")"
+  msg="$(json_escape "built codium missing or incomplete — see preflight-step14-closeout.sh / lvibe ide-prereqs --print-closeout-commands")"
+  if [[ "${vlb}" == "partial" ]]; then
+    local bj
+    bj="$(json_escape "$partial_bin_files")"
+    printf '{"status":"error","step":"14c","vscode_linux_build":"%s","vscode_linux_bin_files":"%s","message":"%s"}\n' "$vj" "$bj" "$msg"
+  else
+    printf '{"status":"error","step":"14c","vscode_linux_build":"%s","vscode_linux_bin_files":null,"message":"%s"}\n' "$vj" "$msg"
+  fi
+}
+
 pick_latest_match() {
   local label="$1"
   shift
@@ -162,7 +178,9 @@ Options:
   --apt-sim             When used with --require-stack-deb, run:
                         `apt-get -s install <stack.deb> <ide.deb>`.
   --skip-gate           Skip ci-editor-gate.sh (faster local check).
-  --json                Emit machine-readable summary JSON on success.
+  --json                Emit machine-readable JSON on stdout: success payload when all checks pass;
+                        on 14.c failure (missing VSCode-linux-*/bin/codium), a single-line object with
+                        status=error, step=14c, vscode_linux_build, optional vscode_linux_bin_files, message.
   -h, --help            Show this message and exit.
 
 JSON success (--json) includes:
@@ -218,9 +236,15 @@ verify_14c_ec=$?
 set -e
 if [[ "$verify_14c_ec" -ne 0 ]]; then
   _vlb="$("$ROOT/packaging/scripts/probe-vscode-linux-build.sh" "$ROOT")"
-  echo "verify-step14-closeout: vscode_linux_build: ${_vlb} (probe-vscode-linux-build.sh — same field as preflight after 14.c)" >&2
+  _bf=""
   if [[ "${_vlb}" == "partial" ]]; then
     _bf="$("$ROOT/packaging/scripts/print-step14-vscode-linux-bin-files.sh" "$ROOT")"
+  fi
+  if [[ "$PRINT_JSON" -eq 1 ]]; then
+    emit_json_error_14c "$_vlb" "$_bf"
+  fi
+  echo "verify-step14-closeout: vscode_linux_build: ${_vlb} (probe-vscode-linux-build.sh — same field as preflight after 14.c)" >&2
+  if [[ "${_vlb}" == "partial" ]]; then
     echo "verify-step14-closeout: vscode_linux_bin_files: ${_bf}" >&2
     echo "verify-step14-closeout: linux_compile tarball — ${ROOT}/packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser Actions or gh); ${ROOT}/packaging/scripts/trigger-le-vibe-ide-linux-compile.sh; ${ROOT}/packaging/scripts/download-vscodium-linux-compile-artifact.sh --install; then ${ROOT}/packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh … — editor/BUILD.md 14.f" >&2
   elif [[ "${_vlb}" == "absent" ]]; then
