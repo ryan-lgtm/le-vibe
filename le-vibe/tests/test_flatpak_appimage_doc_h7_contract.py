@@ -39,3 +39,11 @@ def test_build_appimage_sh_documents_pytest_verify_lock() -> None:
     assert "test_flatpak_appimage_doc_h7_contract.py" in text
     assert "test_verify_step14_closeout_contract.py" in text
     assert ".pytest-verify-step14-contract.lock" in text
+
+
+def test_flatpak_org_le_vibe_launcher_yml_documents_pytest_verify_lock() -> None:
+    text = (_repo_root() / "packaging" / "flatpak" / "org.le_vibe.Launcher.yml").read_text(encoding="utf-8")
+    assert "app-id: org.le_vibe.Launcher" in text
+    assert "test_flatpak_appimage_doc_h7_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text

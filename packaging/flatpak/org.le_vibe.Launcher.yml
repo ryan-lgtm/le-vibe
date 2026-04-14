@@ -1,5 +1,7 @@
 # Lé Vibe — Flatpak manifest (Roadmap H7). Flathub-oriented; app id may be renamed when publishing.
 # Build from monorepo root (see packaging/flatpak/README.md).
+# Pytest: le-vibe/tests/test_flatpak_appimage_doc_h7_contract.py; verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 app-id: org.le_vibe.Launcher
 runtime: org.freedesktop.Platform
 runtime-version: '24.08'
