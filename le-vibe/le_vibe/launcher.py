@@ -829,8 +829,8 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
         const="branding",
         default=None,
         help=(
-            "print one path: vscode, branding, sync-icons, vsc-linux-svg, svg, desktop, stage, build-ide-deb, "
-            "build-debs, control (default key when flag is present: branding)"
+            "print one path: vscode, branding, sync-icons, vsc-linux-svg, workbench-icon, svg, desktop, stage, "
+            "build-ide-deb, build-debs, control (default key when flag is present: branding)"
         ),
     )
     mode.add_argument(

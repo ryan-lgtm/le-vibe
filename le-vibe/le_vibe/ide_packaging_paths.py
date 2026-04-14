@@ -1,4 +1,4 @@
-"""STEP 14 / H6: paths for §7.3 IDE packaging — VSCode-linux tree, branding, staging scripts.
+"""STEP 14 / H6: paths for §7.3 IDE packaging — VSCode-linux tree, branding, Linux + workbench icons, staging scripts.
 
 Freedesktop ``.desktop`` QA (packaged or installed): see ``preflight-step14-closeout.sh``,
 ``verify-step14-closeout.sh``, ``build-le-vibe-ide-deb.sh``, and test-host
@@ -85,6 +85,10 @@ def iter_ide_prereq_paths(root: Path) -> list[tuple[str, Path, bool]]:
             "VSCodium linux le-vibe.svg (after sync; LEVIBE_EDITOR_GATE_ASSERT_BRAND)",
             Path("editor/vscodium/src/stable/resources/linux/le-vibe.svg"),
         ),
+        (
+            "Workbench code-icon.svg stable (after sync; §7.3 window chrome)",
+            Path("editor/vscodium/src/stable/src/vs/workbench/browser/media/code-icon.svg"),
+        ),
         ("Canonical app icon (stack)", Path("packaging/icons/hicolor/scalable/apps/le-vibe.svg")),
         ("Stage IDE → deb staging", Path("packaging/scripts/stage-le-vibe-ide-deb.sh")),
         ("Build le-vibe-ide .deb", Path("packaging/scripts/build-le-vibe-ide-deb.sh")),
@@ -103,6 +107,7 @@ IDE_PREREQ_PATH_ONLY: dict[str, Path] = {
     "branding": Path("editor/le-vibe-overrides/product-branding-merge.json"),
     "sync-icons": Path("editor/le-vibe-overrides/sync-linux-icon-assets.sh"),
     "vsc-linux-svg": Path("editor/vscodium/src/stable/resources/linux/le-vibe.svg"),
+    "workbench-icon": Path("editor/vscodium/src/stable/src/vs/workbench/browser/media/code-icon.svg"),
     "svg": Path("packaging/icons/hicolor/scalable/apps/le-vibe.svg"),
     "desktop": Path("packaging/debian-le-vibe-ide/debian/le-vibe.desktop"),
     "stage": Path("packaging/scripts/stage-le-vibe-ide-deb.sh"),

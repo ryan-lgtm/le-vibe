@@ -25,6 +25,13 @@ def test_ide_prereqs_path_only_desktop(monkeypatch: pytest.MonkeyPatch, capsys: 
     assert out.endswith("le-vibe.desktop")
 
 
+def test_ide_prereqs_path_only_workbench_icon(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    monkeypatch.setattr(sys, "argv", ["launcher", "ide-prereqs", "--path-only", "workbench-icon"])
+    assert launcher.main() == 0
+    out = capsys.readouterr().out.strip()
+    assert "workbench/browser/media/code-icon.svg" in out
+
+
 def test_ide_prereqs_path_only_vscode_missing(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     monkeypatch.setattr(
         "le_vibe.ide_packaging_paths.vscode_linux_build_status",
@@ -88,7 +95,7 @@ def test_ide_prereqs_json_in_checkout(monkeypatch: pytest.MonkeyPatch, capsys: p
     assert "static_prereq_files_ok" in data
     assert data["static_prereq_files_ok"] is True
     assert "vscodium_linux_svg_staged" in data
-    assert len(data["entries"]) == 10
+    assert len(data["entries"]) == 11
     assert all("label" in e and "path" in e and "exists" in e for e in data["entries"])
 
 
