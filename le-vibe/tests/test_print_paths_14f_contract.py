@@ -87,4 +87,6 @@ def test_print_ci_tarball_codium_path_documents_14f():
     assert "unzip first" in text
     assert "GitHub Actions" in text
     assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text

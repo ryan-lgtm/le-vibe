@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # STEP 14.f — unpack a linux_compile artifact (vscodium-linux-build.tar.gz) to a temp dir and print
 # the absolute path to VSCode-linux-*/bin/codium (same layout as print-vsbuild-codium-path.sh).
+# Tarball discovery: print-github-linux-compile-artifact-hint.sh, trigger-le-vibe-ide-linux-compile.sh,
+#   download-vscodium-linux-compile-artifact.sh --install (same family as install-vscodium-linux-tarball-to-editor-vendor.sh).
 #
 # GitHub Actions serves workflow artifacts as a .zip download; unzip first — the archive contains
 # vscodium-linux-build.tar.gz (see editor/BUILD.md *14.f*).
@@ -23,8 +25,11 @@ Unpack a linux_compile artifact to a temp directory and print the absolute path 
 VSCode-linux-*/bin/codium (STEP 14.f — editor/BUILD.md).
 
 Obtain vscodium-linux-build.tar.gz: packaging/scripts/print-github-linux-compile-artifact-hint.sh
-(browser Actions UI or gh run download). To install into editor/vscodium/ instead of a temp dir,
-use packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh (same tarball).
+(browser Actions UI or gh run download); maintainer:
+packaging/scripts/trigger-le-vibe-ide-linux-compile.sh;
+packaging/scripts/download-vscodium-linux-compile-artifact.sh --install.
+To install into editor/vscodium/ instead of a temp dir, use
+packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh (same tarball).
 
 GitHub Actions wraps vscodium-linux-build.tar.gz in a .zip — unzip first, then pass
 the .tar.gz path to this script.
@@ -46,7 +51,7 @@ fi
 ARG="$1"
 if [[ ! -f "$ARG" ]]; then
   echo "${0##*/}: not a regular file: $ARG — pass the path to vscodium-linux-build.tar.gz from CI (editor/BUILD.md 14.f)." >&2
-  echo "${0##*/}: obtain tarball: ${ROOT}/packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser or gh)" >&2
+  echo "${0##*/}: obtain tarball: ${ROOT}/packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser or gh); ${ROOT}/packaging/scripts/trigger-le-vibe-ide-linux-compile.sh; ${ROOT}/packaging/scripts/download-vscodium-linux-compile-artifact.sh --install" >&2
   exit 1
 fi
 if ! command -v realpath >/dev/null 2>&1; then
