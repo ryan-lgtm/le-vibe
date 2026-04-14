@@ -23,6 +23,9 @@ def test_build_le_vibe_debs_script_header_documents_ci_vs_with_ide_step14():
     assert "le-vibe-deb" in text
     assert "apt-repo-releases.md" in text
     assert "IDE package" in text
+    assert "test_build_le_vibe_debs_script_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_build_le_vibe_debs_script_mentions_submodule_14b():
