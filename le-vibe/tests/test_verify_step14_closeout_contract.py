@@ -2,15 +2,38 @@
 
 from __future__ import annotations
 
+import fcntl
 import json
 import os
 import subprocess
 import tempfile
+from collections.abc import Callable
 from pathlib import Path
 
 
 def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
+
+
+def _artifact_lock_fd() -> int:
+    lock_path = _repo_root() / "le-vibe" / ".pytest-verify-step14-contract.lock"
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    return os.open(str(lock_path), os.O_RDWR | os.O_CREAT, 0o644)
+
+
+def _unlock_artifact_lock(fd: int) -> None:
+    fcntl.flock(fd, fcntl.LOCK_UN)
+    os.close(fd)
+
+
+def _run_with_step14_contract_artifact_lock(fn: Callable[[], None]) -> None:
+    """Serialize tests that share placeholder packaging/*.deb and fake editor bin/codium (xdist-safe)."""
+    fd = _artifact_lock_fd()
+    fcntl.flock(fd, fcntl.LOCK_EX)
+    try:
+        fn()
+    finally:
+        _unlock_artifact_lock(fd)
 
 
 def test_verify_step14_closeout_script_bash_syntax() -> None:
@@ -97,7 +120,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "print-built-codium-path.sh" in text
 
 
-def test_verify_step14_closeout_json_mode_outputs_parseable_payload() -> None:
+def _verify_step14_closeout_json_mode_outputs_parseable_payload_impl() -> None:
     root = _repo_root()
     script = root / "packaging" / "scripts" / "verify-step14-closeout.sh"
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -203,8 +226,11 @@ EOF
             stack_deb.unlink(missing_ok=True)
 
 
-def test_verify_step14_closeout_json_mode_apt_sim_ran_with_stack_requirement() -> None:
-    """--require-stack-deb + --apt-sim sets apt_sim_note=ran when apt-get -s succeeds."""
+def test_verify_step14_closeout_json_mode_outputs_parseable_payload() -> None:
+    _run_with_step14_contract_artifact_lock(_verify_step14_closeout_json_mode_outputs_parseable_payload_impl)
+
+
+def _verify_step14_closeout_json_mode_apt_sim_ran_with_stack_requirement_impl() -> None:
     root = _repo_root()
     script = root / "packaging" / "scripts" / "verify-step14-closeout.sh"
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -318,7 +344,12 @@ exit 1
             stack_deb.unlink(missing_ok=True)
 
 
-def test_verify_step14_closeout_json_mode_reports_apt_sim_requested_without_stack_requirement() -> None:
+def test_verify_step14_closeout_json_mode_apt_sim_ran_with_stack_requirement() -> None:
+    """--require-stack-deb + --apt-sim sets apt_sim_note=ran when apt-get -s succeeds."""
+    _run_with_step14_contract_artifact_lock(_verify_step14_closeout_json_mode_apt_sim_ran_with_stack_requirement_impl)
+
+
+def _verify_step14_closeout_json_mode_reports_apt_sim_requested_without_stack_requirement_impl() -> None:
     root = _repo_root()
     script = root / "packaging" / "scripts" / "verify-step14-closeout.sh"
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -407,7 +438,13 @@ EOF
             ide_deb.unlink(missing_ok=True)
 
 
-def test_verify_step14_closeout_json_mode_escapes_special_chars_in_paths() -> None:
+def test_verify_step14_closeout_json_mode_reports_apt_sim_requested_without_stack_requirement() -> None:
+    _run_with_step14_contract_artifact_lock(
+        _verify_step14_closeout_json_mode_reports_apt_sim_requested_without_stack_requirement_impl
+    )
+
+
+def _verify_step14_closeout_json_mode_escapes_special_chars_in_paths_impl() -> None:
     root = _repo_root()
     script = root / "packaging" / "scripts" / "verify-step14-closeout.sh"
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -505,3 +542,7 @@ EOF
             fake_codium.unlink(missing_ok=True)
             ide_deb.unlink(missing_ok=True)
             stack_deb.unlink(missing_ok=True)
+
+
+def test_verify_step14_closeout_json_mode_escapes_special_chars_in_paths() -> None:
+    _run_with_step14_contract_artifact_lock(_verify_step14_closeout_json_mode_escapes_special_chars_in_paths_impl)

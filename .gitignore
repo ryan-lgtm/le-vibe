@@ -2,6 +2,7 @@
 .venv/
 __pycache__/
 .pytest_cache/
+le-vibe/.pytest-verify-step14-contract.lock
 *.py[cod]
 *.egg-info/
 
