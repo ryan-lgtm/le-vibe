@@ -1,4 +1,6 @@
 [Desktop Entry]
+# Pytest: le-vibe/tests/test_packaging_le_vibe_ide_deb_contract.py; verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 Name=Lé Vibe
 GenericName=Integrated Development Environment
 Comment=Edit code with Lé Vibe (Code OSS shell)
