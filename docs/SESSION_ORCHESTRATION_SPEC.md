@@ -38,18 +38,19 @@ It applies in **two places**:
 
 ## 2. Skill agents (defaults)
 
-All **eight** roles are **enabled by default**. Each has a **markdown** file describing scope, responsibilities, and boundaries (modern SaaS org norms: clear ownership, escalation to PM/User, no silent scope creep).
+All **nine** canonical roles are **enabled by default**. Each has a **markdown** file describing scope, responsibilities, and boundaries (modern SaaS org norms: clear ownership, escalation to PM/User, no silent scope creep).
 
-| Agent `id` | File (template & workspace) | Role |
-|------------|-------------------------------|------|
-| `product_manager` | `templates/…/product-manager.md` → `.lvibe/agents/product-manager/skill.md` | Outcomes, epics, priorities, stakeholder framing. |
-| `project_manager` | `…/project-manager.md` → `.lvibe/agents/project-manager/skill.md` | Sequencing, dependencies, risk, delivery cadence. |
-| `senior_backend_engineer` | `…/senior-backend-engineer.md` → `.lvibe/agents/senior-backend-engineer/skill.md` | APIs, data, services, performance, security backend. |
-| `senior_frontend_engineer` | `…/senior-frontend-engineer.md` → `.lvibe/agents/senior-frontend-engineer/skill.md` | UI/UX implementation, accessibility, client performance. |
-| `senior_devops_engineer` | `…/senior-devops-engineer.md` → `.lvibe/agents/senior-devops-engineer/skill.md` | CI/CD, infra as code, observability, release safety. |
-| `senior_qa_engineer` | `…/senior-qa-engineer.md` → `.lvibe/agents/senior-qa-engineer/skill.md` | Test strategy, quality gates, regression mindset. |
-| `senior_industry_advisor` | `…/senior-industry-advisor.md` → `.lvibe/agents/senior-industry-advisor/skill.md` | Domain and product judgment: counsel for PM/PjM/Engineering leadership; vets coherence with **QA** on agentically produced outcomes; uses RAG + general domain knowledge (labeled). |
-| `user` | `…/user.md` → `.lvibe/agents/user/skill.md` | Human intent, acceptance, “what good looks like”; can be automated as a stub for playbooks. |
+| Agent `id` | Alias | File (template & workspace) | Role |
+|------------|-------|-----------------------------|------|
+| `subject_matter_industry_expert` | `@sme` | `…/subject-matter-industry-expert.md` → `.lvibe/agents/subject-matter-industry-expert/skill.md` | Deterministic domain and industry guidance for the workspace purpose. |
+| `senior_product_operations` | `@props` | `…/senior-product-operations.md` → `.lvibe/agents/senior-product-operations/skill.md` | Delivery operations, sequencing, readiness, and execution governance. |
+| `senior_product_management` | `@prod` | `…/senior-product-management.md` → `.lvibe/agents/senior-product-management/skill.md` | Outcomes, epics, priorities, and product tradeoffs. |
+| `senior_backend_engineer` | `@be-eng` | `…/senior-backend-engineer.md` → `.lvibe/agents/senior-backend-engineer/skill.md` | APIs, data, services, performance, security backend. |
+| `senior_frontend_engineer` | `@fe-eng` | `…/senior-frontend-engineer.md` → `.lvibe/agents/senior-frontend-engineer/skill.md` | UI/UX implementation, accessibility, client performance. |
+| `senior_devops_engineer` | `@do-eng` | `…/senior-devops-engineer.md` → `.lvibe/agents/senior-devops-engineer/skill.md` | CI/CD, infra as code, observability, release safety. |
+| `senior_marketing` | `@marketing` | `…/senior-marketing.md` → `.lvibe/agents/senior-marketing/skill.md` | Positioning, launch narrative, and communication readiness. |
+| `senior_customer_success` | `@cs` | `…/senior-customer-success.md` → `.lvibe/agents/senior-customer-success/skill.md` | Adoption quality, onboarding clarity, supportability, and retention signals. |
+| `senior_revenue` | `@rev` | `…/senior-revenue.md` → `.lvibe/agents/senior-revenue/skill.md` | Monetization impact, commercial risk, and revenue-oriented prioritization. |
 
 **Paths:**
 
@@ -69,22 +70,51 @@ All **eight** roles are **enabled by default**. Each has a **markdown** file des
 | Field | Type | Meaning |
 |-------|------|---------|
 | `schema_version` | string | e.g. `"session-manifest.v1"` |
-| `meta` | object | ids, timestamps, optional `workspace_summary` / RAG pointers; optional **`continue_construction_note`** / **`ai_pilot_note`** (human hints; tie to **[`docs/AI_PILOT_AND_CONTINUE.md`](AI_PILOT_AND_CONTINUE.md)** and the Master queue in **[`docs/PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md)**) |
+| `meta` | object | ids, timestamps, optional `workspace_summary` / RAG pointers; optional `evidence_artifacts` registry (artifact ids that evidence entries must reference), optional `evidence_artifact_records` (artifact-to-session mapping for freshness checks), optional `goal_alignment_check.start` / `goal_alignment_check.end` records (session boundary alignment checks), optional `stop_condition_check` gate (`completion_allowed` only true at final milestone with product goals satisfied), optional `milestone_definition_of_done_checks` (per-milestone DoD pass/fail), optional `milestone_dependency_visibility` (dependency graph quality + missing refs), optional `progress_confidence_report` (confidence score + drift detection), optional `final_milestone_lock_criteria` (acceptance-evidence lock gate), optional `failure_mode_catalog` (active failure modes derived from readiness blockers), optional `release_readiness_summary` (derived readiness + blockers from checks/tasks), optional `remaining_gaps_report` (explicit pre-closeout gap list), plus optional **`continue_construction_note`** / **`ai_pilot_note`** (human hints; tie to **[`docs/AI_PILOT_AND_CONTINUE.md`](AI_PILOT_AND_CONTINUE.md)** and the Master queue in **[`docs/PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md)**) |
 | `session_steps` | array | Ordered **SESSION STEPS** designed by PM workflow (see §4) |
 | `agents` | object | Which roles are on; paths to skill markdown |
 | `product` | object | **Epics** and **tasks** (PM-owned backlog) |
 
-### 3.2 `product.epics`
+### 3.2 `product.milestones` (formal schema)
+
+- Each milestone includes:
+  - `id`
+  - `objective`
+  - `acceptance` (array of acceptance statements)
+  - `exit_tests` (array of test identifiers/paths)
+  - `owners` (array of role aliases or owner ids)
+- This schema defines milestone accountability before closeout checks.
+
+### 3.2.1 Milestone definition-of-done checks (Task 62)
+
+- Operator-consumable checks evaluate each milestone for required DoD fields:
+  - non-empty `objective`
+  - non-empty `acceptance`
+  - non-empty `exit_tests`
+  - non-empty `owners`
+- Results are persisted in `meta.milestone_definition_of_done_checks` with per-milestone pass/fail and aggregate totals.
+
+### 3.2.2 Cross-milestone dependency visibility (Task 63)
+
+- Milestones may include `dependencies` as milestone-id references.
+- Orchestrator computes `meta.milestone_dependency_visibility` with:
+  - per-milestone dependency lists
+  - missing dependency references
+  - reverse dependents map
+- Release and gap outputs include a blocker when dependency references are missing.
+
+### 3.3 `product.epics`
 
 - Each **epic** has `id`, `title`, optional `description`, and `tasks[]`.
 - Each **task** has `id`, `title`, `status` (`pending` \| `in_progress` \| `done` \| `blocked`), optional `assignee_agent`, `notes`, `acceptance_criteria`.
 
 The orchestrator **iterates** epics/tasks in order unless a step overrides (e.g. “current epic only”).
 
-### 3.3 `agents`
+### 3.4 `agents`
 
-- `defaults.all_enabled`: boolean — default **true** (all eight on).
+- `defaults.all_enabled`: boolean — default **true** (all nine canonical roles on).
 - `roles[]`: optional per-role overrides: `id`, `enabled`, `skill_path` (relative to `.lvibe/` or template root).
+- Mentions may use shorthand aliases: `@sme`, `@props`, `@prod`, `@be-eng`, `@fe-eng`, `@do-eng`, `@marketing`, `@cs`, `@rev`.
 
 ---
 
@@ -117,6 +147,39 @@ Steps are **declarative** entries in `session_steps[]`. Each has at least `id`, 
 
 - Agents **do not** each ingest the whole repo blindly. They use **`.lvibe/`** (manifest, `memory/incremental.md`, `chunks/`, `AGENTS.md`) per **`docs/PRODUCT_SPEC.md` §5**.
 - **Session manifest** is part of that ground truth: epics/tasks + current step index (implementation may add `meta.current_step_id` or a sidecar state file—see example JSON).
+- **Runtime alignment checks:** launcher runtime updates `meta.goal_alignment_check.start` after workspace prepare and `meta.goal_alignment_check.end` after editor exit so session boundaries always carry evidence.
+- **Runtime stop condition check:** launcher runtime updates `meta.stop_condition_check` with `completion_allowed=false` by default, so completion stays blocked until product goals and final milestone are explicitly verified.
+- **Phase 7 closeout invariant (Task 70):** `stop_condition_check.completion_allowed` stays **false** for all partial states and turns **true** only when product goals are satisfied and the current milestone equals the final milestone.
+- **Release-readiness summary (Task 69):** orchestrator computes `meta.release_readiness_summary` from goal-alignment end status, stop-condition gate, and task status counts so release blockers are explicit and deterministic.
+- **Remaining gaps report (Task 66):** orchestrator computes and persists `meta.remaining_gaps_report` from current blockers so milestone close explicitly lists unresolved gaps (`lvibe remaining-gaps`).
+- **Milestone DoD checks (Task 62):** orchestrator computes `meta.milestone_definition_of_done_checks`; release/gap outputs include a `milestone_definition_of_done_incomplete` blocker when required milestone fields are missing.
+- **Milestone dependency visibility (Task 63):** orchestrator computes `meta.milestone_dependency_visibility`; release/gap outputs include `milestone_dependency_missing_reference` when dependencies point to unknown milestone ids.
+- **Progress confidence + drift (Task 64):** orchestrator computes `meta.progress_confidence_report`; release/gap outputs include `progress_drift_detected` when alignment claims are ahead of observable execution progress.
+- **Final milestone lock criteria (Task 65):** orchestrator computes `meta.final_milestone_lock_criteria` and requires complete acceptance evidence (`goal_alignment_check.end.evidence` + `stop_condition_check.evidence`) before final milestone lock is satisfied.
+- **Evidence provenance validation (Task 59):** final-milestone lock checks now require evidence entries to be traceable via `meta.evidence_artifacts`; untraceable evidence adds `final_milestone_evidence_untraceable` blocker and keeps lock unsatisfied.
+- **Evidence freshness rule (Task 26):** evidence entries must also be fresh for current `meta.session_id` via `meta.evidence_artifact_records`; stale evidence adds `final_milestone_evidence_stale` and must be revalidated before lock.
+- **Runtime artifact refresh (Task 26 follow-through):** runtime persistence helpers (`persist_goal_alignment_check` / `persist_stop_condition_check`) auto-upsert `meta.evidence_artifacts` and refresh `meta.evidence_artifact_records` for the active `meta.session_id`.
+- **Runtime session-id guard:** those same persistence helpers repair missing/blank `meta.session_id` before writing evidence so artifact freshness tracking is always attachable to a concrete session.
+- **Session-id repair audit logging:** when repair occurs, runtime emits structured `session_id_repaired` events (including check type and repaired id) so identity repairs are observable in logs.
+- **Structured log event contract:** workspace orchestration events use `schema_version=workspace_event.v1`. Required fields:
+  - All workspace events are emitted through a shared helper entrypoint (`_emit_workspace_event`) to centralize schema/version/workspace fields and required-field validation.
+  - `session_id_repaired`: `workspace`, `check`, `repaired_session_id` (+ `phase` for goal-alignment repairs).
+  - `goal_alignment_check_applied`: `workspace`, `phase`, `status`.
+  - `stop_condition_check_applied`: `workspace`, `completion_allowed`.
+  - Noop events (`*_noop_*`) emitted by opening-skip / goal-alignment / stop-condition / readiness / gaps include `workspace`.
+  - Summary events include: `release_readiness_applied` (`workspace`, `ready`, `blockers`) and `remaining_gaps_applied` (`workspace`, `gap_count`).
+  - Contract registry is centralized in `WORKSPACE_EVENT_REQUIRED_FIELDS`; test matrix enforces all listed events for both positive and missing-field paths.
+  - Strict registration rule: `_emit_workspace_event` rejects unknown workspace event ids unless they are explicitly present in `WORKSPACE_EVENT_REQUIRED_FIELDS`.
+  - Developer checklist when adding a workspace event: update `WORKSPACE_EVENT_REQUIRED_FIELDS`, emit through `_emit_workspace_event`, extend event-contract tests, and update this spec section.
+  - Static parity guard: shared test utility parses `_emit_workspace_event` callsites and requires exact set parity with `WORKSPACE_EVENT_REQUIRED_FIELDS`.
+  - Event id literals only: callsites must pass string-literal event ids to `_emit_workspace_event`; dynamic event-id composition is disallowed by contract tests.
+  - Static diagnostics quality: violations report concrete `file:line:column` locations for non-literal event-id callsites, and scan recursively across `le_vibe/**/*.py` emitter modules.
+  - Recursive-scan exclusion policy: skip paths containing `generated`, `vendor`, `third_party`, or `__pycache__`; exclusions are explicit in shared test utility with per-term rationale strings and covered by tests.
+  - Policy-change guard: exclusion term set is pinned by test and must be intentionally updated alongside rationale + spec-contract text when terms change.
+  - Safe update procedure: shared utility docstring lists required exclusion-update steps (reasons map, derived parts, spec text, contract assertions, and targeted test run).
+  - Canonical helper-index tuple (`WORKSPACE_EVENT_HELPER_INDEX_SYMBOLS`) now includes `HELPER_INDEX_GOVERNANCE_ANCHOR_PREFIX` so exported-helper coverage is single-sourced.
+  - Governance test comment convention: use short `Guard #N:` and/or single-line intent comments above policy tests so each guard’s responsibility stays explicit and non-overlapping.
+- **Failure-mode cataloging (Task 58):** orchestrator computes `meta.failure_mode_catalog` from release blockers with id/severity/status entries so operators can triage closeout risks from a stable decision record.
 - **Negotiation:** orchestrator proposes next action from `session_steps` + current epic/task; agents respond per skill file; decisions recorded in incremental memory **in small, token-efficient** snippets.
 - **Master vs subagents (product model):** The **in-app** primary model **grounds** on **`.lvibe/`** and manifest/task state; it **invokes** subagent roles **when appropriate** so their “learning” (summaries, decisions, chunk refs) is **reused**—see **`docs/PRODUCT_SPEC.md` §7**. Not every role runs on every turn; **selective** orchestration keeps latency and token use **lean**.
 - **Session-long updates:** Even when the user is **not** chat-heavy, the product may **append bounded** updates to **`.lvibe/`** over an open session (**PRODUCT_SPEC** §5)—implementation must stay **safe** and **small-token**.
@@ -152,7 +215,7 @@ When the **master orchestrator** lacks **product authority** or **clear** techni
 ## 7. Success criteria (this spec)
 
 - [x] Example JSON validates the mental model: **session_steps** + **product.epics** + **agents**.
-- [x] Eight agent markdown files exist with **Lé Vibe**-aligned, SaaS-realistic defaults (including **Senior Industry Advisor**).
+- [x] Nine canonical agent markdown files exist with **Lé Vibe**-aligned, SaaS-realistic defaults and alias mapping (`@sme`, `@props`, `@prod`, `@be-eng`, `@fe-eng`, `@do-eng`, `@marketing`, `@cs`, `@rev`).
 - [x] Opening / skip / workspace-scan behavior is documented for implementers (`le_vibe.session_orchestrator`: `resolve_next_step_after_opening_skip`, `apply_opening_skip`, `write_workspace_scan_stub`).
 - [x] Same files conceptually reused under **`.lvibe/`** for end users.
 

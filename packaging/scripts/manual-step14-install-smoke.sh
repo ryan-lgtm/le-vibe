@@ -91,16 +91,15 @@ run_verify_only() {
     echo "manual-step14-install-smoke: lvibe not on PATH (is stack package installed?)." >&2
     exit 1
   }
-  command -v codium >/dev/null 2>&1 || {
-    echo "manual-step14-install-smoke: codium not on PATH (is IDE package installed?)." >&2
+  [[ -x /usr/lib/le-vibe/bin/codium ]] || {
+    echo "manual-step14-install-smoke: missing executable /usr/lib/le-vibe/bin/codium (is IDE package installed?)." >&2
     exit 1
   }
+  if ! command -v codium >/dev/null 2>&1; then
+    echo "manual-step14-install-smoke: codium not on PATH (non-fatal) — packaged launcher exists at /usr/lib/le-vibe/bin/codium" >&2
+  fi
   [[ -f /usr/share/applications/le-vibe.desktop ]] || {
     echo "manual-step14-install-smoke: missing /usr/share/applications/le-vibe.desktop" >&2
-    exit 1
-  }
-  [[ -x /usr/lib/le-vibe/bin/codium ]] || {
-    echo "manual-step14-install-smoke: missing executable /usr/lib/le-vibe/bin/codium" >&2
     exit 1
   }
   [[ -f /usr/share/doc/le-vibe/README.Debian || -f /usr/share/doc/le-vibe/README.Debian.gz ]] || {
@@ -115,7 +114,7 @@ run_verify_only() {
   else
     echo "manual-step14-install-smoke: optional desktop-file-validate not on PATH — skipped (install desktop-file-utils for full Freedesktop QA)" >&2
   fi
-  echo "manual-step14-install-smoke: OK (lvibe + codium + desktop + docs present)."
+  echo "manual-step14-install-smoke: OK (lvibe + /usr/lib/le-vibe/bin/codium + desktop + docs present)."
 }
 
 while [[ $# -gt 0 ]]; do
@@ -188,7 +187,8 @@ cat <<EOF
 
 2) Verify commands resolve:
    lvibe --help
-   codium --version
+   /usr/lib/le-vibe/bin/codium --version
+   # Optional PATH alias check: codium --version
 
 3) Verify installed payloads:
    test -x /usr/lib/le-vibe/bin/codium

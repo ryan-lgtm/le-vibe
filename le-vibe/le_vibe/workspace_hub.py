@@ -151,6 +151,8 @@ def ensure_lvibe_workspace(workspace_root: Path) -> Path:
             "# Agent rules (Lé Vibe)\n\n"
             "- Treat **`.lvibe/`** as the default place for **project memory** and **incremental context**.\n"
             "- **Prefer** recalling from `memory/` and small files here instead of re-reading large caches or whole trees.\n"
+            "- **Deterministic recall order:** `session-manifest.json` → `memory/incremental.md` (tail) / `memory/workspace-scan.md` → `rag/refs/` relevant refs → only required `agents/<agent_id>/skill.md` files.\n"
+            "- Avoid broad `.lvibe/**` rescans unless the ordered sources are missing or contradictory.\n"
             "- **Append** new facts as **short** bullet or YAML snippets in `memory/incremental.md` (~2 KiB per entry as a "
             "guide; summarize if growing; compaction may trim the tail under storage pressure — PRODUCT_SPEC §5.5).\n"
             "- Optional: place **chunk references** under **`rag/refs/`** (preferred) or legacy `chunks/` for RAG-style lookups.\n"

@@ -1150,6 +1150,21 @@ def _cmd_workspace_governance(argv: list[str]) -> int:
         "within_cap": within_cap,
         "storage_state_path": str(state_path),
         "storage_state": storage_state,
+        "storage_pressure_state": (
+            storage_state.get("storage_pressure_state")
+            if isinstance(storage_state, dict)
+            else None
+        ),
+        "last_compaction_at": (
+            storage_state.get("last_compaction_at")
+            if isinstance(storage_state, dict)
+            else None
+        ),
+        "compaction_actions_count": (
+            storage_state.get("compaction_actions_count")
+            if isinstance(storage_state, dict)
+            else None
+        ),
     }
 
     if args.json:
@@ -1168,6 +1183,60 @@ def _cmd_workspace_governance(argv: list[str]) -> int:
     print(f"Usage: {usage} bytes ({usage / (1024 * 1024):.2f} MB) / {effective_cap} MB budget")
     print(f"Within cap: {'yes' if within_cap else 'no'}")
     print(f"storage-state.json: {state_path} ({'present' if state_path.is_file() else 'absent'})")
+    return 0
+
+
+def _cmd_remaining_gaps(argv: list[str]) -> int:
+    """STEP 66: explicit remaining-gaps report before milestone close."""
+    import json as json_mod
+
+    from le_vibe.session_orchestrator import (
+        load_session_manifest,
+        persist_remaining_gaps_report,
+        remaining_gaps_report,
+    )
+
+    p = argparse.ArgumentParser(
+        prog="lvibe remaining-gaps",
+        description="Show explicit milestone-close remaining gaps from .lvibe/session-manifest.json.",
+    )
+    p.add_argument(
+        "--workspace",
+        "-C",
+        default=".",
+        help="workspace root (default: current directory)",
+    )
+    p.add_argument(
+        "--json",
+        action="store_true",
+        help="print remaining gaps report as JSON",
+    )
+    args = p.parse_args(argv)
+    try:
+        ws = Path(args.workspace).expanduser().resolve()
+    except OSError as e:
+        print(f"lvibe remaining-gaps: bad --workspace: {e}", file=sys.stderr)
+        return 2
+    lvibe_dir = ws / ".lvibe"
+    manifest_path = lvibe_dir / "session-manifest.json"
+    if not manifest_path.is_file():
+        print(f"lvibe remaining-gaps: missing {manifest_path}", file=sys.stderr)
+        return 1
+    persist_remaining_gaps_report(ws, source="launcher_remaining_gaps_cmd")
+    data = load_session_manifest(lvibe_dir)
+    report = data.get("meta", {}).get("remaining_gaps_report")
+    if not isinstance(report, dict):
+        report = remaining_gaps_report(data)
+    if args.json:
+        payload = {"workspace_root": str(ws), "report": report}
+        print(json_mod.dumps(payload, indent=2, ensure_ascii=False), file=sys.stdout)
+        return 0
+    print("Authority: Agent Orchestration Session Playbook Task 66")
+    print(f"Workspace: {ws}")
+    print(f"Has gaps: {'yes' if report.get('has_gaps') else 'no'}")
+    print(f"Gap count: {report.get('gap_count', 0)}")
+    for gap in report.get("gaps", []):
+        print(f"- {gap}")
     return 0
 
 
@@ -1447,6 +1516,63 @@ def _cleanup() -> None:
     stop_managed_ollama()
 
 
+def _record_goal_alignment_session_boundary(
+    workspaces: list[Path],
+    *,
+    phase: str,
+    status: str,
+    evidence: list[str],
+    notes: str,
+    current_milestone: str,
+) -> None:
+    from le_vibe.session_orchestrator import persist_goal_alignment_check
+
+    for root in workspaces:
+        persist_goal_alignment_check(
+            root,
+            phase=phase,
+            status=status,
+            evidence=evidence,
+            notes=notes,
+            current_milestone=current_milestone,
+        )
+
+
+def _record_stop_condition_boundary(
+    workspaces: list[Path],
+    *,
+    product_goals_satisfied: bool,
+    final_milestone_achieved: bool,
+    current_milestone: str,
+    final_milestone: str,
+    evidence: list[str],
+    notes: str,
+) -> None:
+    from le_vibe.session_orchestrator import persist_stop_condition_check
+
+    for root in workspaces:
+        persist_stop_condition_check(
+            root,
+            product_goals_satisfied=product_goals_satisfied,
+            final_milestone_achieved=final_milestone_achieved,
+            current_milestone=current_milestone,
+            final_milestone=final_milestone,
+            evidence=evidence,
+            notes=notes,
+        )
+
+
+def _record_release_readiness_summary(
+    workspaces: list[Path],
+    *,
+    source: str,
+) -> None:
+    from le_vibe.session_orchestrator import persist_release_readiness_summary
+
+    for root in workspaces:
+        persist_release_readiness_summary(root, source=source)
+
+
 def main() -> int:
     if len(sys.argv) >= 2 and sys.argv[1] == "sync-agent-skills":
         return _cmd_sync_agent_skills(sys.argv[2:])
@@ -1480,6 +1606,8 @@ def main() -> int:
         return _cmd_append_incremental_fact(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "workspace-governance":
         return _cmd_workspace_governance(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "remaining-gaps":
+        return _cmd_remaining_gaps(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "master-orchestrator":
         return _cmd_master_orchestrator(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "ai-pilot-continue":
@@ -1584,7 +1712,29 @@ def main() -> int:
         "user_settings_loaded",
         lvibe_cap_default_explicit=us.get("lvibe_cap_mb_default") is not None,
     )
-    prepare_workspaces_for_editor_args(args.editor_args)
+    prepared_workspaces = prepare_workspaces_for_editor_args(args.editor_args)
+    if prepared_workspaces:
+        _record_goal_alignment_session_boundary(
+            prepared_workspaces,
+            phase="start",
+            status="aligned",
+            evidence=["launcher.session_start", f"editor={args.editor}"],
+            notes="Automatic session start alignment check from launcher runtime.",
+            current_milestone="Launcher session start",
+        )
+        _record_stop_condition_boundary(
+            prepared_workspaces,
+            product_goals_satisfied=False,
+            final_milestone_achieved=False,
+            current_milestone="Launcher session start",
+            final_milestone="Final milestone pending",
+            evidence=["launcher.session_start"],
+            notes="Stop condition starts false until product goal and final milestone are verified.",
+        )
+        _record_release_readiness_summary(
+            prepared_workspaces,
+            source="launcher_session_start",
+        )
 
     cmd = [args.editor, *args.editor_args]
     try:
@@ -1597,6 +1747,28 @@ def main() -> int:
 
     rc = proc.wait()
     append_structured_log("launcher", "editor_exit", editor=cmd[0], exit_code=rc)
+    if prepared_workspaces:
+        _record_goal_alignment_session_boundary(
+            prepared_workspaces,
+            phase="end",
+            status="aligned" if rc == 0 else "needs_follow_up",
+            evidence=["launcher.editor_exit", f"editor_exit_code={rc}"],
+            notes="Automatic session end alignment check from launcher runtime.",
+            current_milestone="Launcher session end",
+        )
+        _record_stop_condition_boundary(
+            prepared_workspaces,
+            product_goals_satisfied=False,
+            final_milestone_achieved=False,
+            current_milestone="Launcher session end",
+            final_milestone="Final milestone pending",
+            evidence=["launcher.editor_exit", f"editor_exit_code={rc}"],
+            notes="Stop condition remains false by default; requires explicit session closeout proof.",
+        )
+        _record_release_readiness_summary(
+            prepared_workspaces,
+            source="launcher_session_end",
+        )
     _cleanup()
     if rc < 0:
         return 128 - rc

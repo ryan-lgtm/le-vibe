@@ -3,11 +3,9 @@ packaging/bin/le-vibe usr/bin
 packaging/bin/lvibe usr/bin
 packaging/bin/lvibe-hygiene usr/bin
 packaging/bin/le-vibe-setup-continue usr/bin
-packaging/applications/le-vibe.desktop usr/share/applications
 packaging/scripts/install-continue-extension.sh usr/share/le-vibe/scripts
 packaging/continue-openvsx-version usr/share/le-vibe
 packaging/scripts/sync-continue-config.sh usr/share/le-vibe/scripts
 packaging/scripts/fetch-code-oss-artifact.sh usr/share/le-vibe/scripts
 packaging/scripts/le-vibe-continue-setup-autostart.sh usr/share/le-vibe/scripts
 packaging/autostart/le-vibe-continue-setup.desktop etc/xdg/autostart
-packaging/icons/hicolor/scalable/apps/le-vibe.svg usr/share/icons/hicolor/scalable/apps

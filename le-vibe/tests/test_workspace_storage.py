@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from le_vibe.workspace_hub import ensure_lvibe_workspace
@@ -82,6 +83,79 @@ def test_refresh_writes_storage_state_json(tmp_path: Path, monkeypatch) -> None:
     data = (root / ".lvibe" / "storage-state.json").read_text(encoding="utf-8")
     assert "usage_bytes" in data
     assert "50" in data
+    payload = json.loads(data)
+    assert payload["compaction_actions_count"] == 0
+    assert payload["compaction_warning"] is False
+    assert payload["last_compaction_at"] is None
+    assert payload["storage_pressure_state"] == "ok"
+
+
+def test_refresh_records_compaction_metadata_when_over_cap(tmp_path: Path, monkeypatch) -> None:
+    cfg = tmp_path / "cfg"
+    cfg.mkdir()
+    monkeypatch.setattr("le_vibe.workspace_policy.le_vibe_config_dir", lambda: cfg)
+    monkeypatch.setenv("LE_VIBE_LVIBE_CAP_MB", "10")
+    root = tmp_path / "w"
+    root.mkdir()
+    ensure_lvibe_workspace(root)
+    fat = root / ".lvibe" / "rag" / "refs" / "big.yaml"
+    fat.parent.mkdir(parents=True, exist_ok=True)
+    fat.write_bytes(b"x" * (15 * 1024 * 1024))
+
+    refresh_storage_metadata(root, config_dir=cfg)
+
+    payload = json.loads((root / ".lvibe" / "storage-state.json").read_text(encoding="utf-8"))
+    assert payload["compaction_actions_count"] >= 1
+    assert payload["compaction_warning"] in (True, False)
+    assert isinstance(payload["last_compaction_at"], str)
+    assert payload["last_compaction_at"]
+    assert payload["storage_pressure_state"] in ("ok", "near_cap", "over_cap")
+
+
+def test_write_storage_state_reports_near_cap_pressure(tmp_path: Path) -> None:
+    from le_vibe.workspace_storage import write_storage_state
+
+    root = tmp_path / "w"
+    lv = root / ".lvibe"
+    lv.mkdir(parents=True, exist_ok=True)
+    write_storage_state(root, cap_mb=10, usage_bytes=9 * 1024 * 1024)
+    payload = json.loads((lv / "storage-state.json").read_text(encoding="utf-8"))
+    assert payload["storage_pressure_state"] == "near_cap"
+
+
+def test_write_storage_state_exact_cap_is_near_cap_not_over(tmp_path: Path) -> None:
+    from le_vibe.workspace_storage import write_storage_state
+
+    root = tmp_path / "w"
+    lv = root / ".lvibe"
+    lv.mkdir(parents=True, exist_ok=True)
+    cap_bytes = 10 * 1024 * 1024
+    write_storage_state(root, cap_mb=10, usage_bytes=cap_bytes)
+    payload = json.loads((lv / "storage-state.json").read_text(encoding="utf-8"))
+    assert payload["storage_pressure_state"] == "near_cap"
+
+
+def test_write_storage_state_one_byte_over_cap_is_over_cap(tmp_path: Path) -> None:
+    from le_vibe.workspace_storage import write_storage_state
+
+    root = tmp_path / "w"
+    lv = root / ".lvibe"
+    lv.mkdir(parents=True, exist_ok=True)
+    cap_bytes = 10 * 1024 * 1024
+    write_storage_state(root, cap_mb=10, usage_bytes=cap_bytes + 1)
+    payload = json.loads((lv / "storage-state.json").read_text(encoding="utf-8"))
+    assert payload["storage_pressure_state"] == "over_cap"
+
+
+def test_write_storage_state_zero_cap_reports_over_cap(tmp_path: Path) -> None:
+    from le_vibe.workspace_storage import write_storage_state
+
+    root = tmp_path / "w"
+    lv = root / ".lvibe"
+    lv.mkdir(parents=True, exist_ok=True)
+    write_storage_state(root, cap_mb=0, usage_bytes=0)
+    payload = json.loads((lv / "storage-state.json").read_text(encoding="utf-8"))
+    assert payload["storage_pressure_state"] == "over_cap"
 
 
 def test_lvibe_tree_usage_bytes_zero_without_dot_lvibe(tmp_path: Path) -> None:

@@ -107,7 +107,7 @@ Keep the tree **easy to reason about** and **easy to cap by size**:
 
 | Area | Role |
 |------|------|
-| **Per-agent subtrees** | Under **`.lvibe/agents/<agent_id>/`** — **persona + project-specific context** and **interaction history** for that role (small markdown files; bounded growth per agent). Example `agent_id`: `product_manager`, `senior_backend_engineer`, … |
+| **Per-agent subtrees** | Under **`.lvibe/agents/<agent_id>/`** — **persona + project-specific context** and **interaction history** for that role (small markdown files; bounded growth per agent). Example canonical `agent_id`: `senior_product_management`, `senior_backend_engineer`, `subject_matter_industry_expert`, … |
 | **Shared RAG / chunks** | Under **`.lvibe/rag/`** (or equivalent top-level siblings such as existing **`chunks/`**, **`memory/`**) — **cross-cutting** chunk references, manifests, and token-efficient retrieval material **separate** from per-agent narrative so compaction can target **RAG first**, then **oldest agent notes**, without mixing concerns. |
 
 Exact filenames may evolve; the **separation** (agent-local vs shared RAG) is **must ship** for maintainability and compaction.
@@ -163,7 +163,7 @@ Implementation must **migrate** from **unconditional** `.lvibe/` creation to **c
 
 **Must ship (behavioral model):**
 
-1. **Subagents** (skill roles: PM, Engineering, QA, **Senior Industry Advisor**, etc.) are **first-class**: their markdown definitions and negotiated outputs feed context under **`.lvibe/agents/<agent_id>/`** and shared RAG (**§5.2**) so the master agent **reuses what they “learn”** instead of re-deriving everything each turn (when **§5.1** consent is on).
+1. **Subagents** (skill roles: `@sme`, `@props`, `@prod`, `@be-eng`, `@fe-eng`, `@do-eng`, `@marketing`, `@cs`, `@rev`) are **first-class**: their markdown definitions and negotiated outputs feed context under **`.lvibe/agents/<agent_id>/`** and shared RAG (**§5.2**) so the master agent **reuses what they “learn”** instead of re-deriving everything each turn (when **§5.1** consent is on).
 2. **Invocation:** The runtime **invokes** or **simulates** subagent perspectives **when it makes sense** for the current task (task-based management, not a wall of parallel chatter)—orchestration is **selective**, not always “all agents every time.”
 3. **Harmony:** Light assist and heavy “vibe-code” should both feel **coherent**: same **`.lvibe/`** layer, same **token discipline**, **fast** paths for simple asks.
 
@@ -187,7 +187,7 @@ The **master orchestrator** must **not** guess on **material** decisions that be
 2. **Subagent → coordinator:** Subagents **request** the coordinator when a step is **high-impact** or when **specialists disagree**. The coordinator **does not** override the user on those categories.
 3. **Halt, don’t assume:** When the orchestrator **cannot** responsibly decide, it **stops automated execution** of that branch and surfaces a **user gate**—**no** silent defaults on matters listed above.
 4. **USER RESPONSE REQUIRED:** The UI (or agent output in Cursor mimic) must show that exact label in **ALL CAPS** as a **banner line**, followed by **numbered questions** the user must answer to proceed.
-5. **Answer format:** Instruct the user to reply by **number** (e.g. `1: …`, `2: …`). Accept explicit **non-preference** answers such as **“No preference”**, **“I don’t care”**, **“Your call”**, or **“Surprise me”** as **valid**—the orchestrator then may choose a **documented** default or escalate to **Product Manager** / **Senior Industry Advisor** role per skill files, **without** inventing user intent.
+5. **Answer format:** Instruct the user to reply by **number** (e.g. `1: …`, `2: …`). Accept explicit **non-preference** answers such as **“No preference”**, **“I don’t care”**, **“Your call”**, or **“Surprise me”** as **valid**—the orchestrator then may choose a **documented** default or escalate to **Senior Product Management** (`@prod`) / **Subject Matter/Industry Expert** (`@sme`) per skill files, **without** inventing user intent.
 6. **Examples** of gate-worthy situations: **design** choices that affect UX or brand; **major database** or storage restructures; **persistent disagreement** among subagents on approach; legal/compliance-sensitive choices (surface to **User** / **Product Manager**).
 
 **Detail and protocol:** **`docs/SESSION_ORCHESTRATION_SPEC.md`** (orchestration §5). Lazy prompts should mirror halt semantics (**`docs/PROMPT_BUILD_LE_VIBE.md`**).

@@ -1,5 +1,7 @@
 # Skill agent: User (Lé Vibe)
 
+> Legacy compatibility template. The user is still the authority via `USER RESPONSE REQUIRED`, but this file is not part of the canonical specialist subagent roster.
+
 ## Mission
 
 Represent **human intent**, **acceptance**, and **“what good looks like”** for the product—whether played by a real person or a structured stand-in for automation.

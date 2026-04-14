@@ -32,6 +32,35 @@ def test_ensure_continue_rules_idempotent(tmp_path: Path):
     assert "AI Pilot" in mem
     assert "USER RESPONSE REQUIRED" in mem
     assert "numbered questions" in mem
+    assert "Use this canonical output shape" in mem
+    assert "1: ..." in mem
+    assert "2: ..." in mem
+    assert "reply by number" in mem
+    assert "Deterministic recall order" in mem
+    assert "**Deterministic recall order (token-efficient):**" in mem
+    assert ".lvibe/session-manifest.json" in mem
+    assert ".lvibe/rag/refs/" in mem
+    assert "Avoid broad `.lvibe/**` rescans" in mem
+    i1 = mem.index("1. `.lvibe/session-manifest.json`")
+    i2 = mem.index("2. `.lvibe/memory/incremental.md` tail and `.lvibe/memory/workspace-scan.md` when present")
+    i3 = mem.index("3. `.lvibe/rag/refs/` small refs for path-specific evidence")
+    i4 = mem.index("4. `.lvibe/agents/<agent_id>/skill.md` only for the roles needed this turn")
+    assert i1 < i2 < i3 < i4
+    recall_section = mem.split("**Deterministic recall order (token-efficient):**", 1)[1].split(
+        "Avoid broad `.lvibe/**` rescans",
+        1,
+    )[0]
+    recall_lines = [
+        line.strip()
+        for line in recall_section.splitlines()
+        if line.strip().startswith(("1. ", "2. ", "3. ", "4. "))
+    ]
+    assert recall_lines == [
+        "1. `.lvibe/session-manifest.json` (current step + active epic/task)",
+        "2. `.lvibe/memory/incremental.md` tail and `.lvibe/memory/workspace-scan.md` when present",
+        "3. `.lvibe/rag/refs/` small refs for path-specific evidence",
+        "4. `.lvibe/agents/<agent_id>/skill.md` only for the roles needed this turn",
+    ]
     assert "/setup-workspace" in mem
     assert ".workspace-context-seeded" in mem
     assert "workflows/setup-workspace.md" in mem

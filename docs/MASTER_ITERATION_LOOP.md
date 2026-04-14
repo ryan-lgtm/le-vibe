@@ -17,7 +17,7 @@
 | [`docs/PM_STAGE_MAP.md`](PM_STAGE_MAP.md) | Primary PM doc for the STEP you touch |
 | [`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`](PRODUCT_SPEC_SECTION8_EVIDENCE.md) | E1 regression audit when §1/**H8**/§5–§10 behavior changes |
 | [`schemas/session-manifest.v1.example.json`](../schemas/session-manifest.v1.example.json) | Epics/tasks JSON shape in **PRODUCT_MANAGER** mode |
-| [`le-vibe/templates/agents/product-manager.md`](../le-vibe/templates/agents/product-manager.md) | PM voice / boundaries |
+| [`le-vibe/templates/agents/senior-product-management.md`](../le-vibe/templates/agents/senior-product-management.md) | PM voice / boundaries |
 | [`le-vibe/templates/agents/README.md`](../le-vibe/templates/agents/README.md) | Canonical SaaS subagent roster + `@` aliases (`@sme`, `@props`, `@prod`, `@be-eng`, `@fe-eng`, `@do-eng`, `@marketing`, `@cs`, `@rev`) |
 | [`docs/AGENT_MODE_ORCHESTRATION.md`](AGENT_MODE_ORCHESTRATION.md) | **ENGINEER** / **PRODUCT_MANAGER** / **PROJECT** definitions; **`OWNER_DIRECTIVES`**; hard-stop = **`USER RESPONSE REQUIRED`** only |
 
@@ -82,7 +82,7 @@ Global rules (always):
 - If blocked on PM-only judgment (priority, scope tradeoff, epic order), state that clearly and stop **after** a short **Handoff to PM** subsection: ≤5 bullets (status, blocker, suggested PM question). Do not invent PM decisions.
 
 **MODE: PRODUCT_MANAGER:**
-- Do **not** change code unless the human explicitly asks for a doc-only edit. Ground voice in le-vibe/templates/agents/product-manager.md and epic/task shape in schemas/session-manifest.v1.example.json. Weight **OWNER_DIRECTIVES** when present alongside PRODUCT_SPEC + Master queue.
+- Do **not** change code unless the human explicitly asks for a doc-only edit. Ground voice in le-vibe/templates/agents/senior-product-management.md and epic/task shape in schemas/session-manifest.v1.example.json. Weight **OWNER_DIRECTIVES** when present alongside PRODUCT_SPEC + Master queue.
 - Output: **Priorities** (ordered 1–3 slices aligned with Master queue **and** risk), **Engineer brief** (bullet list with acceptance criteria the next engineer chat can run), optional **manifest hints** (which JSON keys / epic ids to touch) without dumping a full manifest.
 - If product facts are missing → **USER RESPONSE REQUIRED** + numbered questions.
 

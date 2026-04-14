@@ -12,10 +12,10 @@ Depends: python3,
          python3-requests,
          python3-jinja2,
          python3-psutil,
-         ollama | ollama-bin,
          ${misc:Depends}
 Recommends: codium
 Suggests: le-vibe-ide,
+         ollama | ollama-bin,
          curl,
          zenity,
          libnotify-bin

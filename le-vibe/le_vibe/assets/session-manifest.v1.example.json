@@ -7,6 +7,216 @@
     "workspace_summary": null,
     "rag_notes": "Populate workspace_summary or chunk refs after workspace_scan; keep entries short.",
     "current_step_id": "opening_intent",
+    "evidence_artifacts": [
+      "acceptance.complete",
+      "exit_tests.complete"
+    ],
+    "evidence_artifact_records": [
+      {
+        "id": "acceptance.complete",
+        "session_id": "example-local-dev"
+      },
+      {
+        "id": "exit_tests.complete",
+        "session_id": "example-local-dev"
+      }
+    ],
+    "goal_alignment_check": {
+      "start": {
+        "goal": "Ship one orchestration task per session with evidence.",
+        "current_milestone": "Session kickoff",
+        "final_milestone": "Release-ready orchestration",
+        "constraints": [
+          "One session, one shippable increment",
+          "Avoid unrelated refactors"
+        ],
+        "status": "aligned",
+        "evidence": [],
+        "notes": "Run this check at session start."
+      },
+      "end": {
+        "goal": "Ship one orchestration task per session with evidence.",
+        "current_milestone": "Session closeout",
+        "final_milestone": "Release-ready orchestration",
+        "constraints": [
+          "One session, one shippable increment",
+          "Avoid unrelated refactors"
+        ],
+        "status": "pending",
+        "evidence": [
+          "acceptance.complete"
+        ],
+        "notes": "Update at session end after tests/docs."
+      }
+    },
+    "stop_condition_check": {
+      "product_goals_satisfied": false,
+      "final_milestone_achieved": false,
+      "current_milestone": "Session kickoff",
+      "final_milestone": "Release-ready orchestration",
+      "completion_allowed": false,
+      "evidence": [
+        "exit_tests.complete"
+      ],
+      "notes": "Completion remains blocked until both product goals and final milestone are verified."
+    },
+    "release_readiness_summary": {
+      "ready": false,
+      "goal_alignment_end_status": "pending",
+      "completion_allowed": false,
+      "task_counts": {
+        "pending": 1,
+        "in_progress": 0,
+        "blocked": 0,
+        "done": 0,
+        "other": 0
+      },
+      "total_tasks": 1,
+      "blockers": [
+        "goal_alignment_end_not_aligned",
+        "stop_condition_not_met",
+        "incomplete_tasks_present"
+      ],
+      "source": "session_manifest"
+    },
+    "remaining_gaps_report": {
+      "has_gaps": true,
+      "gap_count": 3,
+      "gaps": [
+        "goal_alignment_end_not_aligned",
+        "stop_condition_not_met",
+        "incomplete_tasks_present"
+      ],
+      "ready": false,
+      "completion_allowed": false,
+      "source": "session_manifest"
+    },
+    "milestone_definition_of_done_checks": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "all_passed": true,
+      "checks": [
+        {
+          "id": "milestone-foundation",
+          "objective_ok": true,
+          "acceptance_ok": true,
+          "exit_tests_ok": true,
+          "owners_ok": true,
+          "passed": true
+        }
+      ],
+      "source": "session_manifest"
+    },
+    "milestone_dependency_visibility": {
+      "total": 1,
+      "missing_count": 0,
+      "has_missing": false,
+      "entries": [
+        {
+          "id": "milestone-foundation",
+          "dependencies": [],
+          "missing_dependencies": []
+        }
+      ],
+      "dependents": {
+        "milestone-foundation": []
+      },
+      "source": "session_manifest"
+    },
+    "progress_confidence_report": {
+      "confidence_score": 0.3,
+      "task_done_ratio": 0.0,
+      "milestone_dod_pass_ratio": 1.0,
+      "stop_condition_met": false,
+      "drift_detected": false,
+      "drift_reason": "",
+      "source": "session_manifest"
+    },
+    "final_milestone_lock_criteria": {
+      "locked": false,
+      "criteria": {
+        "goal_alignment_end_aligned": false,
+        "goal_alignment_end_evidence_present": false,
+        "goal_alignment_end_evidence_traceable": true,
+        "goal_alignment_end_evidence_fresh": true,
+        "stop_condition_met": false,
+        "stop_condition_evidence_present": false,
+        "stop_condition_evidence_traceable": true,
+        "stop_condition_evidence_fresh": true,
+        "milestone_definition_of_done_passed": true,
+        "milestone_dependencies_resolved": true,
+        "no_progress_drift": true
+      },
+      "evidence_provenance": {
+        "goal_alignment_end": {
+          "registry_count": 2,
+          "provided_count": 1,
+          "traceable_count": 1,
+          "untraceable_count": 0,
+          "fresh_count": 1,
+          "stale_count": 0,
+          "current_session_id": "example-local-dev",
+          "traceable": [
+            "acceptance.complete"
+          ],
+          "untraceable": [],
+          "fresh": [
+            "acceptance.complete"
+          ],
+          "stale": [],
+          "all_traceable": true,
+          "all_fresh": true
+        },
+        "stop_condition": {
+          "registry_count": 2,
+          "provided_count": 1,
+          "traceable_count": 1,
+          "untraceable_count": 0,
+          "fresh_count": 1,
+          "stale_count": 0,
+          "current_session_id": "example-local-dev",
+          "traceable": [
+            "exit_tests.complete"
+          ],
+          "untraceable": [],
+          "fresh": [
+            "exit_tests.complete"
+          ],
+          "stale": [],
+          "all_traceable": true,
+          "all_fresh": true
+        }
+      },
+      "source": "session_manifest"
+    },
+    "failure_mode_catalog": {
+      "total": 4,
+      "active": 4,
+      "modes": [
+        {
+          "id": "goal_alignment_end_not_aligned",
+          "severity": "medium",
+          "status": "active"
+        },
+        {
+          "id": "stop_condition_not_met",
+          "severity": "high",
+          "status": "active"
+        },
+        {
+          "id": "incomplete_tasks_present",
+          "severity": "medium",
+          "status": "active"
+        },
+        {
+          "id": "final_milestone_lock_not_satisfied",
+          "severity": "high",
+          "status": "active"
+        }
+      ],
+      "source": "session_manifest"
+    },
     "continue_construction_note": "Optional hint: resume from this manifest + .lvibe/ per docs/AI_PILOT_AND_CONTINUE.md (user e.g. “Please continue”).",
     "ai_pilot_note": "Optional hint: sustained coordinated mode; same PRODUCT_SPEC §5/§8 guards; doc-first per docs/PM_STAGE_MAP.md and docs/PROMPT_BUILD_LE_VIBE.md."
   },
@@ -45,14 +255,19 @@
     },
     "roles": [
       {
-        "id": "product_manager",
+        "id": "subject_matter_industry_expert",
         "enabled": true,
-        "skill_path": ".lvibe/agents/product-manager/skill.md"
+        "skill_path": ".lvibe/agents/subject-matter-industry-expert/skill.md"
       },
       {
-        "id": "project_manager",
+        "id": "senior_product_operations",
         "enabled": true,
-        "skill_path": ".lvibe/agents/project-manager/skill.md"
+        "skill_path": ".lvibe/agents/senior-product-operations/skill.md"
+      },
+      {
+        "id": "senior_product_management",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-product-management/skill.md"
       },
       {
         "id": "senior_backend_engineer",
@@ -70,23 +285,43 @@
         "skill_path": ".lvibe/agents/senior-devops-engineer/skill.md"
       },
       {
-        "id": "senior_qa_engineer",
+        "id": "senior_marketing",
         "enabled": true,
-        "skill_path": ".lvibe/agents/senior-qa-engineer/skill.md"
+        "skill_path": ".lvibe/agents/senior-marketing/skill.md"
       },
       {
-        "id": "senior_industry_advisor",
+        "id": "senior_customer_success",
         "enabled": true,
-        "skill_path": ".lvibe/agents/senior-industry-advisor/skill.md"
+        "skill_path": ".lvibe/agents/senior-customer-success/skill.md"
       },
       {
-        "id": "user",
+        "id": "senior_revenue",
         "enabled": true,
-        "skill_path": ".lvibe/agents/user/skill.md"
+        "skill_path": ".lvibe/agents/senior-revenue/skill.md"
       }
     ]
   },
   "product": {
+    "milestones": [
+      {
+        "id": "milestone-foundation",
+        "objective": "Establish orchestration contracts and runtime checks.",
+        "acceptance": [
+          "Goal alignment checks exist at session start and end.",
+          "Stop-condition gate blocks completion until final milestone verification."
+        ],
+        "exit_tests": [
+          "le-vibe/tests/test_session_orchestrator.py",
+          "le-vibe/tests/test_launcher_goal_alignment.py"
+        ],
+        "owners": [
+          "@prod",
+          "@be-eng",
+          "@props"
+        ],
+        "dependencies": []
+      }
+    ],
     "epics": [
       {
         "id": "epic-example-001",

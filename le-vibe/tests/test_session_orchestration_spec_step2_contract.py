@@ -18,6 +18,79 @@ def test_session_orchestration_spec_documents_step2_and_e1():
     assert "ensure_pm_session_artifacts" in text
     assert "apply_opening_skip" in text
     assert "session_manifest_example_source_path" in text
+    assert "goal_alignment_check.start" in text
+    assert "goal_alignment_check.end" in text
+    assert "stop_condition_check" in text
+    assert "release_readiness_summary" in text
+    assert "Release-readiness summary (Task 69)" in text
+    assert "remaining_gaps_report" in text
+    assert "Remaining gaps report (Task 66)" in text
+    assert "Milestone definition-of-done checks (Task 62)" in text
+    assert "meta.milestone_definition_of_done_checks" in text
+    assert "Cross-milestone dependency visibility (Task 63)" in text
+    assert "meta.milestone_dependency_visibility" in text
+    assert "Progress confidence + drift (Task 64)" in text
+    assert "meta.progress_confidence_report" in text
+    assert "Final milestone lock criteria (Task 65)" in text
+    assert "meta.final_milestone_lock_criteria" in text
+    assert "Failure-mode cataloging (Task 58)" in text
+    assert "meta.failure_mode_catalog" in text
+    assert "Evidence provenance validation (Task 59)" in text
+    assert "meta.evidence_artifacts" in text
+    assert "final_milestone_evidence_untraceable" in text
+    assert "Evidence freshness rule (Task 26)" in text
+    assert "meta.evidence_artifact_records" in text
+    assert "final_milestone_evidence_stale" in text
+    assert "Runtime artifact refresh (Task 26 follow-through)" in text
+    assert "persist_goal_alignment_check" in text
+    assert "persist_stop_condition_check" in text
+    assert "Runtime session-id guard" in text
+    assert "repair missing/blank `meta.session_id`" in text
+    assert "Session-id repair audit logging" in text
+    assert "session_id_repaired" in text
+    assert "Structured log event contract" in text
+    assert "schema_version=workspace_event.v1" in text
+    assert "_emit_workspace_event" in text
+    assert "WORKSPACE_EVENT_REQUIRED_FIELDS" in text
+    assert "test matrix enforces all listed events" in text
+    assert "Strict registration rule" in text
+    assert "rejects unknown workspace event ids" in text
+    assert "Developer checklist when adding a workspace event" in text
+    assert "update `WORKSPACE_EVENT_REQUIRED_FIELDS`" in text
+    assert "emit through `_emit_workspace_event`" in text
+    assert "Static parity guard" in text
+    assert "exact set parity with `WORKSPACE_EVENT_REQUIRED_FIELDS`" in text
+    assert "shared test utility parses `_emit_workspace_event` callsites" in text
+    assert "Event id literals only" in text
+    assert "dynamic event-id composition is disallowed" in text
+    assert "Static diagnostics quality" in text
+    assert "file:line:column" in text
+    assert "le_vibe/**/*.py" in text
+    assert "Recursive-scan exclusion policy" in text
+    assert "generated" in text and "vendor" in text and "third_party" in text
+    assert "per-term rationale strings" in text
+    assert "Policy-change guard" in text
+    assert "exclusion term set is pinned by test" in text
+    assert "Safe update procedure" in text
+    assert "shared utility docstring lists required exclusion-update steps" in text
+    assert "WORKSPACE_EVENT_HELPER_INDEX_SYMBOLS" in text
+    assert "HELPER_INDEX_GOVERNANCE_ANCHOR_PREFIX" in text
+    assert "Governance test comment convention" in text
+    assert "Guard #N:" in text
+    assert "goal_alignment_check_applied" in text
+    assert "stop_condition_check_applied" in text
+    assert "Noop events (`*_noop_*`)" in text
+    assert "release_readiness_applied" in text
+    assert "remaining_gaps_applied" in text
+    assert "product.milestones" in text
+    assert "objective" in text
+    assert "acceptance" in text
+    assert "exit_tests" in text
+    assert "owners" in text
+    assert "Runtime stop condition check" in text
+    assert "Task 70" in text
+    assert "stays **false** for all partial states" in text
+    assert "Runtime alignment checks" in text
     assert "schemas/session-manifest.v1.example.json" in text
     assert "spec-phase2.md" in text and "§14" in text
 

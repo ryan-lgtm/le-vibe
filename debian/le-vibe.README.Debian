@@ -15,7 +15,7 @@ Lé Vibe — quick steps after apt install
 
 **CI vs maintainer .deb bundles:** Default **`ci.yml`** artifact **`le-vibe-deb`** ships the stack **`le-vibe`** **`.deb`**, SBOM, and **`SHA256SUMS`** for those files — **not** **`le-vibe-ide_*_amd64.deb`**. Full-product release notes — **`docs/apt-repo-releases.md`** (*IDE package*); stage map — **`docs/PM_STAGE_MAP.md`** (*H1 vs §7.3 .deb bundles*).
 
-2. Run the launcher once so first-run can install Ollama (if needed), pull a model, and write configs under ~/.config/le-vibe/:
+2. Run the launcher once so first-run can reuse an existing **`ollama`** binary on **`PATH`** (or install Ollama if missing), pull a model, and write configs under ~/.config/le-vibe/:
      lvibe
    (Compatibility: `le-vibe` is the same entrypoint.)
 

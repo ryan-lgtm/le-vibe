@@ -17,3 +17,13 @@ Use this role set for orchestration and subagent debate:
 - Senior Marketing (`@marketing`) → `senior-marketing.md`
 - Senior Customer Success (`@cs`) → `senior-customer-success.md`
 - Senior Revenue (`@rev`) → `senior-revenue.md`
+
+## Legacy template compatibility (deprecated names)
+
+These legacy files remain for backward compatibility and migration:
+
+- `product-manager.md` → use `senior-product-management.md` (`@prod`)
+- `project-manager.md` → use `senior-product-operations.md` (`@props`)
+- `senior-industry-advisor.md` → use `subject-matter-industry-expert.md` (`@sme`)
+- `senior-qa-engineer.md` → quality responsibilities are now shared across engineering + product ops with customer-facing readiness from `@marketing`, `@cs`, and `@rev`
+- `user.md` → explicit user authority remains at orchestration gate (`USER RESPONSE REQUIRED`); not part of canonical specialist roster

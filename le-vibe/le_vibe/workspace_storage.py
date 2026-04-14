@@ -96,16 +96,32 @@ def write_storage_state(
     *,
     cap_mb: int,
     usage_bytes: int,
+    compaction_actions_count: int = 0,
+    compaction_warning: bool = False,
+    last_compaction_at: str | None = None,
 ) -> Path:
     """Write ``.lvibe/storage-state.json`` with usage vs cap (PRODUCT_SPEC §5.4)."""
     lv = workspace_root / _LVIBE
     out = lv / "storage-state.json"
+    cap_bytes = cap_mb * 1024 * 1024
+    if cap_bytes <= 0:
+        pressure = "over_cap"
+    elif usage_bytes > cap_bytes:
+        pressure = "over_cap"
+    elif usage_bytes >= int(cap_bytes * 0.9):
+        pressure = "near_cap"
+    else:
+        pressure = "ok"
     payload: dict[str, Any] = {
         "schema": "lvibe-storage-state.v1",
         "cap_mb": cap_mb,
         "usage_bytes": usage_bytes,
         "usage_human": _format_mb(usage_bytes),
         "cap_human": f"{cap_mb} MB",
+        "storage_pressure_state": pressure,
+        "compaction_actions_count": compaction_actions_count,
+        "compaction_warning": compaction_warning,
+        "last_compaction_at": last_compaction_at,
         "updated_at": datetime.now(timezone.utc).isoformat(),
     }
     out.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -234,8 +250,15 @@ def refresh_storage_metadata(workspace_root: Path, *, config_dir: Path | None = 
     if not lvibe.is_dir():
         return 0, cap
     usage = _dir_size_bytes(lvibe)
+    compaction_actions_count = 0
+    compaction_warning = False
+    last_compaction_at: str | None = None
     if usage > cap * 1024 * 1024:
         actions = compact_lvibe_tree(workspace_root, cap)
+        compaction_actions_count = len(actions)
+        compaction_warning = any(a.startswith("warning:") for a in actions)
+        if actions:
+            last_compaction_at = datetime.now(timezone.utc).isoformat()
         if actions:
             append_structured_log(
                 "workspace",
@@ -244,5 +267,12 @@ def refresh_storage_metadata(workspace_root: Path, *, config_dir: Path | None = 
                 actions=actions[:40],
             )
         usage = _dir_size_bytes(lvibe)
-    write_storage_state(workspace_root, cap_mb=cap, usage_bytes=usage)
+    write_storage_state(
+        workspace_root,
+        cap_mb=cap,
+        usage_bytes=usage,
+        compaction_actions_count=compaction_actions_count,
+        compaction_warning=compaction_warning,
+        last_compaction_at=last_compaction_at,
+    )
     return usage, cap

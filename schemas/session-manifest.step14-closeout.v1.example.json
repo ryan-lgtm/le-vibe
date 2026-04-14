@@ -45,14 +45,19 @@
     },
     "roles": [
       {
-        "id": "product_manager",
+        "id": "subject_matter_industry_expert",
         "enabled": false,
-        "skill_path": ".lvibe/agents/product-manager/skill.md"
+        "skill_path": ".lvibe/agents/subject-matter-industry-expert/skill.md"
       },
       {
-        "id": "project_manager",
+        "id": "senior_product_operations",
         "enabled": false,
-        "skill_path": ".lvibe/agents/project-manager/skill.md"
+        "skill_path": ".lvibe/agents/senior-product-operations/skill.md"
+      },
+      {
+        "id": "senior_product_management",
+        "enabled": false,
+        "skill_path": ".lvibe/agents/senior-product-management/skill.md"
       },
       {
         "id": "senior_backend_engineer",
@@ -70,19 +75,19 @@
         "skill_path": ".lvibe/agents/senior-devops-engineer/skill.md"
       },
       {
-        "id": "senior_qa_engineer",
+        "id": "senior_marketing",
         "enabled": true,
-        "skill_path": ".lvibe/agents/senior-qa-engineer/skill.md"
+        "skill_path": ".lvibe/agents/senior-marketing/skill.md"
       },
       {
-        "id": "senior_industry_advisor",
+        "id": "senior_customer_success",
         "enabled": false,
-        "skill_path": ".lvibe/agents/senior-industry-advisor/skill.md"
+        "skill_path": ".lvibe/agents/senior-customer-success/skill.md"
       },
       {
-        "id": "user",
+        "id": "senior_revenue",
         "enabled": false,
-        "skill_path": ".lvibe/agents/user/skill.md"
+        "skill_path": ".lvibe/agents/senior-revenue/skill.md"
       }
     ]
   },
@@ -129,7 +134,7 @@
             "id": "task-14-pytest-docs",
             "title": "Keep E1 green; update PRODUCT_SPEC honesty / PM_STAGE_MAP only with evidence",
             "status": "pending",
-            "assignee_agent": "senior_qa_engineer",
+            "assignee_agent": "senior_product_operations",
             "notes": "cd le-vibe && python3 -m pytest tests/ after Python changes. Do not claim STEP 14 done on tests/docs alone — need real branded IDE output + .deb path verified or SKIPPED.",
             "acceptance_criteria": "Pytest passes; any STEP deferral uses SKIPPED + reason in the honest place per spec-phase2 §14."
           }
