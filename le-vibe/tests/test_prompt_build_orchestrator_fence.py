@@ -60,3 +60,6 @@ def test_print_master_orchestrator_prompt_script_header_mentions_queue():
     assert "0 -> 1 -> 14 -> 2-13 -> 15-17" in text
     assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "PM_STAGE_MAP.md" in text
+    assert "test_prompt_build_orchestrator_fence.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text

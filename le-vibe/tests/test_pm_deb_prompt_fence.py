@@ -19,3 +19,6 @@ def test_print_pm_deb_build_prompt_script_header_mentions_queue() -> None:
     assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "PM_STAGE_MAP.md" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "test_pm_deb_prompt_fence.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text

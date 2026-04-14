@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""CLI for probe-vscode-linux-build.sh — classifier + weighted compile-gate progress."""
+"""CLI for probe-vscode-linux-build.sh — classifier + weighted compile-gate progress.
+
+Pytest: le-vibe/tests/test_probe_vscode_linux_build_script_contract.py; verify JSON stubs —
+  le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
+"""
 
 from __future__ import annotations
 

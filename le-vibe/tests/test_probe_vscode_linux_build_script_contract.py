@@ -19,6 +19,13 @@ def _probe_py() -> Path:
     return _repo_root() / "packaging" / "scripts" / "probe_vscode_linux_build.py"
 
 
+def test_probe_vscode_linux_build_py_docstring_documents_verify_contract() -> None:
+    text = _probe_py().read_text(encoding="utf-8")
+    assert "test_probe_vscode_linux_build_script_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
+
+
 def test_probe_vscode_linux_build_py_compiles_and_help_lists_json_keys() -> None:
     py = _probe_py()
     assert py.is_file(), py

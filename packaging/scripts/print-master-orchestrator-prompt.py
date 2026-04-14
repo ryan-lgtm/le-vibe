@@ -5,6 +5,8 @@ Product / scope: docs/PRODUCT_SPEC.md §9; spec-phase2.md §14 (H6/H7 vs in-repo
 STEP 16 guard: le-vibe/tests/test_prompt_build_orchestrator_fence.py (stdout must match the fenced block); extraction logic: le_vibe.master_orchestrator.extract_master_orchestrator_fence (also ``lvibe master-orchestrator --print``).
 Full E1 roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (ci.yml, dependabot.yml, packaging/bin).
 Master orchestrator: 0 -> 1 -> 14 -> 2-13 -> 15-17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16).
+Pytest: le-vibe/tests/test_prompt_build_orchestrator_fence.py; verify JSON stubs —
+  le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 """
 
 from __future__ import annotations
