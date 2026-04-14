@@ -9,6 +9,8 @@
 # Staging env (passed through to stage-le-vibe-ide-deb.sh): LEVIBE_STAGE_IDE_ASSERT_BRAND, LEVIBE_STAGE_IDE_VERBOSE — §7.3 product.json identity.
 # Optional: LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 runs ci-editor-gate.sh before staging (same §7.3 check as build-le-vibe-debs.sh --with-ide).
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — §7.3 le-vibe-ide .deb build after STEP 0–1.
+# Pytest contracts: le-vibe/tests/test_packaging_le_vibe_ide_deb_contract.py (this script + stage); verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
