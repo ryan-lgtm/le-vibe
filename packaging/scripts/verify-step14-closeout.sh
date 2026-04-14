@@ -38,6 +38,28 @@ json_escape() {
   printf '%s' "$value"
 }
 
+emit_json_error_gate() {
+  local msg
+  msg="$(json_escape "${1:-ci-editor-gate.sh failed — same gate as ./editor/smoke.sh}")"
+  printf '{"status":"error","step":"gate","message":"%s"}\n' "$msg"
+}
+
+emit_json_error_ide_deb_missing() {
+  local vlb="$1"
+  local vj msg
+  vj="$(json_escape "$vlb")"
+  msg="$(json_escape "missing packaging/le-vibe-ide_*.deb — run packaging/scripts/build-le-vibe-ide-deb.sh or build-le-vibe-debs.sh --with-ide")"
+  printf '{"status":"error","step":"ide_deb","vscode_linux_build":"%s","message":"%s"}\n' "$vj" "$msg"
+}
+
+emit_json_error_stack_deb_missing() {
+  local codium="$1"
+  local cj msg
+  cj="$(json_escape "$codium")"
+  msg="$(json_escape "missing le-vibe_*.deb — dpkg-buildpackage emits ../le-vibe_*.deb beside the clone; or build-le-vibe-debs.sh")"
+  printf '{"status":"error","step":"stack_deb","vscode_linux_build":"ready","codium_path":"%s","message":"%s"}\n' "$cj" "$msg"
+}
+
 # Machine-readable failure when --json and 14.c does not pass (partial/absent/unknown tree).
 emit_json_error_14c() {
   local vlb="$1"
@@ -179,8 +201,8 @@ Options:
                         `apt-get -s install <stack.deb> <ide.deb>`.
   --skip-gate           Skip ci-editor-gate.sh (faster local check).
   --json                Emit machine-readable JSON on stdout: success payload when all checks pass;
-                        on 14.c failure (missing VSCode-linux-*/bin/codium), a single-line object with
-                        status=error, step=14c, vscode_linux_build, optional vscode_linux_bin_files, message.
+                        on failure, a single-line object with status=error and step in
+                        gate | 14c | ide_deb | stack_deb (see script header / PM_DEB_BUILD_ITERATION.md).
   -h, --help            Show this message and exit.
 
 JSON success (--json) includes:
@@ -224,7 +246,16 @@ done
 
 if [[ "$SKIP_GATE" -eq 0 ]]; then
   log_note "==> STEP 14 gate: ci-editor-gate.sh"
+  set +e
   "$ROOT/packaging/scripts/ci-editor-gate.sh"
+  gate_ec=$?
+  set -e
+  if [[ "$gate_ec" -ne 0 ]]; then
+    if [[ "$PRINT_JSON" -eq 1 ]]; then
+      emit_json_error_gate "ci-editor-gate.sh failed — same gate as ./editor/smoke.sh (bash -n / nvmrc / optional brand)"
+    fi
+    exit "$gate_ec"
+  fi
 else
   log_note "==> STEP 14 gate: skipped (--skip-gate)"
 fi
@@ -259,6 +290,10 @@ log_note "==> STEP 14 IDE package: packaging/le-vibe-ide_*.deb"
 shopt -s nullglob
 ide_debs=("$ROOT"/packaging/le-vibe-ide_*.deb)
 if [[ ${#ide_debs[@]} -eq 0 ]]; then
+  if [[ "$PRINT_JSON" -eq 1 ]]; then
+    _vlb_ide="$("$ROOT/packaging/scripts/probe-vscode-linux-build.sh" "$ROOT")"
+    emit_json_error_ide_deb_missing "$_vlb_ide"
+  fi
   echo "verify-step14-closeout: missing packaging/le-vibe-ide_*.deb — run packaging/scripts/build-le-vibe-ide-deb.sh or build-le-vibe-debs.sh --with-ide." >&2
   exit 1
 fi
@@ -304,6 +339,9 @@ if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
   log_note "==> Stack package: le-vibe_*.deb (required; resolve-latest-le-vibe-stack-deb.sh)"
   stack_deb_latest="$("$ROOT/packaging/scripts/resolve-latest-le-vibe-stack-deb.sh" "$ROOT")"
   if [[ -z "$stack_deb_latest" ]]; then
+    if [[ "$PRINT_JSON" -eq 1 ]]; then
+      emit_json_error_stack_deb_missing "$CODIUM_PATH"
+    fi
     echo "verify-step14-closeout: missing le-vibe_*.deb — dpkg-buildpackage emits ../le-vibe_*.deb beside the clone; or copy into repo root; run dpkg-buildpackage -us -uc -b (or build-le-vibe-debs.sh)." >&2
     exit 1
   fi

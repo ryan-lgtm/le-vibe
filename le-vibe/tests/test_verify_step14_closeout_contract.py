@@ -5,6 +5,7 @@ from __future__ import annotations
 import fcntl
 import json
 import os
+import shutil
 import subprocess
 
 import pytest
@@ -129,8 +130,14 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "test_verify_step14_closeout_contract.py" in text
     assert ".pytest-verify-step14-contract.lock" in text
     assert "emit_json_error_14c" in text
+    assert "emit_json_error_gate" in text
+    assert "emit_json_error_ide_deb_missing" in text
+    assert "emit_json_error_stack_deb_missing" in text
     assert '{"status":"error"' in text
     assert '"step":"14c"' in text
+    assert '"step":"gate"' in text
+    assert '"step":"ide_deb"' in text
+    assert '"step":"stack_deb"' in text
 
 
 def _verify_step14_closeout_json_mode_outputs_parseable_payload_impl() -> None:
@@ -595,3 +602,42 @@ def _verify_step14_closeout_json_emits_error_payload_when_14c_not_ready_impl() -
 def test_verify_step14_closeout_json_emits_error_payload_when_14c_not_ready() -> None:
     """Serialize with other verify JSON tests — avoids pick_latest_match seeing another worker's *.deb."""
     _run_with_step14_contract_artifact_lock(_verify_step14_closeout_json_emits_error_payload_when_14c_not_ready_impl)
+
+
+def _verify_step14_closeout_json_emits_error_when_ide_deb_missing_impl() -> None:
+    """14.c passes but no packaging/le-vibe-ide_*.deb — stdout JSON uses step=ide_deb."""
+    root = _repo_root()
+    script = root / "packaging" / "scripts" / "verify-step14-closeout.sh"
+    packaging_dir = root / "packaging"
+    fake_codium = root / "editor" / "vscodium" / "VSCode-linux-x64" / "bin" / "codium"
+    fake_codium.parent.mkdir(parents=True, exist_ok=True)
+    fake_codium.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
+    os.chmod(fake_codium, 0o755)
+    moved: list[tuple[Path, Path]] = []
+    aside = tempfile.mkdtemp(prefix="le-vibe-ide-deb-aside-")
+    try:
+        for deb in sorted(packaging_dir.glob("le-vibe-ide_*.deb")):
+            dest = Path(aside) / deb.name
+            shutil.move(str(deb), str(dest))
+            moved.append((deb, dest))
+        result = subprocess.run(
+            [str(script), "--skip-gate", "--json"],
+            cwd=str(root),
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 1, result.stderr
+        payload = json.loads(result.stdout)
+        assert payload["status"] == "error"
+        assert payload["step"] == "ide_deb"
+        assert payload["vscode_linux_build"] == "ready"
+        assert "message" in payload
+    finally:
+        fake_codium.unlink(missing_ok=True)
+        for orig, dest in moved:
+            if dest.is_file():
+                shutil.move(str(dest), str(orig))
+
+
+def test_verify_step14_closeout_json_emits_error_when_ide_deb_missing() -> None:
+    _run_with_step14_contract_artifact_lock(_verify_step14_closeout_json_emits_error_when_ide_deb_missing_impl)

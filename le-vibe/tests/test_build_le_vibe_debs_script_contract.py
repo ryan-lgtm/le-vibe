@@ -180,6 +180,9 @@ def test_pm_deb_build_iteration_doc_json_closeout_payload_lists_vscode_linux_bui
     assert "14c" in sec
     assert "vscode_linux_bin_files" in sec
     assert "preflight-step14-closeout.sh" in sec
+    assert "gate" in sec
+    assert "ide_deb" in sec
+    assert "stack_deb" in sec
 
 
 def test_pm_deb_build_iteration_doc_success_output_orders_build_vs_test_host_step14():
