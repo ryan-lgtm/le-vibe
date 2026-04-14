@@ -91,6 +91,8 @@ def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> 
     assert "Failure (--with-ide)" in rag
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in rag
     assert "print-github-linux-compile-artifact-hint.sh" in rag
+    assert "trigger-le-vibe-ide-linux-compile.sh" in rag
+    assert "download-vscodium-linux-compile-artifact.sh" in rag
     assert "browser Actions UI or gh" in rag
     assert "lvibe ide-prereqs --print-closeout-commands" in rag
     assert "print-step14-vscode-linux-bin-files.sh" in rag
