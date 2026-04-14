@@ -33,6 +33,14 @@ def test_editor_build_md_compile_wrapper_node_parity_14a_14e():
     assert "LEVIBE_SKIP_NODE_VERSION_CHECK" in text
 
 
+def test_editor_build_md_vscodium_submodule_restore_after_prepare_step14():
+    """§7.3: BUILD.md documents resetting tracked editor/vscodium drift (no Lé Vibe commits in upstream submodule)."""
+    text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")
+    assert "git -C editor/vscodium checkout -- ." in text
+    assert "docs/vscodium-fork-le-vibe.md" in text
+    assert "Superproject" in text
+
+
 def test_editor_build_md_contract_get_repo_and_howto():
     text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")
     assert "get_repo.sh" in text
