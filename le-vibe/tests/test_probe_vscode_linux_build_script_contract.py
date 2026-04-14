@@ -63,6 +63,13 @@ def test_probe_vscode_linux_build_py_default_stdout_matches_ide_packaging_paths(
     assert int(data["compile_gate_pct"]) == int(direct["compile_gate_pct"])
 
 
+def test_probe_vscode_linux_build_sh_documents_pytest_verify_lock() -> None:
+    text = (_repo_root() / "packaging" / "scripts" / "probe-vscode-linux-build.sh").read_text(encoding="utf-8")
+    assert "test_probe_vscode_linux_build_script_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
+
+
 def test_probe_vscode_linux_build_script_exists_bash_syntax_and_help() -> None:
     script = _repo_root() / "packaging" / "scripts" / "probe-vscode-linux-build.sh"
     assert script.is_file(), script

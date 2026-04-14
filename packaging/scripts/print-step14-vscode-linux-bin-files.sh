@@ -3,6 +3,8 @@
 # vscode_linux_build is partial (same inventory as lvibe ide-prereqs --json vscode_linux_bin_files).
 # Used by preflight-step14-closeout.sh and verify-step14-closeout.sh — keep logic in one place.
 # Exits 0; prints nothing when not partial or Python probe fails (caller probes first).
+# Pytest: le-vibe/tests/test_print_step14_vscode_linux_bin_files_contract.py; verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

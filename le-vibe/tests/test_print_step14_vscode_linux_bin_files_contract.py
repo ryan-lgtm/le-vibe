@@ -32,6 +32,9 @@ def test_print_step14_vscode_linux_bin_files_uses_ide_packaging_paths() -> None:
     assert "trigger-le-vibe-ide-linux-compile.sh" in text
     assert "download-vscodium-linux-compile-artifact.sh" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
+    assert "test_print_step14_vscode_linux_bin_files_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_print_step14_vscode_linux_bin_files_help_stdout() -> None:

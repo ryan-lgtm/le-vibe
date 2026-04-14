@@ -6,6 +6,8 @@
 #
 # Default stdout is a single word (ready|partial|absent|unknown) for scripts that parse it.
 # Use --progress for a weighted % toward bin/codium; use --json for machine-readable milestones.
+# Pytest: le-vibe/tests/test_probe_vscode_linux_build_script_contract.py; verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
