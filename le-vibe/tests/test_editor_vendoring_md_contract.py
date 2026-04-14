@@ -40,6 +40,10 @@ def test_editor_vendoring_md_documents_smoke_gate_and_metadata():
     assert "fail fast" in text
     assert "vscodium-linux-build.tar.gz" in text
     assert "print-ci-tarball-codium-path.sh" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     assert "NODE_OPTIONS" in text
     assert "max-old-space-size=8192" in text
     assert "When full compile fails" in text
