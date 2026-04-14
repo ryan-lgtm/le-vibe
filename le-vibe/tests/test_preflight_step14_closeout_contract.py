@@ -69,6 +69,8 @@ def test_download_vscodium_linux_compile_artifact_script_contract() -> None:
     assert "build-le-vibe-ide.yml" in text
     assert "le-vibe-vscodium-linux-" in text
     assert "GITHUB_TOKEN" in text
+    assert "_github_api_get" in text
+    assert "archive download requires" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     subprocess.run(
         ["bash", "-n", str(_repo_root() / "packaging" / "scripts" / "download-vscodium-linux-compile-artifact.sh")],
@@ -88,3 +90,4 @@ def test_print_github_linux_compile_artifact_hint_lists_browser_and_gh() -> None
     assert "gh run" in out
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in out
     assert "download-vscodium-linux-compile-artifact.sh" in out
+    assert "public repos" in out

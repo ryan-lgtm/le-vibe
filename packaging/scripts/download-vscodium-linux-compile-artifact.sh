@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # STEP 14.f / §7.3 — download vscodium-linux-build.tar.gz from a successful GitHub Actions
 # **linux_compile** run (build-le-vibe-ide.yml) using curl + the REST API (no gh CLI).
-# Requires GITHUB_TOKEN or GH_TOKEN with **actions:read** (repo scope on private repos).
+# **List** workflow runs + artifacts: works **without** a token on **public** repos (rate-limited).
+# **Download** the artifact .zip: requires **GITHUB_TOKEN** or **GH_TOKEN** with **actions:read**
+# (classic **repo** on private repositories).
 # Authority: editor/BUILD.md (*GitHub Actions artifact*), docs/PM_DEB_BUILD_ITERATION.md.
 # Pair: packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh --yes
 # E1: le-vibe/tests/test_packaging_step14_help_smoke.py; packaging/scripts/ci-editor-gate.sh (bash -n).
@@ -25,8 +27,10 @@ Find the newest successful workflow run for **build-le-vibe-ide.yml** that uploa
 **le-vibe-vscodium-linux-<run_id>** (job **linux_compile**), download the GitHub .zip wrapper,
 extract **vscodium-linux-build.tar.gz**, and print its path.
 
-Requires **GITHUB_TOKEN** or **GH_TOKEN** with permission to read Actions artifacts
-(**actions:read**; classic PAT: **repo** on private repositories).
+**Download** requires **GITHUB_TOKEN** or **GH_TOKEN** with permission to read Actions artifacts
+(**actions:read**; classic PAT: **repo** on private repositories). Discovery (runs + artifact id) may
+succeed **without** a token on **public** repositories; if a matching artifact is found but no token
+is set, the script prints the artifact id and exits **2** (export a token and re-run).
 
 Options:
   --run-id ID      Use this workflow run id instead of auto-discovery (artifact must exist).
@@ -35,7 +39,7 @@ Options:
   -h, --help         Show this message and exit.
 
 Environment:
-  GITHUB_TOKEN, GH_TOKEN   GitHub API token (required).
+  GITHUB_TOKEN, GH_TOKEN   Required to **download** the artifact archive (not for public list APIs).
   GITHUB_API_URL           Override API host (default https://api.github.com).
 
 After success, vendor the tree:
@@ -58,11 +62,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$TOKEN" ]]; then
-  echo "${0##*/}: set GITHUB_TOKEN or GH_TOKEN (actions:read) — see --help" >&2
-  exit 2
-fi
-
 if ! command -v curl >/dev/null 2>&1; then
   echo "${0##*/}: curl not on PATH" >&2
   exit 1
@@ -76,12 +75,21 @@ if ! command -v unzip >/dev/null 2>&1; then
   exit 1
 fi
 
-_gh_headers() {
-  curl -sS \
-    -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer ${TOKEN}" \
-    -H "X-GitHub-Api-Version: 2022-11-28" \
-    "$@"
+# Public repos: unauthenticated GETs work for workflow runs + artifact list (not for archive download).
+_github_api_get() {
+  local url="$1"
+  if [[ -n "${TOKEN}" ]]; then
+    curl -sS \
+      -H "Accept: application/vnd.github+json" \
+      -H "Authorization: Bearer ${TOKEN}" \
+      -H "X-GitHub-Api-Version: 2022-11-28" \
+      "$url"
+  else
+    curl -sS \
+      -H "Accept: application/vnd.github+json" \
+      -H "X-GitHub-Api-Version: 2022-11-28" \
+      "$url"
+  fi
 }
 
 _parse_remote() {
@@ -107,7 +115,7 @@ read -r OWNER REPO < <(_parse_remote)
 _pick_artifact_from_run() {
   local rid="$1"
   local json
-  json="$(_gh_headers "${API}/repos/${OWNER}/${REPO}/actions/runs/${rid}/artifacts?per_page=100")"
+  json="$(_github_api_get "${API}/repos/${OWNER}/${REPO}/actions/runs/${rid}/artifacts?per_page=100")"
   if ! jq -e . >/dev/null 2>&1 <<<"$json"; then
     echo "${0##*/}: artifacts API error for run ${rid}" >&2
     printf '%s\n' "$json" >&2
@@ -130,9 +138,13 @@ if [[ -n "$RUN_ID" ]]; then
   ARTIFACT_ID="${line%%$'\t'*}"
   ARTIFACT_NAME="${line#*$'\t'}"
 else
-  runs_json="$(_gh_headers "${API}/repos/${OWNER}/${REPO}/actions/workflows/build-le-vibe-ide.yml/runs?per_page=50")"
+  runs_json="$(_github_api_get "${API}/repos/${OWNER}/${REPO}/actions/workflows/build-le-vibe-ide.yml/runs?per_page=50")"
+  if jq -e '.message' >/dev/null 2>&1 <<<"$runs_json"; then
+    echo "${0##*/}: GitHub API: $(jq -r .message <<<"$runs_json") — private repo or rate limit; set GITHUB_TOKEN" >&2
+    exit 1
+  fi
   if ! jq -e '.workflow_runs' >/dev/null 2>&1 <<<"$runs_json"; then
-    echo "${0##*/}: workflow runs API error — check token and repo access (${OWNER}/${REPO})" >&2
+    echo "${0##*/}: workflow runs API error — check network and repo access (${OWNER}/${REPO})" >&2
     printf '%s\n' "$runs_json" >&2
     exit 1
   fi
@@ -153,6 +165,12 @@ else
   fi
 fi
 
+if [[ -z "$TOKEN" ]]; then
+  echo "${0##*/}: found ${ARTIFACT_NAME} (artifact id=${ARTIFACT_ID}, run_id=${RESOLVED_RUN}) — archive download requires GITHUB_TOKEN or GH_TOKEN (actions:read). Public repos support unauthenticated discovery only." >&2
+  echo "${0##*/}: export a token, then re-run; or use packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser/gh)." >&2
+  exit 2
+fi
+
 if [[ -z "$OUT_DIR" ]]; then
   OUT_DIR="${TMPDIR:-/tmp}"
 fi
@@ -162,7 +180,7 @@ trap 'rm -f "${ZIP}"' EXIT
 
 echo "${0##*/}: owner/repo=${OWNER}/${REPO} run_id=${RESOLVED_RUN} artifact=${ARTIFACT_NAME} (id=${ARTIFACT_ID})"
 
-# Download archive (.zip); GitHub redirects to blob storage — curl -L
+# Download archive (.zip); GitHub redirects to blob storage — curl -L (401 without token)
 http_code="$(
   curl -sS -L -o "$ZIP" -w '%{http_code}' \
     -H "Accept: application/vnd.github+json" \
