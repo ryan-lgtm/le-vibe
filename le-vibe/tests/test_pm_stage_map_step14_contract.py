@@ -46,6 +46,10 @@ def test_pm_stage_map_step14_lists_ide_workflows_smoke_and_e1_test_build():
     assert "debian/lvibe.1" in row
     assert "print-ci-tarball-codium-path.sh" in row
     assert "print-step14-vscode-linux-bin-files.sh" in row
+    assert "print-github-linux-compile-artifact-hint.sh" in row
+    assert "trigger-le-vibe-ide-linux-compile.sh" in row
+    assert "download-vscodium-linux-compile-artifact.sh" in row
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in row
     assert "verify-step14-closeout.sh" in row
     assert "--require-stack-deb" in row
     assert "test_verify_step14_closeout_contract.py" in row
