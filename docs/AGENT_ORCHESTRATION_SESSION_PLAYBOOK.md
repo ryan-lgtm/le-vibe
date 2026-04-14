@@ -12,6 +12,22 @@ Use this as a sequential backlog for 70 engineering chat sessions. Each task is 
 - Subagents must provide evidence, not opinions, when debating.
 - Disagreements resolve through documented decision records and scorecards.
 
+## Canonical subagent roster (SaaS personas)
+
+Use these roles as the canonical specialist roster for orchestration debates, handoffs, and execution support:
+
+- Subject Matter/Industry Expert (`@sme`)
+- Senior Product Operations (`@props`)
+- Senior Product Management (`@prod`)
+- Senior Backend Engineer (`@be-eng`)
+- Senior Frontend Engineer (`@fe-eng`)
+- Senior DevOps Engineer (`@do-eng`)
+- Senior Marketing (`@marketing`)
+- Senior Customer Success (`@cs`)
+- Senior Revenue (`@rev`)
+
+Persona behavior should follow general SaaS industry responsibilities and skillsets for each role.
+
 ## Session backlog (70 tasks)
 
 ### Phase 1 - Foundations and contracts (1-10)
@@ -29,13 +45,13 @@ Use this as a sequential backlog for 70 engineering chat sessions. Each task is 
 
 ### Phase 2 - Subagent role specialization (11-20)
 
-11. Define role cards for `architect`, `implementer`, `reviewer`, and `tester` subagents.
+11. Define role cards for the canonical roster (`@sme`, `@props`, `@prod`, `@be-eng`, `@fe-eng`, `@do-eng`, `@marketing`, `@cs`, `@rev`).
 12. Add capability declarations per subagent (what each role can and cannot decide).
-13. Add a role-based route planner that maps task type to default subagent mix.
+13. Add a role-based route planner that maps task type to default subagent mix from the canonical roster.
 14. Add fallback routing when preferred role is unavailable.
 15. Add conflict-of-interest rule (implementer cannot be sole approver of own design).
-16. Add reviewer escalation rule when risk score exceeds threshold.
-17. Add tester gate definitions for code, integration, and packaging paths.
+16. Add escalation rule when risk score exceeds threshold (default to `@prod` + `@props` + relevant engineering role).
+17. Add quality gate definitions for code, integration, packaging, and go-to-market readiness (`@marketing`, `@cs`, `@rev`).
 18. Add explicit timebox policy per role to avoid infinite analysis loops.
 19. Add operator override mechanism with audit note requirements.
 20. Add tests confirming correct role assignment for representative task categories.
@@ -127,7 +143,7 @@ Session context:
 
 Operating directives:
 1) Treat operator goals as highest priority.
-2) Use structured subagent collaboration where useful: architect, implementer, reviewer, tester.
+2) Use only the canonical subagent roster: `@sme`, `@props`, `@prod`, `@be-eng`, `@fe-eng`, `@do-eng`, `@marketing`, `@cs`, `@rev`.
 3) If multiple approaches exist, run a brief evidence-based debate and choose the best path via explicit scorecard.
 4) Keep scope to one-session completion; avoid unrelated refactors.
 5) Implement changes directly, then run/extend tests.

@@ -18,7 +18,7 @@
 | [`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`](PRODUCT_SPEC_SECTION8_EVIDENCE.md) | E1 regression audit when §1/**H8**/§5–§10 behavior changes |
 | [`schemas/session-manifest.v1.example.json`](../schemas/session-manifest.v1.example.json) | Epics/tasks JSON shape in **PRODUCT_MANAGER** mode |
 | [`le-vibe/templates/agents/product-manager.md`](../le-vibe/templates/agents/product-manager.md) | PM voice / boundaries |
-| [`le-vibe/templates/agents/senior-backend-engineer.md`](../le-vibe/templates/agents/senior-backend-engineer.md) (or another `senior-*.md`) | Default engineering voice for **ENGINEER** mode (pick one per session) |
+| [`le-vibe/templates/agents/README.md`](../le-vibe/templates/agents/README.md) | Canonical SaaS subagent roster + `@` aliases (`@sme`, `@props`, `@prod`, `@be-eng`, `@fe-eng`, `@do-eng`, `@marketing`, `@cs`, `@rev`) |
 | [`docs/AGENT_MODE_ORCHESTRATION.md`](AGENT_MODE_ORCHESTRATION.md) | **ENGINEER** / **PRODUCT_MANAGER** / **PROJECT** definitions; **`OWNER_DIRECTIVES`**; hard-stop = **`USER RESPONSE REQUIRED`** only |
 
 ## Human workflow (new agent each phase)
@@ -58,6 +58,7 @@ Authority: docs/PRODUCT_SPEC.md (wins) → docs/SESSION_ORCHESTRATION_SPEC.md �
 
 Global rules (always):
 - User-facing name: Lé Vibe (é in Lé). ASCII: le-vibe, lvibe, ~/.config/le-vibe/, .lvibe/.
+- Canonical specialist subagents (SaaS personas): **`@sme`**, **`@props`**, **`@prod`**, **`@be-eng`**, **`@fe-eng`**, **`@do-eng`**, **`@marketing`**, **`@cs`**, **`@rev`**.
 - **Retrieval (RAG-shaped):** Treat specs as indexed manuscripts. Cite **path + § or heading**; open only the lines needed for the current MODE. Do not paste hundreds of lines of spec into the chat.
 - **§7.3** material STEP 14 / IDE decisions are fixed in PRODUCT_SPEC — implement; do not reopen branding scope unless §7.3 changes.
 - **§7.2 / §8:** The **only** hard stop where you **must not** continue without the human is **USER RESPONSE REQUIRED** — unresolved product/architecture gaps not decided in PRODUCT_SPEC (all caps first line), then numbered questions; **No preference** is valid. **LÉ VIBE BLOCKED** only for secrets, credentials, or required out-of-repo access. **Do not** treat “a subsidiary checklist in a PM phase doc is all [x]” as forbidding **PASTE SAME AGAIN** if **OWNER_DIRECTIVES** or Master queue work still applies.

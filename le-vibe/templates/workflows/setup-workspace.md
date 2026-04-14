@@ -35,10 +35,10 @@ Users may type these literally; assistants treat them as **structured intents**:
 | User text | Intent |
 |-----------|--------|
 | `/setup-workspace` | Run this workflow; capture answers in `.lvibe/`. |
-| `/agent product_manager` | Prefer **product_manager** lens for the next turn (see **`.lvibe/agents/`** roles). |
-| `/agent senior_backend_engineer` | Prefer backend engineering lens. |
+| `/agent @prod` | Prefer **Senior Product Management** lens for the next turn (see **`.lvibe/agents/`** roles). |
+| `/agent @be-eng` | Prefer **Senior Backend Engineer** lens. |
 
-**Mentions:** `@product_manager`, `@senior_qa_engineer`, etc. — route questions to the matching **`.lvibe/agents/<id>/skill.md`** role when clarifying.
+**Mentions:** `@sme`, `@props`, `@prod`, `@be-eng`, `@fe-eng`, `@do-eng`, `@marketing`, `@cs`, `@rev` — route questions to the matching **`.lvibe/agents/<id>/skill.md`** role when clarifying.
 
 ---
 

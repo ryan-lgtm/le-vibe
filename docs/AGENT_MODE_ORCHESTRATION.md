@@ -20,6 +20,24 @@
 
 ---
 
+## Canonical subagents and mention aliases
+
+When the orchestrator invokes specialists, use this canonical SaaS roster and shorthand mentions:
+
+- Subject Matter/Industry Expert — `@sme`
+- Senior Product Operations — `@props`
+- Senior Product Management — `@prod`
+- Senior Backend Engineer — `@be-eng`
+- Senior Frontend Engineer — `@fe-eng`
+- Senior DevOps Engineer — `@do-eng`
+- Senior Marketing — `@marketing`
+- Senior Customer Success — `@cs`
+- Senior Revenue — `@rev`
+
+These roles are debate participants and advisors under the ENGINEER/PRODUCT/PROJECT hats; they do not replace the three top-level modes.
+
+---
+
 ## Owner directives (steer PRODUCT and PROJECT)
 
 Optional prefix in the **same** chat as the orchestration prompt:
