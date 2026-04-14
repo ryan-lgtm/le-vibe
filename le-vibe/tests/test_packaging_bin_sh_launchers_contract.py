@@ -5,6 +5,8 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
+import pytest
+
 
 def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
@@ -56,6 +58,21 @@ def test_lvibe_hygiene_bin_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -
     assert "IDE package" in text
     assert "PM_STAGE_MAP.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
+
+
+@pytest.mark.parametrize(
+    "relative",
+    [
+        "packaging/bin/lvibe",
+        "packaging/bin/le-vibe",
+        "packaging/bin/lvibe-hygiene",
+    ],
+)
+def test_packaging_bin_sh_launchers_document_pytest_verify_lock(relative: str) -> None:
+    text = (_repo_root() / relative).read_text(encoding="utf-8")
+    assert "test_packaging_bin_sh_launchers_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_packaging_bin_sh_launchers_syntax_and_python3_guard() -> None:

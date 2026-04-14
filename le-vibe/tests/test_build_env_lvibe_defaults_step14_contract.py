@@ -30,3 +30,6 @@ def test_build_env_lvibe_defaults_documents_7_3_and_compile_hook():
     assert "codium" in text
     assert "BINARY_NAME" in text
     assert "lvibe" in text
+    assert "test_build_env_lvibe_defaults_step14_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text

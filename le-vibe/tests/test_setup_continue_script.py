@@ -87,3 +87,6 @@ def test_setup_continue_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -> N
     assert "IDE package" in text
     assert "PM_STAGE_MAP.md" in text
     assert "H1 vs §7.3 .deb bundles" in text
+    assert "test_setup_continue_script.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
