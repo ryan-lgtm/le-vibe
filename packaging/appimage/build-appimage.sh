@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # Stage an AppDir for Lé Vibe (H7) and optionally run appimagetool (PRODUCT_SPEC — lvibe).
+# Pytest: le-vibe/tests/test_flatpak_appimage_doc_h7_contract.py; verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 APPDIR="${ROOT}/packaging/appimage/AppDir"

@@ -32,3 +32,10 @@ def test_h7_packaging_files_exist():
     assert (root / "packaging" / "appimage" / "AppRun").is_file()
     assert (root / "packaging" / "appimage" / "build-appimage.sh").is_file()
     assert (root / "packaging" / "appimage" / "README.md").is_file()
+
+
+def test_build_appimage_sh_documents_pytest_verify_lock() -> None:
+    text = (_repo_root() / "packaging" / "appimage" / "build-appimage.sh").read_text(encoding="utf-8")
+    assert "test_flatpak_appimage_doc_h7_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
