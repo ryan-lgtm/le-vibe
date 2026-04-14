@@ -90,3 +90,5 @@ def test_pm_stage_map_notes_step14_fine_grain_closure_and_remaining_gap():
     assert "test_spec_phase2_section14_snapshot_contract.py" in text
     assert "branding-staging.checklist.md" in text
     assert "ci-editor-gate" in text
+    assert "git -C editor/vscodium checkout" in text
+    assert "test_editor_build_md_vscodium_submodule_restore_after_prepare_step14" in text
