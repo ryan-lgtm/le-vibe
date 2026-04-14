@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import subprocess
 from pathlib import Path
@@ -22,6 +23,8 @@ def test_preflight_step14_closeout_script_documents_checks() -> None:
     text = (_repo_root() / "packaging" / "scripts" / "preflight-step14-closeout.sh").read_text(encoding="utf-8")
     assert "0 → 1 → 14" in text or "0 -> 1 -> 14" in text
     assert "PROMPT_BUILD_LE_VIBE.md" in text
+    assert "--json" in text
+    assert "desktop_in_deb" in text
     assert "verify-step14-closeout.sh" in text
     assert "ci-editor-gate.sh" in text
     assert "verify-14c-local-binary.sh" in text
@@ -58,6 +61,34 @@ def test_preflight_step14_closeout_prints_vscode_linux_build_line() -> None:
     )
     combined = result.stdout + result.stderr
     assert re.search(r"^vscode_linux_build: (ready|partial|absent|unknown)\s*$", combined, re.MULTILINE), combined
+
+
+def test_preflight_step14_closeout_json_stdout_matches_probe() -> None:
+    """--json: single JSON object on stdout; vscode_linux_build matches probe."""
+    root = _repo_root()
+    script = root / "packaging" / "scripts" / "preflight-step14-closeout.sh"
+    probe = subprocess.run(
+        [str(root / "packaging" / "scripts" / "probe-vscode-linux-build.sh"), str(root)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    state = probe.stdout.strip()
+    result = subprocess.run(
+        [str(script), "--skip-gate", "--json"],
+        cwd=str(root),
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout.strip())
+    assert payload["vscode_linux_build"] == state
+    assert payload["gate"] == "skipped"
+    assert "failures" in payload
+    assert "codium" in payload
+    assert "ide_deb" in payload
+    assert "desktop_in_deb" in payload
+    assert "stack_deb" in payload
+    assert payload["status"] in ("ok", "error")
 
 
 def test_verify_step14_closeout_mentions_preflight() -> None:

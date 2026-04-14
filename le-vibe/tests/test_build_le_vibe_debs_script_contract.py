@@ -143,6 +143,8 @@ def test_pm_deb_build_iteration_doc_preflight_verify_stderr_vscode_linux_build_s
     assert "probe-vscode-linux-build.sh" in sec
     assert "verify-step14-closeout.sh --json" in sec
     assert "verify-step14-closeout.sh" in sec and "stderr" in sec
+    assert "desktop_in_deb" in sec
+    assert "preflight-step14-closeout.sh" in sec and "machine-readable" in sec
 
 
 def test_pm_deb_build_iteration_doc_master_orchestrator_queue_step14():
