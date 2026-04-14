@@ -10,7 +10,7 @@ def _repo_root() -> Path:
 
 
 def test_root_readme_step15_lvibe_governance_section():
-    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    text = (_repo_root() / "docs" / "MONOREPO_DEVELOPER_REFERENCE.md").read_text(encoding="utf-8")
     assert "### `.lvibe/` governance — STEP 15" in text
     assert "Master orchestrator STEP 15" in text
     assert "resolve_lvibe_creation" in text
@@ -19,7 +19,7 @@ def test_root_readme_step15_lvibe_governance_section():
 
 
 def test_root_readme_step16_pm_stage_map_section():
-    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    text = (_repo_root() / "docs" / "MONOREPO_DEVELOPER_REFERENCE.md").read_text(encoding="utf-8")
     assert "### PM stage map — STEP 16" in text
     assert "Master orchestrator STEP 16" in text
     assert "print-master-orchestrator-prompt.py" in text
@@ -27,7 +27,7 @@ def test_root_readme_step16_pm_stage_map_section():
 
 
 def test_root_readme_step17_ai_pilot_continue_section():
-    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    text = (_repo_root() / "docs" / "MONOREPO_DEVELOPER_REFERENCE.md").read_text(encoding="utf-8")
     assert "### AI Pilot & Continue contracts — STEP 17" in text
     assert "Master orchestrator STEP 17" in text
     assert "AI_PILOT_AND_CONTINUE.md" in text

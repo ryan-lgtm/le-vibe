@@ -19,6 +19,7 @@ def test_packaging_ci_smoke_sh_bash_syntax() -> None:
 def test_packaging_ci_smoke_sh_documents_step14_gate_and_submodule_14b():
     text = (_repo_root() / "packaging" / "scripts" / "ci-smoke.sh").read_text(encoding="utf-8")
     assert "STEP 14" in text and "H6" in text
+    assert "install-le-vibe-local.sh" in text
     assert "ci-editor-gate.sh" in text
     assert "git submodule update --init editor/vscodium" in text
     assert "Fresh clone (14.b)" in text

@@ -7,7 +7,7 @@
 # Optional: LEVIBE_EDITOR_GATE_ASSERT_BRAND=1 with --with-ide runs ci-editor-gate.sh before build-le-vibe-ide-deb.sh (§7.3 product.json identity).
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — one-shot stack .deb + optional --with-ide IDE .deb (STEP 14 / §7.3 after STEP 0–1).
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md when building --with-ide and editor/vscodium/ is empty.
-# Pytest contracts: le-vibe/tests/test_build_le_vibe_debs_script_contract.py (this script); verify JSON stubs —
+# Pytest contracts: le-vibe/tests/test_build_le_vibe_debs_script_contract.py (this script), test_install_le_vibe_local_script_contract.py (install-le-vibe-local.sh orchestrator); verify JSON stubs —
 #   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
 

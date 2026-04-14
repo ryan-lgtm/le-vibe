@@ -10,7 +10,7 @@ def _repo_root() -> Path:
 
 
 def test_root_readme_step13_h7_flatpak_appimage_section():
-    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    text = (_repo_root() / "docs" / "MONOREPO_DEVELOPER_REFERENCE.md").read_text(encoding="utf-8")
     assert "### Flatpak & AppImage — STEP 13 / H7" in text
     assert "Master orchestrator STEP 13" in text
     assert "flatpak-appimage.md" in text

@@ -222,9 +222,21 @@ if [[ "$1" == "--field" ]]; then
   fi
 fi
 if [[ "$1" == "--fsys-tarfile" ]]; then
-  cat <<'EOF'
-dummy-tar-stream
-EOF
+  _td="$(mktemp -d)"
+  mkdir -p "$_td/usr/share/applications" "$_td/usr/lib/le-vibe/bin" "$_td/usr/share/icons/hicolor/scalable/apps"
+  cat >"$_td/usr/share/applications/le-vibe.desktop" <<'DESK'
+[Desktop Entry]
+Name=Lé Vibe
+Exec=/usr/lib/le-vibe/bin/codium %F
+DESK
+  : >"$_td/usr/lib/le-vibe/bin/codium"
+  chmod +x "$_td/usr/lib/le-vibe/bin/codium"
+  : >"$_td/usr/share/icons/hicolor/scalable/apps/le-vibe.svg"
+  (cd "$_td" && tar -cf - \\
+    ./usr/share/applications/le-vibe.desktop \\
+    ./usr/lib/le-vibe/bin/codium \\
+    ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg)
+  rm -rf "$_td"
   exit 0
 fi
 echo "unexpected dpkg-deb args: $*" >&2
@@ -234,14 +246,7 @@ exit 1
             )
             os.chmod(stub_dir / "dpkg-deb", 0o755)
             (stub_dir / "tar").write_text(
-                """#!/usr/bin/env bash
-set -euo pipefail
-cat <<'EOF'
-[Desktop Entry]
-Name=Lé Vibe
-Exec=/usr/lib/le-vibe/bin/codium %F
-EOF
-""",
+                "#!/usr/bin/env bash\nexec /usr/bin/tar \"$@\"\n",
                 encoding="utf-8",
             )
             os.chmod(stub_dir / "tar", 0o755)
@@ -338,9 +343,21 @@ if [[ "$1" == "--field" ]]; then
   fi
 fi
 if [[ "$1" == "--fsys-tarfile" ]]; then
-  cat <<'EOF'
-dummy-tar-stream
-EOF
+  _td="$(mktemp -d)"
+  mkdir -p "$_td/usr/share/applications" "$_td/usr/lib/le-vibe/bin" "$_td/usr/share/icons/hicolor/scalable/apps"
+  cat >"$_td/usr/share/applications/le-vibe.desktop" <<'DESK'
+[Desktop Entry]
+Name=Lé Vibe
+Exec=/usr/lib/le-vibe/bin/codium %F
+DESK
+  : >"$_td/usr/lib/le-vibe/bin/codium"
+  chmod +x "$_td/usr/lib/le-vibe/bin/codium"
+  : >"$_td/usr/share/icons/hicolor/scalable/apps/le-vibe.svg"
+  (cd "$_td" && tar -cf - \\
+    ./usr/share/applications/le-vibe.desktop \\
+    ./usr/lib/le-vibe/bin/codium \\
+    ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg)
+  rm -rf "$_td"
   exit 0
 fi
 echo "unexpected dpkg-deb args: $*" >&2
@@ -350,14 +367,7 @@ exit 1
             )
             os.chmod(stub_dir / "dpkg-deb", 0o755)
             (stub_dir / "tar").write_text(
-                """#!/usr/bin/env bash
-set -euo pipefail
-cat <<'EOF'
-[Desktop Entry]
-Name=Lé Vibe
-Exec=/usr/lib/le-vibe/bin/codium %F
-EOF
-""",
+                "#!/usr/bin/env bash\nexec /usr/bin/tar \"$@\"\n",
                 encoding="utf-8",
             )
             os.chmod(stub_dir / "tar", 0o755)
@@ -443,9 +453,21 @@ if [[ "$1" == "--field" ]]; then
   fi
 fi
 if [[ "$1" == "--fsys-tarfile" ]]; then
-  cat <<'EOF'
-dummy-tar-stream
-EOF
+  _td="$(mktemp -d)"
+  mkdir -p "$_td/usr/share/applications" "$_td/usr/lib/le-vibe/bin" "$_td/usr/share/icons/hicolor/scalable/apps"
+  cat >"$_td/usr/share/applications/le-vibe.desktop" <<'DESK'
+[Desktop Entry]
+Name=Lé Vibe
+Exec=/usr/lib/le-vibe/bin/codium %F
+DESK
+  : >"$_td/usr/lib/le-vibe/bin/codium"
+  chmod +x "$_td/usr/lib/le-vibe/bin/codium"
+  : >"$_td/usr/share/icons/hicolor/scalable/apps/le-vibe.svg"
+  (cd "$_td" && tar -cf - \\
+    ./usr/share/applications/le-vibe.desktop \\
+    ./usr/lib/le-vibe/bin/codium \\
+    ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg)
+  rm -rf "$_td"
   exit 0
 fi
 echo "unexpected dpkg-deb args: $*" >&2
@@ -455,14 +477,7 @@ exit 1
             )
             os.chmod(stub_dir / "dpkg-deb", 0o755)
             (stub_dir / "tar").write_text(
-                """#!/usr/bin/env bash
-set -euo pipefail
-cat <<'EOF'
-[Desktop Entry]
-Name=Lé Vibe
-Exec=/usr/lib/le-vibe/bin/codium %F
-EOF
-""",
+                "#!/usr/bin/env bash\nexec /usr/bin/tar \"$@\"\n",
                 encoding="utf-8",
             )
             os.chmod(stub_dir / "tar", 0o755)
@@ -556,9 +571,21 @@ if [[ "$1" == "--field" ]]; then
   fi
 fi
 if [[ "$1" == "--fsys-tarfile" ]]; then
-  cat <<'EOF'
-dummy-tar-stream
-EOF
+  _td="$(mktemp -d)"
+  mkdir -p "$_td/usr/share/applications" "$_td/usr/lib/le-vibe/bin" "$_td/usr/share/icons/hicolor/scalable/apps"
+  cat >"$_td/usr/share/applications/le-vibe.desktop" <<'DESK'
+[Desktop Entry]
+Name=Lé Vibe
+Exec=/usr/lib/le-vibe/bin/codium %F
+DESK
+  : >"$_td/usr/lib/le-vibe/bin/codium"
+  chmod +x "$_td/usr/lib/le-vibe/bin/codium"
+  : >"$_td/usr/share/icons/hicolor/scalable/apps/le-vibe.svg"
+  (cd "$_td" && tar -cf - \\
+    ./usr/share/applications/le-vibe.desktop \\
+    ./usr/lib/le-vibe/bin/codium \\
+    ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg)
+  rm -rf "$_td"
   exit 0
 fi
 echo "unexpected dpkg-deb args: $*" >&2
@@ -568,14 +595,7 @@ exit 1
             )
             os.chmod(stub_dir / "dpkg-deb", 0o755)
             (stub_dir / "tar").write_text(
-                """#!/usr/bin/env bash
-set -euo pipefail
-cat <<'EOF'
-[Desktop Entry]
-Name=Lé Vibe
-Exec=/usr/lib/le-vibe/bin/codium %F
-EOF
-""",
+                "#!/usr/bin/env bash\nexec /usr/bin/tar \"$@\"\n",
                 encoding="utf-8",
             )
             os.chmod(stub_dir / "tar", 0o755)
@@ -683,9 +703,21 @@ if [[ "$1" == "--field" ]]; then
   fi
 fi
 if [[ "$1" == "--fsys-tarfile" ]]; then
-  cat <<'EOF'
-dummy-tar-stream
-EOF
+  _td="$(mktemp -d)"
+  mkdir -p "$_td/usr/share/applications" "$_td/usr/lib/le-vibe/bin" "$_td/usr/share/icons/hicolor/scalable/apps"
+  cat >"$_td/usr/share/applications/le-vibe.desktop" <<'DESK'
+[Desktop Entry]
+Name=Lé Vibe
+Exec=/usr/lib/le-vibe/bin/codium %F
+DESK
+  : >"$_td/usr/lib/le-vibe/bin/codium"
+  chmod +x "$_td/usr/lib/le-vibe/bin/codium"
+  : >"$_td/usr/share/icons/hicolor/scalable/apps/le-vibe.svg"
+  (cd "$_td" && tar -cf - \\
+    ./usr/share/applications/le-vibe.desktop \\
+    ./usr/lib/le-vibe/bin/codium \\
+    ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg)
+  rm -rf "$_td"
   exit 0
 fi
 echo "unexpected dpkg-deb args: $*" >&2
@@ -695,14 +727,7 @@ exit 1
             )
             os.chmod(stub_dir / "dpkg-deb", 0o755)
             (stub_dir / "tar").write_text(
-                """#!/usr/bin/env bash
-set -euo pipefail
-cat <<'EOF'
-[Desktop Entry]
-Name=Lé Vibe
-Exec=/usr/lib/le-vibe/bin/codium %F
-EOF
-""",
+                "#!/usr/bin/env bash\nexec /usr/bin/tar \"$@\"\n",
                 encoding="utf-8",
             )
             os.chmod(stub_dir / "tar", 0o755)

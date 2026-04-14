@@ -10,6 +10,7 @@
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — this script is STEP 10 (H3) then ci-editor-gate.sh (STEP 14 smoke).
 # Fresh clone (14.b): git submodule update --init editor/vscodium when editor/vscodium/ is empty — editor/README.md; docs/ci-qa-hardening.md *Local clone (14.b)*.
 # Requires: find (findutils), mktemp (coreutils), python3 on PATH.
+# Canonical local full-product installer: bash -n packaging/scripts/install-le-vibe-local.sh (STEP 14 / §7.3 — docs/LOCAL_INSTALL_ONE_SHOT.md).
 # Pytest: le-vibe/tests/test_packaging_ci_smoke_sh_contract.py; verify JSON stubs —
 #   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
@@ -37,6 +38,9 @@ echo "ci-smoke: packaging shell wrappers (bash -n)"
 while IFS= read -r -d '' f; do
   bash -n "$f"
 done < <(find packaging/bin -maxdepth 1 -type f -print0 2>/dev/null || true)
+
+echo "ci-smoke: canonical local installer (bash -n)"
+bash -n packaging/scripts/install-le-vibe-local.sh
 
 echo "ci-smoke: lvibe hygiene on synthetic workspace"
 HYG_TMP="$(mktemp -d)"

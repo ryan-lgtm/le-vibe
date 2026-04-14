@@ -10,7 +10,7 @@ def _repo_root() -> Path:
 
 
 def test_root_readme_step7_h4_continue_pin_section():
-    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    text = (_repo_root() / "docs" / "MONOREPO_DEVELOPER_REFERENCE.md").read_text(encoding="utf-8")
     assert "### Continue extension pin — STEP 7 / H4" in text
     assert "Master orchestrator STEP 7" in text
     assert "continue-openvsx-version" in text

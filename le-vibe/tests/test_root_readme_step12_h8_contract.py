@@ -10,7 +10,7 @@ def _repo_root() -> Path:
 
 
 def test_root_readme_step12_h8_product_surface_section():
-    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    text = (_repo_root() / "docs" / "MONOREPO_DEVELOPER_REFERENCE.md").read_text(encoding="utf-8")
     assert "### Product surface — STEP 12 / H8" in text
     assert "Master orchestrator STEP 12" in text
     assert "dependabot.yml" in text

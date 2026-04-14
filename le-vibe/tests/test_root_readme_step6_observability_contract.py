@@ -10,7 +10,7 @@ def _repo_root() -> Path:
 
 
 def test_root_readme_operator_troubleshooting_lists_components_and_tail():
-    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    text = (_repo_root() / "docs" / "MONOREPO_DEVELOPER_REFERENCE.md").read_text(encoding="utf-8")
     assert "## Operator troubleshooting & observability — STEP 6 / E5" in text
     assert "Master orchestrator STEP 6" in text
     assert "no third-party telemetry" in text

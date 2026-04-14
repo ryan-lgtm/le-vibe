@@ -10,7 +10,7 @@ def _repo_root() -> Path:
 
 
 def test_root_readme_step8_h1_releases_section():
-    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    text = (_repo_root() / "docs" / "MONOREPO_DEVELOPER_REFERENCE.md").read_text(encoding="utf-8")
     assert "### Releases & checksums — STEP 8 / H1" in text
     assert "Master orchestrator STEP 8" in text
     assert "le-vibe-deb" in text

@@ -14,7 +14,7 @@ from le_vibe.workspace_hub import LVIBE_DIR_NAME
 
 def test_welcome_banner_matches_product_spec_section4():
     assert "Welcome to Lé Vibe" in WELCOME_BANNER
-    assert "Cursor" in WELCOME_BANNER
+    assert "your editor" in WELCOME_BANNER
     assert "open source" in WELCOME_BANNER.lower() or "free" in WELCOME_BANNER.lower()
     assert "lvibe welcome" in WELCOME_BANNER
     assert "open-welcome" in WELCOME_BANNER
@@ -57,7 +57,7 @@ def test_lvibe_editor_welcome_template_section4_positioning():
     text = (root / "templates" / "lvibe-editor-welcome.md").read_text(encoding="utf-8")
     assert "Welcome to Lé Vibe" in text
     assert "open source" in text.lower()
-    assert "Cursor" in text
+    assert "Chat/Agent" in text
     assert "PRODUCT_SPEC.md" in text
     assert "§4" in text
     assert "In-editor" in text

@@ -38,7 +38,7 @@ def test_ensure_continue_rules_idempotent(tmp_path: Path):
     assert "/agent" in mem
     welcome = (tmp_path / ".continue" / "rules" / PRODUCT_WELCOME_RULE_NAME).read_text(encoding="utf-8")
     assert "Welcome to Lé Vibe" in welcome
-    assert "Cursor" in welcome
+    assert "Chat/Agent" in welcome
     assert "Quick Open" in welcome
     assert "Ctrl+P" in welcome or "Cmd+P" in welcome
     assert ".lvibe/WELCOME.md" in welcome

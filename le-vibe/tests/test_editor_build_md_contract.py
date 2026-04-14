@@ -175,6 +175,13 @@ def test_editor_print_ci_tarball_codium_script_exists():
     assert (_repo_root() / "editor" / "print-ci-tarball-codium-path.sh").is_file()
 
 
+def test_editor_build_md_canonical_local_install_links_one_shot_doc():
+    text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")
+    assert "install-le-vibe-local.sh" in text
+    assert "LOCAL_INSTALL_ONE_SHOT.md" in text
+    assert "--preflight-only" in text
+
+
 def test_editor_build_md_contract_debian_section_stack_ide_one_shot_step14():
     """§7.3 BUILD.md lists build-le-vibe-debs --with-ide + PM/apt release pointers."""
     text = (_repo_root() / "editor" / "BUILD.md").read_text(encoding="utf-8")

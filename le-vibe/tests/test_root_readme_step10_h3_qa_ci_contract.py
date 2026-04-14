@@ -10,7 +10,7 @@ def _repo_root() -> Path:
 
 
 def test_root_readme_step10_h3_qa_ci_section():
-    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    text = (_repo_root() / "docs" / "MONOREPO_DEVELOPER_REFERENCE.md").read_text(encoding="utf-8")
     assert "### QA CI & smoke — STEP 10 / H3" in text
     assert "Master orchestrator STEP 10" in text
     assert "ci-smoke.sh" in text

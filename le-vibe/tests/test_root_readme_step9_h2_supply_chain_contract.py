@@ -10,7 +10,7 @@ def _repo_root() -> Path:
 
 
 def test_root_readme_step9_h2_supply_chain_section():
-    text = (_repo_root() / "README.md").read_text(encoding="utf-8")
+    text = (_repo_root() / "docs" / "MONOREPO_DEVELOPER_REFERENCE.md").read_text(encoding="utf-8")
     assert "### Supply chain & SBOM — STEP 9 / H2" in text
     assert "Master orchestrator STEP 9" in text
     assert "pip-audit" in text
