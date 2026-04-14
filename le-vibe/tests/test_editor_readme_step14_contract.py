@@ -103,6 +103,10 @@ def test_editor_readme_documents_linux_compile_and_tarball_14ef():
     assert "vscodium-linux-build.tar.gz" in text
     assert "le-vibe-vscodium-linux-" in text
     assert "print-ci-tarball-codium-path.sh" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     assert "NODE_OPTIONS" in text
     assert "max-old-space-size=8192" in text
     assert "When full compile fails" in text
