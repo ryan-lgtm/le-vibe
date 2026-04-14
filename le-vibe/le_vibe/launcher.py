@@ -938,11 +938,19 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             print("(cd editor/vscodium && ./dev/build.sh)")
         print("./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb")
         print("./packaging/scripts/verify-step14-closeout.sh --require-stack-deb")
-        print("# optional: add --apt-sim or --json to verify — docs/PM_DEB_BUILD_ITERATION.md")
+        print(
+            "# optional: add --apt-sim or --json to verify "
+            "(desktop_file_validate ran|skipped in --json) — docs/PM_DEB_BUILD_ITERATION.md"
+        )
         print(
             "# test host after apt install stack + IDE .deb (optional desktop-file-utils "
             "Freedesktop QA — same le-vibe.desktop checks as preflight / verify / "
             "build-le-vibe-ide-deb): ./packaging/scripts/manual-step14-install-smoke.sh --verify-only"
+        )
+        print(
+            "# test host JSON (paths + desktop_file_validate_on_path): "
+            "./packaging/scripts/manual-step14-install-smoke.sh --json "
+            "— docs/PM_DEB_BUILD_ITERATION.md (*Success output (`--with-ide`)*)"
         )
         if vs_status == "ready":
             print(

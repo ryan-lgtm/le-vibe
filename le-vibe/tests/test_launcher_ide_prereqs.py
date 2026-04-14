@@ -108,6 +108,9 @@ def test_ide_prereqs_print_closeout_commands(monkeypatch: pytest.MonkeyPatch, ca
     assert "preflight-step14-closeout.sh" in out
     assert "verify-step14-closeout.sh" in out
     assert "manual-step14-install-smoke.sh --verify-only" in out
+    assert "manual-step14-install-smoke.sh --json" in out
+    assert "desktop_file_validate_on_path" in out
+    assert "desktop_file_validate ran|skipped" in out
     assert "PM_DEB_BUILD_ITERATION.md" in out
 
 
