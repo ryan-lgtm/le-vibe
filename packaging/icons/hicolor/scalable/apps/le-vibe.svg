@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Lé Vibe app icon — hicolor scalable; refine with design-system exports when ready (see docs/brand-assets.md). -->
-<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-labelledby="le-vibe-icon-title">
+<!-- Lé Vibe app icon — hicolor scalable; matches editor code-icon (docs/brand-assets.md). -->
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 100 100" role="img" aria-labelledby="le-vibe-icon-title">
   <title id="le-vibe-icon-title">Lé Vibe</title>
-  <desc>Lé Vibe product mark: stylized L and curve on a rounded square.</desc>
+  <desc>Lé Vibe product mark: diamond, deep purple to ruby red gradient.</desc>
   <defs>
-    <linearGradient id="lv-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1a3d4d"/>
-      <stop offset="100%" stop-color="#0d1f28"/>
-    </linearGradient>
-    <linearGradient id="lv-accent" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#5eead4"/>
-      <stop offset="100%" stop-color="#2dd4bf"/>
+    <linearGradient id="lv-diamond-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4527A0"/>
+      <stop offset="100%" stop-color="#B71C1C"/>
     </linearGradient>
   </defs>
-  <rect width="128" height="128" rx="24" fill="url(#lv-bg)"/>
-  <!-- Stylized L + vibe curve (product mark, not a third-party logo) -->
-  <path d="M36 34h10v52H36z M36 34h36v10H36z M36 58h28v10H36z" fill="url(#lv-accent)" opacity="0.95"/>
-  <path d="M78 40c14 0 26 12 26 26s-12 26-26 26" stroke="url(#lv-accent)" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.92"/>
-  <circle cx="84" cy="88" r="5" fill="#94a3b8" opacity="0.5"/>
+  <path d="M 50 12 L 88 50 L 50 88 L 12 50 Z" fill="url(#lv-diamond-grad)"/>
 </svg>
