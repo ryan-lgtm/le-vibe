@@ -61,8 +61,24 @@ def test_verify_step14_closeout_mentions_preflight() -> None:
     assert "preflight-step14-closeout.sh" in text
 
 
+def test_download_vscodium_linux_compile_artifact_script_contract() -> None:
+    """STEP 14.f: curl+token path for linux_compile tarball (no gh CLI)."""
+    text = (_repo_root() / "packaging" / "scripts" / "download-vscodium-linux-compile-artifact.sh").read_text(
+        encoding="utf-8"
+    )
+    assert "build-le-vibe-ide.yml" in text
+    assert "le-vibe-vscodium-linux-" in text
+    assert "GITHUB_TOKEN" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
+    subprocess.run(
+        ["bash", "-n", str(_repo_root() / "packaging" / "scripts" / "download-vscodium-linux-compile-artifact.sh")],
+        check=True,
+        capture_output=True,
+    )
+
+
 def test_print_github_linux_compile_artifact_hint_lists_browser_and_gh() -> None:
-    """STEP 14: offline hint documents Actions UI (no gh) and gh run download."""
+    """STEP 14: offline hint documents Actions UI (no gh), gh run download, and curl+token helper."""
     root = _repo_root()
     script = root / "packaging" / "scripts" / "print-github-linux-compile-artifact-hint.sh"
     r = subprocess.run([str(script)], cwd=str(root), capture_output=True, text=True)
@@ -71,3 +87,4 @@ def test_print_github_linux_compile_artifact_hint_lists_browser_and_gh() -> None
     assert "Actions" in out
     assert "gh run" in out
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in out
+    assert "download-vscodium-linux-compile-artifact.sh" in out
