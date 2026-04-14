@@ -46,6 +46,7 @@ def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
     assert "vscode_linux_partial" in text
     assert "vscode_linux_build" in text
     assert "vscode_linux_bin_files" in text
+    assert "hicolor_icon_in_deb" in text
     assert "debian/lvibe.1" in text
     assert "--print-closeout-commands" in text
     assert "probe-vscode-linux-build.sh" in text

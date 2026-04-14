@@ -95,6 +95,8 @@ def test_ide_prereqs_json_in_checkout(monkeypatch: pytest.MonkeyPatch, capsys: p
     assert "static_prereq_files_ok" in data
     assert data["static_prereq_files_ok"] is True
     assert "vscodium_linux_svg_staged" in data
+    assert "hicolor_icon_in_deb" in data
+    assert data["hicolor_icon_in_deb"] in ("none", "ok", "missing", "unknown")
     assert len(data["entries"]) == 11
     assert all("label" in e and "path" in e and "exists" in e for e in data["entries"])
 
@@ -115,6 +117,7 @@ def test_ide_prereqs_print_closeout_commands(monkeypatch: pytest.MonkeyPatch, ca
     assert "probe_vscode_linux_build.py" in out
     assert "preflight-step14-closeout.sh" in out
     assert "preflight-step14-closeout.sh --require-stack-deb --json" in out
+    assert "hicolor_icon_in_deb" in out
     assert "verify-step14-closeout.sh" in out
     assert "manual-step14-install-smoke.sh --verify-only" in out
     assert "manual-step14-install-smoke.sh --json" in out

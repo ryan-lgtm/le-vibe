@@ -6,7 +6,9 @@ from pathlib import Path
 
 from le_vibe.ide_packaging_paths import (
     find_vscode_linux_tree,
+    ide_deb_hicolor_icon_status,
     iter_ide_prereq_paths,
+    pick_latest_le_vibe_ide_deb,
     static_prereq_repo_files_ok,
     vscode_linux_bin_filenames,
     vscode_linux_build_status,
@@ -24,6 +26,7 @@ def test_ide_packaging_paths_module_doc_mentions_freedesktop_closeout_chain() ->
     assert m.__doc__ is not None
     assert "manual-step14-install-smoke" in m.__doc__
     assert "desktop-file-validate" in m.__doc__
+    assert "hicolor_icon_in_deb" in m.__doc__
 
 
 def test_fixed_prereq_files_exist_in_repo():
@@ -114,6 +117,24 @@ def test_vscode_linux_compile_gate_ready_is_100_pct(tmp_path: Path) -> None:
     d = vscode_linux_compile_gate_progress(tmp_path)
     assert d["compile_gate_pct"] == 100
     assert d["vscode_linux_build"] == "ready"
+
+
+def test_pick_latest_le_vibe_ide_deb_sort_v_prefers_higher_version(tmp_path: Path) -> None:
+    pkg = tmp_path / "packaging"
+    pkg.mkdir(parents=True)
+    (pkg / "le-vibe-ide_0.1.0_amd64.deb").write_bytes(b"x")
+    (pkg / "le-vibe-ide_0.2.0_amd64.deb").write_bytes(b"x")
+    assert pick_latest_le_vibe_ide_deb(tmp_path) == pkg / "le-vibe-ide_0.2.0_amd64.deb"
+
+
+def test_ide_deb_hicolor_icon_status_none_without_deb(tmp_path: Path) -> None:
+    (tmp_path / "packaging").mkdir()
+    assert ide_deb_hicolor_icon_status(tmp_path) == "none"
+
+
+def test_ide_deb_hicolor_icon_status_clone_is_valid_enum() -> None:
+    st = ide_deb_hicolor_icon_status(_root())
+    assert st in ("none", "ok", "missing", "unknown")
 
 
 def test_vscode_linux_bin_filenames_lists_bin_files(tmp_path: Path) -> None:

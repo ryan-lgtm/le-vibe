@@ -806,6 +806,7 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
 
     from le_vibe.ide_packaging_paths import (
         IDE_PREREQ_PATH_ONLY,
+        ide_deb_hicolor_icon_status,
         iter_ide_prereq_paths,
         static_prereq_repo_files_ok,
         vscode_linux_bin_filenames,
@@ -839,6 +840,7 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
         help=(
             "print monorepo root, vscode_linux_build (ready|partial|absent), vscode_linux_ready / "
             "vscode_linux_partial, VSCode-linux path, vscode_linux_bin_files (when a tree path is known), "
+            "hicolor_icon_in_deb (none|ok|missing|unknown — newest packaging/le-vibe-ide_*.deb vs preflight/verify), "
             "and each §7.3 path with exists flags"
         ),
     )
@@ -955,7 +957,8 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             print("(cd editor/vscodium && ./dev/build.sh)")
         print("./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb")
         print(
-            "# optional: preflight --json (structured gap summary on stdout; human lines on stderr) — "
+            "# optional: preflight --json (structured gap summary on stdout; human lines on stderr; "
+            "hicolor_icon_in_deb aligns with lvibe ide-prereqs --json) — "
             "docs/PM_DEB_BUILD_ITERATION.md *Preflight (all gaps)*: "
             "./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb --json"
         )
@@ -995,6 +998,7 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             vscode_linux_partial=vs_status == "partial",
             static_prereq_files_ok=static_ok,
             vscodium_linux_svg_staged=vsc_svg.is_file(),
+            hicolor_icon_in_deb=ide_deb_hicolor_icon_status(root),
             entries=entries,
         )
         return 0

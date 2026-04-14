@@ -3,14 +3,22 @@
 Freedesktop ``.desktop`` QA (packaged or installed): see ``preflight-step14-closeout.sh``,
 ``verify-step14-closeout.sh``, ``build-le-vibe-ide-deb.sh``, and test-host
 ``manual-step14-install-smoke.sh --verify-only`` (``desktop-file-validate`` when available).
+``ide_deb_hicolor_icon_status`` / ``lvibe ide-prereqs --json`` field ``hicolor_icon_in_deb`` match
+preflight/verify hicolor payload checks on ``packaging/le-vibe-ide_*.deb``.
 """
 
 from __future__ import annotations
 
+import shutil
+import subprocess
 from pathlib import Path
 from typing import Literal
 
 VscodeLinuxBuildStatus = Literal["ready", "partial", "absent"]
+HicolorIdeDebStatus = Literal["none", "ok", "missing", "unknown"]
+
+# Same path string as ``preflight-step14-closeout.sh`` / ``verify-step14-closeout.sh`` (§7.3 Freedesktop icon).
+_IDE_DEB_HICOLOR_NEEDLE = "./usr/share/icons/hicolor/scalable/apps/le-vibe.svg"
 
 
 def vscode_linux_build_status(root: Path) -> tuple[VscodeLinuxBuildStatus, Path | None]:
@@ -133,6 +141,58 @@ IDE_PREREQ_STATIC_OK_KEYS: tuple[str, ...] = (
 def static_prereq_repo_files_ok(root: Path) -> bool:
     """True when every committed packaging / override file needed for §7.3 automation exists."""
     return all((root / IDE_PREREQ_PATH_ONLY[k]).is_file() for k in IDE_PREREQ_STATIC_OK_KEYS)
+
+
+def pick_latest_le_vibe_ide_deb(root: Path) -> Path | None:
+    """
+    Newest ``packaging/le-vibe-ide_*.deb`` using ``sort -V`` on basenames — parity with bash close-out scripts.
+    """
+    packaging = root / "packaging"
+    if not packaging.is_dir():
+        return None
+    paths = list(packaging.glob("le-vibe-ide_*.deb"))
+    if not paths:
+        return None
+    if len(paths) == 1:
+        return paths[0]
+    proc = subprocess.run(
+        ["sort", "-V"],
+        input="\n".join(p.name for p in paths),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    lines = [ln.strip() for ln in proc.stdout.splitlines() if ln.strip()]
+    if not lines:
+        return paths[0]
+    last_name = lines[-1]
+    for p in paths:
+        if p.name == last_name:
+            return p
+    return paths[-1]
+
+
+def ide_deb_hicolor_icon_status(root: Path) -> HicolorIdeDebStatus:
+    """
+    Whether the newest ``packaging/le-vibe-ide_*.deb`` lists the §7.3 hicolor icon path in ``dpkg-deb --contents``.
+
+    Values match ``preflight-step14-closeout.sh --json`` field ``hicolor_icon_in_deb``:
+    ``none`` (no IDE ``.deb``), ``ok`` / ``missing``, or ``unknown`` (no ``dpkg-deb`` or read failure).
+    """
+    deb = pick_latest_le_vibe_ide_deb(root)
+    if deb is None:
+        return "none"
+    if shutil.which("dpkg-deb") is None:
+        return "unknown"
+    proc = subprocess.run(
+        ["dpkg-deb", "--contents", str(deb)],
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    if proc.returncode != 0:
+        return "unknown"
+    return "ok" if _IDE_DEB_HICOLOR_NEEDLE in proc.stdout else "missing"
 
 
 def vscode_linux_compile_gate_progress(root: Path) -> dict[str, object]:
