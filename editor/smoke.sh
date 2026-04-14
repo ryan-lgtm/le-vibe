@@ -10,6 +10,8 @@
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — STEP 14 after STEP 0–1.
 # E1: docs/PRODUCT_SPEC.md *Prioritization* documents this path — le-vibe/tests/test_product_spec_section8.py
 # (same module locks ide-ci-metadata / retention-days / permissions (contents read, actions write) / Pre-binary / editor/BUILD+VENDORING in PRODUCT_SPEC *Prioritization*).
+# Pytest: le-vibe/tests/test_editor_smoke_sh_step14_contract.py; verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 exec "${ROOT}/packaging/scripts/ci-editor-gate.sh" "$@"

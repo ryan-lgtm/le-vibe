@@ -8,6 +8,8 @@
 # Exit 1: stderr lists upstream message plus monorepo next steps (14.a→14.c).
 # Fresh clone (14.b): git submodule update --init editor/vscodium — editor/README.md (before fetch/build under editor/vscodium/).
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16) — 14.c verify local VSCode-linux tree after STEP 0–1.
+# Pytest: le-vibe/tests/test_editor_smoke_sh_step14_contract.py; verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

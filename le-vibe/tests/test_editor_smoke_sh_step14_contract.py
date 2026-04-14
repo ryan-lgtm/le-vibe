@@ -5,6 +5,8 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
+import pytest
+
 
 def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
@@ -60,3 +62,27 @@ def test_editor_smoke_sh_delegates_ci_editor_gate():
     assert "build-le-vibe-ide.yml" in text or "build-linux.yml" in text
     assert "14.d" in text
     assert "branding-staging.checklist.md" in text
+
+
+@pytest.mark.parametrize(
+    "relative",
+    [
+        "editor/smoke.sh",
+        "editor/le-vibe-overrides/sync-linux-icon-assets.sh",
+        "editor/print-built-codium-path.sh",
+        "editor/verify-14c-local-binary.sh",
+        "editor/smoke-lvibe-editor.sh",
+        "editor/print-vsbuild-codium-path.sh",
+        "editor/print-ci-tarball-codium-path.sh",
+        "editor/smoke-built-codium-lvibe.sh",
+        "editor/verify-73-maintainer.sh",
+        "editor/use-node-toolchain.sh",
+        "editor/fetch-vscode-sources.sh",
+    ],
+)
+def test_editor_step14_scripts_document_pytest_verify_lock(relative: str) -> None:
+    """STEP 14 editor/ helpers link pytest + verify-step14 JSON contract + flock (same as packaging/scripts)."""
+    text = (_repo_root() / relative).read_text(encoding="utf-8")
+    assert "test_editor_smoke_sh_step14_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
