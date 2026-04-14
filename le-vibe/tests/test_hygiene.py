@@ -55,6 +55,33 @@ def test_hygiene_seed_missing_skips_without_lvibe_dir(tmp_path: Path):
     assert code == 1
 
 
+def test_hygiene_warns_rag_ref_incomplete_yaml(tmp_path: Path):
+    ensure_lvibe_workspace(tmp_path)
+    ref = tmp_path / ".lvibe" / "rag" / "refs" / "topic.yaml"
+    ref.write_text("path: ./README.md\n", encoding="utf-8")
+    errs, warns = check_lvibe_workspace(tmp_path)
+    assert errs == []
+    assert any("title" in w and "topic.yaml" in w for w in warns)
+
+
+def test_hygiene_warns_rag_ref_md_without_frontmatter(tmp_path: Path):
+    ensure_lvibe_workspace(tmp_path)
+    ref = tmp_path / ".lvibe" / "rag" / "refs" / "note.md"
+    ref.write_text("# Title\n\nSome prose without frontmatter block.\n", encoding="utf-8")
+    errs, warns = check_lvibe_workspace(tmp_path)
+    assert errs == []
+    assert any("frontmatter" in w.lower() and "note.md" in w for w in warns)
+
+
+def test_hygiene_warns_oversize_rag_ref(tmp_path: Path):
+    ensure_lvibe_workspace(tmp_path)
+    huge = tmp_path / ".lvibe" / "rag" / "refs" / "big.yaml"
+    huge.write_bytes(b"x" * (128 * 1024 + 1))
+    errs, warns = check_lvibe_workspace(tmp_path)
+    assert errs == []
+    assert any("big.yaml" in w and "KiB" in w for w in warns)
+
+
 def test_hygiene_warns_chunk_missing_path(tmp_path: Path):
     ensure_lvibe_workspace(tmp_path)
     chunk = tmp_path / ".lvibe" / "chunks" / "ref.yaml"

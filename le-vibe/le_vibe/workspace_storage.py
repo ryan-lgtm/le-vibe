@@ -13,16 +13,82 @@ from .workspace_policy import cap_mb_from_environ, get_cap_mb
 
 _LVIBE = ".lvibe"
 
-# Re-export for callers that import size of tree
+# Protected from chunk-layer deletion (PRODUCT_SPEC §5.5 — never drop manifest without policy).
+_PROTECTED_LVIBE_NAMES = frozenset(
+    {
+        "session-manifest.json",
+        "manifest.yaml",
+        "storage-state.json",
+        "AGENTS.md",
+        "WELCOME.md",
+        "continue-rules.md",
+    }
+)
+
+
 def _dir_size_bytes(root: Path) -> int:
     total = 0
     try:
         for p in root.rglob("*"):
             if p.is_file():
-                total += p.stat().st_size
+                try:
+                    total += p.stat().st_size
+                except OSError as e:
+                    logging.warning(
+                        "workspace_storage: stat failed for %s: %s",
+                        p,
+                        e,
+                    )
     except OSError as e:
-        logging.debug("workspace_storage: size walk failed: %s", e)
+        logging.warning("workspace_storage: size walk failed under %s: %s", root, e)
     return total
+
+
+def _chunk_layer_compaction_files(lvibe: Path) -> list[Path]:
+    """
+    Files eligible for first-phase compaction: shared RAG/chunks only (§5.5).
+
+    Preserves ``rag/README.md`` and everything outside the RAG/chunk layer; does not
+    include ``session-manifest.json`` (not under ``rag/`` / ``chunks/``).
+    """
+    seen: set[str] = set()
+    out: list[Path] = []
+
+    def add(p: Path) -> None:
+        if p.name in _PROTECTED_LVIBE_NAMES:
+            return
+        try:
+            key = str(p.resolve())
+        except OSError:
+            key = str(p)
+        if key in seen:
+            return
+        seen.add(key)
+        out.append(p)
+
+    rag = lvibe / "rag"
+    if rag.is_dir():
+        for p in rag.rglob("*"):
+            if not p.is_file():
+                continue
+            try:
+                rel = p.relative_to(rag)
+            except ValueError:
+                continue
+            if rel == Path("README.md"):
+                continue
+            if rel.parts and rel.parts[0] == "refs":
+                add(p)
+                continue
+            add(p)
+
+    chunks = lvibe / "chunks"
+    if chunks.is_dir():
+        for p in chunks.rglob("*"):
+            if p.is_file() and p.name != "README.md":
+                add(p)
+
+    return out
 
 
 def write_storage_state(
@@ -78,22 +144,20 @@ def compact_lvibe_tree(workspace_root: Path, cap_mb: int) -> list[str]:
     if not over():
         return []
 
-    # 1) RAG + legacy chunks: remove oldest files by mtime (refs only)
-    for tree_name in ("rag", "chunks"):
-        sub = lvibe / tree_name
-        if not sub.is_dir():
+    # 1) RAG / chunk layer: remove oldest files first (§5.5); keep hub READMEs + protected names
+    layer_files = _chunk_layer_compaction_files(lvibe)
+    layer_files.sort(key=lambda p: p.stat().st_mtime)
+    for f in layer_files:
+        if not over():
+            break
+        if f.name in _PROTECTED_LVIBE_NAMES:
             continue
-        files = [p for p in sub.rglob("*") if p.is_file()]
-        files.sort(key=lambda p: p.stat().st_mtime)
-        for f in files:
-            if not over():
-                break
-            try:
-                rel = f.relative_to(lvibe)
-                f.unlink()
-                actions.append(f"removed {rel}")
-            except OSError:
-                continue
+        try:
+            rel = f.relative_to(lvibe)
+            f.unlink()
+            actions.append(f"removed {rel}")
+        except OSError:
+            continue
 
     # 2) Per-agent: trim largest skill.md files last — remove oldest small sidecars first
     agents = lvibe / "agents"

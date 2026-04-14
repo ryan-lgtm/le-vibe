@@ -1042,6 +1042,58 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
     return 0
 
 
+def _cmd_append_incremental_fact(argv: list[str]) -> int:
+    """Append one short line to ``.lvibe/memory/incremental.md`` (PRODUCT_SPEC §5.3) — optional idempotent key."""
+    from le_vibe.workspace_incremental_sync import append_incremental_fact
+
+    p = argparse.ArgumentParser(
+        prog="lvibe append-incremental-fact",
+        description="Append a dated fact to .lvibe/memory/incremental.md (existing .lvibe/ only).",
+    )
+    p.add_argument(
+        "-C",
+        "--workspace",
+        default=".",
+        type=Path,
+        help="workspace root (default: current directory)",
+    )
+    p.add_argument(
+        "--text",
+        required=True,
+        help="short fact text to append (keep token-efficient)",
+    )
+    p.add_argument(
+        "--idempotent-id",
+        default=None,
+        metavar="ID",
+        help="if set, skip when this id was already written (duplicate-safe)",
+    )
+    args = p.parse_args(argv)
+    try:
+        ws = args.workspace.expanduser().resolve()
+    except OSError as e:
+        print(f"lvibe append-incremental-fact: bad --workspace: {e}", file=sys.stderr)
+        return 2
+    try:
+        did, path = append_incremental_fact(
+            ws,
+            args.text,
+            idempotent_id=args.idempotent_id,
+        )
+    except FileNotFoundError as e:
+        print(f"lvibe append-incremental-fact: {e}", file=sys.stderr)
+        print("Create .lvibe/ with consent (lvibe .) first.", file=sys.stderr)
+        return 1
+    except ValueError as e:
+        print(f"lvibe append-incremental-fact: {e}", file=sys.stderr)
+        return 2
+    if did:
+        print(f"appended: {path}")
+    else:
+        print(f"skipped (already present): {path}")
+    return 0
+
+
 def _cmd_workspace_governance(argv: list[str]) -> int:
     """STEP 15: consent, cap, usage vs cap — ``PRODUCT_SPEC`` §5, ``docs/PM_STAGE_MAP.md`` STEP 15."""
     import json as json_mod
@@ -1424,6 +1476,8 @@ def main() -> int:
         return _cmd_flatpak_appimage(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "ide-prereqs":
         return _cmd_ide_prereqs(sys.argv[2:])
+    if len(sys.argv) >= 2 and sys.argv[1] == "append-incremental-fact":
+        return _cmd_append_incremental_fact(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "workspace-governance":
         return _cmd_workspace_governance(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "master-orchestrator":

@@ -8,6 +8,35 @@ from le_vibe.workspace_hub import ensure_lvibe_workspace
 from le_vibe.workspace_storage import compact_lvibe_tree, lvibe_tree_usage_bytes, refresh_storage_metadata
 
 
+def test_compaction_preserves_rag_readme_when_trimming_refs(tmp_path: Path, monkeypatch) -> None:
+    cfg = tmp_path / "cfg"
+    cfg.mkdir()
+    monkeypatch.setattr("le_vibe.workspace_policy.le_vibe_config_dir", lambda: cfg)
+    root = tmp_path / "w"
+    root.mkdir()
+    ensure_lvibe_workspace(root)
+    readme = root / ".lvibe" / "rag" / "README.md"
+    assert readme.is_file()
+    fat = root / ".lvibe" / "rag" / "refs" / "big.yaml"
+    fat.write_bytes(b"x" * (3 * 1024 * 1024))
+    compact_lvibe_tree(root, cap_mb=1)
+    assert readme.is_file()
+    assert not fat.exists()
+
+
+def test_compaction_removes_stray_large_file_under_rag(tmp_path: Path, monkeypatch) -> None:
+    cfg = tmp_path / "cfg"
+    cfg.mkdir()
+    monkeypatch.setattr("le_vibe.workspace_policy.le_vibe_config_dir", lambda: cfg)
+    root = tmp_path / "w"
+    root.mkdir()
+    ensure_lvibe_workspace(root)
+    stray = root / ".lvibe" / "rag" / "fat.bin"
+    stray.write_bytes(b"z" * (3 * 1024 * 1024))
+    compact_lvibe_tree(root, cap_mb=1)
+    assert not stray.exists()
+
+
 def test_compaction_removes_rag_refs_when_over_cap(tmp_path: Path, monkeypatch) -> None:
     cfg = tmp_path / "cfg"
     cfg.mkdir()

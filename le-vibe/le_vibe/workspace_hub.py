@@ -151,8 +151,8 @@ def ensure_lvibe_workspace(workspace_root: Path) -> Path:
             "# Agent rules (Lé Vibe)\n\n"
             "- Treat **`.lvibe/`** as the default place for **project memory** and **incremental context**.\n"
             "- **Prefer** recalling from `memory/` and small files here instead of re-reading large caches or whole trees.\n"
-            "- **Append** new facts as **short** bullet or YAML snippets in `memory/incremental.md` (keep entries small; "
-            "summarize if growing).\n"
+            "- **Append** new facts as **short** bullet or YAML snippets in `memory/incremental.md` (~2 KiB per entry as a "
+            "guide; summarize if growing; compaction may trim the tail under storage pressure — PRODUCT_SPEC §5.5).\n"
             "- Optional: place **chunk references** under **`rag/refs/`** (preferred) or legacy `chunks/` for RAG-style lookups.\n"
             "- **User gate (PRODUCT_SPEC §7.2):** If you lack authority for a **high-impact** decision or roles **disagree** materially, stop and surface **`USER RESPONSE REQUIRED`** with **numbered questions** (see **`.continue/rules/`** memory rule)—do not assume.\n"
             "- **Secrets (PRODUCT_SPEC §8):** Do **not** read **`.env`** / **`.env.*`** unless the user **explicitly** approves; "
@@ -166,7 +166,8 @@ def ensure_lvibe_workspace(workspace_root: Path) -> Path:
     if not incremental.exists():
         incremental.write_text(
             "# Incremental memory (bounded)\n\n"
-            "_Append small dated snippets; avoid unbounded paste of full project history._\n\n",
+            "_Append small dated snippets; avoid unbounded paste of full project history._\n"
+            "_Keep each new bullet roughly **≤ ~2 KiB**; `lvibe hygiene` warns if this file grows large._\n\n",
             encoding="utf-8",
         )
 
@@ -180,7 +181,10 @@ def ensure_lvibe_workspace(workspace_root: Path) -> Path:
             "# Shared RAG (PRODUCT_SPEC §5.2)\n\n"
             "Cross-cutting chunk references and retrieval material **separate** from per-agent narrative. "
             "Place small YAML/Markdown files under **`refs/`**. Compaction removes oldest refs here **before** "
-            "touching per-agent `skill.md` files.\n",
+            "touching per-agent `skill.md` files.\n\n"
+            "**Minimal ref shape (recommended):** YAML frontmatter in `.md` or keys at the top of `.yaml`:\n"
+            "`title`, `path` (repo-relative), `summary`, `updated` (ISO date). "
+            "`lvibe hygiene` warns when keys are missing or files are oversized.\n",
             encoding="utf-8",
         )
 

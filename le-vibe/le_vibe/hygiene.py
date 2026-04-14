@@ -2,9 +2,11 @@
 
 Session JSON is expected to match ``schemas/session-manifest.v1.example.json`` (see
 ``docs/SESSION_ORCHESTRATION_SPEC.md``; STEP 5 / E4, PM map). Optional ``storage-state.json``
-is checked for ``lvibe-storage-state.v1`` (PRODUCT_SPEC §5.4). Use ``--seed-missing`` to
-idempotently add a missing ``session-manifest.json`` and agent ``skill.md`` files; ``--json``
-for machine-readable reports.
+is checked for ``lvibe-storage-state.v1`` (PRODUCT_SPEC §5.4). Files under ``rag/refs/`` warn
+when over ~128KiB (small-ref discipline). ``rag/refs/*.md`` / ``*.yaml`` should use optional YAML
+frontmatter with ``title``, ``path`` (repo-relative), ``summary``, and ``updated`` (warnings if
+missing). Use ``--seed-missing`` to idempotently add a missing
+``session-manifest.json`` and agent ``skill.md`` files; ``--json`` for machine-readable reports.
 """
 
 from __future__ import annotations
@@ -105,6 +107,104 @@ def _chunk_path_references(lvibe: Path, workspace: Path) -> tuple[list[str], lis
     return errors, warnings
 
 
+_RAG_REF_OVERSIZE_BYTES = 128 * 1024
+_RAG_REF_SCHEMA_KEYS = ("title", "path", "summary", "updated")
+_INCREMENTAL_SOFT_WARN_BYTES = 64 * 1024
+
+# Rough “looks like a secret literal” (PRODUCT_SPEC §8 — refs only, no values).
+_SECRETISH_LINE = re.compile(
+    r"(?i)(password|api_key|apikey|secret|client_secret|access_token)\s*[:=]\s*['\"]?[^\s'\"#]{16,}"
+)
+
+
+def _parse_md_frontmatter_keys(text: str) -> dict[str, str] | None:
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return None
+    keys: dict[str, str] = {}
+    for i in range(1, len(lines)):
+        if lines[i].strip() == "---":
+            for j in range(1, i):
+                line = lines[j]
+                if ":" not in line or line.strip().startswith("#"):
+                    continue
+                k, _, v = line.partition(":")
+                keys[k.strip()] = v.strip().strip("\"'")
+            return keys
+    return None
+
+
+def _top_level_yaml_scalar_keys(text: str, *, max_lines: int = 100) -> dict[str, str]:
+    keys: dict[str, str] = {}
+    for line in text.splitlines()[:max_lines]:
+        s = line.strip()
+        if not s or s.startswith("#"):
+            continue
+        if s.startswith("---"):
+            break
+        if s.startswith("-") or ":" not in s:
+            continue
+        k, _, v = line.partition(":")
+        keys[k.strip()] = v.strip().strip("\"'")
+    return keys
+
+
+def _rag_refs_schema_warnings(lvibe: Path) -> list[str]:
+    """Minimal ref shape: ``title``, ``path``, ``summary``, ``updated`` (warnings only)."""
+    warnings: list[str] = []
+    refs = lvibe / "rag" / "refs"
+    if not refs.is_dir():
+        return warnings
+    for f in sorted(refs.rglob("*")):
+        if not f.is_file():
+            continue
+        suf = f.suffix.lower()
+        if suf not in (".yaml", ".yml", ".md", ".txt"):
+            continue
+        try:
+            n = f.stat().st_size
+        except OSError:
+            continue
+        if n > _RAG_REF_OVERSIZE_BYTES:
+            continue
+        try:
+            text = f.read_text(encoding="utf-8", errors="replace")
+        except OSError as e:
+            warnings.append(f"{f.relative_to(lvibe)}: read failed ({e})")
+            continue
+        if _SECRETISH_LINE.search(text):
+            warnings.append(
+                f"{f.relative_to(lvibe)}: possible secret-like literal — use references only (PRODUCT_SPEC §8)"
+            )
+        rel = f.relative_to(lvibe)
+        if suf == ".txt":
+            warnings.append(
+                f"{rel}: prefer .md or .yaml with optional frontmatter (title, path, summary, updated)"
+            )
+            continue
+        if suf == ".md":
+            fm = _parse_md_frontmatter_keys(text)
+            if fm is None:
+                if len(text.strip()) > 20:
+                    warnings.append(
+                        f"{rel}: add YAML frontmatter with title, path, summary, updated (Lé Vibe rag ref convention)"
+                    )
+                continue
+            for key in _RAG_REF_SCHEMA_KEYS:
+                if key not in fm or not str(fm.get(key, "")).strip():
+                    warnings.append(f"{rel}: frontmatter missing or empty `{key}`")
+            continue
+        # .yaml / .yml
+        keys = _top_level_yaml_scalar_keys(text)
+        if not keys and text.strip():
+            warnings.append(f"{rel}: expected top-level keys title, path, summary, updated")
+            continue
+        for key in _RAG_REF_SCHEMA_KEYS:
+            if key not in keys or not str(keys.get(key, "")).strip():
+                warnings.append(f"{rel}: missing or empty `{key}`")
+    return warnings
+
+
 def _incremental_size_warning(lvibe: Path) -> list[str]:
     warnings: list[str] = []
     inc = lvibe / "memory" / "incremental.md"
@@ -112,6 +212,29 @@ def _incremental_size_warning(lvibe: Path) -> list[str]:
         n = inc.stat().st_size
         if n > 512 * 1024:
             warnings.append(f"memory/incremental.md is {n // 1024}KiB — consider summarizing (token efficiency)")
+        elif n > _INCREMENTAL_SOFT_WARN_BYTES:
+            warnings.append(
+                f"memory/incremental.md is {n // 1024}KiB — keep individual entries short (~2KiB recommended)"
+            )
+    return warnings
+
+
+def _rag_refs_oversize_warnings(lvibe: Path) -> list[str]:
+    """Small-file discipline for ``rag/refs/`` (PRODUCT_SPEC §5.2 — token-efficient on-disk RAG)."""
+    warnings: list[str] = []
+    refs = lvibe / "rag" / "refs"
+    if not refs.is_dir():
+        return warnings
+    for f in sorted(refs.rglob("*")):
+        if not f.is_file():
+            continue
+        if f.suffix.lower() not in (".yaml", ".yml", ".md", ".txt"):
+            continue
+        n = f.stat().st_size
+        if n > _RAG_REF_OVERSIZE_BYTES:
+            warnings.append(
+                f"{f.relative_to(lvibe)} is {n // 1024}KiB — split or summarize (rag ref size budget)"
+            )
     return warnings
 
 
@@ -195,6 +318,8 @@ def check_lvibe_workspace(workspace_root: Path) -> tuple[list[str], list[str]]:
     errors.extend(e2)
     warnings.extend(w2)
     warnings.extend(_incremental_size_warning(lvibe))
+    warnings.extend(_rag_refs_oversize_warnings(lvibe))
+    warnings.extend(_rag_refs_schema_warnings(lvibe))
 
     e3, w3 = _storage_state_checks(lvibe)
     errors.extend(e3)

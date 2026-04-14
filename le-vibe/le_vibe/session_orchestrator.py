@@ -64,6 +64,8 @@ def sync_agent_skills_from_templates(lvibe_dir: Path) -> list[Path]:
     src_dir = agent_skill_templates_dir()
     written: list[Path] = []
     for src in sorted(src_dir.glob("*.md")):
+        if src.name.lower() == "readme.md":
+            continue
         agent_id = src.stem
         dest_dir = dest_root / agent_id
         dest_dir.mkdir(parents=True, exist_ok=True)

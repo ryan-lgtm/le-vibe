@@ -23,13 +23,21 @@ per-workspace size budget (default 50 MB; configurable).
 """
 
 
+_ACCEPT_ENV = frozenset(
+    {"accept", "accepted", "yes", "y", "1", "true"},
+)
+_DECLINE_ENV = frozenset(
+    {"decline", "declined", "no", "n", "0", "false"},
+)
+
+
 def _env_consent_override() -> str | None:
     raw = os.environ.get("LE_VIBE_LVIBE_CONSENT", "").strip().lower()
     if not raw:
         return None
-    if raw in ("accept", "accepted", "yes", "y", "1", "true"):
+    if raw in _ACCEPT_ENV:
         return "accept"
-    if raw in ("decline", "declined", "no", "n", "0", "false"):
+    if raw in _DECLINE_ENV:
         return "decline"
     return None
 
@@ -54,7 +62,16 @@ def resolve_lvibe_creation(
     if existing == "accepted":
         return True
 
+    raw_env = os.environ.get("LE_VIBE_LVIBE_CONSENT", "").strip()
     env = _env_consent_override()
+    if raw_env and env is None:
+        append_structured_log(
+            "workspace",
+            "lvibe_consent_skip",
+            workspace=key,
+            reason="invalid_env_value",
+            detail=raw_env[:120],
+        )
     if env == "accept":
         set_consent(workspace_root, "accepted", config_dir=config_dir)
         append_structured_log("workspace", "lvibe_consent", workspace=key, decision="accept", source="env")
