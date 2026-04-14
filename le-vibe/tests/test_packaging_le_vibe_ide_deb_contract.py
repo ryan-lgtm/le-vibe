@@ -23,6 +23,9 @@ def test_stage_le_vibe_ide_deb_script_header_documents_h1_vs_ci_step14():
     assert "Full-product install" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "Success output (--with-ide)" in text
+    assert "test_packaging_le_vibe_ide_deb_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_stage_le_vibe_ide_deb_script_documents_14b_submodule_and_bash_syntax():
