@@ -52,6 +52,7 @@ def test_manual_step14_install_smoke_script_documents_install_and_verify() -> No
     assert "resolve-latest-le-vibe-stack-deb.sh" in text
     assert "preflight-step14-closeout.sh" in text
     assert "vscode_linux_build" in text
+    assert "desktop_file_validate_on_path" in text
     assert "ide-prereqs --json" in text
     assert "probe-vscode-linux-build.sh" in text
     assert "dpkg-buildpackage" in text
@@ -68,6 +69,7 @@ def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> 
     assert "probe-vscode-linux-build.sh" in rag
     assert "Preflight (all gaps" in rag
     assert "apt_sim_note" in rag
+    assert "desktop_file_validate" in rag
     assert "print-built-codium-path" in rag
     assert "print-vsbuild-codium-path" in rag
     assert "build-le-vibe-ide-deb.sh --help" in rag
@@ -78,6 +80,7 @@ def test_session_manifest_step14_closeout_rag_notes_mentions_closeout_json() -> 
     assert "packaging/scripts/ci-vscodium-linux-dev-build.sh" in rag
     assert "manual-step14-install-smoke.sh default STACK_DEB" in rag
     assert "manual-step14-install-smoke.sh --verify-only" in rag
+    assert "desktop_file_validate_on_path" in rag
     assert "desktop-file-validate" in rag
     assert "resolve-latest-le-vibe-stack-deb.sh" in rag
     assert "Output paths (from repo root)" in rag
@@ -185,6 +188,7 @@ def test_manual_step14_install_smoke_json_mode() -> None:
         assert payload["ide_deb"] == str(ide)
         assert payload["install_cmd"] == f'sudo apt install "{stack}" "{ide}"'
         assert payload["vscode_linux_build"] in ("ready", "partial", "absent", "unknown")
+        assert isinstance(payload["desktop_file_validate_on_path"], bool)
 
 
 def test_manual_step14_install_smoke_json_mode_escapes_special_chars() -> None:
@@ -216,3 +220,4 @@ def test_manual_step14_install_smoke_json_mode_escapes_special_chars() -> None:
         assert payload["stack_deb"] == str(stack)
         assert payload["ide_deb"] == str(ide)
         assert payload["vscode_linux_build"] in ("ready", "partial", "absent", "unknown")
+        assert isinstance(payload["desktop_file_validate_on_path"], bool)
