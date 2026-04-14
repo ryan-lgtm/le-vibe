@@ -78,6 +78,10 @@ def test_root_readme_current_status_works_well_today_full_product_install_step14
     assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "vscode_linux_bin_files" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
+    assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
+    assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
 
 
 def test_root_readme_pm_session_section_labels_master_step2():
