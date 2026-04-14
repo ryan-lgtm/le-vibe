@@ -18,3 +18,5 @@ def test_brand_assets_doc_lists_icons_and_h5():
     assert "le-vibe.svg" in text
     assert "sync-linux-icon-assets.sh" in text
     assert "workbench" in text
+    assert "--check" in text
+    assert "mktemp" in text
