@@ -5,6 +5,8 @@
 # packaging/scripts/build-le-vibe-debs.sh (find_stack_deb).
 # Authority: docs/PM_DEB_BUILD_ITERATION.md *Output paths (from repo root)*.
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md.
+# Pytest: le-vibe/tests/test_resolve_latest_le_vibe_stack_deb_contract.py; verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

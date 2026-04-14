@@ -4,6 +4,8 @@
 # .github/workflows/build-le-vibe-ide.yml (job linux_compile, upload-artifact).
 # E1: le-vibe/tests/test_packaging_step14_help_smoke.py; packaging/scripts/ci-editor-gate.sh (bash -n).
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md
+# Pytest: le-vibe/tests/test_preflight_step14_closeout_contract.py; verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
 
 usage() {

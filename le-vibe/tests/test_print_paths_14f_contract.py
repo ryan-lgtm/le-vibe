@@ -56,6 +56,9 @@ def test_install_vscodium_linux_tarball_to_editor_vendor_documents_14f():
     assert "download-vscodium-linux-compile-artifact.sh" in text
     assert "obtain tarball:" in text
     assert "not a regular file:" in text
+    assert "test_print_paths_14f_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_print_ci_tarball_codium_path_documents_14f():

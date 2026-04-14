@@ -27,6 +27,9 @@ def test_resolve_latest_le_vibe_stack_deb_script_documents_callers_and_globs() -
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "sort -V" in text
     assert "le-vibe_*.deb" in text
+    assert "test_resolve_latest_le_vibe_stack_deb_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_resolve_latest_le_vibe_stack_deb_prints_nothing_when_no_deb() -> None:

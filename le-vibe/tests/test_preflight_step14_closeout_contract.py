@@ -68,6 +68,9 @@ def test_verify_step14_closeout_mentions_preflight() -> None:
 def test_trigger_le_vibe_ide_linux_compile_script_contract() -> None:
     """STEP 14.e: curl workflow_dispatch for linux_compile without gh CLI."""
     text = (_repo_root() / "packaging" / "scripts" / "trigger-le-vibe-ide-linux-compile.sh").read_text(encoding="utf-8")
+    assert "test_preflight_step14_closeout_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
     assert "build-le-vibe-ide.yml" in text
     assert "vscodium_linux_compile" in text
     assert "dispatches" in text
@@ -91,6 +94,9 @@ def test_download_vscodium_linux_compile_artifact_script_contract() -> None:
     assert "LEVIBE_DOWNLOAD_ARTIFACT_MAX_PAGES" in text
     assert "archive download requires" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
+    assert "test_preflight_step14_closeout_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
     subprocess.run(
         ["bash", "-n", str(_repo_root() / "packaging" / "scripts" / "download-vscodium-linux-compile-artifact.sh")],
         check=True,
@@ -102,6 +108,10 @@ def test_print_github_linux_compile_artifact_hint_lists_browser_and_gh() -> None
     """STEP 14: offline hint documents Actions UI (no gh), gh run download, and curl+token helper."""
     root = _repo_root()
     script = root / "packaging" / "scripts" / "print-github-linux-compile-artifact-hint.sh"
+    hint_text = script.read_text(encoding="utf-8")
+    assert "test_preflight_step14_closeout_contract.py" in hint_text
+    assert "test_verify_step14_closeout_contract.py" in hint_text
+    assert ".pytest-verify-step14-contract.lock" in hint_text
     r = subprocess.run([str(script)], cwd=str(root), capture_output=True, text=True)
     assert r.returncode == 0, r.stderr
     out = r.stdout
