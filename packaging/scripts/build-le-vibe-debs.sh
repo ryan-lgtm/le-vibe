@@ -53,7 +53,9 @@ Prerequisites (IDE):  a successful dev/build.sh under editor/vscodium (see edito
   (./editor/fetch-vscode-sources.sh), then ./packaging/scripts/ci-vscodium-linux-dev-build.sh, or see editor/BUILD.md.
   If VSCode-linux-* exists but bin/codium is missing (partial build), finish dev/build.sh — editor/BUILD.md (Partial tree, 14.c);
   docs/PM_DEB_BUILD_ITERATION.md (*Partial VSCode-linux tree*); ./editor/print-built-codium-path.sh; ./editor/print-vsbuild-codium-path.sh;
-  CI linux_compile tarball: packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser Actions or gh), then packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh (editor/BUILD.md 14.f);
+  CI linux_compile tarball: packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser Actions or gh);
+  packaging/scripts/trigger-le-vibe-ide-linux-compile.sh; packaging/scripts/download-vscodium-linux-compile-artifact.sh --install;
+  then packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh (editor/BUILD.md 14.f);
   With --with-ide, build-le-vibe-debs.sh runs packaging/scripts/probe-vscode-linux-build.sh before the stack dpkg-buildpackage when no --vs-build is set — fail fast (exit 1) if the probe is not ready, so you do not spend time on the stack .deb when 14.c is incomplete. Override with --vs-build PATH to a tree that already contains bin/codium.
   stage-le-vibe-ide-deb.sh fails with the same hint. packaging/scripts/build-le-vibe-ide-deb.sh --help lists full triage + verify-step14-closeout.sh --require-stack-deb.
   Fresh clone (14.b): git submodule update --init editor/vscodium from repo root if editor/vscodium/ is empty — editor/README.md.

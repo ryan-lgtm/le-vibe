@@ -107,6 +107,8 @@ def test_build_le_vibe_ide_deb_script_documents_14b_and_bash_syntax():
     assert "print-built-codium-path.sh" in text
     assert "print-vsbuild-codium-path.sh" in text
     assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     assert "verify-step14-closeout.sh" in text
     assert "preflight-step14-closeout.sh" in text

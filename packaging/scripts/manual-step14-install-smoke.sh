@@ -50,6 +50,8 @@ Build machine prerequisites (no .debs yet — partial VSCode-linux / missing bin
   ./editor/print-built-codium-path.sh, ./editor/print-vsbuild-codium-path.sh,
   packaging/scripts/print-step14-vscode-linux-bin-files.sh (same bin/ list as lvibe ide-prereqs --json vscode_linux_bin_files),
   packaging/scripts/print-github-linux-compile-artifact-hint.sh (offline copy/paste for Actions UI + gh run download → tarball),
+  packaging/scripts/trigger-le-vibe-ide-linux-compile.sh,
+  packaging/scripts/download-vscodium-linux-compile-artifact.sh --install,
   packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh (linux_compile vscodium-linux-build.tar.gz — 14.f),
   packaging/scripts/build-le-vibe-ide-deb.sh --help (triage + verify-step14-closeout.sh),
   then packaging/scripts/build-le-vibe-debs.sh --with-ide (exits before stack dpkg-buildpackage until
