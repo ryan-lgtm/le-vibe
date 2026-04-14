@@ -18,10 +18,13 @@ Usage: editor/le-vibe-overrides/sync-linux-icon-assets.sh [--check]
 
 Copy packaging/icons/hicolor/scalable/apps/le-vibe.svg into
 editor/vscodium/src/stable/resources/linux/ and generate le-vibe.png
-(rsvg-convert preferred, or ImageMagick convert).
+(rsvg-convert preferred, or ImageMagick convert). Also writes the same mark to
+src/stable and src/insider .../vs/workbench/browser/media/code-icon.svg
+(1024x1024 — upstream Electron convention) for §7.3 window/workbench chrome.
 
-  --check    Read-only: exit 0 if staged le-vibe.svg matches the packaging canonical
-             (docs/brand-assets.md); exit 1 if missing or different — no writes.
+  --check    Read-only: exit 0 if staged linux le-vibe.svg and workbench
+             code-icon.svg files match the packaging canonical; exit 1 if missing
+             or different — no writes.
 
 Requires editor/vscodium/product.json — git submodule update --init editor/vscodium
 (Fresh clone 14.b: editor/README.md).
@@ -55,6 +58,10 @@ if [[ "$CHECK" -eq 1 ]]; then
     echo "sync-linux-icon-assets: --check requires cmp (coreutils)." >&2
     exit 1
   fi
+  if ! command -v sed >/dev/null 2>&1; then
+    echo "sync-linux-icon-assets: --check requires sed." >&2
+    exit 1
+  fi
   dest_svg="${DEST}/le-vibe.svg"
   if [[ ! -f "$dest_svg" ]]; then
     echo "sync-linux-icon-assets: --check: missing ${dest_svg} — run sync without --check first (editor/BUILD.md *Linux icons*)." >&2
@@ -64,7 +71,23 @@ if [[ "$CHECK" -eq 1 ]]; then
     echo "sync-linux-icon-assets: --check: ${dest_svg} differs from ${SRC_SVG} — run sync to refresh (docs/brand-assets.md)." >&2
     exit 1
   fi
-  echo "sync-linux-icon-assets: --check OK (le-vibe.svg matches packaging canonical)"
+  tmp_wb="$(mktemp)"
+  sed 's/width="128" height="128"/width="1024" height="1024"/' "$SRC_SVG" >"$tmp_wb"
+  for qual in stable insider; do
+    dest_wb="${VSC}/src/${qual}/src/vs/workbench/browser/media/code-icon.svg"
+    if [[ ! -f "$dest_wb" ]]; then
+      rm -f "$tmp_wb"
+      echo "sync-linux-icon-assets: --check: missing ${dest_wb} — run sync without --check first (editor/BUILD.md *Linux icons*)." >&2
+      exit 1
+    fi
+    if ! cmp -s "$tmp_wb" "$dest_wb"; then
+      rm -f "$tmp_wb"
+      echo "sync-linux-icon-assets: --check: ${dest_wb} differs from packaging-derived workbench icon — run sync to refresh (docs/brand-assets.md)." >&2
+      exit 1
+    fi
+  done
+  rm -f "$tmp_wb"
+  echo "sync-linux-icon-assets: --check OK (linux le-vibe.svg + workbench code-icon.svg match packaging canonical)"
   exit 0
 fi
 
@@ -74,6 +97,10 @@ if ! command -v mkdir >/dev/null 2>&1; then
 fi
 if ! command -v cp >/dev/null 2>&1; then
   echo "sync-linux-icon-assets: cp not on PATH — install coreutils (e.g. sudo apt install coreutils) (editor/BUILD.md §7.3 icons)." >&2
+  exit 1
+fi
+if ! command -v sed >/dev/null 2>&1; then
+  echo "sync-linux-icon-assets: sed not on PATH — install sed (e.g. sudo apt install sed) (editor/BUILD.md §7.3 icons)." >&2
   exit 1
 fi
 mkdir -p "$DEST"
@@ -86,4 +113,9 @@ else
   echo "sync-linux-icon-assets: install rsvg-convert or ImageMagick convert to create le-vibe.png — e.g. sudo apt install librsvg2-bin or sudo apt install imagemagick (Debian/Ubuntu)" >&2
   exit 1
 fi
-echo "sync-linux-icon-assets: updated ${DEST}/le-vibe.svg and le-vibe.png"
+for qual in stable insider; do
+  wb_dir="${VSC}/src/${qual}/src/vs/workbench/browser/media"
+  mkdir -p "$wb_dir"
+  sed 's/width="128" height="128"/width="1024" height="1024"/' "$SRC_SVG" >"${wb_dir}/code-icon.svg"
+done
+echo "sync-linux-icon-assets: updated ${DEST}/le-vibe.svg, le-vibe.png, and workbench code-icon.svg (stable + insider)"

@@ -35,7 +35,7 @@ Use this as a **read map** before editing upstream or recording patch notes—pa
 | **Prepare / build entrypoints** | **`product.json`**, **`prepare_src.sh`**, **`prepare_vscode.sh`**, **`dev/build.sh`**, **`build.sh`** — see **`docs/howto-build.md`** |
 | **Linux `.desktop` templates** | e.g. **`src/stable/resources/linux/code.desktop`**, **`code-url-handler.desktop`** (Insider vs stable under **`src/insider/`**) |
 | **Fetched vscode tree** | After **`fetch-vscode-sources.sh`**, **`editor/vscodium/vscode/`** — merged **Code - OSS** product metadata used at compile time |
-| **Icons vs stack** | Ship art in **[`packaging/icons/`](../../packaging/icons/)**; install targets follow upstream **`resources/linux`** / **`hicolor`** layout — **`docs/vscodium-fork-le-vibe.md`** (*Branding & overrides*) |
+| **Icons vs stack** | Ship art in **[`packaging/icons/`](../../packaging/icons/)**; **`sync-linux-icon-assets.sh`** copies into **`resources/linux`** and workbench **`code-icon.svg`** (**`src/stable`** / **`src/insider`**) per **`docs/vscodium-fork-le-vibe.md`** (*Branding & overrides*) |
 
 ## What to stage here (checklist)
 

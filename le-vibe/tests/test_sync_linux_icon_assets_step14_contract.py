@@ -26,6 +26,9 @@ def test_sync_linux_icon_assets_documents_14b():
     assert "§7.3" in text
     assert "ci-vscodium-linux-dev-build.sh" in text
     assert "src/stable/resources/linux" in text
+    assert "workbench/browser/media" in text
+    assert "code-icon.svg" in text
+    assert "for qual in stable insider" in text
     assert "expected editor/vscodium/product.json" in text
     assert "packaging/icons/hicolor/scalable/apps/le-vibe.svg" in text
     assert "git submodule update --init editor/vscodium" in text
