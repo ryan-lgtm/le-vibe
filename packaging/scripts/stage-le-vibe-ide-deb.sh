@@ -86,6 +86,7 @@ BIN="$VS_DIR/bin/codium"
 if [[ ! -e "$BIN" ]]; then
   echo "stage-le-vibe-ide-deb: missing $BIN (partial VSCode-linux tree — finish ./dev/build.sh per editor/BUILD.md 14.c *Partial tree*). From repo root: ./editor/print-built-codium-path.sh (diagnostics). If editor/vscodium/ is empty: git submodule update --init editor/vscodium (Fresh clone 14.b: editor/README.md). CI vs maintainer bundles: docs/PM_STAGE_MAP.md (H1 vs §7.3 .deb bundles); packaging/debian-le-vibe-ide/README.md." >&2
   echo "stage-le-vibe-ide-deb: or CI tarball (browser or gh): packaging/scripts/print-github-linux-compile-artifact-hint.sh" >&2
+  echo "stage-le-vibe-ide-deb: maintainer CI: packaging/scripts/trigger-le-vibe-ide-linux-compile.sh; packaging/scripts/download-vscodium-linux-compile-artifact.sh --install" >&2
   echo "stage-le-vibe-ide-deb: then: packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh /path/to/vscodium-linux-build.tar.gz --yes (editor/BUILD.md 14.f)" >&2
   exit 1
 fi

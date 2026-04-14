@@ -177,9 +177,11 @@ if [[ "$WITH_IDE" -eq 1 ]]; then
       if [[ "$_probe" == "partial" ]]; then
         echo "  Partial tree — finish: cd editor/vscodium && ./dev/build.sh (editor/BUILD.md *Partial tree*). ./editor/print-built-codium-path.sh" >&2
         echo "  Or CI tarball (browser or gh): packaging/scripts/print-github-linux-compile-artifact-hint.sh" >&2
+        echo "  Maintainer CI: packaging/scripts/trigger-le-vibe-ide-linux-compile.sh; packaging/scripts/download-vscodium-linux-compile-artifact.sh --install" >&2
         echo "  Then: packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh /path/to/vscodium-linux-build.tar.gz --yes (editor/BUILD.md 14.f)" >&2
       elif [[ "$_probe" == "absent" ]]; then
         echo "  No VSCode-linux tree — editor/BUILD.md; git submodule update --init editor/vscodium (14.b)." >&2
+        echo "  Or CI tarball: packaging/scripts/print-github-linux-compile-artifact-hint.sh; packaging/scripts/trigger-le-vibe-ide-linux-compile.sh; packaging/scripts/download-vscodium-linux-compile-artifact.sh --install — editor/BUILD.md 14.f" >&2
       else
         echo "  Probe failed (unknown) — run: packaging/scripts/probe-vscode-linux-build.sh" >&2
       fi
