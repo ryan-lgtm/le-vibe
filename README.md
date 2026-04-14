@@ -51,6 +51,18 @@ You open a project, chat and edit with Continue, and run models locally. The pro
 
 ---
 
+## How the agents work
+
+Lé Vibe uses an operator-led orchestration model: the operator agent sets goals and constraints, then specialized subagents collaborate to deliver implementation, review, and validation. For higher-risk work, subagents are expected to debate alternatives with evidence and converge on the best path before code lands.
+
+- User-friendly overview and orchestrator behavior: [`docs/AGENT_MODE_ORCHESTRATION.md`](docs/AGENT_MODE_ORCHESTRATION.md)
+- Repeatable 70-session hardening backlog (one session per task): [`docs/AGENT_ORCHESTRATION_SESSION_PLAYBOOK.md`](docs/AGENT_ORCHESTRATION_SESSION_PLAYBOOK.md)
+- Canonical loop prompt entrypoint: [`docs/MASTER_ITERATION_LOOP.md`](docs/MASTER_ITERATION_LOOP.md)
+
+If you want to run iterative engineering sessions, use the copy/paste prompt in the session playbook and increment session numbers sequentially.
+
+---
+
 ## Documentation & project depth
 
 - **Maintainer / engineering index:** [`docs/README.md`](docs/README.md) — roadmap docs, packaging, CI, trust.

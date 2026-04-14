@@ -8,6 +8,14 @@ For **Lé Vibe Phase 2** (managed Ollama on a dedicated port, configs under `~/.
 
 **Authority:** Must-ship behavior — [`../docs/PRODUCT_SPEC.md`](../docs/PRODUCT_SPEC.md). Phase 1/2 specs — [`../spec.md`](../spec.md), [`../spec-phase2.md`](../spec-phase2.md). **Optional RAG / embeddings** (not canonical): [`../docs/rag/le-vibe-phase2-chunks.md`](../docs/rag/le-vibe-phase2-chunks.md) (`lv-meta-overview`) — see **`spec-phase2.md`** *RAG / embeddings*. PM session & orchestration — [`../docs/SESSION_ORCHESTRATION_SPEC.md`](../docs/SESSION_ORCHESTRATION_SPEC.md), [`../docs/PM_STAGE_MAP.md`](../docs/PM_STAGE_MAP.md). Maintainer doc index (Roadmap **H1–H8**) — [`../docs/README.md`](../docs/README.md) (**`PRODUCT_SPEC` §9** *Maintainer index*).
 
+## How the agents work
+
+For operator/subagent coordination and iterative execution:
+
+- Operator + subagent orchestration model: [`../docs/AGENT_MODE_ORCHESTRATION.md`](../docs/AGENT_MODE_ORCHESTRATION.md)
+- 70 one-session orchestration hardening tasks: [`../docs/AGENT_ORCHESTRATION_SESSION_PLAYBOOK.md`](../docs/AGENT_ORCHESTRATION_SESSION_PLAYBOOK.md)
+- Repeatable loop prompt contract: [`../docs/MASTER_ITERATION_LOOP.md`](../docs/MASTER_ITERATION_LOOP.md)
+
 **Alternate bundles / H7 (STEP 13):** Flatpak + AppImage templates — [`../docs/flatpak-appimage.md`](../docs/flatpak-appimage.md) (`packaging/flatpak/`, `packaging/appimage/`). **`lvibe flatpak-appimage`** lists those paths from a monorepo checkout (**`--path-only doc`** / **`flatpak`** / …; **`--json`** for **`monorepo_root`**, per-file **`exists`**, **`all_present`**).
 
 **Trust / H8 — product surface (STEP 12):** [`../SECURITY.md`](../SECURITY.md) (*Related docs* — **`docs/README`** *Product surface* / **ISSUE_TEMPLATE** optional **`rag/...`*); [`../docs/privacy-and-telemetry.md`](../docs/privacy-and-telemetry.md) (*E1 contract tests* row); [`../docs/README.md`](../docs/README.md) *Product surface* — **`.github/`** — **`ci.yml`**, **`dependabot.yml`**, **`.github/ISSUE_TEMPLATE/`** ([`config.yml`](../.github/ISSUE_TEMPLATE/config.yml) **`#` H8** lines; same chain as root [`README.md`](../README.md) *Documentation index & privacy*). **`lvibe product-surface`** lists those paths from a monorepo checkout (**`--path-only ci`** / **`dependabot`** / … for one file; **`--json`** for **`monorepo_root`**, per-file **`exists`**, and **`all_present`**).
