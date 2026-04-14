@@ -56,6 +56,7 @@ def test_editor_readme_lists_production_deb_pair_step14():
     assert "ide-prereqs --print-closeout-commands" in text
     assert "--json" in text
     assert "apt_sim_note" in text
+    assert "desktop_file_validate" in text
     assert "build machine" in text
     assert "test host" in text
 

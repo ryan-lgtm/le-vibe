@@ -59,6 +59,8 @@ def test_le_vibe_readme_production_install_step14_lists_ide_deb_path():
     assert "verify-step14-closeout.sh --require-stack-deb" in text
     assert "--json" in text
     assert "apt_sim_note" in text
+    assert "desktop_file_validate" in text
+    assert "desktop_file_validate_on_path" in text
     assert "Maintainer build output" in text
     assert "build machine" in text
     assert "test host" in text
