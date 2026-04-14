@@ -55,6 +55,8 @@ def test_debian_lvibe_man_ide_prereqs_synopsis_print_closeout_commands_step14():
     assert "desktop\\-file\\-validate" in text
     assert "desktop_file_validate" in text
     assert "desktop_file_validate_on_path" in text
+    assert "\\fBgit \\-C editor/vscodium checkout" in text
+    assert "submodule restore" in text
 
 
 def test_debian_le_vibe_man_ide_prereqs_synopsis_print_closeout_commands_step14():
@@ -81,6 +83,7 @@ def test_debian_le_vibe_man_ide_prereqs_synopsis_print_closeout_commands_step14(
     assert "desktop\\-file\\-validate" in text
     assert "desktop_file_validate" in text
     assert "desktop_file_validate_on_path" in text
+    assert "\\fBgit \\-C editor/vscodium checkout" in text
 
 
 def test_debian_le_vibe_man_lists_first_run_observability_step6():

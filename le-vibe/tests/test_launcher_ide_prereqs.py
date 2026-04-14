@@ -124,6 +124,8 @@ def test_ide_prereqs_print_closeout_commands(monkeypatch: pytest.MonkeyPatch, ca
     assert "desktop_file_validate_on_path" in out
     assert "desktop_file_validate ran|skipped" in out
     assert "PM_DEB_BUILD_ITERATION.md" in out
+    assert "git -C editor/vscodium checkout -- ." in out
+    assert "Submodule tracked drift" in out
 
 
 def test_ide_prereqs_print_closeout_partial_hint(
@@ -158,6 +160,7 @@ def test_ide_prereqs_print_closeout_partial_hint(
     assert "exits before stack" in out
     assert "dpkg-buildpackage" in out
     assert "manual-step14-install-smoke.sh --verify-only" in out
+    assert "git -C editor/vscodium checkout -- ." in out
 
 
 def test_ide_prereqs_print_closeout_absent_hint(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
@@ -179,6 +182,7 @@ def test_ide_prereqs_print_closeout_absent_hint(monkeypatch: pytest.MonkeyPatch,
     assert "probe_vscode_linux_build.py" in out
     assert "exits before stack" in out
     assert "manual-step14-install-smoke.sh --verify-only" in out
+    assert "git -C editor/vscodium checkout -- ." in out
 
 
 def test_ide_prereqs_print_closeout_ready_includes_full_product_deb(
@@ -196,6 +200,7 @@ def test_ide_prereqs_print_closeout_ready_includes_full_product_deb(
     assert "preflight + verify are green" in out
     assert "./packaging/scripts/build-le-vibe-debs.sh --with-ide" in out
     assert "PM_DEB_BUILD_ITERATION.md" in out
+    assert "git -C editor/vscodium checkout -- ." in out
     assert "probe-vscode-linux-build.sh" in out
     assert "probe_vscode_linux_build.py" in out
     assert "manual-step14-install-smoke.sh --verify-only" in out

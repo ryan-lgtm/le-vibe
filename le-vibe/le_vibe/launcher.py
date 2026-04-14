@@ -955,6 +955,11 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
             print("./editor/use-node-toolchain.sh")
             print("./editor/fetch-vscode-sources.sh")
             print("(cd editor/vscodium && ./dev/build.sh)")
+        print(
+            "# Submodule tracked drift (after §7.3 prepare / ci-vscodium-linux-dev-build merge+sync) — "
+            "reset to pinned upstream; do not commit Lé Vibe layers in editor/vscodium — "
+            "editor/BUILD.md *Submodule restore*: git -C editor/vscodium checkout -- ."
+        )
         print("./packaging/scripts/preflight-step14-closeout.sh --require-stack-deb")
         print(
             "# optional: preflight --json (structured gap summary on stdout; human lines on stderr; "
