@@ -382,6 +382,8 @@ def test_pm_deb_build_iteration_doc_failure_with_ide_fail_fast_probe_step14():
     assert "vscodium-linux-build.tar.gz" in partial
     assert "print-step14-vscode-linux-bin-files.sh" in partial
     assert "print-github-linux-compile-artifact-hint.sh" in partial
+    assert "trigger-le-vibe-ide-linux-compile.sh" in partial
+    assert "download-vscodium-linux-compile-artifact.sh" in partial
     assert "Artifacts" in partial
     assert "vscode_linux_bin_files" in partial
 
