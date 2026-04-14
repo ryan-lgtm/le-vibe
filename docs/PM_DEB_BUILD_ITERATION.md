@@ -82,7 +82,7 @@ When you have both artifacts from **`build-le-vibe-debs.sh`** (stack) and **`--w
 
 ### §7.3 IDE staging — Lé Vibe identity in the built tree
 
-The **`le-vibe-ide`** package repacks **`editor/vscodium/VSCode-linux-*`**. That directory should be produced after **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** (merge **`product-branding-merge.json`**, **`sync-linux-icon-assets.sh`**, env defaults) **before** **`dev/build.sh`** — not a bare upstream compile — see **`editor/BUILD.md`** *Linux icons*.
+The **`le-vibe-ide`** package repacks **`editor/vscodium/VSCode-linux-*`**. That directory should be produced after **`packaging/scripts/ci-vscodium-linux-dev-build.sh`** (merge **`product-branding-merge.json`**, **`sync-linux-icon-assets.sh`** — **`src/stable/resources/linux`** + workbench **`code-icon.svg`**, env defaults) **before** **`dev/build.sh`** — not a bare upstream compile — see **`editor/BUILD.md`** *Linux icons*. **`lvibe ide-prereqs --json`** lists those touchpoints (including **`--path-only workbench-icon`** for the stable workbench SVG) — **`le-vibe/README.md`** *Production install (STEP 14 / §7.3)*.
 
 **[`packaging/scripts/stage-le-vibe-ide-deb.sh`](../packaging/scripts/stage-le-vibe-ide-deb.sh)** warns if **`resources/app/product.json`** lacks **Lé Vibe** strings. Optional environment (inherited by **`build-le-vibe-ide-deb.sh`** and **`build-le-vibe-debs.sh --with-ide`**):
 

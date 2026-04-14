@@ -408,6 +408,8 @@ def test_pm_deb_build_iteration_doc_731_staging_identity_step14():
     assert "ci-vscodium-linux-dev-build.sh" in text
     assert "product-branding-merge.json" in text
     assert "sync-linux-icon-assets.sh" in text
+    assert "workbench-icon" in text
+    assert "code-icon.svg" in text
     assert "LEVIBE_STAGE_IDE_ASSERT_BRAND" in text
     assert "LEVIBE_STAGE_IDE_VERBOSE" in text
     assert "LEVIBE_EDITOR_GATE_ASSERT_BRAND" in text
