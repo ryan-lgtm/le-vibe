@@ -6,6 +6,7 @@ See ``docs/SESSION_ORCHESTRATION_SPEC.md`` and ``schemas/session-manifest.v1.exa
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import uuid
 from pathlib import Path
@@ -19,6 +20,7 @@ GOAL_ALIGNMENT_CHECK_KEY = "goal_alignment_check"
 GOAL_ALIGNMENT_PHASES = {"start", "end"}
 STOP_CONDITION_CHECK_KEY = "stop_condition_check"
 RELEASE_READINESS_SUMMARY_KEY = "release_readiness_summary"
+CI_EVIDENCE_SUMMARY_KEY = "ci_evidence_summary"
 REMAINING_GAPS_REPORT_KEY = "remaining_gaps_report"
 MILESTONE_DOD_CHECKS_KEY = "milestone_definition_of_done_checks"
 MILESTONE_DEPENDENCY_VISIBILITY_KEY = "milestone_dependency_visibility"
@@ -28,6 +30,49 @@ FAILURE_MODE_CATALOG_KEY = "failure_mode_catalog"
 EVIDENCE_ARTIFACTS_KEY = "evidence_artifacts"
 EVIDENCE_ARTIFACT_RECORDS_KEY = "evidence_artifact_records"
 WORKSPACE_EVENT_SCHEMA_VERSION = "workspace_event.v1"
+BLOCKER_GROUP_BASE = "base"
+BLOCKER_GROUP_EVIDENCE = "evidence"
+FAILURE_MODE_ALLOWED_SEVERITIES: tuple[str, ...] = ("high", "medium")
+FAILURE_MODE_BLOCKER_POLICY: tuple[tuple[str, str, str], ...] = (
+    ("goal_alignment_end_not_aligned", BLOCKER_GROUP_BASE, "medium"),
+    ("stop_condition_not_met", BLOCKER_GROUP_BASE, "high"),
+    ("blocked_tasks_present", BLOCKER_GROUP_BASE, "medium"),
+    ("incomplete_tasks_present", BLOCKER_GROUP_BASE, "medium"),
+    ("milestone_definition_of_done_incomplete", BLOCKER_GROUP_BASE, "medium"),
+    ("milestone_dependency_missing_reference", BLOCKER_GROUP_BASE, "medium"),
+    ("progress_drift_detected", BLOCKER_GROUP_BASE, "medium"),
+    ("final_milestone_evidence_untraceable", BLOCKER_GROUP_EVIDENCE, "high"),
+    ("final_milestone_evidence_stale", BLOCKER_GROUP_EVIDENCE, "high"),
+    ("final_milestone_lock_not_satisfied", BLOCKER_GROUP_BASE, "high"),
+    ("ci_failures_present", BLOCKER_GROUP_BASE, "medium"),
+)
+FAILURE_MODE_SEVERITY_BY_BLOCKER: dict[str, str] = {
+    blocker_id: severity for blocker_id, _group, severity in FAILURE_MODE_BLOCKER_POLICY
+}
+RELEASE_READINESS_BASE_BLOCKER_IDS: tuple[str, ...] = tuple(
+    blocker_id
+    for blocker_id, group, _severity in FAILURE_MODE_BLOCKER_POLICY
+    if group == BLOCKER_GROUP_BASE
+)
+RELEASE_READINESS_EVIDENCE_BLOCKER_IDS: tuple[str, ...] = tuple(
+    blocker_id
+    for blocker_id, group, _severity in FAILURE_MODE_BLOCKER_POLICY
+    if group == BLOCKER_GROUP_EVIDENCE
+)
+
+
+def failure_mode_severity_taxonomy_diagnostics() -> dict[str, Any]:
+    """Return parity diagnostics between policy-used and allowed severities."""
+    allowed = set(FAILURE_MODE_ALLOWED_SEVERITIES)
+    used = {severity for _blocker_id, _group, severity in FAILURE_MODE_BLOCKER_POLICY}
+    unknown = sorted(used.difference(allowed))
+    unused = sorted(allowed.difference(used))
+    return {
+        "allowed_severities": sorted(allowed),
+        "used_severities": sorted(used),
+        "unknown_severities": unknown,
+        "unused_allowed_severities": unused,
+    }
 # Developer checklist for adding a new workspace event:
 # 1) Add event id to WORKSPACE_EVENT_REQUIRED_FIELDS with required payload keys.
 # 2) Emit the event only via _emit_workspace_event (not append_structured_log directly).
@@ -504,22 +549,18 @@ def release_readiness_summary(manifest: dict[str, Any]) -> dict[str, Any]:
     deps = milestone_dependency_visibility(manifest)
     progress = progress_confidence_report(manifest)
     lock = final_milestone_lock_criteria(manifest)
+    ci_summary = ci_evidence_summary(manifest)
     failure_catalog = failure_mode_catalog(manifest)
-    blockers: list[str] = []
-    if end_status != "aligned":
-        blockers.append("goal_alignment_end_not_aligned")
-    if not completion_allowed:
-        blockers.append("stop_condition_not_met")
-    if task_counts["blocked"] > 0:
-        blockers.append("blocked_tasks_present")
-    if task_counts["pending"] > 0 or task_counts["in_progress"] > 0:
-        blockers.append("incomplete_tasks_present")
-    if not bool(dod.get("all_passed", False)):
-        blockers.append("milestone_definition_of_done_incomplete")
-    if int(deps.get("missing_count", 0)) > 0:
-        blockers.append("milestone_dependency_missing_reference")
-    if bool(progress.get("drift_detected")):
-        blockers.append("progress_drift_detected")
+    blockers = _collect_release_readiness_base_blockers(
+        end_status=end_status,
+        completion_allowed=completion_allowed,
+        task_counts=task_counts,
+        dod=dod,
+        deps=deps,
+        progress=progress,
+        lock=lock,
+        ci_summary=ci_summary,
+    )
     lock_criteria = lock.get("criteria") if isinstance(lock.get("criteria"), dict) else {}
     if (
         bool(lock_criteria.get("goal_alignment_end_evidence_present"))
@@ -528,7 +569,7 @@ def release_readiness_summary(manifest: dict[str, Any]) -> dict[str, Any]:
         bool(lock_criteria.get("stop_condition_evidence_present"))
         and not bool(lock_criteria.get("stop_condition_evidence_traceable"))
     ):
-        blockers.append("final_milestone_evidence_untraceable")
+        blockers.append(RELEASE_READINESS_EVIDENCE_BLOCKER_IDS[0])
     if (
         bool(lock_criteria.get("goal_alignment_end_evidence_present"))
         and not bool(lock_criteria.get("goal_alignment_end_evidence_fresh"))
@@ -536,9 +577,7 @@ def release_readiness_summary(manifest: dict[str, Any]) -> dict[str, Any]:
         bool(lock_criteria.get("stop_condition_evidence_present"))
         and not bool(lock_criteria.get("stop_condition_evidence_fresh"))
     ):
-        blockers.append("final_milestone_evidence_stale")
-    if not bool(lock.get("locked", False)):
-        blockers.append("final_milestone_lock_not_satisfied")
+        blockers.append(RELEASE_READINESS_EVIDENCE_BLOCKER_IDS[1])
     return {
         "ready": len(blockers) == 0,
         "goal_alignment_end_status": end_status,
@@ -549,6 +588,7 @@ def release_readiness_summary(manifest: dict[str, Any]) -> dict[str, Any]:
         "milestone_dependency_visibility": deps,
         "progress_confidence_report": progress,
         "final_milestone_lock_criteria": lock,
+        "ci_evidence_summary": ci_summary,
         "failure_mode_catalog": failure_catalog,
         "blockers": blockers,
     }
@@ -568,6 +608,7 @@ def upsert_release_readiness_summary(
     upsert_milestone_dependency_visibility(manifest, source=source)
     upsert_progress_confidence_report(manifest, source=source)
     upsert_final_milestone_lock_criteria(manifest, source=source)
+    upsert_ci_evidence_summary(manifest, source=source)
     upsert_failure_mode_catalog(manifest, source=source)
     summary = release_readiness_summary(manifest)
     summary["source"] = source
@@ -636,6 +677,7 @@ def upsert_remaining_gaps_report(
     upsert_milestone_dependency_visibility(manifest, source=source)
     upsert_progress_confidence_report(manifest, source=source)
     upsert_final_milestone_lock_criteria(manifest, source=source)
+    upsert_ci_evidence_summary(manifest, source=source)
     upsert_failure_mode_catalog(manifest, source=source)
     report = remaining_gaps_report(manifest)
     report["source"] = source
@@ -1039,6 +1081,125 @@ def evidence_provenance_report(manifest: dict[str, Any], evidence: Any) -> dict[
     }
 
 
+def parse_ci_failure_evidence(log_text: Any) -> dict[str, Any]:
+    """
+    Parse CI log text into deterministic failure evidence records (Task 59).
+    """
+    text = str(log_text or "")
+    if not text.strip():
+        return {
+            "has_failures": False,
+            "failure_count": 0,
+            "error_count": 0,
+            "reported_failed_count": 0,
+            "reported_error_count": 0,
+            "failures": [],
+        }
+
+    failures: list[dict[str, str]] = []
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        failed_match = re.match(r"^FAILED\s+(\S+)\s+-\s+(.+)$", line)
+        if failed_match:
+            failures.append(
+                {
+                    "kind": "failed",
+                    "node_id": failed_match.group(1),
+                    "detail": failed_match.group(2).strip(),
+                }
+            )
+            continue
+        error_match = re.match(r"^ERROR\s+(\S+)\s+-\s+(.+)$", line)
+        if error_match:
+            failures.append(
+                {
+                    "kind": "error",
+                    "node_id": error_match.group(1),
+                    "detail": error_match.group(2).strip(),
+                }
+            )
+
+    # Pytest summary usually includes "... 2 failed, 1 error ..."; keep this when available.
+    reported_failed_matches = re.findall(r"\b(\d+)\s+failed\b", text)
+    reported_error_matches = re.findall(r"\b(\d+)\s+error(?:s)?\b", text)
+    reported_failed_count = int(reported_failed_matches[-1]) if reported_failed_matches else 0
+    reported_error_count = int(reported_error_matches[-1]) if reported_error_matches else 0
+
+    failed_count = sum(1 for item in failures if item.get("kind") == "failed")
+    error_count = sum(1 for item in failures if item.get("kind") == "error")
+
+    return {
+        "has_failures": (failed_count + error_count) > 0 or (reported_failed_count + reported_error_count) > 0,
+        "failure_count": failed_count,
+        "error_count": error_count,
+        "reported_failed_count": reported_failed_count,
+        "reported_error_count": reported_error_count,
+        "failures": failures,
+    }
+
+
+def ci_evidence_summary(manifest: dict[str, Any]) -> dict[str, Any]:
+    """
+    Aggregate CI-failure evidence from manifest meta for release gating (Task 59).
+    """
+    meta = manifest.get("meta")
+    if not isinstance(meta, dict):
+        return {
+            "sources": 0,
+            "has_failures": False,
+            "failure_count": 0,
+            "error_count": 0,
+            "reported_failed_count": 0,
+            "reported_error_count": 0,
+            "failures": [],
+        }
+    raw_logs: list[str] = []
+    single = meta.get("ci_failure_log")
+    if isinstance(single, str) and single.strip():
+        raw_logs.append(single)
+    multi = meta.get("ci_failure_logs")
+    if isinstance(multi, list):
+        raw_logs.extend(str(item) for item in multi if str(item).strip())
+
+    failures: list[dict[str, str]] = []
+    failure_count = 0
+    error_count = 0
+    reported_failed_count = 0
+    reported_error_count = 0
+    for log in raw_logs:
+        parsed = parse_ci_failure_evidence(log)
+        failures.extend([entry for entry in parsed.get("failures", []) if isinstance(entry, dict)])
+        failure_count += int(parsed.get("failure_count", 0))
+        error_count += int(parsed.get("error_count", 0))
+        reported_failed_count += int(parsed.get("reported_failed_count", 0))
+        reported_error_count += int(parsed.get("reported_error_count", 0))
+    return {
+        "sources": len(raw_logs),
+        "has_failures": (failure_count + error_count) > 0 or (reported_failed_count + reported_error_count) > 0,
+        "failure_count": failure_count,
+        "error_count": error_count,
+        "reported_failed_count": reported_failed_count,
+        "reported_error_count": reported_error_count,
+        "failures": failures,
+    }
+
+
+def upsert_ci_evidence_summary(
+    manifest: dict[str, Any],
+    *,
+    source: str = "session_manifest",
+) -> dict[str, Any]:
+    """Write ``meta.ci_evidence_summary`` into manifest meta."""
+    meta = manifest.get("meta")
+    if not isinstance(meta, dict):
+        meta = {}
+        manifest["meta"] = meta
+    summary = ci_evidence_summary(manifest)
+    summary["source"] = source
+    meta[CI_EVIDENCE_SUMMARY_KEY] = summary
+    return summary
+
+
 def failure_mode_catalog(manifest: dict[str, Any]) -> dict[str, Any]:
     """
     Build a catalog of active failure modes from current blockers (Task 58).
@@ -1046,10 +1207,11 @@ def failure_mode_catalog(manifest: dict[str, Any]) -> dict[str, Any]:
     blockers = list(release_readiness_summary_without_catalog(manifest).get("blockers") or [])
     modes: list[dict[str, Any]] = []
     for blocker in blockers:
+        severity = FAILURE_MODE_SEVERITY_BY_BLOCKER.get(blocker, "medium")
         modes.append(
             {
                 "id": blocker,
-                "severity": "high" if "stop_condition" in blocker or "final_milestone" in blocker else "medium",
+                "severity": severity,
                 "status": "active",
             }
         )
@@ -1081,23 +1243,17 @@ def release_readiness_summary_without_catalog(manifest: dict[str, Any]) -> dict[
     deps = milestone_dependency_visibility(manifest)
     progress = progress_confidence_report(manifest)
     lock = final_milestone_lock_criteria(manifest)
-    blockers: list[str] = []
-    if end_status != "aligned":
-        blockers.append("goal_alignment_end_not_aligned")
-    if not completion_allowed:
-        blockers.append("stop_condition_not_met")
-    if task_counts["blocked"] > 0:
-        blockers.append("blocked_tasks_present")
-    if task_counts["pending"] > 0 or task_counts["in_progress"] > 0:
-        blockers.append("incomplete_tasks_present")
-    if not bool(dod.get("all_passed", False)):
-        blockers.append("milestone_definition_of_done_incomplete")
-    if int(deps.get("missing_count", 0)) > 0:
-        blockers.append("milestone_dependency_missing_reference")
-    if bool(progress.get("drift_detected")):
-        blockers.append("progress_drift_detected")
-    if not bool(lock.get("locked", False)):
-        blockers.append("final_milestone_lock_not_satisfied")
+    ci_summary = ci_evidence_summary(manifest)
+    blockers = _collect_release_readiness_base_blockers(
+        end_status=end_status,
+        completion_allowed=completion_allowed,
+        task_counts=task_counts,
+        dod=dod,
+        deps=deps,
+        progress=progress,
+        lock=lock,
+        ci_summary=ci_summary,
+    )
     return {
         "ready": len(blockers) == 0,
         "goal_alignment_end_status": end_status,
@@ -1107,9 +1263,44 @@ def release_readiness_summary_without_catalog(manifest: dict[str, Any]) -> dict[
         "milestone_definition_of_done_checks": dod,
         "milestone_dependency_visibility": deps,
         "progress_confidence_report": progress,
+        "ci_evidence_summary": ci_summary,
         "final_milestone_lock_criteria": lock,
         "blockers": blockers,
     }
+
+
+def _collect_release_readiness_base_blockers(
+    *,
+    end_status: str,
+    completion_allowed: bool,
+    task_counts: dict[str, int],
+    dod: dict[str, Any],
+    deps: dict[str, Any],
+    progress: dict[str, Any],
+    lock: dict[str, Any],
+    ci_summary: dict[str, Any],
+) -> list[str]:
+    """Return base release-readiness blocker ids from one shared rule set."""
+    blockers: list[str] = []
+    if end_status != "aligned":
+        blockers.append(RELEASE_READINESS_BASE_BLOCKER_IDS[0])
+    if not completion_allowed:
+        blockers.append(RELEASE_READINESS_BASE_BLOCKER_IDS[1])
+    if task_counts["blocked"] > 0:
+        blockers.append(RELEASE_READINESS_BASE_BLOCKER_IDS[2])
+    if task_counts["pending"] > 0 or task_counts["in_progress"] > 0:
+        blockers.append(RELEASE_READINESS_BASE_BLOCKER_IDS[3])
+    if not bool(dod.get("all_passed", False)):
+        blockers.append(RELEASE_READINESS_BASE_BLOCKER_IDS[4])
+    if int(deps.get("missing_count", 0)) > 0:
+        blockers.append(RELEASE_READINESS_BASE_BLOCKER_IDS[5])
+    if bool(progress.get("drift_detected")):
+        blockers.append(RELEASE_READINESS_BASE_BLOCKER_IDS[6])
+    if bool(ci_summary.get("has_failures")):
+        blockers.append(RELEASE_READINESS_BASE_BLOCKER_IDS[7])
+    if not bool(lock.get("locked", False)):
+        blockers.append(RELEASE_READINESS_BASE_BLOCKER_IDS[8])
+    return blockers
 
 
 def upsert_failure_mode_catalog(

@@ -8,7 +8,7 @@
 # Pytest: le-vibe/tests/test_packaging_bin_sh_launchers_contract.py; verify JSON stubs —
 #   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 # Requires: python3 on PATH.
-export PYTHONPATH="/usr/share/le-vibe${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONPATH="/usr/share/le-vibe/le-vibe:/usr/share/le-vibe${PYTHONPATH:+:$PYTHONPATH}"
 if ! command -v python3 >/dev/null 2>&1; then
   echo "lvibe-hygiene: python3 not on PATH — install Python 3 (e.g. sudo apt install python3)." >&2
   exit 127

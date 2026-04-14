@@ -19,15 +19,36 @@ from workspace_event_contract_utils import SAFE_UPDATE_STEP_PATTERNS
 from workspace_event_contract_utils import WORKSPACE_EVENT_HELPER_INDEX_SYMBOLS
 from workspace_event_contract_utils import WORKSPACE_EVENT_HELPER_CALLABLE_SYMBOLS
 from workspace_event_contract_utils import WORKSPACE_EVENT_HELPER_CONSTANT_SYMBOLS
+from workspace_event_contract_utils import WORKSPACE_EVENT_HELPER_INTERNAL_ONLY_CONSTANT_SYMBOLS
+from workspace_event_contract_utils import INTERNAL_ONLY_REGISTRY_ORDERING_PAIR
+from workspace_event_contract_utils import CALLABLE_PLACEMENT_GUARDED_HELPERS
+from workspace_event_contract_utils import HELPER_GOVERNANCE_SPEC_PHRASES
+from workspace_event_contract_utils import HELPER_GOVERNANCE_SPEC_FIRST_PHRASE
+from workspace_event_contract_utils import HELPER_GOVERNANCE_SPEC_LAST_PHRASE
 from workspace_event_contract_utils import HELPER_INDEX_GOVERNANCE_ANCHOR_PREFIX
+from workspace_event_contract_utils import EXPORTED_HELPER_INDEX_HEADER
+from workspace_event_contract_utils import PARSE_EXPORTED_HELPER_INDEX_EDGE_CASE_IDS_CANONICAL
+from workspace_event_contract_utils import PARSE_EXPORTED_HELPER_INDEX_EDGE_CASE_IDS
+from workspace_event_contract_utils import FAILURE_MODE_DIAGNOSTIC_GOVERNANCE_INVARIANTS
+from workspace_event_contract_utils import parse_exported_helper_index
 from workspace_event_contract_utils import assert_safe_update_step_patterns_integrity
 from workspace_event_contract_utils import assert_safe_update_procedure_docstring
+from workspace_event_contract_utils import assert_internal_only_registry_integrity
+from workspace_event_contract_utils import assert_ordering_pair_integrity
+from workspace_event_contract_utils import assert_callable_surface_membership
+from workspace_event_contract_utils import assert_callable_symbols_resolve
+from workspace_event_contract_utils import assert_helper_index_export_and_resolution_consistency
+from workspace_event_contract_utils import assert_phrase_bundle_full_integrity
+from workspace_event_contract_utils import assert_expected_symbol_tuple
+from workspace_event_contract_utils import assert_constant_symbol_discoverability
+from workspace_event_contract_utils import assert_marker_adjacent_to_target_tests
 from le_vibe.session_orchestrator import (
     GOAL_ALIGNMENT_CHECK_KEY,
     SESSION_MANIFEST_FILENAME,
     STOP_CONDITION_CHECK_KEY,
     apply_opening_skip,
     bundled_session_manifest_example_path,
+    ci_evidence_summary,
     evaluate_stop_condition,
     evidence_artifact_registry,
     evidence_artifact_session_map,
@@ -48,6 +69,7 @@ from le_vibe.session_orchestrator import (
     persist_remaining_gaps_report,
     persist_release_readiness_summary,
     persist_stop_condition_check,
+    parse_ci_failure_evidence,
     remaining_gaps_report,
     release_readiness_summary,
     resolve_next_step_after_opening_skip,
@@ -62,6 +84,7 @@ from le_vibe.session_orchestrator import (
     upsert_progress_confidence_report,
     upsert_remaining_gaps_report,
     upsert_release_readiness_summary,
+    upsert_ci_evidence_summary,
     upsert_stop_condition_check,
     workspace_has_meaningful_files,
 )
@@ -70,6 +93,15 @@ from le_vibe.session_orchestrator import (
 def _expected_agent_skill_count() -> int:
     templates_dir = Path(__file__).resolve().parents[1] / "templates" / "agents"
     return len([p for p in templates_dir.glob("*.md") if p.name.lower() != "readme.md"])
+
+WORKSPACE_EVENT_PARAM_CASES = sorted(session_orchestrator.WORKSPACE_EVENT_REQUIRED_FIELDS.items())
+WORKSPACE_EVENT_PARAM_IDS = [f"event={event}" for event, _required in WORKSPACE_EVENT_PARAM_CASES]
+WORKSPACE_EVENT_REQUIRED_ONLY_PARAM_CASES = [
+    (event, required) for event, required in WORKSPACE_EVENT_PARAM_CASES if required
+]
+WORKSPACE_EVENT_REQUIRED_ONLY_PARAM_IDS = [
+    f"event={event}" for event, _required in WORKSPACE_EVENT_REQUIRED_ONLY_PARAM_CASES
+]
 
 
 # PROCEDURE_GUARD #1: safe-update step patterns satisfy shared integrity constraints.
@@ -100,6 +132,36 @@ def test_session_manifest_example_source_prefers_repo_schemas():
     assert json.loads(src.read_text(encoding="utf-8")) == json.loads(
         bundled_session_manifest_example_path().read_text(encoding="utf-8")
     )
+
+
+def test_session_manifest_examples_pin_ci_evidence_summary_shape():
+    repo_root = Path(__file__).resolve().parents[2]
+    example_paths = (
+        repo_root / "schemas" / "session-manifest.v1.example.json",
+        bundled_session_manifest_example_path(),
+    )
+    expected_keys = {
+        "sources",
+        "has_failures",
+        "failure_count",
+        "error_count",
+        "reported_failed_count",
+        "reported_error_count",
+        "failures",
+        "source",
+    }
+    for path in example_paths:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        summary = data["meta"]["ci_evidence_summary"]
+        assert set(summary.keys()) == expected_keys
+        assert isinstance(summary["sources"], int)
+        assert isinstance(summary["has_failures"], bool)
+        assert isinstance(summary["failure_count"], int)
+        assert isinstance(summary["error_count"], int)
+        assert isinstance(summary["reported_failed_count"], int)
+        assert isinstance(summary["reported_error_count"], int)
+        assert isinstance(summary["failures"], list)
+        assert summary["source"] == "session_manifest"
 
 
 def test_seed_and_sync_creates_manifest_and_agents(tmp_path: Path):
@@ -354,6 +416,16 @@ def test_seeded_manifest_contains_release_readiness_summary(tmp_path: Path):
     summary = data["meta"]["release_readiness_summary"]
     assert summary["ready"] is False
     assert "stop_condition_not_met" in summary["blockers"]
+
+
+def test_seeded_manifest_contains_ci_evidence_summary(tmp_path: Path):
+    lv = tmp_path / ".lvibe"
+    lv.mkdir()
+    seed_session_manifest_if_missing(lv)
+    data = load_session_manifest(lv)
+    summary = data["meta"]["ci_evidence_summary"]
+    assert summary["has_failures"] is False
+    assert summary["sources"] == 0
 
 
 def test_seeded_manifest_contains_remaining_gaps_report(tmp_path: Path):
@@ -679,6 +751,12 @@ def test_persist_stop_condition_check_noop_when_manifest_missing(tmp_path: Path)
         (False, True, "M9", "M9"),
         (True, True, "M8", "M9"),
     ],
+    ids=[
+        "goals_false_milestone_false",
+        "goals_true_milestone_false",
+        "goals_false_milestone_true",
+        "milestone_mismatch",
+    ],
 )
 def test_stop_condition_stays_false_until_all_final_conditions_are_true(
     product_goals_satisfied: bool,
@@ -925,7 +1003,8 @@ def test_emit_workspace_event_allows_noop_without_extra_fields(
 
 @pytest.mark.parametrize(
     ("event", "required"),
-    sorted(session_orchestrator.WORKSPACE_EVENT_REQUIRED_FIELDS.items()),
+    WORKSPACE_EVENT_PARAM_CASES,
+    ids=WORKSPACE_EVENT_PARAM_IDS,
 )
 def test_emit_workspace_event_contract_matrix(
     tmp_path: Path,
@@ -953,11 +1032,8 @@ def test_emit_workspace_event_contract_matrix(
 
 @pytest.mark.parametrize(
     ("event", "required"),
-    [
-        (event, required)
-        for event, required in sorted(session_orchestrator.WORKSPACE_EVENT_REQUIRED_FIELDS.items())
-        if required
-    ],
+    WORKSPACE_EVENT_REQUIRED_ONLY_PARAM_CASES,
+    ids=WORKSPACE_EVENT_REQUIRED_ONLY_PARAM_IDS,
 )
 def test_emit_workspace_event_rejects_missing_required_field(
     tmp_path: Path,
@@ -1052,25 +1128,7 @@ def test_governance_comment_markers_are_adjacent_to_target_tests():
         ("# Guard #2:", "def test_workspace_event_helper_index_symbols_derivation_is_explicit"),
         ("# Guard #3:", "def test_workspace_event_helper_index_symbols_keep_callable_then_constant_order"),
     )
-    for guard_prefix, fn_def_prefix in expected_pairs:
-        fn_idx = next(
-            (idx for idx, line in enumerate(lines) if line.strip().startswith(fn_def_prefix)),
-            -1,
-        )
-        assert fn_idx >= 0, fn_def_prefix
-        guard_idx = -1
-        for idx in range(fn_idx - 1, -1, -1):
-            stripped = lines[idx].strip()
-            if not stripped:
-                continue
-            if stripped.startswith("#"):
-                guard_idx = idx
-                break
-            break
-        assert guard_idx >= 0, guard_prefix
-        assert lines[guard_idx].strip().startswith(guard_prefix), (guard_prefix, lines[guard_idx].strip())
-        # Allow one blank spacer line for readability.
-        assert fn_idx - guard_idx in (1, 2), (guard_prefix, fn_def_prefix, guard_idx, fn_idx)
+    assert_marker_adjacent_to_target_tests(lines, expected_pairs)
 
 
 def test_procedure_guard_markers_are_adjacent_to_target_tests():
@@ -1079,24 +1137,61 @@ def test_procedure_guard_markers_are_adjacent_to_target_tests():
         ("# PROCEDURE_GUARD #1:", "def test_safe_update_step_patterns_integrity_guard"),
         ("# PROCEDURE_GUARD #2:", "def test_safe_update_step_patterns_integrity_helper_is_idempotent"),
     )
-    for guard_prefix, fn_def_prefix in expected_pairs:
-        fn_idx = next(
-            (idx for idx, line in enumerate(lines) if line.strip().startswith(fn_def_prefix)),
-            -1,
-        )
-        assert fn_idx >= 0, fn_def_prefix
-        guard_idx = -1
-        for idx in range(fn_idx - 1, -1, -1):
-            stripped = lines[idx].strip()
-            if not stripped:
-                continue
-            if stripped.startswith("#"):
-                guard_idx = idx
-                break
-            break
-        assert guard_idx >= 0, guard_prefix
-        assert lines[guard_idx].strip().startswith(guard_prefix), (guard_prefix, lines[guard_idx].strip())
-        assert fn_idx - guard_idx in (1, 2), (guard_prefix, fn_def_prefix, guard_idx, fn_idx)
+    assert_marker_adjacent_to_target_tests(lines, expected_pairs)
+
+
+@pytest.mark.parametrize(
+    ("lines", "should_pass"),
+    [
+        (
+            [
+                "# Guard #1: expected guard",
+                "",
+                "def test_example():",
+                "    pass",
+            ],
+            True,
+        ),
+        (
+            [
+                "def test_example():",
+                "    pass",
+            ],
+            False,
+        ),
+        (
+            [
+                "# Guard #1: expected guard",
+                "# unrelated nearest comment",
+                "def test_example():",
+                "    pass",
+            ],
+            False,
+        ),
+        (
+            [
+                "# Guard #1: expected guard",
+                "",
+                "",
+                "def test_example():",
+                "    pass",
+            ],
+            False,
+        ),
+    ],
+    ids=[
+        "valid_marker_and_spacing",
+        "missing_marker",
+        "wrong_nearest_comment",
+        "spacing_exceeds_limit",
+    ],
+)
+def test_assert_marker_adjacent_to_target_tests_table_driven(lines: list[str], should_pass: bool):
+    if should_pass:
+        assert_marker_adjacent_to_target_tests(lines, (("# Guard #1:", "def test_example"),))
+        return
+    with pytest.raises(AssertionError):
+        assert_marker_adjacent_to_target_tests(lines, (("# Guard #1:", "def test_example"),))
 
 
 def test_helper_index_governance_anchor_token_present():
@@ -1134,17 +1229,150 @@ def test_helper_index_governance_anchor_token_present():
 # HELPER_INDEX_GOVERNANCE: keeps exported symbol docs, ordering, and partition semantics aligned.
 def test_workspace_event_contract_utils_helper_index_matches_exports():
     doc = workspace_event_utils.__doc__ or ""
+    exported_names = parse_exported_helper_index(doc)
     # HELPER_INDEX_GOVERNANCE_ANCHOR_PREFIX is covered via canonical symbol tuple membership.
-    for name in WORKSPACE_EVENT_HELPER_INDEX_SYMBOLS:
-        assert f"- {name}" in doc
-        assert hasattr(workspace_event_utils, name), name
+    assert_helper_index_export_and_resolution_consistency(
+        WORKSPACE_EVENT_HELPER_INDEX_SYMBOLS,
+        WORKSPACE_EVENT_HELPER_CALLABLE_SYMBOLS,
+        workspace_event_utils,
+        exported_names,
+    )
 
 
 def test_workspace_event_contract_utils_helper_index_order_is_canonical():
     doc = workspace_event_utils.__doc__ or ""
     # Order is verified against the same canonical tuple used for export-coverage checks.
-    positions = [doc.index(f"- {name}") for name in WORKSPACE_EVENT_HELPER_INDEX_SYMBOLS]
+    exported_names = parse_exported_helper_index(doc)
+    positions = [exported_names.index(name) for name in WORKSPACE_EVENT_HELPER_INDEX_SYMBOLS]
     assert positions == sorted(positions)
+
+
+def test_workspace_event_contract_utils_docstring_trailing_failure_mode_invariant_entry():
+    doc = workspace_event_utils.__doc__ or ""
+    exported_names = parse_exported_helper_index(doc)
+    assert exported_names[-1] == "FAILURE_MODE_DIAGNOSTIC_GOVERNANCE_INVARIANTS"
+
+
+def test_parse_exported_helper_index_scopes_to_index_section_only():
+    doc = f"""
+Header
+
+{EXPORTED_HELPER_INDEX_HEADER}
+- alpha
+- beta
+
+Another section:
+- should_not_be_included
+""".strip()
+    assert parse_exported_helper_index(doc) == ["alpha", "beta"]
+
+
+@pytest.mark.parametrize(
+    ("doc", "expected"),
+    [
+        (
+            """
+Header
+- alpha
+- beta
+""".strip(),
+            [],
+        ),
+        (
+            f"""
+{EXPORTED_HELPER_INDEX_HEADER}
+- first
+
+Next section:
+{EXPORTED_HELPER_INDEX_HEADER}
+- second
+""".strip(),
+            ["first"],
+        ),
+        (
+            f"""
+{EXPORTED_HELPER_INDEX_HEADER}
+
+Next section:
+- item
+""".strip(),
+            [],
+        ),
+    ],
+    ids=PARSE_EXPORTED_HELPER_INDEX_EDGE_CASE_IDS,
+)
+def test_parse_exported_helper_index_edge_cases(doc: str, expected: list[str]):
+    assert parse_exported_helper_index(doc) == expected
+
+
+def test_parse_exported_helper_index_edge_case_ids_integrity():
+    case_ids = PARSE_EXPORTED_HELPER_INDEX_EDGE_CASE_IDS
+    assert len(case_ids) > 0
+    assert len(case_ids) == len(set(case_ids))
+    assert case_ids == PARSE_EXPORTED_HELPER_INDEX_EDGE_CASE_IDS_CANONICAL
+
+
+def test_parse_exported_helper_index_edge_case_ids_alias_identity_link():
+    assert (
+        PARSE_EXPORTED_HELPER_INDEX_EDGE_CASE_IDS
+        is PARSE_EXPORTED_HELPER_INDEX_EDGE_CASE_IDS_CANONICAL
+    )
+
+
+def test_workspace_event_helper_internal_only_constants_are_excluded_from_export_surfaces():
+    doc = workspace_event_utils.__doc__ or ""
+    exported_names = parse_exported_helper_index(doc)
+    names = WORKSPACE_EVENT_HELPER_INTERNAL_ONLY_CONSTANT_SYMBOLS
+    assert_internal_only_registry_integrity(
+        names,
+        module=workspace_event_utils,
+        exported_names=exported_names,
+        constant_symbols=WORKSPACE_EVENT_HELPER_CONSTANT_SYMBOLS,
+    )
+
+
+def test_workspace_event_helper_internal_only_registry_symbol_is_discoverable():
+    doc = workspace_event_utils.__doc__ or ""
+    exported_names = parse_exported_helper_index(doc)
+    assert_constant_symbol_discoverability(
+        "WORKSPACE_EVENT_HELPER_INTERNAL_ONLY_CONSTANT_SYMBOLS",
+        constant_symbols=WORKSPACE_EVENT_HELPER_CONSTANT_SYMBOLS,
+        exported_names=exported_names,
+    )
+
+
+def test_internal_only_registry_ordering_pair_integrity():
+    doc = workspace_event_utils.__doc__ or ""
+    exported_names = parse_exported_helper_index(doc)
+    assert_ordering_pair_integrity(INTERNAL_ONLY_REGISTRY_ORDERING_PAIR, exported_names)
+
+
+def test_helper_governance_spec_phrases_integrity():
+    assert_phrase_bundle_full_integrity(
+        HELPER_GOVERNANCE_SPEC_PHRASES,
+        first_phrase=HELPER_GOVERNANCE_SPEC_FIRST_PHRASE,
+        last_phrase=HELPER_GOVERNANCE_SPEC_LAST_PHRASE,
+    )
+
+
+def test_callable_placement_guarded_helpers_stay_in_callable_section():
+    helpers = CALLABLE_PLACEMENT_GUARDED_HELPERS
+    assert_expected_symbol_tuple(
+        helpers,
+        (
+            "assert_internal_only_registry_integrity",
+            "assert_ordering_pair_integrity",
+            "assert_phrase_bundle_integrity",
+            "assert_helper_governance_runtime_consistency",
+        ),
+    )
+    for helper_symbol in helpers:
+        assert_callable_surface_membership(
+            helper_symbol,
+            callable_symbols=WORKSPACE_EVENT_HELPER_CALLABLE_SYMBOLS,
+            constant_symbols=WORKSPACE_EVENT_HELPER_CONSTANT_SYMBOLS,
+            index_symbols=WORKSPACE_EVENT_HELPER_INDEX_SYMBOLS,
+        )
 
 
 # Guard #1: symbol list stays collision-free.
@@ -1167,6 +1395,12 @@ def test_workspace_event_helper_index_symbols_keep_callable_then_constant_order(
     callable_count = len(WORKSPACE_EVENT_HELPER_CALLABLE_SYMBOLS)
     assert WORKSPACE_EVENT_HELPER_INDEX_SYMBOLS[:callable_count] == WORKSPACE_EVENT_HELPER_CALLABLE_SYMBOLS
     assert WORKSPACE_EVENT_HELPER_INDEX_SYMBOLS[callable_count:] == WORKSPACE_EVENT_HELPER_CONSTANT_SYMBOLS
+
+
+def test_failure_mode_diagnostics_invariant_symbol_position_in_helper_constants():
+    symbol_name = "FAILURE_MODE_DIAGNOSTIC_GOVERNANCE_INVARIANTS"
+    assert symbol_name in WORKSPACE_EVENT_HELPER_CONSTANT_SYMBOLS
+    assert WORKSPACE_EVENT_HELPER_CONSTANT_SYMBOLS[-1] == symbol_name
 
 
 def test_release_readiness_summary_ready_when_checks_and_tasks_complete():
@@ -1457,6 +1691,46 @@ def test_evidence_provenance_report_marks_stale_when_session_differs():
     assert report["all_fresh"] is False
 
 
+def test_parse_ci_failure_evidence_extracts_pytest_failures_and_errors():
+    log = """
+=========================== short test summary info ============================
+FAILED tests/test_alpha.py::test_one - AssertionError: expected 1
+ERROR tests/test_beta.py::test_two - RuntimeError: boom
+========================= 1 failed, 1 error in 0.72s =========================
+""".strip()
+    parsed = parse_ci_failure_evidence(log)
+    assert parsed["has_failures"] is True
+    assert parsed["failure_count"] == 1
+    assert parsed["error_count"] == 1
+    assert parsed["reported_failed_count"] == 1
+    assert parsed["reported_error_count"] == 1
+    assert parsed["failures"][0]["node_id"] == "tests/test_alpha.py::test_one"
+    assert parsed["failures"][1]["node_id"] == "tests/test_beta.py::test_two"
+
+
+def test_ci_evidence_summary_reads_single_and_multi_log_fields():
+    manifest = {
+        "meta": {
+            "ci_failure_log": "FAILED tests/test_alpha.py::test_one - AssertionError: expected 1",
+            "ci_failure_logs": [
+                "ERROR tests/test_beta.py::test_two - RuntimeError: boom\n=== 1 error in 0.10s ===",
+            ],
+        }
+    }
+    summary = ci_evidence_summary(manifest)
+    assert summary["sources"] == 2
+    assert summary["has_failures"] is True
+    assert summary["failure_count"] == 1
+    assert summary["error_count"] == 1
+
+
+def test_upsert_ci_evidence_summary_writes_meta():
+    manifest = {"meta": {"ci_failure_log": "FAILED tests/test_alpha.py::test_one - AssertionError: expected 1"}}
+    summary = upsert_ci_evidence_summary(manifest, source="test_ci")
+    assert summary["source"] == "test_ci"
+    assert manifest["meta"]["ci_evidence_summary"]["has_failures"] is True
+
+
 def test_final_milestone_lock_criteria_requires_fresh_evidence():
     manifest = {
         "meta": {
@@ -1546,6 +1820,34 @@ def test_release_readiness_summary_adds_stale_evidence_blocker():
     assert "final_milestone_evidence_stale" in summary["blockers"]
 
 
+def test_release_readiness_summary_adds_ci_failures_blocker():
+    manifest = {
+        "meta": {
+            "evidence_artifacts": ["acceptance.complete", "exit_tests.complete"],
+            "goal_alignment_check": {"end": {"status": "aligned", "evidence": ["acceptance.complete"]}},
+            "stop_condition_check": {"completion_allowed": True, "evidence": ["exit_tests.complete"]},
+            "ci_failure_log": "FAILED tests/test_alpha.py::test_one - AssertionError: expected 1",
+        },
+        "product": {
+            "milestones": [
+                {
+                    "id": "m1",
+                    "objective": "obj",
+                    "acceptance": ["a"],
+                    "exit_tests": ["t"],
+                    "owners": ["@prod"],
+                    "dependencies": [],
+                }
+            ],
+            "epics": [{"id": "e1", "title": "x", "tasks": [{"id": "t1", "status": "done"}]}],
+        },
+    }
+    summary = release_readiness_summary(manifest)
+    assert "ci_evidence_summary" in summary
+    assert summary["ci_evidence_summary"]["has_failures"] is True
+    assert "ci_failures_present" in summary["blockers"]
+
+
 def test_upsert_final_milestone_lock_criteria_writes_meta():
     manifest = {
         "meta": {
@@ -1584,6 +1886,218 @@ def test_failure_mode_catalog_maps_blockers_to_entries():
     assert "stop_condition_not_met" in ids
     stop_mode = next(m for m in cat["modes"] if m["id"] == "stop_condition_not_met")
     assert stop_mode["severity"] == "high"
+
+
+def test_failure_mode_catalog_includes_ci_failures_present_with_medium_severity():
+    manifest = {
+        "meta": {
+            "evidence_artifacts": ["acceptance.complete", "exit_tests.complete"],
+            "goal_alignment_check": {"end": {"status": "aligned", "evidence": ["acceptance.complete"]}},
+            "stop_condition_check": {"completion_allowed": True, "evidence": ["exit_tests.complete"]},
+            "ci_failure_log": "FAILED tests/test_alpha.py::test_one - AssertionError: expected 1",
+        },
+        "product": {
+            "milestones": [
+                {
+                    "id": "m1",
+                    "objective": "obj",
+                    "acceptance": ["a"],
+                    "exit_tests": ["t"],
+                    "owners": ["@prod"],
+                    "dependencies": [],
+                }
+            ],
+            "epics": [{"id": "e1", "title": "x", "tasks": [{"id": "t1", "status": "done"}]}],
+        },
+    }
+    cat = failure_mode_catalog(manifest)
+    ci_mode = next(m for m in cat["modes"] if m["id"] == "ci_failures_present")
+    assert ci_mode["severity"] == "medium"
+    assert ci_mode["status"] == "active"
+
+
+def test_failure_mode_severity_policy_map_covers_known_blockers():
+    expected = {
+        "goal_alignment_end_not_aligned": "medium",
+        "stop_condition_not_met": "high",
+        "blocked_tasks_present": "medium",
+        "incomplete_tasks_present": "medium",
+        "milestone_definition_of_done_incomplete": "medium",
+        "milestone_dependency_missing_reference": "medium",
+        "progress_drift_detected": "medium",
+        "final_milestone_evidence_untraceable": "high",
+        "final_milestone_evidence_stale": "high",
+        "final_milestone_lock_not_satisfied": "high",
+        "ci_failures_present": "medium",
+    }
+    assert session_orchestrator.FAILURE_MODE_SEVERITY_BY_BLOCKER == expected
+
+
+def test_failure_mode_catalog_uses_severity_policy_map():
+    manifest = {
+        "meta": {
+            "evidence_artifacts": ["acceptance.complete", "exit_tests.complete"],
+            "goal_alignment_check": {"end": {"status": "aligned", "evidence": ["acceptance.complete"]}},
+            "stop_condition_check": {"completion_allowed": True, "evidence": ["missing.trace"]},
+            "ci_failure_log": "FAILED tests/test_alpha.py::test_one - AssertionError: expected 1",
+        },
+        "product": {
+            "milestones": [
+                {
+                    "id": "m1",
+                    "objective": "obj",
+                    "acceptance": ["a"],
+                    "exit_tests": ["t"],
+                    "owners": ["@prod"],
+                    "dependencies": [],
+                }
+            ],
+            "epics": [{"id": "e1", "title": "x", "tasks": [{"id": "t1", "status": "done"}]}],
+        },
+    }
+    cat = failure_mode_catalog(manifest)
+    for mode in cat["modes"]:
+        blocker = mode["id"]
+        assert mode["severity"] == session_orchestrator.FAILURE_MODE_SEVERITY_BY_BLOCKER.get(blocker, "medium")
+
+
+def test_failure_mode_severity_policy_map_covers_all_emitted_blockers():
+    emitted = set(session_orchestrator.RELEASE_READINESS_BASE_BLOCKER_IDS).union(
+        set(session_orchestrator.RELEASE_READINESS_EVIDENCE_BLOCKER_IDS)
+    )
+    # Coverage guard: every central blocker id requires explicit severity policy.
+    missing = emitted.difference(session_orchestrator.FAILURE_MODE_SEVERITY_BY_BLOCKER.keys())
+    assert missing == set()
+
+
+def test_failure_mode_blocker_policy_derives_maps_and_groups():
+    policy = session_orchestrator.FAILURE_MODE_BLOCKER_POLICY
+    assert policy, "expected non-empty blocker policy"
+    derived_map = {bid: sev for bid, _group, sev in policy}
+    derived_base = tuple(
+        bid for bid, group, _sev in policy if group == session_orchestrator.BLOCKER_GROUP_BASE
+    )
+    derived_evidence = tuple(
+        bid for bid, group, _sev in policy if group == session_orchestrator.BLOCKER_GROUP_EVIDENCE
+    )
+    assert session_orchestrator.FAILURE_MODE_SEVERITY_BY_BLOCKER == derived_map
+    assert session_orchestrator.RELEASE_READINESS_BASE_BLOCKER_IDS == derived_base
+    assert session_orchestrator.RELEASE_READINESS_EVIDENCE_BLOCKER_IDS == derived_evidence
+
+
+def test_failure_mode_blocker_policy_shape_unique_ids_and_allowed_groups():
+    policy = session_orchestrator.FAILURE_MODE_BLOCKER_POLICY
+    blocker_ids = [bid for bid, _group, _sev in policy]
+    groups = {group for _bid, group, _sev in policy}
+    assert len(blocker_ids) == len(set(blocker_ids))
+    assert groups == {
+        session_orchestrator.BLOCKER_GROUP_BASE,
+        session_orchestrator.BLOCKER_GROUP_EVIDENCE,
+    }
+
+
+def test_failure_mode_blocker_policy_tuple_shape_and_severity_taxonomy():
+    policy = session_orchestrator.FAILURE_MODE_BLOCKER_POLICY
+    allowed_severity = set(session_orchestrator.FAILURE_MODE_ALLOWED_SEVERITIES)
+    for entry in policy:
+        assert isinstance(entry, tuple)
+        assert len(entry) == 3
+        blocker_id, _group, severity = entry
+        assert isinstance(blocker_id, str) and blocker_id
+        assert severity in allowed_severity
+
+
+def test_failure_mode_allowed_severities_integrity():
+    allowed = session_orchestrator.FAILURE_MODE_ALLOWED_SEVERITIES
+    assert isinstance(allowed, tuple)
+    assert len(allowed) > 0
+    assert len(allowed) == len(set(allowed))
+    assert allowed == ("high", "medium")
+
+
+def test_failure_mode_policy_severity_parity_with_allowed_taxonomy():
+    diagnostics = session_orchestrator.failure_mode_severity_taxonomy_diagnostics()
+    assert diagnostics["unknown_severities"] == []
+    assert diagnostics["unused_allowed_severities"] == []
+
+
+def test_failure_mode_severity_taxonomy_diagnostics_contract_shape():
+    diagnostics = session_orchestrator.failure_mode_severity_taxonomy_diagnostics()
+    assert set(diagnostics.keys()) == {
+        "allowed_severities",
+        "used_severities",
+        "unknown_severities",
+        "unused_allowed_severities",
+    }
+    assert isinstance(diagnostics["allowed_severities"], list)
+    assert isinstance(diagnostics["used_severities"], list)
+    assert isinstance(diagnostics["unknown_severities"], list)
+    assert isinstance(diagnostics["unused_allowed_severities"], list)
+
+
+def test_failure_mode_severity_taxonomy_diagnostics_ordering():
+    diagnostics = session_orchestrator.failure_mode_severity_taxonomy_diagnostics()
+    assert diagnostics["allowed_severities"] == sorted(diagnostics["allowed_severities"])
+    assert diagnostics["used_severities"] == sorted(diagnostics["used_severities"])
+
+
+def test_failure_mode_severity_taxonomy_diagnostics_links_allowed_source_constant():
+    diagnostics = session_orchestrator.failure_mode_severity_taxonomy_diagnostics()
+    assert diagnostics["allowed_severities"] == sorted(session_orchestrator.FAILURE_MODE_ALLOWED_SEVERITIES)
+
+
+def test_failure_mode_severity_taxonomy_diagnostics_links_used_source_policy():
+    diagnostics = session_orchestrator.failure_mode_severity_taxonomy_diagnostics()
+    expected = sorted({severity for _bid, _group, severity in session_orchestrator.FAILURE_MODE_BLOCKER_POLICY})
+    assert diagnostics["used_severities"] == expected
+
+
+def test_failure_mode_severity_taxonomy_diagnostics_governance_table():
+    diagnostics = session_orchestrator.failure_mode_severity_taxonomy_diagnostics()
+    checks = (
+        (
+            FAILURE_MODE_DIAGNOSTIC_GOVERNANCE_INVARIANTS[0],
+            set(diagnostics.keys())
+            == {
+                "allowed_severities",
+                "used_severities",
+                "unknown_severities",
+                "unused_allowed_severities",
+            },
+        ),
+        (
+            FAILURE_MODE_DIAGNOSTIC_GOVERNANCE_INVARIANTS[1],
+            all(
+                isinstance(diagnostics[key], list)
+                for key in (
+                    "allowed_severities",
+                    "used_severities",
+                    "unknown_severities",
+                    "unused_allowed_severities",
+                )
+            ),
+        ),
+        (
+            FAILURE_MODE_DIAGNOSTIC_GOVERNANCE_INVARIANTS[2],
+            diagnostics["allowed_severities"] == sorted(diagnostics["allowed_severities"])
+            and diagnostics["used_severities"] == sorted(diagnostics["used_severities"]),
+        ),
+        (
+            FAILURE_MODE_DIAGNOSTIC_GOVERNANCE_INVARIANTS[3],
+            diagnostics["allowed_severities"] == sorted(session_orchestrator.FAILURE_MODE_ALLOWED_SEVERITIES),
+        ),
+        (
+            FAILURE_MODE_DIAGNOSTIC_GOVERNANCE_INVARIANTS[4],
+            diagnostics["used_severities"]
+            == sorted({severity for _bid, _group, severity in session_orchestrator.FAILURE_MODE_BLOCKER_POLICY}),
+        ),
+        (
+            FAILURE_MODE_DIAGNOSTIC_GOVERNANCE_INVARIANTS[5],
+            diagnostics["unknown_severities"] == [] and diagnostics["unused_allowed_severities"] == [],
+        ),
+    )
+    failed = [name for name, ok in checks if not ok]
+    assert failed == [], failed
 
 
 def test_upsert_failure_mode_catalog_writes_meta():

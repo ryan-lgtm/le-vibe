@@ -79,6 +79,16 @@
       ],
       "source": "session_manifest"
     },
+    "ci_evidence_summary": {
+      "sources": 0,
+      "has_failures": false,
+      "failure_count": 0,
+      "error_count": 0,
+      "reported_failed_count": 0,
+      "reported_error_count": 0,
+      "failures": [],
+      "source": "session_manifest"
+    },
     "remaining_gaps_report": {
       "has_gaps": true,
       "gap_count": 3,

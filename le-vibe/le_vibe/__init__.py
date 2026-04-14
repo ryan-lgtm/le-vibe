@@ -17,6 +17,7 @@ from .continue_workspace import (
 from .editor_welcome import WELCOME_MD_NAME, ensure_lvibe_welcome_md
 from .session_orchestrator import (
     apply_opening_skip,
+    ci_evidence_summary,
     evaluate_stop_condition,
     evidence_artifact_registry,
     evidence_artifact_session_map,
@@ -36,6 +37,7 @@ from .session_orchestrator import (
     persist_remaining_gaps_report,
     persist_release_readiness_summary,
     persist_stop_condition_check,
+    parse_ci_failure_evidence,
     remaining_gaps_report,
     release_readiness_summary,
     resolve_next_step_after_opening_skip,
@@ -50,6 +52,7 @@ from .session_orchestrator import (
     upsert_remaining_gaps_report,
     upsert_release_readiness_summary,
     upsert_stop_condition_check,
+    upsert_ci_evidence_summary,
 )
 from .welcome import maybe_print_welcome, welcome_marker_path
 from .workspace_hub import (
@@ -70,6 +73,7 @@ __all__ = [
     "WELCOME_MD_NAME",
     "ManagedOllamaState",
     "apply_opening_skip",
+    "ci_evidence_summary",
     "ensure_continue_lvibe_rules",
     "ensure_lvibe_welcome_md",
     "ensure_bootstrap",
@@ -99,10 +103,12 @@ __all__ = [
     "persist_remaining_gaps_report",
     "persist_release_readiness_summary",
     "persist_stop_condition_check",
+    "parse_ci_failure_evidence",
     "remaining_gaps_report",
     "release_readiness_summary",
     "session_manifest_example_source_path",
     "upsert_goal_alignment_check",
+    "upsert_ci_evidence_summary",
     "upsert_final_milestone_lock_criteria",
     "upsert_failure_mode_catalog",
     "upsert_milestone_dependency_visibility",
