@@ -18,6 +18,25 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def _backup_and_stub_codium(path: Path) -> tuple[bool, bytes | None, int]:
+    existed = path.exists()
+    original = path.read_bytes() if existed else None
+    original_mode = path.stat().st_mode if existed else 0o755
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
+    os.chmod(path, 0o755)
+    return existed, original, original_mode
+
+
+def _restore_codium(path: Path, snapshot: tuple[bool, bytes | None, int]) -> None:
+    existed, original, original_mode = snapshot
+    if existed and original is not None:
+        path.write_bytes(original)
+        os.chmod(path, original_mode)
+    else:
+        path.unlink(missing_ok=True)
+
+
 def _artifact_lock_fd() -> int:
     lock_path = _repo_root() / "le-vibe" / ".pytest-verify-step14-contract.lock"
     lock_path.parent.mkdir(parents=True, exist_ok=True)
@@ -73,6 +92,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "packaging/le-vibe-ide_*.deb" in text
     assert "--require-stack-deb" in text
     assert "--apt-sim" in text
+    assert "--apt-sim-allow-host-failure" in text
     assert "--skip-gate" in text
     assert "--json" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
@@ -90,6 +110,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "resolve-latest-le-vibe-stack-deb.sh" in text
     assert "assert_deb_contains" in text
     assert "assert_deb_contains_any" in text
+    assert "assert_deb_not_contains" in text
     assert "assert_deb_field_equals" in text
     assert "assert_deb_file_contains" in text
     assert "assert_deb_path_is_executable" in text
@@ -102,6 +123,9 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "./usr/share/applications/le-vibe.desktop" in text
     assert "./usr/share/icons/hicolor/scalable/apps/le-vibe.svg" in text
     assert "./usr/lib/le-vibe/bin/codium" in text
+    assert "./usr/bin/le-vibe-ide" in text
+    assert "./usr/bin/codium" in text
+    assert "ide public CLI check" in text
     assert "Name=Lé Vibe" in text
     assert "Exec=/usr/lib/le-vibe/bin/codium %F" in text
     assert "./usr/bin/lvibe" in text
@@ -118,6 +142,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert '"codium_path":' in text
     assert '"ide_deb":' in text
     assert '"apt_sim_note":' in text
+    assert "host_state_error_allowed" in text
     assert "desktop_file_validate" in text
     assert "JSON success (--json)" in text
     assert "requested_without_stack_requirement" in text
@@ -152,9 +177,7 @@ def _verify_step14_closeout_json_mode_outputs_parseable_payload_impl() -> None:
         stack_deb = root.parent / "le-vibe_9999.0.0_all.deb"
         ide_deb = packaging_dir / "le-vibe-ide_9999.0.0_amd64.deb"
         fake_codium = root / "editor" / "vscodium" / "VSCode-linux-x64" / "bin" / "codium"
-        fake_codium.parent.mkdir(parents=True, exist_ok=True)
-        fake_codium.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
-        os.chmod(fake_codium, 0o755)
+        codium_snapshot = _backup_and_stub_codium(fake_codium)
         stack_deb.write_bytes(b"placeholder")
         ide_deb.write_bytes(b"placeholder")
         try:
@@ -162,13 +185,20 @@ def _verify_step14_closeout_json_mode_outputs_parseable_payload_impl() -> None:
                 """#!/usr/bin/env bash
 set -euo pipefail
 if [[ "$1" == "--contents" ]]; then
-  cat <<'EOF'
+  deb_path="$2"
+  if [[ "$deb_path" == *"le-vibe-ide_"* ]]; then
+    cat <<'EOF'
 -rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/lib/le-vibe/bin/codium
--rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/bin/lvibe
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/applications/le-vibe.desktop
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg
+-rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/doc/le-vibe-ide/README.Debian
+EOF
+  else
+    cat <<'EOF'
+-rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/bin/lvibe
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/doc/le-vibe/README.Debian
 EOF
+  fi
   exit 0
 fi
 if [[ "$1" == "--field" ]]; then
@@ -243,7 +273,7 @@ EOF
             assert payload["codium_path"].endswith("editor/vscodium/VSCode-linux-x64/bin/codium")
             assert "==> STEP 14 gate: skipped (--skip-gate)" in result.stderr
         finally:
-            fake_codium.unlink(missing_ok=True)
+            _restore_codium(fake_codium, codium_snapshot)
             ide_deb.unlink(missing_ok=True)
             stack_deb.unlink(missing_ok=True)
 
@@ -263,9 +293,7 @@ def _verify_step14_closeout_json_mode_apt_sim_ran_with_stack_requirement_impl() 
         stack_deb = root.parent / "le-vibe_9999.0.4_all.deb"
         ide_deb = packaging_dir / "le-vibe-ide_9999.0.4_amd64.deb"
         fake_codium = root / "editor" / "vscodium" / "VSCode-linux-x64" / "bin" / "codium"
-        fake_codium.parent.mkdir(parents=True, exist_ok=True)
-        fake_codium.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
-        os.chmod(fake_codium, 0o755)
+        codium_snapshot = _backup_and_stub_codium(fake_codium)
         stack_deb.write_bytes(b"placeholder")
         ide_deb.write_bytes(b"placeholder")
         try:
@@ -273,13 +301,20 @@ def _verify_step14_closeout_json_mode_apt_sim_ran_with_stack_requirement_impl() 
                 """#!/usr/bin/env bash
 set -euo pipefail
 if [[ "$1" == "--contents" ]]; then
-  cat <<'EOF'
+  deb_path="$2"
+  if [[ "$deb_path" == *"le-vibe-ide_"* ]]; then
+    cat <<'EOF'
 -rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/lib/le-vibe/bin/codium
--rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/bin/lvibe
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/applications/le-vibe.desktop
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg
+-rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/doc/le-vibe-ide/README.Debian
+EOF
+  else
+    cat <<'EOF'
+-rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/bin/lvibe
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/doc/le-vibe/README.Debian
 EOF
+  fi
   exit 0
 fi
 if [[ "$1" == "--field" ]]; then
@@ -362,7 +397,7 @@ exit 1
             assert payload["apt_sim_note"] == "ran"
             assert payload["desktop_file_validate"] == "ran"
         finally:
-            fake_codium.unlink(missing_ok=True)
+            _restore_codium(fake_codium, codium_snapshot)
             ide_deb.unlink(missing_ok=True)
             stack_deb.unlink(missing_ok=True)
 
@@ -382,9 +417,7 @@ def _verify_step14_closeout_json_mode_reports_apt_sim_requested_without_stack_re
         packaging_dir = root / "packaging"
         ide_deb = packaging_dir / "le-vibe-ide_9999.0.1_amd64.deb"
         fake_codium = root / "editor" / "vscodium" / "VSCode-linux-x64" / "bin" / "codium"
-        fake_codium.parent.mkdir(parents=True, exist_ok=True)
-        fake_codium.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
-        os.chmod(fake_codium, 0o755)
+        codium_snapshot = _backup_and_stub_codium(fake_codium)
         ide_deb.write_bytes(b"placeholder")
         try:
             (stub_dir / "dpkg-deb").write_text(
@@ -458,13 +491,139 @@ EOF
             assert payload["apt_sim_note"] == "requested_without_stack_requirement"
             assert payload["desktop_file_validate"] == "ran"
         finally:
-            fake_codium.unlink(missing_ok=True)
+            _restore_codium(fake_codium, codium_snapshot)
             ide_deb.unlink(missing_ok=True)
 
 
 def test_verify_step14_closeout_json_mode_reports_apt_sim_requested_without_stack_requirement() -> None:
     _run_with_step14_contract_artifact_lock(
         _verify_step14_closeout_json_mode_reports_apt_sim_requested_without_stack_requirement_impl
+    )
+
+
+def _verify_step14_closeout_json_mode_reports_host_state_error_allowed_for_apt_sim_impl() -> None:
+    root = _repo_root()
+    script = root / "packaging" / "scripts" / "verify-step14-closeout.sh"
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_root = Path(tmp_dir)
+        stub_dir = tmp_root / "bin"
+        stub_dir.mkdir()
+        packaging_dir = root / "packaging"
+        stack_deb = root.parent / "le-vibe_9999.0.8_all.deb"
+        ide_deb = packaging_dir / "le-vibe-ide_9999.0.8_amd64.deb"
+        fake_codium = root / "editor" / "vscodium" / "VSCode-linux-x64" / "bin" / "codium"
+        codium_snapshot = _backup_and_stub_codium(fake_codium)
+        stack_deb.write_bytes(b"placeholder")
+        ide_deb.write_bytes(b"placeholder")
+        try:
+            (stub_dir / "dpkg-deb").write_text(
+                """#!/usr/bin/env bash
+set -euo pipefail
+if [[ "$1" == "--contents" ]]; then
+  deb_path="$2"
+  if [[ "$deb_path" == *"le-vibe-ide_"* ]]; then
+    cat <<'EOF'
+-rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/lib/le-vibe/bin/codium
+-rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/applications/le-vibe.desktop
+-rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg
+EOF
+  else
+    cat <<'EOF'
+-rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/bin/lvibe
+-rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/doc/le-vibe/README.Debian
+EOF
+  fi
+  exit 0
+fi
+if [[ "$1" == "--field" ]]; then
+  deb_path="$2"
+  field="$3"
+  if [[ "$field" == "Package" ]]; then
+    if [[ "$deb_path" == *"le-vibe-ide_"* ]]; then
+      printf 'le-vibe-ide\\n'
+    else
+      printf 'le-vibe\\n'
+    fi
+    exit 0
+  fi
+  if [[ "$field" == "Architecture" ]]; then
+    if [[ "$deb_path" == *"le-vibe-ide_"* ]]; then
+      printf 'amd64\\n'
+    else
+      printf 'all\\n'
+    fi
+    exit 0
+  fi
+fi
+if [[ "$1" == "--fsys-tarfile" ]]; then
+  cat <<'EOF'
+dummy-tar-stream
+EOF
+  exit 0
+fi
+echo "unexpected dpkg-deb args: $*" >&2
+exit 1
+""",
+                encoding="utf-8",
+            )
+            os.chmod(stub_dir / "dpkg-deb", 0o755)
+            (stub_dir / "tar").write_text(
+                """#!/usr/bin/env bash
+set -euo pipefail
+cat <<'EOF'
+[Desktop Entry]
+Name=Lé Vibe
+Exec=/usr/lib/le-vibe/bin/codium %F
+EOF
+""",
+                encoding="utf-8",
+            )
+            os.chmod(stub_dir / "tar", 0o755)
+            (stub_dir / "desktop-file-validate").write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
+            os.chmod(stub_dir / "desktop-file-validate", 0o755)
+            (stub_dir / "apt-get").write_text(
+                """#!/usr/bin/env bash
+set -euo pipefail
+echo "Reading package lists..."
+echo "The following packages have unmet dependencies:"
+echo " le-vibe : Depends: ollama but it is not installable"
+echo "E: Unable to correct problems, you have held broken packages."
+exit 100
+""",
+                encoding="utf-8",
+            )
+            os.chmod(stub_dir / "apt-get", 0o755)
+            result = subprocess.run(
+                [
+                    str(script),
+                    "--skip-gate",
+                    "--require-stack-deb",
+                    "--apt-sim",
+                    "--apt-sim-allow-host-failure",
+                    "--json",
+                ],
+                cwd=str(root),
+                capture_output=True,
+                text=True,
+                env={
+                    "PATH": str(stub_dir) + ":" + str(Path("/usr/bin")) + ":" + str(Path("/bin")),
+                },
+            )
+            assert result.returncode == 0, result.stderr
+            payload = json.loads(result.stdout)
+            assert payload["status"] == "ok"
+            assert payload["apt_sim_requested"] is True
+            assert payload["apt_sim_ran"] is True
+            assert payload["apt_sim_note"] == "host_state_error_allowed"
+        finally:
+            _restore_codium(fake_codium, codium_snapshot)
+            ide_deb.unlink(missing_ok=True)
+            stack_deb.unlink(missing_ok=True)
+
+
+def test_verify_step14_closeout_json_mode_reports_host_state_error_allowed_for_apt_sim() -> None:
+    _run_with_step14_contract_artifact_lock(
+        _verify_step14_closeout_json_mode_reports_host_state_error_allowed_for_apt_sim_impl
     )
 
 
@@ -479,9 +638,7 @@ def _verify_step14_closeout_json_mode_escapes_special_chars_in_paths_impl() -> N
         stack_deb = root.parent / 'le-vibe_9999.9.9_"quotes"_all.deb'
         ide_deb = packaging_dir / 'le-vibe-ide_9999.9.9_"quotes"_amd64.deb'
         fake_codium = root / "editor" / "vscodium" / "VSCode-linux-x64" / "bin" / "codium"
-        fake_codium.parent.mkdir(parents=True, exist_ok=True)
-        fake_codium.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
-        os.chmod(fake_codium, 0o755)
+        codium_snapshot = _backup_and_stub_codium(fake_codium)
         stack_deb.write_bytes(b"placeholder")
         ide_deb.write_bytes(b"placeholder")
         try:
@@ -489,13 +646,20 @@ def _verify_step14_closeout_json_mode_escapes_special_chars_in_paths_impl() -> N
                 """#!/usr/bin/env bash
 set -euo pipefail
 if [[ "$1" == "--contents" ]]; then
-  cat <<'EOF'
+  deb_path="$2"
+  if [[ "$deb_path" == *"le-vibe-ide_"* ]]; then
+    cat <<'EOF'
 -rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/lib/le-vibe/bin/codium
--rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/bin/lvibe
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/applications/le-vibe.desktop
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/icons/hicolor/scalable/apps/le-vibe.svg
+-rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/doc/le-vibe-ide/README.Debian
+EOF
+  else
+    cat <<'EOF'
+-rwxr-xr-x root/root         0 2026-01-01 00:00 ./usr/bin/lvibe
 -rw-r--r-- root/root         0 2026-01-01 00:00 ./usr/share/doc/le-vibe/README.Debian
 EOF
+  fi
   exit 0
 fi
 if [[ "$1" == "--field" ]]; then
@@ -564,7 +728,7 @@ EOF
             assert payload["apt_sim_note"] == "not_requested"
             assert payload["desktop_file_validate"] == "ran"
         finally:
-            fake_codium.unlink(missing_ok=True)
+            _restore_codium(fake_codium, codium_snapshot)
             ide_deb.unlink(missing_ok=True)
             stack_deb.unlink(missing_ok=True)
 
@@ -615,9 +779,7 @@ def _verify_step14_closeout_json_emits_error_when_ide_deb_missing_impl() -> None
     script = root / "packaging" / "scripts" / "verify-step14-closeout.sh"
     packaging_dir = root / "packaging"
     fake_codium = root / "editor" / "vscodium" / "VSCode-linux-x64" / "bin" / "codium"
-    fake_codium.parent.mkdir(parents=True, exist_ok=True)
-    fake_codium.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
-    os.chmod(fake_codium, 0o755)
+    codium_snapshot = _backup_and_stub_codium(fake_codium)
     moved: list[tuple[Path, Path]] = []
     aside = tempfile.mkdtemp(prefix="le-vibe-ide-deb-aside-")
     try:
@@ -638,7 +800,7 @@ def _verify_step14_closeout_json_emits_error_when_ide_deb_missing_impl() -> None
         assert payload["vscode_linux_build"] == "ready"
         assert "message" in payload
     finally:
-        fake_codium.unlink(missing_ok=True)
+        _restore_codium(fake_codium, codium_snapshot)
         for orig, dest in moved:
             if dest.is_file():
                 shutil.move(str(dest), str(orig))

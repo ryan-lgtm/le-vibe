@@ -99,6 +99,7 @@ fi
 echo "check-linux-vscodium-build-deps: missing Debian packages: ${missing[*]:-(none)}" >&2
 echo "check-linux-vscodium-build-deps: install (Debian/Ubuntu):" >&2
 echo "  ./packaging/scripts/install-linux-vscodium-build-deps.sh" >&2
+echo "  ./packaging/scripts/install-linux-vscodium-build-deps.sh --print-install-command" >&2
 echo "  # or: sudo apt-get update && sudo apt-get install -y ${missing[*]}" >&2
 if [[ "${_pydev_ok}" -eq 0 ]]; then
   echo "  # also: sudo apt-get install -y python3.11-dev   # ubuntu-22.04 / CI pkgs, or python3.12-dev on 24.04+" >&2

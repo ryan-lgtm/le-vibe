@@ -213,6 +213,7 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "GenericName=" in desktop
     assert "Exec=/usr/lib/le-vibe/bin/codium" in desktop
     assert "Icon=le-vibe" in desktop
+    assert "Categories=Development;IDE;" in desktop
     assert "test_packaging_le_vibe_ide_deb_contract.py" in desktop
     assert "test_verify_step14_closeout_contract.py" in desktop
     assert ".pytest-verify-step14-contract.lock" in desktop

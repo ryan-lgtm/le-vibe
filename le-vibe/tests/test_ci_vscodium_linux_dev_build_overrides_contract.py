@@ -44,7 +44,12 @@ def test_ci_vscodium_linux_dev_build_documents_overrides_hook():
     assert "LEVIBE_SKIP_NODE_VERSION_CHECK" in text
     assert "LEVIBE_VSCODIUM_PREPARE_ONLY" in text
     assert "LEVIBE_SKIP_HOST_DEPS_CHECK" in text
+    assert "LEVIBE_AUTO_DOCKER_FALLBACK" in text
     assert "check-linux-vscodium-build-deps.sh" in text
+    assert "install-linux-vscodium-build-deps.sh --print-install-command" in text
+    assert "docker-le-vibe-vscodium-linux-compile.sh" in text
+    assert "attempting docker fallback now" in text
+    assert "no host apt mutation" in text
     assert "node --version" in text
     assert "grep not on PATH" in text
     assert "sed not on PATH" in text

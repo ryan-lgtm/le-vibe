@@ -20,6 +20,24 @@ REQUIRE_STACK_DEB=0
 SKIP_GATE=0
 PRINT_JSON=0
 
+_pick_latest_valid_deb() {
+  local label="$1"
+  shift
+  local matches=("$@")
+  local sorted=()
+  local cand
+  mapfile -t sorted < <(printf '%s\n' "${matches[@]}" | sort -V)
+  for (( idx=${#sorted[@]}-1; idx>=0; idx-- )); do
+    cand="${sorted[$idx]}"
+    if dpkg-deb --field "$cand" Package >/dev/null 2>&1; then
+      printf '%s\n' "$cand"
+      return 0
+    fi
+  done
+  echo "[missing] no valid .deb archive for ${label} (found ${#sorted[@]} candidate file(s), all unreadable)" >&2
+  return 1
+}
+
 json_escape() {
   local value="$1"
   value="${value//\\/\\\\}"
@@ -123,7 +141,14 @@ fi
 shopt -s nullglob
 ide_debs=("$ROOT"/packaging/le-vibe-ide_*.deb)
 if [[ ${#ide_debs[@]} -gt 0 ]]; then
-  _ide_deb="$(printf '%s\n' "${ide_debs[@]}" | sort -V | tail -n1)"
+  if ! _ide_deb="$(_pick_latest_valid_deb "packaging/le-vibe-ide_*.deb" "${ide_debs[@]}")"; then
+    IDE_STATE="missing"
+    failures=$((failures + 1))
+    DESKTOP_STATE="none"
+    _ide_deb=""
+  fi
+fi
+if [[ -n "${_ide_deb:-}" ]]; then
   p_out "[ok] packaging/le-vibe-ide_*.deb ($_ide_deb)"
   # Same payload path as verify-step14-closeout.sh (§7.3 Freedesktop icon).
   _hicon_listed="./usr/share/icons/hicolor/scalable/apps/le-vibe.svg"
@@ -133,6 +158,27 @@ if [[ ${#ide_debs[@]} -gt 0 ]]; then
   else
     echo "[missing] ${_hicon_listed} not in dpkg-deb --contents of ${_ide_deb} — rebuild IDE .deb (packaging/debian-le-vibe-ide/debian/le-vibe-ide.install)" >&2
     HICON_STATE="missing"
+    failures=$((failures + 1))
+  fi
+  # §7.3: only lvibe is public PATH CLI from the stack package, not the IDE .deb.
+  _forbidden_public_cli=(
+    "./usr/bin/lvibe"
+    "./usr/bin/le-vibe"
+    "./usr/bin/le-vibe-ide"
+    "./usr/bin/codium"
+  )
+  _forbidden_hit=""
+  for _forbidden in "${_forbidden_public_cli[@]}"; do
+    if dpkg-deb --contents "$_ide_deb" 2>/dev/null | grep -Fq "$_forbidden"; then
+      _forbidden_hit="$_forbidden"
+      break
+    fi
+  done
+  if [[ -z "$_forbidden_hit" ]]; then
+    p_out "[ok] ide .deb exports no public PATH CLI payload (/usr/bin/*)"
+  else
+    echo "[missing] IDE .deb unexpectedly exposes public CLI path ${_forbidden_hit} — keep PATH command in stack package (`/usr/bin/lvibe`) only" >&2
+    IDE_STATE="missing"
     failures=$((failures + 1))
   fi
   # Freedesktop QA on packaged le-vibe.desktop (same extraction as build-le-vibe-ide-deb.sh post-build).

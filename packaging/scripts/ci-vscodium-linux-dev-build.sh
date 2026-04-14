@@ -36,6 +36,8 @@ Environment:
                                       dev/build.sh patch, then exit without running dev/build.sh (no compile).
   LEVIBE_SKIP_HOST_DEPS_CHECK         Set to 1 to skip packaging/scripts/check-linux-vscodium-build-deps.sh
                                       (Linux full compile only; CI installs apt deps before this script).
+  LEVIBE_AUTO_DOCKER_FALLBACK         Set to 1 to auto-run docker-le-vibe-vscodium-linux-compile.sh when
+                                      Linux host dependency preflight fails (self-hosted fallback).
 
 Authority: editor/BUILD.md (Linux icons, 14.e), docs/vscodium-fork-le-vibe.md.
 EOF
@@ -110,6 +112,12 @@ fi
 if [[ "${LEVIBE_VSCODIUM_PREPARE_ONLY:-}" != "1" && "${LEVIBE_SKIP_HOST_DEPS_CHECK:-}" != "1" && "$(uname -s)" == "Linux" ]]; then
   echo "ci-vscodium-linux-dev-build: Linux host dependency preflight (check-linux-vscodium-build-deps.sh)..."
   if ! "${ROOT}/packaging/scripts/check-linux-vscodium-build-deps.sh"; then
+    echo "ci-vscodium-linux-dev-build: host install hint: ${ROOT}/packaging/scripts/install-linux-vscodium-build-deps.sh --print-install-command" >&2
+    echo "ci-vscodium-linux-dev-build: docker fallback (no host apt mutation): ${ROOT}/packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh" >&2
+    if [[ "${LEVIBE_AUTO_DOCKER_FALLBACK:-}" == "1" ]]; then
+      echo "ci-vscodium-linux-dev-build: LEVIBE_AUTO_DOCKER_FALLBACK=1 — attempting docker fallback now..." >&2
+      exec "${ROOT}/packaging/scripts/docker-le-vibe-vscodium-linux-compile.sh"
+    fi
     echo "ci-vscodium-linux-dev-build: install packages from the hint above, or LEVIBE_SKIP_HOST_DEPS_CHECK=1 to continue at your own risk (editor/BUILD.md 14.e)." >&2
     exit 1
   fi

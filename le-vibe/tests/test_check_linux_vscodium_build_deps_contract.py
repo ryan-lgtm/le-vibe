@@ -28,6 +28,9 @@ def test_install_linux_vscodium_build_deps_script_bash_syntax() -> None:
     assert "PM_STAGE_MAP.md" in text
     assert "EUID" in text
     assert "_apt" in text
+    assert "--print-install-command" in text
+    assert "sudo -n true" in text
+    assert "interactive password" in text
     assert "test_check_linux_vscodium_build_deps_contract.py" in text
     assert "test_verify_step14_closeout_contract.py" in text
     assert ".pytest-verify-step14-contract.lock" in text
@@ -42,6 +45,7 @@ def test_check_linux_vscodium_build_deps_matches_ci_apt_list() -> None:
     assert "PM_STAGE_MAP.md" in text
     assert "linux-vscodium-ci-apt.pkgs" in text
     assert "install-linux-vscodium-build-deps.sh" in text
+    assert "--print-install-command" in text
     assert "libxkbfile-dev" in text
     assert "_python_dev_headers_ok" in text
     assert "python3.12-dev" in text

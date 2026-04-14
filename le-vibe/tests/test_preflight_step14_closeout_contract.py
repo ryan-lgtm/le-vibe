@@ -27,6 +27,8 @@ def test_preflight_step14_closeout_script_documents_checks() -> None:
     assert "desktop_in_deb" in text
     assert "hicolor_icon_in_deb" in text
     assert "usr/share/icons/hicolor/scalable/apps/le-vibe.svg" in text
+    assert "no public PATH CLI payload" in text
+    assert "./usr/bin/le-vibe-ide" in text
     assert "verify-step14-closeout.sh" in text
     assert "ci-editor-gate.sh" in text
     assert "verify-14c-local-binary.sh" in text

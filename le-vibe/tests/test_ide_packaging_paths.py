@@ -88,6 +88,17 @@ def test_vscode_linux_build_status_ready(tmp_path: Path) -> None:
     assert p == tmp_path / "editor" / "vscodium" / "VSCode-linux-x64"
 
 
+def test_vscode_linux_build_status_codium_not_executable_is_partial(tmp_path: Path) -> None:
+    bindir = tmp_path / "editor" / "vscodium" / "VSCode-linux-x64" / "bin"
+    bindir.mkdir(parents=True)
+    c = bindir / "codium"
+    c.write_text("#!/bin/sh\n", encoding="utf-8")
+    c.chmod(0o644)
+    st, p = vscode_linux_build_status(tmp_path)
+    assert st == "partial"
+    assert p == tmp_path / "editor" / "vscodium" / "VSCode-linux-x64"
+
+
 def test_vscode_linux_bin_filenames_none_when_no_tree() -> None:
     assert vscode_linux_bin_filenames(None) is None
 

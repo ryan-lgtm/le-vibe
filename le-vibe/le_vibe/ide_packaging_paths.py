@@ -29,7 +29,7 @@ def vscode_linux_build_status(root: Path) -> tuple[VscodeLinuxBuildStatus, Path 
     """
     Classify the local VSCode-linux output under ``editor/vscodium/``.
 
-    * **ready** — ``VSCode-linux-*/bin/codium`` exists (14.c complete).
+    * **ready** — ``VSCode-linux-*/bin/codium`` exists and is executable (14.c complete).
     * **partial** — a ``VSCode-linux-*`` directory exists but ``bin/codium`` is missing
       (incomplete compile; see ``editor/BUILD.md`` *Partial tree*).
     * **absent** — no usable tree (fresh submodule or no build yet).
@@ -38,7 +38,8 @@ def vscode_linux_build_status(root: Path) -> tuple[VscodeLinuxBuildStatus, Path 
     if not vsc.is_dir():
         return "absent", None
     for p in sorted(vsc.glob("VSCode-linux-*")):
-        if p.is_dir() and (p / "bin" / "codium").is_file():
+        codium = p / "bin" / "codium"
+        if p.is_dir() and codium.is_file() and codium.stat().st_mode & 0o111:
             return "ready", p.resolve()
     for p in sorted(vsc.glob("VSCode-linux-*")):
         if p.is_dir():
@@ -275,14 +276,14 @@ def vscode_linux_compile_gate_progress(root: Path) -> dict[str, object]:
     )
 
     codium_path = vs_tree / "bin" / "codium" if vs_tree is not None else None
-    ok = codium_path is not None and codium_path.is_file()
+    ok = codium_path is not None and codium_path.is_file() and codium_path.stat().st_mode & 0o111
     w = 30
     if ok:
         score += w
     milestones.append(
         {
             "id": "codium_binary",
-            "label": "VSCode-linux-*/bin/codium exists (compile gate complete)",
+            "label": "VSCode-linux-*/bin/codium exists and is executable (compile gate complete)",
             "weight": w,
             "done": ok,
         }

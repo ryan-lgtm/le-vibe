@@ -17,6 +17,7 @@ cd "$ROOT"
 REQUIRE_STACK_DEB=0
 SKIP_GATE=0
 ENABLE_APT_SIM=0
+ALLOW_APT_SIM_HOST_FAILURE=0
 PRINT_JSON=0
 DESKTOP_FILE_VALIDATE="skipped"
 
@@ -90,6 +91,24 @@ pick_latest_match() {
   printf '%s\n' "${sorted[$idx]}"
 }
 
+pick_latest_valid_deb() {
+  local label="$1"
+  shift
+  local matches=("$@")
+  local sorted=()
+  local cand
+  mapfile -t sorted < <(printf '%s\n' "${matches[@]}" | sort -V)
+  for (( idx=${#sorted[@]}-1; idx>=0; idx-- )); do
+    cand="${sorted[$idx]}"
+    if dpkg-deb --field "$cand" Package >/dev/null 2>&1; then
+      printf '%s\n' "$cand"
+      return 0
+    fi
+  done
+  echo "verify-step14-closeout: no valid .deb archive for $label (found ${#sorted[@]} candidate file(s), all unreadable)." >&2
+  return 1
+}
+
 assert_deb_contains() {
   local deb_path="$1"
   local needle="$2"
@@ -114,6 +133,17 @@ assert_deb_contains_any() {
   done
   echo "verify-step14-closeout: $deb_path missing expected payload entries (any of): $*" >&2
   exit 1
+}
+
+assert_deb_not_contains() {
+  local deb_path="$1"
+  local needle="$2"
+  local contents
+  contents="$(dpkg-deb --contents "$deb_path")"
+  if grep -Fq "$needle" <<<"$contents"; then
+    echo "verify-step14-closeout: $deb_path unexpectedly contains forbidden payload path: $needle" >&2
+    exit 1
+  fi
 }
 
 assert_deb_field_equals() {
@@ -170,17 +200,24 @@ assert_apt_simulated_install() {
     exit 2
   fi
   if ! apt_output="$(apt-get -s install "$stack_deb" "$ide_deb" 2>&1)"; then
+    if [[ "$ALLOW_APT_SIM_HOST_FAILURE" -eq 1 ]] && [[ "$apt_output" == *"not installable"* || "$apt_output" == *"held broken packages"* ]]; then
+      echo "verify-step14-closeout: apt simulation host-state failure allowed by --apt-sim-allow-host-failure." >&2
+      echo "verify-step14-closeout: apt-get -s output follows:" >&2
+      printf '%s\n' "$apt_output" >&2
+      return 3
+    fi
     echo "verify-step14-closeout: apt simulation failed for stack+IDE deb pair." >&2
     echo "verify-step14-closeout: apt-get -s output follows:" >&2
     printf '%s\n' "$apt_output" >&2
     echo "verify-step14-closeout: this usually indicates host apt state issues (held/broken packages), not .deb payload drift." >&2
-    exit 1
+    return 1
   fi
+  return 0
 }
 
 usage() {
   cat <<'EOF'
-Usage: packaging/scripts/verify-step14-closeout.sh [--require-stack-deb] [--apt-sim] [--skip-gate] [--json]
+Usage: packaging/scripts/verify-step14-closeout.sh [--require-stack-deb] [--apt-sim] [--apt-sim-allow-host-failure] [--skip-gate] [--json]
 
 Checks local STEP 14 / §7.3 readiness:
   1) packaging/scripts/ci-editor-gate.sh (unless --skip-gate),
@@ -188,6 +225,7 @@ Checks local STEP 14 / §7.3 readiness:
   3) packaging/le-vibe-ide_*.deb exists and passes content checks:
      - launcher payload paths exist (`le-vibe.desktop`, `/usr/lib/le-vibe/bin/codium`,
        `hicolor/scalable/apps/le-vibe.svg`),
+     - no public CLI payload under `/usr/bin` (IDE package must not expose a second PATH command),
      - desktop content contains `Name=Lé Vibe` and `Exec=/usr/lib/le-vibe/bin/codium %F`,
      - optional (when desktop-file-validate is on PATH): Freedesktop validation of packaged
        `le-vibe.desktop` (same extraction as preflight-step14-closeout / build-le-vibe-ide-deb.sh),
@@ -200,6 +238,9 @@ Options:
                         - metadata is `Package: le-vibe`, `Architecture: all`.
   --apt-sim             When used with --require-stack-deb, run:
                         `apt-get -s install <stack.deb> <ide.deb>`.
+  --apt-sim-allow-host-failure
+                        With --apt-sim, treat known host apt resolver failures
+                        ("not installable", "held broken packages") as non-fatal.
   --skip-gate           Skip ci-editor-gate.sh (faster local check).
   --json                Emit machine-readable JSON on stdout: success payload when all checks pass;
                         on failure, a single-line object with status=error and step in
@@ -213,7 +254,7 @@ JSON success (--json) includes:
   desktop_file_validate (ran | skipped — packaged le-vibe.desktop via
   desktop-file-validate when desktop-file-utils is on PATH),
   apt_sim_requested, apt_sim_ran, apt_sim_note
-  (not_requested | ran | requested_without_stack_requirement).
+  (not_requested | ran | requested_without_stack_requirement | host_state_error_allowed).
 
 See also:
   - packaging/scripts/build-le-vibe-debs.sh --with-ide
@@ -233,6 +274,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --require-stack-deb) REQUIRE_STACK_DEB=1 ;;
     --apt-sim) ENABLE_APT_SIM=1 ;;
+    --apt-sim-allow-host-failure) ALLOW_APT_SIM_HOST_FAILURE=1 ;;
     --skip-gate) SKIP_GATE=1 ;;
     --json) PRINT_JSON=1 ;;
     -h|--help) usage; exit 0 ;;
@@ -298,13 +340,24 @@ if [[ ${#ide_debs[@]} -eq 0 ]]; then
   echo "verify-step14-closeout: missing packaging/le-vibe-ide_*.deb — run packaging/scripts/build-le-vibe-ide-deb.sh or build-le-vibe-debs.sh --with-ide." >&2
   exit 1
 fi
-ide_deb_latest="$(pick_latest_match "packaging/le-vibe-ide_*.deb" "${ide_debs[@]}")"
+if ! ide_deb_latest="$(pick_latest_valid_deb "packaging/le-vibe-ide_*.deb" "${ide_debs[@]}")"; then
+  if [[ "$PRINT_JSON" -eq 1 ]]; then
+    _vlb_ide="$("$ROOT/packaging/scripts/probe-vscode-linux-build.sh" "$ROOT")"
+    emit_json_error_ide_deb_missing "$_vlb_ide"
+  fi
+  exit 1
+fi
 log_note "    ide deb: $ide_deb_latest"
 log_note "    ide deb payload check: /usr/share/applications/le-vibe.desktop + /usr/lib/le-vibe/bin/codium + hicolor icon"
 assert_deb_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop"
 assert_deb_contains "$ide_deb_latest" "./usr/lib/le-vibe/bin/codium"
 assert_deb_contains "$ide_deb_latest" "./usr/share/icons/hicolor/scalable/apps/le-vibe.svg"
 assert_deb_path_is_executable "$ide_deb_latest" "./usr/lib/le-vibe/bin/codium"
+log_note "    ide public CLI check: forbidden in IDE .deb (/usr/bin/{lvibe,le-vibe,le-vibe-ide,codium})"
+assert_deb_not_contains "$ide_deb_latest" "./usr/bin/lvibe"
+assert_deb_not_contains "$ide_deb_latest" "./usr/bin/le-vibe"
+assert_deb_not_contains "$ide_deb_latest" "./usr/bin/le-vibe-ide"
+assert_deb_not_contains "$ide_deb_latest" "./usr/bin/codium"
 log_note "    ide desktop check: Name=Lé Vibe + Exec=/usr/lib/le-vibe/bin/codium %F"
 assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop" "Name=Lé Vibe"
 assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop" "Exec=/usr/lib/le-vibe/bin/codium %F"
@@ -360,7 +413,16 @@ if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
   assert_deb_field_equals "$stack_deb_latest" "Architecture" "all"
   if [[ "$ENABLE_APT_SIM" -eq 1 ]]; then
     log_note "    apt simulation check: apt-get -s install <stack.deb> <ide.deb>"
+    set +e
     assert_apt_simulated_install "$stack_deb_latest" "$ide_deb_latest"
+    _apt_sim_ec=$?
+    set -e
+    if [[ "$_apt_sim_ec" -eq 1 || "$_apt_sim_ec" -eq 2 ]]; then
+      exit "$_apt_sim_ec"
+    fi
+    if [[ "$_apt_sim_ec" -eq 3 ]]; then
+      apt_sim_note="host_state_error_allowed"
+    fi
   else
     log_note "    apt simulation check: skipped (use --apt-sim)"
   fi
@@ -370,10 +432,10 @@ if [[ "$PRINT_JSON" -eq 1 ]]; then
   codium_json="$(json_escape "$CODIUM_PATH")"
   ide_json="$(json_escape "$ide_deb_latest")"
   stack_json=""
-  apt_sim_note="not_requested"
+  apt_sim_note="${apt_sim_note:-not_requested}"
   if [[ "$REQUIRE_STACK_DEB" -eq 1 ]]; then
     stack_json="$(json_escape "$stack_deb_latest")"
-    if [[ "$ENABLE_APT_SIM" -eq 1 ]]; then
+    if [[ "$ENABLE_APT_SIM" -eq 1 && "$apt_sim_note" == "not_requested" ]]; then
       apt_sim_note="ran"
     fi
   elif [[ "$ENABLE_APT_SIM" -eq 1 ]]; then

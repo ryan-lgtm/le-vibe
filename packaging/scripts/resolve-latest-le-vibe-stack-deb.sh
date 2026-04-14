@@ -38,4 +38,12 @@ shopt -u nullglob
 if [[ ${#cands[@]} -eq 0 ]]; then
   exit 0
 fi
-printf '%s\n' "${cands[@]}" | sort -V | tail -n1
+mapfile -t _sorted < <(printf '%s\n' "${cands[@]}" | sort -V)
+for (( idx=${#_sorted[@]}-1; idx>=0; idx-- )); do
+  _cand="${_sorted[$idx]}"
+  if dpkg-deb --field "$_cand" Package >/dev/null 2>&1; then
+    printf '%s\n' "$_cand"
+    exit 0
+  fi
+done
+exit 0
