@@ -38,6 +38,8 @@ def test_step14_autonomous_runbook_documents_closeout_verifier():
     assert "print-vsbuild-codium-path" in text
     assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "print-github-linux-compile-artifact-hint.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
+    assert "download-vscodium-linux-compile-artifact.sh" in text
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in text
     assert "print-ci-tarball-codium-path.sh" in text
     assert "build-le-vibe-ide-deb.sh --help" in text
