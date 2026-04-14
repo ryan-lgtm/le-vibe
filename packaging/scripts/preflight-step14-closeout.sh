@@ -10,7 +10,7 @@
 # After the 14.c check, prints vscode_linux_build: ready|partial|absent — packaging/scripts/probe-vscode-linux-build.sh
 # (same classifier as lvibe ide-prereqs --json / verify-step14-closeout.sh --json).
 # Optional --json: human lines go to stderr; one machine-readable JSON object on stdout (aligned with verify-step14-closeout.sh steps).
-# Pytest contract (JSON / stubs): le-vibe/tests/test_verify_step14_closeout_contract.py — fcntl lock + shared placeholder .debs; .gitignore: le-vibe/.pytest-verify-step14-contract.lock.
+# Pytest contract: le-vibe/tests/test_preflight_step14_closeout_contract.py (JSON shape); verify-step14-closeout.sh — le-vibe/tests/test_verify_step14_closeout_contract.py; .gitignore: le-vibe/.pytest-verify-step14-contract.lock.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -48,7 +48,7 @@ Prints one line per check ([ok] / [missing]) then a summary. Exit 0 iff all chec
   --require-stack-deb   Also require le-vibe_*.deb (resolve-latest-le-vibe-stack-deb.sh).
   --skip-gate           Skip ci-editor-gate.sh (faster when only checking artifacts).
   --json                Human-readable lines to stderr; one JSON summary on stdout (gate, codium,
-                        ide_deb, desktop_file_validate, stack_deb, vscode_linux_build, failures).
+                        ide_deb, hicolor_icon_in_deb, desktop_in_deb, stack_deb, vscode_linux_build, failures).
 
 See packaging/scripts/verify-step14-closeout.sh for the strict single-pass verifier.
 EOF
@@ -73,6 +73,7 @@ failures=0
 GATE_STATE="ok"
 CODIUM_STATE="ok"
 IDE_STATE="ok"
+HICON_STATE="none"
 DESKTOP_STATE="skipped"
 STACK_STATE="not_required"
 
@@ -122,17 +123,19 @@ fi
 shopt -s nullglob
 ide_debs=("$ROOT"/packaging/le-vibe-ide_*.deb)
 if [[ ${#ide_debs[@]} -gt 0 ]]; then
-  _ide="$(printf '%s\n' "${ide_debs[@]}" | sort -V | tail -n1)"
-  p_out "[ok] packaging/le-vibe-ide_*.deb ($_ide)"
-else
-  echo "[missing] packaging/le-vibe-ide_*.deb — packaging/scripts/build-le-vibe-ide-deb.sh or build-le-vibe-debs.sh --with-ide" >&2
-  IDE_STATE="missing"
-  failures=$((failures + 1))
-fi
-
-# When an IDE .deb is present: Freedesktop QA on packaged le-vibe.desktop (same extraction as build-le-vibe-ide-deb.sh post-build).
-if [[ ${#ide_debs[@]} -gt 0 ]]; then
   _ide_deb="$(printf '%s\n' "${ide_debs[@]}" | sort -V | tail -n1)"
+  p_out "[ok] packaging/le-vibe-ide_*.deb ($_ide_deb)"
+  # Same payload path as verify-step14-closeout.sh (§7.3 Freedesktop icon).
+  _hicon_listed="./usr/share/icons/hicolor/scalable/apps/le-vibe.svg"
+  if dpkg-deb --contents "$_ide_deb" 2>/dev/null | grep -Fq "$_hicon_listed"; then
+    p_out "[ok] ide .deb lists ${_hicon_listed} (hicolor — §7.3)"
+    HICON_STATE="ok"
+  else
+    echo "[missing] ${_hicon_listed} not in dpkg-deb --contents of ${_ide_deb} — rebuild IDE .deb (packaging/debian-le-vibe-ide/debian/le-vibe-ide.install)" >&2
+    HICON_STATE="missing"
+    failures=$((failures + 1))
+  fi
+  # Freedesktop QA on packaged le-vibe.desktop (same extraction as build-le-vibe-ide-deb.sh post-build).
   if command -v desktop-file-validate >/dev/null 2>&1; then
     _desk_tmp="$(mktemp "${TMPDIR:-/tmp}/le-vibe-desk-XXXXXXXX.desktop")"
     _ok=0
@@ -162,6 +165,9 @@ if [[ ${#ide_debs[@]} -gt 0 ]]; then
     p_out "[optional] desktop-file-validate not on PATH — skipped packaged .desktop check (install desktop-file-utils; build-le-vibe-ide-deb.sh runs this after dpkg-buildpackage)"
   fi
 else
+  echo "[missing] packaging/le-vibe-ide_*.deb — packaging/scripts/build-le-vibe-ide-deb.sh or build-le-vibe-debs.sh --with-ide" >&2
+  IDE_STATE="missing"
+  failures=$((failures + 1))
   DESKTOP_STATE="none"
 fi
 
@@ -192,8 +198,8 @@ if [[ "$PRINT_JSON" -eq 1 ]]; then
   else
     _bf_json='"vscode_linux_bin_files":null'
   fi
-  printf '{"status":"%s","failures":%d,"gate":"%s","codium":"%s","ide_deb":"%s","desktop_in_deb":"%s","stack_deb":"%s","vscode_linux_build":"%s",%s}\n' \
-    "$_status" "$failures" "$GATE_STATE" "$CODIUM_STATE" "$IDE_STATE" "$DESKTOP_STATE" "$STACK_STATE" "$_vj" "$_bf_json"
+  printf '{"status":"%s","failures":%d,"gate":"%s","codium":"%s","ide_deb":"%s","hicolor_icon_in_deb":"%s","desktop_in_deb":"%s","stack_deb":"%s","vscode_linux_build":"%s",%s}\n' \
+    "$_status" "$failures" "$GATE_STATE" "$CODIUM_STATE" "$IDE_STATE" "$HICON_STATE" "$DESKTOP_STATE" "$STACK_STATE" "$_vj" "$_bf_json"
 fi
 
 if [[ "$failures" -eq 0 ]]; then

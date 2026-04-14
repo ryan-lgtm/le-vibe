@@ -25,6 +25,8 @@ def test_preflight_step14_closeout_script_documents_checks() -> None:
     assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "--json" in text
     assert "desktop_in_deb" in text
+    assert "hicolor_icon_in_deb" in text
+    assert "usr/share/icons/hicolor/scalable/apps/le-vibe.svg" in text
     assert "verify-step14-closeout.sh" in text
     assert "ci-editor-gate.sh" in text
     assert "verify-14c-local-binary.sh" in text
@@ -87,6 +89,7 @@ def test_preflight_step14_closeout_json_stdout_matches_probe() -> None:
     assert "codium" in payload
     assert "ide_deb" in payload
     assert "desktop_in_deb" in payload
+    assert "hicolor_icon_in_deb" in payload
     assert "stack_deb" in payload
     assert payload["status"] in ("ok", "error")
 

@@ -237,6 +237,7 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "Verified 2026-04-13" in sec73
     assert "held broken packages" in sec73
     assert "verify-step14-closeout.sh --require-stack-deb" in sec73
+    assert "hicolor_icon_in_deb" in sec73
     assert "preflight-step14-closeout.sh" in sec73
     assert "ide-prereqs --print-closeout-commands" in sec73
     assert "probe-vscode-linux-build.sh" in sec73

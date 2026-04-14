@@ -144,6 +144,7 @@ def test_pm_deb_build_iteration_doc_preflight_verify_stderr_vscode_linux_build_s
     assert "verify-step14-closeout.sh --json" in sec
     assert "verify-step14-closeout.sh" in sec and "stderr" in sec
     assert "desktop_in_deb" in sec
+    assert "hicolor_icon_in_deb" in sec
     assert "preflight-step14-closeout.sh" in sec and "machine-readable" in sec
 
 
