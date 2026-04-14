@@ -27,6 +27,9 @@ def test_ci_editor_gate_header_documents_le_vibe_deb_vs_ide_deb_step14():
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "Full-product install" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
+    assert "test_ci_editor_gate_step14_contract.py" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_ci_editor_gate_documents_step14_smoke_and_overrides_e1():

@@ -22,6 +22,8 @@
 #   GitHub Actions run Summary — Pre-binary artifact line (LE_VIBE_EDITOR pointer) — same test.
 # 14.c: bash -n editor/smoke-lvibe-editor.sh (launcher ↔ LE_VIBE_EDITOR smoke; see editor/BUILD.md).
 # VSCodium’s repo uses product.json + get_repo.sh (no root package.json until vscode is fetched).
+# Pytest: le-vibe/tests/test_ci_editor_gate_step14_contract.py (this script); verify JSON stubs —
+#   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
