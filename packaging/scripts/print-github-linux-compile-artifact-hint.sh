@@ -38,6 +38,10 @@ if [[ $# -gt 0 ]]; then
   exit 2
 fi
 
+echo "# === Trigger linux_compile (14.e) — needs token with repo scope ==="
+echo "#    packaging/scripts/trigger-le-vibe-ide-linux-compile.sh [--ref main]"
+echo "#    (workflow_dispatch vscodium_linux_compile=true → watch Actions → then download artifact below)"
+echo "#"
 echo "# === CI tarball — build-le-vibe-ide.yml job linux_compile (14.e) → 14.f ==="
 echo "# Artifact contains: vscodium-linux-build.tar.gz (VSCode-linux-* tree)."
 echo "#"

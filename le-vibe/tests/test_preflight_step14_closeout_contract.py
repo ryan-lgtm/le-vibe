@@ -61,6 +61,20 @@ def test_verify_step14_closeout_mentions_preflight() -> None:
     assert "preflight-step14-closeout.sh" in text
 
 
+def test_trigger_le_vibe_ide_linux_compile_script_contract() -> None:
+    """STEP 14.e: curl workflow_dispatch for linux_compile without gh CLI."""
+    text = (_repo_root() / "packaging" / "scripts" / "trigger-le-vibe-ide-linux-compile.sh").read_text(encoding="utf-8")
+    assert "build-le-vibe-ide.yml" in text
+    assert "vscodium_linux_compile" in text
+    assert "dispatches" in text
+    assert "204" in text
+    subprocess.run(
+        ["bash", "-n", str(_repo_root() / "packaging" / "scripts" / "trigger-le-vibe-ide-linux-compile.sh")],
+        check=True,
+        capture_output=True,
+    )
+
+
 def test_download_vscodium_linux_compile_artifact_script_contract() -> None:
     """STEP 14.f: curl+token path for linux_compile tarball (no gh CLI)."""
     text = (_repo_root() / "packaging" / "scripts" / "download-vscodium-linux-compile-artifact.sh").read_text(
@@ -92,3 +106,4 @@ def test_print_github_linux_compile_artifact_hint_lists_browser_and_gh() -> None
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in out
     assert "download-vscodium-linux-compile-artifact.sh" in out
     assert "public repos" in out
+    assert "trigger-le-vibe-ide-linux-compile.sh" in out
