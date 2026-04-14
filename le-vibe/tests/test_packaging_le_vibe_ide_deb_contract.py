@@ -149,6 +149,8 @@ def test_debian_le_vibe_ide_control_and_scripts():
     assert "Compile fail-fast (STEP 14" in readme
     assert "ci-vscodium-bash-syntax.sh" in readme
     assert "ci-editor-nvmrc-sync.sh" in readme
+    assert "workbench-icon" in readme
+    assert "code-icon.svg" in readme
     assert "§7.3" in readme
     assert "/usr/lib/le-vibe/bin/codium" in readme
     assert "lvibe" in readme
