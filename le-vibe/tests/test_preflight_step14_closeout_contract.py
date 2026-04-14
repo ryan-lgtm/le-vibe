@@ -42,6 +42,8 @@ def test_preflight_step14_closeout_script_documents_checks() -> None:
     assert "download-vscodium-linux-compile-artifact.sh" in text
     assert "desktop-file-validate" in text
     assert "build-le-vibe-ide-deb.sh" in text
+    assert "test_verify_step14_closeout_contract.py" in text
+    assert ".pytest-verify-step14-contract.lock" in text
 
 
 def test_preflight_step14_closeout_prints_vscode_linux_build_line() -> None:

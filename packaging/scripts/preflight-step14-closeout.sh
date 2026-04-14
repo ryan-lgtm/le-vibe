@@ -9,6 +9,7 @@
 #
 # After the 14.c check, prints vscode_linux_build: ready|partial|absent — packaging/scripts/probe-vscode-linux-build.sh
 # (same classifier as lvibe ide-prereqs --json / verify-step14-closeout.sh --json).
+# Pytest contract (JSON / stubs): le-vibe/tests/test_verify_step14_closeout_contract.py — fcntl lock + shared placeholder .debs; .gitignore: le-vibe/.pytest-verify-step14-contract.lock.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
