@@ -265,7 +265,18 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in sec73
     assert "trigger-le-vibe-ide-linux-compile.sh" in sec73
     assert "download-vscodium-linux-compile-artifact.sh" in sec73
-    assert "605" in text
+    assert "606" in text
+
+
+def test_product_spec_section8_evidence_man_pages_documents_ide_prereqs_json_hicolor_step14():
+    """E1: Man pages paragraph ties lvibe ide-prereqs --json to hicolor / static prereqs."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC_SECTION8_EVIDENCE.md").read_text(encoding="utf-8")
+    assert "**Man pages:**" in text
+    assert "hicolor_icon_in_deb" in text
+    assert "static_prereq_files_ok" in text
+    assert "vscodium_linux_svg_staged" in text
+    assert "lvibe ide-prereqs" in text
 
 
 def test_product_spec_section8_evidence_section10_lists_ide_deb_desktop_step14():

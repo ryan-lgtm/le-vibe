@@ -37,6 +37,9 @@ def test_debian_lvibe_man_ide_prereqs_synopsis_print_closeout_commands_step14():
     assert "verify\\-step14\\-closeout.sh" in text
     assert "vscode_linux_partial" in text
     assert "vscode_linux_build" in text
+    assert "hicolor_icon_in_deb" in text
+    assert "static_prereq_files_ok" in text
+    assert "vscodium_linux_svg_staged" in text
     assert "build\\-le\\-vibe\\-debs.sh" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "dpkg\\-buildpackage" in text
@@ -64,6 +67,7 @@ def test_debian_le_vibe_man_ide_prereqs_synopsis_print_closeout_commands_step14(
     assert "gap summary" in text
     assert "vscode_linux_partial" in text
     assert "vscode_linux_build" in text
+    assert "hicolor_icon_in_deb" in text
     assert "PM_DEB_BUILD_ITERATION.md" in text
     assert "dpkg\\-buildpackage" in text
     assert "install\\-vscodium\\-linux\\-tarball\\-to\\-editor\\-vendor.sh" in text
