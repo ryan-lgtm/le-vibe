@@ -33,6 +33,8 @@ def test_probe_vscode_linux_build_py_compiles_and_help_lists_json_keys() -> None
     out = f"{r.stdout}\n{r.stderr}"
     assert "vscode_linux_build" in out
     assert "--json" in out and "--progress" in out
+    assert "print-github-linux-compile-artifact-hint.sh" in out
+    assert "preflight-step14-closeout.sh" in out
 
 
 def test_probe_vscode_linux_build_py_default_stdout_matches_ide_packaging_paths() -> None:

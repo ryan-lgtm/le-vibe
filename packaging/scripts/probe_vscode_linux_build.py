@@ -16,8 +16,22 @@ def _ascii_progress_bar(pct: int, width: int = 32) -> str:
     return f"[{bar}] {pct}%"
 
 
+_RECOVERY_EPILOG = """When partial — recover toward bin/codium (linux_compile tarball or local dev/build.sh):
+  packaging/scripts/print-github-linux-compile-artifact-hint.sh
+  packaging/scripts/trigger-le-vibe-ide-linux-compile.sh
+  packaging/scripts/download-vscodium-linux-compile-artifact.sh  (--install)
+  packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh
+Also: print-step14-vscode-linux-bin-files.sh (bin/ inventory); editor/BUILD.md (Partial tree, 14.f);
+lvibe ide-prereqs --print-closeout-commands; packaging/scripts/preflight-step14-closeout.sh.
+Same classifier as le_vibe.ide_packaging_paths.vscode_linux_build_status()."""
+
+
 def main() -> int:
-    p = argparse.ArgumentParser(description="Classify editor/vscodium VSCode-linux-* build state (STEP 14).")
+    p = argparse.ArgumentParser(
+        description="Classify editor/vscodium VSCode-linux-* build state (STEP 14).",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=_RECOVERY_EPILOG,
+    )
     p.add_argument(
         "repo_root",
         nargs="?",
