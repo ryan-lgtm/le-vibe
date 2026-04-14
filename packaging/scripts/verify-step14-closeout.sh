@@ -3,6 +3,8 @@
 #   - ci-editor-gate.sh passes (same as ./editor/smoke.sh fail-fast gates),
 #   - editor/vscodium/VSCode-linux-*/bin/codium exists (14.c),
 #   - packaging/le-vibe-ide_*.deb exists.
+# On 14.c failure: hints include print-github-linux-compile-artifact-hint.sh, trigger-le-vibe-ide-linux-compile.sh,
+#   download-vscodium-linux-compile-artifact.sh --install (partial or absent tree) — same family as lvibe ide-prereqs --print-closeout-commands.
 # Optional: also require stack le-vibe_*.deb (parent of clone, then repo root) via --require-stack-deb.
 # When multiple matching artifacts exist, pick the newest version-like filename.
 # Master orchestrator: 0 -> 1 -> 14 -> 2-13 -> 15-17 — docs/PROMPT_BUILD_LE_VIBE.md (ORDERED WORK QUEUE, Rolling iteration); docs/PM_STAGE_MAP.md (Execution order / STEP 16).
@@ -219,7 +221,9 @@ if [[ "$verify_14c_ec" -ne 0 ]]; then
   if [[ "${_vlb}" == "partial" ]]; then
     _bf="$("$ROOT/packaging/scripts/print-step14-vscode-linux-bin-files.sh" "$ROOT")"
     echo "verify-step14-closeout: vscode_linux_bin_files: ${_bf}" >&2
-    echo "verify-step14-closeout: linux_compile tarball — ${ROOT}/packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser Actions or gh); then ${ROOT}/packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh … — editor/BUILD.md 14.f" >&2
+    echo "verify-step14-closeout: linux_compile tarball — ${ROOT}/packaging/scripts/print-github-linux-compile-artifact-hint.sh (browser Actions or gh); ${ROOT}/packaging/scripts/trigger-le-vibe-ide-linux-compile.sh; ${ROOT}/packaging/scripts/download-vscodium-linux-compile-artifact.sh --install; then ${ROOT}/packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh … — editor/BUILD.md 14.f" >&2
+  elif [[ "${_vlb}" == "absent" ]]; then
+    echo "verify-step14-closeout: no VSCode-linux tree — ${ROOT}/packaging/scripts/print-github-linux-compile-artifact-hint.sh; ${ROOT}/packaging/scripts/trigger-le-vibe-ide-linux-compile.sh; ${ROOT}/packaging/scripts/download-vscodium-linux-compile-artifact.sh --install; ${ROOT}/packaging/scripts/install-vscodium-linux-tarball-to-editor-vendor.sh — editor/BUILD.md 14.c / 14.f" >&2
   fi
   echo "verify-step14-closeout: STEP 14.c failed (built codium missing or incomplete). Preflight: ${ROOT}/packaging/scripts/preflight-step14-closeout.sh — docs/PM_DEB_BUILD_ITERATION.md; lvibe ide-prereqs --print-closeout-commands" >&2
   exit 1
