@@ -55,5 +55,8 @@ def test_step14_autonomous_runbook_documents_closeout_verifier():
     assert "preflight-step14-closeout.sh" in text
     assert "stderr hint" in text
     assert "manual-step14-install-smoke.sh" in text
+    assert "manual-step14-install-smoke.sh --json" in text
+    assert "desktop_file_validate_on_path" in text
+    assert "desktop_file_validate" in text
     assert "--verify-only" in text
     assert "desktop-file-validate" in text

@@ -254,8 +254,11 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "vscode_linux_build_status" in sec73
     assert "vscode_linux_build" in sec73
     assert "verify-step14-closeout.sh --json" in sec73
+    assert "desktop_file_validate" in sec73
+    assert "desktop_file_validate_on_path" in sec73
     assert "test_launcher_ide_prereqs.py" in sec73
     assert "test_verify_step14_closeout_contract.py" in sec73
+    assert "test_manual_step14_install_smoke_contract.py" in sec73
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in sec73
     assert "571" in text
 
