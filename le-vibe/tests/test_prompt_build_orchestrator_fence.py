@@ -34,6 +34,7 @@ def test_master_orchestrator_fence_extractable():
     assert "Partial VSCode-linux tree" in text
     assert "print-github-linux-compile-artifact-hint.sh" in text
     assert "download-vscodium-linux-compile-artifact.sh" in text
+    assert "trigger-le-vibe-ide-linux-compile.sh" in text
     assert "print-step14-vscode-linux-bin-files.sh" in text
     assert "vscode_linux_bin_files" in text
     assert "print-built-codium-path" in text

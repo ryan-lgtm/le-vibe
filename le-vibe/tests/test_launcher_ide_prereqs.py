@@ -134,6 +134,8 @@ def test_ide_prereqs_print_closeout_partial_hint(
     assert "Partial tree" in out
     assert "install-vscodium-linux-tarball-to-editor-vendor.sh" in out
     assert "print-github-linux-compile-artifact-hint.sh" in out
+    assert "trigger-le-vibe-ide-linux-compile.sh" in out
+    assert "download-vscodium-linux-compile-artifact.sh --install" in out
     assert "print-step14-vscode-linux-bin-files.sh" in out
     assert "print-ci-tarball-codium-path.sh" in out
     assert "./editor/use-node-toolchain.sh" in out
@@ -158,6 +160,8 @@ def test_ide_prereqs_print_closeout_absent_hint(monkeypatch: pytest.MonkeyPatch,
     assert "./editor/use-node-toolchain.sh" in out
     assert "./editor/fetch-vscode-sources.sh" in out
     assert "(cd editor/vscodium && ./dev/build.sh)" in out
+    assert "trigger-le-vibe-ide-linux-compile.sh" in out
+    assert "download-vscodium-linux-compile-artifact.sh --install" in out
     assert "probe-vscode-linux-build.sh" in out
     assert "exits before stack" in out
     assert "manual-step14-install-smoke.sh --verify-only" in out

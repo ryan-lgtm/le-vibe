@@ -904,6 +904,14 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
                 "./packaging/scripts/print-github-linux-compile-artifact-hint.sh"
             )
             print(
+                "# OR trigger linux_compile on GitHub (14.e — GITHUB_TOKEN with workflow dispatch / repo scope): "
+                "./packaging/scripts/trigger-le-vibe-ide-linux-compile.sh"
+            )
+            print(
+                "# then fetch tarball + vendor into editor/vscodium/ (14.f — GITHUB_TOKEN with actions:read): "
+                "./packaging/scripts/download-vscodium-linux-compile-artifact.sh --install"
+            )
+            print(
                 "# bin/ inventory (same as ide-prereqs --json vscode_linux_bin_files): "
                 "./packaging/scripts/print-step14-vscode-linux-bin-files.sh"
             )
@@ -931,6 +939,11 @@ def _cmd_ide_prereqs(argv: list[str]) -> int:
                 "dpkg-buildpackage until probe-vscode-linux-build.sh is ready — "
                 "docs/PM_DEB_BUILD_ITERATION.md (*Failure (`--with-ide`)*)"
             )
+            print(
+                "# OR remote CI (14.e → 14.f) without local compile — trigger linux_compile, then vendor tarball:"
+            )
+            print("# ./packaging/scripts/trigger-le-vibe-ide-linux-compile.sh")
+            print("# ./packaging/scripts/download-vscodium-linux-compile-artifact.sh --install")
             print("# golden-path bootstrap:")
             print("git submodule update --init editor/vscodium")
             print("./editor/use-node-toolchain.sh")
