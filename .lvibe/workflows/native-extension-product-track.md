@@ -381,6 +381,12 @@
     - OPERATOR smoke table still documents `default \`2500\`` for `LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS`
   - Evidence:
     - `test/package-ollama-timeout-default.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-38**: README documents **default Ollama probe timeout** (`leVibeNative.ollamaTimeoutMs` / smoke env).
+  - Acceptance:
+    - developer README states 2500 ms default, setting key, and `LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS`
+    - contract test prevents removal
+  - Evidence:
+    - `README.md`; `test/readme-ollama-timeout.test.js`; `npm run verify` green.
 
 ---
 

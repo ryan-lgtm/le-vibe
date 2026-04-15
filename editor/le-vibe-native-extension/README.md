@@ -12,6 +12,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Default local Ollama URL:** **`http://127.0.0.1:11434`** — Settings **`leVibeNative.ollamaEndpoint`** (smoke defaults match unless **`LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT`** is set; see **`OPERATOR.md`**).
 
+**Default Ollama probe timeout:** **`2500` ms** — Settings **`leVibeNative.ollamaTimeoutMs`** (smoke override **`LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS`**; see **`OPERATOR.md`**).
+
 **Telemetry:** defaults to **local structured logs only**; no remote telemetry unless you **explicitly opt in** (same policy as **`OPERATOR.md`**).
 
 **Canonical user-facing name (chat UX):** **Lé Vibe Chat** — palette titles and panel copy use this name for the agent surface (per product track; same line as **`OPERATOR.md`**).
