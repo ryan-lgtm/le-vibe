@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from le_vibe.cline_setup_auto import maybe_auto_setup_cline_after_first_run
+from le_vibe.cline_setup_auto import maybe_auto_setup_cline_after_first_run, maybe_print_cline_onboarding_hint
 
 
 def test_auto_setup_cline_noop_without_first_run_complete(tmp_path: Path, monkeypatch) -> None:
@@ -31,3 +31,20 @@ def test_auto_setup_cline_suppresses_on_failure(tmp_path: Path, monkeypatch) -> 
     )
     maybe_auto_setup_cline_after_first_run(cfg)
     assert (cfg / ".auto-cline-setup-suppressed").is_file()
+
+
+def test_prints_onboarding_hint_once_when_auth_state_not_visible(tmp_path: Path, monkeypatch, capsys) -> None:
+    cfg = tmp_path / "cfg"
+    cfg.mkdir()
+    (cfg / ".first-run-complete").write_text("ok\n", encoding="utf-8")
+    home = tmp_path / "home"
+    store = home / ".config" / "Lé Vibe" / "User" / "globalStorage" / "saoudrizwan.claude-dev" / "settings"
+    store.mkdir(parents=True)
+    (store / "cline_mcp_settings.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setattr("pathlib.Path.home", lambda: home)
+    maybe_print_cline_onboarding_hint(cfg)
+    first = capsys.readouterr().err
+    assert "appears unauthenticated" in first
+    maybe_print_cline_onboarding_hint(cfg)
+    second = capsys.readouterr().err
+    assert second == ""

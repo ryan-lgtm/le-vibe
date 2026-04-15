@@ -43,6 +43,30 @@ def test_session_preamble_returns_exit_8_when_default_launch_not_agent_ready(
     assert rc == 8
 
 
+def test_session_preamble_recovers_when_ollama_was_down(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("LE_VIBE_SKIP_SESSION_PREAMBLE", raising=False)
+    monkeypatch.setattr(sys, "platform", "linux")
+    monkeypatch.setattr("le_vibe.launcher.ensure_product_first_run", lambda **_k: (0, "ok"))
+    monkeypatch.setattr("le_vibe.launcher.maybe_auto_setup_cline_after_first_run", lambda _cfg: None)
+    monkeypatch.setattr("le_vibe.launcher.maybe_print_cline_onboarding_hint", lambda _cfg: None)
+    seen = {"n": 0}
+
+    def fake_eval(**_k):
+        seen["n"] += 1
+        if seen["n"] == 1:
+            return (False, "Lé Vibe: Ollama API is not reachable at http://127.0.0.1:11435.")
+        return (True, "agent-ready")
+
+    monkeypatch.setattr("le_vibe.launcher.evaluate_first_run_agent_readiness", fake_eval)
+    monkeypatch.setattr(
+        "le_vibe.launcher.ensure_managed_ollama",
+        lambda **_k: (True, "started", None),
+    )
+    rc = launcher._run_global_session_preamble(["lvibe"])
+    assert rc is None
+    assert seen["n"] == 2
+
+
 def test_launcher_subcommands_frozen_matches_dispatch() -> None:
     """Guard: new ``lvibe <cmd>`` dispatch branches must update ``_LAUNCHER_SUBCOMMANDS``."""
     src = Path(launcher.__file__).read_text(encoding="utf-8")

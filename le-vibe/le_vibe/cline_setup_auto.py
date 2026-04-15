@@ -19,6 +19,7 @@ from pathlib import Path
 from .structured_log import append_structured_log
 
 _SUPPRESSED = ".auto-cline-setup-suppressed"
+_ONBOARDING_HINT_SHOWN = ".cline-onboarding-hint-shown"
 
 
 def _first_run_complete(cfg_dir: Path) -> bool:
@@ -94,3 +95,38 @@ def maybe_auto_setup_cline_after_first_run(cfg_dir: Path) -> None:
         "When online, run: le-vibe-setup-cline",
         file=sys.stderr,
     )
+
+
+def maybe_print_cline_onboarding_hint(cfg_dir: Path) -> None:
+    """
+    Print a one-time onboarding hint when Cline is installed but no local auth state is visible yet.
+
+    This avoids repeated gray-screen confusion on first launch while keeping startup deterministic.
+    """
+    if os.environ.get("LE_VIBE_SHOW_CLINE_ONBOARDING_HINT", "1").lower() in ("0", "false", "no"):
+        return
+    marker = cfg_dir / _ONBOARDING_HINT_SHOWN
+    if marker.is_file():
+        return
+    if not _first_run_complete(cfg_dir):
+        return
+    store = Path.home() / ".config" / "Lé Vibe" / "User" / "globalStorage" / "saoudrizwan.claude-dev"
+    if not store.is_dir():
+        return
+    files = [p for p in store.rglob("*") if p.is_file()]
+    # Fresh installs typically have only MCP settings until the user completes Cline auth/provider onboarding.
+    if len(files) == 1 and files[0].name == "cline_mcp_settings.json":
+        print(
+            "Lé Vibe: Cline is installed but appears unauthenticated. "
+            "Open the Cline panel and complete sign-in/provider setup if the chat panel is blank.",
+            file=sys.stderr,
+        )
+        append_structured_log(
+            "launcher",
+            "cline_onboarding_hint",
+            reason="no_visible_auth_state_in_global_storage",
+        )
+        try:
+            marker.write_text("shown\n", encoding="utf-8")
+        except OSError:
+            pass

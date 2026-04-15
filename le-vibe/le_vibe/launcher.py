@@ -14,7 +14,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from .cline_setup_auto import maybe_auto_setup_cline_after_first_run
+from .cline_setup_auto import maybe_auto_setup_cline_after_first_run, maybe_print_cline_onboarding_hint
 from .first_run import ensure_product_first_run, evaluate_first_run_agent_readiness
 from .managed_ollama import ensure_managed_ollama, stop_managed_ollama
 from .paths import LE_VIBE_MANAGED_OLLAMA_PORT, le_vibe_config_dir
@@ -1622,7 +1622,7 @@ def _run_global_session_preamble(argv: list[str]) -> int | None:
     First-run bootstrap + best-effort ``le-vibe-setup-cline`` for every ``lvibe`` invocation.
 
     Runs before subcommand dispatch so the first command a user runs (CLI or desktop ``Exec=``)
-    wires Continue when possible. Set ``LE_VIBE_SKIP_SESSION_PREAMBLE=1`` to skip (tests/CI).
+    wires Cline when possible. Set ``LE_VIBE_SKIP_SESSION_PREAMBLE=1`` to skip (tests/CI).
     """
     if sys.platform != "linux":
         return None
@@ -1655,7 +1655,18 @@ def _run_global_session_preamble(argv: list[str]) -> int | None:
                 print(msg, file=sys.stderr)
                 return code
     maybe_auto_setup_cline_after_first_run(cfg)
+    maybe_print_cline_onboarding_hint(cfg)
     ready, readiness_msg = evaluate_first_run_agent_readiness(config_dir=cfg)
+    if not ready and "Ollama API is not reachable" in readiness_msg:
+        ok, msg, _state = ensure_managed_ollama(host="127.0.0.1", port=LE_VIBE_MANAGED_OLLAMA_PORT)
+        append_structured_log(
+            "launcher",
+            "agent_readiness_ollama_recover_attempt",
+            ok=ok,
+            message=msg[:400],
+        )
+        if ok:
+            ready, readiness_msg = evaluate_first_run_agent_readiness(config_dir=cfg)
     if not ready:
         append_structured_log(
             "launcher",
