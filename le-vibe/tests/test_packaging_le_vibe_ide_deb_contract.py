@@ -134,6 +134,7 @@ def test_debian_le_vibe_ide_control_and_scripts():
     root = _repo_root()
     control = (root / "packaging" / "debian-le-vibe-ide" / "debian" / "control").read_text(encoding="utf-8")
     assert "Package: le-vibe-ide" in control
+    assert "Depends:" in control and "le-vibe" in control
     assert "/usr/lib/le-vibe/bin/codium" in control
     assert "le-vibe.desktop" in control
     assert "hicolor-icon-theme" in control
@@ -211,7 +212,7 @@ def test_debian_le_vibe_ide_control_and_scripts():
     )
     assert "Lé Vibe" in desktop
     assert "GenericName=" in desktop
-    assert "Exec=/usr/lib/le-vibe/bin/codium" in desktop
+    assert "Exec=/usr/bin/lvibe" in desktop
     assert "Icon=le-vibe" in desktop
     assert "Categories=Development;IDE;" in desktop
     assert "test_packaging_le_vibe_ide_deb_contract.py" in desktop

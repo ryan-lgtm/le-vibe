@@ -7,6 +7,9 @@ yet linked — same order as the manual command (``docs/continue-extension-pin.m
 Disable with ``LE_VIBE_AUTO_CONTINUE_SETUP=0``. Failure (except no editor on PATH) writes
 ``.auto-continue-setup-suppressed`` so repeated launches do not hammer the marketplace;
 delete that file to retry. ``PRODUCT_SPEC`` remains authoritative over ``.lvibe/`` manifests.
+
+Bootstrap + this hook run from ``le_vibe.launcher._run_global_session_preamble`` on every Linux
+``lvibe`` start (before subcommands) unless ``LE_VIBE_SKIP_SESSION_PREAMBLE=1`` (tests/CI).
 """
 
 from __future__ import annotations

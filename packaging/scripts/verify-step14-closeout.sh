@@ -225,8 +225,8 @@ Checks local STEP 14 / §7.3 readiness:
   3) packaging/le-vibe-ide_*.deb exists and passes content checks:
      - launcher payload paths exist (`le-vibe.desktop`, `/usr/lib/le-vibe/bin/codium`,
        `hicolor/scalable/apps/le-vibe.svg`),
-     - no public CLI payload under `/usr/bin` (IDE package must not expose a second PATH command),
-     - desktop content contains `Name=Lé Vibe` and `Exec=/usr/lib/le-vibe/bin/codium %F`,
+     - no public CLI payload under `/usr/bin` (IDE package must not ship stack binaries; `Exec=` uses `/usr/bin/lvibe` from `le-vibe` Depends),
+     - desktop content contains `Name=Lé Vibe` and `Exec=/usr/bin/lvibe %F`,
      - optional (when desktop-file-validate is on PATH): Freedesktop validation of packaged
        `le-vibe.desktop` (same extraction as preflight-step14-closeout / build-le-vibe-ide-deb.sh),
      - package metadata is `Package: le-vibe-ide`, `Architecture: amd64`.
@@ -358,9 +358,9 @@ assert_deb_not_contains "$ide_deb_latest" "./usr/bin/lvibe"
 assert_deb_not_contains "$ide_deb_latest" "./usr/bin/le-vibe"
 assert_deb_not_contains "$ide_deb_latest" "./usr/bin/le-vibe-ide"
 assert_deb_not_contains "$ide_deb_latest" "./usr/bin/codium"
-log_note "    ide desktop check: Name=Lé Vibe + Exec=/usr/lib/le-vibe/bin/codium %F"
+log_note "    ide desktop check: Name=Lé Vibe + Exec=/usr/bin/lvibe %F"
 assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop" "Name=Lé Vibe"
-assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop" "Exec=/usr/lib/le-vibe/bin/codium %F"
+assert_deb_file_contains "$ide_deb_latest" "./usr/share/applications/le-vibe.desktop" "Exec=/usr/bin/lvibe %F"
 log_note "    ide deb metadata check: Package=le-vibe-ide, Architecture=amd64"
 assert_deb_field_equals "$ide_deb_latest" "Package" "le-vibe-ide"
 assert_deb_field_equals "$ide_deb_latest" "Architecture" "amd64"

@@ -3,11 +3,11 @@
   "meta": {
     "session_id": "r-vibe-unified-install-continue-2026-04",
     "created_utc": "2026-04-14T00:00:00Z",
-    "title": "Lé Vibe — monorepo session backlog (unified install + maintainer STEP 14 verify + post-install smoke OK)",
-    "workspace_summary": "Dogfood manifest (SESSION_ORCHESTRATION_SPEC). Both epics done; STEP 14 verify + post-install smoke OK 2026-04-14. E1: 902 passed, 1 skipped; playbook docs-chain plus STEP14 build-env defaults export guard + exact APP_NAME/ORG_NAME lines + export-order (set -a < APP < ORG < set +a) + export-count==2 + set +a tail guard + no export BINARY_NAME + BINARY_NAME stays codium comment E1-locked. .lvibe/ not authoritative vs docs/PRODUCT_SPEC.md. Added STEP 17 contract anchoring AI Pilot visible multi-agent observability wording (near-real-time witness, not a black box).",
+    "title": "Lé Vibe — IDE-first repo cleanup backlog + prior shippable milestones",
+    "workspace_summary": "Dogfood manifest (SESSION_ORCHESTRATION_SPEC). Unified-install + STEP14 epics done (2026-04-14). Active PM tracks: fresh-install Continue stabilization (gray-box + yaml.schemas failure) and IDE-first repository cleanup — see epics in product.epics plus .lvibe/IDE_FIRST_REPO_CLEANUP_BACKLOG.md. E1: 902 passed, 1 skipped when last recorded. .lvibe/ not authoritative vs docs/PRODUCT_SPEC.md except where PM updates land in docs tasks.",
     "rag_notes": "Authority: docs/PRODUCT_SPEC.md (wins vs .lvibe/). STEP 14 verified on-host. E1 902/1 skipped; playbook chain contracts plus test_build_env_lvibe_defaults_step14_contract set -a/set +a guard, exact APP_NAME/ORG_NAME export lines, export-order assertions (set -a < APP < ORG < set +a), exact export-count==2, set +a tail guard, no export BINARY_NAME invariant, and BINARY_NAME stays codium comment anchor. Added test_pm_stage_map_step17_contract AI Pilot observability anchor (near–real time + witness + not a black box).",
     "current_step_id": "epic_iteration",
-    "continue_construction_note": "product.epics: no pending tasks. 2026-04-15: playbook chain contracts cover root/docs/le-vibe README links plus playbook purpose, one-session-per-task, sequential-backlog, final milestone stop-conditions, one-focused-session, per-session test-evidence, evidence-not-opinions, documented-resolution, operator-ownership, and canonical-roster-role wording (incl. SaaS personas heading + @props, @be-eng, @fe-eng, @marketing, @cs) and exact Phase 1..7 headings plus Sessions 1-20/21-40/41-60/61-70 summary bullets and task 1+2 schema anchors plus task 69/70 stop-readiness lines. E1: 902 passed, 1 skipped. Next: live-watching UX per PRODUCT_SPEC when scheduled.",
+    "continue_construction_note": "product.epics: pending fresh-install-continue-stabilization and ide-first-repo-cleanup (see .lvibe/IDE_FIRST_REPO_CLEANUP_BACKLOG.md). Strict priority: complete all task-e* in epic-fresh-install-continue-stabilization before starting new task-a*/b*/c*/d* unless operator explicitly overrides for that session.",
     "ai_pilot_note": "Same PRODUCT_SPEC §5/§8; doc-first per docs/PM_STAGE_MAP.md. Continue apiBase remains managed Ollama port per le-vibe/templates/continue-config.yaml.j2 and docs/AI_PILOT_AND_CONTINUE.md."
   },
   "session_steps": [
@@ -146,6 +146,164 @@
             "assignee_agent": "@do-eng",
             "notes": "2026-04-14: manual-step14-install-smoke.sh --verify-only exit 0 (lvibe, /usr/lib/le-vibe/bin/codium, desktop, README.Debian present). Same host as build had packages installed; use a clean VM for release sign-off if policy requires.",
             "acceptance_criteria": "Smoke script exits 0 after install; record host OS if policy allows — not required for merge."
+          }
+        ]
+      },
+      {
+        "id": "epic-fresh-install-continue-stabilization",
+        "title": "Fresh install stabilization — Continue gray-box + yaml.schemas registration failure",
+        "description": "After install-le-vibe-local.sh --install --yes on a clean host, Continue can appear as a gray box and extension host logs show yaml.schemas write failure. Stabilize extension install/activation order and recovery behavior.",
+        "tasks": [
+          {
+            "id": "task-e1-reproduce-clean-install",
+            "title": "E1 — Reproduce on clean install and capture logs/artifacts",
+            "status": "pending",
+            "assignee_agent": "@do-eng",
+            "notes": "Capture extension list/state, workbench.desktop.main.js errors, and exact install path used.",
+            "acceptance_criteria": "Deterministic repro documented under .lvibe/audit/ with environment details."
+          },
+          {
+            "id": "task-e2-yaml-guardrails",
+            "title": "E2 — Enforce YAML extension availability before Continue schema writes",
+            "status": "pending",
+            "assignee_agent": "@be-eng",
+            "notes": "Touch installer and first-run paths as needed; avoid non-deterministic race/order assumptions.",
+            "acceptance_criteria": "No yaml.schemas write attempt occurs before key registration is available."
+          },
+          {
+            "id": "task-e3-continue-activation-hardening",
+            "title": "E3 — Harden Continue activation and fallback/remediation path",
+            "status": "pending",
+            "assignee_agent": "@be-eng",
+            "notes": "Address gray-box behavior and expose actionable recovery command/log signal.",
+            "acceptance_criteria": "Fresh install yields usable Continue or explicit guided remediation; no silent gray-box failure."
+          },
+          {
+            "id": "task-e4-tests-smoke-regression",
+            "title": "E4 — Add contract/smoke tests for fresh-install extension activation",
+            "status": "pending",
+            "assignee_agent": "@prod",
+            "notes": "Extend existing continue/yaml tests and install smoke coverage where practical.",
+            "acceptance_criteria": "Regression path covered by automated test or deterministic smoke script check."
+          },
+          {
+            "id": "task-e5-docs-triage-sop",
+            "title": "E5 — Update docs with post-install verification and triage SOP",
+            "status": "pending",
+            "assignee_agent": "@prod",
+            "notes": "README.Debian / install docs should include verify + repair flow.",
+            "acceptance_criteria": "Operator-facing docs contain exact checks and recovery commands."
+          }
+        ]
+      },
+      {
+        "id": "epic-ide-first-repo-cleanup",
+        "title": "IDE-first repository cleanup — remove r-vibe wrapper mental model; single focus on IDE + Ollama + agent + install",
+        "description": "Engineering executes .lvibe/IDE_FIRST_REPO_CLEANUP_BACKLOG.md. Authorized: full git toolkit (prefer git mv). Outcome: one coherent product tree and docs; optional physical consolidation per accepted RFC.",
+        "tasks": [
+          {
+            "id": "task-a1-tree-inventory",
+            "title": "A1 — Tree inventory and source-of-truth map (no moves)",
+            "status": "pending",
+            "assignee_agent": "@prod",
+            "notes": "Deliverable: table in backlog or .lvibe/audit/ linking areas to docs.",
+            "acceptance_criteria": "Top-level purposes documented; duplicate packaging paths called out."
+          },
+          {
+            "id": "task-a2-layout-rfc",
+            "title": "A2 — Target layout RFC with options, risks, CI impact, recommendation",
+            "status": "pending",
+            "assignee_agent": "@be-eng",
+            "notes": "File: .lvibe/decisions/IDE_FIRST_LAYOUT_RFC.md",
+            "acceptance_criteria": "One recommended option; rollback noted; unlocks Phase C."
+          },
+          {
+            "id": "task-a3-strings-audit",
+            "title": "A3 — Audit r-vibe / monorepo strings for doc and automation update list",
+            "status": "pending",
+            "assignee_agent": "@do-eng",
+            "notes": "Attach path list for Phase B.",
+            "acceptance_criteria": "Checklist or grep artifact committed under .lvibe/audit/ or referenced from RFC."
+          },
+          {
+            "id": "task-b1-readme-clone-identity",
+            "title": "B1 — README and clone dirname / product identity alignment",
+            "status": "pending",
+            "assignee_agent": "@prod",
+            "notes": "Depends on A2 for naming choices.",
+            "acceptance_criteria": "Quick-start matches PM naming; no stale cd r-vibe if deprecated."
+          },
+          {
+            "id": "task-b2-product-docs-alignment",
+            "title": "B2 — PRODUCT_SPEC / PM_STAGE_MAP IDE-first language (minimal edits)",
+            "status": "pending",
+            "assignee_agent": "@prod",
+            "notes": "Align with A2; avoid wholesale rewrites.",
+            "acceptance_criteria": "No contradictory monorepo mandate where PM directs single-product focus."
+          },
+          {
+            "id": "task-b3-maintainer-index",
+            "title": "B3 — Maintainer/developer doc index titles and framing",
+            "status": "pending",
+            "assignee_agent": "@prod",
+            "notes": "docs/README.md, MONOREPO_DEVELOPER_REFERENCE or successor.",
+            "acceptance_criteria": "Doc graph intact; framing is IDE-product-first."
+          },
+          {
+            "id": "task-c1-packaging-consolidation",
+            "title": "C1 — Packaging/debian layout per accepted RFC",
+            "status": "pending",
+            "assignee_agent": "@do-eng",
+            "notes": "Skip with explicit N/A in manifest if RFC keeps dual trees.",
+            "acceptance_criteria": "Build/install docs match tree; scripts updated if moved."
+          },
+          {
+            "id": "task-c2-path-updates",
+            "title": "C2 — Scripts, workflows, and code path updates after any git mv",
+            "status": "pending",
+            "assignee_agent": "@be-eng",
+            "notes": "le-vibe/, editor/, packaging/, .github/workflows.",
+            "acceptance_criteria": "No stale relative paths in scoped areas; CI green."
+          },
+          {
+            "id": "task-c3-tests-contracts",
+            "title": "C3 — Tests and packaging contract updates",
+            "status": "pending",
+            "assignee_agent": "@be-eng",
+            "notes": "pytest from repo root.",
+            "acceptance_criteria": "Full test suite green."
+          },
+          {
+            "id": "task-c4-submodules-editor",
+            "title": "C4 — Submodules and editor build docs if paths touched",
+            "status": "pending",
+            "assignee_agent": "@do-eng",
+            "notes": "N/A if C moves skip editor/submodule paths.",
+            "acceptance_criteria": "Submodule sync + BUILD steps reproducible."
+          },
+          {
+            "id": "task-d1-smoke-verify",
+            "title": "D1 — Install / STEP14 / smoke per docs (evidence recorded)",
+            "status": "pending",
+            "assignee_agent": "@do-eng",
+            "notes": "As far as environment allows.",
+            "acceptance_criteria": "Evidence in task notes or blocked with reason."
+          },
+          {
+            "id": "task-d2-manifest-closeout",
+            "title": "D2 — Mark epic tasks done; update meta.workspace_summary",
+            "status": "pending",
+            "assignee_agent": "@prod",
+            "notes": "After D1.",
+            "acceptance_criteria": "session-manifest.json valid and current."
+          },
+          {
+            "id": "task-d3-operator-handoff",
+            "title": "D3 — Operator handoff: clone/build instructions accurate",
+            "status": "pending",
+            "assignee_agent": "@prod",
+            "notes": "README / LOCAL_INSTALL_ONE_SHOT only if gaps remain.",
+            "acceptance_criteria": "End-to-end instructions match post-cleanup repo."
           }
         ]
       }

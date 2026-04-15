@@ -97,7 +97,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "--json" in text
     assert "build-le-vibe-debs.sh --with-ide" in text
     assert "desktop content contains `Name=Lé Vibe`" in text
-    assert "Exec=/usr/lib/le-vibe/bin/codium %F" in text
+    assert "Exec=/usr/bin/lvibe %F" in text
     assert "Package: le-vibe-ide" in text
     assert "Architecture: amd64" in text
     assert "Package: le-vibe" in text
@@ -127,7 +127,7 @@ def test_verify_step14_closeout_script_documents_required_artifacts() -> None:
     assert "./usr/bin/codium" in text
     assert "ide public CLI check" in text
     assert "Name=Lé Vibe" in text
-    assert "Exec=/usr/lib/le-vibe/bin/codium %F" in text
+    assert "Exec=/usr/bin/lvibe %F" in text
     assert "./usr/bin/lvibe" in text
     assert "./usr/share/doc/le-vibe/README.Debian" in text
     assert "./usr/share/doc/le-vibe/README.Debian.gz" in text
@@ -227,7 +227,7 @@ if [[ "$1" == "--fsys-tarfile" ]]; then
   cat >"$_td/usr/share/applications/le-vibe.desktop" <<'DESK'
 [Desktop Entry]
 Name=Lé Vibe
-Exec=/usr/lib/le-vibe/bin/codium %F
+Exec=/usr/bin/lvibe %F
 DESK
   : >"$_td/usr/lib/le-vibe/bin/codium"
   chmod +x "$_td/usr/lib/le-vibe/bin/codium"
@@ -348,7 +348,7 @@ if [[ "$1" == "--fsys-tarfile" ]]; then
   cat >"$_td/usr/share/applications/le-vibe.desktop" <<'DESK'
 [Desktop Entry]
 Name=Lé Vibe
-Exec=/usr/lib/le-vibe/bin/codium %F
+Exec=/usr/bin/lvibe %F
 DESK
   : >"$_td/usr/lib/le-vibe/bin/codium"
   chmod +x "$_td/usr/lib/le-vibe/bin/codium"
@@ -458,7 +458,7 @@ if [[ "$1" == "--fsys-tarfile" ]]; then
   cat >"$_td/usr/share/applications/le-vibe.desktop" <<'DESK'
 [Desktop Entry]
 Name=Lé Vibe
-Exec=/usr/lib/le-vibe/bin/codium %F
+Exec=/usr/bin/lvibe %F
 DESK
   : >"$_td/usr/lib/le-vibe/bin/codium"
   chmod +x "$_td/usr/lib/le-vibe/bin/codium"
@@ -576,7 +576,7 @@ if [[ "$1" == "--fsys-tarfile" ]]; then
   cat >"$_td/usr/share/applications/le-vibe.desktop" <<'DESK'
 [Desktop Entry]
 Name=Lé Vibe
-Exec=/usr/lib/le-vibe/bin/codium %F
+Exec=/usr/bin/lvibe %F
 DESK
   : >"$_td/usr/lib/le-vibe/bin/codium"
   chmod +x "$_td/usr/lib/le-vibe/bin/codium"
@@ -708,7 +708,7 @@ if [[ "$1" == "--fsys-tarfile" ]]; then
   cat >"$_td/usr/share/applications/le-vibe.desktop" <<'DESK'
 [Desktop Entry]
 Name=Lé Vibe
-Exec=/usr/lib/le-vibe/bin/codium %F
+Exec=/usr/bin/lvibe %F
 DESK
   : >"$_td/usr/lib/le-vibe/bin/codium"
   chmod +x "$_td/usr/lib/le-vibe/bin/codium"

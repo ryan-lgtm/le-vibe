@@ -158,4 +158,4 @@ else
   echo "stage-le-vibe-ide-deb: desktop-file-validate not on PATH — skipped (install desktop-file-utils; ci-smoke.sh validates sources)" >&2
 fi
 
-echo "stage-le-vibe-ide-deb: staged $STAGING (launcher $STAGING/usr/lib/le-vibe/bin/codium; menu $STAGING/usr/share/applications/le-vibe.desktop)"
+echo "stage-le-vibe-ide-deb: staged $STAGING (IDE binary $STAGING/usr/lib/le-vibe/bin/codium; menu $STAGING/usr/share/applications/le-vibe.desktop → Exec=/usr/bin/lvibe)"

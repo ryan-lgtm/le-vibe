@@ -1574,7 +1574,94 @@ def _record_release_readiness_summary(
         persist_release_readiness_summary(root, source=source)
 
 
+# First argv token after the program name when it selects a launcher subcommand (must match dispatch below).
+_LAUNCHER_SUBCOMMANDS: frozenset[str] = frozenset(
+    {
+        "sync-agent-skills",
+        "open-welcome",
+        "welcome",
+        "hygiene",
+        "logs",
+        "continue-pin",
+        "verify-checksums",
+        "pip-audit",
+        "ci-smoke",
+        "ci-editor-gate",
+        "brand-paths",
+        "product-surface",
+        "flatpak-appimage",
+        "ide-prereqs",
+        "append-incremental-fact",
+        "workspace-governance",
+        "remaining-gaps",
+        "master-orchestrator",
+        "ai-pilot-continue",
+        "apply-opening-skip",
+        "continue-rules",
+    }
+)
+
+
+def _default_launcher_argv(argv: list[str]) -> bool:
+    """True when argv selects the managed-Ollama + editor entry (not a subcommand)."""
+    if len(argv) < 2:
+        return True
+    return argv[1] not in _LAUNCHER_SUBCOMMANDS
+
+
+def _skip_first_run_requested(argv: list[str]) -> bool:
+    return "--skip-first-run" in argv and _default_launcher_argv(argv)
+
+
+def _force_first_run_requested(argv: list[str]) -> bool:
+    return "--force-first-run" in argv and _default_launcher_argv(argv)
+
+
+def _run_global_session_preamble(argv: list[str]) -> int | None:
+    """
+    First-run bootstrap + best-effort ``le-vibe-setup-continue`` for every ``lvibe`` invocation.
+
+    Runs before subcommand dispatch so the first command a user runs (CLI or desktop ``Exec=``)
+    wires Continue when possible. Set ``LE_VIBE_SKIP_SESSION_PREAMBLE=1`` to skip (tests/CI).
+    """
+    if sys.platform != "linux":
+        return None
+    if os.environ.get("LE_VIBE_SKIP_SESSION_PREAMBLE", "").lower() in ("1", "true", "yes"):
+        return None
+    if len(argv) >= 2 and argv[1] in ("-h", "--help"):
+        return None
+    cfg = le_vibe_config_dir()
+    is_subcommand = len(argv) >= 2 and argv[1] in _LAUNCHER_SUBCOMMANDS
+    skip_fr = _skip_first_run_requested(argv)
+    if not skip_fr:
+        assume = os.environ.get("LE_VIBE_ASSUME_YES", "1").lower()
+        install_yes = assume not in ("0", "false", "no")
+        verbose = os.environ.get("LE_VIBE_VERBOSE", "").lower() in ("1", "true", "yes")
+        force = _force_first_run_requested(argv)
+        code, msg = ensure_product_first_run(
+            yes=install_yes,
+            verbose=verbose,
+            force=force,
+        )
+        if code != 0:
+            if is_subcommand:
+                append_structured_log(
+                    "launcher",
+                    "first_run_incomplete_continuing_subcommand",
+                    exit_code=code,
+                )
+            else:
+                append_structured_log("launcher", "first_run_exit", exit_code=code, message=msg[:300])
+                print(msg, file=sys.stderr)
+                return code
+    maybe_auto_setup_continue_after_first_run(cfg)
+    return None
+
+
 def main() -> int:
+    early = _run_global_session_preamble(sys.argv)
+    if early is not None:
+        return early
     if len(sys.argv) >= 2 and sys.argv[1] == "sync-agent-skills":
         return _cmd_sync_agent_skills(sys.argv[2:])
     if len(sys.argv) >= 2 and sys.argv[1] == "open-welcome":
@@ -1686,20 +1773,7 @@ def main() -> int:
     signal.signal(signal.SIGINT, _signal_handler)
     signal.signal(signal.SIGHUP, _signal_handler)
 
-    if not args.skip_first_run:
-        assume = os.environ.get("LE_VIBE_ASSUME_YES", "1").lower()
-        install_yes = assume not in ("0", "false", "no")
-        fr_code, fr_msg = ensure_product_first_run(
-            yes=install_yes,
-            verbose=os.environ.get("LE_VIBE_VERBOSE", "").lower() in ("1", "true", "yes"),
-            force=args.force_first_run,
-        )
-        if fr_code != 0:
-            append_structured_log("launcher", "first_run_exit", exit_code=fr_code, message=fr_msg[:300])
-            print(fr_msg, file=sys.stderr)
-            return fr_code
-
-    maybe_auto_setup_continue_after_first_run(le_vibe_config_dir())
+    # First-run + Continue wiring: ``_run_global_session_preamble`` (before subcommand dispatch).
 
     ok, msg, _state = ensure_managed_ollama(host=args.host, port=port)
     if not ok:
