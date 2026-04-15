@@ -134,3 +134,10 @@ test('OPERATOR.md documents workspace plan validation (task-n10-1)', () => {
   assert.ok(text.includes('workspace-plan.js'));
   assert.ok(text.includes('levibe.workspace_plan.v1'));
 });
+
+test('OPERATOR.md documents workspace plan execution + audit (task-n10-2)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n10-2'));
+  assert.ok(text.includes('workspace-plan-exec.js'));
+  assert.ok(text.includes('workspace-plan-audit.jsonl'));
+});

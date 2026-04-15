@@ -10,6 +10,7 @@ const {
   defaultStatePath: migrationStatePath,
   migrationAuditPath,
 } = require('../third-party-migration');
+const { workspacePlanAuditPath } = require('../workspace-plan-exec');
 
 test('levibeNativeChatDir matches all persisted path roots', () => {
   const root = levibeNativeChatDir();
@@ -19,6 +20,7 @@ test('levibeNativeChatDir matches all persisted path roots', () => {
   assert.ok(handoffAuditPath().startsWith(root + '/') || handoffAuditPath().startsWith(root + '\\'));
   assert.ok(migrationStatePath().startsWith(root + '/') || migrationStatePath().startsWith(root + '\\'));
   assert.ok(migrationAuditPath().startsWith(root + '/') || migrationAuditPath().startsWith(root + '\\'));
+  assert.ok(workspacePlanAuditPath().startsWith(root + '/') || workspacePlanAuditPath().startsWith(root + '\\'));
 });
 
 test('PERSISTED_ARTIFACTS has unique basenames (transcript glob allowed once)', () => {

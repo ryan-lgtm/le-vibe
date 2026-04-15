@@ -43,6 +43,8 @@ const { buildUnifiedDiff, canApplyAfterPreview } = require('./edit-preview');
 const { applyEditProposalBatchAsWorkspaceEdit } = require('./workspace-edit-apply');
 const { resolveSingleSelectionForPartialApply } = require('./selection-apply');
 const { buildPreviewRevision, checkDiskContentMatchesRevision } = require('./edit-conflict');
+const { validateWorkspacePlan, WORKSPACE_PLAN_KIND } = require('./workspace-plan');
+const { executeValidatedWorkspacePlan } = require('./workspace-plan-exec');
 
 function getTranscriptContext(vscode) {
   const config = vscode.workspace.getConfiguration('leVibeNative');
@@ -201,6 +203,12 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
       <button type="button" id="editPreviewApply" disabled>Apply to file</button>
     </div>
   </div>
+  <h3>Workspace plan (demo)</h3>
+  <p class="muted">Epic N10 — per-step status in the chat line below; structured lines append to <code>workspace-plan-audit.jsonl</code> under ~/.config/le-vibe/levibe-native-chat/</p>
+  <div>
+    <button data-action="runSampleWorkspacePlan">Run sample workspace plan</button>
+    <button type="button" id="cancelWorkspacePlanRun" disabled>Cancel plan run</button>
+  </div>
   <h3>Workspace context</h3>
   <p class="muted">Token-budget rules: max ${escapeHtml(budget.maxFiles)} files; each excerpt up to ${escapeHtml(budget.maxCharsPerFile)} chars and ${escapeHtml(budget.maxLinesPerFile)} lines; total injected context capped at ${escapeHtml(budget.maxTotalChars)} chars.</p>
   <div>
@@ -265,6 +273,10 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
         }
         return;
       }
+      if (msg && msg.type === 'planRunUpdate') {
+        document.getElementById('cancelWorkspacePlanRun').disabled = !msg.cancelEnabled;
+        return;
+      }
       if (!msg || msg.type !== 'chatUpdate') {
         return;
       }
@@ -287,6 +299,9 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     });
     document.getElementById('editPreviewApply').addEventListener('click', () => {
       vscode.postMessage({ type: 'editPreview', action: 'apply' });
+    });
+    document.getElementById('cancelWorkspacePlanRun').addEventListener('click', () => {
+      vscode.postMessage({ type: 'action', actionId: 'cancelWorkspacePlanRun' });
     });
   </script>
 </body>
@@ -332,6 +347,8 @@ function openAgentSurface() {
   let latestDiagnostics = { mode: 'startup_probe' };
   let lastPromptPlain = null;
   let editPreviewSession = null;
+  /** @type {null | { cancelled: boolean; cancel: () => void }} */
+  let planRunCanceller = null;
   let wizardState = loadWizardState();
   const showFirstRunWizard = config.get('showFirstRunWizard', true);
   const useWizard = showFirstRunWizard && !wizardState.complete;
@@ -597,6 +614,112 @@ function openAgentSurface() {
             : 'Sample diff shown — Apply to file is allowed without Accept (requireEditPreviewBeforeApply is off).',
         });
       })();
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'runSampleWorkspacePlan') {
+      void (async () => {
+        const folder = vscode.workspace.workspaceFolders?.[0];
+        if (!folder) {
+          await vscode.window.showWarningMessage('Open a folder workspace first to run a workspace plan.');
+          return;
+        }
+        if (planRunCanceller !== null) {
+          panel.webview.postMessage({
+            type: 'chatUpdate',
+            status: 'A plan run is already in progress — use Cancel plan run or wait for completion.',
+          });
+          return;
+        }
+        const lvibeDir = vscode.Uri.joinPath(folder.uri, '.lvibe');
+        try {
+          await vscode.workspace.fs.stat(lvibeDir);
+        } catch {
+          await vscode.workspace.fs.createDirectory(lvibeDir);
+        }
+        const stamp = Date.now();
+        const relA = `.lvibe/levibe-plan-demo-${stamp}.txt`;
+        const relB = `.lvibe/levibe-plan-demo-${stamp}-moved.txt`;
+        const uriA = vscode.Uri.joinPath(folder.uri, relA);
+        const uriB = vscode.Uri.joinPath(folder.uri, relB);
+        const plan = {
+          kind: WORKSPACE_PLAN_KIND,
+          steps: [
+            {
+              id: 'demo-create',
+              op: 'create_file',
+              targetUri: uriA.toString(),
+              content: '# Lé Vibe workspace plan demo\n',
+            },
+            {
+              id: 'demo-edit',
+              op: 'apply_edit',
+              targetUri: uriA.toString(),
+              edit: {
+                kind: 'full_file',
+                content: '# Lé Vibe workspace plan demo\n# second line from apply_edit\n',
+              },
+            },
+            {
+              id: 'demo-move',
+              op: 'move_file',
+              fromUri: uriA.toString(),
+              toUri: uriB.toString(),
+            },
+          ],
+        };
+        const validated = validateWorkspacePlan(plan);
+        if (!validated.ok) {
+          panel.webview.postMessage({ type: 'chatUpdate', status: validated.userMessage });
+          return;
+        }
+        const canceller = { cancelled: false, cancel() { this.cancelled = true; } };
+        planRunCanceller = canceller;
+        panel.webview.postMessage({ type: 'planRunUpdate', cancelEnabled: true });
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: 'Running sample workspace plan (3 steps)…',
+          replaceLog: '',
+        });
+        const result = await executeValidatedWorkspacePlan(vscode, validated.value, {
+          workspaceFolder: folder,
+          workspaceUriStr: folder.uri.toString(),
+          shouldCancel: () => canceller.cancelled,
+          onProgress: (line) => {
+            panel.webview.postMessage({ type: 'chatUpdate', append: `${line}\n` });
+          },
+        });
+        planRunCanceller = null;
+        panel.webview.postMessage({ type: 'planRunUpdate', cancelEnabled: false });
+        if (!result.ok) {
+          panel.webview.postMessage({
+            type: 'chatUpdate',
+            status: `Plan failed: ${result.error}`,
+          });
+          return;
+        }
+        if (result.cancelled) {
+          panel.webview.postMessage({
+            type: 'chatUpdate',
+            status: `Plan cancelled after ${result.completedSteps} completed step(s). Remaining steps were not run.`,
+          });
+          return;
+        }
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status:
+            'Sample workspace plan finished — see chat log above. Audit lines: ~/.config/le-vibe/levibe-native-chat/workspace-plan-audit.jsonl',
+        });
+      })();
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'cancelWorkspacePlanRun') {
+      if (planRunCanceller && !planRunCanceller.cancelled) {
+        planRunCanceller.cancel();
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: 'Cancellation requested — current step finishes, then remaining steps are skipped.',
+        });
+      }
       return;
     }
     if (msg.type === 'action' && msg.actionId === 'openOllamaSetupHelp') {

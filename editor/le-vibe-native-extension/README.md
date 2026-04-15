@@ -101,6 +101,7 @@ Token-budget rules (configurable in Settings):
 ## Workspace plan (Epic N10)
 
 - Multi-step orchestration uses **`levibe.workspace_plan.v1`** — ordered **`steps`** with **`op`**: `create_file`, `apply_edit` (same `edit` shapes as [`EDIT_PROPOSAL.v1.md`](EDIT_PROPOSAL.v1.md)), `delete_file`, `move_file`. Validate with [`workspace-plan.js`](workspace-plan.js) (`validateWorkspacePlan`) **before** execution so invalid plans surface a single **`Lé Vibe Chat: workspace plan invalid — …`** string (no partial writes). Human summary: [`WORKSPACE_PLAN.v1.md`](WORKSPACE_PLAN.v1.md).
+- **Execution (task-n10-2):** the panel **Run sample workspace plan** demo streams **`Lé Vibe Chat: plan step N/M — …`** lines into the chat log; each phase also appends structured JSONL under **`workspace-plan-audit.jsonl`** (see *Bounded persistence inventory*). **Cancel plan run** stops before the next step (the in-flight step completes first). Implementation: [`workspace-plan-exec.js`](workspace-plan-exec.js).
 
 ## Operator handoff contract (task-n4-2)
 
@@ -175,5 +176,6 @@ All first-party on-disk state for this extension lives under **`~/.config/le-vib
 | `operator-handoff-audit.jsonl` | Append-only operator handoff records (`lvibe.operator_handoff.v1`). |
 | `third-party-migration-state.json` | Third-party migration status (`third_party_migration.v1`). |
 | `third-party-migration-audit.jsonl` | Append-only migration actions (`lvibe.third_party_migration.v1`). |
+| `workspace-plan-audit.jsonl` | Append-only workspace plan step records (`lvibe.workspace_plan_audit.v1`). |
 
 No embeddings or unbounded cloud sync are written by this extension; export/clear remain user-driven.

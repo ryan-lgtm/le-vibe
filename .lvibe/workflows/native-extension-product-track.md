@@ -582,10 +582,12 @@ Product intent: match **Cursor Composer** / multi-file Copilot flows: a single a
     - schema + tests
   - Evidence:
     - `schemas/levibe.workspace-plan.v1.json`; `WORKSPACE_PLAN.v1.md`; `workspace-plan.js` (`validateWorkspacePlan`, `formatPlanValidationForUser`); `test/workspace-plan.test.js`; `README.md` / `OPERATOR.md`; `npm run verify` green.
-- [ ] `pending` **task-n10-2**: Execute plan steps with **per-step progress** in **Lé Vibe Chat** (step N of M, file path, status).
+- [x] `done` **task-n10-2**: Execute plan steps with **per-step progress** in **Lé Vibe Chat** (step N of M, file path, status).
   - Acceptance:
     - UI shows progress; logs structured events locally
     - cancel aborts remaining steps safely
+  - Evidence:
+    - `workspace-plan-exec.js` (`executeValidatedWorkspacePlan`, `lvibe.workspace_plan_audit.v1` JSONL at `workspace-plan-audit.jsonl`); panel **Run sample workspace plan** / **Cancel plan run** + `planRunUpdate` in `extension.js`; `storage-inventory.js` + README bounded table; tests `test/workspace-plan-exec.test.js`, `test/scaffold.test.js`, `test/storage-inventory.test.js`, `test/operator-doc.test.js`; `npm run verify` green.
 - [ ] `pending` **task-n10-3**: **Rollback strategy**: on failure mid-plan, offer “undo applied steps” or leave workspace consistent with explicit partial state message.
   - Acceptance:
     - documented semantics + at least best-effort undo for same session
