@@ -353,6 +353,11 @@
     - contract test prevents removal
   - Evidence:
     - `README.md`; `test/readme-extension-entry.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-33**: Extension entry doc parity (OPERATOR ↔ README).
+  - Acceptance:
+    - automated test locks shared phrasing around `./extension.js` and VS Code activation entry
+  - Evidence:
+    - `test/extension-entry-doc-parity.test.js`; `npm run verify` green.
 
 ---
 
