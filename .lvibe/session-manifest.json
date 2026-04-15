@@ -134,9 +134,9 @@
           {
             "id": "task-c3-cline-lvibe-bootstrap-policy",
             "title": "Enforce Cline startup policy to read .lvibe manifest/instructions before edits",
-            "status": "pending",
+            "status": "done",
             "assignee_agent": "@be-eng",
-            "notes": "Add default Cline instruction/bootstrap template and ensure it points to .lvibe/session-manifest.json plus relevant .lvibe markdown.",
+            "notes": "Added shipped Cline bootstrap rule template at .clinerules/00-le-vibe-bootstrap.md and wired default workspace provisioning to seed it idempotently. Template explicitly requires reading .lvibe/session-manifest.json and relevant .lvibe markdown before edits.",
             "acceptance_criteria": "Documented and testable bootstrap rule exists and is shipped with product defaults."
           },
           {

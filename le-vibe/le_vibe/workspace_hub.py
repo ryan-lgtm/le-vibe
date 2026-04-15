@@ -15,6 +15,7 @@ from .continue_workspace import (
     PRODUCT_WELCOME_RULE_NAME,
     ensure_continue_lvibe_rules,
 )
+from .cline_bootstrap import ensure_cline_bootstrap_rule
 from .editor_welcome import ensure_lvibe_welcome_md
 from .session_orchestrator import ensure_pm_session_artifacts
 from .structured_log import append_structured_log
@@ -216,6 +217,7 @@ def ensure_lvibe_workspace(workspace_root: Path) -> Path:
     ensure_lvibe_welcome_md(workspace_root)
     ensure_lvibe_workflow_templates(workspace_root)
     ensure_continue_lvibe_rules(workspace_root)
+    ensure_cline_bootstrap_rule(workspace_root)
 
     return lvibe
 

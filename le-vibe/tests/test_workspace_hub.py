@@ -44,6 +44,7 @@ def test_ensure_lvibe_creates_layout(tmp_path: Path):
     assert len(list((lv / "agents").glob("*/skill.md"))) == _expected_agent_skill_count()
     assert (root / ".continue" / "rules" / "00-le-vibe-lvibe-memory.md").is_file()
     assert (root / ".continue" / "rules" / "01-le-vibe-product-welcome.md").is_file()
+    assert (root / ".clinerules" / "00-le-vibe-bootstrap.md").is_file()
     assert (lv / "WELCOME.md").is_file()
     assert (lv / "workflows" / "setup-workspace.md").is_file()
     assert "/setup-workspace" in (lv / "workflows" / "setup-workspace.md").read_text(encoding="utf-8")
