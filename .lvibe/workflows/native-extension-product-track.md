@@ -464,6 +464,11 @@
     - runbook states default and allowed enum values; README ties default to development override flow; test reads contributes default and requires backtick value near the setting key in both files
   - Evidence:
     - `OPERATOR.md`; `README.md`; `test/dev-startup-state-doc-package-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-54**: **Settings inventory guardrail** — every **`leVibeNative.*`** key in **`package.json`** contributes is mentioned in **OPERATOR** and/or **README**.
+  - Acceptance:
+    - test enumerates `contributes.configuration[0].properties` keys with `leVibeNative.` prefix and asserts each appears in combined operator + README text
+  - Evidence:
+    - `test/package-leVibeNative-keys-doc-inventory.test.js`; `npm run verify` green.
 
 ---
 
