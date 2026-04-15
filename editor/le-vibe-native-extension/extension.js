@@ -1,5 +1,7 @@
 'use strict';
 
+const crypto = require('node:crypto');
+
 const OPEN_AGENT_SURFACE_COMMAND = 'leVibeNative.openAgentSurface';
 const OPEN_OLLAMA_SETUP_HELP_COMMAND = 'leVibeNative.openOllamaSetupHelp';
 const OPEN_MODEL_PULL_HELP_COMMAND = 'leVibeNative.openModelPullHelp';
@@ -8,6 +10,7 @@ const OPEN_WORKSPACE_SETUP_COMMAND = 'leVibeNative.openWorkspaceSetup';
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 const { createOllamaClient } = require('./ollama');
 const { createChatController } = require('./chat');
+const { transcriptPath, appendEntry } = require('./chat-transcript');
 
 function escapeHtml(text) {
   return String(text)
@@ -107,6 +110,12 @@ function openAgentSurface() {
     model: config.get('ollamaModel', 'mistral:latest'),
   });
   const chat = createChatController(client);
+  const workspaceUri = vscode.workspace.workspaceFolders?.[0]?.uri.toString() ?? 'no-workspace';
+  const transcriptCaps = {
+    maxBytes: config.get('chatTranscriptMaxBytes', 524288),
+    maxMessages: config.get('chatTranscriptMaxMessages', 200),
+  };
+  const transcriptFile = transcriptPath(workspaceUri);
   const panel = vscode.window.createWebviewPanel(
     'leVibeNativeReadiness',
     'Lé Vibe Native Readiness',
@@ -139,6 +148,21 @@ function openAgentSurface() {
         panel.webview.postMessage({ type: 'chatUpdate', status: 'Enter a prompt first.' });
         return;
       }
+      try {
+        appendEntry(
+          transcriptFile,
+          {
+            id: `u-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
+            ts: Date.now(),
+            role: 'user',
+            content: prompt,
+          },
+          transcriptCaps,
+        );
+      } catch {
+        /* ignore transcript write failures; chat still works */
+      }
+      let assistantBuffer = '';
       panel.webview.postMessage({
         type: 'chatUpdate',
         status: 'Streaming response from local Ollama...',
@@ -146,9 +170,26 @@ function openAgentSurface() {
       });
       void chat.sendPrompt(prompt, {
         onToken(token) {
+          assistantBuffer += token;
           panel.webview.postMessage({ type: 'chatUpdate', append: token });
         },
         onDone(cancelled) {
+          if (!cancelled && assistantBuffer.length > 0) {
+            try {
+              appendEntry(
+                transcriptFile,
+                {
+                  id: `a-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
+                  ts: Date.now(),
+                  role: 'assistant',
+                  content: assistantBuffer,
+                },
+                transcriptCaps,
+              );
+            } catch {
+              /* ignore */
+            }
+          }
           panel.webview.postMessage({
             type: 'chatUpdate',
             status: cancelled ? 'Request cancelled.' : 'Response complete.',

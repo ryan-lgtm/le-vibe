@@ -84,6 +84,20 @@
             "type": "string",
             "default": "mistral:latest",
             "description": "Local Ollama model tag used for prompt streaming requests."
+          },
+          "leVibeNative.chatTranscriptMaxBytes": {
+            "type": "integer",
+            "minimum": 4096,
+            "maximum": 52428800,
+            "default": 524288,
+            "description": "Max on-disk size (bytes) for Lé Vibe Chat JSONL transcript before oldest-first compaction."
+          },
+          "leVibeNative.chatTranscriptMaxMessages": {
+            "type": "integer",
+            "minimum": 10,
+            "maximum": 5000,
+            "default": 200,
+            "description": "Max number of transcript lines (JSONL rows) before oldest-first compaction."
           }
         }
       }
