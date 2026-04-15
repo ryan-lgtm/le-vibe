@@ -29,3 +29,5 @@ Each **proposal** has:
 Malformed payloads must be rejected by `validateEditProposal` before UI apply (see `test/edit-proposal.test.js`).
 
 **Preview before write (Epic N9):** the panel can show a unified diff (`edit-preview.js`) and gate applies with **`leVibeNative.requireEditPreviewBeforeApply`** — see **`README.md`** *Edit preview before apply*.
+
+**Apply:** validated proposals are written with **`workspace-edit-apply.js`** (`applyEditProposalBatchAsWorkspaceEdit`) — one **`WorkspaceEdit`** per accepted batch for editor-friendly undo.

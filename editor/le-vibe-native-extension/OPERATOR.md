@@ -24,6 +24,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Edit preview gate:** **`leVibeNative.requireEditPreviewBeforeApply`** default **`true`** — panel shows a unified diff before writing; when **`true`**, **Accept preview** is required before **Apply to file** (see **`README.md`** *Edit preview before apply*).
 
+**Apply / undo (WorkspaceEdit):** Panel **Apply to file** uses **`vscode.workspace.applyEdit`** with **one** **`WorkspaceEdit` per Apply click** (`workspace-edit-apply.js`) — not raw `fs.writeFile` — so the active editor records a normal text undo. **Manual check (task-n9-3):** after Apply, focus the modified document and **Undo** once; the file should revert to its pre-apply contents for that operation.
+
 **Startup / rollout (defaults):** **`leVibeNative.enableFirstPartyAgentSurface`** default **`true`** (first-party Lé Vibe Chat surface); **`leVibeNative.showFirstRunWizard`** default **`true`** (checkpointed wizard); **`leVibeNative.openPanelOnStartup`** default **`true`** (auto-open panel when the first-party surface is enabled). Rollback semantics in **`README.md`** *Rollout and rollback*.
 
 **Third-party migration nudge:** **`leVibeNative.showThirdPartyMigrationNudge`** default **`true`**. **Ollama readiness source:** **`leVibeNative.useLiveOllamaReadiness`** default **`true`** (live local probes; for development overrides, set **`leVibeNative.useLiveOllamaReadiness`** to **`false`** and use **`leVibeNative.devStartupState`**). Migration flow in **`README.md`** *Third-party agent migration*.

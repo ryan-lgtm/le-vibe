@@ -89,6 +89,7 @@ Token-budget rules (configurable in Settings):
 
 - **`leVibeNative.requireEditPreviewBeforeApply`** (default **`true`**) — for the panel **Preview sample workspace edit** flow, a unified diff is shown first; when **`true`**, you must click **Accept preview** before **Apply to file** (no silent whole-file overwrite from preview alone). Set to **`false`** only if you accept **Apply to file** immediately after the diff is shown (the preview is still displayed for that demo path).
 - Proposal shape: [`EDIT_PROPOSAL.v1.md`](EDIT_PROPOSAL.v1.md) · [`edit-proposal.js`](edit-proposal.js) · diff/gate helpers [`edit-preview.js`](edit-preview.js).
+- Apply path: [`workspace-edit-apply.js`](workspace-edit-apply.js) — one **`WorkspaceEdit`** per **Apply** (VS Code undo stacks coalesce that transaction per buffer).
 
 ## Operator handoff contract (task-n4-2)
 

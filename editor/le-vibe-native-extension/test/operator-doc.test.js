@@ -109,3 +109,10 @@ test('OPERATOR.md documents Product track workflow path (task-n8-66)', () => {
   assert.ok(text.includes('`.lvibe/workflows/native-extension-product-track.md`'));
   assert.ok(text.includes('Epic N8'));
 });
+
+test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('workspace.applyEdit'));
+  assert.ok(text.includes('workspace-edit-apply.js'));
+  assert.ok(text.includes('Manual check'));
+});
