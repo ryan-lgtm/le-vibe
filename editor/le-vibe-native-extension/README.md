@@ -98,6 +98,10 @@ Token-budget rules (configurable in Settings):
 - Helper: [`selection-apply.js`](selection-apply.js) (`resolveSingleSelectionForPartialApply`).
 - **Stale file conflict:** [`edit-conflict.js`](edit-conflict.js) stores a **SHA-256** of the file’s UTF-8 bytes at **Preview sample workspace edit** time. If the file changes or disappears before **Apply to file**, apply is **blocked** and the panel shows a fixed **Lé Vibe Chat:** remediation string (re-run preview).
 
+## Workspace plan (Epic N10)
+
+- Multi-step orchestration uses **`levibe.workspace_plan.v1`** — ordered **`steps`** with **`op`**: `create_file`, `apply_edit` (same `edit` shapes as [`EDIT_PROPOSAL.v1.md`](EDIT_PROPOSAL.v1.md)), `delete_file`, `move_file`. Validate with [`workspace-plan.js`](workspace-plan.js) (`validateWorkspacePlan`) **before** execution so invalid plans surface a single **`Lé Vibe Chat: workspace plan invalid — …`** string (no partial writes). Human summary: [`WORKSPACE_PLAN.v1.md`](WORKSPACE_PLAN.v1.md).
+
 ## Operator handoff contract (task-n4-2)
 
 - Command: `Lé Vibe Chat: Emit operator handoff event` (`leVibeNative.emitOperatorHandoff`), also available as a panel action.

@@ -576,10 +576,12 @@ Product intent: users expect **Lé Vibe Chat** to drive the editor the way **Cur
 
 Product intent: match **Cursor Composer** / multi-file Copilot flows: a single agent turn can touch several files with an ordered, auditable plan.
 
-- [ ] `pending` **task-n10-1**: Introduce a **multi-step plan object** (ordered steps: create/apply/delete/move) produced by the model or orchestrator, validated before execution.
+- [x] `done` **task-n10-1**: Introduce a **multi-step plan object** (ordered steps: create/apply/delete/move) produced by the model or orchestrator, validated before execution.
   - Acceptance:
     - invalid plans rejected with user-visible errors (no partial mystery writes)
     - schema + tests
+  - Evidence:
+    - `schemas/levibe.workspace-plan.v1.json`; `WORKSPACE_PLAN.v1.md`; `workspace-plan.js` (`validateWorkspacePlan`, `formatPlanValidationForUser`); `test/workspace-plan.test.js`; `README.md` / `OPERATOR.md`; `npm run verify` green.
 - [ ] `pending` **task-n10-2**: Execute plan steps with **per-step progress** in **Lé Vibe Chat** (step N of M, file path, status).
   - Acceptance:
     - UI shows progress; logs structured events locally

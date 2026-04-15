@@ -128,3 +128,9 @@ test('OPERATOR.md documents edit preview stale conflict (task-n9-5)', () => {
   assert.ok(text.includes('edit-conflict.js'));
   assert.ok(text.includes('task-n9-5'));
 });
+
+test('OPERATOR.md documents workspace plan validation (task-n10-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('workspace-plan.js'));
+  assert.ok(text.includes('levibe.workspace_plan.v1'));
+});

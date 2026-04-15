@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://le-vibe.dev/schemas/levibe.workspace-plan.v1.json",
+  "title": "Lé Vibe workspace plan (v1)",
+  "description": "Ordered steps (create / apply_edit / delete_file / move_file) validated before any execution (Epic N10).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kind", "steps"],
+  "properties": {
+    "kind": {
+      "type": "string",
+      "const": "levibe.workspace_plan.v1"
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/planStep" }
+    }
+  },
+  "$defs": {
+    "planStep": {
+      "oneOf": [
+        { "$ref": "#/$defs/createFile" },
+        { "$ref": "#/$defs/applyEdit" },
+        { "$ref": "#/$defs/deleteFile" },
+        { "$ref": "#/$defs/moveFile" }
+      ]
+    },
+    "fileUri": {
+      "type": "string",
+      "pattern": "^file://"
+    },
+    "createFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "op", "targetUri"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "op": { "type": "string", "const": "create_file" },
+        "targetUri": { "$ref": "#/$defs/fileUri" },
+        "content": { "type": "string" }
+      }
+    },
+    "applyEdit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "op", "targetUri", "edit"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "op": { "type": "string", "const": "apply_edit" },
+        "targetUri": { "$ref": "#/$defs/fileUri" },
+        "edit": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "range", "newText"],
+              "properties": {
+                "kind": { "const": "range_replace" },
+                "range": { "type": "object" },
+                "newText": { "type": "string" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "content"],
+              "properties": {
+                "kind": { "const": "full_file" },
+                "content": { "type": "string" }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "deleteFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "op", "targetUri"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "op": { "type": "string", "const": "delete_file" },
+        "targetUri": { "$ref": "#/$defs/fileUri" }
+      }
+    },
+    "moveFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "op", "fromUri", "toUri"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "op": { "type": "string", "const": "move_file" },
+        "fromUri": { "$ref": "#/$defs/fileUri" },
+        "toUri": { "$ref": "#/$defs/fileUri" }
+      }
+    }
+  }
+}
