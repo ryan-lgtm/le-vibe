@@ -82,3 +82,10 @@ test('OPERATOR.md documents leVibeNative.ollamaTimeoutMs and smoke timeout overr
   assert.ok(text.includes('leVibeNative.ollamaTimeoutMs'));
   assert.ok(text.includes('LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS'));
 });
+
+test('OPERATOR.md documents default Ollama model tag and leVibeNative.ollamaModel (task-n8-43)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Default local model tag'));
+  assert.ok(text.includes('mistral:latest'));
+  assert.ok(text.includes('leVibeNative.ollamaModel'));
+});

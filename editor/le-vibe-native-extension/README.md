@@ -14,6 +14,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Default Ollama probe timeout:** **`2500` ms** — Settings **`leVibeNative.ollamaTimeoutMs`** (smoke override **`LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS`**; see **`OPERATOR.md`**).
 
+**Default local model tag:** **`mistral:latest`** — Settings **`leVibeNative.ollamaModel`** (streaming generate; see **`OPERATOR.md`**).
+
 **Telemetry:** defaults to **local structured logs only**; no remote telemetry unless you **explicitly opt in** (same policy as **`OPERATOR.md`**).
 
 **Canonical user-facing name (chat UX):** **Lé Vibe Chat** — palette titles and panel copy use this name for the agent surface (per product track; same line as **`OPERATOR.md`**).

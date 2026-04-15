@@ -408,6 +408,12 @@
     - client exposes resolved `model`; equals `package.json` contributes default
   - Evidence:
     - `ollama.js` return shape; `test/ollama-client-model-default.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-43**: OPERATOR + README document **default Ollama model** (`leVibeNative.ollamaModel`).
+  - Acceptance:
+    - runbook and developer README state `mistral:latest` and the Settings key
+    - parity test on shared `mistral:latest` markdown stem
+  - Evidence:
+    - `OPERATOR.md`; `README.md`; `test/operator-doc.test.js`; `test/readme-ollama-model.test.js`; `test/ollama-model-doc-parity.test.js`; `npm run verify` green.
 
 ---
 
