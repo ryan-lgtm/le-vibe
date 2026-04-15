@@ -16,6 +16,7 @@ test('manifest contributes Lé Vibe Open Agent Surface command', () => {
   assert.ok(commands.find((item) => item.command === 'leVibeNative.clearContextFiles'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.emitOperatorHandoff'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.openThirdPartyMigrationGuide'));
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.applySelectionDemoReplace'));
 });
 
 test('manifest supports deterministic activation entrypoints', () => {
@@ -28,6 +29,7 @@ test('manifest supports deterministic activation entrypoints', () => {
   assert.ok(activationEvents.includes('onCommand:leVibeNative.pickContextFile'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.emitOperatorHandoff'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.openThirdPartyMigrationGuide'));
+  assert.ok(activationEvents.includes('onCommand:leVibeNative.applySelectionDemoReplace'));
 });
 
 test('extension exports activate/deactivate and command constant', () => {
@@ -35,6 +37,7 @@ test('extension exports activate/deactivate and command constant', () => {
   assert.equal(typeof extensionModule.deactivate, 'function');
   assert.equal(extensionModule.OPEN_AGENT_SURFACE_COMMAND, 'leVibeNative.openAgentSurface');
   assert.equal(extensionModule.OPEN_THIRD_PARTY_MIGRATION_COMMAND, 'leVibeNative.openThirdPartyMigrationGuide');
+  assert.equal(extensionModule.APPLY_SELECTION_DEMO_REPLACE_COMMAND, 'leVibeNative.applySelectionDemoReplace');
   assert.equal(path.basename(require.resolve('../extension')), 'extension.js');
 });
 

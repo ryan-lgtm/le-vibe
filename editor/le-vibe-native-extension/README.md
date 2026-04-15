@@ -91,6 +91,12 @@ Token-budget rules (configurable in Settings):
 - Proposal shape: [`EDIT_PROPOSAL.v1.md`](EDIT_PROPOSAL.v1.md) · [`edit-proposal.js`](edit-proposal.js) · diff/gate helpers [`edit-preview.js`](edit-preview.js).
 - Apply path: [`workspace-edit-apply.js`](workspace-edit-apply.js) — one **`WorkspaceEdit`** per **Apply** (VS Code undo stacks coalesce that transaction per buffer).
 
+### Partial selection apply (Epic N9)
+
+- Command Palette: **Lé Vibe Chat: Apply demo replace to selection** (`leVibeNative.applySelectionDemoReplace`) — replaces the **single** non-empty editor selection with a short demo line via **`WorkspaceEdit.replace`** (Undo reverts). Use this to validate partial-apply wiring before model-driven `range_replace` proposals.
+- **When selection is missing or ambiguous:** no active editor, **empty** selection (caret only), or **more than one** selection (multi-cursor) → a **warning** only; **no** workspace edit. Multiple regions are **not** merged — use one range or whole-file preview in the panel.
+- Helper: [`selection-apply.js`](selection-apply.js) (`resolveSingleSelectionForPartialApply`).
+
 ## Operator handoff contract (task-n4-2)
 
 - Command: `Lé Vibe Chat: Emit operator handoff event` (`leVibeNative.emitOperatorHandoff`), also available as a panel action.

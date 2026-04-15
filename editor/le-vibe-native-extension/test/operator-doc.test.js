@@ -116,3 +116,9 @@ test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () =
   assert.ok(text.includes('workspace-edit-apply.js'));
   assert.ok(text.includes('Manual check'));
 });
+
+test('OPERATOR.md documents partial selection apply command (task-n9-4)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('leVibeNative.applySelectionDemoReplace'));
+  assert.ok(text.includes('selection-apply.js'));
+});

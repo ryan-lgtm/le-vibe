@@ -13,6 +13,7 @@ const PICK_CONTEXT_FILE_COMMAND = 'leVibeNative.pickContextFile';
 const CLEAR_CONTEXT_FILES_COMMAND = 'leVibeNative.clearContextFiles';
 const EMIT_OPERATOR_HANDOFF_COMMAND = 'leVibeNative.emitOperatorHandoff';
 const OPEN_THIRD_PARTY_MIGRATION_COMMAND = 'leVibeNative.openThirdPartyMigrationGuide';
+const APPLY_SELECTION_DEMO_REPLACE_COMMAND = 'leVibeNative.applySelectionDemoReplace';
 
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 const { createOllamaClient } = require('./ollama');
@@ -40,6 +41,7 @@ const { runThirdPartyMigrationGuide, scheduleThirdPartyMigrationNudge } = requir
 const { validateEditProposal, EDIT_PROPOSAL_KIND } = require('./edit-proposal');
 const { buildUnifiedDiff, canApplyAfterPreview } = require('./edit-preview');
 const { applyEditProposalBatchAsWorkspaceEdit } = require('./workspace-edit-apply');
+const { resolveSingleSelectionForPartialApply } = require('./selection-apply');
 
 function getTranscriptContext(vscode) {
   const config = vscode.workspace.getConfiguration('leVibeNative');
@@ -826,6 +828,21 @@ function activate(context) {
         await vscode.window.showErrorMessage(`Clear failed: ${e && e.message ? e.message : e}`);
       }
     }),
+    vscode.commands.registerCommand(APPLY_SELECTION_DEMO_REPLACE_COMMAND, async () => {
+      const editor = vscode.window.activeTextEditor;
+      const resolved = resolveSingleSelectionForPartialApply(editor);
+      if (!resolved.ok) {
+        await vscode.window.showWarningMessage(resolved.message);
+        return;
+      }
+      const we = new vscode.WorkspaceEdit();
+      const demo = '/* Lé Vibe Chat — selection demo (partial apply) */\n';
+      we.replace(editor.document.uri, /** @type {import('vscode').Range} */ (resolved.range), demo);
+      const applied = await vscode.workspace.applyEdit(we);
+      if (applied) {
+        await vscode.window.showInformationMessage('Lé Vibe Chat: selection range replaced (Undo to revert).');
+      }
+    }),
     vscode.commands.registerCommand(OPEN_THIRD_PARTY_MIGRATION_COMMAND, () => runThirdPartyMigrationGuide(vscode)),
     vscode.commands.registerCommand(OPEN_AGENT_SURFACE_COMMAND, openAgentSurface),
     vscode.commands.registerCommand(OPEN_OLLAMA_SETUP_HELP_COMMAND, () =>
@@ -882,6 +899,7 @@ module.exports = {
   CLEAR_CONTEXT_FILES_COMMAND,
   EMIT_OPERATOR_HANDOFF_COMMAND,
   OPEN_THIRD_PARTY_MIGRATION_COMMAND,
+  APPLY_SELECTION_DEMO_REPLACE_COMMAND,
   getTranscriptContext,
   getContextBudget,
   panelHtml,

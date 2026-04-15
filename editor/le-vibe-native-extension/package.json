@@ -40,7 +40,8 @@
     "onCommand:leVibeNative.pickContextFile",
     "onCommand:leVibeNative.clearContextFiles",
     "onCommand:leVibeNative.emitOperatorHandoff",
-    "onCommand:leVibeNative.openThirdPartyMigrationGuide"
+    "onCommand:leVibeNative.openThirdPartyMigrationGuide",
+    "onCommand:leVibeNative.applySelectionDemoReplace"
   ],
   "contributes": {
     "commands": [
@@ -97,6 +98,11 @@
       {
         "command": "leVibeNative.openThirdPartyMigrationGuide",
         "title": "Lé Vibe: Open third-party agent migration guide",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.applySelectionDemoReplace",
+        "title": "Lé Vibe Chat: Apply demo replace to selection",
         "category": "Lé Vibe"
       }
     ],
