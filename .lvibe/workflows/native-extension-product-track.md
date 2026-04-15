@@ -509,6 +509,11 @@
     - runbook and developer README quote the full command strings; test reads `package.json` and requires both literals in each file
   - Evidence:
     - `OPERATOR.md`; `README.md`; `test/package-scripts-test-smoke-doc-literal-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-63**: **Umbrella doc sync** — **OPERATOR** + **README** contain every exact **`package.json` `scripts`** value (`test`, `smoke`, `verify`).
+  - Acceptance:
+    - single test iterates `package.json` `scripts` entries and requires each string literal in both markdown files
+  - Evidence:
+    - `test/package-json-all-scripts-doc-literal-sync.test.js`; `npm run verify` green.
 
 ---
 
