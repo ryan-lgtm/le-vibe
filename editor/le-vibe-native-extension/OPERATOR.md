@@ -10,6 +10,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Telemetry:** defaults to **local structured logs only**; there is **no** remote telemetry unless the user **explicitly opts in**.
 
+**Canonical user-facing name (chat UX):** **Lé Vibe Chat** — palette titles and panel copy use this name for the agent surface (per product track).
+
 ## Verify (canonical)
 
 From this directory:

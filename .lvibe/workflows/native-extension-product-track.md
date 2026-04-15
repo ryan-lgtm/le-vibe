@@ -318,6 +318,12 @@
     - parity on shared “defaults” phrasing with OPERATOR
   - Evidence:
     - `README.md` Telemetry line; `test/readme-telemetry.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-27**: **Lé Vibe Chat** documented as canonical user-facing chat name.
+  - Acceptance:
+    - OPERATOR + README state the product-track canonical name for palette/panel UX
+    - parity test on shared sentence stem
+  - Evidence:
+    - `OPERATOR.md` + `README.md`; `test/canonical-product-name.test.js`; `npm run verify` green.
 
 ---
 

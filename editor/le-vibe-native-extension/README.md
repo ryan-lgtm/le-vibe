@@ -10,6 +10,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Telemetry:** defaults to **local structured logs only**; no remote telemetry unless you **explicitly opt in** (same policy as **`OPERATOR.md`**).
 
+**Canonical user-facing name (chat UX):** **Lé Vibe Chat** — palette titles and panel copy use this name for the agent surface (per product track; same line as **`OPERATOR.md`**).
+
 ## Scope for task-n1-1
 
 - Extension host entrypoint exists (`extension.js`).
