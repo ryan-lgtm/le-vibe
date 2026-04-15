@@ -489,6 +489,11 @@
     - `verify-script.test.js` asserts exact `scripts.test` string so CI/agents cannot silently drop `*.test.js` discovery
   - Evidence:
     - `test/verify-script.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-59**: **`package.json` `scripts.smoke`** contract — **`node ./scripts/smoke-integration.js`** (deterministic smoke entrypoint).
+  - Acceptance:
+    - `verify-script.test.js` asserts exact `scripts.smoke` string
+  - Evidence:
+    - `test/verify-script.test.js`; `npm run verify` green.
 
 ---
 

@@ -13,3 +13,8 @@ test('package.json test script uses node:test with test/*.test.js glob (task-n8-
   const testScript = packageJson.scripts && packageJson.scripts.test;
   assert.equal(testScript, 'node --test ./test/*.test.js');
 });
+
+test('package.json smoke script points at smoke-integration.js (task-n8-59)', () => {
+  const smoke = packageJson.scripts && packageJson.scripts.smoke;
+  assert.equal(smoke, 'node ./scripts/smoke-integration.js');
+});
