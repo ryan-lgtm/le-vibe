@@ -100,3 +100,11 @@ Token-budget rules (configurable in Settings):
 - **Panel / wizard:** Asserts every readiness `panelHtml` state and each first-run wizard step produce substantial HTML with Lé Vibe markers and chat controls (no blank webview).
 - **Ollama:** Uses `createOllamaClient` from `ollama.js` with the same endpoint defaults as the extension; if the daemon is down, the smoke **passes** unless `LEVIBE_NATIVE_SMOKE_STRICT_OLLAMA=1` (use on a machine with Ollama to fail closed). Override endpoint with `LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT` if needed.
 - **`lvibe .`:** When this package lives under the r-vibe repo, verifies `packaging/bin/lvibe` execs `python3 -m le_vibe.launcher` (the `lvibe .` entry). Set `LEVIBE_SMOKE_SKIP_LVIBE_LAUNCHER=1` if you only have the extension subtree.
+
+## Rollout and rollback (task-n7-1)
+
+- **Feature flag:** `leVibeNative.enableFirstPartyAgentSurface` (default **true**). This is the supported switch for first-party Lé Vibe Chat rollout; toggling it does not delete data under `~/.config/le-vibe/`.
+- **Rollback:** set `enableFirstPartyAgentSurface` to **false** in Settings (JSON: `"leVibeNative.enableFirstPartyAgentSurface": false`). Effects:
+  - Startup no longer auto-opens the readiness panel (even if `openPanelOnStartup` is true).
+  - Command **Lé Vibe: Open Agent Surface** shows a message with **Open Settings** to flip the flag back; the webview panel is not created while disabled.
+- **Restore:** set the same key back to **true** (or remove the override). Palette commands for transcript export/clear and operator handoff remain available for recovery workflows while the panel is disabled.

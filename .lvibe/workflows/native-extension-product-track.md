@@ -149,10 +149,12 @@
 
 ### Epic N7 — Rollout and migration
 
-- [ ] `pending` **task-n7-1**: Introduce feature flag: first-party extension default with fallback controls.
+- [x] `done` **task-n7-1**: Introduce feature flag: first-party extension default with fallback controls.
   - Acceptance:
     - reversible rollout toggle
     - docs for rollback
+  - Evidence:
+    - Added `feature-flags.js` + `leVibeNative.enableFirstPartyAgentSurface` (default `true`) in `package.json`; `extension.js` gates `openAgentSurface` + startup auto-open; README rollback/restore; `test/feature-flags.test.js`; `npm test` in `editor/le-vibe-native-extension`.
 - [ ] `pending` **task-n7-2**: Migrate users from third-party extension state.
   - Acceptance:
     - deterministic cleanup/remediation

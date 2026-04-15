@@ -34,6 +34,7 @@ const {
   readTranscriptRaw,
   clearTranscript,
 } = require('./chat-transcript');
+const { isFirstPartyAgentSurfaceEnabled } = require('./feature-flags');
 
 function getTranscriptContext(vscode) {
   const config = vscode.workspace.getConfiguration('leVibeNative');
@@ -238,6 +239,22 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
 
 function openAgentSurface() {
   const vscode = require('vscode');
+  if (!isFirstPartyAgentSurfaceEnabled(vscode)) {
+    void vscode.window
+      .showInformationMessage(
+        'Lé Vibe first-party agent surface is disabled (rollback). Set leVibeNative.enableFirstPartyAgentSurface to true in Settings to restore the Lé Vibe Chat panel.',
+        'Open Settings',
+      )
+      .then((choice) => {
+        if (choice === 'Open Settings') {
+          void vscode.commands.executeCommand(
+            'workbench.action.openSettings',
+            'leVibeNative.enableFirstPartyAgentSurface',
+          );
+        }
+      });
+    return undefined;
+  }
   const config = vscode.workspace.getConfiguration('leVibeNative');
   const client = createOllamaClient({
     endpoint: config.get('ollamaEndpoint', 'http://127.0.0.1:11434'),
@@ -663,7 +680,9 @@ function activate(context) {
   );
 
   const config = vscode.workspace.getConfiguration('leVibeNative');
-  if (config.get('openPanelOnStartup', true)) {
+  const openStartup =
+    config.get('openPanelOnStartup', true) && config.get('enableFirstPartyAgentSurface', true);
+  if (openStartup) {
     setTimeout(() => {
       void vscode.commands.executeCommand(OPEN_AGENT_SURFACE_COMMAND);
     }, 0);
@@ -689,4 +708,5 @@ module.exports = {
   getContextBudget,
   panelHtml,
   firstRunWizardHtml,
+  isFirstPartyAgentSurfaceEnabled,
 };

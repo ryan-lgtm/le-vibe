@@ -92,6 +92,11 @@
             "default": true,
             "description": "Show the Lé Vibe Chat first-run onboarding wizard (checkpointed, ends on the full readiness surface)."
           },
+          "leVibeNative.enableFirstPartyAgentSurface": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Enable the first-party Lé Vibe Chat readiness panel and agent surface. Set to **false** for rollback (no panel auto-open; `Lé Vibe: Open Agent Surface` shows re-enable instructions). Local-first defaults are unchanged when enabled."
+          },
           "leVibeNative.devStartupState": {
             "type": "string",
             "enum": [
