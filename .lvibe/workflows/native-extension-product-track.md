@@ -240,6 +240,11 @@
     - contract test prevents removal
   - Evidence:
     - `README.md` *Prerequisites (developers)*; `test/readme-prerequisites.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-14**: Operator-doc test covers `package.json` discovery fields.
+  - Acceptance:
+    - `OPERATOR.md` contract includes homepage / bugs / keywords alongside repository
+  - Evidence:
+    - `test/operator-doc.test.js` extended; `npm run verify` green.
 
 ---
 

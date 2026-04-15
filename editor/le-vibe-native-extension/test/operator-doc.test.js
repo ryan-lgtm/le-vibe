@@ -11,3 +11,11 @@ test('OPERATOR.md exists and documents verify + persistence pointers', () => {
   assert.ok(text.includes('storage-inventory.js'));
   assert.ok(text.includes('levibe-native-chat'));
 });
+
+test('OPERATOR.md mentions package.json discovery fields (task-n8-14)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('homepage'));
+  assert.ok(text.includes('bugs'));
+  assert.ok(text.includes('keywords'));
+  assert.ok(text.includes('repository.directory'));
+});
