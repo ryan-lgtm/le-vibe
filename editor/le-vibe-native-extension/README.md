@@ -53,3 +53,16 @@ The panel includes a basic local prompt test surface:
 | **Clear transcript** | Panel + Palette (`Lé Vibe Chat: Clear transcript`) | Modal confirmation, then deletes that workspace’s JSONL file. |
 
 All paths stay under `~/.config/le-vibe/levibe-native-chat/` unless the user chooses another location during export.
+
+## Workspace context picker (task-n4-1)
+
+- Add context files from panel (`Add context file`) or Command Palette (`Lé Vibe Chat: Add workspace context file`).
+- Selected files are read from the current workspace only, path-checked to block traversal/absolute references, and clipped before prompt injection.
+- Context is injected into prompt payload before the user prompt section, so Ollama receives local file excerpts plus the user message.
+
+Token-budget rules (configurable in Settings):
+
+- `leVibeNative.contextMaxFiles` (default `4`)
+- `leVibeNative.contextMaxCharsPerFile` (default `1200`)
+- `leVibeNative.contextMaxLinesPerFile` (default `80`)
+- `leVibeNative.contextMaxTotalChars` (default `3200`)

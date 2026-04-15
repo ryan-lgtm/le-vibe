@@ -20,7 +20,9 @@
     "onCommand:leVibeNative.openWorkspaceSetup",
     "onCommand:leVibeNative.viewChatUsage",
     "onCommand:leVibeNative.exportChatTranscript",
-    "onCommand:leVibeNative.clearChatTranscript"
+    "onCommand:leVibeNative.clearChatTranscript",
+    "onCommand:leVibeNative.pickContextFile",
+    "onCommand:leVibeNative.clearContextFiles"
   ],
   "contributes": {
     "commands": [
@@ -57,6 +59,16 @@
       {
         "command": "leVibeNative.clearChatTranscript",
         "title": "Lé Vibe Chat: Clear transcript",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.pickContextFile",
+        "title": "Lé Vibe Chat: Add workspace context file",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.clearContextFiles",
+        "title": "Lé Vibe Chat: Clear selected workspace context",
         "category": "Lé Vibe"
       }
     ],
@@ -116,6 +128,34 @@
             "maximum": 5000,
             "default": 200,
             "description": "Max number of transcript lines (JSONL rows) before oldest-first compaction."
+          },
+          "leVibeNative.contextMaxFiles": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "default": 4,
+            "description": "Maximum number of workspace files that can be selected as prompt context."
+          },
+          "leVibeNative.contextMaxCharsPerFile": {
+            "type": "integer",
+            "minimum": 200,
+            "maximum": 20000,
+            "default": 1200,
+            "description": "Maximum number of characters captured from each selected context file."
+          },
+          "leVibeNative.contextMaxLinesPerFile": {
+            "type": "integer",
+            "minimum": 10,
+            "maximum": 400,
+            "default": 80,
+            "description": "Maximum number of lines captured from each selected context file."
+          },
+          "leVibeNative.contextMaxTotalChars": {
+            "type": "integer",
+            "minimum": 500,
+            "maximum": 80000,
+            "default": 3200,
+            "description": "Total prompt context character budget across all selected files."
           }
         }
       }

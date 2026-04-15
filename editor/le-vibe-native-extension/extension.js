@@ -9,10 +9,13 @@ const OPEN_WORKSPACE_SETUP_COMMAND = 'leVibeNative.openWorkspaceSetup';
 const VIEW_CHAT_USAGE_COMMAND = 'leVibeNative.viewChatUsage';
 const EXPORT_CHAT_TRANSCRIPT_COMMAND = 'leVibeNative.exportChatTranscript';
 const CLEAR_CHAT_TRANSCRIPT_COMMAND = 'leVibeNative.clearChatTranscript';
+const PICK_CONTEXT_FILE_COMMAND = 'leVibeNative.pickContextFile';
+const CLEAR_CONTEXT_FILES_COMMAND = 'leVibeNative.clearContextFiles';
 
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 const { createOllamaClient } = require('./ollama');
 const { createChatController } = require('./chat');
+const { isSafeRelativePath, clipTextByBudget, buildPromptWithContext } = require('./workspace-context');
 const {
   transcriptPath,
   appendEntry,
@@ -34,6 +37,16 @@ function getTranscriptContext(vscode) {
   };
 }
 
+function getContextBudget(vscode) {
+  const config = vscode.workspace.getConfiguration('leVibeNative');
+  return {
+    maxFiles: config.get('contextMaxFiles', 4),
+    maxCharsPerFile: config.get('contextMaxCharsPerFile', 1200),
+    maxLinesPerFile: config.get('contextMaxLinesPerFile', 80),
+    maxTotalChars: config.get('contextMaxTotalChars', 3200),
+  };
+}
+
 function escapeHtml(text) {
   return String(text)
     .replace(/&/g, '&amp;')
@@ -42,7 +55,13 @@ function escapeHtml(text) {
     .replace(/"/g, '&quot;');
 }
 
-function panelHtml(state, detailOverride, diagnostics) {
+function panelHtml(state, detailOverride, diagnostics, contextBudget) {
+  const budget = contextBudget || {
+    maxFiles: 4,
+    maxCharsPerFile: 1200,
+    maxLinesPerFile: 80,
+    maxTotalChars: 3200,
+  };
   const content = getStateContent(state, detailOverride);
   const actionButtons = content.actions
     .map((action) => `<button data-action="${escapeHtml(action.id)}">${escapeHtml(action.label)}</button>`)
@@ -87,6 +106,12 @@ function panelHtml(state, detailOverride, diagnostics) {
   </div>
   <div id="chatStatus" class="muted">Idle.</div>
   <div id="chatLog" class="chat-log"></div>
+  <h3>Workspace context</h3>
+  <p class="muted">Token-budget rules: max ${escapeHtml(budget.maxFiles)} files; each excerpt up to ${escapeHtml(budget.maxCharsPerFile)} chars and ${escapeHtml(budget.maxLinesPerFile)} lines; total injected context capped at ${escapeHtml(budget.maxTotalChars)} chars.</p>
+  <div>
+    <button data-action="pickContextFile">Add context file</button>
+    <button data-action="clearContextFiles">Clear context</button>
+  </div>
   <h3>Lé Vibe Chat storage</h3>
   <p class="muted">Local JSONL under ~/.config/le-vibe/levibe-native-chat/</p>
   <div>
@@ -140,15 +165,17 @@ function openAgentSurface() {
   });
   const chat = createChatController(client);
   const { transcriptFile, transcriptCaps } = getTranscriptContext(vscode);
+  const contextBudget = getContextBudget(vscode);
+  const selectedContexts = [];
   const panel = vscode.window.createWebviewPanel(
     'leVibeNativeReadiness',
     'Lé Vibe Native Readiness',
     vscode.ViewColumn.Active,
     { enableScripts: true, retainContextWhenHidden: true },
   );
-  panel.webview.html = panelHtml('checking', null, { mode: 'startup_probe' });
+  panel.webview.html = panelHtml('checking', null, { mode: 'startup_probe' }, contextBudget);
   resolveStartupSnapshot(vscode).then((snapshot) => {
-    panel.webview.html = panelHtml(snapshot.state, snapshot.detailOverride, snapshot.diagnostics);
+    panel.webview.html = panelHtml(snapshot.state, snapshot.detailOverride, snapshot.diagnostics, contextBudget);
   });
   panel.webview.onDidReceiveMessage((msg) => {
     if (!msg) {
@@ -164,6 +191,35 @@ function openAgentSurface() {
     }
     if (msg.type === 'action' && msg.actionId === 'openWorkspaceSetup') {
       void vscode.commands.executeCommand(OPEN_WORKSPACE_SETUP_COMMAND);
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'pickContextFile') {
+      void vscode.commands.executeCommand(PICK_CONTEXT_FILE_COMMAND).then((picked) => {
+        if (!picked) {
+          return;
+        }
+        if (selectedContexts.length >= contextBudget.maxFiles) {
+          panel.webview.postMessage({
+            type: 'chatUpdate',
+            status: `Context file cap reached (${contextBudget.maxFiles}). Clear context or raise cap.`,
+          });
+          return;
+        }
+        if (selectedContexts.find((entry) => entry.path === picked.path)) {
+          panel.webview.postMessage({ type: 'chatUpdate', status: `Context already selected: ${picked.path}` });
+          return;
+        }
+        selectedContexts.push(picked);
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: `Context selected (${selectedContexts.length}/${contextBudget.maxFiles}): ${picked.path}`,
+        });
+      });
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'clearContextFiles') {
+      selectedContexts.length = 0;
+      panel.webview.postMessage({ type: 'chatUpdate', status: 'Workspace context cleared.' });
       return;
     }
     if (msg.type === 'action' && msg.actionId === 'viewChatUsage') {
@@ -227,6 +283,7 @@ function openAgentSurface() {
         panel.webview.postMessage({ type: 'chatUpdate', status: 'Enter a prompt first.' });
         return;
       }
+      const promptWithContext = buildPromptWithContext(prompt, selectedContexts, contextBudget.maxTotalChars);
       try {
         appendEntry(
           transcriptFile,
@@ -247,7 +304,7 @@ function openAgentSurface() {
         status: 'Streaming response from local Ollama...',
         replaceLog: '',
       });
-      void chat.sendPrompt(prompt, {
+      void chat.sendPrompt(promptWithContext, {
         onToken(token) {
           assistantBuffer += token;
           panel.webview.postMessage({ type: 'chatUpdate', append: token });
@@ -300,6 +357,43 @@ function openAgentSurface() {
 function activate(context) {
   const vscode = require('vscode');
   context.subscriptions.push(
+    vscode.commands.registerCommand(PICK_CONTEXT_FILE_COMMAND, async () => {
+      const folder = vscode.workspace.workspaceFolders?.[0];
+      if (!folder) {
+        await vscode.window.showWarningMessage('Open a folder workspace first.');
+        return null;
+      }
+      const files = await vscode.workspace.findFiles('**/*', '**/{node_modules,.git,.lvibe}/**', 300);
+      if (!files.length) {
+        await vscode.window.showInformationMessage('No workspace files available for context selection.');
+        return null;
+      }
+      const items = files.map((uri) => ({
+        label: vscode.workspace.asRelativePath(uri, false),
+        uri,
+      }));
+      const choice = await vscode.window.showQuickPick(items, {
+        title: 'Select workspace file for Lé Vibe Chat context',
+        placeHolder: 'Choose one file to include as prompt context excerpt',
+      });
+      if (!choice) {
+        return null;
+      }
+      if (!isSafeRelativePath(choice.label)) {
+        await vscode.window.showWarningMessage('Unsafe file reference blocked.');
+        return null;
+      }
+      const ctx = getContextBudget(vscode);
+      const bytes = await vscode.workspace.fs.readFile(choice.uri);
+      const raw = Buffer.from(bytes).toString('utf8');
+      const excerpt = clipTextByBudget(raw, ctx.maxCharsPerFile, ctx.maxLinesPerFile);
+      return { path: choice.label, content: excerpt };
+    }),
+    vscode.commands.registerCommand(CLEAR_CONTEXT_FILES_COMMAND, async () => {
+      await vscode.window.showInformationMessage(
+        'Use the panel action "Clear context" to clear currently selected workspace context files.',
+      );
+    }),
     vscode.commands.registerCommand(VIEW_CHAT_USAGE_COMMAND, async () => {
       const { transcriptFile } = getTranscriptContext(vscode);
       const stats = getTranscriptStats(transcriptFile);
@@ -391,6 +485,9 @@ module.exports = {
   VIEW_CHAT_USAGE_COMMAND,
   EXPORT_CHAT_TRANSCRIPT_COMMAND,
   CLEAR_CHAT_TRANSCRIPT_COMMAND,
+  PICK_CONTEXT_FILE_COMMAND,
+  CLEAR_CONTEXT_FILES_COMMAND,
   getTranscriptContext,
+  getContextBudget,
   panelHtml,
 };

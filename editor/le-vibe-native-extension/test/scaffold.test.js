@@ -12,6 +12,8 @@ test('manifest contributes Lé Vibe Open Agent Surface command', () => {
   const command = commands.find((item) => item.command === 'leVibeNative.openAgentSurface');
   assert.ok(command, 'expected leVibeNative.openAgentSurface command contribution');
   assert.equal(command.title, 'Lé Vibe: Open Agent Surface');
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.pickContextFile'));
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.clearContextFiles'));
 });
 
 test('manifest supports deterministic activation entrypoints', () => {
@@ -21,6 +23,7 @@ test('manifest supports deterministic activation entrypoints', () => {
     'expected command activation event',
   );
   assert.ok(activationEvents.includes('onStartupFinished'), 'expected startup activation event');
+  assert.ok(activationEvents.includes('onCommand:leVibeNative.pickContextFile'));
 });
 
 test('extension exports activate/deactivate and command constant', () => {
@@ -59,5 +62,7 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('View usage'));
     assert.ok(html.includes('Export transcript'));
     assert.ok(html.includes('Clear transcript'));
+    assert.ok(html.includes('Add context file'));
+    assert.ok(html.includes('Clear context'));
   });
 });
