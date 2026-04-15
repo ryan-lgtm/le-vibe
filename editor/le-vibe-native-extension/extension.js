@@ -37,6 +37,8 @@ const {
 } = require('./chat-transcript');
 const { isFirstPartyAgentSurfaceEnabled } = require('./feature-flags');
 const { runThirdPartyMigrationGuide, scheduleThirdPartyMigrationNudge } = require('./third-party-migration');
+const { validateEditProposal, EDIT_PROPOSAL_KIND } = require('./edit-proposal');
+const { buildUnifiedDiff, canApplyAfterPreview } = require('./edit-preview');
 
 function getTranscriptContext(vscode) {
   const config = vscode.workspace.getConfiguration('leVibeNative');
@@ -182,6 +184,19 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   </div>
   <div id="chatStatus" class="muted">Idle.</div>
   <div id="chatLog" class="chat-log"></div>
+  <h3>Edit preview (workspace)</h3>
+  <p class="muted">Unified diff before writing. When <code>leVibeNative.requireEditPreviewBeforeApply</code> is on (default), click <strong>Accept preview</strong> then <strong>Apply to file</strong> — no silent whole-file overwrite.</p>
+  <div>
+    <button data-action="previewSampleWorkspaceEdit">Preview sample workspace edit</button>
+  </div>
+  <div id="editPreviewSection" style="display:none;margin-top:0.5rem;">
+    <pre id="editPreviewPre" class="diag"></pre>
+    <div>
+      <button type="button" id="editPreviewAccept">Accept preview</button>
+      <button type="button" id="editPreviewReject">Reject</button>
+      <button type="button" id="editPreviewApply" disabled>Apply to file</button>
+    </div>
+  </div>
   <h3>Workspace context</h3>
   <p class="muted">Token-budget rules: max ${escapeHtml(budget.maxFiles)} files; each excerpt up to ${escapeHtml(budget.maxCharsPerFile)} chars and ${escapeHtml(budget.maxLinesPerFile)} lines; total injected context capped at ${escapeHtml(budget.maxTotalChars)} chars.</p>
   <div>
@@ -225,6 +240,27 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     });
     window.addEventListener('message', (event) => {
       const msg = event.data;
+      if (msg && msg.type === 'editPreview') {
+        const sec = document.getElementById('editPreviewSection');
+        const pre = document.getElementById('editPreviewPre');
+        const applyBtn = document.getElementById('editPreviewApply');
+        sec.style.display = 'block';
+        pre.textContent = msg.unifiedDiff || '';
+        applyBtn.disabled = msg.applyEnabled !== true;
+        return;
+      }
+      if (msg && msg.type === 'editPreviewUpdate') {
+        if (msg.clear) {
+          document.getElementById('editPreviewSection').style.display = 'none';
+          document.getElementById('editPreviewPre').textContent = '';
+          document.getElementById('editPreviewApply').disabled = true;
+          return;
+        }
+        if (msg.applyEnabled) {
+          document.getElementById('editPreviewApply').disabled = false;
+        }
+        return;
+      }
       if (!msg || msg.type !== 'chatUpdate') {
         return;
       }
@@ -238,6 +274,15 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
       } else if (typeof msg.append === 'string') {
         log.textContent += msg.append;
       }
+    });
+    document.getElementById('editPreviewAccept').addEventListener('click', () => {
+      vscode.postMessage({ type: 'editPreview', action: 'accept' });
+    });
+    document.getElementById('editPreviewReject').addEventListener('click', () => {
+      vscode.postMessage({ type: 'editPreview', action: 'reject' });
+    });
+    document.getElementById('editPreviewApply').addEventListener('click', () => {
+      vscode.postMessage({ type: 'editPreview', action: 'apply' });
     });
   </script>
 </body>
@@ -282,6 +327,7 @@ function openAgentSurface() {
   let latestStartupState = 'checking';
   let latestDiagnostics = { mode: 'startup_probe' };
   let lastPromptPlain = null;
+  let editPreviewSession = null;
   let wizardState = loadWizardState();
   const showFirstRunWizard = config.get('showFirstRunWizard', true);
   const useWizard = showFirstRunWizard && !wizardState.complete;
@@ -394,6 +440,59 @@ function openAgentSurface() {
     if (!msg) {
       return;
     }
+    if (msg.type === 'editPreview') {
+      if (msg.action === 'accept') {
+        if (editPreviewSession) {
+          editPreviewSession.userAccepted = true;
+        }
+        panel.webview.postMessage({ type: 'editPreviewUpdate', applyEnabled: true });
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: 'Edit preview accepted — you can Apply to file.',
+        });
+        return;
+      }
+      if (msg.action === 'reject') {
+        editPreviewSession = null;
+        panel.webview.postMessage({ type: 'editPreviewUpdate', clear: true });
+        panel.webview.postMessage({ type: 'chatUpdate', status: 'Edit preview rejected.' });
+        return;
+      }
+      if (msg.action === 'apply') {
+        void (async () => {
+          const cfg = vscode.workspace.getConfiguration('leVibeNative');
+          const requirePreview = cfg.get('requireEditPreviewBeforeApply', true);
+          if (!editPreviewSession) {
+            await vscode.window.showWarningMessage('No pending edit preview.');
+            return;
+          }
+          const gate = canApplyAfterPreview({
+            requireEditPreviewBeforeApply: requirePreview,
+            previewShown: editPreviewSession.previewShown,
+            userAcceptedPreview: editPreviewSession.userAccepted,
+          });
+          if (!gate.ok) {
+            await vscode.window.showWarningMessage(gate.reason);
+            return;
+          }
+          try {
+            await vscode.workspace.fs.writeFile(
+              editPreviewSession.targetUri,
+              Buffer.from(editPreviewSession.newText, 'utf8'),
+            );
+            const rel = vscode.workspace.asRelativePath(editPreviewSession.targetUri, false);
+            await vscode.window.showInformationMessage(`Lé Vibe Chat: applied edit to ${rel}`);
+          } catch (e) {
+            await vscode.window.showErrorMessage(e && e.message ? e.message : String(e));
+          }
+          editPreviewSession = null;
+          panel.webview.postMessage({ type: 'editPreviewUpdate', clear: true });
+          panel.webview.postMessage({ type: 'chatUpdate', status: 'Edit applied to workspace file.' });
+        })();
+        return;
+      }
+      return;
+    }
     if (msg.type === 'wizard') {
       const checkpointOrder = ['welcome', 'local_first', 'ollama_note', 'workspace_note'];
       if (msg.action === 'next') {
@@ -419,6 +518,64 @@ function openAgentSurface() {
         beginMainReadiness();
         return;
       }
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'previewSampleWorkspaceEdit') {
+      void (async () => {
+        const folder = vscode.workspace.workspaceFolders?.[0];
+        if (!folder) {
+          await vscode.window.showWarningMessage('Open a folder workspace first to preview a sample edit.');
+          return;
+        }
+        const rel = '.levibe-edit-preview-demo.txt';
+        const targetUri = vscode.Uri.joinPath(folder.uri, rel);
+        let before = '';
+        try {
+          const bytes = await vscode.workspace.fs.readFile(targetUri);
+          before = Buffer.from(bytes).toString('utf8');
+        } catch {
+          before = '';
+        }
+        const after =
+          before.length === 0
+            ? '# Lé Vibe edit preview demo\n'
+            : `${before.replace(/\s+$/, '')}\n# Lé Vibe edit preview demo\n`;
+        const proposal = {
+          kind: EDIT_PROPOSAL_KIND,
+          proposals: [
+            {
+              targetUri: targetUri.toString(),
+              edit: { kind: 'full_file', content: after },
+            },
+          ],
+        };
+        const validated = validateEditProposal(proposal);
+        if (!validated.ok) {
+          await vscode.window.showErrorMessage(`Invalid proposal: ${validated.errors.join('; ')}`);
+          return;
+        }
+        const requirePreview = vscode.workspace
+          .getConfiguration('leVibeNative')
+          .get('requireEditPreviewBeforeApply', true);
+        const diff = buildUnifiedDiff(before, after, rel);
+        editPreviewSession = {
+          targetUri,
+          newText: after,
+          previewShown: true,
+          userAccepted: false,
+        };
+        panel.webview.postMessage({
+          type: 'editPreview',
+          unifiedDiff: diff,
+          applyEnabled: !requirePreview,
+        });
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: requirePreview
+            ? 'Sample diff shown — Accept preview then Apply to file (or Reject).'
+            : 'Sample diff shown — Apply to file is allowed without Accept (requireEditPreviewBeforeApply is off).',
+        });
+      })();
       return;
     }
     if (msg.type === 'action' && msg.actionId === 'openOllamaSetupHelp') {

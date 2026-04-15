@@ -227,6 +227,11 @@
             "maximum": 80000,
             "default": 3200,
             "description": "Total prompt context character budget across all selected files."
+          },
+          "leVibeNative.requireEditPreviewBeforeApply": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "When **true** (default), applying assistant-proposed workspace edits from the Lé Vibe panel requires reviewing the unified diff and clicking **Accept preview** before **Apply to file** — no silent whole-file overwrite after preview alone."
           }
         }
       }

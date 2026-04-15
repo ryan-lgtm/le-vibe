@@ -79,5 +79,8 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('Emit handoff event'));
     assert.ok(html.includes('Third-party agent migration'));
     assert.ok(html.includes('Open migration guide'));
+    assert.ok(html.includes('Edit preview (workspace)'));
+    assert.ok(html.includes('Preview sample workspace edit'));
+    assert.ok(html.includes('editPreviewApply'));
   });
 });

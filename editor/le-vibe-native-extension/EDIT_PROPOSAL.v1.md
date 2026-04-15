@@ -27,3 +27,5 @@ Each **proposal** has:
   - **`full_file`:** `content` string replacing the entire file.
 
 Malformed payloads must be rejected by `validateEditProposal` before UI apply (see `test/edit-proposal.test.js`).
+
+**Preview before write (Epic N9):** the panel can show a unified diff (`edit-preview.js`) and gate applies with **`leVibeNative.requireEditPreviewBeforeApply`** — see **`README.md`** *Edit preview before apply*.

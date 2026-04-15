@@ -85,6 +85,11 @@ Token-budget rules (configurable in Settings):
 - **`leVibeNative.contextMaxLinesPerFile`** (default **`80`**)
 - **`leVibeNative.contextMaxTotalChars`** (default **`3200`**)
 
+## Edit preview before apply (Epic N9)
+
+- **`leVibeNative.requireEditPreviewBeforeApply`** (default **`true`**) — for the panel **Preview sample workspace edit** flow, a unified diff is shown first; when **`true`**, you must click **Accept preview** before **Apply to file** (no silent whole-file overwrite from preview alone). Set to **`false`** only if you accept **Apply to file** immediately after the diff is shown (the preview is still displayed for that demo path).
+- Proposal shape: [`EDIT_PROPOSAL.v1.md`](EDIT_PROPOSAL.v1.md) · [`edit-proposal.js`](edit-proposal.js) · diff/gate helpers [`edit-preview.js`](edit-preview.js).
+
 ## Operator handoff contract (task-n4-2)
 
 - Command: `Lé Vibe Chat: Emit operator handoff event` (`leVibeNative.emitOperatorHandoff`), also available as a panel action.

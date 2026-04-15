@@ -22,6 +22,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Workspace context caps:** **`leVibeNative.contextMaxFiles`** default **`4`**, **`leVibeNative.contextMaxCharsPerFile`** default **`1200`**, **`leVibeNative.contextMaxLinesPerFile`** default **`80`**, **`leVibeNative.contextMaxTotalChars`** default **`3200`** (per-file and total character budget for prompt context; details in **`README.md`** *Workspace context picker*).
 
+**Edit preview gate:** **`leVibeNative.requireEditPreviewBeforeApply`** default **`true`** — panel shows a unified diff before writing; when **`true`**, **Accept preview** is required before **Apply to file** (see **`README.md`** *Edit preview before apply*).
+
 **Startup / rollout (defaults):** **`leVibeNative.enableFirstPartyAgentSurface`** default **`true`** (first-party Lé Vibe Chat surface); **`leVibeNative.showFirstRunWizard`** default **`true`** (checkpointed wizard); **`leVibeNative.openPanelOnStartup`** default **`true`** (auto-open panel when the first-party surface is enabled). Rollback semantics in **`README.md`** *Rollout and rollback*.
 
 **Third-party migration nudge:** **`leVibeNative.showThirdPartyMigrationNudge`** default **`true`**. **Ollama readiness source:** **`leVibeNative.useLiveOllamaReadiness`** default **`true`** (live local probes; for development overrides, set **`leVibeNative.useLiveOllamaReadiness`** to **`false`** and use **`leVibeNative.devStartupState`**). Migration flow in **`README.md`** *Third-party agent migration*.
