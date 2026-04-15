@@ -1,0 +1,171 @@
+# Lé Vibe Native Extension Product Track
+
+**Owner:** Senior Product Management / Product Owner  
+**Execution mode:** Senior engineering agents, iterative delivery, no prompt edits between passes  
+**Primary objective:** Replace third-party gray-screen onboarding risk with a first-party Lé Vibe extension that is local-first, auditable, and storage-respectful.
+
+## Product goals
+
+1. `lvibe .` launches into an immediately usable agent surface (no gray dead-end).
+2. Local Ollama is the default runtime with explicit health/status feedback.
+3. Conversation and agent memory storage is bounded, user-visible, and opt-out/clearable.
+4. Startup behavior is deterministic: clear success path or explicit remediation.
+5. Every iteration is testable, auditable, and safe to ship incrementally.
+
+## Non-negotiable constraints
+
+- Local-first by default (no silent cloud fallback).
+- No hidden writes of large chat history or embeddings outside declared locations.
+- Must expose user controls for retention, export, and clear.
+- Canonical UX/product name is **Lé Vibe Chat** for all user-facing surfaces.
+- No unrelated refactors outside active task scope.
+- If blocked on sudo/manual interaction, continue all other in-scope work and report under **USER FLAGGED ACTIONS REQUIRED**.
+
+## Storage policy (required)
+
+- **Chat transcript store:** bounded JSONL or sqlite under `~/.config/le-vibe/`.
+- **Default retention:** rolling window + max size budget.
+- **Compaction:** oldest-first with summary stub (never silent data loss).
+- **Privacy controls:** `lvibe` command(s) to inspect usage, export, and clear.
+- **Telemetry:** local structured logs only unless user explicitly opts in.
+
+## Delivery model
+
+- Work in small vertical slices.
+- Each pass picks the **first `pending` task** in epic order.
+- Update status and evidence in this file each pass.
+- Keep a running section called **USER FLAGGED ACTIONS REQUIRED** for operator-only steps.
+
+---
+
+## Epic order and task board
+
+### Epic N0 — Product framing and architecture baseline
+
+- [x] `done` **task-n0-1**: Define extension boundary (what stays in launcher vs extension vs backend bridge).
+  - Acceptance:
+    - one-page architecture diagram and responsibilities
+    - explicit API boundary for Ollama + workspace services
+  - Evidence:
+    - Added `docs/native-extension-boundary.md` with boundary diagram, deterministic startup contract, and explicit extension<->bridge, bridge<->Ollama, and bridge<->workspace API definitions.
+- [x] `done` **task-n0-2**: Decide extension tech shape (native VS Code extension + webview view + command surface).
+  - Acceptance:
+    - scaffold approach selected
+    - risks/trade-offs documented
+  - Evidence:
+    - Added `docs/native-extension-tech-shape.md` selecting `editor/le-vibe-native-extension` scaffold, initial command surface, webview view rationale, and explicit risks/trade-offs with mitigations.
+
+### Epic N1 — Extension skeleton and deterministic startup
+
+- [x] `done` **task-n1-1**: Create first-party extension package scaffold under `editor/` tree with Lé Vibe branding.
+  - Acceptance:
+    - extension activates
+    - command appears in command palette
+  - Evidence:
+    - Added `editor/le-vibe-native-extension/` scaffold with branded command contribution (`leVibeNative.openAgentSurface` / `Lé Vibe: Open Agent Surface`), startup+command activation events, and passing targeted tests (`npm test` in extension folder).
+- [x] `done` **task-n1-2**: Add startup readiness panel (not blank/gray) with explicit states:
+  - `checking`, `ready`, `needs_ollama`, `needs_model`, `needs_auth_or_setup`.
+  - Acceptance:
+    - no blank panel state
+    - every non-ready state has an actionable button/text
+  - Evidence:
+    - Implemented readiness webview panel in `editor/le-vibe-native-extension/extension.js` + `readiness.js` with all required states rendered, startup auto-open, and non-ready action buttons (`openOllamaSetupHelp`, `openModelPullHelp`, `openWorkspaceSetup`); targeted tests pass via `npm test` (6/6).
+
+### Epic N2 — Local Ollama integration MVP
+
+- [x] `done` **task-n2-1**: Implement Ollama health probe + model list integration.
+  - Acceptance:
+    - extension can read health/model state
+    - failures mapped to explicit remediation copy
+  - Evidence:
+    - Added `editor/le-vibe-native-extension/ollama.js` and wired live startup probe in `readiness.js`/`extension.js` using local endpoint (`http://127.0.0.1:11434` default), model-list state mapping (`ready` vs `needs_model`), and explicit error remediation copy for probe failures (`needs_ollama`); targeted tests pass (`npm test`, 10/10).
+- [x] `done` **task-n2-2**: Implement basic prompt/response streaming in panel.
+  - Acceptance:
+    - send prompt
+    - receive streaming response
+    - cancel in-flight request
+  - Evidence:
+    - Added local Ollama prompt streaming path in `editor/le-vibe-native-extension/ollama.js`, chat lifecycle controller in `chat.js`, and panel send/cancel UI wiring in `extension.js` (stream token updates + cancel handling); targeted tests pass via `npm test` (13/13).
+
+### Epic N3 — Conversation persistence with storage controls
+
+- [x] `done` **task-n3-1**: Add bounded chat persistence with configurable cap.
+  - Acceptance:
+    - max size enforced
+    - old messages compacted predictably
+  - Evidence:
+    - Added `editor/le-vibe-native-extension/chat-transcript.js` (JSONL under `~/.config/le-vibe/levibe-native-chat/`, `leVibeNative.chatTranscriptMaxBytes` / `chatTranscriptMaxMessages`, oldest-first compaction with explicit system stub), wired from `extension.js` on each user/assistant turn; tests in `test/transcript.test.js`; `npm test` 17/17.
+- [x] `done` **task-n3-2**: Add user-facing controls (`view usage`, `export`, `clear`).
+  - Acceptance:
+    - controls wired
+    - docs for behavior and paths
+  - Evidence:
+    - Panel buttons + Command Palette commands: `leVibeNative.viewChatUsage`, `exportChatTranscript`, `clearChatTranscript` (`extension.js`, `package.json`); `chat-transcript.js` helpers `getTranscriptStats`, `readTranscriptRaw`, `clearTranscript`; README table for paths under `~/.config/le-vibe/levibe-native-chat/`; `npm test` 18/18.
+
+### Epic N4 — Workspace/operator integration
+
+- [x] `done` **task-n4-1**: Integrate workspace context picker and safe file references.
+  - Acceptance:
+    - selected file context included in prompt payload
+    - clear token-budget rules
+  - Evidence:
+    - Added workspace context utilities in `editor/le-vibe-native-extension/workspace-context.js` and wired panel/palette controls (`pickContextFile`, `clearContextFiles`) in `extension.js`/`package.json`; selected file excerpts are clipped and injected into outbound prompt payload; token-budget rules shown in panel + documented in `README.md`; tests pass via `npm test` (21/21).
+- [x] `done` **task-n4-2**: Add operator handoff contract from extension to `lvibe` environment orchestration.
+  - Acceptance:
+    - reproducible handoff event format
+    - local audit log evidence
+  - Evidence:
+    - Added `editor/le-vibe-native-extension/operator-handoff.js` with contract `lvibe.operator_handoff.v1` and JSONL append helper; wired panel + command palette action `leVibeNative.emitOperatorHandoff` in `extension.js`/`package.json`; local audit log path `~/.config/le-vibe/levibe-native-chat/operator-handoff-audit.jsonl`; targeted tests pass (`npm test`, 23/23).
+
+### Epic N5 — Reliability and UX hardening
+
+- [x] `done` **task-n5-1**: Add resilient retries and timeout UX for Ollama/API calls.
+  - Acceptance:
+    - no hard hangs
+    - user gets retry + diagnostics
+  - Evidence:
+    - Added `retry-helpers.js` and wired exponential retries for streaming (`chat.js`) plus `listModels` in `ollama.js`; stream stall/max-duration timers in `ollama.js`; panel diagnostics + **Retry last prompt** (`extension.js`); settings `ollamaMaxRetries`, `ollamaRetryBackoffMs`, `ollamaStreamStallMs`, `ollamaStreamMaxMs`; README + tests (`npm test` extended).
+- [x] `done` **task-n5-2**: Add onboarding wizard and first-run checkpoints.
+  - Acceptance:
+    - first-run path ends in actionable ready state
+    - no ambiguous gray panel
+  - Evidence:
+    - Added `first-run-wizard.js` (persisted checkpoints under `~/.config/le-vibe/levibe-native-chat/first-run-wizard.json`), `firstRunWizardHtml` + message handlers in `extension.js` (next/finish/skip → `beginMainReadiness()`), setting `leVibeNative.showFirstRunWizard`; tests `test/first-run-wizard.test.js` + scaffold assertion for wizard HTML; README section; `npm test` in extension folder.
+
+### Epic N6 — Test and release contracts
+
+- [ ] `pending` **task-n6-1**: Add unit tests for state machine + storage bounds.
+  - Acceptance:
+    - deterministic tests for each non-ready state
+    - persistence limits tested
+- [ ] `pending` **task-n6-2**: Add integration smoke path (`lvibe .` + extension ready checks).
+  - Acceptance:
+    - automated smoke verifies panel is not blank
+    - verifies local Ollama/model wiring
+
+### Epic N7 — Rollout and migration
+
+- [ ] `pending` **task-n7-1**: Introduce feature flag: first-party extension default with fallback controls.
+  - Acceptance:
+    - reversible rollout toggle
+    - docs for rollback
+- [ ] `pending` **task-n7-2**: Migrate users from third-party extension state.
+  - Acceptance:
+    - deterministic cleanup/remediation
+    - migration notes + guardrails
+
+---
+
+## Per-pass completion checklist (engineering agents)
+
+1. Implement only active task scope.
+2. Add/update targeted tests.
+3. Run relevant tests/verification commands.
+4. Update this file task status + short evidence note.
+5. Record any operator-only blockers under **USER FLAGGED ACTIONS REQUIRED**.
+6. Create clean scoped commit(s), push, report status.
+
+## USER FLAGGED ACTIONS REQUIRED
+
+- _None currently._
+

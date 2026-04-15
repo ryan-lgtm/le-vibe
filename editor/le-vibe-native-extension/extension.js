@@ -20,6 +20,14 @@ const { isSafeRelativePath, clipTextByBudget, buildPromptWithContext } = require
 const { handoffAuditPath, buildOperatorHandoffEvent, appendOperatorHandoffAudit } = require('./operator-handoff');
 const { formatOllamaDiagnostic } = require('./retry-helpers');
 const {
+  loadWizardState,
+  saveWizardState,
+  advanceStep,
+  markCheckpoint,
+  completeWizard,
+  FINAL_STEP_INDEX,
+} = require('./first-run-wizard');
+const {
   transcriptPath,
   appendEntry,
   getTranscriptStats,
@@ -56,6 +64,67 @@ function escapeHtml(text) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+function firstRunWizardHtml(step) {
+  const safeStep = Math.min(Math.max(Number(step) || 0, 0), FINAL_STEP_INDEX);
+  const steps = [
+    {
+      title: 'Lé Vibe Chat — Welcome',
+      body: 'This first-run checklist ends in an actionable agent surface (no empty gray panel). Lé Vibe Chat is local-first: no silent cloud fallback.',
+    },
+    {
+      title: 'Checkpoint 1 — Local-first and storage',
+      body: 'Transcripts and audit data live under ~/.config/le-vibe/ with explicit caps. You can view usage, export, and clear from the panel after setup.',
+    },
+    {
+      title: 'Checkpoint 2 — Local Ollama',
+      body: 'After this wizard, the panel shows live readiness (reachable Ollama, model present). If you are not ready yet, use the remediation buttons (Open Ollama Setup Help, model install steps).',
+    },
+    {
+      title: 'Checkpoint 3 — Workspace',
+      body: 'Open a folder workspace for full context and workflows (e.g. .lvibe/workflows). Then use Local prompt test when the runtime state is ready or follow the on-screen actions.',
+    },
+  ];
+  const cur = steps[safeStep];
+  const progress = `Step ${safeStep + 1} of ${FINAL_STEP_INDEX + 1}`;
+  const nextBtn =
+    safeStep < FINAL_STEP_INDEX
+      ? '<button id="wizNext">Next checkpoint</button>'
+      : '<button id="wizFinish">Finish and open agent surface</button>';
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body { font-family: var(--vscode-font-family); color: var(--vscode-foreground); padding: 1rem 1.25rem; line-height: 1.45; font-size: 13px; background: var(--vscode-editor-background); }
+    h2 { margin-bottom: 0.35rem; }
+    .muted { opacity: 0.85; }
+    .card { border: 1px solid var(--vscode-panel-border); border-radius: 8px; padding: 0.85rem 1rem; margin-top: 0.75rem; background: var(--vscode-sideBar-background); }
+    button { margin-right: 0.5rem; margin-top: 0.5rem; padding: 0.4rem 0.85rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>${escapeHtml(cur.title)}</h2>
+  <p class="muted">${escapeHtml(progress)}</p>
+  <div class="card">
+    <p>${escapeHtml(cur.body)}</p>
+  </div>
+  <div>
+    ${nextBtn}
+    <button id="wizSkip">Skip onboarding</button>
+  </div>
+  <p class="muted">Skipping still opens the full Lé Vibe surface with explicit readiness states and actions.</p>
+  <script>
+    const vscode = acquireVsCodeApi();
+    const next = document.getElementById('wizNext');
+    const finish = document.getElementById('wizFinish');
+    if (next) next.addEventListener('click', () => vscode.postMessage({ type: 'wizard', action: 'next' }));
+    if (finish) finish.addEventListener('click', () => vscode.postMessage({ type: 'wizard', action: 'finish' }));
+    document.getElementById('wizSkip').addEventListener('click', () => vscode.postMessage({ type: 'wizard', action: 'skip' }));
+  </script>
+</body>
+</html>`;
 }
 
 function panelHtml(state, detailOverride, diagnostics, contextBudget) {
@@ -189,18 +258,38 @@ function openAgentSurface() {
   let latestStartupState = 'checking';
   let latestDiagnostics = { mode: 'startup_probe' };
   let lastPromptPlain = null;
+  let wizardState = loadWizardState();
+  const showFirstRunWizard = config.get('showFirstRunWizard', true);
+  const useWizard = showFirstRunWizard && !wizardState.complete;
+
   const panel = vscode.window.createWebviewPanel(
     'leVibeNativeReadiness',
     'Lé Vibe Native Readiness',
     vscode.ViewColumn.Active,
     { enableScripts: true, retainContextWhenHidden: true },
   );
-  panel.webview.html = panelHtml('checking', null, { mode: 'startup_probe' }, contextBudget);
-  resolveStartupSnapshot(vscode).then((snapshot) => {
-    latestStartupState = snapshot.state;
-    latestDiagnostics = snapshot.diagnostics || {};
-    panel.webview.html = panelHtml(snapshot.state, snapshot.detailOverride, snapshot.diagnostics, contextBudget);
-  });
+
+  function beginMainReadiness() {
+    panel.webview.html = panelHtml('checking', null, { mode: 'startup_probe' }, contextBudget);
+    resolveStartupSnapshot(vscode).then((snapshot) => {
+      latestStartupState = snapshot.state;
+      latestDiagnostics = snapshot.diagnostics || {};
+      panel.webview.html = panelHtml(snapshot.state, snapshot.detailOverride, snapshot.diagnostics, contextBudget);
+      panel.webview.postMessage({
+        type: 'chatUpdate',
+        status:
+          snapshot.state === 'ready'
+            ? 'Lé Vibe Chat: runtime ready. Use Local prompt test below.'
+            : 'Lé Vibe Chat: follow the highlighted readiness state and use the action buttons.',
+      });
+    });
+  }
+
+  if (useWizard) {
+    panel.webview.html = firstRunWizardHtml(wizardState.step);
+  } else {
+    beginMainReadiness();
+  }
 
   function runPromptSend(promptPlain, { skipUserTranscript = false } = {}) {
     const trimmed = String(promptPlain || '').trim();
@@ -279,6 +368,33 @@ function openAgentSurface() {
 
   panel.webview.onDidReceiveMessage((msg) => {
     if (!msg) {
+      return;
+    }
+    if (msg.type === 'wizard') {
+      const checkpointOrder = ['welcome', 'local_first', 'ollama_note', 'workspace_note'];
+      if (msg.action === 'next') {
+        const idx = wizardState.step;
+        if (idx < FINAL_STEP_INDEX) {
+          wizardState = markCheckpoint(wizardState, checkpointOrder[idx]);
+          wizardState = advanceStep(wizardState);
+          saveWizardState(wizardState);
+          panel.webview.html = firstRunWizardHtml(wizardState.step);
+        }
+        return;
+      }
+      if (msg.action === 'finish') {
+        wizardState = markCheckpoint(wizardState, checkpointOrder[FINAL_STEP_INDEX]);
+        wizardState = completeWizard(wizardState);
+        saveWizardState(wizardState);
+        beginMainReadiness();
+        return;
+      }
+      if (msg.action === 'skip') {
+        wizardState = completeWizard(wizardState);
+        saveWizardState(wizardState);
+        beginMainReadiness();
+        return;
+      }
       return;
     }
     if (msg.type === 'action' && msg.actionId === 'openOllamaSetupHelp') {
@@ -572,4 +688,5 @@ module.exports = {
   getTranscriptContext,
   getContextBudget,
   panelHtml,
+  firstRunWizardHtml,
 };

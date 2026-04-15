@@ -53,6 +53,12 @@ test('every non-ready state has actionable remediation buttons', () => {
   });
 });
 
+test('first-run wizard HTML is non-empty and branded', () => {
+  const html = extensionModule.firstRunWizardHtml(0);
+  assert.ok(html.includes('Lé Vibe Chat — Welcome'));
+  assert.ok(html.includes('wizNext') || html.includes('wizFinish'));
+});
+
 test('panel HTML is never blank and includes state indicator', () => {
   STARTUP_STATES.forEach((state) => {
     const html = extensionModule.panelHtml(state);

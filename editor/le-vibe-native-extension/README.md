@@ -80,3 +80,10 @@ Token-budget rules (configurable in Settings):
 - **Automatic retries** for transient local Ollama failures (`ollamaMaxRetries`, exponential backoff from `ollamaRetryBackoffMs`) apply to readiness `GET /api/tags` and to streaming `POST /api/generate`.
 - **Stream guards**: `ollamaStreamStallMs` aborts if no tokens/activity for too long; `ollamaStreamMaxMs` caps total stream wall time (prevents hard hangs).
 - **UX**: panel shows structured diagnostics on failure (`[error code] message (endpoint: …)`), retry progress during auto-retry, and a **Retry last prompt** button (manual resend without duplicating the user line in the transcript).
+
+## First-run onboarding (task-n5-2)
+
+- On first open, a **checkpointed wizard** runs before the full readiness + chat surface so the panel is never an empty gray view.
+- State is stored at `~/.config/le-vibe/levibe-native-chat/first-run-wizard.json` (schema `first_run_wizard.v1`).
+- **Next checkpoint** advances; **Finish and open agent surface** completes the wizard and runs the normal readiness flow; **Skip onboarding** marks completion and opens the same surface.
+- Setting: `leVibeNative.showFirstRunWizard` (default `true`). Set to `false` to go straight to the readiness panel.

@@ -87,6 +87,11 @@
             "default": true,
             "description": "Open the Lé Vibe readiness panel at startup."
           },
+          "leVibeNative.showFirstRunWizard": {
+            "type": "boolean",
+            "default": true,
+            "description": "Show the Lé Vibe Chat first-run onboarding wizard (checkpointed, ends on the full readiness surface)."
+          },
           "leVibeNative.devStartupState": {
             "type": "string",
             "enum": [
