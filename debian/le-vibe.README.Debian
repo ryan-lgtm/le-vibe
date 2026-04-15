@@ -7,7 +7,7 @@ Lé Vibe — quick steps after apt install
 
 **Session persistence (14.g):** Interactive shells can **`export LE_VIBE_EDITOR=...`** in **`~/.profile`** or **`~/.bashrc`**. **Desktop / “open from app menu”** sessions often **do not** source those files — use **`~/.config/environment.d/`** (`*.conf`, systemd user environment) or your distro’s documented session env so **`lvibe`** inherits **`LE_VIBE_EDITOR`** (same story as **`editor/README.md`** *Persisting `LE_VIBE_EDITOR`*).
 
-**Desktop launcher (§7.3):** With **`le-vibe-ide`** installed, your environment’s application menu lists **Lé Vibe** (Freedesktop **`le-vibe.desktop`**) and runs **`/usr/bin/lvibe`** (same first-run + Continue auto-setup path as the CLI; **`le-vibe-ide`** **Depends** on the **`le-vibe`** stack package). The editor binary remains **`/usr/lib/le-vibe/bin/codium`** for **`LE_VIBE_EDITOR`** and internal resolution.
+**Desktop launcher (§7.3):** With **`le-vibe-ide`** installed, your environment’s application menu lists **Lé Vibe** (Freedesktop **`le-vibe.desktop`**) and runs **`/usr/bin/lvibe`** (same first-run + Cline auto-setup path as the CLI; **`le-vibe-ide`** **Depends** on the **`le-vibe`** stack package). The editor binary remains **`/usr/lib/le-vibe/bin/codium`** for **`LE_VIBE_EDITOR`** and internal resolution.
 
 **Default editor when `LE_VIBE_EDITOR` is unset (14.g):** the launcher uses the same order as **`le_vibe.launcher._default_editor`** in **`le-vibe/le_vibe/launcher.py`**: **`$LE_VIBE_EDITOR`** if set; else **`/usr/lib/le-vibe/bin/codium`** if that path exists and is executable (**`le-vibe-ide`** **`.deb`** — **`packaging/debian-le-vibe-ide/`**; **PRODUCT_SPEC** §7.3 internal install path, not a second public **`PATH`** CLI); else **`/usr/bin/codium`** if executable; else the command **`codium`** on **`PATH`**. **`debian/control`** **`Recommends: codium`** and **`Suggests: le-vibe-ide`** cover the usual cases: stock VSCodium until the optional IDE package is installed from the same release train.
 
@@ -19,9 +19,9 @@ Lé Vibe — quick steps after apt install
      lvibe
    (Compatibility: `le-vibe` is the same entrypoint.)
 
-3. Continue + YAML (Open VSX pins — **`docs/continue-extension-pin.md`**): on the **next** **`lvibe`** session after first-run, the launcher **attempts** the same wiring as **`le-vibe-setup-continue`** automatically (sync **`~/.continue/config.yaml`**, then install pinned **`continue.continue`** and **`redhat.vscode-yaml`**). Set **`LE_VIBE_AUTO_CONTINUE_SETUP=0`** to disable. If setup fails (e.g. offline marketplace), run **`le-vibe-setup-continue`** once when online; repeated automatic attempts are suppressed after failure via **`~/.config/le-vibe/.auto-continue-setup-suppressed`** (delete that file to allow another try). Exit codes for the manual command: main README (0 ok; 1 need first-run; 2 sync; 3 extension; 4 no editor).
+3. Cline + YAML (Open VSX pins — **`docs/continue-extension-pin.md`**): on the **next** **`lvibe`** session after first-run, the launcher **attempts** the same wiring as **`le-vibe-setup-cline`** automatically (install pinned **`saoudrizwan.claude-dev`** and **`redhat.vscode-yaml`**). Set **`LE_VIBE_AUTO_CLINE_SETUP=0`** to disable. If setup fails (e.g. offline marketplace), run **`le-vibe-setup-cline`** once when online; repeated automatic attempts are suppressed after failure via **`~/.config/le-vibe/.auto-cline-setup-suppressed`** (delete that file to allow another try). Exit codes for the manual command: 0 ok; 3 extension install failed; 4 no editor.
 
-4. Open the editor, confirm Continue uses apiBase http://127.0.0.1:11435 (managed Ollama).
+4. Open the editor and confirm Cline is available with the local Ollama runtime at **`http://127.0.0.1:11435`**.
 
 IDE sources in a clone (developers)
 ------------------------------------

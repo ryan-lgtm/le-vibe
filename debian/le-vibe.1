@@ -15,7 +15,7 @@ managed Ollama process so GPU VRAM is released.
 Product naming: Lé Vibe is not Microsoft Visual Studio Code; use Code \-
 OSS / VSCodium\-class editors.
 .PP
-After successful first\-run, the launcher may run \fBle\-vibe\-setup\-continue\fR automatically (pinned Continue + YAML extensions and \fB~/.continue/config.yaml\fR sync; \fBdocs/continue\-extension\-pin.md\fR). Set \fBLE_VIBE_AUTO_CONTINUE_SETUP=0\fR to disable.
+After successful first\-run, the launcher may run \fBle\-vibe\-setup\-cline\fR automatically (pinned Cline + YAML extensions; \fBdocs/continue\-extension\-pin.md\fR). Set \fBLE_VIBE_AUTO_CLINE_SETUP=0\fR to disable.
 .PP
 Primary CLI name is \fBlvibe\fR (same as this program). Open the current directory in the editor:
 .B lvibe \.
@@ -79,7 +79,7 @@ With no flags: path and \fBtail \-f\fR reminder; else path only, last \fIN\fR li
 .TP
 .B lvibe continue-pin
 .RI [ \-\-path\-only | \-\-json ]
-Continue Open VSX pin — \fBdocs/continue\-extension\-pin.md\fR; \fBLE_VIBE_CONTINUE_PIN_FILE\fR overrides the pin file path.
+Cline Open VSX pin — \fBdocs/continue\-extension\-pin.md\fR; \fBLE_VIBE_CLINE_PIN_FILE\fR overrides the pin file path.
 .TP
 .B lvibe verify-checksums
 .RI [ \-C " dir " | \-\-json ]
@@ -121,7 +121,7 @@ Configs, first\-run marker, welcome marker (\fB.welcome\-shown\fR), managed Olla
 .I .lvibe/
 Per\-project workspace memory hub \fBafter\fR you accept consent on first open (e.g. \fBlvibe .\fR); agent memory layout; add \fB.lvibe/\fR to \fB.gitignore\fR when that file exists. Summary: \fI/usr/share/doc/le\-vibe/README.Debian\fR.
 .SH "SEE ALSO"
-.BR le\-vibe\-setup\-continue (1),
+.BR le\-vibe\-setup\-cline (1),
 .BR codium (1),
 .BR ollama (1).
 Full docs: \fI/usr/share/doc/le\-vibe/README.Debian\fR.

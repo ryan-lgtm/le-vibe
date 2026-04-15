@@ -142,9 +142,9 @@
           {
             "id": "task-c4-docs-global-continue-to-cline",
             "title": "Replace Continue references in docs with Cline-specific operational guidance",
-            "status": "pending",
+            "status": "done",
             "assignee_agent": "@prod",
-            "notes": "Update user docs, maintainer docs, Debian docs/man references, and stage maps where Continue is currently named as default flow.",
+            "notes": "Updated core docs to make Cline the default operational flow: user/maintainer README guidance, Debian README/manpages (including setup command rename docs), and PM stage-map H4 references now point to Cline install/pin behavior.",
             "acceptance_criteria": "Core docs no longer prescribe Continue setup paths; Cline flow is authoritative and internally consistent."
           },
           {

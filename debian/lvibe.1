@@ -20,7 +20,7 @@ Open the current project in the editor:
 Product naming: Lé Vibe is not Microsoft Visual Studio Code; use Code \-
 OSS / VSCodium\-class editors.
 .PP
-After successful first\-run, the launcher may run \fBle\-vibe\-setup\-continue\fR automatically (pinned Continue + YAML extensions and \fB~/.continue/config.yaml\fR sync; \fBdocs/continue\-extension\-pin.md\fR). Set \fBLE_VIBE_AUTO_CONTINUE_SETUP=0\fR to disable.
+After successful first\-run, the launcher may run \fBle\-vibe\-setup\-cline\fR automatically (pinned Cline + YAML extensions; \fBdocs/continue\-extension\-pin.md\fR). Set \fBLE_VIBE_AUTO_CLINE_SETUP=0\fR to disable.
 .PP
 When first\-run bootstrap fails: set \fBLE_VIBE_VERBOSE\fR for stderr detail; \fBlvibe logs\fR prints the path and a \fBtail \-f\fR reminder, or use \fBlvibe logs \-\-path\-only\fR / \fBlvibe logs \-\-tail\fR \fIN\fR (STEP 6). \fBlvibe \-\-help\fR lists the same remediation flags (\fB\-\-skip\-first\-run\fR, \fB\-\-force\-first\-run\fR, \fBLE_VIBE_VERBOSE\fR, \fBlvibe logs\fR; STEP 6). Same story as \fBle\-vibe\fR(1) OPTIONS; see \fBle\-vibe/README.md\fR \fIFirst\-run (launcher)\fR and \fBPRODUCT_SPEC_SECTION8_EVIDENCE.md\fR §10.
 .SH COMMANDS
@@ -67,7 +67,7 @@ With no flags: print the structured log path (\fB~/.config/le\-vibe/le\-vibe.log
 .TP
 .B lvibe continue-pin
 .RI [ \-\-path\-only | \-\-json ]
-Print the pinned Open VSX semver for Continue (\fBcontinue.continue@\fIver\fR), path only, or JSON (\fBpin_file\fR, \fBsemver\fR, \fBopenvsx_id\fR). Pin file: \fB/usr/share/le\-vibe/continue\-openvsx\-version\fR when installed, else monorepo \fBpackaging/continue\-openvsx\-version\fR; \fBLE_VIBE_CONTINUE_PIN_FILE\fR overrides. \fBdocs/continue\-extension\-pin.md\fR.
+Print the pinned Open VSX semver for Cline (\fBsaoudrizwan.claude-dev@\fIver\fR), path only, or JSON (\fBpin_file\fR, \fBsemver\fR, \fBopenvsx_id\fR). Pin file: \fB/usr/share/le\-vibe/cline\-openvsx\-version\fR when installed, else monorepo \fBpackaging/cline\-openvsx\-version\fR; \fBLE_VIBE_CLINE_PIN_FILE\fR overrides. \fBdocs/continue\-extension\-pin.md\fR.
 .TP
 .B lvibe verify-checksums
 .RI [ \-C " dir " | \-\-json ]
@@ -113,7 +113,7 @@ Configs, first\-run marker, welcome marker (\fB.welcome\-shown\fR), managed Olla
 Per\-project workspace memory \fBafter\fR consent on first open (e.g. \fBlvibe .\fR); see \fBle\-vibe\fR(1) and \fI/usr/share/doc/le\-vibe/README.Debian\fR.
 .SH "SEE ALSO"
 .BR le\-vibe (1),
-.BR le\-vibe\-setup\-continue (1),
+.BR le\-vibe\-setup\-cline (1),
 .BR codium (1),
 .BR ollama (1).
 Full docs: \fI/usr/share/doc/le-vibe/README.Debian\fR.

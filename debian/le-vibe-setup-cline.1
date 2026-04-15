@@ -1,0 +1,45 @@
+.TH LE-VIBE-SETUP-CLINE 1 "2026" "Linux" "User Commands"
+.SH NAME
+le-vibe-setup-cline \- install pinned Cline + YAML extensions for Lé Vibe
+.SH SYNOPSIS
+.B le-vibe-setup-cline
+.SH DESCRIPTION
+Runs
+.BR install\-cline\-extension.sh
+(which installs pinned
+.B saoudrizwan.claude-dev
+and
+.B redhat.vscode\-yaml
+from Open VSX per
+.BR docs/continue\-extension\-pin.md )
+with clear exit codes (see below). Run as the desktop user after
+.B lvibe
+has completed first\-run
+(same launcher as
+.BR le\-vibe (1)).
+
+After successful first\-run, \fBlvibe\fR may invoke this command automatically; set \fBLE_VIBE_AUTO_CLINE_SETUP=0\fR to disable. See \fBlvibe\fR(1) / \fBle\-vibe\fR(1) DESCRIPTION.
+.SH "EXIT STATUS"
+.TP
+.B 0
+Success.
+.TP
+.B 3
+Extension install failed (Cline or YAML; network or marketplace).
+.TP
+.B 4
+No editor binary (install VSCodium or set
+.BR LE_VIBE_EDITOR ).
+.TP
+.B 127
+Helper scripts not found.
+.TP
+.B 125
+Unknown CLI option (see
+.BR \-\-help ).
+.SH "SEE ALSO"
+.BR lvibe (1),
+.BR le\-vibe (1),
+.BR codium (1).
+.PP
+Full post\-install steps and policy summary: \fI/usr/share/doc/le\-vibe/README.Debian\fR.
