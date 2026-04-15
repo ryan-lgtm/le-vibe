@@ -529,6 +529,12 @@
     - `operator-doc.test.js` asserts exact path string + “Product track” / Epic N8 context
   - Evidence:
     - `test/operator-doc.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-67**: **README** contract — *Operator verification / ship checklist* cites the same **Product track** workflow board path (**`.lvibe/workflows/native-extension-product-track.md`**); parity with OPERATOR.
+  - Acceptance:
+    - `readme-product-track-workflow-path.test.js` asserts path + section context in README
+    - `product-track-workflow-doc-parity.test.js` asserts the exact path string appears in both **OPERATOR.md** and **README.md**
+  - Evidence:
+    - `README.md`; `test/readme-product-track-workflow-path.test.js`; `test/product-track-workflow-doc-parity.test.js`; `npm run verify` green.
 
 ---
 

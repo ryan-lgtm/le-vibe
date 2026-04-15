@@ -139,6 +139,7 @@ Token-budget rules (configurable in Settings):
 
 ## Operator verification / ship checklist (task-n8-1)
 
+- **Workflow board:** **`.lvibe/workflows/native-extension-product-track.md`** (Epic N8 — task order for this extension; operator runbook references the same path under **`OPERATOR.md`** *Product track*).
 - **Canonical command:** from `editor/le-vibe-native-extension/`, run **`npm run verify`** (runs **`npm test`** then **`npm run smoke`**; **`package.json`** **`scripts.verify`** = **`npm test && npm run smoke`**).
 - **Underlying scripts:** **`package.json`** **`scripts.test`** = **`node --test ./test/*.test.js`**; **`scripts.smoke`** = **`node ./scripts/smoke-integration.js`**.
 - **Green means:** all unit tests pass; smoke confirms non-blank panel/wizard HTML, `lvibe` launcher string contract when the monorepo layout is present, and a best-effort local Ollama probe (non-fatal if the daemon is absent unless `LEVIBE_NATIVE_SMOKE_STRICT_OLLAMA=1`).
