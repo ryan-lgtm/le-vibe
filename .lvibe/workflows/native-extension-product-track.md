@@ -459,6 +459,11 @@
     - runbook and README name full `leVibeNative.*` keys with backtick `true` near each key; test reads contributes defaults and asserts for both files
   - Evidence:
     - `OPERATOR.md`; `README.md`; `test/migration-readiness-boolean-doc-package-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-53**: Documented **`leVibeNative.devStartupState`** default enum string stays aligned with **`package.json`** in OPERATOR and README.
+  - Acceptance:
+    - runbook states default and allowed enum values; README ties default to development override flow; test reads contributes default and requires backtick value near the setting key in both files
+  - Evidence:
+    - `OPERATOR.md`; `README.md`; `test/dev-startup-state-doc-package-sync.test.js`; `npm run verify` green.
 
 ---
 

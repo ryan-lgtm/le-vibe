@@ -44,7 +44,7 @@ Every non-ready state includes at least one remediation action button:
 - local model install steps
 - workspace setup workflow opener
 
-During `n1-2`, readiness state is driven by `leVibeNative.devStartupState` so UX behavior is deterministic before live health wiring in `n2`.
+During `n1-2`, readiness state is driven by **`leVibeNative.devStartupState`** (default **`needs_auth_or_setup`**) so UX behavior is deterministic before live health wiring in `n2`.
 
 ## Prompt streaming (task-n2-2)
 
@@ -97,7 +97,7 @@ Token-budget rules (configurable in Settings):
 
 - **Automatic retries** for transient local Ollama failures — **`leVibeNative.ollamaMaxRetries`** (default **`2`**), exponential backoff from **`leVibeNative.ollamaRetryBackoffMs`** (default **`400` ms**) — apply to readiness `GET /api/tags` and to streaming `POST /api/generate`.
 - **Stream guards:** **`leVibeNative.ollamaStreamStallMs`** (default **`60000` ms**) aborts if no tokens/activity for too long; **`leVibeNative.ollamaStreamMaxMs`** (default **`120000` ms**) caps total stream wall time (prevents hard hangs).
-- **Readiness source:** **`leVibeNative.useLiveOllamaReadiness`** (default **`true`**) — use live local Ollama probes for startup snapshot; set **`false`** with **`leVibeNative.devStartupState`** for development overrides (see **`test/readiness-state-machine.test.js`**).
+- **Readiness source:** **`leVibeNative.useLiveOllamaReadiness`** (default **`true`**) — use live local Ollama probes for startup snapshot; set **`false`** and choose a **`leVibeNative.devStartupState`** string (default **`needs_auth_or_setup`**) for development overrides (see **`test/readiness-state-machine.test.js`**).
 - **UX**: panel shows structured diagnostics on failure (`[error code] message (endpoint: …)`), retry progress during auto-retry, and a **Retry last prompt** button (manual resend without duplicating the user line in the transcript).
 
 ## First-run onboarding (task-n5-2)

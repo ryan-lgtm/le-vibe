@@ -26,6 +26,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Third-party migration nudge:** **`leVibeNative.showThirdPartyMigrationNudge`** default **`true`**. **Ollama readiness source:** **`leVibeNative.useLiveOllamaReadiness`** default **`true`** (live local probes; for development overrides, set **`leVibeNative.useLiveOllamaReadiness`** to **`false`** and use **`leVibeNative.devStartupState`**). Migration flow in **`README.md`** *Third-party agent migration*.
 
+**Development readiness override:** **`leVibeNative.devStartupState`** default **`needs_auth_or_setup`** (string enum: `checking`, `ready`, `needs_ollama`, `needs_model`, `needs_auth_or_setup`; used when **`leVibeNative.useLiveOllamaReadiness`** is **`false`**).
+
 **Telemetry:** defaults to **local structured logs only**; there is **no** remote telemetry unless the user **explicitly opts in**.
 
 **Canonical user-facing name (chat UX):** **Lé Vibe Chat** — palette titles and panel copy use this name for the agent surface (per product track).
