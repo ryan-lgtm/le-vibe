@@ -1,4 +1,4 @@
-"""Sanity checks for packaging/bin/le-vibe-setup-continue (G-A2 GUI + exit codes)."""
+"""Sanity checks for packaging/bin/le-vibe-setup-cline."""
 
 from __future__ import annotations
 
@@ -11,13 +11,13 @@ def _repo_root() -> Path:
 
 
 def test_setup_continue_script_bash_syntax() -> None:
-    script = _repo_root() / "packaging" / "bin" / "le-vibe-setup-continue"
+    script = _repo_root() / "packaging" / "bin" / "le-vibe-setup-cline"
     assert script.is_file(), script
     subprocess.run(["bash", "-n", str(script)], check=True, capture_output=True)
 
 
 def test_setup_continue_help_exits_zero() -> None:
-    script = _repo_root() / "packaging" / "bin" / "le-vibe-setup-continue"
+    script = _repo_root() / "packaging" / "bin" / "le-vibe-setup-cline"
     r = subprocess.run(
         ["bash", str(script), "--help"],
         check=False,
@@ -25,11 +25,11 @@ def test_setup_continue_help_exits_zero() -> None:
         text=True,
     )
     assert r.returncode == 0
-    assert "--gui" in r.stdout
+    assert "Usage: le-vibe-setup-cline" in r.stdout
 
 
 def test_setup_continue_short_help_matches_long_help() -> None:
-    script = _repo_root() / "packaging" / "bin" / "le-vibe-setup-continue"
+    script = _repo_root() / "packaging" / "bin" / "le-vibe-setup-cline"
     rh = subprocess.run(
         ["bash", str(script), "-h"],
         check=False,
@@ -47,7 +47,7 @@ def test_setup_continue_short_help_matches_long_help() -> None:
 
 
 def test_setup_continue_unknown_option_exit_125() -> None:
-    script = _repo_root() / "packaging" / "bin" / "le-vibe-setup-continue"
+    script = _repo_root() / "packaging" / "bin" / "le-vibe-setup-cline"
     r = subprocess.run(
         ["bash", str(script), "--not-a-real-flag"],
         check=False,
@@ -58,44 +58,29 @@ def test_setup_continue_unknown_option_exit_125() -> None:
     assert "unknown option" in r.stderr
 
 
-def test_setup_continue_gui_requires_zenity_exit_127_documented() -> None:
-    """--gui path must fail with 127 when zenity is unavailable (see script stderr)."""
-    text = (_repo_root() / "packaging" / "bin" / "le-vibe-setup-continue").read_text(
-        encoding="utf-8"
-    )
-    assert "command -v zenity" in text
-    assert "[exit 127]" in text
-    assert "--gui requires zenity" in text
+def test_setup_continue_cline_installer_contract() -> None:
+    text = (_repo_root() / "packaging" / "bin" / "le-vibe-setup-cline").read_text(encoding="utf-8")
+    assert "install-cline-extension.sh" in text
+    assert "install Cline + Red Hat YAML extensions" in text
+    assert "Extension install failed (Cline or YAML" in text
 
 
 def test_setup_continue_requires_bash_readlink_documented() -> None:
-    text = (_repo_root() / "packaging" / "bin" / "le-vibe-setup-continue").read_text(encoding="utf-8")
-    assert "bash not on PATH" in text
+    text = (_repo_root() / "packaging" / "bin" / "le-vibe-setup-cline").read_text(encoding="utf-8")
     assert "readlink not on PATH" in text
 
 
 def test_debian_le_vibe_setup_continue_man_documents_dual_extension_and_auto() -> None:
-    """debian/le-vibe-setup-continue.1 matches install-continue-extension.sh (H4) + launcher auto."""
-    text = (_repo_root() / "debian" / "le-vibe-setup-continue.1").read_text(encoding="utf-8")
-    assert "continue.continue" in text
+    """debian/le-vibe-setup-cline.1 matches install-cline-extension.sh (H4) + launcher auto."""
+    text = (_repo_root() / "debian" / "le-vibe-setup-cline.1").read_text(encoding="utf-8")
+    assert "saoudrizwan.claude-dev" in text
     assert "redhat.vscode\\-yaml" in text
-    assert "LE_VIBE_AUTO_CONTINUE_SETUP" in text
+    assert "LE_VIBE_AUTO_CLINE_SETUP" in text
     assert "continue\\-extension\\-pin.md" in text
 
 
 def test_setup_continue_header_documents_ci_le_vibe_deb_vs_ide_deb_step14() -> None:
-    """STEP 14 / §7.3: setup-continue wrapper keeps same H1 trust line as other packaging/bin stubs."""
-    text = (_repo_root() / "packaging" / "bin" / "le-vibe-setup-continue").read_text(encoding="utf-8")
-    assert "0 → 1 → 14 → 2–13 → 15–17" in text
-    assert "PROMPT_BUILD_LE_VIBE.md" in text
-    assert "le-vibe-deb" in text
-    assert "build-le-vibe-debs.sh --with-ide" in text
-    assert "Full-product install" in text
-    assert "PM_DEB_BUILD_ITERATION.md" in text
-    assert "apt-repo-releases.md" in text
-    assert "IDE package" in text
-    assert "PM_STAGE_MAP.md" in text
-    assert "H1 vs §7.3 .deb bundles" in text
-    assert "test_setup_continue_script.py" in text
-    assert "test_verify_step14_closeout_contract.py" in text
-    assert ".pytest-verify-step14-contract.lock" in text
+    """STEP 14 / §7.3: setup-cline wrapper documents Cline install flow."""
+    text = (_repo_root() / "packaging" / "bin" / "le-vibe-setup-cline").read_text(encoding="utf-8")
+    assert "install-cline-extension.sh" in text
+    assert "No editor binary" in text

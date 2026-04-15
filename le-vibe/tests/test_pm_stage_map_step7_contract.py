@@ -1,4 +1,4 @@
-"""Contract: docs/PM_STAGE_MAP.md STEP 7 row lists H4 Continue pin + E1 (STEP 7)."""
+"""Contract: docs/PM_STAGE_MAP.md STEP 7 row lists H4 Cline pin + E1 (STEP 7)."""
 
 from __future__ import annotations
 
@@ -11,14 +11,12 @@ def _repo_root() -> Path:
 
 def test_pm_stage_map_step7_row_lists_continue_pin_and_e1():
     text = (_repo_root() / "docs" / "PM_STAGE_MAP.md").read_text(encoding="utf-8")
-    rows = [ln for ln in text.splitlines() if ln.lstrip().startswith("| 7 — H4 Continue")]
+    rows = [ln for ln in text.splitlines() if ln.lstrip().startswith("| 7 — H4 Cline")]
     assert len(rows) == 1
     row = rows[0]
-    assert "test_continue_openvsx_pin.py" in row
-    assert "test_install_continue_extension_script.py" in row
-    assert "test_continue_extension_pin_doc_step14_contract.py" in row
+    assert "test_install_cline_extension_script.py" in row
+    assert "test_setup_cline_script.py" in row
     assert "H4" in row or "STEP 7" in row
-    assert "continue-openvsx-version" in row
+    assert "cline-openvsx-version" in row
     assert "vscode-yaml-openvsx-version" in row
-    assert "install-continue-extension.sh" in row
-    assert "verify-continue-pin.sh" in row
+    assert "install-cline-extension.sh" in row

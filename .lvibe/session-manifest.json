@@ -150,9 +150,9 @@
           {
             "id": "task-c5-test-and-smoke-realignment",
             "title": "Replace Continue contract coverage with Cline contract/smoke coverage",
-            "status": "pending",
+            "status": "done",
             "assignee_agent": "@qa-eng",
-            "notes": "Refactor tests that currently pin Continue behavior; preserve intent while switching extension/runtime assumptions to Cline.",
+            "notes": "Migrated Continue-era contract assertions to Cline behavior for setup/manpage/stage-map/doc contracts and validated startup-readiness contracts. Regression evidence: targeted pytest suite covers Cline installer contracts (`install-cline-extension.sh`, `le-vibe-setup-cline`), first-run readiness (`evaluate_first_run_agent_readiness`), launcher preamble readiness exit behavior, and updated docs/manpage references.",
             "acceptance_criteria": "Regression suite validates Cline install and startup behavior; old Continue-only checks are removed or migrated."
           },
           {

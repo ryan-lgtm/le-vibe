@@ -16,16 +16,14 @@ def test_continue_extension_pin_doc_step14_h_strings():
     assert "### STEP 14.h" in text
     assert "14.h" in text
     assert "LE_VIBE_EDITOR" in text
-    assert "install-continue-extension.sh" in text
-    assert "continue-openvsx-version" in text
-    assert "le-vibe-setup-continue" in text
-    assert "continue_setup_auto" in text
-    assert "LE_VIBE_AUTO_CONTINUE_SETUP" in text
+    assert "install-cline-extension.sh" in text
+    assert "cline-openvsx-version" in text
+    assert "le-vibe-setup-cline" in text
+    assert "cline_setup_auto" in text
+    assert "LE_VIBE_AUTO_CLINE_SETUP" in text
     assert "editor/BUILD.md" in text
-    assert "verify-continue-pin.sh" in text
     assert "vscode-yaml-openvsx-version" in text
     assert "redhat.vscode-yaml" in text
-    assert "sync-continue-config.sh" in text
     assert "VSCode-linux-" in text
     assert "print-built-codium-path.sh" in text
     assert "print-vsbuild-codium-path.sh" in text
