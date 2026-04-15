@@ -216,6 +216,12 @@
     - test prevents accidental removal of links
   - Evidence:
     - Root `README.md` bullet under *Documentation & project depth*; `test/root-readme-pointer.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-10**: Maintainer docs index (`docs/README.md`) links native extension.
+  - Acceptance:
+    - discoverability from `docs/README.md` table
+    - contract test prevents accidental removal
+  - Evidence:
+    - `docs/README.md` table row for first-party native extension; `test/docs-readme-pointer.test.js`; `npm run verify` green.
 
 ---
 
