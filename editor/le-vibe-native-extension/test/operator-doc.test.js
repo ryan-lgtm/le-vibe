@@ -26,3 +26,10 @@ test('OPERATOR.md mentions publisher and license (task-n8-16)', () => {
   assert.ok(text.includes('license'));
   assert.ok(text.includes('SPDX'));
 });
+
+test('OPERATOR.md documents engines.vscode / minimum editor version (task-n8-17)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('engines.vscode'));
+  assert.ok(text.includes('1.85'));
+  assert.ok(text.includes('VSCodium'));
+});

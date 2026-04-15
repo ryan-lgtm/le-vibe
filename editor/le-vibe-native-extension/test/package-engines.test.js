@@ -8,3 +8,8 @@ test('package.json declares Node engine for test/verify scripts (task-n8-11)', (
   assert.match(packageJson.engines.node, />=\s*18|^\^|>=/);
   assert.ok(packageJson.engines.vscode, 'vscode engine unchanged');
 });
+
+test('package.json declares vscode engine for extension host API (task-n8-17)', () => {
+  assert.ok(packageJson.engines.vscode);
+  assert.match(packageJson.engines.vscode, /^\^1\.\d+\.\d+$/);
+});

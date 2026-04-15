@@ -2,7 +2,7 @@
 
 Use this sheet when validating or shipping the first-party extension (`editor/le-vibe-native-extension/`).
 
-**Prerequisites:** **Node.js 18+** on your PATH to run **`npm run verify`** / **`npm test`** (uses `node:test`). The VS Code extension host ships its own runtime; the Node engine is for this package’s scripts and CI only.
+**Prerequisites:** **Node.js 18+** on your PATH to run **`npm run verify`** / **`npm test`** (uses `node:test`). The VS Code extension host ships its own runtime; the Node engine is for this package’s scripts and CI only. For installing or running the extension in an editor, match **`engines.vscode`** in `package.json` — currently **VS Code 1.85+** (or a compatible build such as **VSCodium** meeting the same API level).
 
 `package.json` includes **`repository.directory`**, **`homepage`**, **`bugs`**, and **`keywords`** so tooling and registries can link to the monorepo path and issue tracker. It also declares **`publisher`** and **`license`** (SPDX string) for marketplace and CI identity.
 

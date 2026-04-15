@@ -258,6 +258,12 @@
     - contract tests prevent accidental removal
   - Evidence:
     - `OPERATOR.md` sentence; `test/package-metadata.test.js` + `test/operator-doc.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-17**: Operator prerequisites include **`engines.vscode`** (minimum editor API).
+  - Acceptance:
+    - `OPERATOR.md` states VS Code–compatible minimum aligned with `package.json` `engines.vscode`
+    - tests assert `engines.vscode` semver caret and OPERATOR text contract
+  - Evidence:
+    - `OPERATOR.md` prerequisites; `test/package-engines.test.js` + `test/operator-doc.test.js`; `npm run verify` green.
 
 ---
 
