@@ -16,6 +16,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Default local model tag:** **`mistral:latest`** — **`leVibeNative.ollamaModel`** (used for streaming generate requests).
 
+**Ollama retries:** **`leVibeNative.ollamaMaxRetries`** default **`2`**, base backoff **`leVibeNative.ollamaRetryBackoffMs`** default **`400` ms** (transient `GET /api/tags` and streaming `POST /api/generate`).
+
 **Telemetry:** defaults to **local structured logs only**; there is **no** remote telemetry unless the user **explicitly opts in**.
 
 **Canonical user-facing name (chat UX):** **Lé Vibe Chat** — palette titles and panel copy use this name for the agent surface (per product track).

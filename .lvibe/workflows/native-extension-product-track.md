@@ -434,6 +434,11 @@
     - docs state byte and message-count defaults; test reads contributes defaults and requires both literals in OPERATOR and README
   - Evidence:
     - `OPERATOR.md`; `README.md`; `test/transcript-caps-doc-package-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-48**: Documented **Ollama retry defaults** (`ollamaMaxRetries`, `ollamaRetryBackoffMs`) stay aligned with **`package.json`** in OPERATOR and README.
+  - Acceptance:
+    - runbook and README state numeric defaults next to setting keys; test reads contributes defaults and asserts each appears within a short window after its key (avoids ambiguous `2` substring matches)
+  - Evidence:
+    - `OPERATOR.md`; `README.md`; `test/ollama-retry-doc-package-sync.test.js`; `npm run verify` green.
 
 ---
 
