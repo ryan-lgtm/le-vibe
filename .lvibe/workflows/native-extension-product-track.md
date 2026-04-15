@@ -288,6 +288,12 @@
     - prevents silent drift when `engines.node` is bumped
   - Evidence:
     - `test/node-engine-doc-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-22**: OPERATOR documents **local-first** default (no silent cloud fallback).
+  - Acceptance:
+    - runbook states local Ollama as default runtime posture
+    - contract test prevents removal of that operator-facing guarantee
+  - Evidence:
+    - `OPERATOR.md` product line; `test/operator-doc.test.js`; `npm run verify` green.
 
 ---
 
