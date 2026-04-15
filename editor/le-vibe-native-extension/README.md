@@ -80,10 +80,10 @@ All paths stay under `~/.config/le-vibe/levibe-native-chat/` unless the user cho
 
 Token-budget rules (configurable in Settings):
 
-- `leVibeNative.contextMaxFiles` (default `4`)
-- `leVibeNative.contextMaxCharsPerFile` (default `1200`)
-- `leVibeNative.contextMaxLinesPerFile` (default `80`)
-- `leVibeNative.contextMaxTotalChars` (default `3200`)
+- **`leVibeNative.contextMaxFiles`** (default **`4`**)
+- **`leVibeNative.contextMaxCharsPerFile`** (default **`1200`**)
+- **`leVibeNative.contextMaxLinesPerFile`** (default **`80`**)
+- **`leVibeNative.contextMaxTotalChars`** (default **`3200`**)
 
 ## Operator handoff contract (task-n4-2)
 

@@ -444,6 +444,11 @@
     - runbook and README name full `leVibeNative.*` keys with ms defaults; test asserts backtick-wrapped defaults near each key (same pattern as task-n8-48)
   - Evidence:
     - `OPERATOR.md`; `README.md`; `test/ollama-stream-guards-doc-package-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-50**: Documented **workspace context budget defaults** (`contextMaxFiles`, `contextMaxCharsPerFile`, `contextMaxLinesPerFile`, `contextMaxTotalChars`) stay aligned with **`package.json`** in OPERATOR and README.
+  - Acceptance:
+    - runbook lists all four keys with defaults; README uses bold `leVibeNative.*` + backtick defaults; test asserts each default appears near its key in both files
+  - Evidence:
+    - `OPERATOR.md`; `README.md`; `test/workspace-context-doc-package-sync.test.js`; `npm run verify` green.
 
 ---
 

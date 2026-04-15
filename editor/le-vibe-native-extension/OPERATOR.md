@@ -20,6 +20,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Ollama stream guards:** **`leVibeNative.ollamaStreamStallMs`** default **`60000` ms** (abort if no tokens/activity), **`leVibeNative.ollamaStreamMaxMs`** default **`120000` ms** (hard cap on wall time per `POST /api/generate`).
 
+**Workspace context caps:** **`leVibeNative.contextMaxFiles`** default **`4`**, **`leVibeNative.contextMaxCharsPerFile`** default **`1200`**, **`leVibeNative.contextMaxLinesPerFile`** default **`80`**, **`leVibeNative.contextMaxTotalChars`** default **`3200`** (per-file and total character budget for prompt context; details in **`README.md`** *Workspace context picker*).
+
 **Telemetry:** defaults to **local structured logs only**; there is **no** remote telemetry unless the user **explicitly opts in**.
 
 **Canonical user-facing name (chat UX):** **Lé Vibe Chat** — palette titles and panel copy use this name for the agent surface (per product track).
