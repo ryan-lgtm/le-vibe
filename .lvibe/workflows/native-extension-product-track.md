@@ -474,6 +474,11 @@
     - runbook tells operators that `npm test` runs `package-leVibeNative-keys-doc-inventory.test.js` and what failure means; `operator-doc.test.js` asserts key phrases
   - Evidence:
     - `OPERATOR.md`; `test/operator-doc.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-56**: **README** documents the same **settings disclosure guardrail** (inventory test) under *Operator verification / ship checklist*.
+  - Acceptance:
+    - developer README states `npm test` runs `package-leVibeNative-keys-doc-inventory.test.js` and cross-links OPERATOR *Product track*; dedicated README contract test
+  - Evidence:
+    - `README.md`; `test/readme-settings-disclosure-guardrail.test.js`; `npm run verify` green.
 
 ---
 
