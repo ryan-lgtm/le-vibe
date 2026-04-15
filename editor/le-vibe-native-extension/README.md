@@ -87,3 +87,9 @@ Token-budget rules (configurable in Settings):
 - State is stored at `~/.config/le-vibe/levibe-native-chat/first-run-wizard.json` (schema `first_run_wizard.v1`).
 - **Next checkpoint** advances; **Finish and open agent surface** completes the wizard and runs the normal readiness flow; **Skip onboarding** marks completion and opens the same surface.
 - Setting: `leVibeNative.showFirstRunWizard` (default `true`). Set to `false` to go straight to the readiness panel.
+
+## Unit tests: readiness state machine + storage bounds (task-n6-1)
+
+- **Readiness:** `test/readiness-state-machine.test.js` asserts deterministic `getStateContent` for every startup state, stable remediation action ids for `needs_*` states, invalid `devStartupState` fallback, and `resolveStartupSnapshot` dev overrides for each state (no network).
+- **Transcript persistence:** `test/transcript-persistence-bounds.test.js` exercises `appendEntry` under sustained load so on-disk messages never exceed configured `maxMessages` / `maxBytes`, and verifies compaction emits an explicit system stub (no silent truncation).
+- Run: `npm test` in this folder.

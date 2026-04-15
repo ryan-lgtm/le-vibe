@@ -119,6 +119,7 @@ function getStateContent(state, detailOverride) {
 module.exports = {
   STARTUP_STATES,
   STATE_CONTENT,
+  getConfiguredState,
   resolveStartupSnapshot,
   getStateContent,
   mapOllamaErrorToDetail,

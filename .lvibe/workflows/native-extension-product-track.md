@@ -134,10 +134,12 @@
 
 ### Epic N6 — Test and release contracts
 
-- [ ] `pending` **task-n6-1**: Add unit tests for state machine + storage bounds.
+- [x] `done` **task-n6-1**: Add unit tests for state machine + storage bounds.
   - Acceptance:
     - deterministic tests for each non-ready state
     - persistence limits tested
+  - Evidence:
+    - Exported `getConfiguredState` from `readiness.js` for contract tests; added `test/readiness-state-machine.test.js` (per-state `getStateContent`, remediation action ids, dev-override `resolveStartupSnapshot` for all `STARTUP_STATES`, invalid config fallback); added `test/transcript-persistence-bounds.test.js` (appendEntry load/stress within `maxMessages`/`maxBytes`, compaction stub text); README section; `npm test` 37/37 in `editor/le-vibe-native-extension`.
 - [ ] `pending` **task-n6-2**: Add integration smoke path (`lvibe .` + extension ready checks).
   - Acceptance:
     - automated smoke verifies panel is not blank
