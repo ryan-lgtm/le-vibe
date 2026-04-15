@@ -245,6 +245,12 @@
     - `OPERATOR.md` contract includes homepage / bugs / keywords alongside repository
   - Evidence:
     - `test/operator-doc.test.js` extended; `npm run verify` green.
+- [x] `done` **task-n8-15**: Package `homepage` / `bugs` consistency with `repository`.
+  - Acceptance:
+    - automated check that `homepage` embeds `repository.directory`
+    - `bugs.url` same host as `repository.url`
+  - Evidence:
+    - `test/package-homepage-consistency.test.js`; `npm run verify` green.
 
 ---
 
