@@ -79,6 +79,11 @@
             "maximum": 15000,
             "default": 2500,
             "description": "Timeout in milliseconds for local Ollama startup probe requests."
+          },
+          "leVibeNative.ollamaModel": {
+            "type": "string",
+            "default": "mistral:latest",
+            "description": "Local Ollama model tag used for prompt streaming requests."
           }
         }
       }

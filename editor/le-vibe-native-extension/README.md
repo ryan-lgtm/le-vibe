@@ -27,3 +27,11 @@ Every non-ready state includes at least one remediation action button:
 - workspace setup workflow opener
 
 During `n1-2`, readiness state is driven by `leVibeNative.devStartupState` so UX behavior is deterministic before live health wiring in `n2`.
+
+## Prompt streaming (task-n2-2)
+
+The panel includes a basic local prompt test surface:
+
+- Send prompt to local Ollama streaming endpoint.
+- Render streaming token output directly in the panel.
+- Cancel in-flight request with a dedicated button.

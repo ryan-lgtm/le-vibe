@@ -6,6 +6,8 @@ const OPEN_MODEL_PULL_HELP_COMMAND = 'leVibeNative.openModelPullHelp';
 const OPEN_WORKSPACE_SETUP_COMMAND = 'leVibeNative.openWorkspaceSetup';
 
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
+const { createOllamaClient } = require('./ollama');
+const { createChatController } = require('./chat');
 
 function escapeHtml(text) {
   return String(text)
@@ -39,6 +41,8 @@ function panelHtml(state, detailOverride, diagnostics) {
     .pill-list li { border: 1px solid var(--vscode-panel-border); border-radius: 999px; padding: 0.15rem 0.55rem; }
     .pill-list li.active { border-color: var(--vscode-focusBorder); }
     button { margin-right: 0.5rem; margin-top: 0.5rem; padding: 0.35rem 0.75rem; cursor: pointer; }
+    textarea { width: 100%; box-sizing: border-box; margin-top: 0.5rem; margin-bottom: 0.5rem; min-height: 74px; }
+    .chat-log { margin-top: 0.75rem; border: 1px solid var(--vscode-panel-border); border-radius: 6px; padding: 0.6rem; min-height: 80px; white-space: pre-wrap; word-break: break-word; }
     .diag { margin-top: 0.75rem; background: var(--vscode-textCodeBlock-background); padding: 0.6rem; border-radius: 6px; white-space: pre-wrap; word-break: break-word; }
   </style>
 </head>
@@ -49,6 +53,15 @@ function panelHtml(state, detailOverride, diagnostics) {
   <div class="state"><strong>${escapeHtml(state)}</strong></div>
   <p>${escapeHtml(content.detail)}</p>
   <div>${actionsBlock}</div>
+  <h3>Local prompt test</h3>
+  <p class="muted">Send a prompt to local Ollama and receive streaming tokens.</p>
+  <textarea id="promptInput" placeholder="Ask local model something..."></textarea>
+  <div>
+    <button id="sendPrompt">Send Prompt</button>
+    <button id="cancelPrompt">Cancel Request</button>
+  </div>
+  <div id="chatStatus" class="muted">Idle.</div>
+  <div id="chatLog" class="chat-log"></div>
   ${diagnosticsText}
   <script>
     const vscode = acquireVsCodeApi();
@@ -57,6 +70,29 @@ function panelHtml(state, detailOverride, diagnostics) {
         vscode.postMessage({ type: 'action', actionId: button.getAttribute('data-action') });
       });
     });
+    document.getElementById('sendPrompt').addEventListener('click', () => {
+      const prompt = document.getElementById('promptInput').value || '';
+      vscode.postMessage({ type: 'chat', actionId: 'sendPrompt', prompt });
+    });
+    document.getElementById('cancelPrompt').addEventListener('click', () => {
+      vscode.postMessage({ type: 'chat', actionId: 'cancelPrompt' });
+    });
+    window.addEventListener('message', (event) => {
+      const msg = event.data;
+      if (!msg || msg.type !== 'chatUpdate') {
+        return;
+      }
+      const status = document.getElementById('chatStatus');
+      const log = document.getElementById('chatLog');
+      if (msg.status) {
+        status.textContent = msg.status;
+      }
+      if (typeof msg.replaceLog === 'string') {
+        log.textContent = msg.replaceLog;
+      } else if (typeof msg.append === 'string') {
+        log.textContent += msg.append;
+      }
+    });
   </script>
 </body>
 </html>`;
@@ -64,6 +100,13 @@ function panelHtml(state, detailOverride, diagnostics) {
 
 function openAgentSurface() {
   const vscode = require('vscode');
+  const config = vscode.workspace.getConfiguration('leVibeNative');
+  const client = createOllamaClient({
+    endpoint: config.get('ollamaEndpoint', 'http://127.0.0.1:11434'),
+    timeoutMs: config.get('ollamaTimeoutMs', 2500),
+    model: config.get('ollamaModel', 'mistral:latest'),
+  });
+  const chat = createChatController(client);
   const panel = vscode.window.createWebviewPanel(
     'leVibeNativeReadiness',
     'Lé Vibe Native Readiness',
@@ -75,19 +118,57 @@ function openAgentSurface() {
     panel.webview.html = panelHtml(snapshot.state, snapshot.detailOverride, snapshot.diagnostics);
   });
   panel.webview.onDidReceiveMessage((msg) => {
-    if (!msg || msg.type !== 'action') {
+    if (!msg) {
       return;
     }
-    if (msg.actionId === 'openOllamaSetupHelp') {
+    if (msg.type === 'action' && msg.actionId === 'openOllamaSetupHelp') {
       void vscode.commands.executeCommand(OPEN_OLLAMA_SETUP_HELP_COMMAND);
       return;
     }
-    if (msg.actionId === 'openModelPullHelp') {
+    if (msg.type === 'action' && msg.actionId === 'openModelPullHelp') {
       void vscode.commands.executeCommand(OPEN_MODEL_PULL_HELP_COMMAND);
       return;
     }
-    if (msg.actionId === 'openWorkspaceSetup') {
+    if (msg.type === 'action' && msg.actionId === 'openWorkspaceSetup') {
       void vscode.commands.executeCommand(OPEN_WORKSPACE_SETUP_COMMAND);
+      return;
+    }
+    if (msg.type === 'chat' && msg.actionId === 'sendPrompt') {
+      const prompt = (msg.prompt || '').trim();
+      if (!prompt) {
+        panel.webview.postMessage({ type: 'chatUpdate', status: 'Enter a prompt first.' });
+        return;
+      }
+      panel.webview.postMessage({
+        type: 'chatUpdate',
+        status: 'Streaming response from local Ollama...',
+        replaceLog: '',
+      });
+      void chat.sendPrompt(prompt, {
+        onToken(token) {
+          panel.webview.postMessage({ type: 'chatUpdate', append: token });
+        },
+        onDone(cancelled) {
+          panel.webview.postMessage({
+            type: 'chatUpdate',
+            status: cancelled ? 'Request cancelled.' : 'Response complete.',
+          });
+        },
+        onError(error) {
+          panel.webview.postMessage({
+            type: 'chatUpdate',
+            status: `Stream failed: ${(error && error.message) || 'unknown error'}`,
+          });
+        },
+      });
+      return;
+    }
+    if (msg.type === 'chat' && msg.actionId === 'cancelPrompt') {
+      const didCancel = chat.cancelPrompt();
+      panel.webview.postMessage({
+        type: 'chatUpdate',
+        status: didCancel ? 'Cancelling request...' : 'No request is currently running.',
+      });
     }
   });
   return panel;

@@ -53,5 +53,7 @@ test('panel HTML is never blank and includes state indicator', () => {
     const html = extensionModule.panelHtml(state);
     assert.ok(html.includes('Lé Vibe Native Startup'));
     assert.ok(html.includes(`<strong>${state}</strong>`), `expected state marker for ${state}`);
+    assert.ok(html.includes('Send Prompt'));
+    assert.ok(html.includes('Cancel Request'));
   });
 });

@@ -63,7 +63,7 @@ function normalizeEndpoint(endpoint) {
   return value.replace(/\/+$/, '');
 }
 
-function createOllamaClient({ endpoint, timeoutMs = 2500 }) {
+function createOllamaClient({ endpoint, timeoutMs = 2500, model = 'mistral:latest' }) {
   const base = normalizeEndpoint(endpoint);
   async function listModels() {
     const payload = await requestJson('GET', `${base}/api/tags`, timeoutMs);
@@ -80,11 +80,111 @@ function createOllamaClient({ endpoint, timeoutMs = 2500 }) {
     return { ok: true, modelCount: models.length };
   }
 
+  function streamPrompt({ prompt, model: requestedModel }) {
+    let parsedUrl;
+    try {
+      parsedUrl = new URL(`${base}/api/generate`);
+    } catch {
+      return {
+        cancel() {},
+        done: async () => {
+          throw Object.assign(new Error('Invalid Ollama endpoint URL.'), { code: 'OLLAMA_BAD_ENDPOINT' });
+        },
+      };
+    }
+    const transport = parsedUrl.protocol === 'https:' ? https : http;
+    let reqRef = null;
+    let cancelled = false;
+    const done = (onEvent) =>
+      new Promise((resolve, reject) => {
+        const req = transport.request(
+          {
+            method: 'POST',
+            hostname: parsedUrl.hostname,
+            port: parsedUrl.port || (parsedUrl.protocol === 'https:' ? 443 : 80),
+            path: parsedUrl.pathname,
+            timeout: timeoutMs,
+            headers: { 'content-type': 'application/json' },
+          },
+          (res) => {
+            if (res.statusCode < 200 || res.statusCode > 299) {
+              reject(
+                Object.assign(new Error(`Ollama returned status ${res.statusCode}.`), {
+                  code: 'OLLAMA_HTTP_ERROR',
+                }),
+              );
+              return;
+            }
+            let buffer = '';
+            res.on('data', (chunk) => {
+              buffer += chunk.toString('utf8');
+              const lines = buffer.split('\n');
+              buffer = lines.pop() || '';
+              lines.forEach((line) => {
+                const trimmed = line.trim();
+                if (!trimmed) {
+                  return;
+                }
+                let payload;
+                try {
+                  payload = JSON.parse(trimmed);
+                } catch {
+                  return;
+                }
+                if (payload.response) {
+                  onEvent({ type: 'token', value: String(payload.response) });
+                }
+                if (payload.done) {
+                  onEvent({ type: 'done', value: '' });
+                }
+              });
+            });
+            res.on('end', () => resolve());
+            res.on('error', (error) => reject(error));
+          },
+        );
+        reqRef = req;
+        req.on('timeout', () => {
+          req.destroy(Object.assign(new Error('Timed out contacting Ollama.'), { code: 'OLLAMA_TIMEOUT' }));
+        });
+        req.on('error', (error) => {
+          if (cancelled) {
+            reject(Object.assign(new Error('Request cancelled.'), { code: 'OLLAMA_CANCELLED' }));
+            return;
+          }
+          reject(
+            Object.assign(new Error('Could not stream from local Ollama.'), {
+              code: error && error.code ? error.code : 'OLLAMA_STREAM_ERROR',
+            }),
+          );
+        });
+        req.write(
+          JSON.stringify({
+            model: requestedModel || model,
+            prompt,
+            stream: true,
+          }),
+        );
+        req.end();
+      });
+
+    return {
+      cancel() {
+        cancelled = true;
+        if (reqRef) {
+          reqRef.destroy();
+        }
+      },
+      done,
+    };
+  }
+
   return {
     endpoint: base,
     timeoutMs,
     probeHealth,
     listModels,
+    streamPrompt,
   };
 }
 
