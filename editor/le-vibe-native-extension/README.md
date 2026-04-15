@@ -97,6 +97,7 @@ Token-budget rules (configurable in Settings):
 
 - **Automatic retries** for transient local Ollama failures — **`leVibeNative.ollamaMaxRetries`** (default **`2`**), exponential backoff from **`leVibeNative.ollamaRetryBackoffMs`** (default **`400` ms**) — apply to readiness `GET /api/tags` and to streaming `POST /api/generate`.
 - **Stream guards:** **`leVibeNative.ollamaStreamStallMs`** (default **`60000` ms**) aborts if no tokens/activity for too long; **`leVibeNative.ollamaStreamMaxMs`** (default **`120000` ms**) caps total stream wall time (prevents hard hangs).
+- **Readiness source:** **`leVibeNative.useLiveOllamaReadiness`** (default **`true`**) — use live local Ollama probes for startup snapshot; set **`false`** with **`leVibeNative.devStartupState`** for development overrides (see **`test/readiness-state-machine.test.js`**).
 - **UX**: panel shows structured diagnostics on failure (`[error code] message (endpoint: …)`), retry progress during auto-retry, and a **Retry last prompt** button (manual resend without duplicating the user line in the transcript).
 
 ## First-run onboarding (task-n5-2)
@@ -133,7 +134,7 @@ Token-budget rules (configurable in Settings):
 - **Goal:** Move from common third-party chat/agent extensions (e.g. Continue, Cline) to **Lé Vibe Chat** without silent cross-extension writes.
 - **Command:** `Lé Vibe: Open third-party agent migration guide` — opens a Markdown checklist in the editor and optional follow-up actions.
 - **Guardrails:** The extension does **not** uninstall other extensions or delete their data. It only writes migration state and JSONL audit lines under `~/.config/le-vibe/levibe-native-chat/` (`third-party-migration-state.json`, `third-party-migration-audit.jsonl`).
-- **Detection:** A small watchlist of marketplace extension IDs (see `third-party-migration.js`) is used to suggest the guide. If `leVibeNative.showThirdPartyMigrationNudge` is **true** (default) and a watchlist extension is present while migration status is still **pending**, a one-time notification offers the guide; **Not now** records status **skipped** (no further auto nudges).
+- **Detection:** A small watchlist of marketplace extension IDs (see `third-party-migration.js`) is used to suggest the guide. If **`leVibeNative.showThirdPartyMigrationNudge`** (default **`true`**) is on and a watchlist extension is present while migration status is still **pending**, a one-time notification offers the guide; **Not now** records status **skipped** (no further auto nudges).
 - **Remediation:** Disable or uninstall conflicting extensions manually from the Extensions view, keep `leVibeNative.enableFirstPartyAgentSurface` **true**, then verify **Lé Vibe: Open Agent Surface**.
 
 ## Operator verification / ship checklist (task-n8-1)

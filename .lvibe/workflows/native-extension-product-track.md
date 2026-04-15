@@ -454,6 +454,11 @@
     - runbook and README name full `leVibeNative.*` keys with backtick `true`/`false` defaults where stated; test reads contributes booleans and requires `\`true\`` near each key in both files
   - Evidence:
     - `OPERATOR.md`; `README.md`; `test/startup-rollout-boolean-doc-package-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-52**: Documented **migration nudge + live readiness booleans** (`showThirdPartyMigrationNudge`, `useLiveOllamaReadiness`) stay aligned with **`package.json`** in OPERATOR and README.
+  - Acceptance:
+    - runbook and README name full `leVibeNative.*` keys with backtick `true` near each key; test reads contributes defaults and asserts for both files
+  - Evidence:
+    - `OPERATOR.md`; `README.md`; `test/migration-readiness-boolean-doc-package-sync.test.js`; `npm run verify` green.
 
 ---
 
