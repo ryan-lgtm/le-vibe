@@ -10,6 +10,16 @@
     "url": "https://github.com/ryan-lgtm/le-vibe.git",
     "directory": "editor/le-vibe-native-extension"
   },
+  "homepage": "https://github.com/ryan-lgtm/le-vibe/tree/main/editor/le-vibe-native-extension",
+  "bugs": {
+    "url": "https://github.com/ryan-lgtm/le-vibe/issues"
+  },
+  "keywords": [
+    "levibe",
+    "ollama",
+    "local-first",
+    "vscode-extension"
+  ],
   "engines": {
     "vscode": "^1.85.0",
     "node": ">=18"

@@ -228,6 +228,12 @@
     - operator doc states prerequisite
   - Evidence:
     - `engines.node: ">=18"` in `editor/le-vibe-native-extension/package.json`; `OPERATOR.md` prerequisites; `test/package-engines.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-12**: Package discovery metadata (`homepage`, `bugs`, `keywords`).
+  - Acceptance:
+    - `package.json` links to monorepo subtree and issue tracker
+    - operator doc mentions fields
+  - Evidence:
+    - `package.json` `homepage`, `bugs.url`, `keywords`; `OPERATOR.md` note; `test/package-metadata.test.js` extended; `npm run verify` green.
 
 ---
 
