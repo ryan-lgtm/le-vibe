@@ -57,7 +57,7 @@ The panel includes a basic local prompt test surface:
 ## Bounded chat transcript (task-n3-1)
 
 - Transcripts are stored as JSONL under `~/.config/le-vibe/levibe-native-chat/transcript-<workspaceKey>.jsonl` (workspace key is a short hash of the workspace folder URI).
-- Settings `leVibeNative.chatTranscriptMaxBytes` and `leVibeNative.chatTranscriptMaxMessages` cap storage.
+- Settings **`leVibeNative.chatTranscriptMaxBytes`** (default **524288** bytes) and **`leVibeNative.chatTranscriptMaxMessages`** (default **200** JSONL rows) cap storage.
 - When over budget, oldest messages are removed first and a **system** line records how many were compacted (explicit, not silent loss).
 
 ## Storage controls (task-n3-2)

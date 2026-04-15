@@ -429,6 +429,11 @@
     - test reads numeric default and requires its decimal string in both OPERATOR and README
   - Evidence:
     - `test/ollama-timeout-doc-package-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-47**: Documented **transcript retention defaults** (`chatTranscriptMaxBytes`, `chatTranscriptMaxMessages`) stay aligned with **`package.json`** in OPERATOR and README.
+  - Acceptance:
+    - docs state byte and message-count defaults; test reads contributes defaults and requires both literals in OPERATOR and README
+  - Evidence:
+    - `OPERATOR.md`; `README.md`; `test/transcript-caps-doc-package-sync.test.js`; `npm run verify` green.
 
 ---
 
