@@ -32,6 +32,13 @@
 5. Runtime launch smoke:
    - `lvibe .`
    - `lvibe --force-first-run .`
+6. Closeout rerun (this session):
+   - `"/usr/lib/le-vibe/bin/codium" --list-extensions`
+   - `packaging/scripts/install-le-vibe-local.sh --install --yes --skip-compile-failfast --json --log-file .lvibe/audit/task-c6-release-readiness-closeout-2026-04-15.log`
+   - `packaging/scripts/manual-step14-install-smoke.sh --verify-only`
+   - `lvibe .`
+   - `lvibe --force-first-run .`
+   - `rg "continue\\.focusContinueInput|Authentication provider continue|continue\\.continue|Continue" /home/ryan/.config/le-vibe/le-vibe.log.jsonl`
 
 ## Evidence captured
 
@@ -88,6 +95,28 @@
 - Remediation run `lvibe --force-first-run .` succeeded (`exit 0`) and reported:
   - managed Ollama started on `127.0.0.1:11435`
   - selected model already present (`deepseek-r1:14b`)
+
+### F) Closeout rerun evidence (latest)
+
+- Extension inventory at runtime remains Cline-only:
+  - `redhat.vscode-yaml`
+  - `saoudrizwan.claude-dev`
+- Required closeout command re-run still blocks at non-interactive sudo:
+  - `status=error`
+  - `step=install`
+  - `install_readiness_reasons=["apt_install_failed"]`
+  - stderr includes:
+    - `sudo: a terminal is required to read the password`
+    - `sudo: a password is required`
+- Required smoke verifier still passes:
+  - `manual-step14-install-smoke.sh --verify-only` => OK
+- `lvibe .` again reports managed Ollama not reachable on first call in this automation context, but deterministic remediation still succeeds:
+  - `lvibe --force-first-run .` => exit `0`, managed Ollama started, selected model already present.
+- Structured log grep for Continue markers remains clean:
+  - `continue.focusContinueInput`
+  - `Authentication provider continue`
+  - `continue.continue`
+  - result: `No matches found`
 
 ## Blocker report
 
