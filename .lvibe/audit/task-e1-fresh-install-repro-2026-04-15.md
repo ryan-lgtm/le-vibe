@@ -9,7 +9,7 @@
 
 ## Environment
 
-- Timestamp (UTC): 2026-04-15T05:52:30Z
+- Timestamp (UTC): 2026-04-15T06:03:00Z
 - Host OS: Linux `6.17.0-20-generic`
 - Repo: `/home/ryan/workspace/r-vibe`
 - Install flow under test: `./packaging/scripts/install-le-vibe-local.sh --install --yes`
@@ -39,9 +39,10 @@
 - Extension state evidence (Lé Vibe profile cache):
   - `continue.continue` present, version `1.3.38`
   - source file: `~/.config/Lé Vibe/CachedProfilesData/__default__profile__/extensions.user.cache`
-- Repro attempt from this non-interactive agent run failed at `sudo apt install ...` prompt in install script, which requires a TTY password entry:
-  - `sudo: a terminal is required to read the password`
-  - this prevents completing a full clean install inside this automation channel without operator interaction.
+- Interactive terminal evidence confirms full install execution with sudo authentication:
+  - `sudo apt install "/home/ryan/workspace/r-vibe/../le-vibe_0.1.9_all.deb" "/home/ryan/workspace/r-vibe/packaging/le-vibe-ide_0.1.3_amd64.deb"`
+  - package setup lines observed for both `le-vibe (0.1.9)` and `le-vibe-ide (0.1.3)`
+  - install script closeout reported `PASS — Lé Vibe local install path`
 
 ## Current gap vs E1 target signal
 
@@ -49,11 +50,12 @@
   - explicit `yaml.schemas` registration failure line from Lé Vibe `renderer.log`/`workbench.desktop.main.js`
   - first-launch visual symptom ("Continue gray box") screenshot or direct UI witness
 - Reason:
-  - full end-to-end fresh install + first interactive IDE launch requires operator-authenticated `sudo` and GUI interaction.
+  - while install + package setup ran successfully, no post-install interactive `lvibe .` launch evidence is present in logs.
+  - `~/.config/Lé Vibe/logs/` does not exist on disk after the recorded runs, so extension-host/renderer diagnostics were not generated/captured.
 
 ## Operator action needed to complete E1 evidence set
 
-Run the same deterministic flow in an interactive terminal session (with sudo password prompt + one `lvibe .` launch), then append these artifacts:
+From a fresh successful install state, run one interactive launch (`lvibe .`) and then append these artifacts:
 
 1. `~/.config/Lé Vibe/logs/<latest>/window*/renderer.log`
 2. `~/.config/Lé Vibe/logs/<latest>/window*/exthost/exthost.log`
