@@ -341,6 +341,12 @@
     - `main` is `./extension.js` and the file exists (ship/packaging guardrail)
   - Evidence:
     - `test/package-main-entrypoint.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-31**: OPERATOR documents **`package.json` `main`** / `./extension.js` for packaging.
+  - Acceptance:
+    - runbook states the extension host entry path expected by VS Code / VSIX flow
+    - contract test ties to n8-30 guardrail
+  - Evidence:
+    - `OPERATOR.md`; `test/operator-doc.test.js`; `npm run verify` green.
 
 ---
 

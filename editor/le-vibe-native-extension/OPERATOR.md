@@ -6,6 +6,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 `package.json` includes **`repository.directory`**, **`homepage`**, **`bugs`**, and **`keywords`** so tooling and registries can link to the monorepo path and issue tracker. It also declares **`publisher`** and **`license`** (SPDX string) for marketplace and CI identity.
 
+**Extension host entry:** **`package.json`** **`main`** must be **`./extension.js`** (VS Code activation entry; required for packaging).
+
 **Local-first:** the shipped defaults target **local Ollama** (see `leVibeNative.ollamaEndpoint`); the extension does **not** silently fall back to a cloud LLM.
 
 **Telemetry:** defaults to **local structured logs only**; there is **no** remote telemetry unless the user **explicitly opts in**.

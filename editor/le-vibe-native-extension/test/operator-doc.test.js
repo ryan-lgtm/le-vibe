@@ -61,3 +61,10 @@ test('OPERATOR.md bounded persistence names transcript retention settings (task-
   assert.ok(text.includes('leVibeNative.chatTranscriptMaxMessages'));
   assert.ok(text.includes('compaction'));
 });
+
+test('OPERATOR.md documents package.json main extension entry (task-n8-31)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Extension host entry'));
+  assert.ok(text.includes('./extension.js'));
+  assert.ok(text.includes('main'));
+});
