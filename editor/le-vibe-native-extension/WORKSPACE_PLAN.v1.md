@@ -38,3 +38,7 @@ When **`executeValidatedWorkspacePlan`** stops on a **failed** step after one or
 4. **Cancel:** stopping a run with **Cancel plan run** does **not** auto-undo completed steps (user may keep partial work); only **failure** arms the rollback affordance for the completed prefix in the current implementation.
 
 Structured audit: `workspace_plan_rollback` events in **`workspace-plan-audit.jsonl`** record how many inverse steps completed.
+
+## Dry-run (Epic N10)
+
+**`dryRunValidatedWorkspacePlan`** (see [`workspace-plan-dry-run.js`](workspace-plan-dry-run.js)) walks a **validated** plan and prints per-step **rough** byte/token estimates **without** applying `WorkspaceEdit`s. Reads are allowed only to measure existing files (capped read size for very large files). Token figures are a **bounded heuristic** (UTF-8 bytes ÷ 4), not a real tokenizer. Panel demo: **Dry-run sample plan** before **Run sample workspace plan**.

@@ -86,6 +86,7 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('Preview sample workspace edit'));
     assert.ok(html.includes('editPreviewApply'));
     assert.ok(html.includes('Workspace plan (demo)'));
+    assert.ok(html.includes('Dry-run sample plan'));
     assert.ok(html.includes('Run sample workspace plan'));
     assert.ok(html.includes('cancelWorkspacePlanRun'));
     assert.ok(html.includes('undoWorkspacePlanRollback'));

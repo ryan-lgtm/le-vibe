@@ -148,3 +148,10 @@ test('OPERATOR.md documents workspace plan rollback (task-n10-3)', () => {
   assert.ok(text.includes('Undo completed steps'));
   assert.ok(text.includes('workspace_plan_rollback'));
 });
+
+test('OPERATOR.md documents workspace plan dry-run (task-n10-4)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n10-4'));
+  assert.ok(text.includes('Dry-run sample plan'));
+  assert.ok(text.includes('workspace-plan-dry-run.js'));
+});

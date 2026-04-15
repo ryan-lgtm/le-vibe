@@ -593,9 +593,11 @@ Product intent: match **Cursor Composer** / multi-file Copilot flows: a single a
     - documented semantics + at least best-effort undo for same session
   - Evidence:
     - `workspace-plan-exec.js`: pre-step `capturePreStepSnapshot`, `inverseAfterSuccessfulStep`, failure returns `rollbackInverses`; `applyWorkspacePlanRollbackInverses` + `workspace_plan_rollback` audit; optional test hook `failStepAtIndex`; panel **Undo completed steps** + `planRollbackUpdate` in `extension.js`; `WORKSPACE_PLAN.v1.md` rollback section; README/OPERATOR; tests `test/workspace-plan-exec.test.js`, `test/scaffold.test.js`, `test/operator-doc.test.js`; `npm run verify` green.
-- [ ] `pending` **task-n10-4**: Optional **dry-run** mode: list files that would change, with size/token estimates (bounded).
+- [x] `done` **task-n10-4**: Optional **dry-run** mode: list files that would change, with size/token estimates (bounded).
   - Acceptance:
     - dry-run output visible before commit to disk
+  - Evidence:
+    - `workspace-plan-dry-run.js` (`dryRunValidatedWorkspacePlan`, capped lines / read size); panel **Dry-run sample plan** before **Run sample workspace plan**; `buildSampleDemoWorkspacePlan` in `extension.js`; README / `WORKSPACE_PLAN.v1.md` / `OPERATOR.md`; tests `test/workspace-plan-dry-run.test.js`, `test/scaffold.test.js`, `test/operator-doc.test.js`; `pathLabelForStep` exported from `workspace-plan-exec.js`; `npm run verify` green.
 
 ### Epic N11 — File and workspace operations from chat (create / delete / rename)
 

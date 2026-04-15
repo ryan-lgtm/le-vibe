@@ -450,6 +450,7 @@ module.exports = {
   workspacePlanAuditPath,
   appendWorkspacePlanAuditLine,
   formatWorkspacePlanProgressStatus,
+  pathLabelForStep,
   buildAuditRecord,
   buildRollbackAuditRecord,
   capturePreStepSnapshot,

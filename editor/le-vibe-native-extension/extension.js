@@ -48,6 +48,45 @@ const {
   executeValidatedWorkspacePlan,
   applyWorkspacePlanRollbackInverses,
 } = require('./workspace-plan-exec');
+const { dryRunValidatedWorkspacePlan } = require('./workspace-plan-dry-run');
+
+/**
+ * @param {import('vscode')} vscode
+ * @param {import('vscode').WorkspaceFolder} folder
+ */
+function buildSampleDemoWorkspacePlan(vscode, folder) {
+  const stamp = Date.now();
+  const relA = `.lvibe/levibe-plan-demo-${stamp}.txt`;
+  const relB = `.lvibe/levibe-plan-demo-${stamp}-moved.txt`;
+  const uriA = vscode.Uri.joinPath(folder.uri, relA);
+  const uriB = vscode.Uri.joinPath(folder.uri, relB);
+  return {
+    kind: WORKSPACE_PLAN_KIND,
+    steps: [
+      {
+        id: 'demo-create',
+        op: 'create_file',
+        targetUri: uriA.toString(),
+        content: '# Lé Vibe workspace plan demo\n',
+      },
+      {
+        id: 'demo-edit',
+        op: 'apply_edit',
+        targetUri: uriA.toString(),
+        edit: {
+          kind: 'full_file',
+          content: '# Lé Vibe workspace plan demo\n# second line from apply_edit\n',
+        },
+      },
+      {
+        id: 'demo-move',
+        op: 'move_file',
+        fromUri: uriA.toString(),
+        toUri: uriB.toString(),
+      },
+    ],
+  };
+}
 
 function getTranscriptContext(vscode) {
   const config = vscode.workspace.getConfiguration('leVibeNative');
@@ -209,6 +248,7 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <h3>Workspace plan (demo)</h3>
   <p class="muted">Epic N10 — per-step status in the chat line below; structured lines append to <code>workspace-plan-audit.jsonl</code> under ~/.config/le-vibe/levibe-native-chat/</p>
   <div>
+    <button data-action="dryRunSampleWorkspacePlan">Dry-run sample plan</button>
     <button data-action="runSampleWorkspacePlan">Run sample workspace plan</button>
     <button type="button" id="cancelWorkspacePlanRun" disabled>Cancel plan run</button>
     <button type="button" id="undoWorkspacePlanRollback" disabled>Undo completed steps</button>
@@ -629,6 +669,30 @@ function openAgentSurface() {
       })();
       return;
     }
+    if (msg.type === 'action' && msg.actionId === 'dryRunSampleWorkspacePlan') {
+      void (async () => {
+        const folder = vscode.workspace.workspaceFolders?.[0];
+        if (!folder) {
+          await vscode.window.showWarningMessage('Open a folder workspace first to dry-run a workspace plan.');
+          return;
+        }
+        const plan = buildSampleDemoWorkspacePlan(vscode, folder);
+        const validated = validateWorkspacePlan(plan);
+        if (!validated.ok) {
+          panel.webview.postMessage({ type: 'chatUpdate', status: validated.userMessage });
+          return;
+        }
+        const dry = await dryRunValidatedWorkspacePlan(vscode, validated.value, {
+          workspaceFolder: folder,
+        });
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: 'Dry-run complete — no files changed. Use Run sample workspace plan to apply.',
+          replaceLog: `${dry.lines.join('\n')}\n`,
+        });
+      })();
+      return;
+    }
     if (msg.type === 'action' && msg.actionId === 'runSampleWorkspacePlan') {
       void (async () => {
         const folder = vscode.workspace.workspaceFolders?.[0];
@@ -649,37 +713,7 @@ function openAgentSurface() {
         } catch {
           await vscode.workspace.fs.createDirectory(lvibeDir);
         }
-        const stamp = Date.now();
-        const relA = `.lvibe/levibe-plan-demo-${stamp}.txt`;
-        const relB = `.lvibe/levibe-plan-demo-${stamp}-moved.txt`;
-        const uriA = vscode.Uri.joinPath(folder.uri, relA);
-        const uriB = vscode.Uri.joinPath(folder.uri, relB);
-        const plan = {
-          kind: WORKSPACE_PLAN_KIND,
-          steps: [
-            {
-              id: 'demo-create',
-              op: 'create_file',
-              targetUri: uriA.toString(),
-              content: '# Lé Vibe workspace plan demo\n',
-            },
-            {
-              id: 'demo-edit',
-              op: 'apply_edit',
-              targetUri: uriA.toString(),
-              edit: {
-                kind: 'full_file',
-                content: '# Lé Vibe workspace plan demo\n# second line from apply_edit\n',
-              },
-            },
-            {
-              id: 'demo-move',
-              op: 'move_file',
-              fromUri: uriA.toString(),
-              toUri: uriB.toString(),
-            },
-          ],
-        };
+        const plan = buildSampleDemoWorkspacePlan(vscode, folder);
         const validated = validateWorkspacePlan(plan);
         if (!validated.ok) {
           panel.webview.postMessage({ type: 'chatUpdate', status: validated.userMessage });
