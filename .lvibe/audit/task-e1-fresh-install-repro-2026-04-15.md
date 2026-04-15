@@ -50,6 +50,7 @@
   - explicit `yaml.schemas` registration failure line from Lé Vibe `renderer.log`/`workbench.desktop.main.js`
   - first-launch visual symptom ("Continue gray box") screenshot or direct UI witness
 - Reason:
+  - current host state at latest check: `lvibe` is not available on PATH (`lvibe: command not found`), so no interactive launch can be performed from this environment.
   - while install + package setup ran successfully, no post-install interactive `lvibe .` launch evidence is present in logs.
   - `~/.config/Lé Vibe/logs/` does not exist on disk after the recorded runs, so extension-host/renderer diagnostics were not generated/captured.
 
