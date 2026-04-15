@@ -54,3 +54,10 @@ test('OPERATOR.md documents telemetry as local-by-default with explicit opt-in o
   assert.ok(text.includes('local structured logs'));
   assert.ok(text.includes('explicitly opts in'));
 });
+
+test('OPERATOR.md bounded persistence names transcript retention settings (task-n8-28)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('leVibeNative.chatTranscriptMaxBytes'));
+  assert.ok(text.includes('leVibeNative.chatTranscriptMaxMessages'));
+  assert.ok(text.includes('compaction'));
+});

@@ -35,6 +35,8 @@ Runs **`npm test`** then **`npm run smoke`**. Green = all unit tests pass; smoke
 
 All extension-owned files live under **`~/.config/le-vibe/levibe-native-chat/`**. See **`README.md`** (section *Bounded persistence inventory*) and **`storage-inventory.js`** (`levibeNativeChatDir`, `PERSISTED_ARTIFACTS`).
 
+Chat transcript JSONL is capped by **`leVibeNative.chatTranscriptMaxBytes`** and **`leVibeNative.chatTranscriptMaxMessages`** (oldest-first compaction with an explicit system stub when limits are hit — details in README).
+
 ## Product track
 
 Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N8 — operator runbook).

@@ -324,6 +324,12 @@
     - parity test on shared sentence stem
   - Evidence:
     - `OPERATOR.md` + `README.md`; `test/canonical-product-name.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-28**: OPERATOR **bounded persistence** names transcript retention settings.
+  - Acceptance:
+    - runbook cites `chatTranscriptMaxBytes` / `chatTranscriptMaxMessages` and compaction behavior
+    - contract test prevents accidental removal
+  - Evidence:
+    - `OPERATOR.md` *Bounded persistence*; `test/operator-doc.test.js`; `npm run verify` green.
 
 ---
 
