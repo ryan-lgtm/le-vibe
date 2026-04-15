@@ -347,6 +347,12 @@
     - contract test ties to n8-30 guardrail
   - Evidence:
     - `OPERATOR.md`; `test/operator-doc.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-32**: README documents **`main`** / **`./extension.js`** (aligned with OPERATOR).
+  - Acceptance:
+    - developer-facing intro names the VS Code activation entry and points to OPERATOR
+    - contract test prevents removal
+  - Evidence:
+    - `README.md`; `test/readme-extension-entry.test.js`; `npm run verify` green.
 
 ---
 
