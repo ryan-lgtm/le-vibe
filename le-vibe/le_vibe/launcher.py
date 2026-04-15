@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 from .cline_setup_auto import maybe_auto_setup_cline_after_first_run
-from .first_run import ensure_product_first_run
+from .first_run import ensure_product_first_run, evaluate_first_run_agent_readiness
 from .managed_ollama import ensure_managed_ollama, stop_managed_ollama
 from .paths import LE_VIBE_MANAGED_OLLAMA_PORT, le_vibe_config_dir
 from .user_settings import load_user_settings
@@ -1655,6 +1655,22 @@ def _run_global_session_preamble(argv: list[str]) -> int | None:
                 print(msg, file=sys.stderr)
                 return code
     maybe_auto_setup_cline_after_first_run(cfg)
+    ready, readiness_msg = evaluate_first_run_agent_readiness(config_dir=cfg)
+    if not ready:
+        append_structured_log(
+            "launcher",
+            "agent_readiness_failed",
+            message=readiness_msg[:400],
+        )
+        if is_subcommand:
+            append_structured_log(
+                "launcher",
+                "agent_readiness_failed_continuing_subcommand",
+                message=readiness_msg[:400],
+            )
+        else:
+            print(readiness_msg, file=sys.stderr)
+            return 8
     return None
 
 

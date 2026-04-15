@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import os
+import subprocess
 from pathlib import Path
 
 from .api import EnsureBootstrapArgs, ensure_bootstrap
 from .models import clear_tag_cache
+from .ollama_ops import list_local_model_names, model_tag_present_locally, verify_api
 from .paths import LE_VIBE_MANAGED_OLLAMA_PORT, le_vibe_config_dir
 from .structured_log import append_structured_log
 from .user_settings import load_user_settings
@@ -15,6 +18,87 @@ from .user_settings import load_user_settings
 
 def first_run_marker_path(config_dir: Path | None = None) -> Path:
     return (config_dir or le_vibe_config_dir()) / ".first-run-complete"
+
+
+def _default_editor_for_readiness() -> str:
+    env = os.environ.get("LE_VIBE_EDITOR")
+    if env:
+        return env
+    lv_ide = "/usr/lib/le-vibe/bin/codium"
+    if os.path.isfile(lv_ide) and os.access(lv_ide, os.X_OK):
+        return lv_ide
+    if os.path.isfile("/usr/bin/codium") and os.access("/usr/bin/codium", os.X_OK):
+        return "/usr/bin/codium"
+    return "codium"
+
+
+def evaluate_first_run_agent_readiness(
+    *,
+    config_dir: Path | None = None,
+    host: str = "127.0.0.1",
+    port: int = LE_VIBE_MANAGED_OLLAMA_PORT,
+) -> tuple[bool, str]:
+    """
+    C2 readiness gate:
+    - managed Ollama API responds,
+    - selected model exists on the managed API,
+    - Cline extension is active in the target editor binary.
+    """
+    cfg = config_dir or le_vibe_config_dir()
+    if not verify_api(host, port):
+        return (
+            False,
+            f"Lé Vibe: Ollama API is not reachable at http://{host}:{port}. "
+            "Run `lvibe --force-first-run` and retry.",
+        )
+
+    model_decision = cfg / "model-decision.json"
+    if not model_decision.is_file():
+        return (
+            False,
+            "Lé Vibe: missing model decision state (~/.config/le-vibe/model-decision.json). "
+            "Run `lvibe --force-first-run` to regenerate first-run state.",
+        )
+    try:
+        payload = json.loads(model_decision.read_text(encoding="utf-8"))
+        selected_model = str(payload.get("selected_model") or "").strip()
+    except (OSError, json.JSONDecodeError):
+        return (
+            False,
+            "Lé Vibe: model decision state is unreadable. "
+            "Run `lvibe --force-first-run` to repair configuration state.",
+        )
+    if not selected_model:
+        return (
+            False,
+            "Lé Vibe: no selected model is recorded. "
+            "Run `lvibe --force-first-run` and choose/allow a model.",
+        )
+    names = list_local_model_names(host, port)
+    if not model_tag_present_locally(selected_model, names):
+        return (
+            False,
+            f"Lé Vibe: selected model `{selected_model}` is missing on managed Ollama ({host}:{port}). "
+            "Enable pull in user settings or run `lvibe --force-first-run` to repair.",
+        )
+
+    editor = _default_editor_for_readiness()
+    try:
+        out = subprocess.check_output([editor, "--list-extensions"], text=True, stderr=subprocess.STDOUT)
+    except (subprocess.CalledProcessError, FileNotFoundError, OSError):
+        return (
+            False,
+            f"Lé Vibe: cannot inspect editor extensions via `{editor} --list-extensions`. "
+            "Install/configure the Lé Vibe editor binary and rerun `lvibe`.",
+        )
+    exts = {ln.strip().lower() for ln in out.splitlines() if ln.strip()}
+    if "saoudrizwan.claude-dev" not in exts:
+        return (
+            False,
+            "Lé Vibe: Cline extension is not active in the selected editor. "
+            "Run `le-vibe-setup-cline` and retry.",
+        )
+    return True, "agent-ready"
 
 
 def ensure_product_first_run(

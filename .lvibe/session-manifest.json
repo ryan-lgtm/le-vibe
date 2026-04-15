@@ -126,9 +126,9 @@
           {
             "id": "task-c2-first-run-agent-readiness",
             "title": "Implement first-run checks for Ollama, selected model availability, and Cline activation",
-            "status": "pending",
+            "status": "done",
             "assignee_agent": "@be-eng",
-            "notes": "Ensure lvibe launch can confirm runtime readiness state and provide actionable guidance when prerequisites fail.",
+            "notes": "Added first-run readiness gate after bootstrap/autosetup: verifies managed Ollama API reachability, selected model presence on managed API, and active Cline extension in target editor. Default lvibe launch now exits with explicit remediation when readiness fails; subcommands continue with structured log evidence.",
             "acceptance_criteria": "Fresh run reaches agent-ready state or emits explicit remediation steps with no silent failure state."
           },
           {
