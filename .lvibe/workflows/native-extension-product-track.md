@@ -282,6 +282,12 @@
     - prevents silent drift when `engines.vscode` is bumped
   - Evidence:
     - `test/vscode-engine-doc-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-21**: Documented Node minimum stays aligned with **`engines.node`**.
+  - Acceptance:
+    - automated test derives minimum major from `package.json` and requires README + OPERATOR to use `Node.js N+` prose
+    - prevents silent drift when `engines.node` is bumped
+  - Evidence:
+    - `test/node-engine-doc-sync.test.js`; `npm run verify` green.
 
 ---
 
