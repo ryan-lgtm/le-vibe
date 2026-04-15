@@ -479,6 +479,11 @@
     - developer README states `npm test` runs `package-leVibeNative-keys-doc-inventory.test.js` and cross-links OPERATOR *Product track*; dedicated README contract test
   - Evidence:
     - `README.md`; `test/readme-settings-disclosure-guardrail.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-57**: **Doc parity** — OPERATOR *Product track* and README *Operator verification* both name the **settings disclosure guardrail** and **`package-leVibeNative-keys-doc-inventory.test.js`**.
+  - Acceptance:
+    - parity test fails if either file drops the shared stem or inventory test path
+  - Evidence:
+    - `test/settings-disclosure-guardrail-doc-parity.test.js`; `npm run verify` green.
 
 ---
 
