@@ -40,7 +40,7 @@ From this directory:
 npm run verify
 ```
 
-Runs **`npm test`** then **`npm run smoke`**. The **`package.json`** **`scripts.verify`** string is exactly **`npm test && npm run smoke`**. Green = all unit tests pass; smoke confirms non-blank panel HTML, optional `lvibe` launcher string check when the full monorepo is present, a best-effort local Ollama probe (non-fatal if Ollama is down unless strict mode is on), and prints the **canonical first-party persisted config directory** (from `storage-inventory.js`) before `smoke: done`.
+Runs **`npm test`** then **`npm run smoke`**. The **`package.json`** **`scripts.verify`** string is exactly **`npm test && npm run smoke`**. Underlying script entries: **`scripts.test`** = **`node --test ./test/*.test.js`**; **`scripts.smoke`** = **`node ./scripts/smoke-integration.js`**. Green = all unit tests pass; smoke confirms non-blank panel HTML, optional `lvibe` launcher string check when the full monorepo is present, a best-effort local Ollama probe (non-fatal if Ollama is down unless strict mode is on), and prints the **canonical first-party persisted config directory** (from `storage-inventory.js`) before `smoke: done`.
 
 ### Smoke environment (optional)
 

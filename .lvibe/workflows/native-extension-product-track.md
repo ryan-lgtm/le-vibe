@@ -504,6 +504,11 @@
     - docs name `scripts.verify` alongside the verify UX; test reads `package.json` and requires the same string in both markdown files
   - Evidence:
     - `OPERATOR.md`; `README.md`; `test/verify-script-doc-literal-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-62**: **OPERATOR** + **README** include exact **`package.json` `scripts.test`** and **`scripts.smoke`** literals (aligned with **n8-58** / **n8-59**).
+  - Acceptance:
+    - runbook and developer README quote the full command strings; test reads `package.json` and requires both literals in each file
+  - Evidence:
+    - `OPERATOR.md`; `README.md`; `test/package-scripts-test-smoke-doc-literal-sync.test.js`; `npm run verify` green.
 
 ---
 
