@@ -306,6 +306,12 @@
     - both reference `leVibeNative.ollamaEndpoint`
   - Evidence:
     - `test/local-first-doc-parity.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-25**: OPERATOR documents **telemetry** (local logs; remote only on explicit opt-in).
+  - Acceptance:
+    - aligns with product track “Telemetry: local structured logs only unless user explicitly opts in”
+    - contract test prevents removal
+  - Evidence:
+    - `OPERATOR.md` Telemetry line; `test/operator-doc.test.js`; `npm run verify` green.
 
 ---
 

@@ -8,6 +8,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Local-first:** the shipped defaults target **local Ollama** (see `leVibeNative.ollamaEndpoint`); the extension does **not** silently fall back to a cloud LLM.
 
+**Telemetry:** defaults to **local structured logs only**; there is **no** remote telemetry unless the user **explicitly opts in**.
+
 ## Verify (canonical)
 
 From this directory:

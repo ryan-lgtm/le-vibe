@@ -47,3 +47,10 @@ test('OPERATOR.md states local-first Ollama default without silent cloud fallbac
   assert.ok(text.includes('silent'));
   assert.ok(text.toLowerCase().includes('cloud'));
 });
+
+test('OPERATOR.md documents telemetry as local-by-default with explicit opt-in only (task-n8-25)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Telemetry'));
+  assert.ok(text.includes('local structured logs'));
+  assert.ok(text.includes('explicitly opts in'));
+});
