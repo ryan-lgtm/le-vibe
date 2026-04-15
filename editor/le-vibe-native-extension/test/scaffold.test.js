@@ -14,6 +14,7 @@ test('manifest contributes Lé Vibe Open Agent Surface command', () => {
   assert.equal(command.title, 'Lé Vibe: Open Agent Surface');
   assert.ok(commands.find((item) => item.command === 'leVibeNative.pickContextFile'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.clearContextFiles'));
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.emitOperatorHandoff'));
 });
 
 test('manifest supports deterministic activation entrypoints', () => {
@@ -24,6 +25,7 @@ test('manifest supports deterministic activation entrypoints', () => {
   );
   assert.ok(activationEvents.includes('onStartupFinished'), 'expected startup activation event');
   assert.ok(activationEvents.includes('onCommand:leVibeNative.pickContextFile'));
+  assert.ok(activationEvents.includes('onCommand:leVibeNative.emitOperatorHandoff'));
 });
 
 test('extension exports activate/deactivate and command constant', () => {
@@ -64,5 +66,6 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('Clear transcript'));
     assert.ok(html.includes('Add context file'));
     assert.ok(html.includes('Clear context'));
+    assert.ok(html.includes('Emit handoff event'));
   });
 });

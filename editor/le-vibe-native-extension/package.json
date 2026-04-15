@@ -22,7 +22,8 @@
     "onCommand:leVibeNative.exportChatTranscript",
     "onCommand:leVibeNative.clearChatTranscript",
     "onCommand:leVibeNative.pickContextFile",
-    "onCommand:leVibeNative.clearContextFiles"
+    "onCommand:leVibeNative.clearContextFiles",
+    "onCommand:leVibeNative.emitOperatorHandoff"
   ],
   "contributes": {
     "commands": [
@@ -69,6 +70,11 @@
       {
         "command": "leVibeNative.clearContextFiles",
         "title": "Lé Vibe Chat: Clear selected workspace context",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.emitOperatorHandoff",
+        "title": "Lé Vibe Chat: Emit operator handoff event",
         "category": "Lé Vibe"
       }
     ],

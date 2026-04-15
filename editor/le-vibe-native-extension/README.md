@@ -66,3 +66,11 @@ Token-budget rules (configurable in Settings):
 - `leVibeNative.contextMaxCharsPerFile` (default `1200`)
 - `leVibeNative.contextMaxLinesPerFile` (default `80`)
 - `leVibeNative.contextMaxTotalChars` (default `3200`)
+
+## Operator handoff contract (task-n4-2)
+
+- Command: `Lé Vibe Chat: Emit operator handoff event` (`leVibeNative.emitOperatorHandoff`), also available as a panel action.
+- Contract version: `lvibe.operator_handoff.v1`.
+- Event includes reproducible fields: `workspace_uri`, `startup_state`, `diagnostics`, Ollama endpoint/model, selected context paths, context budget, and transcript path/caps.
+- Local audit log evidence is appended as JSONL at:
+  - `~/.config/le-vibe/levibe-native-chat/operator-handoff-audit.jsonl`

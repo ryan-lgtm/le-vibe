@@ -11,11 +11,13 @@ const EXPORT_CHAT_TRANSCRIPT_COMMAND = 'leVibeNative.exportChatTranscript';
 const CLEAR_CHAT_TRANSCRIPT_COMMAND = 'leVibeNative.clearChatTranscript';
 const PICK_CONTEXT_FILE_COMMAND = 'leVibeNative.pickContextFile';
 const CLEAR_CONTEXT_FILES_COMMAND = 'leVibeNative.clearContextFiles';
+const EMIT_OPERATOR_HANDOFF_COMMAND = 'leVibeNative.emitOperatorHandoff';
 
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 const { createOllamaClient } = require('./ollama');
 const { createChatController } = require('./chat');
 const { isSafeRelativePath, clipTextByBudget, buildPromptWithContext } = require('./workspace-context');
+const { handoffAuditPath, buildOperatorHandoffEvent, appendOperatorHandoffAudit } = require('./operator-handoff');
 const {
   transcriptPath,
   appendEntry,
@@ -112,6 +114,11 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     <button data-action="pickContextFile">Add context file</button>
     <button data-action="clearContextFiles">Clear context</button>
   </div>
+  <h3>Operator handoff</h3>
+  <p class="muted">Emit a reproducible handoff event to lvibe orchestration and append local audit evidence.</p>
+  <div>
+    <button data-action="emitOperatorHandoff">Emit handoff event</button>
+  </div>
   <h3>Lé Vibe Chat storage</h3>
   <p class="muted">Local JSONL under ~/.config/le-vibe/levibe-native-chat/</p>
   <div>
@@ -167,6 +174,8 @@ function openAgentSurface() {
   const { transcriptFile, transcriptCaps } = getTranscriptContext(vscode);
   const contextBudget = getContextBudget(vscode);
   const selectedContexts = [];
+  let latestStartupState = 'checking';
+  let latestDiagnostics = { mode: 'startup_probe' };
   const panel = vscode.window.createWebviewPanel(
     'leVibeNativeReadiness',
     'Lé Vibe Native Readiness',
@@ -175,6 +184,8 @@ function openAgentSurface() {
   );
   panel.webview.html = panelHtml('checking', null, { mode: 'startup_probe' }, contextBudget);
   resolveStartupSnapshot(vscode).then((snapshot) => {
+    latestStartupState = snapshot.state;
+    latestDiagnostics = snapshot.diagnostics || {};
     panel.webview.html = panelHtml(snapshot.state, snapshot.detailOverride, snapshot.diagnostics, contextBudget);
   });
   panel.webview.onDidReceiveMessage((msg) => {
@@ -220,6 +231,18 @@ function openAgentSurface() {
     if (msg.type === 'action' && msg.actionId === 'clearContextFiles') {
       selectedContexts.length = 0;
       panel.webview.postMessage({ type: 'chatUpdate', status: 'Workspace context cleared.' });
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'emitOperatorHandoff') {
+      void vscode.commands.executeCommand(EMIT_OPERATOR_HANDOFF_COMMAND, {
+        startupState: latestStartupState,
+        diagnostics: latestDiagnostics,
+        selectedContextPaths: selectedContexts.map((item) => item.path),
+        transcriptFile,
+        transcriptCaps,
+        contextBudget,
+      });
+      panel.webview.postMessage({ type: 'chatUpdate', status: 'Operator handoff event emitted.' });
       return;
     }
     if (msg.type === 'action' && msg.actionId === 'viewChatUsage') {
@@ -357,6 +380,26 @@ function openAgentSurface() {
 function activate(context) {
   const vscode = require('vscode');
   context.subscriptions.push(
+    vscode.commands.registerCommand(EMIT_OPERATOR_HANDOFF_COMMAND, async (input) => {
+      const config = vscode.workspace.getConfiguration('leVibeNative');
+      const { workspaceUri, transcriptFile, transcriptCaps } = getTranscriptContext(vscode);
+      const event = buildOperatorHandoffEvent({
+        workspaceUri,
+        startupState: input && input.startupState ? input.startupState : 'checking',
+        diagnostics: (input && input.diagnostics) || {},
+        ollamaEndpoint: config.get('ollamaEndpoint', 'http://127.0.0.1:11434'),
+        ollamaModel: config.get('ollamaModel', 'mistral:latest'),
+        selectedContextPaths: (input && input.selectedContextPaths) || [],
+        contextBudget: (input && input.contextBudget) || getContextBudget(vscode),
+        transcriptFile,
+        transcriptCaps,
+      });
+      const auditFile = handoffAuditPath();
+      appendOperatorHandoffAudit(auditFile, event);
+      await vscode.window.showInformationMessage(
+        `Lé Vibe Chat handoff event recorded: ${auditFile}`,
+      );
+    }),
     vscode.commands.registerCommand(PICK_CONTEXT_FILE_COMMAND, async () => {
       const folder = vscode.workspace.workspaceFolders?.[0];
       if (!folder) {
@@ -487,6 +530,7 @@ module.exports = {
   CLEAR_CHAT_TRANSCRIPT_COMMAND,
   PICK_CONTEXT_FILE_COMMAND,
   CLEAR_CONTEXT_FILES_COMMAND,
+  EMIT_OPERATOR_HANDOFF_COMMAND,
   getTranscriptContext,
   getContextBudget,
   panelHtml,
