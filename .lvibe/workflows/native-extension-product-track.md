@@ -270,6 +270,12 @@
     - contract test prevents accidental removal
   - Evidence:
     - `README.md` prerequisites; `test/readme-prerequisites.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-19**: OPERATOR cross-links **README** *Prerequisites (developers)*.
+  - Acceptance:
+    - runbook points contributors to README for the same Node / `engines.vscode` guidance
+    - contract test prevents removal of the cross-link
+  - Evidence:
+    - `OPERATOR.md` prerequisites paragraph; `test/operator-doc.test.js`; `npm run verify` green.
 
 ---
 

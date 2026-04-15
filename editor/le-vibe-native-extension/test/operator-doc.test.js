@@ -33,3 +33,9 @@ test('OPERATOR.md documents engines.vscode / minimum editor version (task-n8-17)
   assert.ok(text.includes('1.85'));
   assert.ok(text.includes('VSCodium'));
 });
+
+test('OPERATOR.md cross-links README prerequisites for contributors (task-n8-19)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('Prerequisites (developers)'));
+});
