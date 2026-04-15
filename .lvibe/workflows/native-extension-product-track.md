@@ -414,6 +414,11 @@
     - parity test on shared `mistral:latest` markdown stem
   - Evidence:
     - `OPERATOR.md`; `README.md`; `test/operator-doc.test.js`; `test/readme-ollama-model.test.js`; `test/ollama-model-doc-parity.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-44**: Documented **Ollama model** tag stays aligned with **`package.json`** default.
+  - Acceptance:
+    - test reads `leVibeNative.ollamaModel` default and requires it in both OPERATOR and README
+  - Evidence:
+    - `test/ollama-model-doc-package-sync.test.js`; `npm run verify` green.
 
 ---
 
