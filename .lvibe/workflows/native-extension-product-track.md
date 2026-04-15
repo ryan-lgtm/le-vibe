@@ -294,6 +294,12 @@
     - contract test prevents removal of that operator-facing guarantee
   - Evidence:
     - `OPERATOR.md` product line; `test/operator-doc.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-23**: Extension **README** documents **local-first** (aligned with OPERATOR).
+  - Acceptance:
+    - developer README states local Ollama default and no silent cloud fallback
+    - contract test + cross-reference to OPERATOR
+  - Evidence:
+    - `README.md` Local-first line; `test/readme-local-first.test.js`; `npm run verify` green.
 
 ---
 

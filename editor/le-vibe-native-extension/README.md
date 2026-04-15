@@ -6,6 +6,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Prerequisites (developers):** **Node.js 18+** on your PATH to run **`npm run verify`** / **`npm test`** (see `package.json` **`engines.node`**). The installed VS Code extension host uses the editor’s runtime; the Node requirement applies to this package’s scripts and CI only. To install or run this extension in an editor, match **`engines.vscode`** in `package.json` — currently **VS Code 1.85+** or a compatible build (**VSCodium**, etc.) at the same API level.
 
+**Local-first:** shipped defaults target **local Ollama** (`leVibeNative.ollamaEndpoint`); the extension does **not** silently fall back to a cloud LLM (same posture as **`OPERATOR.md`**).
+
 ## Scope for task-n1-1
 
 - Extension host entrypoint exists (`extension.js`).
