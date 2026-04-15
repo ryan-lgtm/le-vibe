@@ -588,9 +588,11 @@ Product intent: match **Cursor Composer** / multi-file Copilot flows: a single a
     - cancel aborts remaining steps safely
   - Evidence:
     - `workspace-plan-exec.js` (`executeValidatedWorkspacePlan`, `lvibe.workspace_plan_audit.v1` JSONL at `workspace-plan-audit.jsonl`); panel **Run sample workspace plan** / **Cancel plan run** + `planRunUpdate` in `extension.js`; `storage-inventory.js` + README bounded table; tests `test/workspace-plan-exec.test.js`, `test/scaffold.test.js`, `test/storage-inventory.test.js`, `test/operator-doc.test.js`; `npm run verify` green.
-- [ ] `pending` **task-n10-3**: **Rollback strategy**: on failure mid-plan, offer “undo applied steps” or leave workspace consistent with explicit partial state message.
+- [x] `done` **task-n10-3**: **Rollback strategy**: on failure mid-plan, offer “undo applied steps” or leave workspace consistent with explicit partial state message.
   - Acceptance:
     - documented semantics + at least best-effort undo for same session
+  - Evidence:
+    - `workspace-plan-exec.js`: pre-step `capturePreStepSnapshot`, `inverseAfterSuccessfulStep`, failure returns `rollbackInverses`; `applyWorkspacePlanRollbackInverses` + `workspace_plan_rollback` audit; optional test hook `failStepAtIndex`; panel **Undo completed steps** + `planRollbackUpdate` in `extension.js`; `WORKSPACE_PLAN.v1.md` rollback section; README/OPERATOR; tests `test/workspace-plan-exec.test.js`, `test/scaffold.test.js`, `test/operator-doc.test.js`; `npm run verify` green.
 - [ ] `pending` **task-n10-4**: Optional **dry-run** mode: list files that would change, with size/token estimates (bounded).
   - Acceptance:
     - dry-run output visible before commit to disk

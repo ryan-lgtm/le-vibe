@@ -102,6 +102,7 @@ Token-budget rules (configurable in Settings):
 
 - Multi-step orchestration uses **`levibe.workspace_plan.v1`** — ordered **`steps`** with **`op`**: `create_file`, `apply_edit` (same `edit` shapes as [`EDIT_PROPOSAL.v1.md`](EDIT_PROPOSAL.v1.md)), `delete_file`, `move_file`. Validate with [`workspace-plan.js`](workspace-plan.js) (`validateWorkspacePlan`) **before** execution so invalid plans surface a single **`Lé Vibe Chat: workspace plan invalid — …`** string (no partial writes). Human summary: [`WORKSPACE_PLAN.v1.md`](WORKSPACE_PLAN.v1.md).
 - **Execution (task-n10-2):** the panel **Run sample workspace plan** demo streams **`Lé Vibe Chat: plan step N/M — …`** lines into the chat log; each phase also appends structured JSONL under **`workspace-plan-audit.jsonl`** (see *Bounded persistence inventory*). **Cancel plan run** stops before the next step (the in-flight step completes first). Implementation: [`workspace-plan-exec.js`](workspace-plan-exec.js).
+- **Rollback (task-n10-3):** if a step **fails** after earlier steps succeeded, the chat log explains the **partial state** and enables **Undo completed steps** (same VS Code session). Rollback applies inverse **`WorkspaceEdit`** operations in reverse order (best-effort: restore prior bytes, delete newly created files, reverse renames). A `workspace_plan_rollback` line is appended to **`workspace-plan-audit.jsonl`**. Cancel mid-run does not auto-rollback; semantics are documented in [`WORKSPACE_PLAN.v1.md`](WORKSPACE_PLAN.v1.md).
 
 ## Operator handoff contract (task-n4-2)
 

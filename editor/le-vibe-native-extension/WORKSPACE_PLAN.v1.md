@@ -27,3 +27,14 @@ Epic **N10** — ordered multi-file operations produced by a model or orchestrat
 | `move_file` | `fromUri`, `toUri` |
 
 Invalid plans return a single **`userMessage`** string suitable for `showErrorMessage` / panel status — no partial execution in consumers that call `validateWorkspacePlan` first.
+
+## Rollback after mid-plan failure (Epic N10)
+
+When **`executeValidatedWorkspacePlan`** stops on a **failed** step after one or more steps completed successfully:
+
+1. **User-visible:** the panel chat stream includes an explicit partial-state line and offers **Undo completed steps** (enabled only when there is something to revert).
+2. **Semantics:** inverses are derived from snapshots taken **immediately before** each step (file bytes / existence). The extension applies those inverses **in reverse order** via `WorkspaceEdit` (same undo-friendly path as forward edits — not raw shell `rm`).
+3. **Best-effort:** if the workspace changed again before rollback (conflicts, external edits), a rollback step may fail; the panel reports how many inverse steps ran before the error.
+4. **Cancel:** stopping a run with **Cancel plan run** does **not** auto-undo completed steps (user may keep partial work); only **failure** arms the rollback affordance for the completed prefix in the current implementation.
+
+Structured audit: `workspace_plan_rollback` events in **`workspace-plan-audit.jsonl`** record how many inverse steps completed.

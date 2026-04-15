@@ -141,3 +141,10 @@ test('OPERATOR.md documents workspace plan execution + audit (task-n10-2)', () =
   assert.ok(text.includes('workspace-plan-exec.js'));
   assert.ok(text.includes('workspace-plan-audit.jsonl'));
 });
+
+test('OPERATOR.md documents workspace plan rollback (task-n10-3)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n10-3'));
+  assert.ok(text.includes('Undo completed steps'));
+  assert.ok(text.includes('workspace_plan_rollback'));
+});

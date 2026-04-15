@@ -10,6 +10,15 @@ const {
 } = require('./workspace-edit-apply.js');
 const { EDIT_PROPOSAL_KIND } = require('./edit-proposal.js');
 
+/**
+ * @typedef {object} RollbackInverse
+ * @property {'delete_file'|'write_full'|'move_file'} op
+ * @property {string} [targetUri]
+ * @property {string} [content]
+ * @property {string} [fromUri]
+ * @property {string} [toUri]
+ */
+
 function workspacePlanAuditPath() {
   return path.join(levibeNativeChatDir(), 'workspace-plan-audit.jsonl');
 }
@@ -60,6 +69,18 @@ function pathLabelForStep(vscode, folder, uriStr) {
  * @param {object} params
  * @returns {object}
  */
+function buildRollbackAuditRecord(params) {
+  return {
+    contract_version: 'lvibe.workspace_plan_audit.v1',
+    event_type: 'workspace_plan_rollback',
+    timestamp_iso: new Date().toISOString(),
+    workspace_uri: params.workspaceUri || 'no-workspace',
+    plan_kind: WORKSPACE_PLAN_KIND,
+    steps_undone: params.stepsUndone,
+    local_only: true,
+  };
+}
+
 function buildAuditRecord(params) {
   return {
     contract_version: 'lvibe.workspace_plan_audit.v1',
@@ -80,6 +101,156 @@ function buildAuditRecord(params) {
 }
 
 /**
+ * Capture workspace state immediately before a plan step mutates the tree.
+ *
+ * @param {import('vscode')} vscode
+ * @param {object} step
+ * @returns {Promise<object>}
+ */
+async function capturePreStepSnapshot(vscode, step) {
+  if (step.op === 'create_file') {
+    const uri = vscode.Uri.parse(step.targetUri);
+    try {
+      const bytes = await vscode.workspace.fs.readFile(uri);
+      return { kind: 'create_file', hadFile: true, priorUtf8: Buffer.from(bytes).toString('utf8') };
+    } catch {
+      return { kind: 'create_file', hadFile: false };
+    }
+  }
+  if (step.op === 'apply_edit') {
+    const uri = vscode.Uri.parse(step.targetUri);
+    try {
+      const bytes = await vscode.workspace.fs.readFile(uri);
+      return { kind: 'apply_edit', hadFile: true, priorUtf8: Buffer.from(bytes).toString('utf8') };
+    } catch {
+      return { kind: 'apply_edit', hadFile: false };
+    }
+  }
+  if (step.op === 'delete_file') {
+    const uri = vscode.Uri.parse(step.targetUri);
+    try {
+      const bytes = await vscode.workspace.fs.readFile(uri);
+      return { kind: 'delete_file', priorUtf8: Buffer.from(bytes).toString('utf8') };
+    } catch {
+      return { kind: 'delete_file', noop: true };
+    }
+  }
+  if (step.op === 'move_file') {
+    return { kind: 'move_file' };
+  }
+  throw new Error(`unsupported op: ${step.op}`);
+}
+
+/**
+ * Build one inverse WorkspaceEdit-worth of semantics to undo a successful step (best-effort).
+ *
+ * @param {object} step
+ * @param {object} snapshot
+ * @returns {RollbackInverse | null}
+ */
+function inverseAfterSuccessfulStep(step, snapshot) {
+  if (step.op === 'create_file') {
+    if (snapshot.kind !== 'create_file') {
+      return null;
+    }
+    if (!snapshot.hadFile) {
+      return { op: 'delete_file', targetUri: step.targetUri };
+    }
+    return { op: 'write_full', targetUri: step.targetUri, content: snapshot.priorUtf8 };
+  }
+  if (step.op === 'apply_edit') {
+    if (snapshot.kind !== 'apply_edit') {
+      return null;
+    }
+    if (!snapshot.hadFile) {
+      return { op: 'delete_file', targetUri: step.targetUri };
+    }
+    return { op: 'write_full', targetUri: step.targetUri, content: snapshot.priorUtf8 };
+  }
+  if (step.op === 'delete_file') {
+    if (snapshot.kind !== 'delete_file' || snapshot.noop) {
+      return null;
+    }
+    return { op: 'write_full', targetUri: step.targetUri, content: snapshot.priorUtf8 };
+  }
+  if (step.op === 'move_file') {
+    return { op: 'move_file', fromUri: step.toUri, toUri: step.fromUri };
+  }
+  return null;
+}
+
+/**
+ * Apply rollback inverses in reverse order (LIFO). Best-effort; stops on first error.
+ *
+ * @param {import('vscode')} vscode
+ * @param {RollbackInverse[]} inverses
+ * @param {object} [opts]
+ * @param {string} [opts.auditPath]
+ * @param {string} [opts.workspaceUriStr]
+ * @returns {Promise<{ ok: true } | { ok: false, error: string, applied: number }>}
+ */
+async function applyWorkspacePlanRollbackInverses(vscode, inverses, opts = {}) {
+  const auditPath = opts.auditPath || workspacePlanAuditPath();
+  const workspaceUriStr = opts.workspaceUriStr || 'no-workspace';
+  const list = inverses.slice();
+  let applied = 0;
+  for (let k = list.length - 1; k >= 0; k -= 1) {
+    const inv = list[k];
+    try {
+      await applyOneRollbackInverse(vscode, inv);
+      applied += 1;
+    } catch (e) {
+      const msg = e && e.message ? e.message : String(e);
+      return { ok: false, error: msg, applied };
+    }
+  }
+  appendWorkspacePlanAuditLine(auditPath, buildRollbackAuditRecord({ workspaceUri: workspaceUriStr, stepsUndone: applied }));
+  return { ok: true };
+}
+
+/**
+ * @param {import('vscode')} vscode
+ * @param {RollbackInverse} inv
+ */
+async function applyOneRollbackInverse(vscode, inv) {
+  if (inv.op === 'delete_file') {
+    const uri = vscode.Uri.parse(inv.targetUri);
+    const we = new vscode.WorkspaceEdit();
+    we.deleteFile(uri, { recursive: false, ignoreIfNotExists: true });
+    const ok = await vscode.workspace.applyEdit(we);
+    if (!ok) {
+      throw new Error('rollback delete_file applyEdit returned false');
+    }
+    return;
+  }
+  if (inv.op === 'write_full') {
+    const uri = vscode.Uri.parse(inv.targetUri);
+    const text = typeof inv.content === 'string' ? inv.content : '';
+    const ok = await applyFullFileAsSingleWorkspaceEdit(vscode, uri, text);
+    if (!ok) {
+      throw new Error('rollback write_full applyEdit returned false');
+    }
+    return;
+  }
+  if (inv.op === 'move_file') {
+    const from = vscode.Uri.parse(inv.fromUri);
+    const to = vscode.Uri.parse(inv.toUri);
+    const we = new vscode.WorkspaceEdit();
+    if (typeof we.renameFile === 'function') {
+      we.renameFile(from, to, { overwrite: false });
+      const ok = await vscode.workspace.applyEdit(we);
+      if (!ok) {
+        throw new Error('rollback move renameFile applyEdit returned false');
+      }
+      return;
+    }
+    await vscode.workspace.fs.rename(from, to, { overwrite: false });
+    return;
+  }
+  throw new Error(`unsupported rollback op: ${inv.op}`);
+}
+
+/**
  * @param {import('vscode')} vscode
  * @param {object} planValue validated workspace plan
  * @param {object} opts
@@ -88,9 +259,10 @@ function buildAuditRecord(params) {
  * @param {(statusLine: string) => void} [opts.onProgress]
  * @param {() => boolean} [opts.shouldCancel]
  * @param {string} [opts.auditPath]
+ * @param {number} [opts.failStepAtIndex] test-only: throw before executing this 0-based step (after snapshot)
  * @returns {Promise<
  *   | { ok: true, completedSteps: number, cancelled: boolean }
- *   | { ok: false, error: string, completedSteps: number }
+ *   | { ok: false, error: string, completedSteps: number, rollbackInverses?: RollbackInverse[] }
  * >}
  */
 async function executeValidatedWorkspacePlan(vscode, planValue, opts) {
@@ -102,6 +274,8 @@ async function executeValidatedWorkspacePlan(vscode, planValue, opts) {
 
   const steps = planValue.steps;
   const total = steps.length;
+  /** @type {RollbackInverse[]} */
+  const rollbackInverses = [];
 
   const logAudit = (partial) => {
     appendWorkspacePlanAuditLine(
@@ -148,7 +322,30 @@ async function executeValidatedWorkspacePlan(vscode, planValue, opts) {
       runCancelled: false,
     });
 
+    let snapshot;
     try {
+      snapshot = await capturePreStepSnapshot(vscode, step);
+    } catch (snapErr) {
+      const msg = snapErr && snapErr.message ? snapErr.message : String(snapErr);
+      logAudit({
+        stepIndex: i,
+        stepId: step.id,
+        op: step.op,
+        pathLabel,
+        phase: 'failed',
+        runCancelled: false,
+        error: msg,
+      });
+      onProgress(`Lé Vibe Chat: plan step failed (before apply) — ${step.op} — ${pathLabel} — ${msg}`);
+      return { ok: false, error: msg, completedSteps: i, rollbackInverses };
+    }
+
+    try {
+      if (typeof opts.failStepAtIndex === 'number' && opts.failStepAtIndex === i) {
+        throw new Error(
+          typeof opts.failStepMessage === 'string' ? opts.failStepMessage : 'injected plan failure',
+        );
+      }
       await runOneStep(vscode, step);
       onProgress(formatWorkspacePlanProgressStatus(i, total, step.op, pathLabel, 'done'));
       logAudit({
@@ -159,6 +356,10 @@ async function executeValidatedWorkspacePlan(vscode, planValue, opts) {
         phase: 'completed',
         runCancelled: false,
       });
+      const inv = inverseAfterSuccessfulStep(step, snapshot);
+      if (inv) {
+        rollbackInverses.push(inv);
+      }
     } catch (e) {
       const msg = e && e.message ? e.message : String(e);
       logAudit({
@@ -171,7 +372,12 @@ async function executeValidatedWorkspacePlan(vscode, planValue, opts) {
         error: msg,
       });
       onProgress(`Lé Vibe Chat: plan step failed — ${step.op} — ${pathLabel} — ${msg}`);
-      return { ok: false, error: msg, completedSteps: i };
+      onProgress(
+        rollbackInverses.length
+          ? `Lé Vibe Chat: plan stopped in a partial state — ${rollbackInverses.length} prior step(s) succeeded. Click Undo completed steps in the panel to best-effort revert those writes (same session).`
+          : 'Lé Vibe Chat: plan failed on the first step — nothing to roll back.',
+      );
+      return { ok: false, error: msg, completedSteps: i, rollbackInverses };
     }
   }
 
@@ -245,5 +451,9 @@ module.exports = {
   appendWorkspacePlanAuditLine,
   formatWorkspacePlanProgressStatus,
   buildAuditRecord,
+  buildRollbackAuditRecord,
+  capturePreStepSnapshot,
+  inverseAfterSuccessfulStep,
+  applyWorkspacePlanRollbackInverses,
   executeValidatedWorkspacePlan,
 };

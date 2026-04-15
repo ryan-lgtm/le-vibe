@@ -44,7 +44,10 @@ const { applyEditProposalBatchAsWorkspaceEdit } = require('./workspace-edit-appl
 const { resolveSingleSelectionForPartialApply } = require('./selection-apply');
 const { buildPreviewRevision, checkDiskContentMatchesRevision } = require('./edit-conflict');
 const { validateWorkspacePlan, WORKSPACE_PLAN_KIND } = require('./workspace-plan');
-const { executeValidatedWorkspacePlan } = require('./workspace-plan-exec');
+const {
+  executeValidatedWorkspacePlan,
+  applyWorkspacePlanRollbackInverses,
+} = require('./workspace-plan-exec');
 
 function getTranscriptContext(vscode) {
   const config = vscode.workspace.getConfiguration('leVibeNative');
@@ -208,6 +211,7 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <div>
     <button data-action="runSampleWorkspacePlan">Run sample workspace plan</button>
     <button type="button" id="cancelWorkspacePlanRun" disabled>Cancel plan run</button>
+    <button type="button" id="undoWorkspacePlanRollback" disabled>Undo completed steps</button>
   </div>
   <h3>Workspace context</h3>
   <p class="muted">Token-budget rules: max ${escapeHtml(budget.maxFiles)} files; each excerpt up to ${escapeHtml(budget.maxCharsPerFile)} chars and ${escapeHtml(budget.maxLinesPerFile)} lines; total injected context capped at ${escapeHtml(budget.maxTotalChars)} chars.</p>
@@ -277,6 +281,10 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
         document.getElementById('cancelWorkspacePlanRun').disabled = !msg.cancelEnabled;
         return;
       }
+      if (msg && msg.type === 'planRollbackUpdate') {
+        document.getElementById('undoWorkspacePlanRollback').disabled = !msg.undoEnabled;
+        return;
+      }
       if (!msg || msg.type !== 'chatUpdate') {
         return;
       }
@@ -302,6 +310,9 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     });
     document.getElementById('cancelWorkspacePlanRun').addEventListener('click', () => {
       vscode.postMessage({ type: 'action', actionId: 'cancelWorkspacePlanRun' });
+    });
+    document.getElementById('undoWorkspacePlanRollback').addEventListener('click', () => {
+      vscode.postMessage({ type: 'action', actionId: 'undoWorkspacePlanRollback' });
     });
   </script>
 </body>
@@ -349,6 +360,8 @@ function openAgentSurface() {
   let editPreviewSession = null;
   /** @type {null | { cancelled: boolean; cancel: () => void }} */
   let planRunCanceller = null;
+  /** Pending inverse ops after a failed plan run (same session); cleared after rollback or new run. */
+  let pendingWorkspacePlanRollbackInverses = null;
   let wizardState = loadWizardState();
   const showFirstRunWizard = config.get('showFirstRunWizard', true);
   const useWizard = showFirstRunWizard && !wizardState.complete;
@@ -674,6 +687,8 @@ function openAgentSurface() {
         }
         const canceller = { cancelled: false, cancel() { this.cancelled = true; } };
         planRunCanceller = canceller;
+        pendingWorkspacePlanRollbackInverses = null;
+        panel.webview.postMessage({ type: 'planRollbackUpdate', undoEnabled: false });
         panel.webview.postMessage({ type: 'planRunUpdate', cancelEnabled: true });
         panel.webview.postMessage({
           type: 'chatUpdate',
@@ -691,6 +706,11 @@ function openAgentSurface() {
         planRunCanceller = null;
         panel.webview.postMessage({ type: 'planRunUpdate', cancelEnabled: false });
         if (!result.ok) {
+          pendingWorkspacePlanRollbackInverses = result.rollbackInverses || null;
+          panel.webview.postMessage({
+            type: 'planRollbackUpdate',
+            undoEnabled: Boolean(pendingWorkspacePlanRollbackInverses?.length),
+          });
           panel.webview.postMessage({
             type: 'chatUpdate',
             status: `Plan failed: ${result.error}`,
@@ -720,6 +740,37 @@ function openAgentSurface() {
           status: 'Cancellation requested — current step finishes, then remaining steps are skipped.',
         });
       }
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'undoWorkspacePlanRollback') {
+      void (async () => {
+        const inv = pendingWorkspacePlanRollbackInverses;
+        if (!inv || inv.length === 0) {
+          panel.webview.postMessage({
+            type: 'chatUpdate',
+            status: 'No workspace plan rollback is pending.',
+          });
+          return;
+        }
+        const folder = vscode.workspace.workspaceFolders?.[0];
+        const r = await applyWorkspacePlanRollbackInverses(vscode, inv, {
+          workspaceUriStr: folder ? folder.uri.toString() : 'no-workspace',
+        });
+        pendingWorkspacePlanRollbackInverses = null;
+        panel.webview.postMessage({ type: 'planRollbackUpdate', undoEnabled: false });
+        if (!r.ok) {
+          panel.webview.postMessage({
+            type: 'chatUpdate',
+            status: `Rollback failed after ${r.applied} inverse step(s): ${r.error}`,
+          });
+          return;
+        }
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status:
+            'Rollback finished — prior completed plan steps were reverted best-effort (same session). See workspace-plan-audit.jsonl for rollback event.',
+        });
+      })();
       return;
     }
     if (msg.type === 'action' && msg.actionId === 'openOllamaSetupHelp') {

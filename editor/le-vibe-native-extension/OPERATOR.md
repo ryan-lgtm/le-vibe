@@ -34,6 +34,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Workspace plan execution (task-n10-2):** panel **Run sample workspace plan** shows per-step **`Lé Vibe Chat: plan step N/M — …`** progress in the chat log; append-only audit JSONL **`workspace-plan-audit.jsonl`** under `levibe-native-chat/` (**`workspace-plan-exec.js`**). **Cancel plan run** skips remaining steps after the current step completes.
 
+**Workspace plan rollback (task-n10-3):** if a step **fails** after prior steps succeeded, **Undo completed steps** runs best-effort inverse **`WorkspaceEdit`**s (same session); **`workspace_plan_rollback`** lines in **`workspace-plan-audit.jsonl`**. Cancel does not auto-rollback — see **`README.md`** / **`WORKSPACE_PLAN.v1.md`**.
+
 **Startup / rollout (defaults):** **`leVibeNative.enableFirstPartyAgentSurface`** default **`true`** (first-party Lé Vibe Chat surface); **`leVibeNative.showFirstRunWizard`** default **`true`** (checkpointed wizard); **`leVibeNative.openPanelOnStartup`** default **`true`** (auto-open panel when the first-party surface is enabled). Rollback semantics in **`README.md`** *Rollout and rollback*.
 
 **Third-party migration nudge:** **`leVibeNative.showThirdPartyMigrationNudge`** default **`true`**. **Ollama readiness source:** **`leVibeNative.useLiveOllamaReadiness`** default **`true`** (live local probes; for development overrides, set **`leVibeNative.useLiveOllamaReadiness`** to **`false`** and use **`leVibeNative.devStartupState`**). Migration flow in **`README.md`** *Third-party agent migration*.
