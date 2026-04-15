@@ -10,6 +10,8 @@ const {
   appendEntry,
   loadTranscript,
   totalBytes,
+  getTranscriptStats,
+  clearTranscript,
 } = require('../chat-transcript');
 
 test('compactTranscript drops oldest until under maxMessages', () => {
@@ -54,4 +56,18 @@ test('transcriptPath stays under config le-vibe', () => {
   assert.ok(p.includes('.config'));
   assert.ok(p.includes('le-vibe'));
   assert.ok(p.endsWith('.jsonl'));
+});
+
+test('getTranscriptStats reflects file and line count', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lvibe-chat-'));
+  const filePath = path.join(dir, 't.jsonl');
+  appendEntry(filePath, { id: '1', ts: 1, role: 'user', content: 'x' }, { maxBytes: 10000, maxMessages: 100 });
+  const stats = getTranscriptStats(filePath);
+  assert.equal(stats.lineCount, 1);
+  assert.ok(stats.fileBytes > 0);
+  assert.equal(stats.path, filePath);
+  clearTranscript(filePath);
+  const after = getTranscriptStats(filePath);
+  assert.equal(after.lineCount, 0);
+  assert.equal(after.fileBytes, 0);
 });

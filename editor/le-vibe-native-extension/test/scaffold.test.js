@@ -55,5 +55,9 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes(`<strong>${state}</strong>`), `expected state marker for ${state}`);
     assert.ok(html.includes('Send Prompt'));
     assert.ok(html.includes('Cancel Request'));
+    assert.ok(html.includes('Lé Vibe Chat storage'));
+    assert.ok(html.includes('View usage'));
+    assert.ok(html.includes('Export transcript'));
+    assert.ok(html.includes('Clear transcript'));
   });
 });

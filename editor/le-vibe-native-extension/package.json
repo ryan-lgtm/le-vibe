@@ -17,7 +17,10 @@
     "onCommand:leVibeNative.openAgentSurface",
     "onCommand:leVibeNative.openOllamaSetupHelp",
     "onCommand:leVibeNative.openModelPullHelp",
-    "onCommand:leVibeNative.openWorkspaceSetup"
+    "onCommand:leVibeNative.openWorkspaceSetup",
+    "onCommand:leVibeNative.viewChatUsage",
+    "onCommand:leVibeNative.exportChatTranscript",
+    "onCommand:leVibeNative.clearChatTranscript"
   ],
   "contributes": {
     "commands": [
@@ -39,6 +42,21 @@
       {
         "command": "leVibeNative.openWorkspaceSetup",
         "title": "Lé Vibe: Open Workspace Setup Workflow",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.viewChatUsage",
+        "title": "Lé Vibe Chat: View transcript usage",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.exportChatTranscript",
+        "title": "Lé Vibe Chat: Export transcript",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.clearChatTranscript",
+        "title": "Lé Vibe Chat: Clear transcript",
         "category": "Lé Vibe"
       }
     ],

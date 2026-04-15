@@ -124,6 +124,40 @@ function appendEntry(filePath, entry, caps) {
   return saveTranscript(filePath, next, caps);
 }
 
+function getTranscriptStats(filePath) {
+  const messages = loadTranscript(filePath);
+  let fileBytes = 0;
+  try {
+    if (fs.existsSync(filePath)) {
+      fileBytes = fs.statSync(filePath).size;
+    }
+  } catch {
+    /* ignore */
+  }
+  return {
+    path: filePath,
+    lineCount: messages.length,
+    fileBytes,
+  };
+}
+
+function readTranscriptRaw(filePath) {
+  if (!fs.existsSync(filePath)) {
+    return '';
+  }
+  try {
+    return fs.readFileSync(filePath, 'utf8');
+  } catch {
+    return '';
+  }
+}
+
+function clearTranscript(filePath) {
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+  }
+}
+
 module.exports = {
   transcriptDir,
   transcriptPath,
@@ -132,6 +166,9 @@ module.exports = {
   loadTranscript,
   saveTranscript,
   appendEntry,
+  getTranscriptStats,
+  readTranscriptRaw,
+  clearTranscript,
   totalBytes,
   lineBytes,
 };

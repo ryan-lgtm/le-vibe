@@ -6,11 +6,33 @@ const OPEN_AGENT_SURFACE_COMMAND = 'leVibeNative.openAgentSurface';
 const OPEN_OLLAMA_SETUP_HELP_COMMAND = 'leVibeNative.openOllamaSetupHelp';
 const OPEN_MODEL_PULL_HELP_COMMAND = 'leVibeNative.openModelPullHelp';
 const OPEN_WORKSPACE_SETUP_COMMAND = 'leVibeNative.openWorkspaceSetup';
+const VIEW_CHAT_USAGE_COMMAND = 'leVibeNative.viewChatUsage';
+const EXPORT_CHAT_TRANSCRIPT_COMMAND = 'leVibeNative.exportChatTranscript';
+const CLEAR_CHAT_TRANSCRIPT_COMMAND = 'leVibeNative.clearChatTranscript';
 
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 const { createOllamaClient } = require('./ollama');
 const { createChatController } = require('./chat');
-const { transcriptPath, appendEntry } = require('./chat-transcript');
+const {
+  transcriptPath,
+  appendEntry,
+  getTranscriptStats,
+  readTranscriptRaw,
+  clearTranscript,
+} = require('./chat-transcript');
+
+function getTranscriptContext(vscode) {
+  const config = vscode.workspace.getConfiguration('leVibeNative');
+  const workspaceUri = vscode.workspace.workspaceFolders?.[0]?.uri.toString() ?? 'no-workspace';
+  return {
+    workspaceUri,
+    transcriptFile: transcriptPath(workspaceUri),
+    transcriptCaps: {
+      maxBytes: config.get('chatTranscriptMaxBytes', 524288),
+      maxMessages: config.get('chatTranscriptMaxMessages', 200),
+    },
+  };
+}
 
 function escapeHtml(text) {
   return String(text)
@@ -65,6 +87,13 @@ function panelHtml(state, detailOverride, diagnostics) {
   </div>
   <div id="chatStatus" class="muted">Idle.</div>
   <div id="chatLog" class="chat-log"></div>
+  <h3>Lé Vibe Chat storage</h3>
+  <p class="muted">Local JSONL under ~/.config/le-vibe/levibe-native-chat/</p>
+  <div>
+    <button data-action="viewChatUsage">View usage</button>
+    <button data-action="exportChatTranscript">Export transcript</button>
+    <button data-action="clearChatTranscript">Clear transcript</button>
+  </div>
   ${diagnosticsText}
   <script>
     const vscode = acquireVsCodeApi();
@@ -110,12 +139,7 @@ function openAgentSurface() {
     model: config.get('ollamaModel', 'mistral:latest'),
   });
   const chat = createChatController(client);
-  const workspaceUri = vscode.workspace.workspaceFolders?.[0]?.uri.toString() ?? 'no-workspace';
-  const transcriptCaps = {
-    maxBytes: config.get('chatTranscriptMaxBytes', 524288),
-    maxMessages: config.get('chatTranscriptMaxMessages', 200),
-  };
-  const transcriptFile = transcriptPath(workspaceUri);
+  const { transcriptFile, transcriptCaps } = getTranscriptContext(vscode);
   const panel = vscode.window.createWebviewPanel(
     'leVibeNativeReadiness',
     'Lé Vibe Native Readiness',
@@ -140,6 +164,61 @@ function openAgentSurface() {
     }
     if (msg.type === 'action' && msg.actionId === 'openWorkspaceSetup') {
       void vscode.commands.executeCommand(OPEN_WORKSPACE_SETUP_COMMAND);
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'viewChatUsage') {
+      const stats = getTranscriptStats(transcriptFile);
+      void vscode.window.showInformationMessage(
+        `Lé Vibe Chat: ${stats.lineCount} line(s), ${stats.fileBytes} byte(s) on disk. Path: ${stats.path}`,
+      );
+      panel.webview.postMessage({
+        type: 'chatUpdate',
+        status: `Lé Vibe Chat usage: ${stats.lineCount} lines, ${stats.fileBytes} bytes.`,
+      });
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'exportChatTranscript') {
+      void (async () => {
+        const raw = readTranscriptRaw(transcriptFile);
+        if (!raw.trim()) {
+          await vscode.window.showInformationMessage('Lé Vibe Chat: nothing to export for this workspace.');
+          return;
+        }
+        const uri = await vscode.window.showSaveDialog({
+          defaultUri: vscode.Uri.file('levibe-chat-transcript.jsonl'),
+          filters: { 'JSON Lines': ['jsonl'], 'All files': ['*'] },
+          saveLabel: 'Export',
+        });
+        if (!uri) {
+          return;
+        }
+        try {
+          await vscode.workspace.fs.writeFile(uri, Buffer.from(raw, 'utf8'));
+          await vscode.window.showInformationMessage(`Lé Vibe Chat transcript exported to ${uri.fsPath}`);
+        } catch (e) {
+          await vscode.window.showErrorMessage(`Export failed: ${e && e.message ? e.message : e}`);
+        }
+      })();
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'clearChatTranscript') {
+      void (async () => {
+        const pick = await vscode.window.showWarningMessage(
+          'Clear Lé Vibe Chat transcript for this workspace? This cannot be undone.',
+          { modal: true },
+          'Clear',
+        );
+        if (pick !== 'Clear') {
+          return;
+        }
+        try {
+          clearTranscript(transcriptFile);
+          await vscode.window.showInformationMessage('Lé Vibe Chat transcript cleared.');
+          panel.webview.postMessage({ type: 'chatUpdate', status: 'Transcript cleared.' });
+        } catch (e) {
+          await vscode.window.showErrorMessage(`Clear failed: ${e && e.message ? e.message : e}`);
+        }
+      })();
       return;
     }
     if (msg.type === 'chat' && msg.actionId === 'sendPrompt') {
@@ -221,6 +300,52 @@ function openAgentSurface() {
 function activate(context) {
   const vscode = require('vscode');
   context.subscriptions.push(
+    vscode.commands.registerCommand(VIEW_CHAT_USAGE_COMMAND, async () => {
+      const { transcriptFile } = getTranscriptContext(vscode);
+      const stats = getTranscriptStats(transcriptFile);
+      await vscode.window.showInformationMessage(
+        `Lé Vibe Chat: ${stats.lineCount} line(s), ${stats.fileBytes} byte(s) on disk.\n${stats.path}`,
+      );
+    }),
+    vscode.commands.registerCommand(EXPORT_CHAT_TRANSCRIPT_COMMAND, async () => {
+      const { transcriptFile } = getTranscriptContext(vscode);
+      const raw = readTranscriptRaw(transcriptFile);
+      if (!raw.trim()) {
+        await vscode.window.showInformationMessage('Lé Vibe Chat: nothing to export for this workspace.');
+        return;
+      }
+      const uri = await vscode.window.showSaveDialog({
+        defaultUri: vscode.Uri.file('levibe-chat-transcript.jsonl'),
+        filters: { 'JSON Lines': ['jsonl'], 'All files': ['*'] },
+        saveLabel: 'Export',
+      });
+      if (!uri) {
+        return;
+      }
+      try {
+        await vscode.workspace.fs.writeFile(uri, Buffer.from(raw, 'utf8'));
+        await vscode.window.showInformationMessage(`Lé Vibe Chat transcript exported to ${uri.fsPath}`);
+      } catch (e) {
+        await vscode.window.showErrorMessage(`Export failed: ${e && e.message ? e.message : e}`);
+      }
+    }),
+    vscode.commands.registerCommand(CLEAR_CHAT_TRANSCRIPT_COMMAND, async () => {
+      const { transcriptFile } = getTranscriptContext(vscode);
+      const pick = await vscode.window.showWarningMessage(
+        'Clear Lé Vibe Chat transcript for this workspace? This cannot be undone.',
+        { modal: true },
+        'Clear',
+      );
+      if (pick !== 'Clear') {
+        return;
+      }
+      try {
+        clearTranscript(transcriptFile);
+        await vscode.window.showInformationMessage('Lé Vibe Chat transcript cleared.');
+      } catch (e) {
+        await vscode.window.showErrorMessage(`Clear failed: ${e && e.message ? e.message : e}`);
+      }
+    }),
     vscode.commands.registerCommand(OPEN_AGENT_SURFACE_COMMAND, openAgentSurface),
     vscode.commands.registerCommand(OPEN_OLLAMA_SETUP_HELP_COMMAND, () =>
       vscode.env.openExternal(vscode.Uri.parse('https://ollama.com/download/linux')),
@@ -263,5 +388,9 @@ module.exports = {
   OPEN_OLLAMA_SETUP_HELP_COMMAND,
   OPEN_MODEL_PULL_HELP_COMMAND,
   OPEN_WORKSPACE_SETUP_COMMAND,
+  VIEW_CHAT_USAGE_COMMAND,
+  EXPORT_CHAT_TRANSCRIPT_COMMAND,
+  CLEAR_CHAT_TRANSCRIPT_COMMAND,
+  getTranscriptContext,
   panelHtml,
 };
