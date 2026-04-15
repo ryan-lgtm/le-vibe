@@ -4,7 +4,7 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Prerequisites:** **Node.js 18+** on your PATH to run **`npm run verify`** / **`npm test`** (uses `node:test`). The VS Code extension host ships its own runtime; the Node engine is for this package’s scripts and CI only.
 
-`package.json` includes **`repository.directory`**, **`homepage`**, **`bugs`**, and **`keywords`** so tooling and registries can link to the monorepo path and issue tracker.
+`package.json` includes **`repository.directory`**, **`homepage`**, **`bugs`**, and **`keywords`** so tooling and registries can link to the monorepo path and issue tracker. It also declares **`publisher`** and **`license`** (SPDX string) for marketplace and CI identity.
 
 ## Verify (canonical)
 

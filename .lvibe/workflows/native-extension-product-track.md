@@ -251,6 +251,13 @@
     - `bugs.url` same host as `repository.url`
   - Evidence:
     - `test/package-homepage-consistency.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-16**: Package identity — `license` (SPDX) and `publisher`.
+  - Acceptance:
+    - `package.json` declares non-empty `publisher` and SPDX `license`
+    - `OPERATOR.md` mentions these fields for operators
+    - contract tests prevent accidental removal
+  - Evidence:
+    - `OPERATOR.md` sentence; `test/package-metadata.test.js` + `test/operator-doc.test.js`; `npm run verify` green.
 
 ---
 

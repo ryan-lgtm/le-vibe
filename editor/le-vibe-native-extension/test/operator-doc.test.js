@@ -19,3 +19,10 @@ test('OPERATOR.md mentions package.json discovery fields (task-n8-14)', () => {
   assert.ok(text.includes('keywords'));
   assert.ok(text.includes('repository.directory'));
 });
+
+test('OPERATOR.md mentions publisher and license (task-n8-16)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('publisher'));
+  assert.ok(text.includes('license'));
+  assert.ok(text.includes('SPDX'));
+});
