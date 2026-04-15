@@ -370,6 +370,11 @@
     - parity test on URL markdown stem shared with OPERATOR
   - Evidence:
     - `README.md`; `test/readme-ollama-default.test.js`; `test/ollama-default-doc-parity.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-36**: **`package.json`** default **`leVibeNative.ollamaEndpoint`** matches docs.
+  - Acceptance:
+    - automated test asserts contributes default is `http://127.0.0.1:11434` (same as OPERATOR/README)
+  - Evidence:
+    - `test/package-ollama-endpoint-default.test.js`; `npm run verify` green.
 
 ---
 
