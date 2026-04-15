@@ -375,6 +375,12 @@
     - automated test asserts contributes default is `http://127.0.0.1:11434` (same as OPERATOR/README)
   - Evidence:
     - `test/package-ollama-endpoint-default.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-37**: **`leVibeNative.ollamaTimeoutMs`** default matches OPERATOR smoke timeout.
+  - Acceptance:
+    - `package.json` contributes default is `2500` (ms)
+    - OPERATOR smoke table still documents `default \`2500\`` for `LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS`
+  - Evidence:
+    - `test/package-ollama-timeout-default.test.js`; `npm run verify` green.
 
 ---
 
