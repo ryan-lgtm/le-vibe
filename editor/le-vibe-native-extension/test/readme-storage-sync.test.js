@@ -19,3 +19,12 @@ test('README bounded persistence table mentions every PERSISTED_ARTIFACTS entry'
     }
   }
 });
+
+test('README bounded persistence names leVibeNative transcript retention settings (task-n8-29)', () => {
+  const readme = fs.readFileSync(path.join(__dirname, '..', 'README.md'), 'utf8');
+  const start = readme.indexOf('## Bounded persistence inventory');
+  assert.ok(start >= 0);
+  const rest = readme.slice(start);
+  assert.ok(rest.includes('leVibeNative.chatTranscriptMaxBytes'));
+  assert.ok(rest.includes('leVibeNative.chatTranscriptMaxMessages'));
+});

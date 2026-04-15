@@ -135,7 +135,7 @@ Token-budget rules (configurable in Settings):
 
 ## Bounded persistence inventory (task-n8-2)
 
-All first-party on-disk state for this extension lives under **`~/.config/le-vibe/levibe-native-chat/`** (see `storage-inventory.js` for the canonical helper). Retention caps apply to chat JSONL via Settings (`chatTranscriptMaxBytes`, `chatTranscriptMaxMessages`).
+All first-party on-disk state for this extension lives under **`~/.config/le-vibe/levibe-native-chat/`** (see `storage-inventory.js` for the canonical helper). Retention caps apply to chat JSONL via Settings (**`leVibeNative.chatTranscriptMaxBytes`**, **`leVibeNative.chatTranscriptMaxMessages`**).
 
 | Artifact | Role |
 |----------|------|

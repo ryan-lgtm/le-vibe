@@ -330,6 +330,12 @@
     - contract test prevents accidental removal
   - Evidence:
     - `OPERATOR.md` *Bounded persistence*; `test/operator-doc.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-29**: README **bounded persistence** uses full **`leVibeNative.*`** transcript retention keys.
+  - Acceptance:
+    - developer doc matches OPERATOR setting IDs for JSONL caps
+    - contract test scoped to *Bounded persistence inventory* section
+  - Evidence:
+    - `README.md`; `test/readme-storage-sync.test.js`; `npm run verify` green.
 
 ---
 
