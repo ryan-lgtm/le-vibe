@@ -210,6 +210,12 @@
     - automated test prevents OPERATOR / smoke drift
   - Evidence:
     - `OPERATOR.md` row for `LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS`; smoke script file header lists all env vars; `test/smoke-env-doc-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-9**: Monorepo root README pointer to native extension.
+  - Acceptance:
+    - discoverability from repo landing page
+    - test prevents accidental removal of links
+  - Evidence:
+    - Root `README.md` bullet under *Documentation & project depth*; `test/root-readme-pointer.test.js`; `npm run verify` green.
 
 ---
 

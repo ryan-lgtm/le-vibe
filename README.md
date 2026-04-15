@@ -65,6 +65,7 @@ If you want to run iterative engineering sessions, use the copy/paste prompt in 
 
 ## Documentation & project depth
 
+- **First-party Lé Vibe native extension (VS Code extension, local-first readiness + Lé Vibe Chat):** [`editor/le-vibe-native-extension/README.md`](editor/le-vibe-native-extension/README.md) · operator runbook [`editor/le-vibe-native-extension/OPERATOR.md`](editor/le-vibe-native-extension/OPERATOR.md) · product track [`.lvibe/workflows/native-extension-product-track.md`](.lvibe/workflows/native-extension-product-track.md).
 - **Maintainer / engineering index:** [`docs/README.md`](docs/README.md) — roadmap docs, packaging, CI, trust.
 - **Full narrative formerly on this page** (orchestration, CI, E1 test anchors): [`docs/MONOREPO_DEVELOPER_REFERENCE.md`](docs/MONOREPO_DEVELOPER_REFERENCE.md).
 - **Product spec:** [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) · **Stage map:** [`docs/PM_STAGE_MAP.md`](docs/PM_STAGE_MAP.md).
