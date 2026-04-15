@@ -11,6 +11,7 @@
 3. Conversation and agent memory storage is bounded, user-visible, and opt-out/clearable.
 4. Startup behavior is deterministic: clear success path or explicit remediation.
 5. Every iteration is testable, auditable, and safe to ship incrementally.
+6. **Lé Vibe Chat** converges toward **Cursor / GitHub Copilot–class** editor integration: structured proposals, diff preview, safe apply/undo, multi-file agent plans, and guarded file/terminal operations — without breaking local-first or storage constraints above.
 
 ## Non-negotiable constraints
 
@@ -535,6 +536,115 @@
     - `product-track-workflow-doc-parity.test.js` asserts the exact path string appears in both **OPERATOR.md** and **README.md**
   - Evidence:
     - `README.md`; `test/readme-product-track-workflow-path.test.js`; `test/product-track-workflow-doc-parity.test.js`; `npm run verify` green.
+
+### Epic N9 — Cursor/Copilot-like editor actions: apply, diff, undo
+
+Product intent: users expect **Lé Vibe Chat** to drive the editor the way **Cursor** and **GitHub Copilot Chat** do: proposed edits are visible as diffs, applied safely, and reversible.
+
+- [ ] `pending` **task-n9-1**: Define an **edit proposal contract** (JSON schema) for assistant output: target URI(s), replacement ranges or full-file content, rationale, and confidence flags.
+  - Acceptance:
+    - schema documented under `editor/le-vibe-native-extension/` (or `docs/`)
+    - unit tests validate parse + reject malformed proposals
+- [ ] `pending` **task-n9-2**: Implement **preview diff** before apply (side-by-side or unified diff in editor or webview), with explicit **Accept** / **Reject** / **Apply to file** actions.
+  - Acceptance:
+    - no silent whole-file overwrite without preview when setting requires preview (default on)
+    - tests for accept/reject paths
+- [ ] `pending` **task-n9-3**: Wire **WorkspaceEdit** / `TextEditorEdit` application with **single undo transaction** per accepted batch (VS Code undo stack behaves like one user action).
+  - Acceptance:
+    - one undo reverts entire accepted patch
+    - integration test or manual checklist captured in OPERATOR
+- [ ] `pending` **task-n9-4**: Support **partial selection apply** (apply only to highlighted range) and **multi-cursor safe** behavior (document limitations).
+  - Acceptance:
+    - documented behavior when selection missing or ambiguous
+    - tests for at least single-selection happy path
+- [ ] `pending` **task-n9-5**: Add **conflict detection** if file changed on disk since proposal generation (hash/mtime/version token); block apply with explicit remediation.
+  - Acceptance:
+    - deterministic conflict UX string in **Lé Vibe Chat** panel
+    - test for stale-proposal path
+
+### Epic N10 — Composer-style multi-file changes (plan → execute → verify)
+
+Product intent: match **Cursor Composer** / multi-file Copilot flows: a single agent turn can touch several files with an ordered, auditable plan.
+
+- [ ] `pending` **task-n10-1**: Introduce a **multi-step plan object** (ordered steps: create/apply/delete/move) produced by the model or orchestrator, validated before execution.
+  - Acceptance:
+    - invalid plans rejected with user-visible errors (no partial mystery writes)
+    - schema + tests
+- [ ] `pending` **task-n10-2**: Execute plan steps with **per-step progress** in **Lé Vibe Chat** (step N of M, file path, status).
+  - Acceptance:
+    - UI shows progress; logs structured events locally
+    - cancel aborts remaining steps safely
+- [ ] `pending` **task-n10-3**: **Rollback strategy**: on failure mid-plan, offer “undo applied steps” or leave workspace consistent with explicit partial state message.
+  - Acceptance:
+    - documented semantics + at least best-effort undo for same session
+- [ ] `pending` **task-n10-4**: Optional **dry-run** mode: list files that would change, with size/token estimates (bounded).
+  - Acceptance:
+    - dry-run output visible before commit to disk
+
+### Epic N11 — File and workspace operations from chat (create / delete / rename)
+
+Product intent: parity with Copilot/Cursor **agent** tools: create new files, scaffold folders, rename, delete with guardrails.
+
+- [ ] `pending` **task-n11-1**: Implement **create file** and **create folder** actions with path validation (workspace-relative, no `..` escape, deny-list for sensitive roots).
+  - Acceptance:
+    - tests for path traversal rejection
+    - open created file in editor on success (setting-gated)
+- [ ] `pending` **task-n11-2**: Implement **rename/move** with git-friendly behavior (optional: run through VS Code rename API).
+  - Acceptance:
+    - conflict handling documented
+- [ ] `pending` **task-n11-3**: Implement **delete file** behind explicit confirmation UX (never silent delete).
+  - Acceptance:
+    - confirmation modal or two-step confirm in panel
+    - audit log line for destructive ops
+- [ ] `pending` **task-n11-4**: **.gitignore / binary / large file** guards before reading/writing context (align with workspace context budget).
+  - Acceptance:
+    - deterministic skip reasons surfaced in UI
+
+### Epic N12 — “Inline assistant” affordances (Copilot-like)
+
+Product intent: complement the chat panel with lightweight, Copilot-like triggers where appropriate (without duplicating full Copilot product).
+
+- [ ] `pending` **task-n12-1**: Optional **CodeLens / lightbulb** entry: “Ask Lé Vibe Chat about this selection” → sends selection + file path into chat session.
+  - Acceptance:
+    - command registered; selection bounds passed correctly
+    - works when panel closed (opens panel)
+- [ ] `pending` **task-n12-2**: **Quick actions** strip in chat for common intents (explain, refactor selection, generate tests) as templated prompts (local-only).
+  - Acceptance:
+    - templates documented; no network calls beyond configured Ollama
+
+### Epic N13 — Terminal and command execution (Cursor-like, high risk — gated)
+
+Product intent: Cursor-like agent runs can execute shell commands; this must be **opt-in**, obvious, and logged.
+
+- [ ] `pending` **task-n13-1**: Design **terminal execution policy**: off by default; per-workspace opt-in; allow-list/deny-list patterns.
+  - Acceptance:
+    - written policy in docs + settings keys
+- [ ] `pending` **task-n13-2**: If enabled, run commands in **VS Code terminal** with full user visibility (no hidden PTY).
+  - Acceptance:
+    - user must confirm each command batch unless an explicit “session allow” mode is enabled (advanced)
+- [ ] `pending` **task-n13-3**: Structured audit log for every executed command (timestamp, cwd, exit code).
+  - Acceptance:
+    - audit path documented next to other Lé Vibe Chat persistence
+
+### Epic N14 — Indexing & @-mentions (optional, bounded)
+
+Product intent: Cursor-like **@file / @folder** context without unbounded embedding storage.
+
+- [ ] `pending` **task-n14-1**: Implement **@file** / **@folder** picker backed by workspace file search (ripgrep or VS Code API), with strict caps.
+  - Acceptance:
+    - respects `contextMax*` settings; tests for cap enforcement
+- [ ] `pending` **task-n14-2**: Optional **lightweight symbol index** (outline only) for current file — no full-repo embedding by default.
+  - Acceptance:
+    - documented limitations vs Cursor cloud index
+
+### Epic N15 — QA / parity gates for “agentic editor” releases
+
+- [ ] `pending` **task-n15-1**: **E2E checklist** (manual or scripted): propose edit → preview → accept → undo → multi-file plan → cancel mid-flight.
+  - Acceptance:
+    - checklist lives in `OPERATOR.md` or extension README; signed off per release
+- [ ] `pending` **task-n15-2**: **Regression tests** for proposal parser + WorkspaceEdit builder (golden files in `test/fixtures/`).
+  - Acceptance:
+    - `npm run verify` includes new tests; no flaky network
 
 ---
 
