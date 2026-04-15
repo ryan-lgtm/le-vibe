@@ -4,6 +4,7 @@ const path = require('node:path');
 
 const packageJson = require('../package.json');
 const extensionModule = require('../extension');
+const { STARTUP_STATES, getStateContent } = require('../readiness');
 
 test('manifest contributes Lé Vibe Open Agent Surface command', () => {
   const commands = packageJson.contributes && packageJson.contributes.commands;
@@ -27,4 +28,30 @@ test('extension exports activate/deactivate and command constant', () => {
   assert.equal(typeof extensionModule.deactivate, 'function');
   assert.equal(extensionModule.OPEN_AGENT_SURFACE_COMMAND, 'leVibeNative.openAgentSurface');
   assert.equal(path.basename(require.resolve('../extension')), 'extension.js');
+});
+
+test('readiness state set includes required startup states', () => {
+  assert.deepEqual(STARTUP_STATES, [
+    'checking',
+    'ready',
+    'needs_ollama',
+    'needs_model',
+    'needs_auth_or_setup',
+  ]);
+});
+
+test('every non-ready state has actionable remediation buttons', () => {
+  ['needs_ollama', 'needs_model', 'needs_auth_or_setup'].forEach((state) => {
+    const content = getStateContent(state);
+    assert.ok(Array.isArray(content.actions), `expected actions array for ${state}`);
+    assert.ok(content.actions.length > 0, `expected at least one action for ${state}`);
+  });
+});
+
+test('panel HTML is never blank and includes state indicator', () => {
+  STARTUP_STATES.forEach((state) => {
+    const html = extensionModule.panelHtml(state);
+    assert.ok(html.includes('Lé Vibe Native Startup'));
+    assert.ok(html.includes(`<strong>${state}</strong>`), `expected state marker for ${state}`);
+  });
 });

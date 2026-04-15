@@ -14,7 +14,10 @@
   "main": "./extension.js",
   "activationEvents": [
     "onStartupFinished",
-    "onCommand:leVibeNative.openAgentSurface"
+    "onCommand:leVibeNative.openAgentSurface",
+    "onCommand:leVibeNative.openOllamaSetupHelp",
+    "onCommand:leVibeNative.openModelPullHelp",
+    "onCommand:leVibeNative.openWorkspaceSetup"
   ],
   "contributes": {
     "commands": [
@@ -22,6 +25,45 @@
         "command": "leVibeNative.openAgentSurface",
         "title": "Lé Vibe: Open Agent Surface",
         "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.openOllamaSetupHelp",
+        "title": "Lé Vibe: Open Ollama Setup Help",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.openModelPullHelp",
+        "title": "Lé Vibe: Show Local Model Install Steps",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.openWorkspaceSetup",
+        "title": "Lé Vibe: Open Workspace Setup Workflow",
+        "category": "Lé Vibe"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Lé Vibe Native Extension",
+        "properties": {
+          "leVibeNative.openPanelOnStartup": {
+            "type": "boolean",
+            "default": true,
+            "description": "Open the Lé Vibe readiness panel at startup."
+          },
+          "leVibeNative.devStartupState": {
+            "type": "string",
+            "enum": [
+              "checking",
+              "ready",
+              "needs_ollama",
+              "needs_model",
+              "needs_auth_or_setup"
+            ],
+            "default": "needs_auth_or_setup",
+            "description": "Development override for startup readiness state until live Ollama wiring lands."
+          }
+        }
       }
     ]
   },

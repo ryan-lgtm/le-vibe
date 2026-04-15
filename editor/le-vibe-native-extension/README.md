@@ -10,6 +10,20 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
   - Command palette title: `Lé Vibe: Open Agent Surface`
 - Activation events include startup and command-triggered activation.
 
-## Next scope
+## Startup readiness panel (task-n1-2)
 
-Task `n1-2` adds the deterministic readiness panel with explicit non-ready states and actionable remediation.
+The extension now renders a deterministic readiness panel with explicit states:
+
+- `checking`
+- `ready`
+- `needs_ollama`
+- `needs_model`
+- `needs_auth_or_setup`
+
+Every non-ready state includes at least one remediation action button:
+
+- Ollama setup help
+- local model install steps
+- workspace setup workflow opener
+
+During `n1-2`, readiness state is driven by `leVibeNative.devStartupState` so UX behavior is deterministic before live health wiring in `n2`.
