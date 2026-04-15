@@ -1,0 +1,31 @@
+{
+  "name": "le-vibe-native-extension",
+  "displayName": "Lé Vibe Native Agent",
+  "description": "First-party Lé Vibe agent surface for deterministic startup and local-first orchestration.",
+  "version": "0.1.0",
+  "publisher": "levibe",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:leVibeNative.openAgentSurface"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "leVibeNative.openAgentSurface",
+        "title": "Lé Vibe: Open Agent Surface",
+        "category": "Lé Vibe"
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node --test ./test/*.test.js"
+  }
+}
