@@ -9,3 +9,10 @@ test('extension README documents Node prerequisite for verify (task-n8-13)', () 
   assert.ok(readme.includes('18') && readme.includes('npm run verify'));
   assert.ok(readme.includes('engines.node'));
 });
+
+test('extension README documents vscode engine prerequisite aligned with package.json (task-n8-18)', () => {
+  const readme = fs.readFileSync(path.join(__dirname, '..', 'README.md'), 'utf8');
+  assert.ok(readme.includes('engines.vscode'));
+  assert.ok(readme.includes('1.85'));
+  assert.ok(readme.includes('VSCodium'));
+});

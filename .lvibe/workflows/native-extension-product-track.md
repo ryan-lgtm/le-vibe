@@ -264,6 +264,12 @@
     - tests assert `engines.vscode` semver caret and OPERATOR text contract
   - Evidence:
     - `OPERATOR.md` prerequisites; `test/package-engines.test.js` + `test/operator-doc.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-18**: Extension README prerequisites include **`engines.vscode`** (aligned with OPERATOR).
+  - Acceptance:
+    - developer README states minimum editor API alongside Node
+    - contract test prevents accidental removal
+  - Evidence:
+    - `README.md` prerequisites; `test/readme-prerequisites.test.js`; `npm run verify` green.
 
 ---
 
