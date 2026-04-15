@@ -2,6 +2,8 @@
 
 Use this sheet when validating or shipping the first-party extension (`editor/le-vibe-native-extension/`).
 
+`package.json` includes a **`repository.directory`** field so marketplace and tooling resolve this package to its path inside the **r-vibe** monorepo.
+
 ## Verify (canonical)
 
 From this directory:

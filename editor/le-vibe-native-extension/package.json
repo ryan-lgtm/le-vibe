@@ -5,6 +5,11 @@
   "version": "0.1.0",
   "publisher": "levibe",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryan-lgtm/le-vibe.git",
+    "directory": "editor/le-vibe-native-extension"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },

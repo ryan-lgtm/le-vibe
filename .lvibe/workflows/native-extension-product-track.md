@@ -188,6 +188,12 @@
     - operator docs mention the line
   - Evidence:
     - `scripts/smoke-integration.js` logs `levibeNativeChatDir()` before `smoke: done`; `OPERATOR.md` updated; `test/smoke-inventory-line.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-5**: Package metadata for monorepo traceability.
+  - Acceptance:
+    - `package.json` declares git repository + subdirectory for this extension
+    - operator doc notes the field
+  - Evidence:
+    - `package.json` `repository` (`url` + `directory: editor/le-vibe-native-extension`); `OPERATOR.md` sentence; `test/package-metadata.test.js`; `npm run verify` green.
 
 ---
 
