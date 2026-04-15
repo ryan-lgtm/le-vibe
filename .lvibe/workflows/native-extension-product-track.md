@@ -300,6 +300,12 @@
     - contract test + cross-reference to OPERATOR
   - Evidence:
     - `README.md` Local-first line; `test/readme-local-first.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-24**: **Local-first** doc parity between OPERATOR and README.
+  - Acceptance:
+    - automated test requires the same anti–cloud-fallback sentence in both files
+    - both reference `leVibeNative.ollamaEndpoint`
+  - Evidence:
+    - `test/local-first-doc-parity.test.js`; `npm run verify` green.
 
 ---
 
