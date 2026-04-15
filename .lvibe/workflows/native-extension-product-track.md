@@ -170,6 +170,12 @@
     - docs state expected “green” outcome
   - Evidence:
     - Added `npm run verify` (`npm test && npm run smoke`) in `editor/le-vibe-native-extension/package.json`; README section **Operator verification / ship checklist**; `test/verify-script.test.js`; `npm run verify` green in extension folder.
+- [x] `done` **task-n8-2**: Bounded persistence inventory for operators.
+  - Acceptance:
+    - single documented list of persisted paths/patterns under `~/.config/le-vibe/`
+    - guardrails visible (no silent unbounded growth beyond existing caps)
+  - Evidence:
+    - Added `storage-inventory.js` (`levibeNativeChatDir`, `PERSISTED_ARTIFACTS`); `test/storage-inventory.test.js` (paths for transcript, wizard, handoff, migration align on same directory); README table **Bounded persistence inventory**; `npm run verify` green.
 
 ---
 

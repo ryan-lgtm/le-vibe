@@ -122,3 +122,17 @@ Token-budget rules (configurable in Settings):
 - **Canonical command:** from `editor/le-vibe-native-extension/`, run **`npm run verify`** (runs **`npm test`** then **`npm run smoke`**).
 - **Green means:** all unit tests pass; smoke confirms non-blank panel/wizard HTML, `lvibe` launcher string contract when the monorepo layout is present, and a best-effort local Ollama probe (non-fatal if the daemon is absent unless `LEVIBE_NATIVE_SMOKE_STRICT_OLLAMA=1`).
 - Use this before tagging or packaging the extension; CI can mirror the same script.
+
+## Bounded persistence inventory (task-n8-2)
+
+All first-party on-disk state for this extension lives under **`~/.config/le-vibe/levibe-native-chat/`** (see `storage-inventory.js` for the canonical helper). Retention caps apply to chat JSONL via Settings (`chatTranscriptMaxBytes`, `chatTranscriptMaxMessages`).
+
+| Artifact | Role |
+|----------|------|
+| `first-run-wizard.json` | First-run wizard checkpoints (`first_run_wizard.v1`). |
+| `transcript-<hash>.jsonl` | Per-workspace bounded chat transcript (one file per workspace key). |
+| `operator-handoff-audit.jsonl` | Append-only operator handoff records (`lvibe.operator_handoff.v1`). |
+| `third-party-migration-state.json` | Third-party migration status (`third_party_migration.v1`). |
+| `third-party-migration-audit.jsonl` | Append-only migration actions (`lvibe.third_party_migration.v1`). |
+
+No embeddings or unbounded cloud sync are written by this extension; export/clear remain user-driven.
