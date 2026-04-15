@@ -199,6 +199,11 @@
     - subprocess smoke output contract-tested (not only static script grep)
   - Evidence:
     - `test/integration-smoke.test.js` asserts `first-party persisted config dir:` in stdout; `npm run verify` green.
+- [x] `done` **task-n8-7**: README ↔ `PERSISTED_ARTIFACTS` contract test.
+  - Acceptance:
+    - automated check prevents operator table drift from `storage-inventory.js`
+  - Evidence:
+    - `test/readme-storage-sync.test.js`; `npm run verify` green.
 
 ---
 
