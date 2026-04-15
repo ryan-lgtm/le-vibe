@@ -162,6 +162,15 @@
   - Evidence:
     - Added `third-party-migration.js` (watchlist IDs, `third-party-migration-state.json` + `third-party-migration-audit.jsonl` under `~/.config/le-vibe/levibe-native-chat/`, migration Markdown guide, `runThirdPartyMigrationGuide` / `scheduleThirdPartyMigrationNudge`); command + panel action; `leVibeNative.showThirdPartyMigrationNudge`; README; `test/third-party-migration.test.js` + scaffold updates; `npm test` in `editor/le-vibe-native-extension`.
 
+### Epic N8 — Operator runbook and release hygiene
+
+- [x] `done` **task-n8-1**: Canonical verify entrypoint + ship checklist.
+  - Acceptance:
+    - single npm script runs tests + smoke
+    - docs state expected “green” outcome
+  - Evidence:
+    - Added `npm run verify` (`npm test && npm run smoke`) in `editor/le-vibe-native-extension/package.json`; README section **Operator verification / ship checklist**; `test/verify-script.test.js`; `npm run verify` green in extension folder.
+
 ---
 
 ## Per-pass completion checklist (engineering agents)

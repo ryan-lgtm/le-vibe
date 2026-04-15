@@ -218,6 +218,7 @@
   },
   "scripts": {
     "test": "node --test ./test/*.test.js",
-    "smoke": "node ./scripts/smoke-integration.js"
+    "smoke": "node ./scripts/smoke-integration.js",
+    "verify": "npm test && npm run smoke"
   }
 }

@@ -116,3 +116,9 @@ Token-budget rules (configurable in Settings):
 - **Guardrails:** The extension does **not** uninstall other extensions or delete their data. It only writes migration state and JSONL audit lines under `~/.config/le-vibe/levibe-native-chat/` (`third-party-migration-state.json`, `third-party-migration-audit.jsonl`).
 - **Detection:** A small watchlist of marketplace extension IDs (see `third-party-migration.js`) is used to suggest the guide. If `leVibeNative.showThirdPartyMigrationNudge` is **true** (default) and a watchlist extension is present while migration status is still **pending**, a one-time notification offers the guide; **Not now** records status **skipped** (no further auto nudges).
 - **Remediation:** Disable or uninstall conflicting extensions manually from the Extensions view, keep `leVibeNative.enableFirstPartyAgentSurface` **true**, then verify **Lé Vibe: Open Agent Surface**.
+
+## Operator verification / ship checklist (task-n8-1)
+
+- **Canonical command:** from `editor/le-vibe-native-extension/`, run **`npm run verify`** (runs **`npm test`** then **`npm run smoke`**).
+- **Green means:** all unit tests pass; smoke confirms non-blank panel/wizard HTML, `lvibe` launcher string contract when the monorepo layout is present, and a best-effort local Ollama probe (non-fatal if the daemon is absent unless `LEVIBE_NATIVE_SMOKE_STRICT_OLLAMA=1`).
+- Use this before tagging or packaging the extension; CI can mirror the same script.
