@@ -2,11 +2,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const packageJson = require('../package.json');
 
-test('package.json defines verify script chaining test and smoke', () => {
+test('package.json verify script chains npm test then npm run smoke (task-n8-60)', () => {
   const verify = packageJson.scripts && packageJson.scripts.verify;
-  assert.ok(typeof verify === 'string' && verify.length > 0);
-  assert.ok(verify.includes('npm test'), verify);
-  assert.ok(verify.includes('smoke'), verify);
+  assert.equal(verify, 'npm test && npm run smoke');
 });
 
 test('package.json test script uses node:test with test/*.test.js glob (task-n8-58)', () => {

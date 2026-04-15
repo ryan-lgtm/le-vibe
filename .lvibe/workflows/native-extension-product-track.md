@@ -494,6 +494,11 @@
     - `verify-script.test.js` asserts exact `scripts.smoke` string
   - Evidence:
     - `test/verify-script.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-60**: **`package.json` `scripts.verify`** contract — **`npm test && npm run smoke`** (canonical ship gate).
+  - Acceptance:
+    - `verify-script.test.js` asserts exact `scripts.verify` string (replaces loose substring checks)
+  - Evidence:
+    - `test/verify-script.test.js`; `npm run verify` green.
 
 ---
 
