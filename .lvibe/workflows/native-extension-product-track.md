@@ -424,6 +424,11 @@
     - test reads `leVibeNative.ollamaEndpoint` default and requires it in both OPERATOR and README
   - Evidence:
     - `test/ollama-endpoint-doc-package-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-46**: Documented **Ollama probe timeout (ms)** stays aligned with **`package.json`** `leVibeNative.ollamaTimeoutMs` default.
+  - Acceptance:
+    - test reads numeric default and requires its decimal string in both OPERATOR and README
+  - Evidence:
+    - `test/ollama-timeout-doc-package-sync.test.js`; `npm run verify` green.
 
 ---
 
