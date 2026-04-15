@@ -22,6 +22,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Workspace context caps:** **`leVibeNative.contextMaxFiles`** default **`4`**, **`leVibeNative.contextMaxCharsPerFile`** default **`1200`**, **`leVibeNative.contextMaxLinesPerFile`** default **`80`**, **`leVibeNative.contextMaxTotalChars`** default **`3200`** (per-file and total character budget for prompt context; details in **`README.md`** *Workspace context picker*).
 
+**Startup / rollout (defaults):** **`leVibeNative.enableFirstPartyAgentSurface`** default **`true`** (first-party Lé Vibe Chat surface); **`leVibeNative.showFirstRunWizard`** default **`true`** (checkpointed wizard); **`leVibeNative.openPanelOnStartup`** default **`true`** (auto-open panel when the first-party surface is enabled). Rollback semantics in **`README.md`** *Rollout and rollback*.
+
 **Telemetry:** defaults to **local structured logs only**; there is **no** remote telemetry unless the user **explicitly opts in**.
 
 **Canonical user-facing name (chat UX):** **Lé Vibe Chat** — palette titles and panel copy use this name for the agent surface (per product track).

@@ -449,6 +449,11 @@
     - runbook lists all four keys with defaults; README uses bold `leVibeNative.*` + backtick defaults; test asserts each default appears near its key in both files
   - Evidence:
     - `OPERATOR.md`; `README.md`; `test/workspace-context-doc-package-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-51**: Documented **startup / rollout boolean defaults** (`enableFirstPartyAgentSurface`, `showFirstRunWizard`, `openPanelOnStartup`) stay aligned with **`package.json`** in OPERATOR and README.
+  - Acceptance:
+    - runbook and README name full `leVibeNative.*` keys with backtick `true`/`false` defaults where stated; test reads contributes booleans and requires `\`true\`` near each key in both files
+  - Evidence:
+    - `OPERATOR.md`; `README.md`; `test/startup-rollout-boolean-doc-package-sync.test.js`; `npm run verify` green.
 
 ---
 

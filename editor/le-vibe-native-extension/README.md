@@ -104,7 +104,7 @@ Token-budget rules (configurable in Settings):
 - On first open, a **checkpointed wizard** runs before the full readiness + chat surface so the panel is never an empty gray view.
 - State is stored at `~/.config/le-vibe/levibe-native-chat/first-run-wizard.json` (schema `first_run_wizard.v1`).
 - **Next checkpoint** advances; **Finish and open agent surface** completes the wizard and runs the normal readiness flow; **Skip onboarding** marks completion and opens the same surface.
-- Setting: `leVibeNative.showFirstRunWizard` (default `true`). Set to `false` to go straight to the readiness panel.
+- Setting: **`leVibeNative.showFirstRunWizard`** (default **`true`**). Set to **`false`** to go straight to the readiness panel.
 
 ## Unit tests: readiness state machine + storage bounds (task-n6-1)
 
@@ -121,9 +121,10 @@ Token-budget rules (configurable in Settings):
 
 ## Rollout and rollback (task-n7-1)
 
-- **Feature flag:** `leVibeNative.enableFirstPartyAgentSurface` (default **true**). This is the supported switch for first-party Lé Vibe Chat rollout; toggling it does not delete data under `~/.config/le-vibe/`.
-- **Rollback:** set `enableFirstPartyAgentSurface` to **false** in Settings (JSON: `"leVibeNative.enableFirstPartyAgentSurface": false`). Effects:
-  - Startup no longer auto-opens the readiness panel (even if `openPanelOnStartup` is true).
+- **Feature flag:** **`leVibeNative.enableFirstPartyAgentSurface`** (default **`true`**). This is the supported switch for first-party Lé Vibe Chat rollout; toggling it does not delete data under `~/.config/le-vibe/`.
+- **Startup panel:** **`leVibeNative.openPanelOnStartup`** (default **`true`**) — when the first-party surface is enabled, open the readiness panel at editor startup (wizard may run first per **`leVibeNative.showFirstRunWizard`**).
+- **Rollback:** set **`leVibeNative.enableFirstPartyAgentSurface`** to **false** in Settings (JSON: `"leVibeNative.enableFirstPartyAgentSurface": false`). Effects:
+  - Startup no longer auto-opens the readiness panel (even if **`leVibeNative.openPanelOnStartup`** is **`true`**).
   - Command **Lé Vibe: Open Agent Surface** shows a message with **Open Settings** to flip the flag back; the webview panel is not created while disabled.
 - **Restore:** set the same key back to **true** (or remove the override). Palette commands for transcript export/clear and operator handoff remain available for recovery workflows while the panel is disabled.
 
