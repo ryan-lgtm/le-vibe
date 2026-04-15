@@ -541,10 +541,12 @@
 
 Product intent: users expect **Lé Vibe Chat** to drive the editor the way **Cursor** and **GitHub Copilot Chat** do: proposed edits are visible as diffs, applied safely, and reversible.
 
-- [ ] `pending` **task-n9-1**: Define an **edit proposal contract** (JSON schema) for assistant output: target URI(s), replacement ranges or full-file content, rationale, and confidence flags.
+- [x] `done` **task-n9-1**: Define an **edit proposal contract** (JSON schema) for assistant output: target URI(s), replacement ranges or full-file content, rationale, and confidence flags.
   - Acceptance:
     - schema documented under `editor/le-vibe-native-extension/` (or `docs/`)
     - unit tests validate parse + reject malformed proposals
+  - Evidence:
+    - `schemas/levibe.edit-proposal.v1.json`; `EDIT_PROPOSAL.v1.md`; `edit-proposal.js` (`validateEditProposal`); `test/edit-proposal.test.js`; `npm run verify` green.
 - [ ] `pending` **task-n9-2**: Implement **preview diff** before apply (side-by-side or unified diff in editor or webview), with explicit **Accept** / **Reject** / **Apply to file** actions.
   - Acceptance:
     - no silent whole-file overwrite without preview when setting requires preview (default on)

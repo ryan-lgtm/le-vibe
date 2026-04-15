@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://le-vibe.dev/schemas/levibe.edit-proposal.v1.json",
+  "title": "Lé Vibe edit proposal (v1)",
+  "description": "Assistant-produced edit batch: target URIs, range or full-file replacements, rationale, and optional confidence metadata. Used before preview/apply (Epic N9).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kind", "proposals"],
+  "properties": {
+    "kind": {
+      "type": "string",
+      "const": "levibe.edit_proposal.v1"
+    },
+    "proposals": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/fileEdit" }
+    },
+    "rationale": {
+      "type": "string",
+      "maxLength": 16000
+    },
+    "confidence": { "$ref": "#/$defs/confidence" }
+  },
+  "$defs": {
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["line", "character"],
+      "properties": {
+        "line": { "type": "integer", "minimum": 0 },
+        "character": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "$ref": "#/$defs/position" },
+        "end": { "$ref": "#/$defs/position" }
+      }
+    },
+    "rangeReplaceEdit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "range", "newText"],
+      "properties": {
+        "kind": { "type": "string", "const": "range_replace" },
+        "range": { "$ref": "#/$defs/range" },
+        "newText": { "type": "string" }
+      }
+    },
+    "fullFileEdit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "content"],
+      "properties": {
+        "kind": { "type": "string", "const": "full_file" },
+        "content": { "type": "string" }
+      }
+    },
+    "fileEdit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["targetUri", "edit"],
+      "properties": {
+        "targetUri": {
+          "type": "string",
+          "minLength": 8,
+          "pattern": "^file://"
+        },
+        "edit": {
+          "oneOf": [
+            { "$ref": "#/$defs/rangeReplaceEdit" },
+            { "$ref": "#/$defs/fullFileEdit" }
+          ]
+        }
+      }
+    },
+    "confidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "flags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          }
+        }
+      }
+    }
+  }
+}
