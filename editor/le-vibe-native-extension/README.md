@@ -2,6 +2,8 @@
 
 This package is the first-party extension scaffold for the Lé Vibe native extension track.
 
+**Operators:** see **`OPERATOR.md`** for the canonical `npm run verify` command, smoke env vars, and persistence pointers.
+
 ## Scope for task-n1-1
 
 - Extension host entrypoint exists (`extension.js`).

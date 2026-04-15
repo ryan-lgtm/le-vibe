@@ -176,6 +176,12 @@
     - guardrails visible (no silent unbounded growth beyond existing caps)
   - Evidence:
     - Added `storage-inventory.js` (`levibeNativeChatDir`, `PERSISTED_ARTIFACTS`); `test/storage-inventory.test.js` (paths for transcript, wizard, handoff, migration align on same directory); README table **Bounded persistence inventory**; `npm run verify` green.
+- [x] `done` **task-n8-3**: Operator quick-reference document.
+  - Acceptance:
+    - single bookmarkable file for verify commands and persistence pointers
+    - linked from extension README
+  - Evidence:
+    - Added `editor/le-vibe-native-extension/OPERATOR.md` (verify, smoke env table, persistence + workflow pointers); README link; `test/operator-doc.test.js`; `npm run verify` green.
 
 ---
 
