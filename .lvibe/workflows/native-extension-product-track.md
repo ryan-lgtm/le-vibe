@@ -419,6 +419,11 @@
     - test reads `leVibeNative.ollamaModel` default and requires it in both OPERATOR and README
   - Evidence:
     - `test/ollama-model-doc-package-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-45**: Documented **Ollama endpoint URL** stays aligned with **`package.json`** default.
+  - Acceptance:
+    - test reads `leVibeNative.ollamaEndpoint` default and requires it in both OPERATOR and README
+  - Evidence:
+    - `test/ollama-endpoint-doc-package-sync.test.js`; `npm run verify` green.
 
 ---
 
