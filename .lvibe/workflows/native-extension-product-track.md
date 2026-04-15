@@ -155,10 +155,12 @@
     - docs for rollback
   - Evidence:
     - Added `feature-flags.js` + `leVibeNative.enableFirstPartyAgentSurface` (default `true`) in `package.json`; `extension.js` gates `openAgentSurface` + startup auto-open; README rollback/restore; `test/feature-flags.test.js`; `npm test` in `editor/le-vibe-native-extension`.
-- [ ] `pending` **task-n7-2**: Migrate users from third-party extension state.
+- [x] `done` **task-n7-2**: Migrate users from third-party extension state.
   - Acceptance:
     - deterministic cleanup/remediation
     - migration notes + guardrails
+  - Evidence:
+    - Added `third-party-migration.js` (watchlist IDs, `third-party-migration-state.json` + `third-party-migration-audit.jsonl` under `~/.config/le-vibe/levibe-native-chat/`, migration Markdown guide, `runThirdPartyMigrationGuide` / `scheduleThirdPartyMigrationNudge`); command + panel action; `leVibeNative.showThirdPartyMigrationNudge`; README; `test/third-party-migration.test.js` + scaffold updates; `npm test` in `editor/le-vibe-native-extension`.
 
 ---
 

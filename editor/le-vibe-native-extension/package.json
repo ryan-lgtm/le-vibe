@@ -23,7 +23,8 @@
     "onCommand:leVibeNative.clearChatTranscript",
     "onCommand:leVibeNative.pickContextFile",
     "onCommand:leVibeNative.clearContextFiles",
-    "onCommand:leVibeNative.emitOperatorHandoff"
+    "onCommand:leVibeNative.emitOperatorHandoff",
+    "onCommand:leVibeNative.openThirdPartyMigrationGuide"
   ],
   "contributes": {
     "commands": [
@@ -76,6 +77,11 @@
         "command": "leVibeNative.emitOperatorHandoff",
         "title": "Lé Vibe Chat: Emit operator handoff event",
         "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.openThirdPartyMigrationGuide",
+        "title": "Lé Vibe: Open third-party agent migration guide",
+        "category": "Lé Vibe"
       }
     ],
     "configuration": [
@@ -96,6 +102,11 @@
             "type": "boolean",
             "default": true,
             "markdownDescription": "Enable the first-party Lé Vibe Chat readiness panel and agent surface. Set to **false** for rollback (no panel auto-open; `Lé Vibe: Open Agent Surface` shows re-enable instructions). Local-first defaults are unchanged when enabled."
+          },
+          "leVibeNative.showThirdPartyMigrationNudge": {
+            "type": "boolean",
+            "default": true,
+            "description": "When a known third-party agent extension is installed, show a one-time migration nudge (state stored under ~/.config/le-vibe/levibe-native-chat/)."
           },
           "leVibeNative.devStartupState": {
             "type": "string",

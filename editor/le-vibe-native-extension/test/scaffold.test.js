@@ -15,6 +15,7 @@ test('manifest contributes Lé Vibe Open Agent Surface command', () => {
   assert.ok(commands.find((item) => item.command === 'leVibeNative.pickContextFile'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.clearContextFiles'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.emitOperatorHandoff'));
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.openThirdPartyMigrationGuide'));
 });
 
 test('manifest supports deterministic activation entrypoints', () => {
@@ -26,12 +27,14 @@ test('manifest supports deterministic activation entrypoints', () => {
   assert.ok(activationEvents.includes('onStartupFinished'), 'expected startup activation event');
   assert.ok(activationEvents.includes('onCommand:leVibeNative.pickContextFile'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.emitOperatorHandoff'));
+  assert.ok(activationEvents.includes('onCommand:leVibeNative.openThirdPartyMigrationGuide'));
 });
 
 test('extension exports activate/deactivate and command constant', () => {
   assert.equal(typeof extensionModule.activate, 'function');
   assert.equal(typeof extensionModule.deactivate, 'function');
   assert.equal(extensionModule.OPEN_AGENT_SURFACE_COMMAND, 'leVibeNative.openAgentSurface');
+  assert.equal(extensionModule.OPEN_THIRD_PARTY_MIGRATION_COMMAND, 'leVibeNative.openThirdPartyMigrationGuide');
   assert.equal(path.basename(require.resolve('../extension')), 'extension.js');
 });
 
@@ -74,5 +77,7 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('Add context file'));
     assert.ok(html.includes('Clear context'));
     assert.ok(html.includes('Emit handoff event'));
+    assert.ok(html.includes('Third-party agent migration'));
+    assert.ok(html.includes('Open migration guide'));
   });
 });

@@ -12,6 +12,7 @@ const CLEAR_CHAT_TRANSCRIPT_COMMAND = 'leVibeNative.clearChatTranscript';
 const PICK_CONTEXT_FILE_COMMAND = 'leVibeNative.pickContextFile';
 const CLEAR_CONTEXT_FILES_COMMAND = 'leVibeNative.clearContextFiles';
 const EMIT_OPERATOR_HANDOFF_COMMAND = 'leVibeNative.emitOperatorHandoff';
+const OPEN_THIRD_PARTY_MIGRATION_COMMAND = 'leVibeNative.openThirdPartyMigrationGuide';
 
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 const { createOllamaClient } = require('./ollama');
@@ -35,6 +36,7 @@ const {
   clearTranscript,
 } = require('./chat-transcript');
 const { isFirstPartyAgentSurfaceEnabled } = require('./feature-flags');
+const { runThirdPartyMigrationGuide, scheduleThirdPartyMigrationNudge } = require('./third-party-migration');
 
 function getTranscriptContext(vscode) {
   const config = vscode.workspace.getConfiguration('leVibeNative');
@@ -190,6 +192,11 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <p class="muted">Emit a reproducible handoff event to lvibe orchestration and append local audit evidence.</p>
   <div>
     <button data-action="emitOperatorHandoff">Emit handoff event</button>
+  </div>
+  <h3>Third-party agent migration</h3>
+  <p class="muted">Moving from Continue, Cline, or similar? Open the checklist to avoid duplicate agent surfaces (no automatic uninstall).</p>
+  <div>
+    <button data-action="openThirdPartyMigrationGuide">Open migration guide</button>
   </div>
   <h3>Lé Vibe Chat storage</h3>
   <p class="muted">Local JSONL under ~/.config/le-vibe/levibe-native-chat/</p>
@@ -455,6 +462,11 @@ function openAgentSurface() {
       panel.webview.postMessage({ type: 'chatUpdate', status: 'Workspace context cleared.' });
       return;
     }
+    if (msg.type === 'action' && msg.actionId === 'openThirdPartyMigrationGuide') {
+      void vscode.commands.executeCommand(OPEN_THIRD_PARTY_MIGRATION_COMMAND);
+      panel.webview.postMessage({ type: 'chatUpdate', status: 'Opening third-party migration guide…' });
+      return;
+    }
     if (msg.type === 'action' && msg.actionId === 'emitOperatorHandoff') {
       void vscode.commands.executeCommand(EMIT_OPERATOR_HANDOFF_COMMAND, {
         startupState: latestStartupState,
@@ -654,6 +666,7 @@ function activate(context) {
         await vscode.window.showErrorMessage(`Clear failed: ${e && e.message ? e.message : e}`);
       }
     }),
+    vscode.commands.registerCommand(OPEN_THIRD_PARTY_MIGRATION_COMMAND, () => runThirdPartyMigrationGuide(vscode)),
     vscode.commands.registerCommand(OPEN_AGENT_SURFACE_COMMAND, openAgentSurface),
     vscode.commands.registerCommand(OPEN_OLLAMA_SETUP_HELP_COMMAND, () =>
       vscode.env.openExternal(vscode.Uri.parse('https://ollama.com/download/linux')),
@@ -687,6 +700,10 @@ function activate(context) {
       void vscode.commands.executeCommand(OPEN_AGENT_SURFACE_COMMAND);
     }, 0);
   }
+
+  setTimeout(() => {
+    void scheduleThirdPartyMigrationNudge(vscode);
+  }, 4000);
 }
 
 function deactivate() {}
@@ -704,6 +721,7 @@ module.exports = {
   PICK_CONTEXT_FILE_COMMAND,
   CLEAR_CONTEXT_FILES_COMMAND,
   EMIT_OPERATOR_HANDOFF_COMMAND,
+  OPEN_THIRD_PARTY_MIGRATION_COMMAND,
   getTranscriptContext,
   getContextBudget,
   panelHtml,

@@ -108,3 +108,11 @@ Token-budget rules (configurable in Settings):
   - Startup no longer auto-opens the readiness panel (even if `openPanelOnStartup` is true).
   - Command **Lé Vibe: Open Agent Surface** shows a message with **Open Settings** to flip the flag back; the webview panel is not created while disabled.
 - **Restore:** set the same key back to **true** (or remove the override). Palette commands for transcript export/clear and operator handoff remain available for recovery workflows while the panel is disabled.
+
+## Third-party agent migration (task-n7-2)
+
+- **Goal:** Move from common third-party chat/agent extensions (e.g. Continue, Cline) to **Lé Vibe Chat** without silent cross-extension writes.
+- **Command:** `Lé Vibe: Open third-party agent migration guide` — opens a Markdown checklist in the editor and optional follow-up actions.
+- **Guardrails:** The extension does **not** uninstall other extensions or delete their data. It only writes migration state and JSONL audit lines under `~/.config/le-vibe/levibe-native-chat/` (`third-party-migration-state.json`, `third-party-migration-audit.jsonl`).
+- **Detection:** A small watchlist of marketplace extension IDs (see `third-party-migration.js`) is used to suggest the guide. If `leVibeNative.showThirdPartyMigrationNudge` is **true** (default) and a watchlist extension is present while migration status is still **pending**, a one-time notification offers the guide; **Not now** records status **skipped** (no further auto nudges).
+- **Remediation:** Disable or uninstall conflicting extensions manually from the Extensions view, keep `leVibeNative.enableFirstPartyAgentSurface` **true**, then verify **Lé Vibe: Open Agent Surface**.
