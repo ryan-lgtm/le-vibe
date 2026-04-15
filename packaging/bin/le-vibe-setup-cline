@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# One-shot Cline wiring: install Cline + YAML extensions. Clear exit codes for automation.
+set -euo pipefail
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      cat <<'EOF'
+Usage: le-vibe-setup-cline
+
+  Install the Cline extension and companion YAML extension into the configured editor.
+
+Exit codes: 0 ok, 3 extension install failed, 4 no editor binary, 127 helper missing.
+EOF
+      exit 0
+      ;;
+    *)
+      echo "le-vibe-setup-cline: unknown option: $1 (try --help)" >&2
+      exit 125
+      ;;
+  esac
+done
+
+if ! command -v readlink >/dev/null 2>&1; then
+  echo "le-vibe-setup-cline: [exit 127] readlink not on PATH — install coreutils." >&2
+  exit 127
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+if [[ -f "/usr/share/le-vibe/scripts/install-cline-extension.sh" ]]; then
+  SYNC_DIR="/usr/share/le-vibe/scripts"
+elif [[ -f "$SCRIPT_DIR/../scripts/install-cline-extension.sh" ]]; then
+  SYNC_DIR="$(cd "$SCRIPT_DIR/../scripts" && pwd)"
+else
+  echo "le-vibe-setup-cline: [exit 127] cannot find install-cline-extension.sh (is Lé Vibe installed?)" >&2
+  exit 127
+fi
+
+INST="${SYNC_DIR}/install-cline-extension.sh"
+
+if [[ -n "${LE_VIBE_EDITOR:-}" ]]; then
+  b="$LE_VIBE_EDITOR"
+elif [[ -x /usr/lib/le-vibe/bin/codium ]]; then
+  b=/usr/lib/le-vibe/bin/codium
+elif [[ -x /usr/bin/codium ]]; then
+  b=/usr/bin/codium
+else
+  b=codium
+fi
+if [[ ! -x "$b" ]] && ! command -v "$b" >/dev/null 2>&1; then
+  echo "le-vibe-setup-cline: [exit 4] No editor binary — install VSCodium or set LE_VIBE_EDITOR." >&2
+  exit 4
+fi
+
+echo "le-vibe-setup-cline: install Cline + Red Hat YAML extensions (Open VSX)"
+if ! bash "$INST"; then
+  echo "le-vibe-setup-cline: [exit 3] Extension install failed (Cline or YAML; network, marketplace, or extension id)." >&2
+  exit 3
+fi
+
+echo "le-vibe-setup-cline: [exit 0] Done."
+exit 0

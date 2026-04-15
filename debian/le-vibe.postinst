@@ -14,12 +14,11 @@ if command -v gtk-update-icon-cache >/dev/null 2>&1; then
   gtk-update-icon-cache -q /usr/share/icons/hicolor 2>/dev/null || true
 fi
 
-# First install only ($2 empty): hint Continue integration (upgrades stay quiet).
+# First install only ($2 empty): hint Cline integration (upgrades stay quiet).
 if [ "$1" = "configure" ] && [ -z "${2:-}" ]; then
-  echo "Lé Vibe: after first-run, the next lvibe session tries Continue wiring automatically (same as le-vibe-setup-continue)." >&2
-  echo "Lé Vibe: repair or manual run: le-vibe-setup-continue  |  disable auto: LE_VIBE_AUTO_CONTINUE_SETUP=0" >&2
-  echo "le-vibe: exit codes: 0 ok, 1 no YAML yet, 2 sync error, 3 extension install, 4 no editor — see README" >&2
-  echo "le-vibe: optional one-shot desktop reminder for Continue setup: see README (autostart + libnotify-bin)" >&2
+  echo "Lé Vibe: after first-run, the next lvibe session tries Cline wiring automatically (same as le-vibe-setup-cline)." >&2
+  echo "Lé Vibe: repair or manual run: le-vibe-setup-cline  |  disable auto: LE_VIBE_AUTO_CLINE_SETUP=0" >&2
+  echo "le-vibe: exit codes: 0 ok, 3 extension install, 4 no editor — see README" >&2
   echo "le-vibe: details in /usr/share/doc/le-vibe/README.Debian" >&2
 fi
 

@@ -14,7 +14,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from .continue_setup_auto import maybe_auto_setup_continue_after_first_run
+from .cline_setup_auto import maybe_auto_setup_cline_after_first_run
 from .first_run import ensure_product_first_run
 from .managed_ollama import ensure_managed_ollama, stop_managed_ollama
 from .paths import LE_VIBE_MANAGED_OLLAMA_PORT, le_vibe_config_dir
@@ -1619,7 +1619,7 @@ def _force_first_run_requested(argv: list[str]) -> bool:
 
 def _run_global_session_preamble(argv: list[str]) -> int | None:
     """
-    First-run bootstrap + best-effort ``le-vibe-setup-continue`` for every ``lvibe`` invocation.
+    First-run bootstrap + best-effort ``le-vibe-setup-cline`` for every ``lvibe`` invocation.
 
     Runs before subcommand dispatch so the first command a user runs (CLI or desktop ``Exec=``)
     wires Continue when possible. Set ``LE_VIBE_SKIP_SESSION_PREAMBLE=1`` to skip (tests/CI).
@@ -1654,7 +1654,7 @@ def _run_global_session_preamble(argv: list[str]) -> int | None:
                 append_structured_log("launcher", "first_run_exit", exit_code=code, message=msg[:300])
                 print(msg, file=sys.stderr)
                 return code
-    maybe_auto_setup_continue_after_first_run(cfg)
+    maybe_auto_setup_cline_after_first_run(cfg)
     return None
 
 
@@ -1773,7 +1773,7 @@ def main() -> int:
     signal.signal(signal.SIGINT, _signal_handler)
     signal.signal(signal.SIGHUP, _signal_handler)
 
-    # First-run + Continue wiring: ``_run_global_session_preamble`` (before subcommand dispatch).
+    # First-run + Cline wiring: ``_run_global_session_preamble`` (before subcommand dispatch).
 
     ok, msg, _state = ensure_managed_ollama(host=args.host, port=port)
     if not ok:
