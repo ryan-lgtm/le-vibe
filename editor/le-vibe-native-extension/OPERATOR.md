@@ -20,6 +20,7 @@ Runs **`npm test`** then **`npm run smoke`**. Green = all unit tests pass; smoke
 |----------|--------|
 | `LEVIBE_NATIVE_SMOKE_STRICT_OLLAMA=1` | Fail smoke if Ollama is unreachable (use on a machine with Ollama). |
 | `LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT` | Override default `http://127.0.0.1:11434`. |
+| `LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS` | Override Ollama probe timeout (default `2500`). |
 | `LEVIBE_SMOKE_SKIP_LVIBE_LAUNCHER=1` | Skip `packaging/bin/lvibe` check (extension-only tree). |
 
 ## Bounded persistence

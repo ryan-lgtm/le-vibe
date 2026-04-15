@@ -204,6 +204,12 @@
     - automated check prevents operator table drift from `storage-inventory.js`
   - Evidence:
     - `test/readme-storage-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-8**: Smoke env vars documented and contract-tested vs `OPERATOR.md`.
+  - Acceptance:
+    - operator table matches smoke script (including timeout override)
+    - automated test prevents OPERATOR / smoke drift
+  - Evidence:
+    - `OPERATOR.md` row for `LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS`; smoke script file header lists all env vars; `test/smoke-env-doc-sync.test.js`; `npm run verify` green.
 
 ---
 
