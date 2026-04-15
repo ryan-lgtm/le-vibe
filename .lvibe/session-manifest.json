@@ -160,7 +160,7 @@
             "title": "Run full install/smoke closeout and update manifest/doc handoff notes",
             "status": "pending",
             "assignee_agent": "@do-eng",
-            "notes": "Perform final end-to-end run with install-le-vibe-local.sh and smoke verification, then document outcomes in .lvibe/audit and update manifest summary.",
+            "notes": "Closeout evidence recorded in .lvibe/audit/task-c6-release-readiness-closeout-2026-04-15.md. Build + STEP14 verify + runtime readiness (Ollama + Cline extension install) pass via install-le-vibe-local.sh --skip-compile-failfast --json, and installed-state smoke verify-only passes. Full --install closeout remains blocked in this automation context by interactive sudo password requirement during apt install; operator must rerun the same command in an interactive sudo-capable terminal to finalize fresh-install acceptance.",
             "acceptance_criteria": "Evidence exists that fresh install launches Cline-ready Lé Vibe with Ollama/model checks passing."
           }
         ]
