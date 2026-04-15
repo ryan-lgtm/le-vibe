@@ -38,7 +38,7 @@ From a monorepo clone on a supported Linux host, orchestrate the full maintainer
   5) packaging/scripts/verify-step14-closeout.sh --require-stack-deb
   6) With --install: sudo apt install both .deb files (stack first, then IDE — same as build-le-vibe-debs.sh)
   7) After install: packaging/scripts/manual-step14-install-smoke.sh --verify-only
-  8) Runtime readiness: reuse existing ollama on PATH (or install if missing), verify /usr/bin/lvibe is runnable
+  8) Runtime readiness: reuse existing ollama on PATH (or install if missing), install Cline, verify /usr/bin/lvibe is runnable
 
 Resolves the repository root from this script’s path (your cwd may be anywhere).
 
@@ -230,6 +230,21 @@ verify_lvibe_cli_ready() {
     return 1
   fi
   log_tee "==> Runtime check: /usr/bin/lvibe is installed and responds to --help"
+  return 0
+}
+
+install_cline_extension() {
+  local cline_installer="$ROOT/packaging/scripts/install-cline-extension.sh"
+  if [[ ! -x "$cline_installer" ]]; then
+    echo "install-le-vibe-local: Cline installer helper missing or not executable: $cline_installer" >&2
+    return 1
+  fi
+  log_tee "==> Runtime check: install Cline extension via install-cline-extension.sh"
+  if ! LE_VIBE_EDITOR="$CODIUM_PATH" "$cline_installer"; then
+    echo "install-le-vibe-local: failed to install Cline extension into editor binary: $CODIUM_PATH" >&2
+    echo "  Remediation: re-run packaging/scripts/install-cline-extension.sh with LE_VIBE_EDITOR set." >&2
+    return 1
+  fi
   return 0
 }
 
@@ -710,6 +725,14 @@ if ! ensure_ollama_runtime_ready; then
 fi
 RUNTIME_OLLAMA_STATE="ready"
 
+if ! install_cline_extension; then
+  INSTALL_READINESS_SUMMARY="$(build_install_readiness_summary "error" "cline_extension_install_failed")"
+  if [[ "$PRINT_JSON" -eq 1 ]]; then
+    emit_final_json "error" "runtime" "Cline extension install failed" "$PROBE_OUT" "$CODIUM_PATH" "${STACK_DEB:-}" "${IDE_DEB:-}" "true" "$([[ "$DO_INSTALL" -eq 1 ]] && echo true || echo false)" "$SMOKE_PASSED" "$RUNTIME_OLLAMA_STATE" "$RUNTIME_LVIBE_STATE" "install_cline_extension" "$RUNTIME_DEPENDENCY_MODE" "$EDITOR_BUILD_MODE" "error" "cline_extension_install_failed" "$INSTALL_READINESS_SUMMARY"
+  fi
+  exit 1
+fi
+
 if ! verify_lvibe_cli_ready; then
   RUNTIME_LVIBE_STATE="error"
   RUNTIME_REMEDIATION_HINT="repair_lvibe_install"
@@ -739,7 +762,7 @@ else
 fi
 log_tee "STEP 14 verify: OK (verify-step14-closeout.sh --require-stack-deb)"
 log_tee "Next: hash -r  |  lvibe --help  |  codium --version  |  lvibe open-welcome  |  lvibe ."
-log_tee "Continue: after first-run, the next lvibe run attempts le-vibe-setup-continue automatically (see README.Debian; LE_VIBE_AUTO_CONTINUE_SETUP=0 to skip)."
+log_tee "Cline: extension install completed via packaging/scripts/install-cline-extension.sh (Open VSX pin + retries)."
 log_tee ""
 
 if [[ "$RUNTIME_OLLAMA_STATE" != "ready" || "$RUNTIME_LVIBE_STATE" == "error" ]]; then

@@ -93,7 +93,7 @@ def test_install_le_vibe_local_runtime_readiness_contract():
     assert "retrying once after IDE artifact cleanup" in text
     assert "hash -r" in text
     assert "lvibe ." in text
-    assert "LE_VIBE_AUTO_CONTINUE_SETUP" in text
+    assert "install-cline-extension.sh" in text
     assert "\"runtime_ollama_state\"" in text
     assert "\"runtime_lvibe_state\"" in text
     assert "\"runtime_remediation_hint\"" in text
@@ -116,6 +116,7 @@ def test_install_le_vibe_local_runtime_readiness_contract():
     assert "editor_build_skipped_by_flag" in text
     assert "runtime_ollama_not_ready" in text
     assert "runtime_lvibe_not_ready" in text
+    assert "cline_extension_install_failed" in text
     assert "editor_build_not_ready" in text
     assert "codium_binary_not_ready" in text
     assert "deb_build_failed" in text
