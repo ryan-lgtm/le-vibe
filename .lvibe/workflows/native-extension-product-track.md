@@ -387,6 +387,12 @@
     - contract test prevents removal
   - Evidence:
     - `README.md`; `test/readme-ollama-timeout.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-39**: OPERATOR documents **`leVibeNative.ollamaTimeoutMs`** + smoke timeout env.
+  - Acceptance:
+    - runbook names 2500 ms default, VS Code setting, and `LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS`
+    - parity heading stem with README (n8-38)
+  - Evidence:
+    - `OPERATOR.md`; `test/operator-doc.test.js`; `test/ollama-probe-timeout-doc-parity.test.js`; `npm run verify` green.
 
 ---
 

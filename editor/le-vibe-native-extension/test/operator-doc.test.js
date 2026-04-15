@@ -75,3 +75,10 @@ test('OPERATOR.md documents default local Ollama URL and settings key (task-n8-3
   assert.ok(text.includes('leVibeNative.ollamaEndpoint'));
   assert.ok(text.includes('LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT'));
 });
+
+test('OPERATOR.md documents leVibeNative.ollamaTimeoutMs and smoke timeout override (task-n8-39)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Default Ollama probe timeout'));
+  assert.ok(text.includes('leVibeNative.ollamaTimeoutMs'));
+  assert.ok(text.includes('LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS'));
+});

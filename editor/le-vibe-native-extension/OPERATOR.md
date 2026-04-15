@@ -12,6 +12,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Default local Ollama URL:** **`http://127.0.0.1:11434`** — configure via **`leVibeNative.ollamaEndpoint`** (smoke’s default probe matches unless `LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT` is set).
 
+**Default Ollama probe timeout:** **`2500` ms** — configure via **`leVibeNative.ollamaTimeoutMs`** (smoke override **`LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS`**; same default as the smoke table below).
+
 **Telemetry:** defaults to **local structured logs only**; there is **no** remote telemetry unless the user **explicitly opts in**.
 
 **Canonical user-facing name (chat UX):** **Lé Vibe Chat** — palette titles and panel copy use this name for the agent surface (per product track).
