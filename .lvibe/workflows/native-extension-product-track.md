@@ -222,6 +222,12 @@
     - contract test prevents accidental removal
   - Evidence:
     - `docs/README.md` table row for first-party native extension; `test/docs-readme-pointer.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-11**: Declare Node engine for extension package scripts.
+  - Acceptance:
+    - `package.json` `engines.node` for `npm test` / `npm run verify`
+    - operator doc states prerequisite
+  - Evidence:
+    - `engines.node: ">=18"` in `editor/le-vibe-native-extension/package.json`; `OPERATOR.md` prerequisites; `test/package-engines.test.js`; `npm run verify` green.
 
 ---
 
