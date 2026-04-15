@@ -93,3 +93,10 @@ Token-budget rules (configurable in Settings):
 - **Readiness:** `test/readiness-state-machine.test.js` asserts deterministic `getStateContent` for every startup state, stable remediation action ids for `needs_*` states, invalid `devStartupState` fallback, and `resolveStartupSnapshot` dev overrides for each state (no network).
 - **Transcript persistence:** `test/transcript-persistence-bounds.test.js` exercises `appendEntry` under sustained load so on-disk messages never exceed configured `maxMessages` / `maxBytes`, and verifies compaction emits an explicit system stub (no silent truncation).
 - Run: `npm test` in this folder.
+
+## Integration smoke (`lvibe .` contract + Ollama wiring) (task-n6-2)
+
+- Command: `npm run smoke` (also exercised by `test/integration-smoke.test.js`).
+- **Panel / wizard:** Asserts every readiness `panelHtml` state and each first-run wizard step produce substantial HTML with Lé Vibe markers and chat controls (no blank webview).
+- **Ollama:** Uses `createOllamaClient` from `ollama.js` with the same endpoint defaults as the extension; if the daemon is down, the smoke **passes** unless `LEVIBE_NATIVE_SMOKE_STRICT_OLLAMA=1` (use on a machine with Ollama to fail closed). Override endpoint with `LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT` if needed.
+- **`lvibe .`:** When this package lives under the r-vibe repo, verifies `packaging/bin/lvibe` execs `python3 -m le_vibe.launcher` (the `lvibe .` entry). Set `LEVIBE_SMOKE_SKIP_LVIBE_LAUNCHER=1` if you only have the extension subtree.

@@ -140,10 +140,12 @@
     - persistence limits tested
   - Evidence:
     - Exported `getConfiguredState` from `readiness.js` for contract tests; added `test/readiness-state-machine.test.js` (per-state `getStateContent`, remediation action ids, dev-override `resolveStartupSnapshot` for all `STARTUP_STATES`, invalid config fallback); added `test/transcript-persistence-bounds.test.js` (appendEntry load/stress within `maxMessages`/`maxBytes`, compaction stub text); README section; `npm test` 37/37 in `editor/le-vibe-native-extension`.
-- [ ] `pending` **task-n6-2**: Add integration smoke path (`lvibe .` + extension ready checks).
+- [x] `done` **task-n6-2**: Add integration smoke path (`lvibe .` + extension ready checks).
   - Acceptance:
     - automated smoke verifies panel is not blank
     - verifies local Ollama/model wiring
+  - Evidence:
+    - Added `editor/le-vibe-native-extension/scripts/smoke-integration.js` (`npm run smoke`): non-blank `panelHtml`/`firstRunWizardHtml` checks, live Ollama probe via `createOllamaClient` (non-fatal when daemon absent unless `LEVIBE_NATIVE_SMOKE_STRICT_OLLAMA=1`), `packaging/bin/lvibe` launcher string contract for `lvibe .`; `test/integration-smoke.test.js`; README section; `npm test` 38/38 + `npm run smoke` OK.
 
 ### Epic N7 — Rollout and migration
 
