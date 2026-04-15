@@ -234,6 +234,12 @@
     - operator doc mentions fields
   - Evidence:
     - `package.json` `homepage`, `bugs.url`, `keywords`; `OPERATOR.md` note; `test/package-metadata.test.js` extended; `npm run verify` green.
+- [x] `done` **task-n8-13**: README developer prerequisites (Node 18+).
+  - Acceptance:
+    - extension README states Node requirement aligned with `engines.node`
+    - contract test prevents removal
+  - Evidence:
+    - `README.md` *Prerequisites (developers)*; `test/readme-prerequisites.test.js`; `npm run verify` green.
 
 ---
 
