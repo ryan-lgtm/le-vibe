@@ -1,0 +1,178 @@
+'use strict';
+
+const path = require('node:path');
+const { isSafeRelativePath } = require('./workspace-context.js');
+
+/** Blocked first-or-inner path segments (sensitive / heavy roots). */
+const DEFAULT_DENIED_SEGMENTS = new Set(['.git', '.ssh', '.gnupg', 'node_modules', '.env']);
+
+const MAX_RELATIVE_PATH_LEN = 512;
+
+/**
+ * @param {string} relativePath
+ * @param {{ deniedSegments?: Set<string> }} [options]
+ * @returns {{ ok: true, normalizedRelative: string } | { ok: false, userMessage: string }}
+ */
+function validateWorkspaceRelativeCreatePath(relativePath, options = {}) {
+  const denied = options.deniedSegments || DEFAULT_DENIED_SEGMENTS;
+  if (!relativePath || typeof relativePath !== 'string') {
+    return {
+      ok: false,
+      userMessage: 'Lé Vibe Chat: path must be a non-empty workspace-relative string.',
+    };
+  }
+  const trimmed = relativePath.trim();
+  if (!trimmed) {
+    return { ok: false, userMessage: 'Lé Vibe Chat: path must not be empty.' };
+  }
+  if (trimmed.length > MAX_RELATIVE_PATH_LEN) {
+    return {
+      ok: false,
+      userMessage: `Lé Vibe Chat: path too long (max ${MAX_RELATIVE_PATH_LEN} characters).`,
+    };
+  }
+  if (!isSafeRelativePath(trimmed)) {
+    return {
+      ok: false,
+      userMessage: 'Lé Vibe Chat: path must be workspace-relative (no ".." segments or absolute paths).',
+    };
+  }
+  const normalized = path.posix.normalize(trimmed.replace(/\\/g, '/'));
+  const segments = normalized.split('/').filter((s) => s.length > 0);
+  for (const seg of segments) {
+    if (denied.has(seg)) {
+      return {
+        ok: false,
+        userMessage: `Lé Vibe Chat: path segment "${seg}" is blocked (sensitive or disallowed root).`,
+      };
+    }
+  }
+  return { ok: true, normalizedRelative: normalized };
+}
+
+/**
+ * @param {import('vscode')} vscode
+ * @param {import('vscode').Uri} folderUri
+ * @param {string} normalizedRelative posix path under workspace root
+ * @returns {import('vscode').Uri}
+ */
+function uriForNormalizedRelative(vscode, folderUri, normalizedRelative) {
+  const parts = normalizedRelative.split('/').filter(Boolean);
+  let u = folderUri;
+  for (const p of parts) {
+    u = vscode.Uri.joinPath(u, p);
+  }
+  return u;
+}
+
+/**
+ * @param {import('vscode')} vscode
+ * @param {import('vscode').Uri} folderUri
+ * @param {string} normalizedDirRelative directory path only (no trailing slash)
+ * @returns {Promise<{ ok: true } | { ok: false, userMessage: string }>}
+ */
+async function ensureDirectoryChain(vscode, folderUri, normalizedDirRelative) {
+  const v = validateWorkspaceRelativeCreatePath(normalizedDirRelative);
+  if (!v.ok) {
+    return v;
+  }
+  const parts = v.normalizedRelative.split('/').filter(Boolean);
+  let current = folderUri;
+  for (const p of parts) {
+    current = vscode.Uri.joinPath(current, p);
+    try {
+      await vscode.workspace.fs.stat(current);
+    } catch {
+      await vscode.workspace.fs.createDirectory(current);
+    }
+  }
+  return { ok: true };
+}
+
+/**
+ * @param {import('vscode')} vscode
+ * @param {import('vscode').WorkspaceFolder} workspaceFolder
+ * @param {string} relativePath
+ * @param {{ initialContent?: string, openAfterCreate?: boolean }} [options]
+ * @returns {Promise<{ ok: true, uri: import('vscode').Uri } | { ok: false, userMessage: string }>}
+ */
+async function createWorkspaceFile(vscode, workspaceFolder, relativePath, options = {}) {
+  const v = validateWorkspaceRelativeCreatePath(relativePath);
+  if (!v.ok) {
+    return v;
+  }
+  const fileUri = uriForNormalizedRelative(vscode, workspaceFolder.uri, v.normalizedRelative);
+  try {
+    await vscode.workspace.fs.stat(fileUri);
+    return { ok: false, userMessage: 'Lé Vibe Chat: file already exists.' };
+  } catch {
+    // missing — ok
+  }
+
+  const segs = v.normalizedRelative.split('/').filter(Boolean);
+  if (segs.length > 1) {
+    const parentRel = segs.slice(0, -1).join('/');
+    const ensured = await ensureDirectoryChain(vscode, workspaceFolder.uri, parentRel);
+    if (!ensured.ok) {
+      return ensured;
+    }
+  }
+
+  const initial = typeof options.initialContent === 'string' ? options.initialContent : '';
+  const we = new vscode.WorkspaceEdit();
+  we.createFile(fileUri, { overwrite: false });
+  we.insert(fileUri, new vscode.Position(0, 0), initial);
+  const applied = await vscode.workspace.applyEdit(we);
+  if (!applied) {
+    return { ok: false, userMessage: 'Lé Vibe Chat: could not create file (workspace edit was not applied).' };
+  }
+
+  if (options.openAfterCreate) {
+    const doc = await vscode.workspace.openTextDocument(fileUri);
+    await vscode.window.showTextDocument(doc);
+  }
+
+  return { ok: true, uri: fileUri };
+}
+
+/**
+ * @param {import('vscode')} vscode
+ * @param {import('vscode').WorkspaceFolder} workspaceFolder
+ * @param {string} relativePath
+ * @returns {Promise<{ ok: true, uri: import('vscode').Uri } | { ok: false, userMessage: string }>}
+ */
+async function createWorkspaceFolder(vscode, workspaceFolder, relativePath) {
+  const v = validateWorkspaceRelativeCreatePath(relativePath);
+  if (!v.ok) {
+    return v;
+  }
+  const dirUri = uriForNormalizedRelative(vscode, workspaceFolder.uri, v.normalizedRelative);
+  try {
+    await vscode.workspace.fs.stat(dirUri);
+    return { ok: false, userMessage: 'Lé Vibe Chat: folder already exists.' };
+  } catch {
+    // ok
+  }
+
+  const parts = v.normalizedRelative.split('/').filter(Boolean);
+  let current = workspaceFolder.uri;
+  for (const p of parts) {
+    current = vscode.Uri.joinPath(current, p);
+    try {
+      await vscode.workspace.fs.stat(current);
+    } catch {
+      await vscode.workspace.fs.createDirectory(current);
+    }
+  }
+
+  return { ok: true, uri: dirUri };
+}
+
+module.exports = {
+  DEFAULT_DENIED_SEGMENTS,
+  MAX_RELATIVE_PATH_LEN: MAX_RELATIVE_PATH_LEN,
+  validateWorkspaceRelativeCreatePath,
+  uriForNormalizedRelative,
+  createWorkspaceFile,
+  createWorkspaceFolder,
+};

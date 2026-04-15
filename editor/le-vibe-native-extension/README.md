@@ -105,6 +105,12 @@ Token-budget rules (configurable in Settings):
 - **Rollback (task-n10-3):** if a step **fails** after earlier steps succeeded, the chat log explains the **partial state** and enables **Undo completed steps** (same VS Code session). Rollback applies inverse **`WorkspaceEdit`** operations in reverse order (best-effort: restore prior bytes, delete newly created files, reverse renames). A `workspace_plan_rollback` line is appended to **`workspace-plan-audit.jsonl`**. Cancel mid-run does not auto-rollback; semantics are documented in [`WORKSPACE_PLAN.v1.md`](WORKSPACE_PLAN.v1.md).
 - **Dry-run (task-n10-4):** **Dry-run sample plan** prints per-step rough **byte** and **token (÷4) estimates** into the chat log with **no disk writes** (read-only sizing where needed). Output is **line-capped** for bounded UX; see [`workspace-plan-dry-run.js`](workspace-plan-dry-run.js).
 
+## Workspace scaffold — create file / folder (Epic N11, task-n11-1)
+
+- **Panel:** **Create file…** / **Create folder…** · **Command Palette:** **Lé Vibe Chat: Create workspace file…** (`leVibeNative.createWorkspaceFile`), **Lé Vibe Chat: Create workspace folder…** (`leVibeNative.createWorkspaceFolder`).
+- Paths must be **workspace-relative** (no `..` segments, no absolute paths). **Blocked path segments:** `.git`, `.ssh`, `.gnupg`, `node_modules`, `.env` (see [`workspace-fs-actions.js`](workspace-fs-actions.js)).
+- **`leVibeNative.openDocumentAfterWorkspaceCreate`** (default **`true`**) — open the new file in the editor after a successful **create file** (set **`false`** to create without focusing an editor tab).
+
 ## Operator handoff contract (task-n4-2)
 
 - Command: `Lé Vibe Chat: Emit operator handoff event` (`leVibeNative.emitOperatorHandoff`), also available as a panel action.

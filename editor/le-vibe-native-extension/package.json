@@ -41,7 +41,9 @@
     "onCommand:leVibeNative.clearContextFiles",
     "onCommand:leVibeNative.emitOperatorHandoff",
     "onCommand:leVibeNative.openThirdPartyMigrationGuide",
-    "onCommand:leVibeNative.applySelectionDemoReplace"
+    "onCommand:leVibeNative.applySelectionDemoReplace",
+    "onCommand:leVibeNative.createWorkspaceFile",
+    "onCommand:leVibeNative.createWorkspaceFolder"
   ],
   "contributes": {
     "commands": [
@@ -103,6 +105,16 @@
       {
         "command": "leVibeNative.applySelectionDemoReplace",
         "title": "Lé Vibe Chat: Apply demo replace to selection",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.createWorkspaceFile",
+        "title": "Lé Vibe Chat: Create workspace file…",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.createWorkspaceFolder",
+        "title": "Lé Vibe Chat: Create workspace folder…",
         "category": "Lé Vibe"
       }
     ],
@@ -238,6 +250,11 @@
             "type": "boolean",
             "default": true,
             "markdownDescription": "When **true** (default), applying assistant-proposed workspace edits from the Lé Vibe panel requires reviewing the unified diff and clicking **Accept preview** before **Apply to file** — no silent whole-file overwrite after preview alone."
+          },
+          "leVibeNative.openDocumentAfterWorkspaceCreate": {
+            "type": "boolean",
+            "default": true,
+            "description": "After creating a workspace file via Lé Vibe Chat scaffold commands, open it in the active editor."
           }
         }
       }

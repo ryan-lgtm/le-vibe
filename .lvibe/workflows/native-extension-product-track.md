@@ -603,10 +603,12 @@ Product intent: match **Cursor Composer** / multi-file Copilot flows: a single a
 
 Product intent: parity with Copilot/Cursor **agent** tools: create new files, scaffold folders, rename, delete with guardrails.
 
-- [ ] `pending` **task-n11-1**: Implement **create file** and **create folder** actions with path validation (workspace-relative, no `..` escape, deny-list for sensitive roots).
+- [x] `done` **task-n11-1**: Implement **create file** and **create folder** actions with path validation (workspace-relative, no `..` escape, deny-list for sensitive roots).
   - Acceptance:
     - tests for path traversal rejection
     - open created file in editor on success (setting-gated)
+  - Evidence:
+    - `workspace-fs-actions.js` (`validateWorkspaceRelativeCreatePath`, `createWorkspaceFile`, `createWorkspaceFolder`); panel **Create file…** / **Create folder…** + commands `leVibeNative.createWorkspaceFile` / `leVibeNative.createWorkspaceFolder`; setting **`leVibeNative.openDocumentAfterWorkspaceCreate`** (default `true`); `test/workspace-fs-actions.test.js`, `test/scaffold.test.js`, `test/operator-doc.test.js`; README + `OPERATOR.md`; `npm run verify` green.
 - [ ] `pending` **task-n11-2**: Implement **rename/move** with git-friendly behavior (optional: run through VS Code rename API).
   - Acceptance:
     - conflict handling documented

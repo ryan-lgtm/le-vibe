@@ -155,3 +155,10 @@ test('OPERATOR.md documents workspace plan dry-run (task-n10-4)', () => {
   assert.ok(text.includes('Dry-run sample plan'));
   assert.ok(text.includes('workspace-plan-dry-run.js'));
 });
+
+test('OPERATOR.md documents workspace scaffold create file/folder (task-n11-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n11-1'));
+  assert.ok(text.includes('workspace-fs-actions.js'));
+  assert.ok(text.includes('leVibeNative.openDocumentAfterWorkspaceCreate'));
+});

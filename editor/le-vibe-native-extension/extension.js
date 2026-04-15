@@ -14,11 +14,18 @@ const CLEAR_CONTEXT_FILES_COMMAND = 'leVibeNative.clearContextFiles';
 const EMIT_OPERATOR_HANDOFF_COMMAND = 'leVibeNative.emitOperatorHandoff';
 const OPEN_THIRD_PARTY_MIGRATION_COMMAND = 'leVibeNative.openThirdPartyMigrationGuide';
 const APPLY_SELECTION_DEMO_REPLACE_COMMAND = 'leVibeNative.applySelectionDemoReplace';
+const CREATE_WORKSPACE_FILE_COMMAND = 'leVibeNative.createWorkspaceFile';
+const CREATE_WORKSPACE_FOLDER_COMMAND = 'leVibeNative.createWorkspaceFolder';
 
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 const { createOllamaClient } = require('./ollama');
 const { createChatController } = require('./chat');
 const { isSafeRelativePath, clipTextByBudget, buildPromptWithContext } = require('./workspace-context');
+const {
+  validateWorkspaceRelativeCreatePath,
+  createWorkspaceFile,
+  createWorkspaceFolder,
+} = require('./workspace-fs-actions');
 const { handoffAuditPath, buildOperatorHandoffEvent, appendOperatorHandoffAudit } = require('./operator-handoff');
 const { formatOllamaDiagnostic } = require('./retry-helpers');
 const {
@@ -54,6 +61,94 @@ const { dryRunValidatedWorkspacePlan } = require('./workspace-plan-dry-run');
  * @param {import('vscode')} vscode
  * @param {import('vscode').WorkspaceFolder} folder
  */
+/**
+ * @param {import('vscode')} vscode
+ * @param {import('vscode').WebviewPanel | null} panel
+ * @returns {Promise<import('vscode').Uri | null>}
+ */
+async function runCreateWorkspaceFileInteractive(vscode, panel) {
+  const folder = vscode.workspace.workspaceFolders?.[0];
+  if (!folder) {
+    await vscode.window.showWarningMessage('Open a folder workspace first.');
+    if (panel) {
+      panel.webview.postMessage({ type: 'chatUpdate', status: 'Open a folder workspace first.' });
+    }
+    return null;
+  }
+  const rel = await vscode.window.showInputBox({
+    title: 'Create file under workspace',
+    prompt:
+      'Workspace-relative path only. Blocked segments: .git, .ssh, .gnupg, node_modules, .env — no .. or absolute paths.',
+    placeHolder: 'e.g. notes/demo.md',
+    validateInput: (value) => {
+      const r = validateWorkspaceRelativeCreatePath(value);
+      return r.ok ? undefined : r.userMessage.replace(/^Lé Vibe Chat: /, '');
+    },
+  });
+  if (!rel) {
+    return null;
+  }
+  const config = vscode.workspace.getConfiguration('leVibeNative');
+  const openAfter = config.get('openDocumentAfterWorkspaceCreate', true);
+  const result = await createWorkspaceFile(vscode, folder, rel, { openAfterCreate: openAfter });
+  if (!result.ok) {
+    await vscode.window.showWarningMessage(result.userMessage);
+    if (panel) {
+      panel.webview.postMessage({ type: 'chatUpdate', status: result.userMessage });
+    }
+    return null;
+  }
+  const label = vscode.workspace.asRelativePath(result.uri, false);
+  await vscode.window.showInformationMessage(`Lé Vibe Chat: created ${label}`);
+  if (panel) {
+    panel.webview.postMessage({ type: 'chatUpdate', status: `Created file: ${label}` });
+  }
+  return result.uri;
+}
+
+/**
+ * @param {import('vscode')} vscode
+ * @param {import('vscode').WebviewPanel | null} panel
+ * @returns {Promise<import('vscode').Uri | null>}
+ */
+async function runCreateWorkspaceFolderInteractive(vscode, panel) {
+  const folder = vscode.workspace.workspaceFolders?.[0];
+  if (!folder) {
+    await vscode.window.showWarningMessage('Open a folder workspace first.');
+    if (panel) {
+      panel.webview.postMessage({ type: 'chatUpdate', status: 'Open a folder workspace first.' });
+    }
+    return null;
+  }
+  const rel = await vscode.window.showInputBox({
+    title: 'Create folder under workspace',
+    prompt:
+      'Workspace-relative path only. Blocked segments: .git, .ssh, .gnupg, node_modules, .env — no .. or absolute paths.',
+    placeHolder: 'e.g. src/components/widgets',
+    validateInput: (value) => {
+      const r = validateWorkspaceRelativeCreatePath(value);
+      return r.ok ? undefined : r.userMessage.replace(/^Lé Vibe Chat: /, '');
+    },
+  });
+  if (!rel) {
+    return null;
+  }
+  const result = await createWorkspaceFolder(vscode, folder, rel);
+  if (!result.ok) {
+    await vscode.window.showWarningMessage(result.userMessage);
+    if (panel) {
+      panel.webview.postMessage({ type: 'chatUpdate', status: result.userMessage });
+    }
+    return null;
+  }
+  const label = vscode.workspace.asRelativePath(result.uri, false);
+  await vscode.window.showInformationMessage(`Lé Vibe Chat: created folder ${label}`);
+  if (panel) {
+    panel.webview.postMessage({ type: 'chatUpdate', status: `Created folder: ${label}` });
+  }
+  return result.uri;
+}
+
 function buildSampleDemoWorkspacePlan(vscode, folder) {
   const stamp = Date.now();
   const relA = `.lvibe/levibe-plan-demo-${stamp}.txt`;
@@ -258,6 +353,12 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <div>
     <button data-action="pickContextFile">Add context file</button>
     <button data-action="clearContextFiles">Clear context</button>
+  </div>
+  <h3>Workspace scaffold (N11)</h3>
+  <p class="muted">Create paths under the open folder only — no <code>..</code>; segments <code>.git</code>, <code>.ssh</code>, <code>.gnupg</code>, <code>node_modules</code>, <code>.env</code> are blocked.</p>
+  <div>
+    <button data-action="createWorkspaceFilePrompt">Create file…</button>
+    <button data-action="createWorkspaceFolderPrompt">Create folder…</button>
   </div>
   <h3>Operator handoff</h3>
   <p class="muted">Emit a reproducible handoff event to lvibe orchestration and append local audit evidence.</p>
@@ -848,6 +949,14 @@ function openAgentSurface() {
       panel.webview.postMessage({ type: 'chatUpdate', status: 'Workspace context cleared.' });
       return;
     }
+    if (msg.type === 'action' && msg.actionId === 'createWorkspaceFilePrompt') {
+      void runCreateWorkspaceFileInteractive(vscode, panel);
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'createWorkspaceFolderPrompt') {
+      void runCreateWorkspaceFolderInteractive(vscode, panel);
+      return;
+    }
     if (msg.type === 'action' && msg.actionId === 'openThirdPartyMigrationGuide') {
       void vscode.commands.executeCommand(OPEN_THIRD_PARTY_MIGRATION_COMMAND);
       panel.webview.postMessage({ type: 'chatUpdate', status: 'Opening third-party migration guide…' });
@@ -1067,6 +1176,8 @@ function activate(context) {
         await vscode.window.showInformationMessage('Lé Vibe Chat: selection range replaced (Undo to revert).');
       }
     }),
+    vscode.commands.registerCommand(CREATE_WORKSPACE_FILE_COMMAND, () => runCreateWorkspaceFileInteractive(vscode, null)),
+    vscode.commands.registerCommand(CREATE_WORKSPACE_FOLDER_COMMAND, () => runCreateWorkspaceFolderInteractive(vscode, null)),
     vscode.commands.registerCommand(OPEN_THIRD_PARTY_MIGRATION_COMMAND, () => runThirdPartyMigrationGuide(vscode)),
     vscode.commands.registerCommand(OPEN_AGENT_SURFACE_COMMAND, openAgentSurface),
     vscode.commands.registerCommand(OPEN_OLLAMA_SETUP_HELP_COMMAND, () =>
@@ -1124,6 +1235,8 @@ module.exports = {
   EMIT_OPERATOR_HANDOFF_COMMAND,
   OPEN_THIRD_PARTY_MIGRATION_COMMAND,
   APPLY_SELECTION_DEMO_REPLACE_COMMAND,
+  CREATE_WORKSPACE_FILE_COMMAND,
+  CREATE_WORKSPACE_FOLDER_COMMAND,
   getTranscriptContext,
   getContextBudget,
   panelHtml,
