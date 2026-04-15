@@ -2,6 +2,7 @@
 
 const http = require('node:http');
 const https = require('node:https');
+const { sleep, isRetryableOllamaError } = require('./retry-helpers');
 
 function requestJson(method, url, timeoutMs) {
   return new Promise((resolve, reject) => {
@@ -63,16 +64,39 @@ function normalizeEndpoint(endpoint) {
   return value.replace(/\/+$/, '');
 }
 
-function createOllamaClient({ endpoint, timeoutMs = 2500, model = 'mistral:latest' }) {
+function createOllamaClient({
+  endpoint,
+  timeoutMs = 2500,
+  model = 'mistral:latest',
+  streamStallMs = 60000,
+  streamMaxMs = 120000,
+  maxRetries = 2,
+  retryDelayMs = 400,
+}) {
   const base = normalizeEndpoint(endpoint);
+  const maxAttempts = maxRetries + 1;
+
   async function listModels() {
-    const payload = await requestJson('GET', `${base}/api/tags`, timeoutMs);
-    const models = Array.isArray(payload.models) ? payload.models : [];
-    return models.map((item) => ({
-      name: item && item.name ? String(item.name) : '',
-      size: item && typeof item.size === 'number' ? item.size : null,
-      modified_at: item && item.modified_at ? String(item.modified_at) : null,
-    }));
+    let lastError;
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+      try {
+        const payload = await requestJson('GET', `${base}/api/tags`, timeoutMs);
+        const models = Array.isArray(payload.models) ? payload.models : [];
+        return models.map((item) => ({
+          name: item && item.name ? String(item.name) : '',
+          size: item && typeof item.size === 'number' ? item.size : null,
+          modified_at: item && item.modified_at ? String(item.modified_at) : null,
+        }));
+      } catch (error) {
+        lastError = error;
+        const canRetry = isRetryableOllamaError(error) && attempt < maxAttempts - 1;
+        if (!canRetry) {
+          throw error;
+        }
+        await sleep(retryDelayMs * 2 ** attempt);
+      }
+    }
+    throw lastError;
   }
 
   async function probeHealth() {
@@ -97,6 +121,38 @@ function createOllamaClient({ endpoint, timeoutMs = 2500, model = 'mistral:lates
     let cancelled = false;
     const done = (onEvent) =>
       new Promise((resolve, reject) => {
+        let lastActivity = Date.now();
+        const bump = () => {
+          lastActivity = Date.now();
+        };
+        let stallTimer = null;
+        let maxTimer = null;
+        let settled = false;
+
+        function cleanupTimers() {
+          if (stallTimer) {
+            clearInterval(stallTimer);
+            stallTimer = null;
+          }
+          if (maxTimer) {
+            clearTimeout(maxTimer);
+            maxTimer = null;
+          }
+        }
+
+        function finish(ok, err) {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          cleanupTimers();
+          if (ok) {
+            resolve();
+          } else {
+            reject(err);
+          }
+        }
+
         const req = transport.request(
           {
             method: 'POST',
@@ -107,16 +163,42 @@ function createOllamaClient({ endpoint, timeoutMs = 2500, model = 'mistral:lates
             headers: { 'content-type': 'application/json' },
           },
           (res) => {
+            bump();
             if (res.statusCode < 200 || res.statusCode > 299) {
-              reject(
+              finish(
+                false,
                 Object.assign(new Error(`Ollama returned status ${res.statusCode}.`), {
                   code: 'OLLAMA_HTTP_ERROR',
+                  statusCode: res.statusCode,
                 }),
               );
               return;
             }
             let buffer = '';
+            stallTimer = setInterval(() => {
+              if (Date.now() - lastActivity > streamStallMs) {
+                if (reqRef) {
+                  reqRef.destroy();
+                }
+                finish(
+                  false,
+                  Object.assign(new Error('Ollama stream stalled (no activity).'), { code: 'OLLAMA_STREAM_STALL' }),
+                );
+              }
+            }, 2000);
+            maxTimer = setTimeout(() => {
+              if (reqRef) {
+                reqRef.destroy();
+              }
+              finish(
+                false,
+                Object.assign(new Error('Ollama stream exceeded max duration.'), {
+                  code: 'OLLAMA_STREAM_MAX_DURATION',
+                }),
+              );
+            }, streamMaxMs);
             res.on('data', (chunk) => {
+              bump();
               buffer += chunk.toString('utf8');
               const lines = buffer.split('\n');
               buffer = lines.pop() || '';
@@ -132,15 +214,24 @@ function createOllamaClient({ endpoint, timeoutMs = 2500, model = 'mistral:lates
                   return;
                 }
                 if (payload.response) {
+                  bump();
                   onEvent({ type: 'token', value: String(payload.response) });
                 }
                 if (payload.done) {
+                  bump();
                   onEvent({ type: 'done', value: '' });
                 }
               });
             });
-            res.on('end', () => resolve());
-            res.on('error', (error) => reject(error));
+            res.on('end', () => finish(true));
+            res.on('error', (error) =>
+              finish(
+                false,
+                Object.assign(new Error(error.message || 'response error'), {
+                  code: error.code || 'OLLAMA_STREAM_ERROR',
+                }),
+              ),
+            );
           },
         );
         reqRef = req;
@@ -149,10 +240,11 @@ function createOllamaClient({ endpoint, timeoutMs = 2500, model = 'mistral:lates
         });
         req.on('error', (error) => {
           if (cancelled) {
-            reject(Object.assign(new Error('Request cancelled.'), { code: 'OLLAMA_CANCELLED' }));
+            finish(false, Object.assign(new Error('Request cancelled.'), { code: 'OLLAMA_CANCELLED' }));
             return;
           }
-          reject(
+          finish(
+            false,
             Object.assign(new Error('Could not stream from local Ollama.'), {
               code: error && error.code ? error.code : 'OLLAMA_STREAM_ERROR',
             }),
@@ -182,6 +274,10 @@ function createOllamaClient({ endpoint, timeoutMs = 2500, model = 'mistral:lates
   return {
     endpoint: base,
     timeoutMs,
+    streamStallMs,
+    streamMaxMs,
+    maxRetries,
+    retryDelayMs,
     probeHealth,
     listModels,
     streamPrompt,

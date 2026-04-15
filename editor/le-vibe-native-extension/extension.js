@@ -18,6 +18,7 @@ const { createOllamaClient } = require('./ollama');
 const { createChatController } = require('./chat');
 const { isSafeRelativePath, clipTextByBudget, buildPromptWithContext } = require('./workspace-context');
 const { handoffAuditPath, buildOperatorHandoffEvent, appendOperatorHandoffAudit } = require('./operator-handoff');
+const { formatOllamaDiagnostic } = require('./retry-helpers');
 const {
   transcriptPath,
   appendEntry,
@@ -105,6 +106,7 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <div>
     <button id="sendPrompt">Send Prompt</button>
     <button id="cancelPrompt">Cancel Request</button>
+    <button id="retryLastPrompt">Retry last prompt</button>
   </div>
   <div id="chatStatus" class="muted">Idle.</div>
   <div id="chatLog" class="chat-log"></div>
@@ -141,6 +143,9 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     document.getElementById('cancelPrompt').addEventListener('click', () => {
       vscode.postMessage({ type: 'chat', actionId: 'cancelPrompt' });
     });
+    document.getElementById('retryLastPrompt').addEventListener('click', () => {
+      vscode.postMessage({ type: 'chat', actionId: 'retryLastPrompt' });
+    });
     window.addEventListener('message', (event) => {
       const msg = event.data;
       if (!msg || msg.type !== 'chatUpdate') {
@@ -169,13 +174,21 @@ function openAgentSurface() {
     endpoint: config.get('ollamaEndpoint', 'http://127.0.0.1:11434'),
     timeoutMs: config.get('ollamaTimeoutMs', 2500),
     model: config.get('ollamaModel', 'mistral:latest'),
+    streamStallMs: config.get('ollamaStreamStallMs', 60000),
+    streamMaxMs: config.get('ollamaStreamMaxMs', 120000),
+    maxRetries: config.get('ollamaMaxRetries', 2),
+    retryDelayMs: config.get('ollamaRetryBackoffMs', 400),
   });
-  const chat = createChatController(client);
+  const chat = createChatController(client, {
+    maxRetries: config.get('ollamaMaxRetries', 2),
+    retryDelayMs: config.get('ollamaRetryBackoffMs', 400),
+  });
   const { transcriptFile, transcriptCaps } = getTranscriptContext(vscode);
   const contextBudget = getContextBudget(vscode);
   const selectedContexts = [];
   let latestStartupState = 'checking';
   let latestDiagnostics = { mode: 'startup_probe' };
+  let lastPromptPlain = null;
   const panel = vscode.window.createWebviewPanel(
     'leVibeNativeReadiness',
     'Lé Vibe Native Readiness',
@@ -188,6 +201,82 @@ function openAgentSurface() {
     latestDiagnostics = snapshot.diagnostics || {};
     panel.webview.html = panelHtml(snapshot.state, snapshot.detailOverride, snapshot.diagnostics, contextBudget);
   });
+
+  function runPromptSend(promptPlain, { skipUserTranscript = false } = {}) {
+    const trimmed = String(promptPlain || '').trim();
+    if (!trimmed) {
+      panel.webview.postMessage({ type: 'chatUpdate', status: 'Enter a prompt first.' });
+      return;
+    }
+    lastPromptPlain = trimmed;
+    const promptWithContext = buildPromptWithContext(trimmed, selectedContexts, contextBudget.maxTotalChars);
+    if (!skipUserTranscript) {
+      try {
+        appendEntry(
+          transcriptFile,
+          {
+            id: `u-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
+            ts: Date.now(),
+            role: 'user',
+            content: trimmed,
+          },
+          transcriptCaps,
+        );
+      } catch {
+        /* ignore transcript write failures; chat still works */
+      }
+    }
+    let assistantBuffer = '';
+    panel.webview.postMessage({
+      type: 'chatUpdate',
+      status: 'Streaming response from local Ollama...',
+      replaceLog: '',
+    });
+    void chat.sendPrompt(promptWithContext, {
+      onToken(token) {
+        assistantBuffer += token;
+        panel.webview.postMessage({ type: 'chatUpdate', append: token });
+      },
+      onRetry({ attempt, maxAttempts, willRetry, error }) {
+        const detail = formatOllamaDiagnostic(error, client.endpoint);
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: willRetry
+            ? `${detail} Retrying (${attempt}/${maxAttempts})...`
+            : detail,
+        });
+      },
+      onDone(cancelled) {
+        if (!cancelled && assistantBuffer.length > 0) {
+          try {
+            appendEntry(
+              transcriptFile,
+              {
+                id: `a-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
+                ts: Date.now(),
+                role: 'assistant',
+                content: assistantBuffer,
+              },
+              transcriptCaps,
+            );
+          } catch {
+            /* ignore */
+          }
+        }
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: cancelled ? 'Request cancelled.' : 'Response complete.',
+        });
+      },
+      onError(error) {
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: formatOllamaDiagnostic(error, client.endpoint),
+        });
+      },
+    });
+  }
+
   panel.webview.onDidReceiveMessage((msg) => {
     if (!msg) {
       return;
@@ -301,66 +390,15 @@ function openAgentSurface() {
       return;
     }
     if (msg.type === 'chat' && msg.actionId === 'sendPrompt') {
-      const prompt = (msg.prompt || '').trim();
-      if (!prompt) {
-        panel.webview.postMessage({ type: 'chatUpdate', status: 'Enter a prompt first.' });
+      runPromptSend(msg.prompt, { skipUserTranscript: false });
+      return;
+    }
+    if (msg.type === 'chat' && msg.actionId === 'retryLastPrompt') {
+      if (!lastPromptPlain) {
+        panel.webview.postMessage({ type: 'chatUpdate', status: 'No previous prompt to retry.' });
         return;
       }
-      const promptWithContext = buildPromptWithContext(prompt, selectedContexts, contextBudget.maxTotalChars);
-      try {
-        appendEntry(
-          transcriptFile,
-          {
-            id: `u-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
-            ts: Date.now(),
-            role: 'user',
-            content: prompt,
-          },
-          transcriptCaps,
-        );
-      } catch {
-        /* ignore transcript write failures; chat still works */
-      }
-      let assistantBuffer = '';
-      panel.webview.postMessage({
-        type: 'chatUpdate',
-        status: 'Streaming response from local Ollama...',
-        replaceLog: '',
-      });
-      void chat.sendPrompt(promptWithContext, {
-        onToken(token) {
-          assistantBuffer += token;
-          panel.webview.postMessage({ type: 'chatUpdate', append: token });
-        },
-        onDone(cancelled) {
-          if (!cancelled && assistantBuffer.length > 0) {
-            try {
-              appendEntry(
-                transcriptFile,
-                {
-                  id: `a-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
-                  ts: Date.now(),
-                  role: 'assistant',
-                  content: assistantBuffer,
-                },
-                transcriptCaps,
-              );
-            } catch {
-              /* ignore */
-            }
-          }
-          panel.webview.postMessage({
-            type: 'chatUpdate',
-            status: cancelled ? 'Request cancelled.' : 'Response complete.',
-          });
-        },
-        onError(error) {
-          panel.webview.postMessage({
-            type: 'chatUpdate',
-            status: `Stream failed: ${(error && error.message) || 'unknown error'}`,
-          });
-        },
-      });
+      runPromptSend(lastPromptPlain, { skipUserTranscript: true });
       return;
     }
     if (msg.type === 'chat' && msg.actionId === 'cancelPrompt') {

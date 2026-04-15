@@ -74,3 +74,9 @@ Token-budget rules (configurable in Settings):
 - Event includes reproducible fields: `workspace_uri`, `startup_state`, `diagnostics`, Ollama endpoint/model, selected context paths, context budget, and transcript path/caps.
 - Local audit log evidence is appended as JSONL at:
   - `~/.config/le-vibe/levibe-native-chat/operator-handoff-audit.jsonl`
+
+## Reliability: retries and timeouts (task-n5-1)
+
+- **Automatic retries** for transient local Ollama failures (`ollamaMaxRetries`, exponential backoff from `ollamaRetryBackoffMs`) apply to readiness `GET /api/tags` and to streaming `POST /api/generate`.
+- **Stream guards**: `ollamaStreamStallMs` aborts if no tokens/activity for too long; `ollamaStreamMaxMs` caps total stream wall time (prevents hard hangs).
+- **UX**: panel shows structured diagnostics on failure (`[error code] message (endpoint: …)`), retry progress during auto-retry, and a **Retry last prompt** button (manual resend without duplicating the user line in the transcript).

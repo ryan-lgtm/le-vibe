@@ -116,6 +116,34 @@
             "default": 2500,
             "description": "Timeout in milliseconds for local Ollama startup probe requests."
           },
+          "leVibeNative.ollamaMaxRetries": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5,
+            "default": 2,
+            "description": "Automatic retries for transient local Ollama failures (streaming and probes)."
+          },
+          "leVibeNative.ollamaRetryBackoffMs": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 10000,
+            "default": 400,
+            "description": "Base backoff in milliseconds before retrying a transient Ollama failure (exponential)."
+          },
+          "leVibeNative.ollamaStreamStallMs": {
+            "type": "integer",
+            "minimum": 5000,
+            "maximum": 600000,
+            "default": 60000,
+            "description": "If no stream activity for this many milliseconds, cancel the request (prevents hangs)."
+          },
+          "leVibeNative.ollamaStreamMaxMs": {
+            "type": "integer",
+            "minimum": 10000,
+            "maximum": 3600000,
+            "default": 120000,
+            "description": "Hard cap on total streaming duration for a single generate request."
+          },
           "leVibeNative.ollamaModel": {
             "type": "string",
             "default": "mistral:latest",

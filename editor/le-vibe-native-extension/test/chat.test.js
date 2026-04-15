@@ -83,3 +83,33 @@ test('cancelPrompt returns true when a request is active', async () => {
   assert.equal(didCancel, true);
   assert.equal(cancelCalled, true);
 });
+
+test('chat retries transient stream failures before succeeding', async () => {
+  let calls = 0;
+  const controller = createChatController(
+    {
+      streamPrompt() {
+        calls += 1;
+        return {
+          cancel() {},
+          async done(onEvent) {
+            if (calls === 1) {
+              throw Object.assign(new Error('timeout'), { code: 'OLLAMA_TIMEOUT' });
+            }
+            onEvent({ type: 'done', value: '' });
+          },
+        };
+      },
+    },
+    { maxRetries: 2, retryDelayMs: 0 },
+  );
+  const retries = [];
+  await controller.sendPrompt('test', {
+    onToken: () => {},
+    onDone: (cancelled) => assert.equal(cancelled, false),
+    onError: () => assert.fail('unexpected error'),
+    onRetry: (info) => retries.push(info),
+  });
+  assert.equal(calls, 2);
+  assert.equal(retries.length, 1);
+});
