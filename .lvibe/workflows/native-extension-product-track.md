@@ -312,6 +312,12 @@
     - contract test prevents removal
   - Evidence:
     - `OPERATOR.md` Telemetry line; `test/operator-doc.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-26**: Extension **README** documents **telemetry** (aligned with OPERATOR).
+  - Acceptance:
+    - developer README states local structured logs by default and explicit opt-in for remote
+    - parity on shared “defaults” phrasing with OPERATOR
+  - Evidence:
+    - `README.md` Telemetry line; `test/readme-telemetry.test.js`; `npm run verify` green.
 
 ---
 

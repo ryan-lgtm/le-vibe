@@ -8,6 +8,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Local-first:** shipped defaults target **local Ollama** (`leVibeNative.ollamaEndpoint`); the extension does **not** silently fall back to a cloud LLM (same posture as **`OPERATOR.md`**).
 
+**Telemetry:** defaults to **local structured logs only**; no remote telemetry unless you **explicitly opt in** (same policy as **`OPERATOR.md`**).
+
 ## Scope for task-n1-1
 
 - Extension host entrypoint exists (`extension.js`).
