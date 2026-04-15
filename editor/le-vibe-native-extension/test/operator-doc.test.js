@@ -89,3 +89,10 @@ test('OPERATOR.md documents default Ollama model tag and leVibeNative.ollamaMode
   assert.ok(text.includes('mistral:latest'));
   assert.ok(text.includes('leVibeNative.ollamaModel'));
 });
+
+test('OPERATOR.md documents settings disclosure guardrail test (task-n8-55)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Settings disclosure guardrail'));
+  assert.ok(text.includes('package-leVibeNative-keys-doc-inventory.test.js'));
+  assert.ok(text.includes('leVibeNative.*'));
+});

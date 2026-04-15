@@ -60,3 +60,5 @@ Chat transcript JSONL is capped by **`leVibeNative.chatTranscriptMaxBytes`** (de
 ## Product track
 
 Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N8 — operator runbook).
+
+**Settings disclosure guardrail:** **`npm test`** runs **`test/package-leVibeNative-keys-doc-inventory.test.js`**, which fails if any **`leVibeNative.*`** key in **`package.json`** contributes is absent from this runbook and/or **`README.md`** (add the key to operator or developer docs before shipping).

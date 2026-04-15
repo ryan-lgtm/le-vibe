@@ -469,6 +469,11 @@
     - test enumerates `contributes.configuration[0].properties` keys with `leVibeNative.` prefix and asserts each appears in combined operator + README text
   - Evidence:
     - `test/package-leVibeNative-keys-doc-inventory.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-55**: **OPERATOR** documents the **settings disclosure guardrail** (inventory test) under **Product track**.
+  - Acceptance:
+    - runbook tells operators that `npm test` runs `package-leVibeNative-keys-doc-inventory.test.js` and what failure means; `operator-doc.test.js` asserts key phrases
+  - Evidence:
+    - `OPERATOR.md`; `test/operator-doc.test.js`; `npm run verify` green.
 
 ---
 
