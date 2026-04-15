@@ -45,8 +45,12 @@ def test_install_continue_extension_documents_14g_editor_and_openvsx_ref() -> No
     assert "/usr/bin/codium" in text
     assert "--install-extension" in text
     assert "continue-openvsx-version" in text
+    assert "vscode-yaml-openvsx-version" in text
     assert "LE_VIBE_CONTINUE_OPENVSX_VERSION" in text
+    assert "LE_VIBE_VSCODE_YAML_OPENVSX_VERSION" in text
+    assert "LE_VIBE_VSCODE_YAML_PIN_FILE" in text
     assert "continue.continue" in text
+    assert "redhat.vscode-yaml" in text
     assert "test_install_continue_extension_script.py" in text
     assert "test_verify_step14_closeout_contract.py" in text
     assert ".pytest-verify-step14-contract.lock" in text
@@ -59,4 +63,16 @@ def test_continue_openvsx_pin_file_exists_and_semver() -> None:
     assert first and first != "latest"
     parts = first.split(".")
     assert len(parts) >= 2
+    assert all(p.isdigit() for p in parts)
+
+
+def test_vscode_yaml_openvsx_pin_file_exists_and_semver() -> None:
+    pin = _repo_root() / "packaging" / "vscode-yaml-openvsx-version"
+    assert pin.is_file(), pin
+    lines = [ln.strip() for ln in pin.read_text(encoding="utf-8").splitlines() if ln.strip() and not ln.strip().startswith("#")]
+    assert lines, pin
+    first = lines[0]
+    assert first != "latest"
+    parts = first.split(".")
+    assert len(parts) >= 3
     assert all(p.isdigit() for p in parts)

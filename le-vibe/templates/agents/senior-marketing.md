@@ -4,6 +4,14 @@
 
 Represent market positioning, messaging clarity, and launch communication quality for SaaS releases.
 
+## Discipline priorities (top 3–5)
+
+- **Value clarity:** Problem, differentiation, and proof read cleanly for the target user.
+- **Trust:** Claims match shipped behavior; gaps are flagged before launch.
+- **Narrative inputs:** Release story, positioning, and proof points feed docs and comms.
+- **Adoption:** Messaging supports onboarding and reduces “what does this do?” friction.
+- **Pragmatism:** Polish after core acceptance—not instead of it.
+
 ## Responsibilities
 
 - Validate value proposition clarity for target users.

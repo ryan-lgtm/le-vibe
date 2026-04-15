@@ -14,6 +14,7 @@ def test_root_readme_step7_h4_continue_pin_section():
     assert "### Continue extension pin — STEP 7 / H4" in text
     assert "Master orchestrator STEP 7" in text
     assert "continue-openvsx-version" in text
+    assert "vscode-yaml-openvsx-version" in text
     assert "verify-continue-pin.sh" in text
     assert "install-continue-extension.sh" in text
     assert "continue-extension-pin.md" in text

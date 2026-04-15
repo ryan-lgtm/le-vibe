@@ -1,6 +1,6 @@
 .TH LE-VIBE-SETUP-CONTINUE 1 "2026" "Linux" "User Commands"
 .SH NAME
-le-vibe-setup-continue \- symlink Lé Vibe Continue config and install the Continue extension
+le-vibe-setup-continue \- symlink Lé Vibe Continue config and install pinned Continue + YAML extensions
 .SH SYNOPSIS
 .B le-vibe-setup-continue
 .RB [ \-\-gui ]
@@ -9,12 +9,20 @@ Runs
 .BR sync\-continue\-config.sh
 then
 .BR install\-continue\-extension.sh
+(which installs pinned
+.B continue.continue
+and
+.B redhat.vscode\-yaml
+from Open VSX per
+.BR docs/continue\-extension\-pin.md )
 with clear exit codes (see below). Run as the desktop user after
 .B lvibe
 has completed first\-run and written
 .IR ~/.config/le\-vibe/continue\-config.yaml
 (same launcher as
 .BR le\-vibe (1)).
+
+After successful first\-run, \fBlvibe\fR may invoke this command automatically; set \fBLE_VIBE_AUTO_CONTINUE_SETUP=0\fR to disable. See \fBlvibe\fR(1) / \fBle\-vibe\fR(1) DESCRIPTION.
 
 With
 .BR \-\-gui ,
@@ -38,7 +46,7 @@ first (compatibility name:
 Config sync failed.
 .TP
 .B 3
-Extension install failed.
+Extension install failed (Continue or YAML; network or marketplace).
 .TP
 .B 4
 No editor binary (install VSCodium or set

@@ -82,6 +82,32 @@ def test_hygiene_warns_oversize_rag_ref(tmp_path: Path):
     assert any("big.yaml" in w and "KiB" in w for w in warns)
 
 
+def test_hygiene_warns_incremental_md_soft_size(tmp_path: Path):
+    """Above 64KiB triggers soft token-efficiency warning (hygiene._incremental_size_warning)."""
+    ensure_lvibe_workspace(tmp_path)
+    inc = tmp_path / ".lvibe" / "memory" / "incremental.md"
+    inc.parent.mkdir(parents=True, exist_ok=True)
+    inc.write_bytes(b"n" * (64 * 1024 + 1))
+    errs, warns = check_lvibe_workspace(tmp_path)
+    assert errs == []
+    assert any(
+        "memory/incremental.md" in w and "2KiB" in w for w in warns
+    ), warns
+
+
+def test_hygiene_warns_incremental_md_large_size(tmp_path: Path):
+    """Above 512KiB triggers stronger summarizing warning."""
+    ensure_lvibe_workspace(tmp_path)
+    inc = tmp_path / ".lvibe" / "memory" / "incremental.md"
+    inc.parent.mkdir(parents=True, exist_ok=True)
+    inc.write_bytes(b"n" * (512 * 1024 + 1))
+    errs, warns = check_lvibe_workspace(tmp_path)
+    assert errs == []
+    assert any(
+        "memory/incremental.md" in w and "summarizing" in w for w in warns
+    ), warns
+
+
 def test_hygiene_warns_chunk_missing_path(tmp_path: Path):
     ensure_lvibe_workspace(tmp_path)
     chunk = tmp_path / ".lvibe" / "chunks" / "ref.yaml"

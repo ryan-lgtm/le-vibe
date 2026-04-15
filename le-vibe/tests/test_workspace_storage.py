@@ -162,6 +162,33 @@ def test_lvibe_tree_usage_bytes_zero_without_dot_lvibe(tmp_path: Path) -> None:
     assert lvibe_tree_usage_bytes(tmp_path) == 0
 
 
+def test_lvibe_tree_usage_bytes_empty_dot_lvibe_directory(tmp_path: Path) -> None:
+    (tmp_path / ".lvibe").mkdir()
+    assert lvibe_tree_usage_bytes(tmp_path) == 0
+
+
+def test_compact_lvibe_tree_empty_dot_lvibe_no_actions(tmp_path: Path) -> None:
+    (tmp_path / ".lvibe").mkdir()
+    assert compact_lvibe_tree(tmp_path, cap_mb=1) == []
+
+
+def test_refresh_storage_metadata_minimal_lvibe_writes_state(tmp_path: Path, monkeypatch) -> None:
+    """Empty `.lvibe/` still gets metering persisted (LVIBE RAG hardening — consistency O1)."""
+    cfg = tmp_path / "cfg"
+    cfg.mkdir()
+    monkeypatch.setattr("le_vibe.workspace_policy.le_vibe_config_dir", lambda: cfg)
+    root = tmp_path / "w"
+    (root / ".lvibe").mkdir(parents=True)
+    usage, cap = refresh_storage_metadata(root, config_dir=cfg)
+    assert usage == 0
+    assert cap == 50
+    state = root / ".lvibe" / "storage-state.json"
+    assert state.is_file()
+    data = json.loads(state.read_text(encoding="utf-8"))
+    assert data["usage_bytes"] == 0
+    assert data["storage_pressure_state"] == "ok"
+
+
 def test_lvibe_tree_usage_bytes_sums_files(tmp_path: Path) -> None:
     lv = tmp_path / ".lvibe"
     lv.mkdir()

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Roadmap G-A3: optional XDG autostart — one desktop notification to run Continue setup.
+# Roadmap G-A3: optional XDG autostart — one desktop notification when Continue wiring is still pending.
+# Copy aligns with le_vibe.continue_setup_auto (next lvibe after first-run runs le-vibe-setup-continue when possible).
 # Requires: mkdir, touch (coreutils) when a notification is shown; notify-send (libnotify) optional (skipped if absent).
 # Idempotent: skips after ~/.continue/config.yaml is linked, or after one successful notify,
 # or if the user disables via ~/.config/le-vibe/.continue-setup-autostart-disable.
@@ -49,7 +50,7 @@ if notify-send \
   --app-name="Lé Vibe" \
   --urgency=normal \
   "Continue setup" \
-  "Wire the Continue extension: run le-vibe-setup-continue in a terminal (add --gui for a Zenity dialog)."; then
+  "The next lvibe launch tries Continue wiring automatically; or run le-vibe-setup-continue now (add --gui for Zenity)."; then
   touch "$MARK_DONE"
 fi
 exit 0

@@ -2,7 +2,9 @@
 
 Reproducible installs use the Open VSX identifier **`continue.continue`** ([extension page](https://open-vsx.org/extension/Continue/continue)). **`packaging/scripts/install-continue-extension.sh`** passes **`codium --install-extension continue.continue@<version>`** where **`<version>`** comes from **`packaging/continue-openvsx-version`** (one semver per line; comments with **`#`** allowed above the version).
 
-After **`dpkg -i`**, the same pin is installed at **`/usr/share/le-vibe/continue-openvsx-version`**; the script resolves it via **`SCRIPT_DIR/../continue-openvsx-version`** (works for both repo and packaged layouts).
+The same script installs the companion **`redhat.vscode-yaml`** extension ([Open VSX](https://open-vsx.org/extension/redhat/vscode-yaml)) at **`redhat.vscode-yaml@<version>`** using **`packaging/vscode-yaml-openvsx-version`**, so **`yaml.schemas`** / JSON Schema features used by Continue’s config path behave consistently (see manifest-driven **unified install** work in **`.lvibe/session-manifest.json`** when present).
+
+After **`dpkg -i`**, the same pins are installed under **`/usr/share/le-vibe/`** as **`continue-openvsx-version`** and **`vscode-yaml-openvsx-version`**; the script resolves them via **`SCRIPT_DIR/../…`** next to **`install-continue-extension.sh`** (works for both repo and packaged layouts).
 
 **Product anchor:** [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md) §8–§9. **§7.3** fixes the public **`lvibe`** CLI and **`le-vibe-ide`** layout (**`/usr/lib/le-vibe/bin/codium`**) — the Open VSX semver here is unchanged when that shell is present vs a dev-tree **`LE_VIBE_EDITOR`**. **Roadmap H4** (this doc) is indexed from [`README.md`](README.md), [`le-vibe/README.md`](../le-vibe/README.md) *STEP 7*, and [`PROMPT_BUILD_LE_VIBE.md`](PROMPT_BUILD_LE_VIBE.md).
 
@@ -35,8 +37,8 @@ The **Open VSX semver** in **`packaging/continue-openvsx-version`** is the singl
 ## End-to-end (typical)
 
 1. Complete first-run so **`~/.config/le-vibe/continue-config.yaml`** exists (launch **`lvibe`** once).
-2. Run **`le-vibe-setup-continue`** (or **`--gui`**), which runs **`sync-continue-config.sh`** then **`install-continue-extension.sh`**.
-3. The editor installs **`continue.continue@<pinned-version>`** from your configured marketplace (Open VSX for common VSCodium setups).
+2. On the **next** **`lvibe`** start, the launcher **attempts** the same steps as **`le-vibe-setup-continue`** automatically (**`le_vibe.continue_setup_auto`** — **`LE_VIBE_AUTO_CONTINUE_SETUP=0`** to disable). If that fails or you prefer a GUI prompt, run **`le-vibe-setup-continue`** (or **`--gui`**), which runs **`sync-continue-config.sh`** then **`install-continue-extension.sh`**.
+3. The editor installs **`continue.continue@<pinned-version>`** and **`redhat.vscode-yaml@<pinned-version>`** from your configured marketplace (Open VSX for common VSCodium setups).
 
 Manual install from a dev tree (any cwd; script finds its pin file):
 
@@ -50,8 +52,9 @@ bash /path/to/r-vibe/packaging/scripts/install-continue-extension.sh
    `curl -sS 'https://open-vsx.org/api/Continue/continue/latest' | head -c 400`  
    (inspect **`version`** in the JSON).
 2. Set **`packaging/continue-openvsx-version`** to that semver (**one** non-comment line).
-3. Run **`./packaging/scripts/verify-continue-pin.sh`** (and **`cd le-vibe && pytest`** — includes **`test_continue_openvsx_pin`**).
-4. Rebuild the **`.deb`** and smoke-test **`le-vibe-setup-continue`** with VSCodium.
+3. Set **`packaging/vscode-yaml-openvsx-version`** for **`redhat.vscode-yaml`** (query Open VSX **`/api/redhat/vscode-yaml/latest`** or browse the extension page; one semver line).
+4. Run **`./packaging/scripts/verify-continue-pin.sh`** (and **`cd le-vibe && pytest`** — includes **`test_continue_openvsx_pin`**).
+5. Rebuild the **`.deb`** and smoke-test **`le-vibe-setup-continue`** with VSCodium.
 
 ## CI
 
@@ -66,7 +69,10 @@ bash /path/to/r-vibe/packaging/scripts/install-continue-extension.sh
 | **`LE_VIBE_CONTINUE_OPENVSX_VERSION=1.2.3`** | Pin to that version regardless of the file. |
 | **`LE_VIBE_CONTINUE_EXTENSION`** | Extension id (default **`continue.continue`**). Version is still applied as **`id@version`** unless **`latest`**. |
 | **`LE_VIBE_CONTINUE_PIN_FILE`** | Alternate path to a one-line version file. |
+| **`LE_VIBE_VSCODE_YAML_OPENVSX_VERSION`** | Same semantics as Continue: unset reads **`packaging/vscode-yaml-openvsx-version`**; **`latest`** installs **`redhat.vscode-yaml`** without **`@version`**. |
+| **`LE_VIBE_VSCODE_YAML_PIN_FILE`** | Alternate path for the YAML extension semver file (default next to **`install-continue-extension.sh`**). |
+| **`LE_VIBE_VSCODE_YAML_EXTENSION`** | Override extension id (default **`redhat.vscode-yaml`**). |
 
-If the pin file is **missing** and **`LE_VIBE_CONTINUE_OPENVSX_VERSION`** is unset, the script installs **`continue.continue`** with **no** **`@version`** (whatever the marketplace resolves)—**not** reproducible; keep the pin file in packaging for release builds.
+If a pin file is **missing** and the matching **`LE_VIBE_*_OPENVSX_VERSION`** is unset, the script installs that extension id **without** **`@version`** (whatever the marketplace resolves)—**not** reproducible; keep both pin files in packaging for release builds.
 
 VSIX files are **not** bundled in this repo; **`codium --install-extension id@version`** downloads from the editor’s configured marketplace.

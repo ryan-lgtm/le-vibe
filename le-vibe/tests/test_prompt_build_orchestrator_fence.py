@@ -5,6 +5,21 @@ from __future__ import annotations
 from pathlib import Path
 
 
+def test_prompt_build_opener_one_table_roster_and_prioritization_cite_product_spec_authority():
+    """Intro **One-table roster** (§9) + **Prioritization** queue line — STEP 16 / Master prompt authority."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PROMPT_BUILD_LE_VIBE.md").read_text(encoding="utf-8")
+    roster = text.split("**One-table roster:**", 1)[1].split("**E1 / pytest:**", 1)[0]
+    assert "§9" in roster
+    assert "SESSION_ORCHESTRATION_SPEC" in roster
+    assert "PM_STAGE_MAP" in roster
+    assert "PRODUCT_SPEC_SECTION8_EVIDENCE" in roster
+    assert "AI_PILOT_AND_CONTINUE" in roster
+    prio = text.split("**Prioritization:**", 1)[1].split("**Dependabot (H2):**", 1)[0]
+    assert "PRODUCT_SPEC.md" in prio
+    assert "0 → 1 → 14 → 2–13 → 15–17" in prio
+
+
 def test_master_orchestrator_fence_extractable():
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "PROMPT_BUILD_LE_VIBE.md").read_text(encoding="utf-8")

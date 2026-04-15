@@ -9,6 +9,20 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_debian_lvibe_man_documents_auto_continue_setup_after_first_run():
+    """H4: DESCRIPTION names le-vibe-setup-continue auto path + LE_VIBE_AUTO_CONTINUE_SETUP."""
+    text = (_repo_root() / "debian" / "lvibe.1").read_text(encoding="utf-8")
+    assert "le\\-vibe\\-setup\\-continue" in text
+    assert "LE_VIBE_AUTO_CONTINUE_SETUP" in text
+    assert "continue\\-extension\\-pin.md" in text
+
+
+def test_debian_le_vibe_man_documents_auto_continue_setup_after_first_run():
+    text = (_repo_root() / "debian" / "le-vibe.1").read_text(encoding="utf-8")
+    assert "le\\-vibe\\-setup\\-continue" in text
+    assert "LE_VIBE_AUTO_CONTINUE_SETUP" in text
+
+
 def test_debian_lvibe_man_description_lists_first_run_cross_ref_le_vibe_step6():
     """lvibe(1) DESCRIPTION echoes first-run observability; defers full OPTIONS to le-vibe(1)."""
     text = (_repo_root() / "debian" / "lvibe.1").read_text(encoding="utf-8")

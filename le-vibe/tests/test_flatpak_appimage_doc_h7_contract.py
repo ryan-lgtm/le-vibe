@@ -25,6 +25,17 @@ def test_flatpak_appimage_doc_lists_paths_flathub_and_spec_phase2_h7():
     assert "PM_STAGE_MAP" in text
 
 
+def test_flatpak_appimage_doc_e1_and_native_deb_baseline_h7():
+    """H7: E1 paragraph names evidence + H1/H2; native .deb remains baseline vs alternate bundles."""
+    text = (_repo_root() / "docs" / "flatpak-appimage.md").read_text(encoding="utf-8")
+    assert "PRODUCT_SPEC_SECTION8_EVIDENCE.md" in text
+    assert "apt-repo-releases.md" in text
+    assert "sbom-signing-audit.md" in text
+    assert "debian/le-vibe.README.Debian" in text
+    assert "test_flatpak_appimage_doc_h7_contract.py" in text
+    assert "test_flatpak_appimage_paths.py" in text
+
+
 def test_h7_packaging_files_exist():
     root = _repo_root()
     assert (root / "packaging" / "flatpak" / "org.le_vibe.Launcher.yml").is_file()

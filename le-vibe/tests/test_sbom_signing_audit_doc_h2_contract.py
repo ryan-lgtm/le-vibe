@@ -20,3 +20,15 @@ def test_sbom_signing_audit_doc_lists_pip_audit_and_cyclonedx():
     assert "STEP 9" in text
     assert "le-vibe-python.cdx.json" in text
     assert "dependabot.yml" in text
+
+
+def test_sbom_signing_audit_doc_alignment_and_related_docs_h2():
+    """H2: SBOM doc ties CycloneDX + pip-audit to SHA256SUMS (H1) and scopes non-Python pins."""
+    text = (_repo_root() / "docs" / "sbom-signing-audit.md").read_text(encoding="utf-8")
+    assert "## Alignment with CI artifacts" in text
+    assert "**`SHA256SUMS`**" in text
+    assert "**`pip-audit`**" in text
+    assert "## Related docs" in text
+    assert "apt-repo-releases.md" in text
+    assert "continue-extension-pin.md" in text
+    assert "spec-phase2.md" in text

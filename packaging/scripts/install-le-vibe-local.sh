@@ -3,6 +3,7 @@
 # → stack + IDE .deb → STEP 14 close-out verify → optional apt install → post-install smoke.
 # Does not use apt repository hosting — only local dpkg-buildpackage artifacts + sudo apt install .deb files.
 # Authority: docs/PM_DEB_BUILD_ITERATION.md, editor/BUILD.md, packaging/debian-le-vibe-ide/README.md
+# Python supply chain (STEP 9 / H2): docs/sbom-signing-audit.md — pip-audit + CycloneDX SBOM for le-vibe/requirements.txt
 # Master orchestrator: 0 → 1 → 14 → 2–13 → 15–17 — docs/PROMPT_BUILD_LE_VIBE.md; docs/PM_STAGE_MAP.md
 # Pytest: le-vibe/tests/test_install_le_vibe_local_script_contract.py — verify JSON stubs:
 #   le-vibe/tests/test_verify_step14_closeout_contract.py (fcntl lock; .gitignore: le-vibe/.pytest-verify-step14-contract.lock)
@@ -738,6 +739,7 @@ else
 fi
 log_tee "STEP 14 verify: OK (verify-step14-closeout.sh --require-stack-deb)"
 log_tee "Next: hash -r  |  lvibe --help  |  codium --version  |  lvibe open-welcome  |  lvibe ."
+log_tee "Continue: after first-run, the next lvibe run attempts le-vibe-setup-continue automatically (see README.Debian; LE_VIBE_AUTO_CONTINUE_SETUP=0 to skip)."
 log_tee ""
 
 if [[ "$RUNTIME_OLLAMA_STATE" != "ready" || "$RUNTIME_LVIBE_STATE" == "error" ]]; then

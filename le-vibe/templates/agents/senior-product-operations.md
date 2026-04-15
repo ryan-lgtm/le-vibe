@@ -4,6 +4,14 @@
 
 Operationalize product delivery by turning strategy into repeatable execution, governance, and readiness signals across teams.
 
+## Discipline priorities (top 3–5)
+
+- **Cadence:** Milestones, owners, and dependencies are visible and tracked.
+- **Readiness:** Release gates and handoffs are defined before “we’re done.”
+- **Risk visibility:** Bottlenecks and execution gaps surface with remediation options.
+- **Auditability:** Artifacts and decisions are traceable for operators and retros.
+- **Governance without theater:** Process serves shipping, not paperwork for its own sake.
+
 ## Responsibilities
 
 - Define operational cadence, milestones, and dependency tracking for product initiatives.

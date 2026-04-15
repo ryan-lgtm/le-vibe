@@ -2,6 +2,8 @@
 
 User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package version is defined in **`debian/changelog`**; keep this file in sync when you cut a release so **GitHub Releases** copy can match Debian versioning.
 
+The **`le-vibe-ide`** Debian source (**STEP 14** / §7.3) versions independently: **`packaging/debian-le-vibe-ide/debian/changelog`** (not the stack file above). Use **`dpkg-parsechangelog -S Version -l packaging/debian-le-vibe-ide/debian/changelog`** for the **`le-vibe-ide_*.deb`** semver; full-product drops — **`docs/apt-repo-releases.md`** (*IDE `le-vibe-ide` changelog*, *Checklist — full-product GitHub Release*). After both **`le-vibe_*_all.deb`** (beside the clone) and **`packaging/le-vibe-ide_*.deb`** exist, run **`packaging/scripts/verify-step14-closeout.sh --require-stack-deb`** on the build machine (optional **`--json`**, **`--apt-sim`**) — **`docs/PM_DEB_BUILD_ITERATION.md`** (*`--json` close-out payload*, *Success output (`--with-ide`)*).
+
 ## [Unreleased]
 
 ### Changed
@@ -330,6 +332,54 @@ User-facing notes for the **Lé Vibe** bootstrap / launcher **`.deb`**. Package 
 - Product / trust alignment: **`spec-phase2.md` §14** (what **`r-vibe`** ships vs **H6** editor fork / **H7** Flatpak–style bundles) cross-linked from **`docs/PRODUCT_SPEC.md` §9**, **`debian/le-vibe.README.Debian`**, **`debian/control`**, packaging **Product / trust** headers (scripts, **`PATH`** wrappers, `.desktop` files), **`.github/`** (**`ci.yml`**, **`dependabot.yml`**, **`ISSUE_TEMPLATE` + `config.yml` `#` H8**), and **`docs/PRODUCT_SPEC_SECTION8_EVIDENCE.md`** (E1).
 - **H8 / optional RAG / `PRODUCT_SPEC` §10 honesty:** **`docs/rag/le-vibe-phase2-chunks.md`** (*RAG / embeddings*, non-canonical) and **`spec-phase2.md` §14** (*Honesty vs CI* + optional-chunk table row) aligned with **`SECURITY`** *Related docs*, **`.github/ISSUE_TEMPLATE/`** (bug / feature / documentation), **`PM_STAGE_MAP` STEP 12**, **`docs/PROMPT_BUILD_LE_VIBE.md`** intro, root **`README`**, **`privacy-and-telemetry`** *Reporting issues*, **`README.Debian`**, and packaging **`#`** headers — **E1** maintains issue-template YAML; **`pytest`** does not parse it.
 - **H2 / Dependabot:** **[`.github/dependabot.yml`](.github/dependabot.yml)** header and cross-links in root **`README`**, **`docs/PROMPT_BUILD_LE_VIBE.md`**, **`docs/sbom-signing-audit.md`**, and E1 evidence align weekly **pip** / **GitHub Actions** bump PRs with **`pip-audit`**, **`CHANGELOG.md`**, and **`PRODUCT_SPEC` §8–§9**.
+
+## [0.1.9] — 2026-04-12
+
+### Changed
+
+- Launcher + stack docs: default editor prefers **`/usr/lib/le-vibe/bin/codium`** (packaged **le-vibe-ide** `.deb`) before **`codium`** (PRODUCT_SPEC §7.3); **`debian/control`** **`Suggests: le-vibe-ide`**; man pages **lvibe**(1), **le-vibe**(1).
+
+## [0.1.8] — 2026-04-12
+
+### Changed
+
+- Launcher + wrappers: default editor prefers **`/usr/bin/le-vibe-ide`** before **`codium`** (STEP 14.g); man pages **lvibe**(1), **le-vibe**(1).
+
+## [0.1.7] — 2026-04-12
+
+### Documentation
+
+- **`debian/le-vibe.README.Debian`**: future **le-vibe-ide** package + **`LE_VIBE_EDITOR`** defaults (STEP 14.g); pointer to **`editor/BUILD.md`**.
+
+## [0.1.6] — 2026-04-12
+
+### Documentation
+
+- **`debian/le-vibe.README.Debian`** + **`debian/control`** Description: **build-le-vibe-ide** workflow permissions (contents read + actions write).
+
+## [0.1.5] — 2026-04-12
+
+### Documentation
+
+- **`debian/control`** Description: monorepo CI line names **upload-artifact** **retention-days** (pre-binary **ide-ci-metadata**).
+
+## [0.1.4] — 2026-04-12
+
+### Documentation
+
+- **`debian/le-vibe.README.Debian`**: **build-le-vibe-ide** upload-artifact **retention-days** (pre-binary **ide-ci-metadata**).
+
+## [0.1.3] — 2026-04-12
+
+### Documentation
+
+- **`debian/control`** Description: **`README.Debian`** points at **build-le-vibe-ide** metadata + Summary **`LE_VIBE_EDITOR`**.
+
+## [0.1.2] — 2026-04-12
+
+### Documentation
+
+- **`debian/le-vibe.README.Debian`**: **build-le-vibe-ide** **ide-ci-metadata** + Actions Summary **`LE_VIBE_EDITOR`** (**`editor/BUILD`**, **VENDORING**).
 
 ## [0.1.1] — 2026-04-12
 

@@ -24,6 +24,24 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
+def test_session_orchestration_spec_section_31_meta_mentions_optional_construction_and_ai_pilot_notes():
+    """§3.1 ``meta`` row — optional hints aligned with schemas example + PM_STAGE_MAP STEP 16."""
+    text = (_repo_root() / "docs" / "SESSION_ORCHESTRATION_SPEC.md").read_text(encoding="utf-8")
+    assert "continue_construction_note" in text
+    assert "ai_pilot_note" in text
+    assert "AI_PILOT_AND_CONTINUE.md" in text
+    assert "PROMPT_BUILD_LE_VIBE.md" in text
+
+
+def test_session_orchestration_spec_intro_product_authority_cites_product_spec_section9_and_section8_evidence():
+    """Intro **Product authority** — PRODUCT_SPEC §9 roster + SECTION8 evidence (STEP 2 authority chain)."""
+    text = (_repo_root() / "docs" / "SESSION_ORCHESTRATION_SPEC.md").read_text(encoding="utf-8")
+    intro = text.split("**Product authority:**", 1)[1].split("**Maintainer index", 1)[0]
+    assert "`docs/PRODUCT_SPEC.md` §9" in intro
+    assert "PRODUCT_SPEC_SECTION8_EVIDENCE.md" in intro
+    assert "test_session_orchestrator.py" in intro
+
+
 def test_session_orchestration_spec_documents_step2_and_e1():
     text = (_repo_root() / "docs" / "SESSION_ORCHESTRATION_SPEC.md").read_text(encoding="utf-8")
     assert "STEP 2" in text

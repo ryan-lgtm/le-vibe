@@ -261,7 +261,12 @@
   "agents": {
     "defaults": {
       "all_enabled": true,
-      "skill_base": ".lvibe/agents"
+      "skill_base": ".lvibe/agents",
+      "engineer_completion_protocol": [
+        "Whenever an engineer agent changes code, it must finish with clean, scoped git commits.",
+        "Before task completion, engineer agents must push their branch/commits to the remote and report push status.",
+        "If push is blocked (permissions/network/policy), mark task blocked with explicit reason and required operator action."
+      ]
     },
     "roles": [
       {

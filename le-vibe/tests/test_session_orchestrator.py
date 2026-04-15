@@ -134,6 +134,39 @@ def test_session_manifest_example_source_prefers_repo_schemas():
     )
 
 
+def test_session_manifest_example_documents_optional_meta_notes() -> None:
+    """``schemas/session-manifest.v1.example.json`` — optional ``meta`` hints (SESSION_ORCHESTRATION_SPEC §3.1)."""
+    repo_root = Path(__file__).resolve().parents[2]
+    data = json.loads(
+        (repo_root / "schemas" / "session-manifest.v1.example.json").read_text(encoding="utf-8")
+    )
+    meta = data.get("meta")
+    assert isinstance(meta, dict)
+    assert "continue_construction_note" in meta
+    assert "ai_pilot_note" in meta
+    assert "AI_PILOT_AND_CONTINUE" in str(meta.get("continue_construction_note", ""))
+    assert "PM_STAGE_MAP" in str(meta.get("ai_pilot_note", ""))
+
+
+def test_session_manifest_examples_define_engineer_completion_protocol() -> None:
+    repo_root = Path(__file__).resolve().parents[2]
+    example_paths = (
+        repo_root / "schemas" / "session-manifest.v1.example.json",
+        bundled_session_manifest_example_path(),
+        repo_root / "schemas" / "session-manifest.step14-closeout.v1.example.json",
+    )
+    for path in example_paths:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        defaults = data["agents"]["defaults"]
+        protocol = defaults.get("engineer_completion_protocol")
+        assert isinstance(protocol, list)
+        assert len(protocol) >= 3
+        joined = " ".join(str(item) for item in protocol).lower()
+        assert "clean" in joined
+        assert "commit" in joined
+        assert "push" in joined
+
+
 def test_session_manifest_examples_pin_ci_evidence_summary_shape():
     repo_root = Path(__file__).resolve().parents[2]
     example_paths = (
@@ -180,6 +213,30 @@ def test_seed_idempotent(tmp_path: Path):
     p = seed_session_manifest_if_missing(lv)
     assert p is not None
     assert seed_session_manifest_if_missing(lv) is None
+
+
+def test_seed_session_manifest_does_not_overwrite_existing(tmp_path: Path):
+    """PM edits preserved (session_orchestrator.seed_session_manifest_if_missing docstring)."""
+    lv = tmp_path / ".lvibe"
+    lv.mkdir()
+    dest = lv / SESSION_MANIFEST_FILENAME
+    marker = '{"schema_version": "session-manifest.v1", "_pm_marker": true}\n'
+    dest.write_text(marker, encoding="utf-8")
+    assert seed_session_manifest_if_missing(lv) is None
+    assert "_pm_marker" in dest.read_text(encoding="utf-8")
+
+
+def test_sync_agent_skills_preserves_existing_skill_md(tmp_path: Path):
+    """Templates copy only when missing — existing skill.md is not replaced."""
+    lv = tmp_path / ".lvibe"
+    lv.mkdir()
+    agent_dir = lv / "agents" / "senior-backend-engineer"
+    agent_dir.mkdir(parents=True)
+    skill = agent_dir / "skill.md"
+    marker = "# User-edited skill\nkeep-this-line-unique\n"
+    skill.write_text(marker, encoding="utf-8")
+    sync_agent_skills_from_templates(lv)
+    assert skill.read_text(encoding="utf-8") == marker
 
 
 def test_load_manifest_steps_and_tasks(tmp_path: Path):

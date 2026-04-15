@@ -21,6 +21,9 @@ def test_install_le_vibe_local_script_exists_bash_syntax_executable():
 
 def test_install_le_vibe_local_script_header_step14_contracts():
     text = (_root() / "packaging" / "scripts" / "install-le-vibe-local.sh").read_text(encoding="utf-8")
+    assert "sbom-signing-audit.md" in text
+    assert "pip-audit" in text
+    assert "STEP 9" in text
     assert "0 → 1 → 14 → 2–13 → 15–17" in text
     assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "PM_STAGE_MAP.md" in text
@@ -90,6 +93,7 @@ def test_install_le_vibe_local_runtime_readiness_contract():
     assert "retrying once after IDE artifact cleanup" in text
     assert "hash -r" in text
     assert "lvibe ." in text
+    assert "LE_VIBE_AUTO_CONTINUE_SETUP" in text
     assert "\"runtime_ollama_state\"" in text
     assert "\"runtime_lvibe_state\"" in text
     assert "\"runtime_remediation_hint\"" in text

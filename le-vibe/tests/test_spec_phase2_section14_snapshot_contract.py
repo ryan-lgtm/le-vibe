@@ -111,3 +111,12 @@ def test_spec_phase2_section14_ide_row_honesty_strings():
     assert "test_ci_vscodium_linux_dev_build_overrides_contract.py" in text
     assert "SESSION_ORCHESTRATION_SPEC.md" in text
     assert "test_session_orchestration_spec_phase2_paragraph_lists_linux_compile_tarball" in text
+
+
+def test_spec_phase2_section14_honesty_vs_ci_keeps_prioritization_and_test_product_spec_section8():
+    """§14 *Honesty vs CI* — PRODUCT_SPEC *Prioritization* ↔ test_product_spec_section8 (E1 / 14.j)."""
+    text = (_repo_root() / "spec-phase2.md").read_text(encoding="utf-8")
+    block = text.split("**Honesty vs CI:**", 1)[1].split("**Success criteria §13:**", 1)[0]
+    assert "*Prioritization*" in block
+    assert "test_product_spec_section8.py" in block
+    assert "docs/PRODUCT_SPEC.md" in block

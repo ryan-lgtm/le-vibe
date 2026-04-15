@@ -95,14 +95,14 @@ _run_sync_and_install() {
     exit 2
   fi
 
-  echo "le-vibe-setup-continue: step 2/2 — install Continue extension"
+  echo "le-vibe-setup-continue: step 2/2 — install Continue + Red Hat YAML extensions (Open VSX)"
   if ! _editor_ok; then
     echo "le-vibe-setup-continue: [exit 4] No editor binary — install VSCodium or set LE_VIBE_EDITOR." >&2
     exit 4
   fi
 
   if ! bash "$INST"; then
-    echo "le-vibe-setup-continue: [exit 3] Extension install failed (network, marketplace, or extension id)." >&2
+    echo "le-vibe-setup-continue: [exit 3] Extension install failed (Continue or YAML; network, marketplace, or extension id)." >&2
     exit 3
   fi
 

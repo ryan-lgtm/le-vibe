@@ -55,7 +55,8 @@ def test_verify_continue_pin_script_documents_pin_file():
     assert "PM_STAGE_MAP.md" in text
     assert "STEP 14.h" in text
     assert "continue-openvsx-version" in text
-    assert "restore packaging/continue-openvsx-version from git" in text
+    assert "vscode-yaml-openvsx-version" in text
+    assert "restore from git" in text
     assert "add one semver line" in text
     assert "no non-comment version line" in text
     assert "expected semver" in text

@@ -48,6 +48,20 @@ def test_disabled_env(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
     assert not (tmp_path / "le-vibe" / STRUCTURED_LOG_FILENAME).exists()
 
 
+@pytest.mark.parametrize("val", ("false", "no", "off"))
+def test_structured_log_disabled_env_synonyms(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, val: str
+) -> None:
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path))
+    monkeypatch.setenv("LE_VIBE_STRUCTURED_LOG", val)
+    assert structured_log_enabled() is False
+
+
+def test_structured_log_enabled_by_default_when_env_unset(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("LE_VIBE_STRUCTURED_LOG", raising=False)
+    assert structured_log_enabled() is True
+
+
 def test_structured_log_path(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
     monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path))
     p = structured_log_path()

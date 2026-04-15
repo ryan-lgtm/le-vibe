@@ -1,0 +1,154 @@
+{
+  "schema_version": "session-manifest.v1",
+  "meta": {
+    "session_id": "r-vibe-unified-install-continue-2026-04",
+    "created_utc": "2026-04-14T00:00:00Z",
+    "title": "Lé Vibe — monorepo session backlog (unified install + maintainer STEP 14 verify + post-install smoke OK)",
+    "workspace_summary": "Dogfood manifest (SESSION_ORCHESTRATION_SPEC). Both epics done; STEP 14 verify + post-install smoke OK 2026-04-14. E1: 902 passed, 1 skipped; playbook docs-chain plus STEP14 build-env defaults export guard + exact APP_NAME/ORG_NAME lines + export-order (set -a < APP < ORG < set +a) + export-count==2 + set +a tail guard + no export BINARY_NAME + BINARY_NAME stays codium comment E1-locked. .lvibe/ not authoritative vs docs/PRODUCT_SPEC.md. Added STEP 17 contract anchoring AI Pilot visible multi-agent observability wording (near-real-time witness, not a black box).",
+    "rag_notes": "Authority: docs/PRODUCT_SPEC.md (wins vs .lvibe/). STEP 14 verified on-host. E1 902/1 skipped; playbook chain contracts plus test_build_env_lvibe_defaults_step14_contract set -a/set +a guard, exact APP_NAME/ORG_NAME export lines, export-order assertions (set -a < APP < ORG < set +a), exact export-count==2, set +a tail guard, no export BINARY_NAME invariant, and BINARY_NAME stays codium comment anchor. Added test_pm_stage_map_step17_contract AI Pilot observability anchor (near–real time + witness + not a black box).",
+    "current_step_id": "epic_iteration",
+    "continue_construction_note": "product.epics: no pending tasks. 2026-04-15: playbook chain contracts cover root/docs/le-vibe README links plus playbook purpose, one-session-per-task, sequential-backlog, final milestone stop-conditions, one-focused-session, per-session test-evidence, evidence-not-opinions, documented-resolution, operator-ownership, and canonical-roster-role wording (incl. SaaS personas heading + @props, @be-eng, @fe-eng, @marketing, @cs) and exact Phase 1..7 headings plus Sessions 1-20/21-40/41-60/61-70 summary bullets and task 1+2 schema anchors plus task 69/70 stop-readiness lines. E1: 902 passed, 1 skipped. Next: live-watching UX per PRODUCT_SPEC when scheduled.",
+    "ai_pilot_note": "Same PRODUCT_SPEC §5/§8; doc-first per docs/PM_STAGE_MAP.md. Continue apiBase remains managed Ollama port per le-vibe/templates/continue-config.yaml.j2 and docs/AI_PILOT_AND_CONTINUE.md."
+  },
+  "session_steps": [
+    {
+      "id": "opening_intent",
+      "type": "opening_intent",
+      "title": "Describe what you want to build",
+      "description": "Optional; unified-install epic in this manifest is marked done — see product.epics and meta.continue_construction_note.",
+      "skippable": true,
+      "on_skip": "workspace_scan_if_nonempty"
+    },
+    {
+      "id": "workspace_scan",
+      "type": "workspace_scan",
+      "title": "Master orchestrator scans project",
+      "description": "Use monorepo tree + this manifest + .lvibe/ for context."
+    },
+    {
+      "id": "agent_bootstrap",
+      "type": "agent_bootstrap",
+      "title": "Load agents and RAG context",
+      "description": "Enable skill agents per manifest; attach manifests and docs pointers."
+    },
+    {
+      "id": "epic_iteration",
+      "type": "epic_iteration",
+      "title": "Iterate PM epics and tasks",
+      "description": "Walk product.epics in order — all tasks currently done. Add a new epic when docs/PRODUCT_SPEC.md prioritization (or PM) defines the next increment."
+    }
+  ],
+  "agents": {
+    "defaults": {
+      "all_enabled": true,
+      "skill_base": ".lvibe/agents",
+      "engineer_completion_protocol": [
+        "Whenever an engineer agent changes code, it must finish with clean, scoped git commits.",
+        "Before task completion, engineer agents must push their branch/commits to the remote and report push status.",
+        "If push is blocked (permissions/network/policy), mark task blocked with explicit reason and required operator action."
+      ]
+    },
+    "roles": [
+      {
+        "id": "senior_product_management",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-product-management/skill.md"
+      },
+      {
+        "id": "senior_product_operations",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-product-operations/skill.md"
+      },
+      {
+        "id": "senior_devops_engineer",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-devops-engineer/skill.md"
+      },
+      {
+        "id": "senior_backend_engineer",
+        "enabled": true,
+        "skill_path": ".lvibe/agents/senior-backend-engineer/skill.md"
+      }
+    ]
+  },
+  "product": {
+    "milestones": [
+      {
+        "id": "milestone-unified-install-shippable",
+        "objective": "Install path delivers Continue + YAML + Lé Vibe continue-config pairing without mandatory manual setup; verifiable in CI/smoke.",
+        "acceptance": [
+          "One automation path installs continue.continue@pin and redhat.vscode-yaml (or pinned YAML) after first-run YAML exists.",
+          "sync-continue-config remains idempotent; repair command documented if marketplace fails.",
+          "Tests or smoke scripts assert critical invariants where feasible without blocking headless CI."
+        ],
+        "exit_tests": [
+          "le-vibe/tests/test_install_continue_extension_script.py",
+          "le-vibe/tests/test_setup_continue_script.py",
+          "packaging/scripts/manual-step14-install-smoke.sh"
+        ],
+        "owners": [
+          "@do-eng",
+          "@be-eng",
+          "@prod"
+        ],
+        "dependencies": []
+      }
+    ],
+    "epics": [
+      {
+        "id": "epic-unified-install-continue",
+        "title": "Unified install / setup — Continue + YAML + orchestrator config",
+        "description": "PM_STAGE_MAP STEP 7 (H4) + STEP 14.h; end-to-end per docs/continue-extension-pin.md and packaging/bin/le-vibe-setup-continue.",
+        "tasks": [
+          {
+            "id": "task-install-script-yaml-continue",
+            "title": "Extend setup/install scripts: pin Continue + install redhat.vscode-yaml before/after sync per policy",
+            "status": "done",
+            "assignee_agent": "@do-eng",
+            "notes": "Files: packaging/scripts/install-continue-extension.sh, packaging/bin/le-vibe-setup-continue, optionally packaging/continue-openvsx-version companion pin for YAML.",
+            "acceptance_criteria": "le-vibe-setup-continue (or successor) installs both extensions; order documented; non-fatal network failure does not break apt."
+          },
+          {
+            "id": "task-happy-path-hook",
+            "title": "Integrate automation into default install/first-run (no mandatory manual le-vibe-setup-continue)",
+            "status": "done",
+            "assignee_agent": "@be-eng",
+            "notes": "Files: le-vibe/le_vibe/launcher.py (post first-run), packaging/scripts/install-le-vibe-local.sh, debian/le-vibe.postinst messaging.",
+            "acceptance_criteria": "Fresh install + lvibe <ws> reaches usable Continue without user running separate setup except documented repair."
+          },
+          {
+            "id": "task-tests-smoke-docs",
+            "title": "Tests, smoke, operator docs aligned with new flow",
+            "status": "done",
+            "assignee_agent": "@prod",
+            "notes": "Files: le-vibe/tests/*continue*, debian/le-vibe.README.Debian, docs/continue-extension-pin.md.",
+            "acceptance_criteria": "pytest + contract tests green; README reflects happy path; PM_STAGE_MAP pointers still true."
+          }
+        ]
+      },
+      {
+        "id": "epic-maintainer-step14-closeout",
+        "title": "Maintainer — full-product .deb + verify-step14-closeout (PRODUCT_SPEC §7.3 / STEP 14)",
+        "description": "Requires editor/vscodium/VSCode-linux-* and both .deb artifacts on a build machine — docs/PM_DEB_BUILD_ITERATION.md, docs/apt-repo-releases.md, PM_STAGE_MAP STEP 14 row. Not replaceable by .lvibe/ session notes.",
+        "tasks": [
+          {
+            "id": "task-verify-step14-closeout-on-build-host",
+            "title": "Run verify-step14-closeout.sh --require-stack-deb after stack + le-vibe-ide .deb builds (optional --json, --apt-sim)",
+            "status": "done",
+            "assignee_agent": "@do-eng",
+            "notes": "2026-04-14: preflight-step14-closeout.sh --require-stack-deb all OK; verify-step14-closeout.sh --require-stack-deb exit 0 (apt-sim not run). Artifacts: ../le-vibe_0.1.9_all.deb, packaging/le-vibe-ide_0.1.3_amd64.deb, VSCode-linux-x64/bin/codium.",
+            "acceptance_criteria": "verify-step14-closeout exits 0 where both .debs exist; optional manual-step14-install-smoke on test host per docs."
+          },
+          {
+            "id": "task-manual-step14-install-smoke-test-host",
+            "title": "Optional test host: sudo apt install both .debs then packaging/scripts/manual-step14-install-smoke.sh --verify-only",
+            "status": "done",
+            "assignee_agent": "@do-eng",
+            "notes": "2026-04-14: manual-step14-install-smoke.sh --verify-only exit 0 (lvibe, /usr/lib/le-vibe/bin/codium, desktop, README.Debian present). Same host as build had packages installed; use a clean VM for release sign-off if policy requires.",
+            "acceptance_criteria": "Smoke script exits 0 after install; record host OS if policy allows — not required for merge."
+          }
+        ]
+      }
+    ]
+  }
+}

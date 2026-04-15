@@ -220,6 +220,7 @@ def test_le_vibe_readme_lists_step17_ai_pilot_continue():
     text = (_le_vibe_dir() / "README.md").read_text(encoding="utf-8")
     assert "AI Pilot & Continue contracts (STEP 17)" in text
     assert "AI_PILOT_AND_CONTINUE.md" in text
+    assert "AGENT_ORCHESTRATION_SESSION_PLAYBOOK.md" in text
     assert "continue_workspace" in text
     assert "ai-pilot-continue" in text
 
@@ -262,6 +263,7 @@ def test_le_vibe_readme_lists_core_e1_contract_modules():
     assert "apply_opening_skip" in text
     assert "resolve_next_step_after_opening_skip" in text
     assert "PRODUCT_SPEC_SECTION8_EVIDENCE.md" in text
+    assert "*Prioritization*" in text
     assert "test_session_orchestrator.py" in text
     assert "test_session_orchestration_spec_step2_contract.py" in text
     assert "test_issue_template_h8_contract.py" in text

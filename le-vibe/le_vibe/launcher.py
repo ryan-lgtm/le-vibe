@@ -14,6 +14,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from .continue_setup_auto import maybe_auto_setup_continue_after_first_run
 from .first_run import ensure_product_first_run
 from .managed_ollama import ensure_managed_ollama, stop_managed_ollama
 from .paths import LE_VIBE_MANAGED_OLLAMA_PORT, le_vibe_config_dir
@@ -1697,6 +1698,8 @@ def main() -> int:
             append_structured_log("launcher", "first_run_exit", exit_code=fr_code, message=fr_msg[:300])
             print(fr_msg, file=sys.stderr)
             return fr_code
+
+    maybe_auto_setup_continue_after_first_run(le_vibe_config_dir())
 
     ok, msg, _state = ensure_managed_ollama(host=args.host, port=port)
     if not ok:

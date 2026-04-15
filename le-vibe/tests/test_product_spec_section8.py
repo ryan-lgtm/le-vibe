@@ -52,6 +52,15 @@ def test_continue_template_lists_product_name(rel: str):
     assert "AUTODETECT" not in text
 
 
+def test_continue_config_yaml_j2_wires_ollama_api_base():
+    """Continue config template — managed Ollama host:port (AI_PILOT_AND_CONTINUE / STEP 17)."""
+    root = Path(__file__).resolve().parents[1]
+    text = (root / "templates" / "continue-config.yaml.j2").read_text(encoding="utf-8")
+    assert "apiBase:" in text
+    assert "{{ host }}" in text and "{{ port }}" in text
+    assert "provider: ollama" in text
+
+
 def test_lvibe_editor_welcome_template_section4_positioning():
     root = Path(__file__).resolve().parents[1]
     text = (root / "templates" / "lvibe-editor-welcome.md").read_text(encoding="utf-8")
@@ -159,6 +168,19 @@ def test_product_spec_prioritization_names_ci_le_vibe_deb_vs_ide_deb_step14():
     assert "print-ci-tarball-codium-path.sh" in text
 
 
+def test_product_spec_prioritization_north_star_specialists_and_live_watching_continue():
+    """§ Prioritization — north star: Ubuntu golden path; specialists/orchestration; Continue live-watching."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC.md").read_text(encoding="utf-8")
+    assert "## Prioritization (north star)" in text
+    assert "Ubuntu, clone-and-build golden path" in text
+    assert "**operator** as the primary chat agent" in text
+    assert "SESSION_ORCHESTRATION_SPEC.md" in text
+    assert "Specialists and orchestration" in text
+    assert "live-watching" in text
+    assert "Continue" in text
+
+
 def test_product_spec_prioritization_sequences_editor_smoke_before_full_ide_ci():
     """§ Prioritization — vendoring gate for editor/ (H6 / STEP 14) stays documented."""
     root = Path(__file__).resolve().parents[2]
@@ -206,6 +228,15 @@ def test_product_spec_section10_regression_evidence_lists_step14_editor_contract
     assert "When full compile fails" in text
 
 
+def test_product_spec_section10_regression_evidence_ties_section8_tests_to_prioritization():
+    """§10 — regression evidence ties test_product_spec_section8 to *Prioritization* (PRODUCT_SPEC north star)."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "PRODUCT_SPEC.md").read_text(encoding="utf-8")
+    para = text.split("Regression evidence", 1)[1].split("Full **E1** contract list", 1)[0]
+    assert "test_product_spec_section8.py" in para
+    assert "Prioritization" in para
+
+
 def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     """E1: audit doc states CI le-vibe-deb (stack) vs maintainer le-vibe-ide (§7.3)."""
     root = Path(__file__).resolve().parents[2]
@@ -215,6 +246,7 @@ def test_product_spec_section8_evidence_h1_ci_artifact_vs_ide_deb_step14():
     assert "CI `le-vibe-deb` vs maintainer `le-vibe-ide`" in text
     assert "Release bundles (H1 / STEP 8 vs STEP 14 / §7.3)" in text
     assert "test_product_spec_prioritization_names_ci_le_vibe_deb_vs_ide_deb_step14" in text
+    assert "test_product_spec_prioritization_north_star_specialists_and_live_watching_continue" in text
     assert "partial VSCode-linux tree" in text
     assert "PROMPT_BUILD_LE_VIBE.md" in text
     assert "debian/lvibe.1" in text

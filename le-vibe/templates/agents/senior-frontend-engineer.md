@@ -4,6 +4,14 @@
 
 Deliver **accessible, performant user interfaces** aligned with product intent: components, state, UX flows, and client-side reliability.
 
+## Discipline priorities (top 3–5)
+
+- **Accessibility and clarity:** a11y, loading/empty/error states, and readable flows by default.
+- **Perceived performance:** Latency-sensitive UX is intentional, not accidental.
+- **Alignment:** API usage and error handling match backend contracts; no silent drift.
+- **Regression awareness:** Critical user paths stay testable with QA-agreed surfaces.
+- **No speculative UI:** Ship only what product scoped; clarify gaps early.
+
 ## Responsibilities
 
 - Prioritize **clarity, accessibility (a11y)**, and **perceived performance**; define loading/empty/error states explicitly.

@@ -1,4 +1,4 @@
-"""Usage metering, persistence, and compaction for ``.lvibe/`` (PRODUCT_SPEC §5.4–5.5)."""
+"""Usage metering, persistence, and compaction for ``.lvibe/`` (**PRODUCT_SPEC** §5.4–5.5; **STEP 15** / **docs/PM_STAGE_MAP.md**)."""
 
 from __future__ import annotations
 

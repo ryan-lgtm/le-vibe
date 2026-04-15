@@ -164,6 +164,7 @@ def test_root_readme_e1_mapping_cites_le_vibe_readme_contract():
 def test_root_readme_e1_mapping_prioritization_lists_linux_compile_tarball():
     """§ *Prioritization* roster — **`PRODUCT_SPEC`** / SECTION8 evidence parity (**14.e / 14.f**)."""
     text = (_repo_root() / "docs" / "MONOREPO_DEVELOPER_REFERENCE.md").read_text(encoding="utf-8")
+    assert "*Prioritization*" in text
     assert "linux_compile" in text
     assert "ci-vscodium-bash-syntax.sh" in text
     assert "ci-vscodium-linux-dev-build.sh" in text

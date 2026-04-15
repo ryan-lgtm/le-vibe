@@ -27,3 +27,14 @@ def test_issue_template_config_has_h8_maintainer_comment():
     assert "H8" in text
     assert "STEP 12" in text
     assert "docs/README.md" in text
+
+
+def test_dependabot_yml_header_documents_step12_h8_and_sbom_followup():
+    """H2 pip bumps + H8 index: dependabot header matches ci.yml / ISSUE_TEMPLATE trust chain."""
+    text = (_repo_root() / ".github" / "dependabot.yml").read_text(encoding="utf-8")
+    assert "STEP 12" in text
+    assert "H8" in text
+    assert "PM_STAGE_MAP" in text
+    assert "ISSUE_TEMPLATE" in text
+    assert "sbom-signing-audit.md" in text
+    assert "PRODUCT_SPEC" in text

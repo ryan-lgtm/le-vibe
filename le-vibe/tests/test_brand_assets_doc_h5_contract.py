@@ -20,3 +20,13 @@ def test_brand_assets_doc_lists_icons_and_h5():
     assert "workbench" in text
     assert "--check" in text
     assert "mktemp" in text
+
+
+def test_brand_assets_doc_e1_acceptance_and_h6_fork_pointer():
+    """H5: E1 names ci-smoke + PRODUCT_SPEC_SECTION8_EVIDENCE; H6 names fork doc + spec-phase2 honesty."""
+    text = (_repo_root() / "docs" / "brand-assets.md").read_text(encoding="utf-8")
+    assert "ci-smoke.sh" in text
+    assert "PRODUCT_SPEC_SECTION8_EVIDENCE.md" in text
+    assert "ci-qa-hardening.md" in text
+    assert "vscodium-fork-le-vibe.md" in text
+    assert "spec-phase2.md" in text

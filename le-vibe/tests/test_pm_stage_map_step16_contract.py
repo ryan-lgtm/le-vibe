@@ -32,6 +32,19 @@ def test_pm_stage_map_intro_paragraph_step16_doc_locked_loop():
     assert "PASTE SAME AGAIN" in head and "LÉ VIBE SESSION COMPLETE" in head
 
 
+def test_pm_stage_map_intro_spec_index_and_product_spec_rule_step16():
+    """Spec index + conflict rule — SESSION_ORCHESTRATION_SPEC, E1 evidence, PRODUCT_SPEC authority."""
+    text = (_repo_root() / "docs" / "PM_STAGE_MAP.md").read_text(encoding="utf-8")
+    head = "\n".join(text.splitlines()[:12])
+    assert "**Spec index:**" in head
+    assert "SESSION_ORCHESTRATION_SPEC.md" in head
+    assert "PRODUCT_SPEC_SECTION8_EVIDENCE.md" in head
+    assert "AI_PILOT_AND_CONTINUE.md" in head
+    assert "**Rule:**" in text
+    assert "PRODUCT_SPEC.md" in text
+    assert "wins on conflict" in text
+
+
 def test_root_and_docs_readme_link_pm_stage_map():
     root_readme = (_repo_root() / "README.md").read_text(encoding="utf-8")
     docs_readme = (_repo_root() / "docs" / "README.md").read_text(encoding="utf-8")

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from le_vibe.workspace_hub import (
     ensure_gitignore_has_lvibe,
     ensure_lvibe_workspace,
@@ -81,6 +83,21 @@ def test_gitignore_append_idempotent(tmp_path: Path):
     assert ensure_gitignore_has_lvibe(root) is False
 
 
+def test_gitignore_append_adds_newline_before_block_when_file_has_no_trailing_newline(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "p-no-nl"
+    root.mkdir()
+    gi = root / ".gitignore"
+    gi.write_text("*.log", encoding="utf-8")
+    assert ensure_gitignore_has_lvibe(root) is True
+    text = gi.read_text(encoding="utf-8")
+    assert ".lvibe/" in text
+    assert "*.log" in text
+    assert text.index("*.log") < text.index(".lvibe/")
+    assert ensure_gitignore_has_lvibe(root) is False
+
+
 def test_gitignore_missing_noop(tmp_path: Path):
     root = tmp_path / "q"
     root.mkdir()
@@ -100,6 +117,17 @@ def test_gitignore_already_has_lvibe(tmp_path: Path):
     root.mkdir()
     (root / ".gitignore").write_text(".lvibe/\n", encoding="utf-8")
     assert ensure_gitignore_has_lvibe(root) is False
+
+
+@pytest.mark.parametrize("line", [".lvibe", ".lvibe/**"])
+def test_gitignore_skip_append_when_lvibe_listed_without_slash_or_glob(tmp_path: Path, line: str) -> None:
+    """workspace_hub._gitignore_already_mentions_lvibe — no duplicate Lé Vibe block."""
+    root = tmp_path / "gitig-variants"
+    root.mkdir()
+    gi = root / ".gitignore"
+    gi.write_text(f"{line}\n", encoding="utf-8")
+    assert ensure_gitignore_has_lvibe(root) is False
+    assert gi.read_text(encoding="utf-8").strip() == line
 
 
 def test_deterministic_recall_order_aligned_between_continue_rule_and_agents_md(tmp_path: Path):

@@ -19,8 +19,12 @@ def test_continue_extension_pin_doc_step14_h_strings():
     assert "install-continue-extension.sh" in text
     assert "continue-openvsx-version" in text
     assert "le-vibe-setup-continue" in text
+    assert "continue_setup_auto" in text
+    assert "LE_VIBE_AUTO_CONTINUE_SETUP" in text
     assert "editor/BUILD.md" in text
     assert "verify-continue-pin.sh" in text
+    assert "vscode-yaml-openvsx-version" in text
+    assert "redhat.vscode-yaml" in text
     assert "sync-continue-config.sh" in text
     assert "VSCode-linux-" in text
     assert "print-built-codium-path.sh" in text

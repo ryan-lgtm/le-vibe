@@ -45,3 +45,12 @@ def test_workspace_consent_and_policy_docstrings_mention_step15():
     assert "PM_STAGE_MAP" in (wc.__doc__ or "")
     assert "STEP 15" in (wp.__doc__ or "")
     assert "PM_STAGE_MAP" in (wp.__doc__ or "")
+
+
+def test_workspace_storage_docstring_lists_product_spec_step15():
+    import le_vibe.workspace_storage as ws
+
+    doc = ws.__doc__ or ""
+    assert "PRODUCT_SPEC" in doc
+    assert "STEP 15" in doc
+    assert "PM_STAGE_MAP" in doc

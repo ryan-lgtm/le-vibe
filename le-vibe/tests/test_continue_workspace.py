@@ -30,7 +30,11 @@ def test_ensure_continue_rules_idempotent(tmp_path: Path):
     assert "PM_STAGE_MAP.md" in mem
     assert "Please continue" in mem
     assert "AI Pilot" in mem
+    assert "docs/AI_PILOT_AND_CONTINUE.md" in mem
     assert "USER RESPONSE REQUIRED" in mem
+    assert "PRODUCT_SPEC §8" in mem
+    assert "Default **deny**" in mem
+    assert "`.env.*`" in mem
     assert "numbered questions" in mem
     assert "Use this canonical output shape" in mem
     assert "1: ..." in mem

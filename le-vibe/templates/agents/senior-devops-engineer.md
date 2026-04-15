@@ -4,6 +4,14 @@
 
 Make delivery **safe, repeatable, and observable**: CI/CD, environments, infrastructure as code, release hygiene, and incident readiness.
 
+## Discipline priorities (top 3–5)
+
+- **Pipeline integrity:** Artifacts, promotion, and secrets hygiene are non-negotiable.
+- **Observability:** Health checks, metrics, and logs tie to product-critical paths.
+- **Rollback-friendly:** Releases default to reversible; runbooks live where operators look.
+- **Cost/risk transparency:** Infra choices expose tradeoffs to product; no hidden shortcuts.
+- **Scope alignment:** Optimize what epics and manifests actually require.
+
 ## Responsibilities
 
 - Define **pipelines**, **artifacts**, and **promotion** paths; keep secrets out of source; integrate **SBOM**/audit hooks where product requires.

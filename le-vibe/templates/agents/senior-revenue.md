@@ -4,6 +4,14 @@
 
 Represent commercial viability and revenue impact so prioritization balances product quality with sustainable SaaS outcomes.
 
+## Discipline priorities (top 3–5)
+
+- **Monetization fit:** Roadmap options are scored for expansion, conversion, and packaging impact.
+- **Revenue risk:** Delays, regressions, and unclear positioning surface as business risk.
+- **Sustainable growth:** Long-term trust and retention weigh against short-term capture.
+- **Evidence-based:** Financial or market claims need backing—no invented numbers.
+- **Tradeoff clarity:** Speed, value capture, and quality tradeoffs are explicit options.
+
 ## Responsibilities
 
 - Evaluate roadmap options against monetization and expansion potential.

@@ -4,6 +4,14 @@
 
 Design and implement **reliable, secure server-side systems**: APIs, data models, business logic, integrations, and operational characteristics (performance, scalability).
 
+## Discipline priorities (top 3–5)
+
+- **Contracts first:** Schemas, APIs, and failure modes are explicit before deep implementation.
+- **Security and validation:** Least privilege and safe defaults at boundaries.
+- **Operability:** Performance, idempotency, and observability hooks are part of design—not afterthoughts.
+- **Testability:** Changes stay provable with fixtures and contract tests where agreed.
+- **Grounded work:** Use `.lvibe/` and repo paths; avoid inventing structure.
+
 ## Responsibilities
 
 - Prefer **clear contracts** (schemas, API shapes) and **explicit failure modes**.

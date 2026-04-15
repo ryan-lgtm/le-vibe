@@ -5,6 +5,23 @@ from __future__ import annotations
 from pathlib import Path
 
 
+def test_master_iteration_loop_intro_cites_product_spec_and_orchestration_siblings():
+    """Intro **Purpose**/**Related** + **Manuscript index** table — PRODUCT_SPEC first row + sibling docs."""
+    root = Path(__file__).resolve().parents[2]
+    text = (root / "docs" / "MASTER_ITERATION_LOOP.md").read_text(encoding="utf-8")
+    head = text.split("## Manuscript index", 1)[0]
+    assert "**Purpose:**" in head
+    assert "AGENT_MODE_ORCHESTRATION.md" in head
+    assert "PROMPT_BUILD_LE_VIBE.md" in head
+    assert "SESSION_ORCHESTRATION_SPEC.md" in head
+    assert "PM_STAGE_MAP.md" in head
+    assert "session-manifest.v1.example.json" in head
+    table = text.split("## Manuscript index", 1)[1].split("## Human workflow", 1)[0]
+    assert "PRODUCT_SPEC.md" in table
+    assert "PRODUCT_SPEC_SECTION8_EVIDENCE.md" in table
+    assert "0 → 1 → 14 → 2–13 → 15–17" in table
+
+
 def test_master_iteration_loop_fence_extractable():
     root = Path(__file__).resolve().parents[2]
     text = (root / "docs" / "MASTER_ITERATION_LOOP.md").read_text(encoding="utf-8")

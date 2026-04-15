@@ -1,0 +1,3 @@
+# Open VSX semver for redhat.vscode-yaml (companion to Continue — yaml.schemas / JSON Schema).
+# Query: curl -sS 'https://open-vsx.org/api/redhat/vscode-yaml/latest' | jq -r .version
+1.22.2026041108

@@ -13,6 +13,7 @@ def test_docs_readme_section8_evidence_row_lists_linux_compile_cargo_cache():
     text = (_repo_root() / "docs" / "README.md").read_text(encoding="utf-8")
     assert "PRODUCT_SPEC_SECTION8_EVIDENCE.md" in text
     assert "test_product_spec_section8.py" in text
+    assert "*Prioritization*" in text
     assert "14.d" in text
     assert "branding-staging.checklist.md" in text
     assert "linux_compile" in text

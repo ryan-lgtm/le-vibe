@@ -45,6 +45,50 @@ def test_invalid_env_consent_logs_and_skips_without_folder(tmp_path: Path, monke
     assert any(x.get("reason") == "invalid_env_value" for x in captured)
 
 
+def test_resolve_lvibe_non_interactive_undecided_logs_and_skips(tmp_path: Path, monkeypatch) -> None:
+    """No TTY + no env + no prior consent → skip create; structured log (LVIBE hardening O6)."""
+    cfg = tmp_path / "cfg"
+    cfg.mkdir()
+    proj = tmp_path / "proj"
+    proj.mkdir()
+    monkeypatch.setattr("le_vibe.workspace_policy.le_vibe_config_dir", lambda: cfg)
+    monkeypatch.delenv("LE_VIBE_LVIBE_CONSENT", raising=False)
+    monkeypatch.setattr("sys.stdin.isatty", lambda: False)
+    captured: list[dict] = []
+
+    def _cap(component: str, event: str, **fields: object) -> None:
+        captured.append({"component": component, "event": event, **fields})
+
+    monkeypatch.setattr("le_vibe.workspace_consent.append_structured_log", _cap)
+    from le_vibe.workspace_consent import resolve_lvibe_creation
+
+    assert resolve_lvibe_creation(proj, config_dir=cfg) is False
+    assert not (proj / ".lvibe").exists()
+    assert any(x.get("reason") == "non_interactive_undecided" for x in captured)
+
+
+def test_resolve_lvibe_stored_decline_skips_with_log(tmp_path: Path, monkeypatch) -> None:
+    cfg = tmp_path / "cfg"
+    cfg.mkdir()
+    proj = tmp_path / "proj"
+    proj.mkdir()
+    key = str(proj.resolve())
+    pol = {"version": 1, "default_cap_mb": 50, "workspaces": {key: {"consent": "declined"}}}
+    (cfg / "workspace-policy.json").write_text(json.dumps(pol), encoding="utf-8")
+    monkeypatch.setattr("le_vibe.workspace_policy.le_vibe_config_dir", lambda: cfg)
+    captured: list[dict] = []
+
+    def _cap(component: str, event: str, **fields: object) -> None:
+        captured.append({"component": component, "event": event, **fields})
+
+    monkeypatch.setattr("le_vibe.workspace_consent.append_structured_log", _cap)
+    from le_vibe.workspace_consent import resolve_lvibe_creation
+
+    assert resolve_lvibe_creation(proj, config_dir=cfg) is False
+    assert not (proj / ".lvibe").exists()
+    assert any(x.get("reason") == "stored_decline" for x in captured)
+
+
 def test_accept_creates_lvibe_and_storage_state(tmp_path: Path, monkeypatch) -> None:
     cfg = tmp_path / "cfg"
     cfg.mkdir()
