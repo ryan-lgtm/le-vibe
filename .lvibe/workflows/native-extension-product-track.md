@@ -519,6 +519,11 @@
     - runbook and developer README name `package-json-all-scripts-doc-literal-sync.test.js` and shared “Scripts literal umbrella” stem; parity + `operator-doc` contract tests
   - Evidence:
     - `OPERATOR.md`; `README.md`; `test/scripts-umbrella-guardrail-doc-parity.test.js`; `test/operator-doc.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-65**: **README-only** contract test for **scripts literal umbrella** (mirrors **n8-56** pattern for settings disclosure).
+  - Acceptance:
+    - `readme-scripts-umbrella-guardrail.test.js` asserts stem + umbrella test filename in README
+  - Evidence:
+    - `test/readme-scripts-umbrella-guardrail.test.js`; `npm run verify` green.
 
 ---
 
