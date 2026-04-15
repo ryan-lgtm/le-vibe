@@ -398,6 +398,11 @@
     - automated test reads contributes defaults and asserts the same literals appear in smoke script fallbacks
   - Evidence:
     - `test/smoke-defaults-match-package.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-41**: **`createOllamaClient`** default **`timeoutMs`** matches **`package.json`**.
+  - Acceptance:
+    - runtime client constructed with only `endpoint` exposes `timeoutMs` equal to `leVibeNative.ollamaTimeoutMs` default
+  - Evidence:
+    - `test/ollama-client-defaults-match-package.test.js`; `npm run verify` green.
 
 ---
 
