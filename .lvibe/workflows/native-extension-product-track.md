@@ -393,6 +393,11 @@
     - parity heading stem with README (n8-38)
   - Evidence:
     - `OPERATOR.md`; `test/operator-doc.test.js`; `test/ollama-probe-timeout-doc-parity.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-40**: **`smoke-integration.js`** Ollama fallbacks match **`package.json`** defaults.
+  - Acceptance:
+    - automated test reads contributes defaults and asserts the same literals appear in smoke script fallbacks
+  - Evidence:
+    - `test/smoke-defaults-match-package.test.js`; `npm run verify` green.
 
 ---
 
