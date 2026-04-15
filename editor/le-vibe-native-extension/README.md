@@ -96,7 +96,7 @@ Token-budget rules (configurable in Settings):
 ## Reliability: retries and timeouts (task-n5-1)
 
 - **Automatic retries** for transient local Ollama failures — **`leVibeNative.ollamaMaxRetries`** (default **`2`**), exponential backoff from **`leVibeNative.ollamaRetryBackoffMs`** (default **`400` ms**) — apply to readiness `GET /api/tags` and to streaming `POST /api/generate`.
-- **Stream guards**: `ollamaStreamStallMs` aborts if no tokens/activity for too long; `ollamaStreamMaxMs` caps total stream wall time (prevents hard hangs).
+- **Stream guards:** **`leVibeNative.ollamaStreamStallMs`** (default **`60000` ms**) aborts if no tokens/activity for too long; **`leVibeNative.ollamaStreamMaxMs`** (default **`120000` ms**) caps total stream wall time (prevents hard hangs).
 - **UX**: panel shows structured diagnostics on failure (`[error code] message (endpoint: …)`), retry progress during auto-retry, and a **Retry last prompt** button (manual resend without duplicating the user line in the transcript).
 
 ## First-run onboarding (task-n5-2)
