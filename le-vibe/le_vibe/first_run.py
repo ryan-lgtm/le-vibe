@@ -15,6 +15,8 @@ from .paths import LE_VIBE_MANAGED_OLLAMA_PORT, le_vibe_config_dir
 from .structured_log import append_structured_log
 from .user_settings import load_user_settings
 
+_DISALLOWED_EXTENSION_IDS: tuple[str, ...] = ("continue.continue",)
+
 
 def first_run_marker_path(config_dir: Path | None = None) -> Path:
     return (config_dir or le_vibe_config_dir()) / ".first-run-complete"
@@ -30,6 +32,14 @@ def _default_editor_for_readiness() -> str:
     if os.path.isfile("/usr/bin/codium") and os.access("/usr/bin/codium", os.X_OK):
         return "/usr/bin/codium"
     return "codium"
+
+
+def _disallowed_extension_remediation(editor: str, extension_id: str) -> str:
+    return (
+        f"Lé Vibe: disallowed extension `{extension_id}` is active in the selected editor. "
+        "Continue must be removed for a Cline-only runtime. "
+        f"Run `{editor} --uninstall-extension {extension_id}` and retry `lvibe`."
+    )
 
 
 def evaluate_first_run_agent_readiness(
@@ -92,6 +102,9 @@ def evaluate_first_run_agent_readiness(
             "Install/configure the Lé Vibe editor binary and rerun `lvibe`.",
         )
     exts = {ln.strip().lower() for ln in out.splitlines() if ln.strip()}
+    for ext_id in _DISALLOWED_EXTENSION_IDS:
+        if ext_id in exts:
+            return False, _disallowed_extension_remediation(editor, ext_id)
     if "saoudrizwan.claude-dev" not in exts:
         return (
             False,

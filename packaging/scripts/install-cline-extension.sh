@@ -23,6 +23,7 @@ fi
 # Open VSX default extension ids.
 EXT_ID="${LE_VIBE_CLINE_EXTENSION:-saoudrizwan.claude-dev}"
 YAML_EXT_ID="${LE_VIBE_VSCODE_YAML_EXTENSION:-redhat.vscode-yaml}"
+DISALLOWED_EXT_ID="${LE_VIBE_DISALLOWED_CONTINUE_EXTENSION:-continue.continue}"
 
 _read_pin_line() {
   local f="$1"
@@ -83,6 +84,42 @@ install_with_retry() {
     ((n++))
   done
 }
+
+cleanup_disallowed_continue_state() {
+  local ext_id="$1"
+  local listed
+  local line
+  local found=0
+  listed="$("$BIN" --list-extensions 2>/dev/null | tr '[:upper:]' '[:lower:]' || true)"
+  while IFS= read -r line; do
+    if [[ "$line" == "$ext_id" ]]; then
+      found=1
+      break
+    fi
+  done <<< "$listed"
+  if [[ "$found" -eq 1 ]]; then
+    echo "install-cline-extension: uninstalling disallowed extension ${ext_id}." >&2
+    if ! "$BIN" --uninstall-extension "$ext_id"; then
+      echo "install-cline-extension: failed to uninstall disallowed extension ${ext_id}." >&2
+      echo "  Remediation: ${BIN} --uninstall-extension ${ext_id}" >&2
+      return 1
+    fi
+  fi
+
+  local ext_dir=""
+  for ext_dir in \
+    "${HOME}/.vscode-oss/extensions" \
+    "${HOME}/.vscode/extensions" \
+    "${HOME}/.config/VSCodium/extensions"
+  do
+    [[ -d "$ext_dir" ]] || continue
+    rm -rf "${ext_dir}/${ext_id}-"*
+  done
+}
+
+if [[ "${LE_VIBE_CLEANUP_CONTINUE_STATE:-1}" != "0" ]]; then
+  cleanup_disallowed_continue_state "$DISALLOWED_EXT_ID"
+fi
 
 install_with_retry "$REF" "Cline"
 install_with_retry "$YAML_REF" "YAML"

@@ -24,6 +24,14 @@
    - `packaging/scripts/manual-step14-install-smoke.sh --verify-only`
 3. Closeout rerun without apt install (to complete runtime readiness checks):
    - `packaging/scripts/install-le-vibe-local.sh --skip-compile-failfast --json --log-file .lvibe/audit/task-c6-release-readiness-closeout-2026-04-15.log`
+4. Continue blocker inventory/remediation:
+   - `"/usr/lib/le-vibe/bin/codium" --list-extensions`
+   - `bash packaging/scripts/install-cline-extension.sh`
+   - `"/usr/lib/le-vibe/bin/codium" --list-extensions`
+   - `rg "continue|Continue|Authentication provider continue|continue\\.focusContinueInput" /home/ryan/.config/le-vibe/le-vibe.log.jsonl`
+5. Runtime launch smoke:
+   - `lvibe .`
+   - `lvibe --force-first-run .`
 
 ## Evidence captured
 
@@ -57,13 +65,37 @@
     - `redhat.vscode-yaml@1.22.2026041108`
 - Note: this successful run is build+verify+runtime readiness; it does not perform apt install (`install_performed=false`).
 
+### D) Continue blocker closeout evidence (gray-rectangle source removed)
+
+- Before remediation, packaged editor extension list included Continue:
+  - `continue.continue`
+  - `redhat.vscode-yaml`
+  - `saoudrizwan.claude-dev`
+- Deterministic cleanup executed via `install-cline-extension.sh`:
+  - uninstall step ran: `continue.continue` removed successfully.
+- After remediation, extension list contains only:
+  - `redhat.vscode-yaml`
+  - `saoudrizwan.claude-dev`
+- Structured runtime logs contain no Continue activation markers:
+  - `continue.focusContinueInput`
+  - `Authentication provider continue`
+  - `continue.continue`
+  - Command result: `No matches found`
+
+### E) `lvibe .` smoke
+
+- Initial `lvibe .` failed with readiness exit due transient managed Ollama API not reachable (`127.0.0.1:11435`).
+- Remediation run `lvibe --force-first-run .` succeeded (`exit 0`) and reported:
+  - managed Ollama started on `127.0.0.1:11435`
+  - selected model already present (`deepseek-r1:14b`)
+
 ## Blocker report
 
-- Blocker: non-interactive automation cannot satisfy `sudo apt-get install` password prompt during required full `--install` closeout path.
+- Remaining blocker: non-interactive automation cannot satisfy `sudo apt-get install` password prompt during required full `--install` closeout path.
 - Evidence: exact stderr from closeout attempt:
   - `sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper`
   - `sudo: a password is required`
-- This blocks final acceptance wording tied to a fresh install execution in this session.
+- Continue/Cline runtime blocker is closed; only interactive sudo execution remains for full install-path finalization.
 
 ## Explicit unblock action
 

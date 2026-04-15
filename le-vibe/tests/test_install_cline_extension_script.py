@@ -27,6 +27,10 @@ def test_install_cline_extension_contract_strings() -> None:
     assert "LE_VIBE_VSCODE_YAML_PIN_FILE" in text
     assert "LE_VIBE_VSCODE_YAML_OPENVSX_VERSION" in text
     assert "LE_VIBE_CLINE_INSTALL_ATTEMPTS" in text
+    assert "LE_VIBE_DISALLOWED_CONTINUE_EXTENSION" in text
+    assert "LE_VIBE_CLEANUP_CONTINUE_STATE" in text
+    assert "--uninstall-extension" in text
+    assert "continue.continue" in text
     assert "--install-extension" in text
 
 
