@@ -96,3 +96,9 @@ test('OPERATOR.md documents settings disclosure guardrail test (task-n8-55)', ()
   assert.ok(text.includes('package-leVibeNative-keys-doc-inventory.test.js'));
   assert.ok(text.includes('leVibeNative.*'));
 });
+
+test('OPERATOR.md documents scripts literal umbrella guardrail test (task-n8-64)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Scripts literal umbrella'));
+  assert.ok(text.includes('package-json-all-scripts-doc-literal-sync.test.js'));
+});

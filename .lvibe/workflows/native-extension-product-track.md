@@ -514,6 +514,11 @@
     - single test iterates `package.json` `scripts` entries and requires each string literal in both markdown files
   - Evidence:
     - `test/package-json-all-scripts-doc-literal-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-64**: **OPERATOR** + **README** document the **scripts literal umbrella** test (**n8-63**) under verification / **Product track**.
+  - Acceptance:
+    - runbook and developer README name `package-json-all-scripts-doc-literal-sync.test.js` and shared “Scripts literal umbrella” stem; parity + `operator-doc` contract tests
+  - Evidence:
+    - `OPERATOR.md`; `README.md`; `test/scripts-umbrella-guardrail-doc-parity.test.js`; `test/operator-doc.test.js`; `npm run verify` green.
 
 ---
 
