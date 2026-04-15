@@ -96,6 +96,7 @@ Token-budget rules (configurable in Settings):
 - Command Palette: **Lé Vibe Chat: Apply demo replace to selection** (`leVibeNative.applySelectionDemoReplace`) — replaces the **single** non-empty editor selection with a short demo line via **`WorkspaceEdit.replace`** (Undo reverts). Use this to validate partial-apply wiring before model-driven `range_replace` proposals.
 - **When selection is missing or ambiguous:** no active editor, **empty** selection (caret only), or **more than one** selection (multi-cursor) → a **warning** only; **no** workspace edit. Multiple regions are **not** merged — use one range or whole-file preview in the panel.
 - Helper: [`selection-apply.js`](selection-apply.js) (`resolveSingleSelectionForPartialApply`).
+- **Stale file conflict:** [`edit-conflict.js`](edit-conflict.js) stores a **SHA-256** of the file’s UTF-8 bytes at **Preview sample workspace edit** time. If the file changes or disappears before **Apply to file**, apply is **blocked** and the panel shows a fixed **Lé Vibe Chat:** remediation string (re-run preview).
 
 ## Operator handoff contract (task-n4-2)
 

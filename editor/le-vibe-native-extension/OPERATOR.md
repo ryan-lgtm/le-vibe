@@ -28,6 +28,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Partial selection apply (task-n9-4):** Palette **Lé Vibe Chat: Apply demo replace to selection** (`leVibeNative.applySelectionDemoReplace`) — **one** non-empty selection only; **multi-cursor / multiple selections** or **empty** selection → warning, no edit (`selection-apply.js`).
 
+**Edit preview stale conflict (task-n9-5):** Panel **Apply to file** is blocked if workspace file bytes changed (or file vanished) since **Preview sample workspace edit** — content hash snapshot in **`edit-conflict.js`**; deterministic panel/toast copy, re-run preview.
+
 **Startup / rollout (defaults):** **`leVibeNative.enableFirstPartyAgentSurface`** default **`true`** (first-party Lé Vibe Chat surface); **`leVibeNative.showFirstRunWizard`** default **`true`** (checkpointed wizard); **`leVibeNative.openPanelOnStartup`** default **`true`** (auto-open panel when the first-party surface is enabled). Rollback semantics in **`README.md`** *Rollout and rollback*.
 
 **Third-party migration nudge:** **`leVibeNative.showThirdPartyMigrationNudge`** default **`true`**. **Ollama readiness source:** **`leVibeNative.useLiveOllamaReadiness`** default **`true`** (live local probes; for development overrides, set **`leVibeNative.useLiveOllamaReadiness`** to **`false`** and use **`leVibeNative.devStartupState`**). Migration flow in **`README.md`** *Third-party agent migration*.

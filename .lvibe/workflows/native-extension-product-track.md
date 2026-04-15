@@ -565,10 +565,12 @@ Product intent: users expect **Lé Vibe Chat** to drive the editor the way **Cur
     - tests for at least single-selection happy path
   - Evidence:
     - `selection-apply.js` (`resolveSingleSelectionForPartialApply`, `SELECTION_APPLY_LIMITATIONS_MD`); palette command `leVibeNative.applySelectionDemoReplace`; `extension.js` demo `WorkspaceEdit.replace`; `test/selection-apply.test.js`; `README.md` / `OPERATOR.md`; `npm run verify` green.
-- [ ] `pending` **task-n9-5**: Add **conflict detection** if file changed on disk since proposal generation (hash/mtime/version token); block apply with explicit remediation.
+- [x] `done` **task-n9-5**: Add **conflict detection** if file changed on disk since proposal generation (hash/mtime/version token); block apply with explicit remediation.
   - Acceptance:
     - deterministic conflict UX string in **Lé Vibe Chat** panel
     - test for stale-proposal path
+  - Evidence:
+    - `edit-conflict.js` (`buildPreviewRevision`, `checkDiskContentMatchesRevision`, stable `EDIT_PREVIEW_*` strings); `extension.js` apply gate + panel `chatUpdate`; `test/edit-conflict.test.js`; `README.md` / `OPERATOR.md` / `EDIT_PROPOSAL.v1.md`; `npm run verify` green.
 
 ### Epic N10 — Composer-style multi-file changes (plan → execute → verify)
 

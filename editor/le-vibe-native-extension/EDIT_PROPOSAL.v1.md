@@ -33,3 +33,5 @@ Malformed payloads must be rejected by `validateEditProposal` before UI apply (s
 **Apply:** validated proposals are written with **`workspace-edit-apply.js`** (`applyEditProposalBatchAsWorkspaceEdit`) — one **`WorkspaceEdit`** per accepted batch for editor-friendly undo.
 
 **Selection-scoped `range_replace`:** palette **Apply demo replace to selection** uses **`selection-apply.js`** — single non-empty selection only; see **`README.md`** *Partial selection apply*.
+
+**Stale proposal:** **`edit-conflict.js`** compares a preview-time content hash before apply — see **`README.md`** *Edit preview before apply* / stale conflict.

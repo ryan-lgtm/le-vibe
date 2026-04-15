@@ -42,6 +42,7 @@ const { validateEditProposal, EDIT_PROPOSAL_KIND } = require('./edit-proposal');
 const { buildUnifiedDiff, canApplyAfterPreview } = require('./edit-preview');
 const { applyEditProposalBatchAsWorkspaceEdit } = require('./workspace-edit-apply');
 const { resolveSingleSelectionForPartialApply } = require('./selection-apply');
+const { buildPreviewRevision, checkDiskContentMatchesRevision } = require('./edit-conflict');
 
 function getTranscriptContext(vscode) {
   const config = vscode.workspace.getConfiguration('leVibeNative');
@@ -483,6 +484,20 @@ function openAgentSurface() {
               await vscode.window.showErrorMessage('Lé Vibe Chat: internal error — missing proposal on apply.');
               return;
             }
+            if (editPreviewSession.previewRevision) {
+              const conflict = await checkDiskContentMatchesRevision(
+                vscode,
+                editPreviewSession.targetUri,
+                editPreviewSession.previewRevision,
+              );
+              if (!conflict.ok) {
+                await vscode.window.showWarningMessage(conflict.panelMessage);
+                panel.webview.postMessage({ type: 'chatUpdate', status: conflict.panelMessage });
+                editPreviewSession = null;
+                panel.webview.postMessage({ type: 'editPreviewUpdate', clear: true });
+                return;
+              }
+            }
             await applyEditProposalBatchAsWorkspaceEdit(vscode, editPreviewSession.proposal);
             const rel = vscode.workspace.asRelativePath(editPreviewSession.targetUri, false);
             await vscode.window.showInformationMessage(`Lé Vibe Chat: applied edit to ${rel}`);
@@ -568,6 +583,7 @@ function openAgentSurface() {
           newText: after,
           previewShown: true,
           userAccepted: false,
+          previewRevision: buildPreviewRevision(before),
         };
         panel.webview.postMessage({
           type: 'editPreview',

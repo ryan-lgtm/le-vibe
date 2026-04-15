@@ -122,3 +122,9 @@ test('OPERATOR.md documents partial selection apply command (task-n9-4)', () => 
   assert.ok(text.includes('leVibeNative.applySelectionDemoReplace'));
   assert.ok(text.includes('selection-apply.js'));
 });
+
+test('OPERATOR.md documents edit preview stale conflict (task-n9-5)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('edit-conflict.js'));
+  assert.ok(text.includes('task-n9-5'));
+});
