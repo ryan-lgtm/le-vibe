@@ -194,6 +194,11 @@
     - operator doc notes the field
   - Evidence:
     - `package.json` `repository` (`url` + `directory: editor/le-vibe-native-extension`); `OPERATOR.md` sentence; `test/package-metadata.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-6**: Integration test asserts smoke prints persisted-dir line.
+  - Acceptance:
+    - subprocess smoke output contract-tested (not only static script grep)
+  - Evidence:
+    - `test/integration-smoke.test.js` asserts `first-party persisted config dir:` in stdout; `npm run verify` green.
 
 ---
 

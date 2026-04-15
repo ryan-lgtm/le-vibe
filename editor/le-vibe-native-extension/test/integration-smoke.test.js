@@ -20,4 +20,8 @@ test('npm run smoke exits 0 (panel + launcher; Ollama non-strict)', () => {
     r.stdout.includes('non-blank checks OK') || r.stdout.includes('smoke: done'),
     r.stdout,
   );
+  assert.ok(
+    r.stdout.includes('first-party persisted config dir:'),
+    `expected storage-inventory log line in smoke stdout: ${r.stdout}`,
+  );
 });
