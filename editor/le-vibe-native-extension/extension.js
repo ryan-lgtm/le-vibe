@@ -5,7 +5,7 @@ const OPEN_OLLAMA_SETUP_HELP_COMMAND = 'leVibeNative.openOllamaSetupHelp';
 const OPEN_MODEL_PULL_HELP_COMMAND = 'leVibeNative.openModelPullHelp';
 const OPEN_WORKSPACE_SETUP_COMMAND = 'leVibeNative.openWorkspaceSetup';
 
-const { STARTUP_STATES, resolveStartupState, getStateContent } = require('./readiness');
+const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 
 function escapeHtml(text) {
   return String(text)
@@ -15,12 +15,13 @@ function escapeHtml(text) {
     .replace(/"/g, '&quot;');
 }
 
-function panelHtml(state) {
-  const content = getStateContent(state);
+function panelHtml(state, detailOverride, diagnostics) {
+  const content = getStateContent(state, detailOverride);
   const actionButtons = content.actions
     .map((action) => `<button data-action="${escapeHtml(action.id)}">${escapeHtml(action.label)}</button>`)
     .join('');
   const actionsBlock = actionButtons || '<p class="muted">No actions required.</p>';
+  const diagnosticsText = diagnostics ? `<pre class="diag">${escapeHtml(JSON.stringify(diagnostics, null, 2))}</pre>` : '';
   const states = STARTUP_STATES.map((value) => {
     const active = value === state ? 'class="active"' : '';
     return `<li ${active}>${escapeHtml(value)}</li>`;
@@ -38,6 +39,7 @@ function panelHtml(state) {
     .pill-list li { border: 1px solid var(--vscode-panel-border); border-radius: 999px; padding: 0.15rem 0.55rem; }
     .pill-list li.active { border-color: var(--vscode-focusBorder); }
     button { margin-right: 0.5rem; margin-top: 0.5rem; padding: 0.35rem 0.75rem; cursor: pointer; }
+    .diag { margin-top: 0.75rem; background: var(--vscode-textCodeBlock-background); padding: 0.6rem; border-radius: 6px; white-space: pre-wrap; word-break: break-word; }
   </style>
 </head>
 <body>
@@ -47,6 +49,7 @@ function panelHtml(state) {
   <div class="state"><strong>${escapeHtml(state)}</strong></div>
   <p>${escapeHtml(content.detail)}</p>
   <div>${actionsBlock}</div>
+  ${diagnosticsText}
   <script>
     const vscode = acquireVsCodeApi();
     document.querySelectorAll('button[data-action]').forEach((button) => {
@@ -61,14 +64,16 @@ function panelHtml(state) {
 
 function openAgentSurface() {
   const vscode = require('vscode');
-  const state = resolveStartupState(vscode);
   const panel = vscode.window.createWebviewPanel(
     'leVibeNativeReadiness',
     'Lé Vibe Native Readiness',
     vscode.ViewColumn.Active,
     { enableScripts: true, retainContextWhenHidden: true },
   );
-  panel.webview.html = panelHtml(state);
+  panel.webview.html = panelHtml('checking', null, { mode: 'startup_probe' });
+  resolveStartupSnapshot(vscode).then((snapshot) => {
+    panel.webview.html = panelHtml(snapshot.state, snapshot.detailOverride, snapshot.diagnostics);
+  });
   panel.webview.onDidReceiveMessage((msg) => {
     if (!msg || msg.type !== 'action') {
       return;

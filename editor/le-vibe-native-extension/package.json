@@ -62,6 +62,23 @@
             ],
             "default": "needs_auth_or_setup",
             "description": "Development override for startup readiness state until live Ollama wiring lands."
+          },
+          "leVibeNative.useLiveOllamaReadiness": {
+            "type": "boolean",
+            "default": true,
+            "description": "Use live local Ollama readiness checks instead of development state override."
+          },
+          "leVibeNative.ollamaEndpoint": {
+            "type": "string",
+            "default": "http://127.0.0.1:11434",
+            "description": "Local Ollama endpoint used for startup health and model list checks."
+          },
+          "leVibeNative.ollamaTimeoutMs": {
+            "type": "integer",
+            "minimum": 500,
+            "maximum": 15000,
+            "default": 2500,
+            "description": "Timeout in milliseconds for local Ollama startup probe requests."
           }
         }
       }
