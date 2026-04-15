@@ -182,6 +182,12 @@
     - linked from extension README
   - Evidence:
     - Added `editor/le-vibe-native-extension/OPERATOR.md` (verify, smoke env table, persistence + workflow pointers); README link; `test/operator-doc.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-4**: Smoke prints canonical persisted config directory.
+  - Acceptance:
+    - integration smoke output includes the same path contract as `storage-inventory.js`
+    - operator docs mention the line
+  - Evidence:
+    - `scripts/smoke-integration.js` logs `levibeNativeChatDir()` before `smoke: done`; `OPERATOR.md` updated; `test/smoke-inventory-line.test.js`; `npm run verify` green.
 
 ---
 

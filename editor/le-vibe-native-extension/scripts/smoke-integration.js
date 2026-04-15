@@ -17,6 +17,7 @@ const path = require('node:path');
 
 const { STARTUP_STATES } = require('../readiness');
 const { createOllamaClient } = require('../ollama');
+const { levibeNativeChatDir } = require('../storage-inventory');
 const ext = require('../extension');
 
 const MIN_HTML = 400;
@@ -103,6 +104,7 @@ async function main() {
   console.log('smoke: panel + wizard HTML non-blank checks OK');
   await smokeOllama();
   smokeLvibeLauncher();
+  console.log(`smoke: first-party persisted config dir: ${levibeNativeChatDir()}`);
   console.log('smoke: done');
 }
 
