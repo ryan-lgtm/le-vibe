@@ -484,6 +484,11 @@
     - parity test fails if either file drops the shared stem or inventory test path
   - Evidence:
     - `test/settings-disclosure-guardrail-doc-parity.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-58**: **`package.json` `scripts.test`** contract — **`node --test ./test/*.test.js`** (deterministic runner + glob).
+  - Acceptance:
+    - `verify-script.test.js` asserts exact `scripts.test` string so CI/agents cannot silently drop `*.test.js` discovery
+  - Evidence:
+    - `test/verify-script.test.js`; `npm run verify` green.
 
 ---
 
