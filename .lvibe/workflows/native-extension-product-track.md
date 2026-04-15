@@ -276,6 +276,12 @@
     - contract test prevents removal of the cross-link
   - Evidence:
     - `OPERATOR.md` prerequisites paragraph; `test/operator-doc.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-20**: Documented VS Code minimum stays aligned with **`engines.vscode`**.
+  - Acceptance:
+    - automated test derives major.minor from `package.json` and requires README + OPERATOR to mention it
+    - prevents silent drift when `engines.vscode` is bumped
+  - Evidence:
+    - `test/vscode-engine-doc-sync.test.js`; `npm run verify` green.
 
 ---
 
