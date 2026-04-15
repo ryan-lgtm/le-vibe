@@ -274,6 +274,7 @@ function createOllamaClient({
   return {
     endpoint: base,
     timeoutMs,
+    model,
     streamStallMs,
     streamMaxMs,
     maxRetries,

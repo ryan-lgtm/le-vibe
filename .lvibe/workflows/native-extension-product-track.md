@@ -403,6 +403,11 @@
     - runtime client constructed with only `endpoint` exposes `timeoutMs` equal to `leVibeNative.ollamaTimeoutMs` default
   - Evidence:
     - `test/ollama-client-defaults-match-package.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-42**: **`createOllamaClient`** default **`model`** matches **`leVibeNative.ollamaModel`**.
+  - Acceptance:
+    - client exposes resolved `model`; equals `package.json` contributes default
+  - Evidence:
+    - `ollama.js` return shape; `test/ollama-client-model-default.test.js`; `npm run verify` green.
 
 ---
 
