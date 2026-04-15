@@ -358,6 +358,12 @@
     - automated test locks shared phrasing around `./extension.js` and VS Code activation entry
   - Evidence:
     - `test/extension-entry-doc-parity.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-34**: OPERATOR documents **default local Ollama URL** + **`leVibeNative.ollamaEndpoint`**.
+  - Acceptance:
+    - runbook states `http://127.0.0.1:11434` and ties smoke override env to the same default
+    - contract test prevents removal
+  - Evidence:
+    - `OPERATOR.md`; `test/operator-doc.test.js`; `npm run verify` green.
 
 ---
 

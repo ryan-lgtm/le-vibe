@@ -68,3 +68,10 @@ test('OPERATOR.md documents package.json main extension entry (task-n8-31)', () 
   assert.ok(text.includes('./extension.js'));
   assert.ok(text.includes('main'));
 });
+
+test('OPERATOR.md documents default local Ollama URL and settings key (task-n8-34)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('http://127.0.0.1:11434'));
+  assert.ok(text.includes('leVibeNative.ollamaEndpoint'));
+  assert.ok(text.includes('LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT'));
+});
