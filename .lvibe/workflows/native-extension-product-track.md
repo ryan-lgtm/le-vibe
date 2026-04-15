@@ -336,6 +336,11 @@
     - contract test scoped to *Bounded persistence inventory* section
   - Evidence:
     - `README.md`; `test/readme-storage-sync.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-30**: **`package.json` `main`** entrypoint contract.
+  - Acceptance:
+    - `main` is `./extension.js` and the file exists (ship/packaging guardrail)
+  - Evidence:
+    - `test/package-main-entrypoint.test.js`; `npm run verify` green.
 
 ---
 
