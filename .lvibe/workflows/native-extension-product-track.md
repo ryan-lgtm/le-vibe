@@ -499,6 +499,11 @@
     - `verify-script.test.js` asserts exact `scripts.verify` string (replaces loose substring checks)
   - Evidence:
     - `test/verify-script.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-61**: **OPERATOR** + **README** include the exact **`package.json` `scripts.verify`** literal (**`npm test && npm run smoke`**).
+  - Acceptance:
+    - docs name `scripts.verify` alongside the verify UX; test reads `package.json` and requires the same string in both markdown files
+  - Evidence:
+    - `OPERATOR.md`; `README.md`; `test/verify-script-doc-literal-sync.test.js`; `npm run verify` green.
 
 ---
 
