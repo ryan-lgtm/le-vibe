@@ -102,3 +102,10 @@ test('OPERATOR.md documents scripts literal umbrella guardrail test (task-n8-64)
   assert.ok(text.includes('Scripts literal umbrella'));
   assert.ok(text.includes('package-json-all-scripts-doc-literal-sync.test.js'));
 });
+
+test('OPERATOR.md documents Product track workflow path (task-n8-66)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('## Product track'));
+  assert.ok(text.includes('`.lvibe/workflows/native-extension-product-track.md`'));
+  assert.ok(text.includes('Epic N8'));
+});

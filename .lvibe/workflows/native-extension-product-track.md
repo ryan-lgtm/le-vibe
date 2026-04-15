@@ -524,6 +524,11 @@
     - `readme-scripts-umbrella-guardrail.test.js` asserts stem + umbrella test filename in README
   - Evidence:
     - `test/readme-scripts-umbrella-guardrail.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-66**: **OPERATOR** contract — **Product track** section cites the workflow board path **`.lvibe/workflows/native-extension-product-track.md`**.
+  - Acceptance:
+    - `operator-doc.test.js` asserts exact path string + “Product track” / Epic N8 context
+  - Evidence:
+    - `test/operator-doc.test.js`; `npm run verify` green.
 
 ---
 
