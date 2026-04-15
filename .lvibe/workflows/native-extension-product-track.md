@@ -364,6 +364,12 @@
     - contract test prevents removal
   - Evidence:
     - `OPERATOR.md`; `test/operator-doc.test.js`; `npm run verify` green.
+- [x] `done` **task-n8-35**: README **default Ollama URL** + **`leVibeNative.ollamaEndpoint`** (aligned with OPERATOR).
+  - Acceptance:
+    - developer README states `http://127.0.0.1:11434`, setting key, and smoke override env
+    - parity test on URL markdown stem shared with OPERATOR
+  - Evidence:
+    - `README.md`; `test/readme-ollama-default.test.js`; `test/ollama-default-doc-parity.test.js`; `npm run verify` green.
 
 ---
 
