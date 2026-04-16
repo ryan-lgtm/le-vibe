@@ -150,9 +150,15 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Added setting `leVibeNative.inlineSuggestionsEnabled` (default `false`) in `editor/le-vibe-native-extension/package.json` and documented it in both `editor/le-vibe-native-extension/README.md` and `editor/le-vibe-native-extension/OPERATOR.md` to satisfy settings-disclosure guardrails.
     - Added targeted tests in `editor/le-vibe-native-extension/test/inline-suggestions.test.js` for prompt contract, output sanitation, feature gating, and inline insert behavior from local stream tokens.
     - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 341 passed, smoke passed).
-- [ ] `pending` **task-cp4-2**: Add minimal suggestion ranking/debounce and cancellation to avoid noisy UX.
+- [x] `done` **task-cp4-2**: Add minimal suggestion ranking/debounce and cancellation to avoid noisy UX.
   - Acceptance:
     - measured latency budget documented
+  - Evidence (2026-04-15):
+    - Updated `editor/le-vibe-native-extension/inline-suggestions.js` provider flow to add request debouncing, in-flight stream cancellation superseded by newer requests, and minimal candidate ranking/selection so stale/noisy responses are suppressed and only the latest completion request can win.
+    - Updated `editor/le-vibe-native-extension/extension.js` and `editor/le-vibe-native-extension/package.json` to wire/document `leVibeNative.inlineSuggestionsDebounceMs` (default `150` ms) for operator-tunable debounce behavior.
+    - Added regression tests in `editor/le-vibe-native-extension/test/inline-suggestions.test.js` for rapid-request debounce suppression and "latest request wins" cancellation semantics.
+    - Documented inline suggestion latency budget in `editor/le-vibe-native-extension/README.md` and `editor/le-vibe-native-extension/OPERATOR.md` with target `<= 1200 ms p95` time-to-first-suggestion for small local-prefix requests.
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 343 passed, smoke passed).
 - [ ] `pending` **task-cp4-3**: Add fallback quick-fix actions when inline provider is disabled/unavailable.
   - Acceptance:
     - users still get selection-based assist from context menu/CodeLens

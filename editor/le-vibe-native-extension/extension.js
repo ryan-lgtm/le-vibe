@@ -1662,6 +1662,10 @@ function activate(context) {
   const inlineProvider = createInlineSuggestionProvider(
     inlineClient,
     () => vscode.workspace.getConfiguration('leVibeNative').get('inlineSuggestionsEnabled', false) === true,
+    () => ({
+      debounceMs: vscode.workspace.getConfiguration('leVibeNative').get('inlineSuggestionsDebounceMs', 150),
+      maxChars: 160,
+    }),
   );
   registerSelectionChatCodeLens(vscode, context);
   context.subscriptions.push(

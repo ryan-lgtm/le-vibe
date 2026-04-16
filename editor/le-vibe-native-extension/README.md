@@ -66,6 +66,10 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Inline suggestions beta:** Settings **`leVibeNative.inlineSuggestionsEnabled`** (default **`false`**) enables local-only inline completions in editors using configured Ollama endpoint/model; accept/dismiss uses standard VS Code inline suggestion keys.
 
+**Inline suggestion debounce:** **`leVibeNative.inlineSuggestionsDebounceMs`** (default **`150` ms**) reduces noisy rapid-fire requests while typing.
+
+**Latency budget (task-cp4-2):** target inline suggestion time-to-first-suggestion **<= 1200 ms p95** on local models for small single-line prefixes; above-budget behavior should naturally degrade by returning no suggestion for that request instead of blocking editor typing.
+
 **Telemetry:** defaults to **local structured logs only**; no remote telemetry unless you **explicitly opt in** (same policy as **`OPERATOR.md`**).
 
 **Canonical user-facing name (chat UX):** **Lé Vibe Chat** — palette titles and panel copy use this name for the agent surface (per product track; same line as **`OPERATOR.md`**).

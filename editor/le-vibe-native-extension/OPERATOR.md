@@ -17,6 +17,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 **Default local model tag:** **`mistral:latest`** — **`leVibeNative.ollamaModel`** (used for streaming generate requests).
 
 **Inline suggestions (beta, task-cp4-1):** **`leVibeNative.inlineSuggestionsEnabled`** default **`false`** — when enabled, registers a local-only inline completion provider for file editors (standard VS Code accept/dismiss keys); uses configured Ollama endpoint/model only.
+**Inline suggestion debounce (task-cp4-2):** **`leVibeNative.inlineSuggestionsDebounceMs`** default **`150` ms** to suppress noisy repeated requests while typing.
+**Inline latency budget (task-cp4-2):** operational target is **<= 1200 ms p95** time-to-first-suggestion for small single-line prefixes on local Ollama; above budget, provider should return empty result and keep editing responsive.
 
 **Ollama retries:** **`leVibeNative.ollamaMaxRetries`** default **`2`**, base backoff **`leVibeNative.ollamaRetryBackoffMs`** default **`400` ms** (transient `GET /api/tags` and streaming `POST /api/generate`).
 

@@ -286,6 +286,13 @@
             "default": false,
             "markdownDescription": "**Beta (off by default).** Enable local inline code suggestions from Ollama in file editors via VS Code inline completion UX (accept/dismiss with standard editor keys). Uses configured local endpoint/model only; no cloud fallback."
           },
+          "leVibeNative.inlineSuggestionsDebounceMs": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2000,
+            "default": 150,
+            "description": "Debounce window (ms) for inline suggestion requests to reduce noisy/frequent calls while typing."
+          },
           "leVibeNative.chatTranscriptMaxBytes": {
             "type": "integer",
             "minimum": 4096,
