@@ -867,9 +867,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N30 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n30-1**: **Extension README — SPDX `license`** — add one line (near **Operators** or **Monorepo clone**) documenting **`package.json`** **`license`** (SPDX string, aligned with **`OPERATOR.md`** *publisher and license*) so contributors see marketplace/CI identity without opening **`package.json`**; include contract test deriving the string from **`package.json`**.
+- [x] `done` **task-n30-1**: **Extension README — SPDX `license`** — add one line (near **Operators** or **Monorepo clone**) documenting **`package.json`** **`license`** (SPDX string, aligned with **`OPERATOR.md`** *publisher and license*) so contributors see marketplace/CI identity without opening **`package.json`**; include contract test deriving the string from **`package.json`**.
   - Acceptance:
     - **`README.md`** + targeted test
+    - **`npm run verify`** green
+  - Evidence:
+    - **`README.md`** — **`License (task-n30-1)`** with SPDX + **`package.json`** **`license`**.
+    - **`test/readme-license.test.js`**; **`npm run verify`** green.
+
+### Epic N31 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n31-1**: **OPERATOR — README pointer for SPDX license** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *License (task-n30-1)* for **`package.json`** **`license`** so operators align with **`task-n27-1`** / **`task-n29-1`** doc-discovery pattern.
+  - Acceptance:
+    - **`OPERATOR.md`** + **`operator-doc.test.js`** token
     - **`npm run verify`** green
 
 ---
