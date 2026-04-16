@@ -837,9 +837,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N27 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n27-1**: **OPERATOR — README pointers for issues + source** — under **`OPERATOR.md`** *Product track* (or *Verify*), add one line cross-linking **`README.md`** *Issues / bugs (task-n25-1)* and *Source on GitHub (task-n26-1)* so operators land on the same **`bugs.url`** / **`homepage`** strings without opening **`package.json`**.
+- [x] `done` **task-n27-1**: **OPERATOR — README pointers for issues + source** — under **`OPERATOR.md`** *Product track* (or *Verify*), add one line cross-linking **`README.md`** *Issues / bugs (task-n25-1)* and *Source on GitHub (task-n26-1)* so operators land on the same **`bugs.url`** / **`homepage`** strings without opening **`package.json`**.
   - Acceptance:
     - **`OPERATOR.md`** + **`operator-doc.test.js`** token for the cross-link
+    - **`npm run verify`** green
+  - Evidence:
+    - **`OPERATOR.md`** — **`README: issues + GitHub source (task-n27-1)`** under *Product track*; points to README section headings **`task-n25-1`** / **`task-n26-1`**.
+    - **`test/operator-doc.test.js`** — **`task-n27-1`** token test; **`npm run verify`** green.
+
+### Epic N28 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n28-1**: **Extension README — `repository` field** — add one line (near **Issues** / **Source on GitHub**) documenting **`package.json`** **`repository`** (**`type`**, **`url`**, **`directory`**) so contributors know the monorepo clone URL and subdirectory path without assembling it manually; include contract test deriving **`url`** + **`directory`** from **`package.json`**.
+  - Acceptance:
+    - **`README.md`** + targeted test
     - **`npm run verify`** green
 
 ---

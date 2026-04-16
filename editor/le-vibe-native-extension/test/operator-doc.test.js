@@ -110,6 +110,16 @@ test('OPERATOR.md documents Product track workflow path (task-n8-66)', () => {
   assert.ok(text.includes('Epic N8'));
 });
 
+test('OPERATOR.md cross-links README issues + GitHub source (task-n27-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n27-1'));
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('Issues / bugs (task-n25-1)'));
+  assert.ok(text.includes('Source on GitHub (task-n26-1)'));
+  assert.ok(text.includes('bugs.url'));
+  assert.ok(text.includes('homepage'));
+});
+
 test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('workspace.applyEdit'));
