@@ -48,7 +48,8 @@
     "onCommand:leVibeNative.createWorkspaceFile",
     "onCommand:leVibeNative.createWorkspaceFolder",
     "onCommand:leVibeNative.moveWorkspacePath",
-    "onCommand:leVibeNative.deleteWorkspacePath"
+    "onCommand:leVibeNative.deleteWorkspacePath",
+    "onCommand:leVibeNative.askChatAboutSelection"
   ],
   "contributes": {
     "commands": [
@@ -131,8 +132,22 @@
         "command": "leVibeNative.deleteWorkspacePath",
         "title": "Lé Vibe Chat: Delete workspace file or folder…",
         "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.askChatAboutSelection",
+        "title": "Lé Vibe Chat: Ask about selection…",
+        "category": "Lé Vibe"
       }
     ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "leVibeNative.askChatAboutSelection",
+          "when": "editorHasSelection",
+          "group": "navigation@92"
+        }
+      ]
+    },
     "configuration": [
       {
         "title": "Lé Vibe Native Extension",

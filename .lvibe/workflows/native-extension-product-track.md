@@ -630,10 +630,12 @@ Product intent: parity with Copilot/Cursor **agent** tools: create new files, sc
 
 Product intent: complement the chat panel with lightweight, Copilot-like triggers where appropriate (without duplicating full Copilot product).
 
-- [ ] `pending` **task-n12-1**: Optional **CodeLens / lightbulb** entry: “Ask Lé Vibe Chat about this selection” → sends selection + file path into chat session.
+- [x] `done` **task-n12-1**: Optional **CodeLens / lightbulb** entry: “Ask Lé Vibe Chat about this selection” → sends selection + file path into chat session.
   - Acceptance:
     - command registered; selection bounds passed correctly
     - works when panel closed (opens panel)
+  - Evidence:
+    - Command **`leVibeNative.askChatAboutSelection`** + editor context menu; CodeLens on selection range; `runAskChatAboutSelection` → `pendingSelectionContext` + **`executeCommand(openAgentSurface)`**; `flushPendingSelectionContext` pushes context + **`prefillPrompt`**; **`selection-chat-context.js`**; README + `OPERATOR.md`; tests `selection-chat-context.test.js`, scaffold, `operator-doc`; `npm run verify` green.
 - [ ] `pending` **task-n12-2**: **Quick actions** strip in chat for common intents (explain, refactor selection, generate tests) as templated prompts (local-only).
   - Acceptance:
     - templates documented; no network calls beyond configured Ollama

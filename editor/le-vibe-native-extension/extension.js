@@ -18,6 +18,10 @@ const CREATE_WORKSPACE_FILE_COMMAND = 'leVibeNative.createWorkspaceFile';
 const CREATE_WORKSPACE_FOLDER_COMMAND = 'leVibeNative.createWorkspaceFolder';
 const MOVE_WORKSPACE_PATH_COMMAND = 'leVibeNative.moveWorkspacePath';
 const DELETE_WORKSPACE_PATH_COMMAND = 'leVibeNative.deleteWorkspacePath';
+const ASK_CHAT_ABOUT_SELECTION_COMMAND = 'leVibeNative.askChatAboutSelection';
+
+/** @type {null | { path: string, content: string, selectionRange: { startLine: number, startCharacter: number, endLine: number, endCharacter: number } }} */
+let pendingSelectionContext = null;
 
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 const { createOllamaClient } = require('./ollama');
@@ -28,6 +32,7 @@ const {
   loadContextFileWithGuards,
   relativePosixForGitignore,
 } = require('./context-file-guards');
+const { buildSelectionContextEntry, prefillPromptForSelection } = require('./selection-chat-context');
 const {
   validateWorkspaceRelativeCreatePath,
   createWorkspaceFile,
@@ -585,6 +590,13 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
         document.getElementById('undoWorkspacePlanRollback').disabled = !msg.undoEnabled;
         return;
       }
+      if (msg && msg.type === 'prefillPrompt' && typeof msg.text === 'string') {
+        const el = document.getElementById('promptInput');
+        if (el) {
+          el.value = msg.text;
+        }
+        return;
+      }
       if (!msg || msg.type !== 'chatUpdate') {
         return;
       }
@@ -617,6 +629,98 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   </script>
 </body>
 </html>`;
+}
+
+/**
+ * Queue editor selection + file path for the next Lé Vibe Chat panel, then open the agent surface (task-n12-1).
+ */
+async function runAskChatAboutSelection() {
+  const vscode = require('vscode');
+  if (!isFirstPartyAgentSurfaceEnabled(vscode)) {
+    void vscode.window
+      .showInformationMessage(
+        'Lé Vibe first-party agent surface is disabled (rollback). Set leVibeNative.enableFirstPartyAgentSurface to true in Settings.',
+        'Open Settings',
+      )
+      .then((choice) => {
+        if (choice === 'Open Settings') {
+          void vscode.commands.executeCommand(
+            'workbench.action.openSettings',
+            'leVibeNative.enableFirstPartyAgentSurface',
+          );
+        }
+      });
+    return;
+  }
+  const editor = vscode.window.activeTextEditor;
+  if (!editor || editor.selection.isEmpty) {
+    await vscode.window.showInformationMessage('Lé Vibe Chat: select text in an editor first.');
+    return;
+  }
+  const doc = editor.document;
+  if (doc.uri.scheme !== 'file') {
+    await vscode.window.showInformationMessage('Lé Vibe Chat: only on-disk files are supported for selection context.');
+    return;
+  }
+  if (!vscode.workspace.getWorkspaceFolder(doc.uri)) {
+    await vscode.window.showWarningMessage('Lé Vibe Chat: file must be inside an open workspace folder.');
+    return;
+  }
+  const rel = vscode.workspace.asRelativePath(doc.uri, false);
+  if (!rel || rel.includes('..')) {
+    await vscode.window.showWarningMessage('Lé Vibe Chat: could not resolve a safe workspace-relative path.');
+    return;
+  }
+  const sel = editor.selection;
+  const text = doc.getText(sel);
+  const budget = getContextBudget(vscode);
+  pendingSelectionContext = buildSelectionContextEntry(
+    rel,
+    text,
+    {
+      startLine: sel.start.line,
+      startCharacter: sel.start.character,
+      endLine: sel.end.line,
+      endCharacter: sel.end.character,
+    },
+    budget,
+  );
+  await vscode.commands.executeCommand(OPEN_AGENT_SURFACE_COMMAND);
+}
+
+/**
+ * @param {typeof import('vscode')} vscode
+ * @param {import('vscode').ExtensionContext} context
+ */
+function registerSelectionChatCodeLens(vscode, context) {
+  const emitter = new vscode.EventEmitter();
+  context.subscriptions.push(
+    vscode.window.onDidChangeTextEditorSelection(() => emitter.fire(undefined)),
+    vscode.window.onDidChangeActiveTextEditor(() => emitter.fire(undefined)),
+    vscode.languages.registerCodeLensProvider(
+      { scheme: 'file' },
+      {
+        onDidChangeCodeLenses: emitter.event,
+        provideCodeLenses(document) {
+          if (!vscode.workspace.workspaceFolders?.length) {
+            return [];
+          }
+          const ed = vscode.window.activeTextEditor;
+          if (!ed || ed.document !== document || ed.selection.isEmpty) {
+            return [];
+          }
+          const range = new vscode.Range(ed.selection.start, ed.selection.end);
+          return [
+            new vscode.CodeLens(range, {
+              title: 'Ask Lé Vibe Chat about this selection',
+              tooltip: 'Opens Lé Vibe Chat with this file path and selection in prompt context.',
+              command: ASK_CHAT_ABOUT_SELECTION_COMMAND,
+            }),
+          ];
+        },
+      },
+    ),
+  );
 }
 
 function openAgentSurface() {
@@ -673,8 +777,35 @@ function openAgentSurface() {
     { enableScripts: true, retainContextWhenHidden: true },
   );
 
+  function flushPendingSelectionContext() {
+    if (!pendingSelectionContext) {
+      return;
+    }
+    const payload = pendingSelectionContext;
+    pendingSelectionContext = null;
+    selectedContexts.length = 0;
+    selectedContexts.push({
+      path: payload.path,
+      content: payload.content,
+    });
+    const r = payload.selectionRange;
+    const rangeNote =
+      r.startLine === r.endLine
+        ? `L${r.startLine + 1}:c${r.startCharacter}-${r.endCharacter}`
+        : `L${r.startLine + 1}-L${r.endLine + 1}`;
+    panel.webview.postMessage({
+      type: 'chatUpdate',
+      status: `Lé Vibe Chat: added editor selection from "${payload.path}" (${rangeNote}). Add a question and Send Prompt.`,
+    });
+    panel.webview.postMessage({
+      type: 'prefillPrompt',
+      text: prefillPromptForSelection(payload.path, r),
+    });
+  }
+
   function beginMainReadiness() {
     panel.webview.html = panelHtml('checking', null, { mode: 'startup_probe' }, contextBudget);
+    queueMicrotask(() => flushPendingSelectionContext());
     resolveStartupSnapshot(vscode).then((snapshot) => {
       latestStartupState = snapshot.state;
       latestDiagnostics = snapshot.diagnostics || {};
@@ -686,6 +817,7 @@ function openAgentSurface() {
             ? 'Lé Vibe Chat: runtime ready. Use Local prompt test below.'
             : 'Lé Vibe Chat: follow the highlighted readiness state and use the action buttons.',
       });
+      queueMicrotask(() => flushPendingSelectionContext());
     });
   }
 
@@ -1224,6 +1356,7 @@ function openAgentSurface() {
  */
 function activate(context) {
   const vscode = require('vscode');
+  registerSelectionChatCodeLens(vscode, context);
   context.subscriptions.push(
     vscode.commands.registerCommand(EMIT_OPERATOR_HANDOFF_COMMAND, async (input) => {
       const config = vscode.workspace.getConfiguration('leVibeNative');
@@ -1366,6 +1499,7 @@ function activate(context) {
     vscode.commands.registerCommand(MOVE_WORKSPACE_PATH_COMMAND, () => runMoveWorkspacePathInteractive(vscode, null)),
     vscode.commands.registerCommand(DELETE_WORKSPACE_PATH_COMMAND, () => runDeleteWorkspacePathInteractive(vscode, null)),
     vscode.commands.registerCommand(OPEN_THIRD_PARTY_MIGRATION_COMMAND, () => runThirdPartyMigrationGuide(vscode)),
+    vscode.commands.registerCommand(ASK_CHAT_ABOUT_SELECTION_COMMAND, runAskChatAboutSelection),
     vscode.commands.registerCommand(OPEN_AGENT_SURFACE_COMMAND, openAgentSurface),
     vscode.commands.registerCommand(OPEN_OLLAMA_SETUP_HELP_COMMAND, () =>
       vscode.env.openExternal(vscode.Uri.parse('https://ollama.com/download/linux')),
@@ -1426,6 +1560,7 @@ module.exports = {
   CREATE_WORKSPACE_FOLDER_COMMAND,
   MOVE_WORKSPACE_PATH_COMMAND,
   DELETE_WORKSPACE_PATH_COMMAND,
+  ASK_CHAT_ABOUT_SELECTION_COMMAND,
   getTranscriptContext,
   getContextBudget,
   panelHtml,

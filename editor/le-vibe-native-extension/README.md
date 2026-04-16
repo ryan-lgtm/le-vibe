@@ -89,6 +89,12 @@ Token-budget rules (configurable in Settings):
 
 - Before a file is added as prompt context, Lé Vibe Chat applies **`.gitignore`** (workspace root `.gitignore` via [`ignore`](https://www.npmjs.com/package/ignore)), a **per-file size** check against **`leVibeNative.contextMaxCharsPerFile`** (disk bytes must not exceed that budget), and a **binary / non-text** probe (null-byte scan on an initial chunk). Skips use deterministic **`Lé Vibe Chat: skipped "path" — …`** strings (toast + no silent omission). Implementation: [`context-file-guards.js`](context-file-guards.js).
 
+## Inline assistant — selection → chat (Epic N12, task-n12-1)
+
+- **Command Palette / editor context menu:** **Lé Vibe Chat: Ask about selection…** (`leVibeNative.askChatAboutSelection`) — requires a **non-empty** selection in a **workspace file** (`file` scheme). Opens the Lé Vibe Chat panel (same as **Lé Vibe: Open Agent Surface**) if it was closed, then injects **workspace-relative path**, **0-based selection bounds** (surfaced in the context excerpt header), and a **clipped text excerpt** into prompt context, and **prefills** the prompt box with a short template line.
+- **CodeLens:** when text is selected, a lens **Ask Lé Vibe Chat about this selection** appears on the selection range and runs the same command.
+- Helpers: [`selection-chat-context.js`](selection-chat-context.js) (`buildSelectionContextEntry`, `prefillPromptForSelection`).
+
 ## Edit preview before apply (Epic N9)
 
 - **`leVibeNative.requireEditPreviewBeforeApply`** (default **`true`**) — for the panel **Preview sample workspace edit** flow, a unified diff is shown first; when **`true`**, you must click **Accept preview** before **Apply to file** (no silent whole-file overwrite from preview alone). Set to **`false`** only if you accept **Apply to file** immediately after the diff is shown (the preview is still displayed for that demo path).

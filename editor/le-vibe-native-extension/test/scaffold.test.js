@@ -21,6 +21,7 @@ test('manifest contributes Lé Vibe Open Agent Surface command', () => {
   assert.ok(commands.find((item) => item.command === 'leVibeNative.createWorkspaceFolder'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.moveWorkspacePath'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.deleteWorkspacePath'));
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.askChatAboutSelection'));
 });
 
 test('manifest supports deterministic activation entrypoints', () => {
@@ -50,6 +51,7 @@ test('extension exports activate/deactivate and command constant', () => {
   assert.equal(extensionModule.CREATE_WORKSPACE_FOLDER_COMMAND, 'leVibeNative.createWorkspaceFolder');
   assert.equal(extensionModule.MOVE_WORKSPACE_PATH_COMMAND, 'leVibeNative.moveWorkspacePath');
   assert.equal(extensionModule.DELETE_WORKSPACE_PATH_COMMAND, 'leVibeNative.deleteWorkspacePath');
+  assert.equal(extensionModule.ASK_CHAT_ABOUT_SELECTION_COMMAND, 'leVibeNative.askChatAboutSelection');
   assert.equal(path.basename(require.resolve('../extension')), 'extension.js');
 });
 

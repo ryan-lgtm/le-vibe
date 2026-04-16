@@ -184,3 +184,10 @@ test('OPERATOR.md documents workspace context read guards (task-n11-4)', () => {
   assert.ok(text.includes('context-file-guards.js'));
   assert.ok(text.includes('contextMaxCharsPerFile'));
 });
+
+test('OPERATOR.md documents selection to chat (task-n12-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n12-1'));
+  assert.ok(text.includes('leVibeNative.askChatAboutSelection'));
+  assert.ok(text.includes('selection-chat-context.js'));
+});
