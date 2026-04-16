@@ -24,6 +24,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Package name (task-n42-1):** **`le-vibe-native-extension`** — **`package.json`** **`name`** (npm/package identifier; distinct from **`displayName`**).
 
+**Version (task-n44-1):** **`0.1.0`** — **`package.json`** **`version`** (current shipped extension package version; update with each release).
+
 **Changelog / release notes (task-n19-1):** see **`CHANGELOG.md`** — Keep a Changelog–style semver sections (**`[0.1.0]`** seeds the current shipped bar); update when bumping **`package.json`** **`version`**.
 
 **Extension entry (packaging):** **`package.json`** **`main`** is **`./extension.js`** (VS Code activation entry; see **`OPERATOR.md`**).
