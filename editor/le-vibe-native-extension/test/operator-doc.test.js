@@ -250,6 +250,13 @@ test('OPERATOR.md documents VSIX manual install spot-check (task-n23-1)', () => 
   assert.ok(text.includes('displayName'));
 });
 
+test('OPERATOR.md documents alternate CLI for VSIX install (task-n24-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Alternate CLI (task-n24-1)'));
+  assert.ok(text.includes('codium'));
+  assert.ok(text.includes('--install-extension'));
+});
+
 test('OPERATOR.md documents version bump vs deb/git (task-n16-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('task-n16-3'));

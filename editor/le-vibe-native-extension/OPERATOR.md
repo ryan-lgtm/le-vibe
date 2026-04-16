@@ -112,6 +112,8 @@ From **`editor/le-vibe-native-extension/`** after **`npm ci`**, run **`npm run p
 code --install-extension ./le-vibe-native-extension-0.1.0.vsix
 ```
 
+**Alternate CLI (task-n24-1):** if **`code`** is not on your **`PATH`** (e.g. **`which code`** fails), use **`codium`**, **`vscodium`**, or your distro’s VS Code–compatible launcher — keep the same **`--install-extension`** flag and the same **`.vsix`** path. Example: **`codium --install-extension ./le-vibe-native-extension-0.1.0.vsix`**.
+
 **Manual spot-check (task-n23-1):** after a successful install, open the **Extensions** view in the editor (**View → Extensions**, or **Ctrl+Shift+X** / **Cmd+Shift+X**). Locate **Lé Vibe Native Agent** — that string is **`package.json`** **`displayName`** (publisher **`levibe`**). Confirm the **version** shown there matches **`package.json`** **`version`** (for the sample above, **0.1.0**). If the version does not match, you likely installed a different **`.vsix`** or an older cached build — re-run **`npm run package`** and install again.
 
 No tokens or cloud secrets are embedded in this packaging path — the VSIX is a local archive of the extension tree plus production **`node_modules`** per **`@vscode/vsce`** defaults.

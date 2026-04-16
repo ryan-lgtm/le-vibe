@@ -809,7 +809,18 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N24 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n24-1**: **OPERATOR Packaged VSIX — alternate CLI** — add one sentence after the **`code --install-extension`** example: if **`code`** is not on **`PATH`**, use **`codium`** or your editor’s equivalent (**`--install-extension`** path unchanged).
+- [x] `done` **task-n24-1**: **OPERATOR Packaged VSIX — alternate CLI** — add one sentence after the **`code --install-extension`** example: if **`code`** is not on **`PATH`**, use **`codium`** or your editor’s equivalent (**`--install-extension`** path unchanged).
+  - Evidence:
+    - **`OPERATOR.md`** *Packaged VSIX* — **`Alternate CLI (task-n24-1)`** — **`which code`**, **`codium`** / **`vscodium`**, same **`--install-extension`** + **`.vsix`** path; example **`codium --install-extension …`**.
+    - **`test/operator-doc.test.js`** (task-n24-1); **`npm run verify`** green.
+
+### Epic N25 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n25-1**: **Extension README — issues / bugs link** — add a short line (e.g. under **Operators** or **Prerequisites**) with **`package.json`** **`bugs.url`** so contributors can file first-party extension issues without hunting **`package.json`**.
+  - Acceptance:
+    - **`editor/le-vibe-native-extension/README.md`** only (plus product-track / `operator-doc` or README contract test if you add one)
+    - full **`https://github.com/ryan-lgtm/le-vibe/issues`** string (or derive from **`package.json`** in test)
+    - **`npm run verify`** green
 
 ---
 
