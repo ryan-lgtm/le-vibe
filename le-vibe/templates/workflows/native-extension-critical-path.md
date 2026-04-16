@@ -48,10 +48,14 @@ Everything else is out-of-scope unless required to unblock one of the five.
 
 **Narrative:** chat must be fast, clear, cancellable, and resilient with local Ollama.
 
-- [ ] `pending` **task-cp1-1**: Harden streaming lifecycle (send, token stream, cancel, retry, timeout states).
+- [x] `done` **task-cp1-1**: Harden streaming lifecycle (send, token stream, cancel, retry, timeout states).
   - Acceptance:
     - deterministic UI state machine; no stuck "loading"
     - tests for cancel/retry/timeout paths
+  - Evidence (2026-04-15):
+    - Updated `editor/le-vibe-native-extension/chat.js` with an explicit chat lifecycle state machine (`sending`, `streaming`, `retrying`, `cancelled`, `completed`, `error`, `idle`) and deterministic idle cleanup after success/cancel/error.
+    - Updated `editor/le-vibe-native-extension/test/chat.test.js` to assert state transitions and coverage for cancel/retry/timeout paths, including final idle state to prevent stuck loading.
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 323 passed, smoke passed).
 - [ ] `pending` **task-cp1-2**: Add conversation controls that matter in real use (new chat, restore recent, clear/export).
   - Acceptance:
     - bounded persistence unchanged

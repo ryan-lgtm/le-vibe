@@ -5,6 +5,7 @@ const { createChatController } = require('../chat');
 
 test('chat controller streams token and completes', async () => {
   const events = [];
+  const states = [];
   const controller = createChatController({
     streamPrompt() {
       return {
@@ -21,8 +22,11 @@ test('chat controller streams token and completes', async () => {
     onToken: (token) => events.push(`token:${token}`),
     onDone: (cancelled) => events.push(`done:${cancelled}`),
     onError: (error) => events.push(`error:${error.message}`),
+    onStateChange: ({ state }) => states.push(state),
   });
   assert.deepEqual(events, ['token:hello ', 'token:world', 'done:false']);
+  assert.deepEqual(states, ['sending', 'streaming', 'streaming', 'completed', 'idle']);
+  assert.equal(controller.getState(), 'idle');
 });
 
 test('chat controller marks cancelled requests as done(cancelled)', async () => {
@@ -51,6 +55,7 @@ test('chat controller marks cancelled requests as done(cancelled)', async () => 
   assert.equal(result, false);
   assert.equal(doneState, true);
   assert.equal(cancelCalled, false);
+  assert.equal(controller.getState(), 'idle');
 });
 
 test('cancelPrompt returns true when a request is active', async () => {
@@ -82,10 +87,12 @@ test('cancelPrompt returns true when a request is active', async () => {
   await pending;
   assert.equal(didCancel, true);
   assert.equal(cancelCalled, true);
+  assert.equal(controller.getState(), 'idle');
 });
 
 test('chat retries transient stream failures before succeeding', async () => {
   let calls = 0;
+  const states = [];
   const controller = createChatController(
     {
       streamPrompt() {
@@ -109,7 +116,43 @@ test('chat retries transient stream failures before succeeding', async () => {
     onDone: (cancelled) => assert.equal(cancelled, false),
     onError: () => assert.fail('unexpected error'),
     onRetry: (info) => retries.push(info),
+    onStateChange: ({ state }) => states.push(state),
   });
   assert.equal(calls, 2);
   assert.equal(retries.length, 1);
+  assert.deepEqual(states, ['sending', 'retrying', 'sending', 'completed', 'idle']);
+  assert.equal(controller.getState(), 'idle');
+});
+
+test('chat timeout transitions to error and returns idle', async () => {
+  const controller = createChatController(
+    {
+      streamPrompt() {
+        return {
+          cancel() {},
+          async done() {
+            throw Object.assign(new Error('timeout'), { code: 'OLLAMA_TIMEOUT' });
+          },
+        };
+      },
+    },
+    { maxRetries: 0, retryDelayMs: 0 },
+  );
+  const states = [];
+  let errorMessage = '';
+  const retries = [];
+  await controller.sendPrompt('test', {
+    onToken: () => {},
+    onDone: () => assert.fail('expected timeout to fail'),
+    onRetry: (info) => retries.push(info),
+    onError: (error) => {
+      errorMessage = error.message;
+    },
+    onStateChange: ({ state }) => states.push(state),
+  });
+  assert.equal(errorMessage, 'timeout');
+  assert.equal(retries.length, 1);
+  assert.equal(retries[0].willRetry, false);
+  assert.deepEqual(states, ['sending', 'error', 'idle']);
+  assert.equal(controller.getState(), 'idle');
 });
