@@ -24,6 +24,10 @@ Implementation: [`terminal-execution-policy.js`](terminal-execution-policy.js) (
 
 Unless **`terminalSkipBatchConfirmation`** is **true** or you already chose **Run and skip further prompts (this session)** in the modal, you must **confirm each command batch** before it is sent. Session skip is cleared when workspace folders change or via **Lé Vibe Chat: Clear terminal session allow (re-enable confirmations)**.
 
+### Audit log (task-n13-3)
+
+Successful sends append JSONL under **`~/.config/le-vibe/levibe-native-chat/terminal-command-audit.jsonl`** (`lvibe.terminal_command_audit.v1`): **timestamp**, **cwd**, **command_line**, and **`exit_code`** (second line when the editor’s shell-integration end event matches; otherwise only the `sent` line with `exit_code: null`).
+
 ## Recommended workspace snippet
 
 ```json

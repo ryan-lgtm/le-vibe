@@ -2,6 +2,9 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 
 const { runCommandInVisibleTerminal, clearTerminalSessionAllow, LEVIBE_CHAT_TERMINAL_NAME } = require('../terminal-exec.js');
 
@@ -43,6 +46,13 @@ function makeVscodeMock(overrides = {}) {
   };
   mock._sendTextCalls = sendTextCalls;
   mock._createdTerminals = created;
+  mock._exitSubs = [];
+  if (overrides.onDidEndTerminalShellExecution === 'track') {
+    mock.window.onDidEndTerminalShellExecution = (fn) => {
+      mock._exitSubs.push(fn);
+      return { dispose: () => {} };
+    };
+  }
   return mock;
 }
 
@@ -114,4 +124,42 @@ test('runCommandInVisibleTerminal: session skip after flag skips second modal', 
   assert.equal(modalCalls, 1);
   assert.equal(vscode._sendTextCalls.length, 2);
   clearTerminalSessionAllow();
+});
+
+test('runCommandInVisibleTerminal: appends audit sent line with cwd (task-n13-3)', async () => {
+  clearTerminalSessionAllow();
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'tex-audit-'));
+  const auditPath = path.join(dir, 'terminal-command-audit.jsonl');
+  const vscode = makeVscodeMock({});
+  const r = await runCommandInVisibleTerminal(vscode, 'git status', { auditPath });
+  assert.equal(r.ok, true);
+  const raw = fs.readFileSync(auditPath, 'utf8').trim();
+  const row = JSON.parse(raw.split('\n')[0]);
+  assert.equal(row.phase, 'sent');
+  assert.equal(row.cwd, '/tmp/levibe-ws');
+  assert.equal(row.command_line, 'git status');
+  assert.equal(row.exit_code, null);
+  assert.ok(row.audit_id);
+});
+
+test('runCommandInVisibleTerminal: shell_ended audit when onDidEndTerminalShellExecution matches (task-n13-3)', async () => {
+  clearTerminalSessionAllow();
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'tex-audit-'));
+  const auditPath = path.join(dir, 'terminal-command-audit.jsonl');
+  const vscode = makeVscodeMock({ onDidEndTerminalShellExecution: 'track' });
+  const r = await runCommandInVisibleTerminal(vscode, 'git status', { auditPath });
+  assert.equal(r.ok, true);
+  assert.equal(vscode._exitSubs.length, 1);
+  const term = vscode._createdTerminals[0];
+  vscode._exitSubs[0]({
+    terminal: term,
+    exitCode: 0,
+    execution: { commandLine: 'git status' },
+  });
+  const lines = fs.readFileSync(auditPath, 'utf8').trim().split('\n');
+  assert.equal(lines.length, 2);
+  const ended = JSON.parse(lines[1]);
+  assert.equal(ended.phase, 'shell_ended');
+  assert.equal(ended.exit_code, 0);
+  assert.equal(JSON.parse(lines[0]).audit_id, ended.audit_id);
 });

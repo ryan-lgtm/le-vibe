@@ -1,10 +1,18 @@
 'use strict';
 
+const crypto = require('node:crypto');
+
 const {
   normalizeCommandLine,
   evaluateTerminalCommand,
   getTerminalExecutionPolicy,
 } = require('./terminal-execution-policy.js');
+const {
+  terminalCommandAuditPath,
+  buildTerminalCommandAuditSent,
+  buildTerminalCommandAuditEnded,
+  appendTerminalCommandAudit,
+} = require('./terminal-command-audit.js');
 
 /** Visible integrated terminal — not a hidden child_process PTY (task-n13-2). */
 const LEVIBE_CHAT_TERMINAL_NAME = 'Lé Vibe Chat';
@@ -35,10 +43,83 @@ function shouldSkipBatchConfirmation(vscode) {
 }
 
 /**
+ * @param {import('vscode').TerminalShellExecution | undefined} execution
+ * @returns {string}
+ */
+function executionCommandLineText(execution) {
+  if (!execution) {
+    return '';
+  }
+  const cl = execution.commandLine;
+  if (typeof cl === 'string') {
+    return cl;
+  }
+  if (cl && typeof cl.value === 'string') {
+    return cl.value;
+  }
+  return '';
+}
+
+/**
+ * When the editor exposes shell integration, append a second audit line with exit code (task-n13-3).
+ * @param {typeof import('vscode')} vscode
+ * @param {string} commandLine
+ * @param {string} auditId
+ * @param {string} auditFilePath
+ */
+function scheduleExitAuditAppend(vscode, commandLine, auditId, auditFilePath) {
+  const hook = vscode.window.onDidEndTerminalShellExecution;
+  if (typeof hook !== 'function') {
+    return;
+  }
+  const want = normalizeCommandLine(commandLine);
+  let finished = false;
+  /** @type {{ dispose: () => void } | undefined} */
+  let disposable;
+  const timer = setTimeout(() => {
+    if (!finished) {
+      finished = true;
+      try {
+        disposable?.dispose();
+      } catch {
+        /* ignore */
+      }
+    }
+  }, 120000);
+  disposable = hook((e) => {
+    if (finished || !e || !e.terminal) {
+      return;
+    }
+    if (e.terminal.name !== LEVIBE_CHAT_TERMINAL_NAME) {
+      return;
+    }
+    const got = normalizeCommandLine(executionCommandLineText(e.execution));
+    if (!got || got !== want) {
+      return;
+    }
+    finished = true;
+    clearTimeout(timer);
+    try {
+      disposable?.dispose();
+    } catch {
+      /* ignore */
+    }
+    try {
+      appendTerminalCommandAudit(
+        auditFilePath,
+        buildTerminalCommandAuditEnded({ auditId, exitCode: e.exitCode }),
+      );
+    } catch {
+      /* ignore audit failures */
+    }
+  });
+}
+
+/**
  * Run a one-line shell command in a **visible** VS Code integrated terminal (sendText — user sees full I/O).
  * @param {typeof import('vscode')} vscode
  * @param {string} commandLine
- * @param {{ panel?: import('vscode').WebviewPanel | null }} [opts]
+ * @param {{ panel?: import('vscode').WebviewPanel | null, auditPath?: string }} [opts]
  * @returns {Promise<{ ok: true } | { ok: false, reason: string }>}
  */
 async function runCommandInVisibleTerminal(vscode, commandLine, opts = {}) {
@@ -89,6 +170,30 @@ async function runCommandInVisibleTerminal(vscode, commandLine, opts = {}) {
     });
   terminal.show(true);
   terminal.sendText(line, true);
+
+  const auditFilePath = opts.auditPath ?? terminalCommandAuditPath();
+  const auditId = crypto.randomUUID();
+  let workspaceUri = null;
+  let cwd = null;
+  if (folder && folder.uri) {
+    cwd = folder.uri.fsPath || null;
+    workspaceUri =
+      typeof folder.uri.toString === 'function' ? folder.uri.toString() : cwd ? `file://${cwd}` : null;
+  }
+  try {
+    appendTerminalCommandAudit(
+      auditFilePath,
+      buildTerminalCommandAuditSent({
+        auditId,
+        workspaceUri,
+        cwd,
+        commandLine: line,
+      }),
+    );
+  } catch {
+    /* ignore audit failures — command still ran */
+  }
+  scheduleExitAuditAppend(vscode, line, auditId, auditFilePath);
 
   if (panel) {
     panel.webview.postMessage({

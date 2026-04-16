@@ -656,9 +656,11 @@ Product intent: Cursor-like agent runs can execute shell commands; this must be 
     - user must confirm each command batch unless an explicit “session allow” mode is enabled (advanced)
   - Evidence:
     - `terminal-exec.js` — `runCommandInVisibleTerminal` uses `Terminal.sendText` on a named visible terminal (`Lé Vibe Chat`); modal confirmation per batch; **Run and skip further prompts (this session)** + workspace-folder change + **`leVibeNative.clearTerminalSessionAllow`**; advanced **`leVibeNative.terminalSkipBatchConfirmation`**; palette + panel entrypoints; `test/terminal-exec.test.js`; README / `OPERATOR.md` / `TERMINAL_EXECUTION_POLICY.md`; `npm run verify` green.
-- [ ] `pending` **task-n13-3**: Structured audit log for every executed command (timestamp, cwd, exit code).
+- [x] `done` **task-n13-3**: Structured audit log for every executed command (timestamp, cwd, exit code).
   - Acceptance:
     - audit path documented next to other Lé Vibe Chat persistence
+  - Evidence:
+    - `terminal-command-audit.js` + `terminal-exec.js` append **`terminal-command-audit.jsonl`** (`lvibe.terminal_command_audit.v1`: `sent` line with timestamp/cwd/command; `shell_ended` line with **exit_code** when `onDidEndTerminalShellExecution` matches); `storage-inventory.js` / README bounded table / `OPERATOR.md`; `test/terminal-command-audit.test.js`, `terminal-exec.test.js`; `npm run verify` green.
 
 ### Epic N14 — Indexing & @-mentions (optional, bounded)
 

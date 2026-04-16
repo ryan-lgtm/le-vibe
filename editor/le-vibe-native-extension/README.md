@@ -115,6 +115,10 @@ Agent-driven shell commands are **high risk**; see [`TERMINAL_EXECUTION_POLICY.m
 
 Approved commands run only via the **integrated terminal** (named **`Lé Vibe Chat`**) using `Terminal.sendText` — **no hidden PTY**. Palette **Lé Vibe Chat: Run command in integrated terminal…** and the panel **Run command in terminal…** prompt for a one-line command. You **confirm each batch** in a modal unless you choose **Run and skip further prompts (this session)**, or set the advanced **`leVibeNative.terminalSkipBatchConfirmation`** to **`true`**. Session skip clears when workspace folders change or via **Lé Vibe Chat: Clear terminal session allow (re-enable confirmations)**. Implementation: [`terminal-exec.js`](terminal-exec.js).
 
+### Terminal command audit (task-n13-3)
+
+Each successful send appends a structured JSONL record under **`~/.config/le-vibe/levibe-native-chat/terminal-command-audit.jsonl`** (`lvibe.terminal_command_audit.v1`): **timestamp**, **cwd**, **command_line**, **`exit_code: null`** on dispatch. When the editor exposes **`window.onDidEndTerminalShellExecution`** and the event matches the same command line, a second line records **`exit_code`** (may be `null` if the shell did not report a code). See [`terminal-command-audit.js`](terminal-command-audit.js).
+
 ## Edit preview before apply (Epic N9)
 
 - **`leVibeNative.requireEditPreviewBeforeApply`** (default **`true`**) — for the panel **Preview sample workspace edit** flow, a unified diff is shown first; when **`true`**, you must click **Accept preview** before **Apply to file** (no silent whole-file overwrite from preview alone). Set to **`false`** only if you accept **Apply to file** immediately after the diff is shown (the preview is still displayed for that demo path).
@@ -227,5 +231,6 @@ All first-party on-disk state for this extension lives under **`~/.config/le-vib
 | `third-party-migration-audit.jsonl` | Append-only migration actions (`lvibe.third_party_migration.v1`). |
 | `workspace-plan-audit.jsonl` | Append-only workspace plan step records (`lvibe.workspace_plan_audit.v1`). |
 | `workspace-fs-ops-audit.jsonl` | Append-only destructive workspace FS operations (`lvibe.workspace_fs_ops_audit.v1`). |
+| `terminal-command-audit.jsonl` | Append-only integrated terminal command audit (`lvibe.terminal_command_audit.v1` — timestamp, cwd, command; exit code when shell integration reports `onDidEndTerminalShellExecution`). |
 
 No embeddings or unbounded cloud sync are written by this extension; export/clear remain user-driven.
