@@ -47,6 +47,7 @@ Complete **after** the automated gate is **PASS**. Mark each row **PASS** or **F
 | Build (tag / VSIX / git sha) | Date (YYYY-MM-DD) | Automated (`e2e-acceptance`) | Manual table | Sign-off |
 |------------------------------|-------------------|-------------------------------|--------------|----------|
 | CP6 / `main` — 2026-04-15 | 2026-04-15 | **PASS** (`LEVIBE_E2E_ACCEPTANCE_STRICT_OLLAMA=1 npm run e2e-acceptance`) | **PASS** (owner waiver — see Result column) | **Ryan** — owner authorized CP6 documentation sign-off |
+| Chat workspace milestone branch / `59271e6` — 2026-04-16 | 2026-04-16 | **PASS** (`npm run e2e-acceptance`) | **PASS** (M1-M8 recorded above; manual spot-check still required before release tag) | **Pending maintainer release sign-off** |
 
 ## Related runbooks
 
