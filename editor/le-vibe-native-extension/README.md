@@ -155,6 +155,8 @@ The panel includes a basic local prompt test surface:
 
 - Transcripts are stored as JSONL under `~/.config/le-vibe/levibe-native-chat/transcript-<workspaceKey>.jsonl` (workspace key is a short hash of the workspace folder URI).
 - Settings **`leVibeNative.chatTranscriptMaxBytes`** (default **524288** bytes) and **`leVibeNative.chatTranscriptMaxMessages`** (default **200** JSONL rows) cap storage.
+- Workspace conversation history is also persisted in the project at **`.lvibe/chat-history.jsonl`** and hydrated on panel open.
+- Settings **`leVibeNative.chatWorkspaceHistoryRetentionHours`** (default **24**) and **`leVibeNative.chatWorkspaceHistoryMaxEntries`** (default **2000**) prune workspace history.
 - When over budget, oldest messages are removed first and a **system** line records how many were compacted (explicit, not silent loss).
 
 ## Storage controls (task-n3-2)
@@ -336,6 +338,12 @@ Each successful send appends a structured JSONL record under **`~/.config/le-vib
 - **Guardrails:** The extension does **not** uninstall other extensions or delete their data. It only writes migration state and JSONL audit lines under `~/.config/le-vibe/levibe-native-chat/` (`third-party-migration-state.json`, `third-party-migration-audit.jsonl`).
 - **Detection:** A small watchlist of marketplace extension IDs (see `third-party-migration.js`) is used to suggest the guide. If **`leVibeNative.showThirdPartyMigrationNudge`** (default **`true`**) is on and a watchlist extension is present while migration status is still **pending**, a one-time notification offers the guide; **Not now** records status **skipped** (no further auto nudges).
 - **Remediation:** Disable or uninstall conflicting extensions manually from the Extensions view, keep `leVibeNative.enableFirstPartyAgentSurface` **true**, then verify **Lé Vibe Chat: Open Agent Surface**.
+
+## Migration notes for previous panel users
+
+- The chat timeline now focuses on conversation only; operational controls moved into **Settings**, **Logs**, and **Tools** tabs.
+- Workspace-scoped chat continuity is now sourced from **`.lvibe/chat-history.jsonl`** (rolling 24h by default) so reopening the workspace restores recent turns.
+- Local transcript/audit paths under `~/.config/le-vibe/levibe-native-chat/` remain for operator diagnostics and export workflows.
 
 ## Operator verification / ship checklist (task-n8-1)
 

@@ -36,9 +36,48 @@ function appendOrchestratorEvent(filePath, event) {
   fs.appendFileSync(filePath, `${JSON.stringify(event)}\n`, 'utf8');
 }
 
+/**
+ * @param {string} filePath
+ * @param {{ workspaceUri?: string, limit?: number }} options
+ * @returns {object[]}
+ */
+function readRecentOrchestratorEvents(filePath, options = {}) {
+  if (!filePath || !fs.existsSync(filePath)) {
+    return [];
+  }
+  const limit = Number(options.limit ?? 30);
+  const workspaceUri = options.workspaceUri || null;
+  let raw = '';
+  try {
+    raw = fs.readFileSync(filePath, 'utf8');
+  } catch {
+    return [];
+  }
+  const rows = [];
+  for (const line of raw.split('\n')) {
+    if (!line.trim()) {
+      continue;
+    }
+    try {
+      const event = JSON.parse(line);
+      if (!event || typeof event !== 'object') {
+        continue;
+      }
+      if (workspaceUri && event.workspace_uri !== workspaceUri) {
+        continue;
+      }
+      rows.push(event);
+    } catch {
+      /* ignore malformed row */
+    }
+  }
+  return Number.isFinite(limit) && limit > 0 ? rows.slice(-limit) : rows;
+}
+
 module.exports = {
   ORCHESTRATOR_EVENT_CONTRACT,
   orchestratorEventAuditPath,
   buildOrchestratorEvent,
   appendOrchestratorEvent,
+  readRecentOrchestratorEvents,
 };

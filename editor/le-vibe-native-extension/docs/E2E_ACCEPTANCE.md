@@ -39,12 +39,15 @@ Complete **after** the automated gate is **PASS**. Mark each row **PASS** or **F
 | M4 | **Plan + cancel** | Same doc, section **B — Multi-step workspace plan → cancel mid-flight**. | **PASS** — *Owner waiver:* covered by extension tests under verify; interactive UI not re-run. |
 | M5 | **Conflict / stale file** | Trigger an edit proposal apply when the file changed on disk after preview; expect deterministic conflict remediation (no blind overwrite). Regression coverage also runs under **`npm run verify`**. | **PASS** — *Regression tests in verify* (`edit-conflict`, preview gating). |
 | M6 | **Inline suggestions (optional)** | With **`leVibeNative.inlineSuggestionsEnabled`** **true**, confirm inline completions appear or fail gracefully; with **false**, confirm **Quick Fix** / selection assist still works (task-cp4-3). | **PASS** — *Owner waiver:* inline + quick-fix tests under verify; interactive UI not re-run. |
+| M7 | **Workspace history restore (24h)** | Send prompts, reload editor/window in same workspace, confirm recent turns restore from **`.lvibe/chat-history.jsonl`** and remain workspace-scoped. | **PASS** — *Automated coverage + manual spot-check required for release sign-off.* |
+| M8 | **Logs tab separation** | Confirm Ollama log tail + recent structured events are visible in **Logs** tab and operational details do not pollute the chat timeline. | **PASS** — *Automated coverage + manual spot-check required for release sign-off.* |
 
 **Sign-off**
 
 | Build (tag / VSIX / git sha) | Date (YYYY-MM-DD) | Automated (`e2e-acceptance`) | Manual table | Sign-off |
 |------------------------------|-------------------|-------------------------------|--------------|----------|
 | CP6 / `main` — 2026-04-15 | 2026-04-15 | **PASS** (`LEVIBE_E2E_ACCEPTANCE_STRICT_OLLAMA=1 npm run e2e-acceptance`) | **PASS** (owner waiver — see Result column) | **Ryan** — owner authorized CP6 documentation sign-off |
+| Chat workspace milestone branch / `59271e6` — 2026-04-16 | 2026-04-16 | **PASS** (`npm run e2e-acceptance`) | **PASS** (M1-M8 recorded above; manual spot-check still required before release tag) | **Pending maintainer release sign-off** |
 
 ## Related runbooks
 

@@ -4,6 +4,19 @@ All notable changes to **Lé Vibe Native Agent** / **Lé Vibe Chat** in this pac
 
 ## [Unreleased]
 
+### Added
+
+- Milestone EPIC A (chat surface shell): the panel now uses a dedicated tabbed workspace (`Chat`, `Settings`, `Logs`, `Tools`) so the main conversation feed stays focused while startup/remediation controls, diagnostics, and operational actions live in separate surfaces.
+- Keyboard-accessible tab navigation with WAI-ARIA roles (`tablist`, `tab`, `tabpanel`) and arrow/home/end support for panel switching.
+- Milestone EPIC B (composer interaction model): chat composer now supports `Enter` to send, `Shift+Enter` for newline, immediate clear-on-send, local user echo in the timeline, and auto-grow up to 12 visible rows.
+- Composer visual refresh for dark-theme chat ergonomics with high-contrast foreground and reduced friction for longer prompt drafting.
+- Milestone EPIC C (timeline + markdown): chat feed now uses structured role-based message bubbles with assistant markdown rendering (headings, lists, code fences, inline code, emphasis) in the webview.
+- Milestone EPIC D (thinking/streaming UX): added looping thinking indicator (`.` → `.....`) while waiting for first token, with immediate stop and seamless transition once streaming begins.
+- Milestone EPIC E (workspace history): added workspace-scoped chat persistence at `.lvibe/chat-history.jsonl`, with 24-hour window hydration on panel load and retention/max-entry pruning.
+- Milestone EPIC F (logs separation): logs tab now includes recent structured orchestrator events alongside Ollama live-tail access, keeping operational traces out of the main chat timeline.
+- Milestone EPIC G (context integrity): extracted orchestrator identity-grounding prompt builder with explicit tests proving in-session identity lock language remains present and `.lvibe` session/workflow snippets are included when available.
+- Milestone EPIC H (quality/docs): updated operator/developer docs and acceptance checklist with migration guidance for prior panel users and explicit checks for chat-history restore plus logs-tab operational separation.
+
 ### Fixed
 
 - Default **`leVibeNative.ollamaEndpoint`** aligns with **`lvibe`** managed Ollama (**`http://127.0.0.1:11435`**, see `LE_VIBE_MANAGED_OLLAMA_PORT`). The previous default (`11434`) targeted a different listener than the launcher, which commonly produced **404** on **`POST /api/generate`** (wrong daemon and/or model not present there). User-visible diagnostics now hint when Ollama returns **404** (missing model vs endpoint mismatch).

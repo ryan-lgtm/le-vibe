@@ -86,6 +86,11 @@ const {
   readTranscriptRaw,
   clearTranscript,
 } = require('./chat-transcript');
+const {
+  workspaceChatHistoryPath,
+  appendWorkspaceChatHistoryEntry,
+  readWorkspaceChatHistoryWindow,
+} = require('./workspace-chat-history');
 const { isFirstPartyAgentSurfaceEnabled } = require('./feature-flags');
 const { runThirdPartyMigrationGuide, scheduleThirdPartyMigrationNudge } = require('./third-party-migration');
 const { validateEditProposal, EDIT_PROPOSAL_KIND, formatEditProposalValidationForUser } = require('./edit-proposal');
@@ -108,7 +113,13 @@ const {
 const { fetchCurrentFileOutlineForContext } = require('./outline-context');
 const { registerLeVibeChatStatusBar } = require('./status-bar-entry');
 const { createInlineSuggestionProvider } = require('./inline-suggestions');
-const { orchestratorEventAuditPath, buildOrchestratorEvent, appendOrchestratorEvent } = require('./orchestrator-events');
+const {
+  orchestratorEventAuditPath,
+  buildOrchestratorEvent,
+  appendOrchestratorEvent,
+  readRecentOrchestratorEvents,
+} = require('./orchestrator-events');
+const { buildOrchestratorGroundedPrompt } = require('./orchestrator-grounding');
 const { writeRunbookBundle } = require('./runbook-bundle');
 
 /**
@@ -501,16 +512,52 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
 <head>
   <meta charset="UTF-8" />
   <style>
-    body { font-family: var(--vscode-font-family); color: var(--vscode-foreground); padding: 1rem 1.25rem; line-height: 1.45; font-size: 13px; }
-    h2 { margin-bottom: 0.35rem; }
+    body { font-family: var(--vscode-font-family); color: var(--vscode-foreground); padding: 0.9rem 1rem; line-height: 1.45; font-size: 13px; background: var(--vscode-editor-background); }
+    h2, h3 { margin: 0 0 0.35rem 0; }
+    .page-title { margin-bottom: 0.2rem; }
+    .workspace-subtitle { margin-top: 0; margin-bottom: 0.75rem; }
     .state { margin: 0.5rem 0 0.75rem 0; }
     .muted { opacity: 0.8; }
+    .panel { border: 1px solid var(--vscode-panel-border); border-radius: 8px; background: var(--vscode-sideBar-background); overflow: hidden; }
+    .tabs { display: flex; gap: 0.15rem; padding: 0.35rem; border-bottom: 1px solid var(--vscode-panel-border); background: var(--vscode-editorWidget-background); }
+    .tab-btn { border: 1px solid transparent; border-radius: 6px; padding: 0.3rem 0.7rem; cursor: pointer; background: transparent; color: var(--vscode-foreground); }
+    .tab-btn[aria-selected="true"] { border-color: var(--vscode-focusBorder); background: var(--vscode-button-secondaryBackground); }
+    .tab-panel { display: none; padding: 0.85rem; }
+    .tab-panel.active { display: block; }
     .pill-list { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; padding: 0; margin: 0.25rem 0 1rem 0; }
     .pill-list li { border: 1px solid var(--vscode-panel-border); border-radius: 999px; padding: 0.15rem 0.55rem; }
     .pill-list li.active { border-color: var(--vscode-focusBorder); }
     button { margin-right: 0.5rem; margin-top: 0.5rem; padding: 0.35rem 0.75rem; cursor: pointer; }
-    textarea { width: 100%; box-sizing: border-box; margin-top: 0.5rem; margin-bottom: 0.5rem; min-height: 74px; }
-    .chat-log { margin-top: 0.75rem; border: 1px solid var(--vscode-panel-border); border-radius: 6px; padding: 0.6rem; min-height: 80px; white-space: pre-wrap; word-break: break-word; }
+    .composer-wrap { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 74px;
+      resize: none;
+      border: 1px solid var(--vscode-input-border, var(--vscode-panel-border));
+      border-radius: 6px;
+      padding: 0.55rem 0.6rem;
+      font-family: var(--vscode-editor-font-family, var(--vscode-font-family));
+      line-height: 1.35;
+      background: #2f3338;
+      color: #ffffff;
+      caret-color: #ffffff;
+    }
+    textarea::placeholder { color: rgba(255, 255, 255, 0.72); }
+    textarea:focus { outline: 1px solid var(--vscode-focusBorder); outline-offset: 1px; }
+    .chat-log { margin-top: 0.75rem; border: 1px solid var(--vscode-panel-border); border-radius: 6px; padding: 0.6rem; min-height: 140px; max-height: 42vh; overflow-y: auto; display: flex; flex-direction: column; gap: 0.45rem; }
+    .msg { max-width: 90%; border: 1px solid var(--vscode-panel-border); border-radius: 8px; padding: 0.45rem 0.55rem; word-break: break-word; }
+    .msg-user { align-self: flex-end; background: rgba(70, 90, 120, 0.35); }
+    .msg-assistant { align-self: flex-start; background: var(--vscode-editorWidget-background); }
+    .msg-system { align-self: center; background: transparent; border-style: dashed; opacity: 0.9; }
+    .msg-role { font-size: 11px; opacity: 0.75; margin-bottom: 0.2rem; text-transform: uppercase; letter-spacing: 0.02em; }
+    .msg-content p { margin: 0.3rem 0; }
+    .msg-content p:first-child { margin-top: 0; }
+    .msg-content p:last-child { margin-bottom: 0; }
+    .msg-content pre { overflow: auto; background: var(--vscode-textCodeBlock-background); border-radius: 6px; padding: 0.45rem; }
+    .msg-content code { font-family: var(--vscode-editor-font-family, var(--vscode-font-family)); }
+    .msg-content ul { margin: 0.3rem 0 0.3rem 1.2rem; padding: 0; }
+    .msg-content h1, .msg-content h2, .msg-content h3 { margin: 0.4rem 0 0.2rem 0; font-size: 1em; }
     .diag { margin-top: 0.75rem; background: var(--vscode-textCodeBlock-background); padding: 0.6rem; border-radius: 6px; white-space: pre-wrap; word-break: break-word; }
     .skip-link { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
     .skip-link:focus { position: static; width: auto; height: auto; left: auto; padding: 0.35rem 0.55rem; margin-bottom: 0.5rem; background: var(--vscode-button-background); color: var(--vscode-button-foreground); outline: 1px solid var(--vscode-focusBorder); z-index: 1; }
@@ -522,14 +569,16 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
 <body>
   <a class="skip-link" href="#levibe-chat-main">Skip to Lé Vibe Chat panel content</a>
   <main id="levibe-chat-main" tabindex="-1">
-  <h2 id="panelStartupHeading">Lé Vibe Native Startup</h2>
-  <p class="muted">Deterministic readiness state with local-first remediation actions.</p>
-  <nav aria-label="Startup readiness states">
-  <ul class="pill-list">${states}</ul>
-  </nav>
-  <div class="state"><strong>${escapeHtml(state)}</strong></div>
-  <p>${escapeHtml(content.detail)}</p>
-  <div>${actionsBlock}</div>
+  <h2 id="panelStartupHeading" class="page-title">Lé Vibe Chat Workspace</h2>
+  <p class="muted workspace-subtitle">Chat-first local operator workspace with separate operational surfaces.</p>
+  <div class="panel">
+  <div class="tabs" role="tablist" aria-label="Lé Vibe workspace panels">
+    <button type="button" class="tab-btn" role="tab" id="tab-chat" aria-controls="panel-chat" aria-selected="true" tabindex="0">Chat</button>
+    <button type="button" class="tab-btn" role="tab" id="tab-settings" aria-controls="panel-settings" aria-selected="false" tabindex="-1">Settings</button>
+    <button type="button" class="tab-btn" role="tab" id="tab-logs" aria-controls="panel-logs" aria-selected="false" tabindex="-1">Logs</button>
+    <button type="button" class="tab-btn" role="tab" id="tab-tools" aria-controls="panel-tools" aria-selected="false" tabindex="-1">Tools</button>
+  </div>
+  <section id="panel-chat" class="tab-panel active" role="tabpanel" aria-labelledby="tab-chat">
   <h3>Local prompt test</h3>
   <p class="muted">Send a prompt to local Ollama and receive streaming tokens.</p>
   <p class="muted" style="margin-bottom:0.25rem;">Quick actions (task-n12-2) — insert a template below. No network until you click <strong>Send Prompt</strong> (local Ollama only).</p>
@@ -539,17 +588,46 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     <button type="button" data-action="quickActionGenerateTests" title="Insert generate tests template" aria-label="Insert generate tests template">Generate tests…</button>
   </div>
   <label for="promptInput" class="muted" style="display:block;margin-top:0.35rem;">Prompt for local Ollama</label>
-  <textarea id="promptInput" placeholder="Ask local model something..." aria-label="Prompt for local Ollama (Lé Vibe Chat sends to configured local endpoint only)"></textarea>
+  <div class="composer-wrap">
+    <textarea id="promptInput" placeholder="Ask local model something..." aria-label="Prompt for local Ollama (Lé Vibe Chat sends to configured local endpoint only)"></textarea>
+  </div>
   <div>
     <button type="button" id="sendPrompt" title="Send prompt" aria-label="Send prompt">Send Prompt</button>
     <button type="button" id="cancelPrompt" title="Cancel in-flight request" aria-label="Cancel in-flight request">Cancel Request</button>
     <button type="button" id="retryLastPrompt" title="Retry last prompt" aria-label="Retry last prompt">Retry last prompt</button>
-    <button type="button" data-action="openOllamaLogging" title="Live tail Ollama logs" aria-label="Live tail Ollama logs">Ollama Logging</button>
     <button type="button" id="startNewChatSession" title="Start new chat session" aria-label="Start new chat session">New chat</button>
     <button type="button" id="restoreRecentPrompt" title="Restore recent prompt" aria-label="Restore recent prompt">Restore recent…</button>
   </div>
   <div id="chatStatus" class="muted" role="status" aria-live="polite">Idle.</div>
   <div id="chatLog" class="chat-log" role="log" aria-live="polite" aria-relevant="additions text"></div>
+  </section>
+  <section id="panel-settings" class="tab-panel" role="tabpanel" aria-labelledby="tab-settings">
+  <h3>Lé Vibe Native Startup</h3>
+  <p class="muted">Deterministic readiness state with local-first remediation actions.</p>
+  <nav aria-label="Startup readiness states">
+  <ul class="pill-list">${states}</ul>
+  </nav>
+  <div class="state"><strong>${escapeHtml(state)}</strong></div>
+  <p>${escapeHtml(content.detail)}</p>
+  <div>${actionsBlock}</div>
+  <h3>Lé Vibe Chat storage</h3>
+  <p class="muted">Workspace history lives in <code>.lvibe/chat-history.jsonl</code> (24h rolling window by default). Operational transcript/audit files remain local under ~/.config/le-vibe/levibe-native-chat/.</p>
+  <div>
+    <button type="button" data-action="viewChatUsage" title="View transcript usage" aria-label="View transcript usage">View usage</button>
+    <button type="button" data-action="exportChatTranscript" title="Export transcript" aria-label="Export transcript">Export transcript</button>
+    <button type="button" data-action="clearChatTranscript" title="Clear transcript" aria-label="Clear transcript">Clear transcript</button>
+  </div>
+  </section>
+  <section id="panel-logs" class="tab-panel" role="tabpanel" aria-labelledby="tab-logs">
+  <h3>Logs</h3>
+  <p class="muted">Operational logging stays outside chat. Open Ollama live tail and inspect structured diagnostics.</p>
+  <div>
+    <button type="button" data-action="openOllamaLogging" title="Live tail Ollama logs" aria-label="Live tail Ollama logs">Ollama Logging</button>
+  </div>
+  <pre id="recentEventsLog" class="diag" role="region" aria-label="Recent structured events">Loading recent structured events...</pre>
+  ${diagnosticsText}
+  </section>
+  <section id="panel-tools" class="tab-panel" role="tabpanel" aria-labelledby="tab-tools">
   <h3>Edit preview (workspace)</h3>
   <p class="muted">Unified diff before writing. When <code>leVibeNative.requireEditPreviewBeforeApply</code> is on (default), click <strong>Accept preview</strong> then <strong>Apply to file</strong> — no silent whole-file overwrite.</p>
   <div>
@@ -608,17 +686,46 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <div>
     <button type="button" data-action="openThirdPartyMigrationGuide" title="Open third-party migration guide" aria-label="Open third-party migration guide">Open migration guide</button>
   </div>
-  <h3>Lé Vibe Chat storage</h3>
-  <p class="muted">Local JSONL under ~/.config/le-vibe/levibe-native-chat/</p>
-  <div>
-    <button type="button" data-action="viewChatUsage" title="View transcript usage" aria-label="View transcript usage">View usage</button>
-    <button type="button" data-action="exportChatTranscript" title="Export transcript" aria-label="Export transcript">Export transcript</button>
-    <button type="button" data-action="clearChatTranscript" title="Clear transcript" aria-label="Clear transcript">Clear transcript</button>
+  </section>
   </div>
-  ${diagnosticsText}
   </main>
   <script>
     const vscode = acquireVsCodeApi();
+    const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+    const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+    function activateTab(tabId, focusTab) {
+      tabs.forEach((tab) => {
+        const active = tab.id === tabId;
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+        tab.tabIndex = active ? 0 : -1;
+        if (active && focusTab) {
+          tab.focus();
+        }
+      });
+      panels.forEach((panel) => {
+        panel.classList.toggle('active', panel.getAttribute('aria-labelledby') === tabId);
+      });
+    }
+    tabs.forEach((tab, idx) => {
+      tab.addEventListener('click', () => activateTab(tab.id, false));
+      tab.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft' && event.key !== 'Home' && event.key !== 'End') {
+          return;
+        }
+        event.preventDefault();
+        if (event.key === 'Home') {
+          activateTab(tabs[0].id, true);
+          return;
+        }
+        if (event.key === 'End') {
+          activateTab(tabs[tabs.length - 1].id, true);
+          return;
+        }
+        const delta = event.key === 'ArrowRight' ? 1 : -1;
+        const next = (idx + delta + tabs.length) % tabs.length;
+        activateTab(tabs[next].id, true);
+      });
+    });
     document.querySelectorAll('button[data-action]').forEach((button) => {
       button.addEventListener('click', () => {
         const actionId = button.getAttribute('data-action');
@@ -639,10 +746,192 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
         });
       });
     }
-    document.getElementById('sendPrompt').addEventListener('click', () => {
-      const prompt = document.getElementById('promptInput').value || '';
-      vscode.postMessage({ type: 'chat', actionId: 'sendPrompt', prompt });
-    });
+    const MAX_COMPOSER_ROWS = 12;
+    const THINKING_STEPS = ['.', '..', '...', '....', '.....'];
+    const promptInput = document.getElementById('promptInput');
+    const chatLog = document.getElementById('chatLog');
+    const chatStatus = document.getElementById('chatStatus');
+    const recentEventsLog = document.getElementById('recentEventsLog');
+    const messages = [];
+    let pendingAssistantId = null;
+    let thinkingTimer = null;
+    let thinkingStep = 0;
+    let sawFirstToken = false;
+    const escapeHtml = (value) =>
+      String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    const inlineMarkdown = (value) =>
+      escapeHtml(value)
+        .replace(/\x60([^\x60]+)\x60/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    const markdownToHtml = (raw) => {
+      const input = String(raw || '');
+      if (!input.trim()) {
+        return '';
+      }
+      const lines = input.split(/\r?\n/);
+      const out = [];
+      let inCode = false;
+      let codeLines = [];
+      let inList = false;
+      const closeList = () => {
+        if (inList) {
+          out.push('</ul>');
+          inList = false;
+        }
+      };
+      for (const line of lines) {
+        if (line.trim().startsWith('\x60\x60\x60')) {
+          closeList();
+          if (!inCode) {
+            inCode = true;
+            codeLines = [];
+          } else {
+            out.push('<pre><code>' + escapeHtml(codeLines.join('\n')) + '</code></pre>');
+            inCode = false;
+            codeLines = [];
+          }
+          continue;
+        }
+        if (inCode) {
+          codeLines.push(line);
+          continue;
+        }
+        const heading = line.match(/^(#{1,3})\s+(.*)$/);
+        if (heading) {
+          closeList();
+          const level = heading[1].length;
+          out.push('<h' + level + '>' + inlineMarkdown(heading[2]) + '</h' + level + '>');
+          continue;
+        }
+        const list = line.match(/^\s*[-*]\s+(.*)$/);
+        if (list) {
+          if (!inList) {
+            out.push('<ul>');
+            inList = true;
+          }
+          out.push('<li>' + inlineMarkdown(list[1]) + '</li>');
+          continue;
+        }
+        closeList();
+        if (line.trim().length === 0) {
+          continue;
+        }
+        out.push('<p>' + inlineMarkdown(line) + '</p>');
+      }
+      closeList();
+      if (inCode) {
+        out.push('<pre><code>' + escapeHtml(codeLines.join('\n')) + '</code></pre>');
+      }
+      return out.join('');
+    };
+    const renderTimeline = () => {
+      chatLog.innerHTML = '';
+      for (const msg of messages) {
+        const item = document.createElement('div');
+        item.className = 'msg ' + (msg.role === 'user' ? 'msg-user' : msg.role === 'assistant' ? 'msg-assistant' : 'msg-system');
+        const role = document.createElement('div');
+        role.className = 'msg-role';
+        role.textContent = msg.role;
+        const body = document.createElement('div');
+        body.className = 'msg-content';
+        if (msg.role === 'assistant') {
+          body.innerHTML = markdownToHtml(msg.content);
+        } else {
+          body.textContent = msg.content;
+        }
+        item.appendChild(role);
+        item.appendChild(body);
+        chatLog.appendChild(item);
+      }
+      chatLog.scrollTop = chatLog.scrollHeight;
+    };
+    const pushMessage = (role, content) => {
+      const entry = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8), role, content: String(content || '') };
+      messages.push(entry);
+      renderTimeline();
+      return entry.id;
+    };
+    const updateMessage = (id, nextContent) => {
+      const target = messages.find((m) => m.id === id);
+      if (!target) {
+        return;
+      }
+      target.content = String(nextContent || '');
+      renderTimeline();
+    };
+    const clearTimeline = () => {
+      messages.length = 0;
+      pendingAssistantId = null;
+      sawFirstToken = false;
+      renderTimeline();
+    };
+    const stopThinkingIndicator = () => {
+      if (thinkingTimer) {
+        clearInterval(thinkingTimer);
+        thinkingTimer = null;
+      }
+    };
+    const startThinkingIndicator = (assistantMessageId) => {
+      stopThinkingIndicator();
+      thinkingStep = 0;
+      sawFirstToken = false;
+      thinkingTimer = setInterval(() => {
+        if (sawFirstToken) {
+          stopThinkingIndicator();
+          return;
+        }
+        updateMessage(assistantMessageId, THINKING_STEPS[thinkingStep]);
+        thinkingStep = (thinkingStep + 1) % THINKING_STEPS.length;
+      }, 240);
+    };
+    const autoresizeComposer = () => {
+      if (!promptInput) {
+        return;
+      }
+      promptInput.rows = 1;
+      const cs = window.getComputedStyle(promptInput);
+      const lineHeight = Math.max(16, parseFloat(cs.lineHeight) || 20);
+      const borderPad = promptInput.offsetHeight - promptInput.clientHeight;
+      const maxHeight = Math.ceil(lineHeight * MAX_COMPOSER_ROWS + borderPad);
+      promptInput.style.height = 'auto';
+      promptInput.style.height = Math.min(promptInput.scrollHeight, maxHeight) + 'px';
+      promptInput.style.overflowY = promptInput.scrollHeight > maxHeight ? 'auto' : 'hidden';
+    };
+    if (promptInput) {
+      promptInput.addEventListener('input', autoresizeComposer);
+      promptInput.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter') {
+          return;
+        }
+        if (event.shiftKey) {
+          return;
+        }
+        event.preventDefault();
+        submitPromptFromComposer();
+      });
+      autoresizeComposer();
+    }
+    function submitPromptFromComposer() {
+      const prompt = promptInput ? promptInput.value : '';
+      const trimmed = String(prompt || '').trim();
+      if (!trimmed) {
+        vscode.postMessage({ type: 'chat', actionId: 'sendPrompt', prompt });
+        return;
+      }
+      pushMessage('user', trimmed);
+      pendingAssistantId = pushMessage('assistant', THINKING_STEPS[0]);
+      startThinkingIndicator(pendingAssistantId);
+      if (promptInput) {
+        promptInput.value = '';
+        autoresizeComposer();
+      }
+      vscode.postMessage({ type: 'chat', actionId: 'sendPrompt', prompt: trimmed });
+    }
+    document.getElementById('sendPrompt').addEventListener('click', submitPromptFromComposer);
     document.getElementById('cancelPrompt').addEventListener('click', () => {
       vscode.postMessage({ type: 'chat', actionId: 'cancelPrompt' });
     });
@@ -693,18 +982,56 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
         }
         return;
       }
+      if (msg && msg.type === 'historySeed' && Array.isArray(msg.messages)) {
+        clearTimeline();
+        for (const entry of msg.messages) {
+          if (!entry || typeof entry !== 'object') {
+            continue;
+          }
+          const role = entry.role === 'assistant' || entry.role === 'system' ? entry.role : 'user';
+          pushMessage(role, typeof entry.content === 'string' ? entry.content : '');
+        }
+        return;
+      }
+      if (msg && msg.type === 'logsUpdate') {
+        if (recentEventsLog) {
+          recentEventsLog.textContent = typeof msg.text === 'string' ? msg.text : 'No structured events yet.';
+        }
+        return;
+      }
       if (!msg || msg.type !== 'chatUpdate') {
         return;
       }
-      const status = document.getElementById('chatStatus');
-      const log = document.getElementById('chatLog');
       if (msg.status) {
-        status.textContent = msg.status;
+        chatStatus.textContent = msg.status;
+        if (/Response complete|Request cancelled|No request is currently running|Enter a prompt first\./.test(msg.status)) {
+          stopThinkingIndicator();
+          pendingAssistantId = null;
+        }
       }
       if (typeof msg.replaceLog === 'string') {
-        log.textContent = msg.replaceLog;
+        if (msg.replaceLog.length === 0) {
+          clearTimeline();
+        } else {
+          clearTimeline();
+          pushMessage('system', msg.replaceLog);
+        }
       } else if (typeof msg.append === 'string') {
-        log.textContent += msg.append;
+        if (!pendingAssistantId) {
+          pendingAssistantId = pushMessage('assistant', '');
+        }
+        const target = messages.find((m) => m.id === pendingAssistantId);
+        if (!target) {
+          pendingAssistantId = pushMessage('assistant', msg.append);
+        } else {
+          if (!sawFirstToken) {
+            sawFirstToken = true;
+            stopThinkingIndicator();
+            target.content = '';
+          }
+          target.content += msg.append;
+          renderTimeline();
+        }
       }
     });
     document.getElementById('editPreviewAccept').addEventListener('click', () => {
@@ -912,11 +1239,53 @@ async function openAgentSurface() {
   const contextBudget = getContextBudget(vscode);
   const workspaceUri = vscode.workspace.workspaceFolders?.[0]?.uri?.toString() || 'no-workspace';
   const workspaceFsPath = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath || '';
+  const workspaceHistoryFile = workspaceChatHistoryPath(workspaceFsPath);
+  const workspaceHistoryRetentionHours = config.get('chatWorkspaceHistoryRetentionHours', 24);
+  const workspaceHistoryMaxEntries = config.get('chatWorkspaceHistoryMaxEntries', 2000);
   const orchestratorAuditPath = orchestratorEventAuditPath();
   const selectedContexts = [];
   let latestStartupState = 'checking';
   let latestDiagnostics = { mode: 'startup_probe' };
   let lastPromptPlain = null;
+
+  function postWorkspaceHistorySeed() {
+    if (!workspaceHistoryFile) {
+      return;
+    }
+    let rows = [];
+    try {
+      rows = readWorkspaceChatHistoryWindow(workspaceHistoryFile, workspaceHistoryRetentionHours);
+    } catch {
+      rows = [];
+    }
+    panel.webview.postMessage({
+      type: 'historySeed',
+      messages: rows
+        .filter((row) => row && typeof row.content === 'string' && typeof row.role === 'string')
+        .map((row) => ({
+          id: row.id,
+          ts: row.ts,
+          role: row.role,
+          content: row.content,
+        })),
+    });
+  }
+
+  function postRecentStructuredEvents() {
+    const rows = readRecentOrchestratorEvents(orchestratorAuditPath, { workspaceUri, limit: 20 });
+    const text =
+      rows.length === 0
+        ? 'No structured events yet for this workspace.'
+        : rows
+            .map((row) => {
+              const when = row.timestamp_iso || 'unknown-time';
+              const type = row.event_type || 'unknown-event';
+              const payload = row.payload && typeof row.payload === 'object' ? JSON.stringify(row.payload) : '{}';
+              return `[${when}] ${type} ${payload}`;
+            })
+            .join('\n');
+    panel.webview.postMessage({ type: 'logsUpdate', text });
+  }
 
   function collectRecentUserPrompts(limit = 12) {
     const rows = loadTranscript(transcriptFile)
@@ -1018,6 +1387,8 @@ async function openAgentSurface() {
   function beginMainReadiness() {
     panel.webview.html = panelHtml('checking', null, { mode: 'startup_probe' }, contextBudget);
     queueMicrotask(() => flushPendingSelectionContext());
+    queueMicrotask(() => postWorkspaceHistorySeed());
+    queueMicrotask(() => postRecentStructuredEvents());
     resolveStartupSnapshot(vscode).then((snapshot) => {
       latestStartupState = snapshot.state;
       latestDiagnostics = snapshot.diagnostics || {};
@@ -1030,6 +1401,8 @@ async function openAgentSurface() {
             : 'Lé Vibe Chat: follow the highlighted readiness state and use the action buttons.',
       });
       queueMicrotask(() => flushPendingSelectionContext());
+      queueMicrotask(() => postWorkspaceHistorySeed());
+      queueMicrotask(() => postRecentStructuredEvents());
     });
   }
 
@@ -1039,7 +1412,7 @@ async function openAgentSurface() {
     beginMainReadiness();
   }
 
-  function buildOrchestratorGroundedPrompt(userPrompt) {
+  function buildGroundedPrompt(userPrompt) {
     const prompt = String(userPrompt || '').trim();
     const lvibeDir = workspaceFsPath ? path.join(workspaceFsPath, '.lvibe') : '';
     const sessionManifestPath = lvibeDir ? path.join(lvibeDir, 'session-manifest.json') : '';
@@ -1072,29 +1445,10 @@ async function openAgentSurface() {
       ollama_model: client.model,
       selected_context_count: selectedContexts.length,
     };
-    const sections = [
-      'SYSTEM ROLE (LÉ VIBE IDENTITY LOCK):',
-      '- You ARE the Lé Vibe Operator/Orchestrator for this workspace session.',
-      '- Never claim you are "not the orchestrator" or redirect identity to an external CLI role.',
-      '- Speak as the active in-editor operator grounded in local workspace/runtime state.',
-      '- If context is missing, ask one concrete follow-up question.',
-      '',
-      `Environment summary: ${JSON.stringify(envSummary)}`,
-    ];
-
-    if (sessionManifestSnippet) {
-      sections.push('', 'Session manifest excerpt (.lvibe/session-manifest.json):', sessionManifestSnippet);
-    }
-    if (orchestratorWorkflowSnippet) {
-      sections.push(
-        '',
-        'Orchestrator workflow excerpt (.lvibe/workflows/native-extension-master-orchestrator-prompt.md):',
-        orchestratorWorkflowSnippet,
-      );
-    }
-
-    sections.push('', `User request: ${prompt}`);
-    return sections.join('\n');
+    return buildOrchestratorGroundedPrompt(prompt, envSummary, {
+      sessionManifestSnippet,
+      orchestratorWorkflowSnippet,
+    });
   }
 
   function runPromptSend(promptPlain, { skipUserTranscript = false } = {}) {
@@ -1107,20 +1461,25 @@ async function openAgentSurface() {
     const turnId = crypto.randomUUID();
     const startedAtMs = Date.now();
     let retriesObserved = 0;
-    const groundedPrompt = buildOrchestratorGroundedPrompt(trimmed);
+    const groundedPrompt = buildGroundedPrompt(trimmed);
     const promptWithContext = buildPromptWithContext(groundedPrompt, selectedContexts, contextBudget.maxTotalChars);
     if (!skipUserTranscript) {
       try {
+        const userEntry = {
+          id: `u-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
+          ts: Date.now(),
+          role: 'user',
+          content: trimmed,
+        };
         appendEntry(
           transcriptFile,
-          {
-            id: `u-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
-            ts: Date.now(),
-            role: 'user',
-            content: trimmed,
-          },
+          userEntry,
           transcriptCaps,
         );
+        appendWorkspaceChatHistoryEntry(workspaceHistoryFile, userEntry, {
+          retentionHours: workspaceHistoryRetentionHours,
+          maxEntries: workspaceHistoryMaxEntries,
+        });
       } catch {
         /* ignore transcript write failures; chat still works */
       }
@@ -1129,7 +1488,6 @@ async function openAgentSurface() {
     panel.webview.postMessage({
       type: 'chatUpdate',
       status: `Streaming response from local Ollama (model: ${client.model})...`,
-      replaceLog: '',
     });
     void chat.sendPrompt(promptWithContext, {
       onToken(token) {
@@ -1158,16 +1516,21 @@ async function openAgentSurface() {
       onDone(cancelled) {
         if (!cancelled && assistantBuffer.length > 0) {
           try {
+            const assistantEntry = {
+              id: `a-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
+              ts: Date.now(),
+              role: 'assistant',
+              content: assistantBuffer,
+            };
             appendEntry(
               transcriptFile,
-              {
-                id: `a-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
-                ts: Date.now(),
-                role: 'assistant',
-                content: assistantBuffer,
-              },
+              assistantEntry,
               transcriptCaps,
             );
+            appendWorkspaceChatHistoryEntry(workspaceHistoryFile, assistantEntry, {
+              retentionHours: workspaceHistoryRetentionHours,
+              maxEntries: workspaceHistoryMaxEntries,
+            });
           } catch {
             /* ignore */
           }
@@ -1190,6 +1553,7 @@ async function openAgentSurface() {
               skip_user_transcript: skipUserTranscript === true,
             }),
           );
+          postRecentStructuredEvents();
         } catch {
           /* non-blocking audit append */
         }
@@ -1214,6 +1578,7 @@ async function openAgentSurface() {
               skip_user_transcript: skipUserTranscript === true,
             }),
           );
+          postRecentStructuredEvents();
         } catch {
           /* non-blocking audit append */
         }
