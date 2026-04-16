@@ -210,3 +210,10 @@ test('OPERATOR.md documents E2E agentic editor release checklist + sign-off (tas
   assert.ok(text.includes('Cancel plan run'));
   assert.ok(text.includes('Sign-off (per release)'));
 });
+
+test('OPERATOR.md documents regression golden fixtures (task-n15-2)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n15-2'));
+  assert.ok(text.includes('test/fixtures/n15-2'));
+  assert.ok(text.includes('n15-2-golden-regression.test.js'));
+});

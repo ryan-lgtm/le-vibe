@@ -1,0 +1,10 @@
+{
+  "kind": "levibe.edit_proposal.v1",
+  "proposals": [
+    {
+      "targetUri": "file:///workspace/golden/a.txt",
+      "edit": { "kind": "full_file", "content": "x" }
+    }
+  ],
+  "unexpectedField": true
+}

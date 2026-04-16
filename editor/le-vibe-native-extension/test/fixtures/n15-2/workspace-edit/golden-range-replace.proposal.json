@@ -1,0 +1,16 @@
+{
+  "kind": "levibe.edit_proposal.v1",
+  "proposals": [
+    {
+      "targetUri": "file:///tmp/golden-range.txt",
+      "edit": {
+        "kind": "range_replace",
+        "range": {
+          "start": { "line": 0, "character": 0 },
+          "end": { "line": 0, "character": 2 }
+        },
+        "newText": "ZZ"
+      }
+    }
+  ]
+}

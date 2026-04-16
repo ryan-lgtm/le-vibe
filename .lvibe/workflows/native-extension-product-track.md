@@ -684,9 +684,11 @@ Product intent: Cursor-like **@file / @folder** context without unbounded embedd
     - checklist lives in `OPERATOR.md` or extension README; signed off per release
   - Evidence:
     - Added **`OPERATOR.md`** section **E2E agentic editor release checklist (task-n15-1)** with steps A (Preview sample workspace edit → Accept preview → Apply to file → Undo) and B (Run sample workspace plan → Cancel plan run mid-flight) plus **Sign-off (per release)** table; **`README.md`** *Operator verification* cross-link; tests `test/operator-doc.test.js`, `test/readme-e2e-checklist-pointer.test.js`; `npm run verify` green.
-- [ ] `pending` **task-n15-2**: **Regression tests** for proposal parser + WorkspaceEdit builder (golden files in `test/fixtures/`).
+- [x] `done` **task-n15-2**: **Regression tests** for proposal parser + WorkspaceEdit builder (golden files in `test/fixtures/`).
   - Acceptance:
     - `npm run verify` includes new tests; no flaky network
+  - Evidence:
+    - **`test/fixtures/n15-2/edit-proposal/`** + **`test/fixtures/n15-2/workspace-edit/`** golden JSON pairs; **`test/n15-2-golden-regression.test.js`**; shared mock **`test/mock-vscode-workspace-edit.js`** (used by **`workspace-edit-apply.test.js`**); **`OPERATOR.md`** *Regression goldens*; `npm run verify` green (no network).
 
 ---
 

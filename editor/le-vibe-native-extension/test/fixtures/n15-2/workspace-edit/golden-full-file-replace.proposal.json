@@ -1,0 +1,9 @@
+{
+  "kind": "levibe.edit_proposal.v1",
+  "proposals": [
+    {
+      "targetUri": "file:///tmp/golden-replace.txt",
+      "edit": { "kind": "full_file", "content": "replaced\n" }
+    }
+  ]
+}

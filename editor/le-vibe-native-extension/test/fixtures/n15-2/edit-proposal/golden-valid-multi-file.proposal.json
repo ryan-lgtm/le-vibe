@@ -1,0 +1,13 @@
+{
+  "kind": "levibe.edit_proposal.v1",
+  "proposals": [
+    {
+      "targetUri": "file:///workspace/golden/one.ts",
+      "edit": { "kind": "full_file", "content": "export const a = 1;\n" }
+    },
+    {
+      "targetUri": "file:///workspace/golden/two.ts",
+      "edit": { "kind": "full_file", "content": "export const b = 2;\n" }
+    }
+  ]
+}

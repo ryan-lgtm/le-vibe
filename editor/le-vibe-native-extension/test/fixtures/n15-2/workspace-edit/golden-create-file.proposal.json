@@ -1,0 +1,9 @@
+{
+  "kind": "levibe.edit_proposal.v1",
+  "proposals": [
+    {
+      "targetUri": "file:///tmp/golden-new.txt",
+      "edit": { "kind": "full_file", "content": "created\n" }
+    }
+  ]
+}

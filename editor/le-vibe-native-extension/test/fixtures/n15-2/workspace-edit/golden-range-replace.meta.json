@@ -1,0 +1,5 @@
+{
+  "mock": { "fileExists": true, "docLines": ["abcdef"] },
+  "expectedApplyCount": 1,
+  "expectedOps": ["replace"]
+}

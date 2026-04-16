@@ -1,0 +1,5 @@
+{
+  "mock": { "fileExists": false, "docLines": [] },
+  "expectedApplyCount": 1,
+  "expectedOps": ["createFile", "insert"]
+}

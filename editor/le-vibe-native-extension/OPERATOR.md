@@ -132,3 +132,7 @@ Run **after** **`npm run verify`** is green. This is a **manual** gate for agent
 | _e.g. extension 0.x / git tag_ | _e.g. 2026-04-15_ | | |
 
 Add or update a row whenever you **tag**, **publish a VSIX**, or **bless an internal build** so agentic-editor releases stay auditable.
+
+## Regression goldens (Epic N15, task-n15-2)
+
+File-backed cases under **`test/fixtures/n15-2/`** — **`edit-proposal/`** pairs (`*.proposal.json` + `*.expected.json`) and **`workspace-edit/`** pairs (`*.proposal.json` + `*.meta.json`) — are exercised by **`test/n15-2-golden-regression.test.js`** as part of **`npm test`** / **`npm run verify`**. They lock **`validateEditProposal`** and the **`WorkspaceEdit`** op sequence from **`applyEditProposalBatchAsWorkspaceEdit`** (mocked VS Code API — **no network**).

@@ -1,0 +1,13 @@
+{
+  "kind": "levibe.edit_proposal.v1",
+  "proposals": [
+    {
+      "targetUri": "file:///tmp/golden-a.txt",
+      "edit": { "kind": "full_file", "content": "A\n" }
+    },
+    {
+      "targetUri": "file:///tmp/golden-b.txt",
+      "edit": { "kind": "full_file", "content": "B\n" }
+    }
+  ]
+}
