@@ -234,6 +234,14 @@ test('OPERATOR.md cross-links README startup activation intent (task-n55-1)', ()
   assert.ok(text.includes('onStartupFinished'));
 });
 
+test('OPERATOR.md cross-links README activation example lookup (task-n57-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n57-1'));
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('Activation example lookup (task-n56-1)'));
+  assert.ok(text.includes('activationEvents'));
+});
+
 test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('workspace.applyEdit'));

@@ -184,6 +184,8 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 
 **README: startup activation intent (task-n55-1):** **`package.json`** **`activationEvents`** startup rationale is written out in **`README.md`** *Startup activation intent (task-n54-1)* — use that section to verify why **`onStartupFinished`** is enabled.
 
+**README: activation example lookup (task-n57-1):** the one-hop mapping from activation metadata to palette labels is written out in **`README.md`** *Activation example lookup (task-n56-1)* — use that section to jump from **`activationEvents`** literals to the command table quickly.
+
 **CHANGELOG (task-n19-1):** **`CHANGELOG.md`** — semver release notes at the package root (Keep a Changelog–style). When you bump **`package.json`** **`version`**, add a **`## [x.y.z]`** section there (coordinate with *Extension version vs monorepo / packaging (task-n16-3)*). Epic-level history remains in the product-track file above.
 
 **Security notes (task-n18-1):** see **`## Security notes (task-n18-1)`** above — **`npm audit`** triage, **`overrides`** policy, issue tracker pointer.

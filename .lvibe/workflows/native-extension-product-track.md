@@ -1137,9 +1137,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N57 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n57-1**: **OPERATOR — README pointer for activation example lookup** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Activation example lookup (task-n56-1)* so operators can jump from activation metadata to the command table mapping quickly.
+- [x] `done` **task-n57-1**: **OPERATOR — README pointer for activation example lookup** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Activation example lookup (task-n56-1)* so operators can jump from activation metadata to the command table mapping quickly.
   - Acceptance:
     - **`OPERATOR.md`** + **`operator-doc.test.js`** token
+    - **`npm run verify`** green
+  - Evidence:
+    - **`OPERATOR.md`** — **`README: activation example lookup (task-n57-1)`** under *Product track*.
+    - **`test/operator-doc.test.js`** — **`task-n57-1`** token test; **`npm run verify`** green.
+
+### Epic N58 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n58-1**: **Extension README — activationEvents count breakdown pointer to startup line** — add one short line near *Activation events (task-n50-1)* pointing readers to *Startup activation intent (task-n54-1)* for rationale on the startup literal within the event count breakdown; include targeted test for both section tokens.
+  - Acceptance:
+    - **`README.md`** + targeted test
     - **`npm run verify`** green
 
 ---
