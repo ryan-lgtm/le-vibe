@@ -997,9 +997,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N43 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n43-1**: **OPERATOR — README pointer for `name`** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Package name (task-n42-1)* for **`package.json`** **`name`** so operators align with **`task-n41-1`** doc-discovery pattern.
+- [x] `done` **task-n43-1**: **OPERATOR — README pointer for `name`** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Package name (task-n42-1)* for **`package.json`** **`name`** so operators align with **`task-n41-1`** doc-discovery pattern.
   - Acceptance:
     - **`OPERATOR.md`** + **`operator-doc.test.js`** token
+    - **`npm run verify`** green
+  - Evidence:
+    - **`OPERATOR.md`** — **`README: package name (task-n43-1)`** under *Product track*.
+    - **`test/operator-doc.test.js`** — **`task-n43-1`** token test; **`npm run verify`** green.
+
+### Epic N44 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n44-1**: **Extension README — `version`** — add one line (near **Package name** / **Changelog**) documenting **`package.json`** **`version`** so contributors can see the currently shipped extension package version without opening **`package.json`**; include contract test deriving the string from **`package.json`**.
+  - Acceptance:
+    - **`README.md`** + targeted test
     - **`npm run verify`** green
 
 ---
