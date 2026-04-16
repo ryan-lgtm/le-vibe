@@ -154,6 +154,7 @@ All extension-owned files live under **`~/.config/le-vibe/levibe-native-chat/`**
 Chat transcript JSONL is capped by **`leVibeNative.chatTranscriptMaxBytes`** (default **524288** bytes) and **`leVibeNative.chatTranscriptMaxMessages`** (default **200** JSONL rows) (oldest-first compaction with an explicit system stub when limits are hit — details in README).
 
 **Terminal command audit (task-n13-3):** **`terminal-command-audit.jsonl`** — append-only **`lvibe.terminal_command_audit.v1`** lines (timestamp, cwd, command line; **`exit_code`** when **`onDidEndTerminalShellExecution`** matches). Same directory as other Lé Vibe Chat persistence; see **`terminal-command-audit.js`**.
+**Orchestrator bridge audit (task-cp5-1):** **`orchestrator-events.jsonl`** — append-only **`lvibe.orchestrator_event.v1`** lines with event types **`chat_turn`**, **`edit_apply`**, **`plan_run`**, **`terminal_exec`** for operator/orchestrator consumption (local-only JSONL).
 
 ## Product track
 

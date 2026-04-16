@@ -173,9 +173,16 @@ Everything else is out-of-scope unless required to unblock one of the five.
 
 **Narrative:** agent actions must cooperate with orchestrator flows and be observable.
 
-- [ ] `pending` **task-cp5-1**: Standardize event contract between extension and operator/orchestrator (`chat_turn`, `edit_apply`, `plan_run`, `terminal_exec`).
+- [x] `done` **task-cp5-1**: Standardize event contract between extension and operator/orchestrator (`chat_turn`, `edit_apply`, `plan_run`, `terminal_exec`).
   - Acceptance:
     - JSONL contracts documented + contract tests
+  - Evidence (2026-04-15):
+    - Added `editor/le-vibe-native-extension/orchestrator-events.js` with versioned JSONL contract `lvibe.orchestrator_event.v1`, canonical path `orchestrator-events.jsonl`, and envelope helpers for event types `chat_turn`, `edit_apply`, `plan_run`, and `terminal_exec`.
+    - Updated `editor/le-vibe-native-extension/extension.js` to append orchestrator bridge events during live flows: chat turn completion/error/cancel outcomes, edit apply success/failure/conflict-block, workspace plan run lifecycle (started/completed/cancelled/failed), and integrated-terminal execution outcome (`sent`/`blocked`).
+    - Updated `editor/le-vibe-native-extension/terminal-exec.js` return payload to surface normalized `commandLine` metadata for deterministic terminal event records.
+    - Added contract tests in `editor/le-vibe-native-extension/test/orchestrator-events.test.js` and root-path coverage in `editor/le-vibe-native-extension/test/storage-inventory.test.js`; updated persistence inventory in `storage-inventory.js`.
+    - Documented the new contract/audit file in `editor/le-vibe-native-extension/README.md` and `editor/le-vibe-native-extension/OPERATOR.md`, including bounded persistence inventory entry for `orchestrator-events.jsonl`.
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 348 passed, smoke passed).
 - [ ] `pending` **task-cp5-2**: Add "runbook mode" command to package diagnostics for support (settings, logs, recent events).
   - Acceptance:
     - local-only bundle output path documented

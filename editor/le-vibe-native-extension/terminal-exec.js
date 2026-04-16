@@ -120,7 +120,7 @@ function scheduleExitAuditAppend(vscode, commandLine, auditId, auditFilePath) {
  * @param {typeof import('vscode')} vscode
  * @param {string} commandLine
  * @param {{ panel?: import('vscode').WebviewPanel | null, auditPath?: string }} [opts]
- * @returns {Promise<{ ok: true } | { ok: false, reason: string }>}
+ * @returns {Promise<{ ok: true, commandLine: string } | { ok: false, reason: string, commandLine?: string }>}
  */
 async function runCommandInVisibleTerminal(vscode, commandLine, opts = {}) {
   const panel = opts.panel;
@@ -132,7 +132,7 @@ async function runCommandInVisibleTerminal(vscode, commandLine, opts = {}) {
       panel.webview.postMessage({ type: 'chatUpdate', status: reason });
     }
     await vscode.window.showWarningMessage(reason);
-    return { ok: false, reason };
+    return { ok: false, reason, commandLine: normalizeCommandLine(commandLine) };
   }
 
   const line = normalizeCommandLine(commandLine);
@@ -153,7 +153,7 @@ async function runCommandInVisibleTerminal(vscode, commandLine, opts = {}) {
       if (panel) {
         panel.webview.postMessage({ type: 'chatUpdate', status: 'Lé Vibe Chat: terminal command cancelled.' });
       }
-      return { ok: false, reason: 'cancelled' };
+      return { ok: false, reason: 'cancelled', commandLine: line };
     }
     if (choice === 'Run and skip further prompts (this session)') {
       sessionSkipBatchConfirmation = true;
@@ -201,7 +201,7 @@ async function runCommandInVisibleTerminal(vscode, commandLine, opts = {}) {
       status: `Lé Vibe Chat: sent to integrated terminal “${LEVIBE_CHAT_TERMINAL_NAME}” (visible).`,
     });
   }
-  return { ok: true };
+  return { ok: true, commandLine: line };
 }
 
 module.exports = {

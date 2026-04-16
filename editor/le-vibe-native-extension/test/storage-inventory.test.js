@@ -13,6 +13,7 @@ const {
 const { workspacePlanAuditPath } = require('../workspace-plan-exec');
 const { workspaceFsOpsAuditPath } = require('../workspace-fs-ops-audit');
 const { terminalCommandAuditPath } = require('../terminal-command-audit');
+const { orchestratorEventAuditPath } = require('../orchestrator-events');
 
 test('levibeNativeChatDir matches all persisted path roots', () => {
   const root = levibeNativeChatDir();
@@ -25,6 +26,7 @@ test('levibeNativeChatDir matches all persisted path roots', () => {
   assert.ok(workspacePlanAuditPath().startsWith(root + '/') || workspacePlanAuditPath().startsWith(root + '\\'));
   assert.ok(workspaceFsOpsAuditPath().startsWith(root + '/') || workspaceFsOpsAuditPath().startsWith(root + '\\'));
   assert.ok(terminalCommandAuditPath().startsWith(root + '/') || terminalCommandAuditPath().startsWith(root + '\\'));
+  assert.ok(orchestratorEventAuditPath().startsWith(root + '/') || orchestratorEventAuditPath().startsWith(root + '\\'));
 });
 
 test('PERSISTED_ARTIFACTS has unique basenames (transcript glob allowed once)', () => {

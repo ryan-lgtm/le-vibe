@@ -103,6 +103,7 @@ const {
 const { fetchCurrentFileOutlineForContext } = require('./outline-context');
 const { registerLeVibeChatStatusBar } = require('./status-bar-entry');
 const { createInlineSuggestionProvider } = require('./inline-suggestions');
+const { orchestratorEventAuditPath, buildOrchestratorEvent, appendOrchestratorEvent } = require('./orchestrator-events');
 
 /**
  * @param {import('vscode')} vscode
@@ -722,9 +723,8 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
 /**
  * Queue editor selection + file path for the next Lé Vibe Chat panel, then open the agent surface (task-n12-1).
  */
-async function runAskChatAboutSelection() {
+async function runAskChatAboutSelection(opts = {}) {
   const vscode = require('vscode');
-  const opts = arguments[0] || {};
   const quickTemplateId =
     opts && typeof opts.quickTemplateId === 'string' ? opts.quickTemplateId : null;
   if (!isFirstPartyAgentSurfaceEnabled(vscode)) {
@@ -902,6 +902,8 @@ function openAgentSurface() {
   });
   const { transcriptFile, transcriptCaps } = getTranscriptContext(vscode);
   const contextBudget = getContextBudget(vscode);
+  const workspaceUri = vscode.workspace.workspaceFolders?.[0]?.uri?.toString() || 'no-workspace';
+  const orchestratorAuditPath = orchestratorEventAuditPath();
   const selectedContexts = [];
   let latestStartupState = 'checking';
   let latestDiagnostics = { mode: 'startup_probe' };
@@ -1035,6 +1037,9 @@ function openAgentSurface() {
       return;
     }
     lastPromptPlain = trimmed;
+    const turnId = crypto.randomUUID();
+    const startedAtMs = Date.now();
+    let retriesObserved = 0;
     const promptWithContext = buildPromptWithContext(trimmed, selectedContexts, contextBudget.maxTotalChars);
     if (!skipUserTranscript) {
       try {
@@ -1064,6 +1069,9 @@ function openAgentSurface() {
         panel.webview.postMessage({ type: 'chatUpdate', append: token });
       },
       onRetry({ attempt, maxAttempts, willRetry, error }) {
+        if (willRetry) {
+          retriesObserved += 1;
+        }
         const detail = formatOllamaDiagnostic(error, client.endpoint);
         panel.webview.postMessage({
           type: 'chatUpdate',
@@ -1093,12 +1101,47 @@ function openAgentSurface() {
           type: 'chatUpdate',
           status: cancelled ? 'Request cancelled.' : 'Response complete.',
         });
+        try {
+          appendOrchestratorEvent(
+            orchestratorAuditPath,
+            buildOrchestratorEvent('chat_turn', workspaceUri, {
+              turn_id: turnId,
+              outcome: cancelled ? 'cancelled' : 'completed',
+              duration_ms: Date.now() - startedAtMs,
+              retries_observed: retriesObserved,
+              prompt_chars: trimmed.length,
+              response_chars: assistantBuffer.length,
+              context_entries: selectedContexts.length,
+              skip_user_transcript: skipUserTranscript === true,
+            }),
+          );
+        } catch {
+          /* non-blocking audit append */
+        }
       },
       onError(error) {
         panel.webview.postMessage({
           type: 'chatUpdate',
           status: formatOllamaDiagnostic(error, client.endpoint),
         });
+        try {
+          appendOrchestratorEvent(
+            orchestratorAuditPath,
+            buildOrchestratorEvent('chat_turn', workspaceUri, {
+              turn_id: turnId,
+              outcome: 'error',
+              duration_ms: Date.now() - startedAtMs,
+              retries_observed: retriesObserved,
+              prompt_chars: trimmed.length,
+              response_chars: assistantBuffer.length,
+              error: error && error.message ? error.message : String(error),
+              context_entries: selectedContexts.length,
+              skip_user_transcript: skipUserTranscript === true,
+            }),
+          );
+        } catch {
+          /* non-blocking audit append */
+        }
       },
     });
   }
@@ -1172,6 +1215,7 @@ function openAgentSurface() {
             await vscode.window.showWarningMessage(gate.reason);
             return;
           }
+          const targetUriStr = editPreviewSession.targetUri.toString();
           try {
             if (!editPreviewSession.proposal) {
               await vscode.window.showErrorMessage('Lé Vibe Chat: internal error — missing proposal on apply.');
@@ -1186,6 +1230,18 @@ function openAgentSurface() {
               if (!conflict.ok) {
                 await vscode.window.showWarningMessage(conflict.panelMessage);
                 panel.webview.postMessage({ type: 'chatUpdate', status: conflict.panelMessage });
+                try {
+                  appendOrchestratorEvent(
+                    orchestratorAuditPath,
+                    buildOrchestratorEvent('edit_apply', workspaceUri, {
+                      outcome: 'conflict_blocked',
+                      target_uri: targetUriStr,
+                      reason: conflict.panelMessage,
+                    }),
+                  );
+                } catch {
+                  /* non-blocking audit append */
+                }
                 editPreviewSession = null;
                 panel.webview.postMessage({ type: 'editPreviewUpdate', clear: true });
                 return;
@@ -1194,8 +1250,34 @@ function openAgentSurface() {
             await applyEditProposalBatchAsWorkspaceEdit(vscode, editPreviewSession.proposal);
             const rel = vscode.workspace.asRelativePath(editPreviewSession.targetUri, false);
             await vscode.window.showInformationMessage(`Lé Vibe Chat: applied edit to ${rel}`);
+            try {
+              appendOrchestratorEvent(
+                orchestratorAuditPath,
+                buildOrchestratorEvent('edit_apply', workspaceUri, {
+                  outcome: 'applied',
+                  target_uri: targetUriStr,
+                  proposal_count: Array.isArray(editPreviewSession.proposal.proposals)
+                    ? editPreviewSession.proposal.proposals.length
+                    : 0,
+                }),
+              );
+            } catch {
+              /* non-blocking audit append */
+            }
           } catch (e) {
             await vscode.window.showErrorMessage(e && e.message ? e.message : String(e));
+            try {
+              appendOrchestratorEvent(
+                orchestratorAuditPath,
+                buildOrchestratorEvent('edit_apply', workspaceUri, {
+                  outcome: 'failed',
+                  target_uri: targetUriStr,
+                  error: e && e.message ? e.message : String(e),
+                }),
+              );
+            } catch {
+              /* non-blocking audit append */
+            }
           }
           editPreviewSession = null;
           panel.webview.postMessage({ type: 'editPreviewUpdate', clear: true });
@@ -1385,6 +1467,17 @@ function openAgentSurface() {
           await vscode.workspace.fs.createDirectory(lvibeDir);
         }
         const plan = buildSampleDemoWorkspacePlan(vscode, folder);
+        try {
+          appendOrchestratorEvent(
+            orchestratorAuditPath,
+            buildOrchestratorEvent('plan_run', workspaceUri, {
+              phase: 'started',
+              step_total: Array.isArray(plan.steps) ? plan.steps.length : 0,
+            }),
+          );
+        } catch {
+          /* non-blocking audit append */
+        }
         const validated = validateWorkspacePlan(plan);
         if (!validated.ok) {
           panel.webview.postMessage({ type: 'chatUpdate', status: validated.userMessage });
@@ -1420,6 +1513,18 @@ function openAgentSurface() {
             type: 'chatUpdate',
             status: `Plan failed: ${result.error}`,
           });
+          try {
+            appendOrchestratorEvent(
+              orchestratorAuditPath,
+              buildOrchestratorEvent('plan_run', workspaceUri, {
+                phase: 'failed',
+                completed_steps: result.completedSteps,
+                error: result.error,
+              }),
+            );
+          } catch {
+            /* non-blocking audit append */
+          }
           return;
         }
         if (result.cancelled) {
@@ -1427,6 +1532,17 @@ function openAgentSurface() {
             type: 'chatUpdate',
             status: `Plan cancelled after ${result.completedSteps} completed step(s). Remaining steps were not run.`,
           });
+          try {
+            appendOrchestratorEvent(
+              orchestratorAuditPath,
+              buildOrchestratorEvent('plan_run', workspaceUri, {
+                phase: 'cancelled',
+                completed_steps: result.completedSteps,
+              }),
+            );
+          } catch {
+            /* non-blocking audit append */
+          }
           return;
         }
         panel.webview.postMessage({
@@ -1434,6 +1550,17 @@ function openAgentSurface() {
           status:
             'Sample workspace plan finished — see chat log above. Audit lines: ~/.config/le-vibe/levibe-native-chat/workspace-plan-audit.jsonl',
         });
+        try {
+          appendOrchestratorEvent(
+            orchestratorAuditPath,
+            buildOrchestratorEvent('plan_run', workspaceUri, {
+              phase: 'completed',
+              completed_steps: result.completedSteps,
+            }),
+          );
+        } catch {
+          /* non-blocking audit append */
+        }
       })();
       return;
     }
@@ -1584,7 +1711,19 @@ function openAgentSurface() {
         if (!line) {
           return;
         }
-        await runCommandInVisibleTerminal(vscode, line, { panel });
+        const execResult = await runCommandInVisibleTerminal(vscode, line, { panel });
+        try {
+          appendOrchestratorEvent(
+            orchestratorAuditPath,
+            buildOrchestratorEvent('terminal_exec', workspaceUri, {
+              outcome: execResult.ok ? 'sent' : 'blocked',
+              reason: execResult.ok ? undefined : execResult.reason,
+              command_line: execResult.commandLine || line,
+            }),
+          );
+        } catch {
+          /* non-blocking audit append */
+        }
       })();
       return;
     }
@@ -1712,6 +1851,8 @@ function openAgentSurface() {
  */
 function activate(context) {
   const vscode = require('vscode');
+  const workspaceUri = vscode.workspace.workspaceFolders?.[0]?.uri?.toString() || 'no-workspace';
+  const orchestratorAuditPath = orchestratorEventAuditPath();
   const inlineClient = createOllamaClient({
     endpoint: vscode.workspace.getConfiguration('leVibeNative').get('ollamaEndpoint', 'http://127.0.0.1:11434'),
     timeoutMs: vscode.workspace.getConfiguration('leVibeNative').get('ollamaTimeoutMs', 2500),
@@ -1902,7 +2043,19 @@ function activate(context) {
       if (!line) {
         return;
       }
-      await runCommandInVisibleTerminal(vscode, line, {});
+      const execResult = await runCommandInVisibleTerminal(vscode, line, {});
+      try {
+        appendOrchestratorEvent(
+          orchestratorAuditPath,
+          buildOrchestratorEvent('terminal_exec', workspaceUri, {
+            outcome: execResult.ok ? 'sent' : 'blocked',
+            reason: execResult.ok ? undefined : execResult.reason,
+            command_line: execResult.commandLine || line,
+          }),
+        );
+      } catch {
+        /* non-blocking audit append */
+      }
     }),
     vscode.commands.registerCommand(CLEAR_TERMINAL_SESSION_ALLOW_COMMAND, async () => {
       clearTerminalSessionAllow();

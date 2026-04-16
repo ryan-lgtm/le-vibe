@@ -273,6 +273,18 @@ Each successful send appends a structured JSONL record under **`~/.config/le-vib
 - Local audit log evidence is appended as JSONL at:
   - `~/.config/le-vibe/levibe-native-chat/operator-handoff-audit.jsonl`
 
+## Orchestrator bridge contract (task-cp5-1)
+
+- Contract version: `lvibe.orchestrator_event.v1`.
+- Local audit log is append-only JSONL at:
+  - `~/.config/le-vibe/levibe-native-chat/orchestrator-events.jsonl`
+- Event types:
+  - `chat_turn`
+  - `edit_apply`
+  - `plan_run`
+  - `terminal_exec`
+- Contract tests: `test/orchestrator-events.test.js`.
+
 ## Reliability: retries and timeouts (task-n5-1)
 
 - **Automatic retries** for transient local Ollama failures — **`leVibeNative.ollamaMaxRetries`** (default **`2`**), exponential backoff from **`leVibeNative.ollamaRetryBackoffMs`** (default **`400` ms**) — apply to readiness `GET /api/tags` and to streaming `POST /api/generate`.
@@ -343,5 +355,6 @@ All first-party on-disk state for this extension lives under **`~/.config/le-vib
 | `workspace-plan-audit.jsonl` | Append-only workspace plan step records (`lvibe.workspace_plan_audit.v1`). |
 | `workspace-fs-ops-audit.jsonl` | Append-only destructive workspace FS operations (`lvibe.workspace_fs_ops_audit.v1`). |
 | `terminal-command-audit.jsonl` | Append-only integrated terminal command audit (`lvibe.terminal_command_audit.v1` — timestamp, cwd, command; exit code when shell integration reports `onDidEndTerminalShellExecution`). |
+| `orchestrator-events.jsonl` | Append-only operator/orchestrator bridge events (`lvibe.orchestrator_event.v1` with `chat_turn`, `edit_apply`, `plan_run`, `terminal_exec`). |
 
 No embeddings or unbounded cloud sync are written by this extension; export/clear remain user-driven.
