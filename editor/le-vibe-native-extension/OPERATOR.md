@@ -78,6 +78,10 @@ npm run verify
 
 Runs **`npm test`** then **`npm run smoke`**. The **`package.json`** **`scripts.verify`** string is exactly **`npm test && npm run smoke`**. Underlying script entries: **`scripts.test`** = **`node --test ./test/*.test.js`**; **`scripts.smoke`** = **`node ./scripts/smoke-integration.js`**. Green = all unit tests pass; smoke confirms non-blank panel HTML, optional `lvibe` launcher string check when the full monorepo is present, a best-effort local Ollama probe (non-fatal if Ollama is down unless strict mode is on), and prints the **canonical first-party persisted config directory** (from `storage-inventory.js`) before `smoke: done`.
 
+### CI (GitHub Actions)
+
+The repository workflow **`.github/workflows/le-vibe-native-extension-ci.yml`** runs on **push** and **pull request** to **`main`** and **`master`**: it executes **`npm ci`** then **`npm run verify`** in **`editor/le-vibe-native-extension`** on an **Ubuntu** runner (Node **18**). This is the automated ship gate for the extension package; failing steps should block merging once the check is marked **required** in GitHub branch protection (**Settings → Branches** for the default branch). Until your org wires that policy, treat a locally green **`npm run verify`** as the same bar before merging extension changes.
+
 ### Smoke environment (optional)
 
 | Variable | Effect |

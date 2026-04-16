@@ -694,11 +694,13 @@ Product intent: Cursor-like **@file / @folder** context without unbounded embedd
 
 Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same bar as the rest of the stack: automated verify in CI, reproducible VSIX/build artifacts, and docs for how `lvibe .` + installed extension line up.
 
-- [ ] `pending` **task-n16-1**: Add a **repository CI job** (or extend an existing workflow) that runs `npm ci` + `npm run verify` in `editor/le-vibe-native-extension` on PR/push to `main` (Linux runner sufficient).
+- [x] `done` **task-n16-1**: Add a **repository CI job** (or extend an existing workflow) that runs `npm ci` + `npm run verify` in `editor/le-vibe-native-extension` on PR/push to `main` (Linux runner sufficient).
   - Acceptance:
     - workflow YAML checked in under `.github/workflows/` (or documented equivalent)
     - failing tests block merge (required check or documented manual gate if repo policy differs)
     - `OPERATOR.md` or root `README.md` mentions where CI runs extension verify
+  - Evidence:
+    - Added `.github/workflows/le-vibe-native-extension-ci.yml` (Ubuntu, Node 18, `npm ci` + `npm run verify` in `editor/le-vibe-native-extension`); **`OPERATOR.md`** *CI (GitHub Actions)* + root **`README.md`** pointer; branch-protection note for required checks; tests `test/ci-workflow-presence.test.js`, `operator-doc.test.js` (task-n16-1); `npm run verify` green.
 - [ ] `pending` **task-n16-2**: **VSIX build script** + one-line docs: `npm run package` (or equivalent) produces an installable `.vsix`, with output path and `code --install-extension` example in `OPERATOR.md`.
   - Acceptance:
     - script exists in `editor/le-vibe-native-extension/package.json` `scripts`

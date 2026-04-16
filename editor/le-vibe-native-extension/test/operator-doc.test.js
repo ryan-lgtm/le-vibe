@@ -217,3 +217,12 @@ test('OPERATOR.md documents regression golden fixtures (task-n15-2)', () => {
   assert.ok(text.includes('test/fixtures/n15-2'));
   assert.ok(text.includes('n15-2-golden-regression.test.js'));
 });
+
+test('OPERATOR.md documents GitHub Actions CI for extension verify (task-n16-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('.github/workflows/le-vibe-native-extension-ci.yml'));
+  assert.ok(text.includes('npm ci'));
+  assert.ok(text.includes('npm run verify'));
+  assert.ok(text.includes('editor/le-vibe-native-extension'));
+  assert.ok(text.includes('branch protection'));
+});
