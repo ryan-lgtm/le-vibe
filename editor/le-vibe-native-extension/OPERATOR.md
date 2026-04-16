@@ -172,6 +172,8 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 
 **README: package name (task-n43-1):** **`package.json`** **`name`** (npm/package identifier) is written out in **`README.md`** *Package name (task-n42-1)* — use that section for the shipped package id instead of opening **`package.json`**.
 
+**README: version (task-n45-1):** **`package.json`** **`version`** (current shipped extension package version) is written out in **`README.md`** *Version (task-n44-1)* — use that section for the shipped version string instead of opening **`package.json`**.
+
 **CHANGELOG (task-n19-1):** **`CHANGELOG.md`** — semver release notes at the package root (Keep a Changelog–style). When you bump **`package.json`** **`version`**, add a **`## [x.y.z]`** section there (coordinate with *Extension version vs monorepo / packaging (task-n16-3)*). Epic-level history remains in the product-track file above.
 
 **Security notes (task-n18-1):** see **`## Security notes (task-n18-1)`** above — **`npm audit`** triage, **`overrides`** policy, issue tracker pointer.

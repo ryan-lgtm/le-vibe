@@ -186,6 +186,14 @@ test('OPERATOR.md cross-links README package name (task-n43-1)', () => {
   assert.ok(text.includes('name'));
 });
 
+test('OPERATOR.md cross-links README version (task-n45-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n45-1'));
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('Version (task-n44-1)'));
+  assert.ok(text.includes('version'));
+});
+
 test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('workspace.applyEdit'));

@@ -1017,9 +1017,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N45 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n45-1**: **OPERATOR — README pointer for `version`** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Version (task-n44-1)* for **`package.json`** **`version`** so operators align with **`task-n43-1`** doc-discovery pattern.
+- [x] `done` **task-n45-1**: **OPERATOR — README pointer for `version`** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Version (task-n44-1)* for **`package.json`** **`version`** so operators align with **`task-n43-1`** doc-discovery pattern.
   - Acceptance:
     - **`OPERATOR.md`** + **`operator-doc.test.js`** token
+    - **`npm run verify`** green
+  - Evidence:
+    - **`OPERATOR.md`** — **`README: version (task-n45-1)`** under *Product track*.
+    - **`test/operator-doc.test.js`** — **`task-n45-1`** token test; **`npm run verify`** green.
+
+### Epic N46 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n46-1**: **Extension README — `engines.vscode` minimum** — add one line (near **Prerequisites**) documenting the current minimum editor API baseline from **`package.json`** **`engines.vscode`** so contributors can see the runtime floor without scanning JSON; include contract test deriving the major/minor from **`engines.vscode`**.
+  - Acceptance:
+    - **`README.md`** + targeted test
     - **`npm run verify`** green
 
 ---
