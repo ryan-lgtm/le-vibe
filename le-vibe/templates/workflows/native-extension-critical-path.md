@@ -196,13 +196,19 @@ Everything else is out-of-scope unless required to unblock one of the five.
 
 **Narrative:** stop doc-only churn and enforce a product finish line.
 
-- [ ] `pending` **task-cp6-1**: End-to-end acceptance script/checklist proving:
+- [x] `done` **task-cp6-1**: End-to-end acceptance script/checklist proving:
   - chat works with Ollama
   - agent creates/edits/deletes files in a sample project
   - apply/undo/conflict paths pass
   - optional inline suggestions work (or gracefully degrade)
   - Acceptance:
     - single operator command/checklist produces PASS/FAIL
+  - Evidence (2026-04-15):
+    - Added **`editor/le-vibe-native-extension/scripts/e2e-acceptance.js`** — runs **`npm run verify`**; optional **`LEVIBE_E2E_ACCEPTANCE_STRICT_OLLAMA=1`** re-runs smoke with strict Ollama; **`e2e-acceptance: RESULT=PASS|FAIL`** + exit code.
+    - Added **`editor/le-vibe-native-extension/docs/E2E_ACCEPTANCE.md`** — automated command + manual checklist table + sign-off; links **`OPERATOR.md`** N15 E2E section.
+    - Added **`packaging/scripts/levibe-chat-e2e-acceptance.sh`** — monorepo one-liner to **`npm run e2e-acceptance`** from extension dir.
+    - **`package.json`** **`scripts.e2e-acceptance`** = **`node ./scripts/e2e-acceptance.js`**; README + OPERATOR literals; **`test/e2e-acceptance.test.js`** contract tests.
+    - Verification: **`npm run verify`** in **`editor/le-vibe-native-extension/`**; **`npm run e2e-acceptance`** (PASS).
 - [ ] `pending` **task-cp6-2**: Make Lé Vibe Chat the default user path in installer and startup UX.
   - Acceptance:
     - no third-party chat path required for default happy path

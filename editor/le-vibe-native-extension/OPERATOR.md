@@ -83,6 +83,14 @@ npm run verify
 
 Runs **`npm test`** then **`npm run smoke`**. The **`package.json`** **`scripts.verify`** string is exactly **`npm test && npm run smoke`**. Underlying script entries: **`scripts.test`** = **`node --test ./test/*.test.js`**; **`scripts.smoke`** = **`node ./scripts/smoke-integration.js`**. Green = all unit tests pass; smoke confirms non-blank panel HTML, optional `lvibe` launcher string check when the full monorepo is present, a best-effort local Ollama probe (non-fatal if Ollama is down unless strict mode is on), and prints the **canonical first-party persisted config directory** (from `storage-inventory.js`) before `smoke: done`.
 
+### CP6 end-to-end acceptance (task-cp6-1)
+
+**Automated gate (PASS/FAIL exit code):** from this directory, run **`npm run e2e-acceptance`**. That executes **`node ./scripts/e2e-acceptance.js`** (**`package.json`** **`scripts.e2e-acceptance`** = **`node ./scripts/e2e-acceptance.js`**) — it runs **`npm run verify`**, then optionally a second smoke pass with strict Ollama when **`LEVIBE_E2E_ACCEPTANCE_STRICT_OLLAMA=1`**. Success prints **`e2e-acceptance: RESULT=PASS`** and exits **0**; failure prints **`e2e-acceptance: RESULT=FAIL`** and exits non-zero.
+
+**Monorepo entrypoint:** from the repository root, **`./packaging/scripts/levibe-chat-e2e-acceptance.sh`** **`cd`**s to this package and runs **`npm run e2e-acceptance`**.
+
+**Manual checklist:** after the automated gate is green, complete **`docs/E2E_ACCEPTANCE.md`** (chat + Ollama, workspace ops, preview/undo, conflicts, optional inline) and record **PASS/FAIL** in the sign-off table there.
+
 ### Flake resistance (task-n18-2)
 
 **Loop command used (2026-04-15):** from **`editor/le-vibe-native-extension/`**:
@@ -213,7 +221,7 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 
 **Settings disclosure guardrail:** **`npm test`** runs **`test/package-leVibeNative-keys-doc-inventory.test.js`**, which fails if any **`leVibeNative.*`** key in **`package.json`** contributes is absent from this runbook and/or **`README.md`** (add the key to operator or developer docs before shipping).
 
-**Scripts literal umbrella:** **`npm test`** runs **`test/package-json-all-scripts-doc-literal-sync.test.js`**, which fails if any **`package.json` `scripts`** value is absent from this runbook and/or **`README.md`** (keep **`scripts.test`**, **`scripts.smoke`**, **`scripts.verify`** literals documented when you change npm scripts).
+**Scripts literal umbrella:** **`npm test`** runs **`test/package-json-all-scripts-doc-literal-sync.test.js`**, which fails if any **`package.json` `scripts`** value is absent from this runbook and/or **`README.md`** (keep **`scripts.test`**, **`scripts.smoke`**, **`scripts.verify`**, **`scripts.e2e-acceptance`**, **`scripts.package`** literals documented when you change npm scripts).
 
 **Command palette inventory (task-n17-1):** **`README.md`** *Command palette and keyboard shortcuts (task-n17-1)* — table of **`leVibeNative.*`** command id → **Command Palette** label (**`Lé Vibe Chat:`** + **`title`**) → default keybinding (**none** shipped; bind in Keyboard Shortcuts).
 
