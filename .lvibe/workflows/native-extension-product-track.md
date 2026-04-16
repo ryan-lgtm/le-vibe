@@ -816,10 +816,20 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N25 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n25-1**: **Extension README — issues / bugs link** — add a short line (e.g. under **Operators** or **Prerequisites**) with **`package.json`** **`bugs.url`** so contributors can file first-party extension issues without hunting **`package.json`**.
+- [x] `done` **task-n25-1**: **Extension README — issues / bugs link** — add a short line (e.g. under **Operators** or **Prerequisites**) with **`package.json`** **`bugs.url`** so contributors can file first-party extension issues without hunting **`package.json`**.
   - Acceptance:
     - **`editor/le-vibe-native-extension/README.md`** only (plus product-track / `operator-doc` or README contract test if you add one)
     - full **`https://github.com/ryan-lgtm/le-vibe/issues`** string (or derive from **`package.json`** in test)
+    - **`npm run verify`** green
+  - Evidence:
+    - **`README.md`** — **`Issues / bugs (task-n25-1)`** with full **`bugs.url`** + note to tag extension path.
+    - **`test/readme-bugs-url.test.js`** — asserts **`README.md`** contains **`package.json`** **`bugs.url`**; **`npm run verify`** green.
+
+### Epic N26 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n26-1**: **Extension README — `homepage` link** — add one line (near **Issues** or **Operators**) with **`package.json`** **`homepage`** so contributors can open the GitHub **tree** view for this package without assembling the URL manually.
+  - Acceptance:
+    - **`README.md`** + contract test deriving URL from **`package.json`**
     - **`npm run verify`** green
 
 ---
