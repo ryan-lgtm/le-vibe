@@ -26,6 +26,7 @@ test('manifest contributes Lé Vibe Open Agent Surface command', () => {
   assert.ok(commands.find((item) => item.command === 'leVibeNative.clearTerminalSessionAllow'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.addContextAtFile'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.addContextAtFolder'));
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.addCurrentFileOutlineToContext'));
 });
 
 test('manifest supports deterministic activation entrypoints', () => {
@@ -47,6 +48,7 @@ test('manifest supports deterministic activation entrypoints', () => {
   assert.ok(activationEvents.includes('onCommand:leVibeNative.clearTerminalSessionAllow'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.addContextAtFile'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.addContextAtFolder'));
+  assert.ok(activationEvents.includes('onCommand:leVibeNative.addCurrentFileOutlineToContext'));
 });
 
 test('extension exports activate/deactivate and command constant', () => {
@@ -64,6 +66,7 @@ test('extension exports activate/deactivate and command constant', () => {
   assert.equal(extensionModule.CLEAR_TERMINAL_SESSION_ALLOW_COMMAND, 'leVibeNative.clearTerminalSessionAllow');
   assert.equal(extensionModule.ADD_CONTEXT_AT_FILE_COMMAND, 'leVibeNative.addContextAtFile');
   assert.equal(extensionModule.ADD_CONTEXT_AT_FOLDER_COMMAND, 'leVibeNative.addContextAtFolder');
+  assert.equal(extensionModule.ADD_CURRENT_FILE_OUTLINE_COMMAND, 'leVibeNative.addCurrentFileOutlineToContext');
   assert.equal(path.basename(require.resolve('../extension')), 'extension.js');
 });
 
@@ -127,5 +130,6 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('runCommandInIntegratedTerminalPrompt'));
     assert.ok(html.includes('addContextAtFile'));
     assert.ok(html.includes('addContextAtFolder'));
+    assert.ok(html.includes('addCurrentFileOutline'));
   });
 });

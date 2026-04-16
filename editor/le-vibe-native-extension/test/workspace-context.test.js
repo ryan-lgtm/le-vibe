@@ -38,3 +38,12 @@ test('buildPromptWithContext uses FOLDER header for folder context (task-n14-1)'
   assert.ok(prompt.includes('### FOLDER: src'));
   assert.ok(prompt.includes('[dir] lib'));
 });
+
+test('buildPromptWithContext uses OUTLINE header for outline context (task-n14-2)', () => {
+  const prompt = buildPromptWithContext(
+    'Explain structure',
+    [{ path: 'app.ts', kind: 'outline', content: 'Outline…\n- Function main' }],
+    600,
+  );
+  assert.ok(prompt.includes('### OUTLINE: app.ts'));
+});

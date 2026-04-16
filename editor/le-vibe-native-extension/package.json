@@ -53,7 +53,8 @@
     "onCommand:leVibeNative.runCommandInIntegratedTerminal",
     "onCommand:leVibeNative.clearTerminalSessionAllow",
     "onCommand:leVibeNative.addContextAtFile",
-    "onCommand:leVibeNative.addContextAtFolder"
+    "onCommand:leVibeNative.addContextAtFolder",
+    "onCommand:leVibeNative.addCurrentFileOutlineToContext"
   ],
   "contributes": {
     "commands": [
@@ -160,6 +161,11 @@
       {
         "command": "leVibeNative.addContextAtFolder",
         "title": "Lé Vibe Chat: @folder — add folder listing to context…",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.addCurrentFileOutlineToContext",
+        "title": "Lé Vibe Chat: Add current file outline to context…",
         "category": "Lé Vibe"
       }
     ],

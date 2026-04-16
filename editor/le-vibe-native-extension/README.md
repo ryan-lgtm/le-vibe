@@ -95,6 +95,12 @@ Token-budget rules (configurable in Settings):
 - **Discovery:** both use **`vscode.workspace.findFiles`** with the same exclude glob as the legacy picker and a **strict scan cap** (`FILE_PICKER_MAX_SCAN_URIS` in [`at-mention-context.js`](at-mention-context.js)). **@folder** builds folder candidates from parent paths of scanned files, capped at **`FOLDER_QUICKPICK_MAX_CANDIDATES`**, with **`.gitignore`** applied.
 - **Budgets:** file excerpts and one-level folder listings respect **`leVibeNative.contextMaxCharsPerFile`** and **`leVibeNative.contextMaxLinesPerFile`**; the number of context slots still respects **`leVibeNative.contextMaxFiles`** and total injected size **`leVibeNative.contextMaxTotalChars`** via [`workspace-context.js`](workspace-context.js) (`### FOLDER:` blocks for directories).
 
+### Current-file outline only (task-n14-2)
+
+- **Palette:** **Lé Vibe Chat: Add current file outline to context…** (`leVibeNative.addCurrentFileOutlineToContext`); panel **Outline (file)…**.
+- **Mechanism:** **`vscode.executeDocumentSymbolProvider`** on the **active editor** document (language / outline providers — same family as the **Outline** view). Text is **clipped** with **`contextMaxCharsPerFile`** / **`contextMaxLinesPerFile`**; symbol expansion is capped (**`OUTLINE_MAX_SYMBOL_NODES`** / depth in [`outline-context.js`](outline-context.js)).
+- **Limitations vs Cursor-style cloud index:** Lé Vibe Chat does **not** build a **cross-repo embedding index**, **remote** symbol graph, or **semantic** search over the whole workspace. It only pulls **structured outline symbols for one open file** from the local editor APIs — **bounded**, **local-first**, **no default full-repo indexing**. Cursor-class products may combine **cloud-scale** retrieval and **multi-file** intelligence; this extension stays within explicit **storage and context budgets** (see *Bounded persistence inventory*).
+
 ## Inline assistant — selection → chat (Epic N12, task-n12-1)
 
 - **Command Palette / editor context menu:** **Lé Vibe Chat: Ask about selection…** (`leVibeNative.askChatAboutSelection`) — requires a **non-empty** selection in a **workspace file** (`file` scheme). Opens the Lé Vibe Chat panel (same as **Lé Vibe: Open Agent Surface**) if it was closed, then injects **workspace-relative path**, **0-based selection bounds** (surfaced in the context excerpt header), and a **clipped text excerpt** into prompt context, and **prefills** the prompt box with a short template line.

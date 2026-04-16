@@ -48,6 +48,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **@file / @folder (task-n14-1):** Palette **`leVibeNative.addContextAtFile`** / **`leVibeNative.addContextAtFolder`** — **`vscode.workspace.findFiles`** with bounded scan + folder QuickPick cap; excerpts/listings clipped per **`contextMax*`**; implementation **`at-mention-context.js`**.
 
+**Outline (task-n14-2):** Palette **`leVibeNative.addCurrentFileOutlineToContext`** — **`vscode.executeDocumentSymbolProvider`** on the **active file** only; bounded symbol expansion + **`contextMax*`** clipping; **not** a cross-repo or cloud index (see README *Current-file outline only* vs Cursor-class cloud retrieval).
+
 **Selection → chat (task-n12-1):** Palette / context menu **`leVibeNative.askChatAboutSelection`** + CodeLens on selection — opens agent surface if needed; pushes path + clipped selection into context; **`selection-chat-context.js`**.
 
 **Quick action templates (task-n12-2):** Panel **Explain / Refactor selection / Generate tests** — inserts `QUICK_ACTION_TEMPLATES` from **`chat-quick-actions.js`**; Ollama only on **Send Prompt** (local endpoint).

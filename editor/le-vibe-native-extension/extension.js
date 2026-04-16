@@ -23,6 +23,7 @@ const RUN_COMMAND_IN_INTEGRATED_TERMINAL_COMMAND = 'leVibeNative.runCommandInInt
 const CLEAR_TERMINAL_SESSION_ALLOW_COMMAND = 'leVibeNative.clearTerminalSessionAllow';
 const ADD_CONTEXT_AT_FILE_COMMAND = 'leVibeNative.addContextAtFile';
 const ADD_CONTEXT_AT_FOLDER_COMMAND = 'leVibeNative.addContextAtFolder';
+const ADD_CURRENT_FILE_OUTLINE_COMMAND = 'leVibeNative.addCurrentFileOutlineToContext';
 
 /** @type {null | { path: string, content: string, selectionRange: { startLine: number, startCharacter: number, endLine: number, endCharacter: number } }} */
 let pendingSelectionContext = null;
@@ -94,6 +95,7 @@ const {
   pickAtFolderContext,
   FILE_PICKER_MAX_SCAN_URIS,
 } = require('./at-mention-context');
+const { fetchCurrentFileOutlineForContext } = require('./outline-context');
 
 /**
  * @param {import('vscode')} vscode
@@ -540,6 +542,7 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     <button data-action="pickContextFile">Add context file</button>
     <button data-action="addContextAtFile">@file…</button>
     <button data-action="addContextAtFolder">@folder…</button>
+    <button data-action="addCurrentFileOutline">Outline (file)…</button>
     <button data-action="clearContextFiles">Clear context</button>
   </div>
   <h3>Workspace scaffold (N11)</h3>
@@ -857,7 +860,8 @@ function openAgentSurface() {
       content: picked.content,
       ...(picked.kind ? { kind: picked.kind } : {}),
     });
-    const tag = picked.kind === 'folder' ? 'folder' : 'file';
+    const tag =
+      picked.kind === 'folder' ? 'folder' : picked.kind === 'outline' ? 'outline' : 'file';
     panel.webview.postMessage({
       type: 'chatUpdate',
       status: `${labelPrefix} (${selectedContexts.length}/${contextBudget.maxFiles}): ${picked.path} [${tag}]`,
@@ -1290,6 +1294,18 @@ function openAgentSurface() {
       });
       return;
     }
+    if (msg.type === 'action' && msg.actionId === 'addCurrentFileOutline') {
+      void (async () => {
+        const r = await fetchCurrentFileOutlineForContext(vscode, () => getContextBudget(vscode));
+        if (!r.ok) {
+          await vscode.window.showWarningMessage(r.userMessage);
+          panel.webview.postMessage({ type: 'chatUpdate', status: r.userMessage });
+          return;
+        }
+        postContextPick(r, 'Outline context');
+      })();
+      return;
+    }
     if (msg.type === 'action' && msg.actionId === 'clearContextFiles') {
       selectedContexts.length = 0;
       panel.webview.postMessage({ type: 'chatUpdate', status: 'Workspace context cleared.' });
@@ -1522,6 +1538,9 @@ function activate(context) {
     vscode.commands.registerCommand(ADD_CONTEXT_AT_FOLDER_COMMAND, () =>
       pickAtFolderContext(vscode, () => getContextBudget(vscode)),
     ),
+    vscode.commands.registerCommand(ADD_CURRENT_FILE_OUTLINE_COMMAND, () =>
+      fetchCurrentFileOutlineForContext(vscode, () => getContextBudget(vscode)),
+    ),
     vscode.commands.registerCommand(CLEAR_CONTEXT_FILES_COMMAND, async () => {
       await vscode.window.showInformationMessage(
         'Use the panel action "Clear context" to clear currently selected workspace context files.',
@@ -1682,6 +1701,7 @@ module.exports = {
   CLEAR_TERMINAL_SESSION_ALLOW_COMMAND,
   ADD_CONTEXT_AT_FILE_COMMAND,
   ADD_CONTEXT_AT_FOLDER_COMMAND,
+  ADD_CURRENT_FILE_OUTLINE_COMMAND,
   getTranscriptContext,
   getContextBudget,
   panelHtml,

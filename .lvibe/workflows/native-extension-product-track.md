@@ -671,9 +671,11 @@ Product intent: Cursor-like **@file / @folder** context without unbounded embedd
     - respects `contextMax*` settings; tests for cap enforcement
   - Evidence:
     - `at-mention-context.js` — `pickAtFileContext` / `pickAtFolderContext` (`findFiles` + `FILE_PICKER_MAX_SCAN_URIS`, folder QuickPick `FOLDER_QUICKPICK_MAX_CANDIDATES`, `.gitignore`); folder listing via `readDirectory` clipped with `contextMaxCharsPerFile` / `contextMaxLinesPerFile`; `workspace-context.js` `### FOLDER:` blocks; palette + panel commands; `test/at-mention-context.test.js` + `workspace-context.test.js`; README / `OPERATOR.md`; `npm run verify` green.
-- [ ] `pending` **task-n14-2**: Optional **lightweight symbol index** (outline only) for current file — no full-repo embedding by default.
+- [x] `done` **task-n14-2**: Optional **lightweight symbol index** (outline only) for current file — no full-repo embedding by default.
   - Acceptance:
     - documented limitations vs Cursor cloud index
+  - Evidence:
+    - `outline-context.js` — `fetchCurrentFileOutlineForContext` / `outlineTextFromSymbols` (`vscode.executeDocumentSymbolProvider`, caps `OUTLINE_MAX_SYMBOL_NODES` / depth, `contextMax*` via `clipTextByBudget`); `workspace-context.js` `### OUTLINE:`; palette + panel; README + `OPERATOR.md` limitations vs cloud index; `test/outline-context.test.js`; `npm run verify` green.
 
 ### Epic N15 — QA / parity gates for “agentic editor” releases
 
