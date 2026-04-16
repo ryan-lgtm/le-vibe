@@ -827,9 +827,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N26 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n26-1**: **Extension README — `homepage` link** — add one line (near **Issues** or **Operators**) with **`package.json`** **`homepage`** so contributors can open the GitHub **tree** view for this package without assembling the URL manually.
+- [x] `done` **task-n26-1**: **Extension README — `homepage` link** — add one line (near **Issues** or **Operators**) with **`package.json`** **`homepage`** so contributors can open the GitHub **tree** view for this package without assembling the URL manually.
   - Acceptance:
     - **`README.md`** + contract test deriving URL from **`package.json`**
+    - **`npm run verify`** green
+  - Evidence:
+    - **`README.md`** — **`Source on GitHub (task-n26-1)`** with full **`homepage`** URL + **`package.json`** key reference.
+    - **`test/readme-homepage-url.test.js`**; **`npm run verify`** green.
+
+### Epic N27 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n27-1**: **OPERATOR — README pointers for issues + source** — under **`OPERATOR.md`** *Product track* (or *Verify*), add one line cross-linking **`README.md`** *Issues / bugs (task-n25-1)* and *Source on GitHub (task-n26-1)* so operators land on the same **`bugs.url`** / **`homepage`** strings without opening **`package.json`**.
+  - Acceptance:
+    - **`OPERATOR.md`** + **`operator-doc.test.js`** token for the cross-link
     - **`npm run verify`** green
 
 ---
