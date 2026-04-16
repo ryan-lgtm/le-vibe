@@ -48,6 +48,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Activation docs sequence (task-n60-1):** **`Activation events (task-n50-1)`** → **`Activation event example (task-n52-1)`** → **`Activation example lookup (task-n56-1)`** (follow this breadcrumb for the intended discovery flow).
 
+**Activation sequence return hop (task-n68-1):** from **`Activation docs sequence (task-n60-1)`**, jump back to **`Activation docs quick index (task-n62-1)`** when you need the compact activation-doc entrypoint again.
+
 **Startup activation intent (task-n54-1):** **`onStartupFinished`** appears in **`package.json`** **`activationEvents`** to open a readiness-first deterministic entrypoint as soon as the editor startup phase completes.
 
 **Prerequisites (developers):** **Node.js 18+** on your PATH to run **`npm run verify`** / **`npm test`** (see `package.json` **`engines.node`**). The installed VS Code extension host uses the editor’s runtime; the Node requirement applies to this package’s scripts and CI only. To install or run this extension in an editor, match **`engines.vscode`** in `package.json` — currently **VS Code 1.85+** or a compatible build (**VSCodium**, etc.) at the same API level.
