@@ -34,6 +34,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Extension entry (packaging):** **`package.json`** **`main`** is **`./extension.js`** (VS Code activation entry; see **`OPERATOR.md`**).
 
+**Activation events (task-n50-1):** **`package.json`** **`activationEvents`** currently lists **`23`** entries: startup hook **`onStartupFinished`** plus **`22`** command-trigger events (**`onCommand:*`**) for deterministic lazy activation.
+
 **Prerequisites (developers):** **Node.js 18+** on your PATH to run **`npm run verify`** / **`npm test`** (see `package.json` **`engines.node`**). The installed VS Code extension host uses the editor’s runtime; the Node requirement applies to this package’s scripts and CI only. To install or run this extension in an editor, match **`engines.vscode`** in `package.json` — currently **VS Code 1.85+** or a compatible build (**VSCodium**, etc.) at the same API level.
 
 **Local-first:** shipped defaults target **local Ollama** (`leVibeNative.ollamaEndpoint`); the extension does **not** silently fall back to a cloud LLM (same posture as **`OPERATOR.md`**).

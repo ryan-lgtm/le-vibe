@@ -1067,9 +1067,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N50 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n50-1**: **Extension README — activationEvents count and intent** — add one line near command/discovery metadata documenting that **`package.json`** **`activationEvents`** includes **`onStartupFinished`** plus command-trigger entries, and include contract test deriving count + the startup event literal from **`package.json`**.
+- [x] `done` **task-n50-1**: **Extension README — activationEvents count and intent** — add one line near command/discovery metadata documenting that **`package.json`** **`activationEvents`** includes **`onStartupFinished`** plus command-trigger entries, and include contract test deriving count + the startup event literal from **`package.json`**.
   - Acceptance:
     - **`README.md`** + targeted test
+    - **`npm run verify`** green
+  - Evidence:
+    - **`README.md`** — **`Activation events (task-n50-1)`** with **`activationEvents`**, **`onStartupFinished`**, and derived event counts.
+    - **`test/readme-activation-events.test.js`**; **`npm run verify`** green.
+
+### Epic N51 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n51-1**: **OPERATOR — README pointer for activationEvents docs** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Activation events (task-n50-1)* for **`package.json`** **`activationEvents`** so operators can verify startup/command activation intent without opening JSON.
+  - Acceptance:
+    - **`OPERATOR.md`** + **`operator-doc.test.js`** token
     - **`npm run verify`** green
 
 ---
