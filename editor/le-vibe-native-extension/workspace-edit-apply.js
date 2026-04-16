@@ -56,8 +56,12 @@ async function applyFullFileAsSingleWorkspaceEdit(vscode, uri, fullText) {
  */
 async function applyEditProposalBatchAsWorkspaceEdit(vscode, proposal) {
   const we = new vscode.WorkspaceEdit();
+  const items = Array.isArray(proposal && proposal.proposals) ? proposal.proposals : [];
+  if (items.length === 0) {
+    throw new Error('Lé Vibe Chat: proposal batch is empty; refusing applyEdit.');
+  }
 
-  for (const item of proposal.proposals) {
+  for (const item of items) {
     const uri = vscode.Uri.parse(item.targetUri);
     const { edit } = item;
     if (edit.kind === 'full_file') {
@@ -82,6 +86,7 @@ async function applyEditProposalBatchAsWorkspaceEdit(vscode, proposal) {
     }
   }
 
+  // Single applyEdit call keeps this accepted batch as one undo transaction.
   return vscode.workspace.applyEdit(we);
 }
 

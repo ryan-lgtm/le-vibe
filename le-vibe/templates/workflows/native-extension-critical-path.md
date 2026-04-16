@@ -93,9 +93,13 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Updated `editor/le-vibe-native-extension/extension.js` to enforce explicit action handling with active-session checks: Accept/Reject without a pending preview now surface clear in-panel status and never enable apply.
     - Added coverage in `editor/le-vibe-native-extension/test/edit-preview.test.js` for default-path gating, reject clear behavior, and no-session accept blocking.
     - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 330 passed, smoke passed).
-- [ ] `pending` **task-cp2-3**: WorkspaceEdit apply with single undo transaction per accepted batch.
+- [x] `done` **task-cp2-3**: WorkspaceEdit apply with single undo transaction per accepted batch.
   - Acceptance:
     - one undo reverts batch
+  - Evidence (2026-04-15):
+    - Hardened `editor/le-vibe-native-extension/workspace-edit-apply.js` to explicitly reject empty proposal batches before any write call and preserve a single `workspace.applyEdit` call for each accepted validated batch.
+    - Added focused regression tests in `editor/le-vibe-native-extension/test/workspace-edit-apply.test.js` for mixed full-file + range edits in one batch (`getApplyCount() === 1`) and for empty-batch rejection without any `applyEdit` call.
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 332 passed, smoke passed).
 - [ ] `pending` **task-cp2-4**: Stale-file conflict detection (version/hash/mtime) before apply.
   - Acceptance:
     - deterministic conflict remediation shown to user

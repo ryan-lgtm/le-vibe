@@ -96,3 +96,44 @@ test('applyEditProposalBatchAsWorkspaceEdit range_replace single replace (task-n
   const we = vscode.getLastWorkspaceEdit();
   assert.deepEqual(we.ops, ['replace']);
 });
+
+test('applyEditProposalBatchAsWorkspaceEdit mixed edits stay one applyEdit undo batch (task-cp2-3)', async () => {
+  const vscode = mockVscode({ fileExists: true, docLines: ['abcdef'] });
+  const proposal = {
+    kind: 'levibe.edit_proposal.v1',
+    proposals: [
+      {
+        targetUri: 'file:///tmp/range.ts',
+        edit: {
+          kind: 'range_replace',
+          range: {
+            start: { line: 0, character: 1 },
+            end: { line: 0, character: 3 },
+          },
+          newText: 'ZZ',
+        },
+      },
+      {
+        targetUri: 'file:///tmp/full.ts',
+        edit: { kind: 'full_file', content: 'done\n' },
+      },
+    ],
+  };
+  await applyEditProposalBatchAsWorkspaceEdit(vscode, proposal);
+  assert.equal(vscode.getApplyCount(), 1);
+  const we = vscode.getLastWorkspaceEdit();
+  assert.equal(we.ops.filter((o) => o === 'replace').length, 2);
+});
+
+test('applyEditProposalBatchAsWorkspaceEdit rejects empty batch before apply (task-cp2-3)', async () => {
+  const vscode = mockVscode({ fileExists: true, docLines: ['x'] });
+  await assert.rejects(
+    () =>
+      applyEditProposalBatchAsWorkspaceEdit(vscode, {
+        kind: 'levibe.edit_proposal.v1',
+        proposals: [],
+      }),
+    /proposal batch is empty/,
+  );
+  assert.equal(vscode.getApplyCount(), 0);
+});
