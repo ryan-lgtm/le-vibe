@@ -128,9 +128,14 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Hardened `editor/le-vibe-native-extension/workspace-fs-actions.js` fallback move path to normalize destination-exists rename errors (`FileExists` / `EEXIST` / “exists” message) into the same deterministic no-overwrite conflict remediation used by the primary path.
     - Added focused tests in `editor/le-vibe-native-extension/test/workspace-fs-actions.test.js` to assert git-friendly behavior (`WorkspaceEdit.renameFile` invoked with `overwrite: false`) and destination-conflict handling in the fallback `workspace.fs.rename` path.
     - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 336 passed, smoke passed).
-- [ ] `pending` **task-cp3-3**: Delete flow with explicit confirmation + audit log.
+- [x] `done` **task-cp3-3**: Delete flow with explicit confirmation + audit log.
   - Acceptance:
     - no silent delete path exists
+  - Evidence (2026-04-15):
+    - Hardened `editor/le-vibe-native-extension/workspace-fs-actions.js` so `deleteWorkspaceEntry(...)` now requires explicit caller confirmation (`confirmedByUser: true`) and refuses execution otherwise, closing silent invocation paths.
+    - Updated `editor/le-vibe-native-extension/extension.js` delete flow to pass explicit confirmation only after the modal `"Delete"` acknowledgment step, preserving two-step operator-visible delete behavior and existing audit append flow.
+    - Added regression coverage in `editor/le-vibe-native-extension/test/workspace-fs-actions.test.js` for unconfirmed delete blocking (`task-cp3-3`) while retaining existing missing/success/failure delete-path tests.
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 337 passed, smoke passed).
 
 ## Epic CP4 — In-editor suggestions/completion (Copilot-like assist)
 

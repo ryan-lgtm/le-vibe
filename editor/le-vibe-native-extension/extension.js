@@ -296,7 +296,7 @@ async function runDeleteWorkspacePathInteractive(vscode, panel) {
   const wsUri = folder.uri.toString();
   const targetUriGuess = uriForNormalizedRelative(vscode, folder.uri, displayPath);
 
-  const result = await deleteWorkspaceEntry(vscode, folder, displayPath);
+  const result = await deleteWorkspaceEntry(vscode, folder, displayPath, { confirmedByUser: true });
   if (result.ok) {
     appendWorkspaceFsOpsAudit(
       auditFile,

@@ -282,7 +282,7 @@ function mockVscodeForDelete(opts = {}) {
 test('deleteWorkspaceEntry rejects missing path (task-n11-3)', async () => {
   const vscode = mockVscodeForDelete({ missing: true });
   const folder = { uri: vscode.Uri.parse('file:///tmp/ws/') };
-  const r = await deleteWorkspaceEntry(vscode, folder, 'gone.txt');
+  const r = await deleteWorkspaceEntry(vscode, folder, 'gone.txt', { confirmedByUser: true });
   assert.equal(r.ok, false);
   assert.ok(String(r.userMessage).includes('nothing to delete'));
 });
@@ -290,7 +290,7 @@ test('deleteWorkspaceEntry rejects missing path (task-n11-3)', async () => {
 test('deleteWorkspaceEntry deletes file via WorkspaceEdit.deleteFile (task-n11-3)', async () => {
   const vscode = mockVscodeForDelete({ applyOk: true, isDirectory: false });
   const folder = { uri: vscode.Uri.parse('file:///tmp/ws/') };
-  const r = await deleteWorkspaceEntry(vscode, folder, 'x.txt');
+  const r = await deleteWorkspaceEntry(vscode, folder, 'x.txt', { confirmedByUser: true });
   assert.equal(r.ok, true);
   if (r.ok) {
     assert.equal(r.isDirectory, false);
@@ -301,7 +301,7 @@ test('deleteWorkspaceEntry deletes file via WorkspaceEdit.deleteFile (task-n11-3
 test('deleteWorkspaceEntry uses recursive delete for directories (task-n11-3)', async () => {
   const vscode = mockVscodeForDelete({ applyOk: true, isDirectory: true });
   const folder = { uri: vscode.Uri.parse('file:///tmp/ws/') };
-  const r = await deleteWorkspaceEntry(vscode, folder, 'sub/dir');
+  const r = await deleteWorkspaceEntry(vscode, folder, 'sub/dir', { confirmedByUser: true });
   assert.equal(r.ok, true);
   if (r.ok) {
     assert.equal(r.isDirectory, true);
@@ -311,7 +311,15 @@ test('deleteWorkspaceEntry uses recursive delete for directories (task-n11-3)', 
 test('deleteWorkspaceEntry surfaces applyEdit failure (task-n11-3)', async () => {
   const vscode = mockVscodeForDelete({ applyOk: false });
   const folder = { uri: vscode.Uri.parse('file:///tmp/ws/') };
-  const r = await deleteWorkspaceEntry(vscode, folder, 'locked.txt');
+  const r = await deleteWorkspaceEntry(vscode, folder, 'locked.txt', { confirmedByUser: true });
   assert.equal(r.ok, false);
   assert.ok(String(r.userMessage).includes('not applied'));
+});
+
+test('deleteWorkspaceEntry blocks execution without explicit confirmation (task-cp3-3)', async () => {
+  const vscode = mockVscodeForDelete({ applyOk: true, isDirectory: false });
+  const folder = { uri: vscode.Uri.parse('file:///tmp/ws/') };
+  const r = await deleteWorkspaceEntry(vscode, folder, 'x.txt');
+  assert.equal(r.ok, false);
+  assert.ok(String(r.userMessage).includes('requires explicit user confirmation'));
 });

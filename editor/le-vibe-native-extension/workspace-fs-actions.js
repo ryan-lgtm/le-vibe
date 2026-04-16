@@ -273,12 +273,19 @@ async function moveWorkspaceEntry(vscode, workspaceFolder, fromRelative, toRelat
  * @param {import('vscode')} vscode
  * @param {import('vscode').WorkspaceFolder} workspaceFolder
  * @param {string} relativePath
+ * @param {{ confirmedByUser?: boolean }} [options]
  * @returns {Promise<
  *   | { ok: true, uri: import('vscode').Uri, isDirectory: boolean }
  *   | { ok: false, userMessage: string }
  * >}
  */
-async function deleteWorkspaceEntry(vscode, workspaceFolder, relativePath) {
+async function deleteWorkspaceEntry(vscode, workspaceFolder, relativePath, options = {}) {
+  if (!options.confirmedByUser) {
+    return {
+      ok: false,
+      userMessage: 'Lé Vibe Chat: delete requires explicit user confirmation before execution.',
+    };
+  }
   const v = validateWorkspaceRelativeCreatePath(relativePath);
   if (!v.ok) {
     return v;
