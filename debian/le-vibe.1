@@ -15,7 +15,7 @@ managed Ollama process so GPU VRAM is released.
 Product naming: Lé Vibe is not Microsoft Visual Studio Code; use Code \-
 OSS / VSCodium\-class editors.
 .PP
-After successful first\-run, the launcher may run \fBle\-vibe\-setup\-cline\fR automatically (pinned Cline + YAML extensions; \fBdocs/continue\-extension\-pin.md\fR). Set \fBLE_VIBE_AUTO_CLINE_SETUP=0\fR to disable.
+The default happy path uses \fILé Vibe Chat\fR (first\-party extension \fBlevibe.le\-vibe\-native\-extension\fR): after first\-run, the launcher verifies managed Ollama, a selected model, and that extension in the target editor. Optional third\-party Cline: set \fBLE_VIBE_AUTO_CLINE_SETUP=1\fR to allow \fBle\-vibe\-setup\-cline\fR after first\-run (\fBdocs/continue\-extension\-pin.md\fR). Default is off (unset or \fB0\fR).
 .PP
 Primary CLI name is \fBlvibe\fR (same as this program). Open the current directory in the editor:
 .B lvibe \.

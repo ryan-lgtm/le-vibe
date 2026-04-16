@@ -1,11 +1,13 @@
-"""One-shot Cline extension wiring after first-run.
+"""Optional third-party Cline extension wiring after first-run.
 
-Runs ``le-vibe-setup-cline`` when first-run is complete and automatic Cline setup has not
-already been suppressed.
+The default happy path is **Lé Vibe Chat** (first-party ``levibe.le-vibe-native-extension``);
+this module is **off** unless explicitly enabled.
 
-Disable with ``LE_VIBE_AUTO_CLINE_SETUP=0``. Failure writes
-``.auto-cline-setup-suppressed`` so repeated launches do not hammer the marketplace.
-Delete that file to retry.
+When ``LE_VIBE_AUTO_CLINE_SETUP=1`` and first-run is complete, runs ``le-vibe-setup-cline``
+until success or suppressed failure.
+
+Failure writes ``.auto-cline-setup-suppressed`` so repeated launches do not hammer the
+marketplace. Delete that file to retry.
 """
 
 from __future__ import annotations
@@ -27,8 +29,8 @@ def _first_run_complete(cfg_dir: Path) -> bool:
 
 
 def maybe_auto_setup_cline_after_first_run(cfg_dir: Path) -> None:
-    """Best-effort: run ``le-vibe-setup-cline`` once until success or suppressed failure."""
-    if os.environ.get("LE_VIBE_AUTO_CLINE_SETUP", "1").lower() in ("0", "false", "no"):
+    """When ``LE_VIBE_AUTO_CLINE_SETUP`` is enabled, run ``le-vibe-setup-cline`` until success or suppressed failure."""
+    if os.environ.get("LE_VIBE_AUTO_CLINE_SETUP", "0").lower() not in ("1", "true", "yes"):
         return
     suppressed = cfg_dir / _SUPPRESSED
     if suppressed.is_file():

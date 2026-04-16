@@ -6,8 +6,8 @@
 # Full E1 pytest roster: project root README.md Tests / E1 mapping; spec-phase2.md §14 Honesty vs CI (ci.yml, dependabot.yml, packaging/bin).
 # Phase 2 scope: spec-phase2.md §14 (H6/H7 vs in-tree; STEP 14 E1 — editor/le-vibe-overrides/README.md + le-vibe/tests/test_editor_le_vibe_overrides_readme_contract.py).
 Type=Application
-Name=Lé Vibe Continue setup reminder
-Comment=One-shot reminder: next lvibe tries Continue wiring; or run le-vibe-setup-continue (see README.Debian under /usr/share/doc/le-vibe/)
+Name=Lé Vibe optional Continue wiring reminder
+Comment=One-shot hint: Lé Vibe Chat is default; optional Continue sync still pending — see README.Debian under /usr/share/doc/le-vibe/
 Exec=/usr/share/le-vibe/scripts/le-vibe-continue-setup-autostart.sh
 Hidden=false
 NoDisplay=true

@@ -49,8 +49,8 @@ mkdir -p "$LV_DIR"
 if notify-send \
   --app-name="Lé Vibe" \
   --urgency=normal \
-  "Continue setup" \
-  "The next lvibe launch tries Continue wiring automatically; or run le-vibe-setup-continue now (add --gui for Zenity)."; then
+  "Optional Continue wiring" \
+  "Lé Vibe Chat is the default agent. Continue YAML sync still pending — run le-vibe-setup-continue or the next lvibe with LE_VIBE_AUTO_CONTINUE_SETUP=1."; then
   touch "$MARK_DONE"
 fi
 exit 0

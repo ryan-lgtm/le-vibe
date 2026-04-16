@@ -73,4 +73,4 @@ def test_verify_continue_pin_script_documents_pin_file():
 def test_continue_extension_pin_doc_has_step_14h_block():
     text = (_repo_root() / "docs" / "continue-extension-pin.md").read_text(encoding="utf-8")
     assert "STEP 14.h" in text
-    assert "install-continue-extension.sh" in text
+    assert "install-cline-extension.sh" in text

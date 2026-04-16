@@ -37,7 +37,7 @@ The **Open VSX semver** in **`packaging/cline-openvsx-version`** is the single s
 ## End-to-end (typical)
 
 1. Complete first-run so runtime/model state exists under **`~/.config/le-vibe/`** (launch **`lvibe`** once).
-2. On the **next** **`lvibe`** start, the launcher attempts **`le-vibe-setup-cline`** automatically (**`le_vibe.cline_setup_auto`** — **`LE_VIBE_AUTO_CLINE_SETUP=0`** to disable). If that fails, run **`le-vibe-setup-cline`** manually.
+2. **Optional:** set **`LE_VIBE_AUTO_CLINE_SETUP=1`** so a later **`lvibe`** start may run **`le-vibe-setup-cline`** via **`le_vibe.cline_setup_auto`** (default is **off** — the product default is **Lé Vibe Chat**). Otherwise run **`le-vibe-setup-cline`** manually when you want Cline.
 3. The editor installs **`saoudrizwan.claude-dev@<pinned-version>`** and **`redhat.vscode-yaml@<pinned-version>`** from your configured marketplace (Open VSX for common VSCodium setups).
 
 Manual install from a dev tree (any cwd; script finds its pin file):

@@ -1619,10 +1619,11 @@ def _force_first_run_requested(argv: list[str]) -> bool:
 
 def _run_global_session_preamble(argv: list[str]) -> int | None:
     """
-    First-run bootstrap + best-effort ``le-vibe-setup-cline`` for every ``lvibe`` invocation.
+    First-run bootstrap, optional third-party Cline wiring (opt-in), then first-party agent readiness.
 
-    Runs before subcommand dispatch so the first command a user runs (CLI or desktop ``Exec=``)
-    wires Cline when possible. Set ``LE_VIBE_SKIP_SESSION_PREAMBLE=1`` to skip (tests/CI).
+    Default product path is **Lé Vibe Chat** (``evaluate_first_run_agent_readiness``). Third-party
+    Cline auto-install runs only when ``LE_VIBE_AUTO_CLINE_SETUP=1``. Set
+    ``LE_VIBE_SKIP_SESSION_PREAMBLE=1`` to skip (tests/CI).
     """
     if sys.platform != "linux":
         return None

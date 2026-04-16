@@ -209,9 +209,14 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Added **`packaging/scripts/levibe-chat-e2e-acceptance.sh`** — monorepo one-liner to **`npm run e2e-acceptance`** from extension dir.
     - **`package.json`** **`scripts.e2e-acceptance`** = **`node ./scripts/e2e-acceptance.js`**; README + OPERATOR literals; **`test/e2e-acceptance.test.js`** contract tests.
     - Verification: **`npm run verify`** in **`editor/le-vibe-native-extension/`**; **`npm run e2e-acceptance`** (PASS).
-- [ ] `pending` **task-cp6-2**: Make Lé Vibe Chat the default user path in installer and startup UX.
+- [x] `done` **task-cp6-2**: Make Lé Vibe Chat the default user path in installer and startup UX.
   - Acceptance:
     - no third-party chat path required for default happy path
+  - Evidence (2026-04-15):
+    - **`le_vibe.cline_setup_auto`**: default **`LE_VIBE_AUTO_CLINE_SETUP`** is **off** (opt-in **`1`**); docstrings + **`launcher._run_global_session_preamble`** describe first-party readiness vs optional Cline.
+    - **Installer / operator UX:** **`debian/le-vibe.postinst`**, **`debian/le-vibe.README.Debian`**, **`debian/lvibe.1`**, **`debian/le-vibe.1`**, **`debian/le-vibe-setup-cline.1`**, **`docs/continue-extension-pin.md`** — default path is **Lé Vibe Chat** + managed Ollama; Cline is documented as optional.
+    - **Startup reminder:** **`packaging/autostart/le-vibe-continue-setup.desktop`**, **`packaging/scripts/le-vibe-continue-setup-autostart.sh`** — notification copy no longer implies third-party is required.
+    - Tests: **`tests/test_cline_setup_auto.py`** (opt-in default), **`tests/test_continue_autostart_script.py`**, **`tests/test_continue_pin_bash_step14h_contract.py`** (script name contract); **`python -m pytest`** on targeted modules (full suite may require optional **`.lvibe/session-manifest.json`** in dev trees).
 - [ ] `pending` **task-cp6-3**: Product freeze marker (`track complete`) with explicit sign-off fields.
   - Acceptance:
     - workflow has final sign-off block (Product + Eng + QA)

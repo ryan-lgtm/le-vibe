@@ -26,7 +26,7 @@ def test_continue_autostart_documents_mkdir_touch_path_checks() -> None:
     assert "mkdir not on PATH" in text
     assert "touch not on PATH" in text
     assert "continue_setup_auto" in text
-    assert "next lvibe launch tries" in text
+    assert "Lé Vibe Chat is the default agent" in text
     assert "test_continue_autostart_script.py" in text
     assert "test_verify_step14_closeout_contract.py" in text
     assert ".pytest-verify-step14-contract.lock" in text

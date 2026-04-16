@@ -20,7 +20,7 @@ Open the current project in the editor:
 Product naming: Lé Vibe is not Microsoft Visual Studio Code; use Code \-
 OSS / VSCodium\-class editors.
 .PP
-After successful first\-run, the launcher may run \fBle\-vibe\-setup\-cline\fR automatically (pinned Cline + YAML extensions; \fBdocs/continue\-extension\-pin.md\fR). Set \fBLE_VIBE_AUTO_CLINE_SETUP=0\fR to disable.
+The default happy path uses \fILé Vibe Chat\fR (first\-party extension \fBlevibe.le\-vibe\-native\-extension\fR): after first\-run, the launcher verifies managed Ollama, a selected model, and that extension in the target editor (\fBle_vibe.first_run.evaluate_first_run_agent_readiness\fR). Optional third\-party Cline: set \fBLE_VIBE_AUTO_CLINE_SETUP=1\fR to allow the launcher to run \fBle\-vibe\-setup\-cline\fR after first\-run (pinned Cline + YAML; \fBdocs/continue\-extension\-pin.md\fR). Default is off (unset or \fB0\fR).
 .PP
 When first\-run bootstrap fails: set \fBLE_VIBE_VERBOSE\fR for stderr detail; \fBlvibe logs\fR prints the path and a \fBtail \-f\fR reminder, or use \fBlvibe logs \-\-path\-only\fR / \fBlvibe logs \-\-tail\fR \fIN\fR (STEP 6). \fBlvibe \-\-help\fR lists the same remediation flags (\fB\-\-skip\-first\-run\fR, \fB\-\-force\-first\-run\fR, \fBLE_VIBE_VERBOSE\fR, \fBlvibe logs\fR; STEP 6). Same story as \fBle\-vibe\fR(1) OPTIONS; see \fBle\-vibe/README.md\fR \fIFirst\-run (launcher)\fR and \fBPRODUCT_SPEC_SECTION8_EVIDENCE.md\fR §10.
 .SH COMMANDS
