@@ -138,6 +138,14 @@ test('OPERATOR.md cross-links README SPDX license (task-n31-1)', () => {
   assert.ok(text.includes('SPDX'));
 });
 
+test('OPERATOR.md cross-links README publisher (task-n33-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n33-1'));
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('Publisher (task-n32-1)'));
+  assert.ok(text.includes('publisher'));
+});
+
 test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('workspace.applyEdit'));

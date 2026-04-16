@@ -160,6 +160,8 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 
 **README: SPDX license (task-n31-1):** **`package.json`** **`license`** (SPDX string; marketplace / CI identity alongside **`publisher`**) is written out in **`README.md`** *License (task-n30-1)* — use that section for the authoritative SPDX value instead of opening **`package.json`**.
 
+**README: publisher (task-n33-1):** **`package.json`** **`publisher`** (marketplace namespace / VS Code extension id prefix **`<publisher>.<name>`**) is written out in **`README.md`** *Publisher (task-n32-1)* — use that section for the authoritative publisher string instead of opening **`package.json`**.
+
 **CHANGELOG (task-n19-1):** **`CHANGELOG.md`** — semver release notes at the package root (Keep a Changelog–style). When you bump **`package.json`** **`version`**, add a **`## [x.y.z]`** section there (coordinate with *Extension version vs monorepo / packaging (task-n16-3)*). Epic-level history remains in the product-track file above.
 
 **Security notes (task-n18-1):** see **`## Security notes (task-n18-1)`** above — **`npm audit`** triage, **`overrides`** policy, issue tracker pointer.
