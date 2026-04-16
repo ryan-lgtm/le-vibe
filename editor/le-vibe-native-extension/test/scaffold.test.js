@@ -169,6 +169,11 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('Send Prompt'));
     assert.ok(html.includes('Cancel Request'));
     assert.ok(html.includes('Retry last prompt'));
+    assert.ok(html.includes('MAX_COMPOSER_ROWS = 12'));
+    assert.ok(html.includes("if (event.shiftKey)"));
+    assert.ok(html.includes("appendLine('User: ' + trimmed)"));
+    assert.ok(html.includes("appendLine('Assistant:')"));
+    assert.ok(html.includes('background: #2f3338;'));
     assert.ok(html.includes('New chat'));
     assert.ok(html.includes('Restore recent…'));
     assert.ok(html.includes('Lé Vibe Chat storage'));

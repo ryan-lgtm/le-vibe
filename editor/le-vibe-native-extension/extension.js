@@ -517,7 +517,23 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     .pill-list li { border: 1px solid var(--vscode-panel-border); border-radius: 999px; padding: 0.15rem 0.55rem; }
     .pill-list li.active { border-color: var(--vscode-focusBorder); }
     button { margin-right: 0.5rem; margin-top: 0.5rem; padding: 0.35rem 0.75rem; cursor: pointer; }
-    textarea { width: 100%; box-sizing: border-box; margin-top: 0.5rem; margin-bottom: 0.5rem; min-height: 74px; }
+    .composer-wrap { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 74px;
+      resize: none;
+      border: 1px solid var(--vscode-input-border, var(--vscode-panel-border));
+      border-radius: 6px;
+      padding: 0.55rem 0.6rem;
+      font-family: var(--vscode-editor-font-family, var(--vscode-font-family));
+      line-height: 1.35;
+      background: #2f3338;
+      color: #ffffff;
+      caret-color: #ffffff;
+    }
+    textarea::placeholder { color: rgba(255, 255, 255, 0.72); }
+    textarea:focus { outline: 1px solid var(--vscode-focusBorder); outline-offset: 1px; }
     .chat-log { margin-top: 0.75rem; border: 1px solid var(--vscode-panel-border); border-radius: 6px; padding: 0.6rem; min-height: 80px; white-space: pre-wrap; word-break: break-word; }
     .diag { margin-top: 0.75rem; background: var(--vscode-textCodeBlock-background); padding: 0.6rem; border-radius: 6px; white-space: pre-wrap; word-break: break-word; }
     .skip-link { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
@@ -549,7 +565,9 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     <button type="button" data-action="quickActionGenerateTests" title="Insert generate tests template" aria-label="Insert generate tests template">Generate tests…</button>
   </div>
   <label for="promptInput" class="muted" style="display:block;margin-top:0.35rem;">Prompt for local Ollama</label>
-  <textarea id="promptInput" placeholder="Ask local model something..." aria-label="Prompt for local Ollama (Lé Vibe Chat sends to configured local endpoint only)"></textarea>
+  <div class="composer-wrap">
+    <textarea id="promptInput" placeholder="Ask local model something..." aria-label="Prompt for local Ollama (Lé Vibe Chat sends to configured local endpoint only)"></textarea>
+  </div>
   <div>
     <button type="button" id="sendPrompt" title="Send prompt" aria-label="Send prompt">Send Prompt</button>
     <button type="button" id="cancelPrompt" title="Cancel in-flight request" aria-label="Cancel in-flight request">Cancel Request</button>
@@ -704,10 +722,60 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
         });
       });
     }
-    document.getElementById('sendPrompt').addEventListener('click', () => {
-      const prompt = document.getElementById('promptInput').value || '';
-      vscode.postMessage({ type: 'chat', actionId: 'sendPrompt', prompt });
-    });
+    const MAX_COMPOSER_ROWS = 12;
+    const promptInput = document.getElementById('promptInput');
+    const chatLog = document.getElementById('chatLog');
+    const appendLine = (text) => {
+      if (typeof text !== 'string' || text.length === 0) {
+        return;
+      }
+      const needsBreak = chatLog.textContent.length > 0 && !chatLog.textContent.endsWith('\n');
+      chatLog.textContent += (needsBreak ? '\n' : '') + text;
+      chatLog.scrollTop = chatLog.scrollHeight;
+    };
+    const autoresizeComposer = () => {
+      if (!promptInput) {
+        return;
+      }
+      promptInput.rows = 1;
+      const cs = window.getComputedStyle(promptInput);
+      const lineHeight = Math.max(16, parseFloat(cs.lineHeight) || 20);
+      const borderPad = promptInput.offsetHeight - promptInput.clientHeight;
+      const maxHeight = Math.ceil(lineHeight * MAX_COMPOSER_ROWS + borderPad);
+      promptInput.style.height = 'auto';
+      promptInput.style.height = Math.min(promptInput.scrollHeight, maxHeight) + 'px';
+      promptInput.style.overflowY = promptInput.scrollHeight > maxHeight ? 'auto' : 'hidden';
+    };
+    if (promptInput) {
+      promptInput.addEventListener('input', autoresizeComposer);
+      promptInput.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter') {
+          return;
+        }
+        if (event.shiftKey) {
+          return;
+        }
+        event.preventDefault();
+        submitPromptFromComposer();
+      });
+      autoresizeComposer();
+    }
+    function submitPromptFromComposer() {
+      const prompt = promptInput ? promptInput.value : '';
+      const trimmed = String(prompt || '').trim();
+      if (!trimmed) {
+        vscode.postMessage({ type: 'chat', actionId: 'sendPrompt', prompt });
+        return;
+      }
+      appendLine('User: ' + trimmed);
+      appendLine('Assistant:');
+      if (promptInput) {
+        promptInput.value = '';
+        autoresizeComposer();
+      }
+      vscode.postMessage({ type: 'chat', actionId: 'sendPrompt', prompt: trimmed });
+    }
+    document.getElementById('sendPrompt').addEventListener('click', submitPromptFromComposer);
     document.getElementById('cancelPrompt').addEventListener('click', () => {
       vscode.postMessage({ type: 'chat', actionId: 'cancelPrompt' });
     });
@@ -770,6 +838,7 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
         log.textContent = msg.replaceLog;
       } else if (typeof msg.append === 'string') {
         log.textContent += msg.append;
+        log.scrollTop = log.scrollHeight;
       }
     });
     document.getElementById('editPreviewAccept').addEventListener('click', () => {
@@ -1194,7 +1263,6 @@ async function openAgentSurface() {
     panel.webview.postMessage({
       type: 'chatUpdate',
       status: `Streaming response from local Ollama (model: ${client.model})...`,
-      replaceLog: '',
     });
     void chat.sendPrompt(promptWithContext, {
       onToken(token) {

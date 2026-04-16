@@ -8,6 +8,8 @@ All notable changes to **Lé Vibe Native Agent** / **Lé Vibe Chat** in this pac
 
 - Milestone EPIC A (chat surface shell): the panel now uses a dedicated tabbed workspace (`Chat`, `Settings`, `Logs`, `Tools`) so the main conversation feed stays focused while startup/remediation controls, diagnostics, and operational actions live in separate surfaces.
 - Keyboard-accessible tab navigation with WAI-ARIA roles (`tablist`, `tab`, `tabpanel`) and arrow/home/end support for panel switching.
+- Milestone EPIC B (composer interaction model): chat composer now supports `Enter` to send, `Shift+Enter` for newline, immediate clear-on-send, local user echo in the timeline, and auto-grow up to 12 visible rows.
+- Composer visual refresh for dark-theme chat ergonomics with high-contrast foreground and reduced friction for longer prompt drafting.
 
 ### Fixed
 
