@@ -64,10 +64,14 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Updated `editor/le-vibe-native-extension/extension.js` and `editor/le-vibe-native-extension/package.json` to add new conversation controls: `leVibeNative.startNewChatSession` and `leVibeNative.restoreRecentPrompt`, plus panel buttons (`New chat`, `Restore recent…`) and transcript-backed recent prompt restore flow.
     - Updated `editor/le-vibe-native-extension/README.md` command/storage control docs and `editor/le-vibe-native-extension/test/scaffold.test.js` command/export/panel assertions for the new controls.
     - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 323 passed, smoke passed).
-- [ ] `pending` **task-cp1-3**: Add prompt context controls in-panel (`@file`, `@folder`, selection explain/refactor/tests).
+- [x] `done` **task-cp1-3**: Add prompt context controls in-panel (`@file`, `@folder`, selection explain/refactor/tests).
   - Acceptance:
     - strict token/file caps respected
     - visible skip reasons for disallowed/large/binary files
+  - Evidence (2026-04-15):
+    - Existing in-panel context controls were already wired (`@file`, `@folder`, selection quick actions explain/refactor/tests) with strict `contextMax*` cap enforcement in `workspace-context.js`, `context-file-guards.js`, and `at-mention-context.js`.
+    - Updated `editor/le-vibe-native-extension/at-mention-context.js` and `editor/le-vibe-native-extension/extension.js` so `@file/@folder` guard failures return and surface explicit in-panel skip messages (`Lé Vibe Chat: skipped …`) instead of relying on toast-only visibility.
+    - Added targeted tests in `editor/le-vibe-native-extension/test/at-mention-context.test.js` for visible skip-message returns; verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 325 passed, smoke passed).
 
 ## Epic CP2 — Cursor-like live edits (propose → preview → apply → undo)
 

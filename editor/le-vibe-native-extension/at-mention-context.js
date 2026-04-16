@@ -119,19 +119,21 @@ async function buildFolderListingExcerpt(vscode, workspaceFolder, relFolder, bud
 /**
  * @param {typeof import('vscode')} vscode
  * @param {() => { maxCharsPerFile: number, maxLinesPerFile: number }} getBudget from Settings (contextMax*)
- * @returns {Promise<null | { path: string, content: string, kind?: 'file' | 'folder' }>}
+ * @returns {Promise<null | { path: string, content: string, kind?: 'file' | 'folder' } | { skipMessage: string }>}
  */
 async function pickAtFileContext(vscode, getBudget) {
   const folder = vscode.workspace.workspaceFolders?.[0];
   if (!folder) {
-    await vscode.window.showWarningMessage('Open a folder workspace first.');
-    return null;
+    const msg = 'Open a folder workspace first.';
+    await vscode.window.showWarningMessage(msg);
+    return { skipMessage: `Lé Vibe Chat: skipped @file — ${msg}` };
   }
   const ig = await loadGitignoreMatcher(vscode, folder);
   const files = await vscode.workspace.findFiles('**/*', FIND_EXCLUDE, FILE_PICKER_MAX_SCAN_URIS);
   if (!files.length) {
-    await vscode.window.showInformationMessage('No workspace files available for @file context.');
-    return null;
+    const msg = 'No workspace files available for @file context.';
+    await vscode.window.showInformationMessage(msg);
+    return { skipMessage: `Lé Vibe Chat: skipped @file — ${msg}` };
   }
   const items = sliceToCap(files, FILE_PICKER_MAX_SCAN_URIS)
     .map((uri) => ({
@@ -140,10 +142,9 @@ async function pickAtFileContext(vscode, getBudget) {
     }))
     .filter((item) => !ig.ignores(relativePosixForGitignore(item.label)));
   if (!items.length) {
-    await vscode.window.showInformationMessage(
-      'Lé Vibe Chat: no @file candidates — empty tree or matches exceed cap / .gitignore.',
-    );
-    return null;
+    const msg = 'Lé Vibe Chat: no @file candidates — empty tree or matches exceed cap / .gitignore.';
+    await vscode.window.showInformationMessage(msg);
+    return { skipMessage: `Lé Vibe Chat: skipped @file — no eligible files after .gitignore/cap filters.` };
   }
   const choice = await vscode.window.showQuickPick(items, {
     title: 'Lé Vibe Chat: @file — add workspace file to context',
@@ -153,8 +154,9 @@ async function pickAtFileContext(vscode, getBudget) {
     return null;
   }
   if (!isSafeRelativePath(choice.label)) {
-    await vscode.window.showWarningMessage('Unsafe file reference blocked.');
-    return null;
+    const msg = 'Unsafe file reference blocked.';
+    await vscode.window.showWarningMessage(msg);
+    return { skipMessage: `Lé Vibe Chat: skipped @file — ${msg}` };
   }
   const budget = getBudget();
   const prep = await loadContextFileWithGuards(
@@ -167,7 +169,7 @@ async function pickAtFileContext(vscode, getBudget) {
   );
   if (!prep.ok) {
     await vscode.window.showWarningMessage(prep.userMessage);
-    return null;
+    return { skipMessage: prep.userMessage };
   }
   return { path: choice.label, content: prep.excerpt, kind: 'file' };
 }
@@ -175,13 +177,14 @@ async function pickAtFileContext(vscode, getBudget) {
 /**
  * @param {typeof import('vscode')} vscode
  * @param {() => { maxCharsPerFile: number, maxLinesPerFile: number }} getBudget
- * @returns {Promise<null | { path: string, content: string, kind?: 'file' | 'folder' }>}
+ * @returns {Promise<null | { path: string, content: string, kind?: 'file' | 'folder' } | { skipMessage: string }>}
  */
 async function pickAtFolderContext(vscode, getBudget) {
   const folder = vscode.workspace.workspaceFolders?.[0];
   if (!folder) {
-    await vscode.window.showWarningMessage('Open a folder workspace first.');
-    return null;
+    const msg = 'Open a folder workspace first.';
+    await vscode.window.showWarningMessage(msg);
+    return { skipMessage: `Lé Vibe Chat: skipped @folder — ${msg}` };
   }
   const ig = await loadGitignoreMatcher(vscode, folder);
   const files = await vscode.workspace.findFiles('**/*', FIND_EXCLUDE, FILE_PICKER_MAX_SCAN_URIS);
@@ -194,8 +197,9 @@ async function pickAtFolderContext(vscode, getBudget) {
     rel,
   }));
   if (!folderChoices.length) {
-    await vscode.window.showInformationMessage('No workspace folders available for @folder context.');
-    return null;
+    const msg = 'No workspace folders available for @folder context.';
+    await vscode.window.showInformationMessage(msg);
+    return { skipMessage: `Lé Vibe Chat: skipped @folder — ${msg}` };
   }
   const choice = await vscode.window.showQuickPick(folderChoices, {
     title: 'Lé Vibe Chat: @folder — add folder listing to context',
@@ -207,8 +211,9 @@ async function pickAtFolderContext(vscode, getBudget) {
   const rel = choice.rel;
   const displayPath = rel === '' ? '.' : rel;
   if (rel !== '' && !isSafeRelativePath(rel)) {
-    await vscode.window.showWarningMessage('Unsafe folder reference blocked.');
-    return null;
+    const msg = 'Unsafe folder reference blocked.';
+    await vscode.window.showWarningMessage(msg);
+    return { skipMessage: `Lé Vibe Chat: skipped @folder — ${msg}` };
   }
   const budget = getBudget();
   const excerpt = await buildFolderListingExcerpt(vscode, folder, rel, budget);

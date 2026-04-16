@@ -890,6 +890,10 @@ function openAgentSurface() {
     if (!picked) {
       return;
     }
+    if (picked.skipMessage) {
+      panel.webview.postMessage({ type: 'chatUpdate', status: picked.skipMessage });
+      return;
+    }
     if (selectedContexts.length >= contextBudget.maxFiles) {
       panel.webview.postMessage({
         type: 'chatUpdate',
