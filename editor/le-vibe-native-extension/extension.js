@@ -100,6 +100,7 @@ const {
 } = require('./at-mention-context');
 const { fetchCurrentFileOutlineForContext } = require('./outline-context');
 const { registerLeVibeChatStatusBar } = require('./status-bar-entry');
+const { createInlineSuggestionProvider } = require('./inline-suggestions');
 
 /**
  * @param {import('vscode')} vscode
@@ -1649,8 +1650,22 @@ function openAgentSurface() {
  */
 function activate(context) {
   const vscode = require('vscode');
+  const inlineClient = createOllamaClient({
+    endpoint: vscode.workspace.getConfiguration('leVibeNative').get('ollamaEndpoint', 'http://127.0.0.1:11434'),
+    timeoutMs: vscode.workspace.getConfiguration('leVibeNative').get('ollamaTimeoutMs', 2500),
+    model: vscode.workspace.getConfiguration('leVibeNative').get('ollamaModel', 'mistral:latest'),
+    streamStallMs: vscode.workspace.getConfiguration('leVibeNative').get('ollamaStreamStallMs', 60000),
+    streamMaxMs: vscode.workspace.getConfiguration('leVibeNative').get('ollamaStreamMaxMs', 120000),
+    maxRetries: vscode.workspace.getConfiguration('leVibeNative').get('ollamaMaxRetries', 2),
+    retryDelayMs: vscode.workspace.getConfiguration('leVibeNative').get('ollamaRetryBackoffMs', 400),
+  });
+  const inlineProvider = createInlineSuggestionProvider(
+    inlineClient,
+    () => vscode.workspace.getConfiguration('leVibeNative').get('inlineSuggestionsEnabled', false) === true,
+  );
   registerSelectionChatCodeLens(vscode, context);
   context.subscriptions.push(
+    vscode.languages.registerInlineCompletionItemProvider({ scheme: 'file' }, inlineProvider),
     vscode.workspace.onDidChangeWorkspaceFolders(() => {
       clearTerminalSessionAllow();
     }),

@@ -64,6 +64,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Default local model tag:** **`mistral:latest`** — Settings **`leVibeNative.ollamaModel`** (streaming generate; see **`OPERATOR.md`**).
 
+**Inline suggestions beta:** Settings **`leVibeNative.inlineSuggestionsEnabled`** (default **`false`**) enables local-only inline completions in editors using configured Ollama endpoint/model; accept/dismiss uses standard VS Code inline suggestion keys.
+
 **Telemetry:** defaults to **local structured logs only**; no remote telemetry unless you **explicitly opt in** (same policy as **`OPERATOR.md`**).
 
 **Canonical user-facing name (chat UX):** **Lé Vibe Chat** — palette titles and panel copy use this name for the agent surface (per product track; same line as **`OPERATOR.md`**).

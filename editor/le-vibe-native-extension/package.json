@@ -281,6 +281,11 @@
             "default": "mistral:latest",
             "description": "Local Ollama model tag used for prompt streaming requests."
           },
+          "leVibeNative.inlineSuggestionsEnabled": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "**Beta (off by default).** Enable local inline code suggestions from Ollama in file editors via VS Code inline completion UX (accept/dismiss with standard editor keys). Uses configured local endpoint/model only; no cloud fallback."
+          },
           "leVibeNative.chatTranscriptMaxBytes": {
             "type": "integer",
             "minimum": 4096,

@@ -141,10 +141,15 @@ Everything else is out-of-scope unless required to unblock one of the five.
 
 **Narrative:** optional but strategic parity: inline assistance, not only side-panel chat.
 
-- [ ] `pending` **task-cp4-1**: Add inline suggestion provider (setting-gated beta) using local Ollama.
+- [x] `done` **task-cp4-1**: Add inline suggestion provider (setting-gated beta) using local Ollama.
   - Acceptance:
     - suggestions can be accepted/dismissed with standard editor keys
     - no cloud fallback
+  - Evidence (2026-04-15):
+    - Added `editor/le-vibe-native-extension/inline-suggestions.js` and wired it in `editor/le-vibe-native-extension/extension.js` via `vscode.languages.registerInlineCompletionItemProvider({ scheme: 'file' }, ...)` with feature gate `leVibeNative.inlineSuggestionsEnabled`.
+    - Added setting `leVibeNative.inlineSuggestionsEnabled` (default `false`) in `editor/le-vibe-native-extension/package.json` and documented it in both `editor/le-vibe-native-extension/README.md` and `editor/le-vibe-native-extension/OPERATOR.md` to satisfy settings-disclosure guardrails.
+    - Added targeted tests in `editor/le-vibe-native-extension/test/inline-suggestions.test.js` for prompt contract, output sanitation, feature gating, and inline insert behavior from local stream tokens.
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 341 passed, smoke passed).
 - [ ] `pending` **task-cp4-2**: Add minimal suggestion ranking/debounce and cancellation to avoid noisy UX.
   - Acceptance:
     - measured latency budget documented
