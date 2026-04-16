@@ -166,6 +166,8 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 
 **README: categories (task-n37-1):** **`package.json`** **`categories`** (VS Code Marketplace extension category) are written out in **`README.md`** *Categories (task-n36-1)* — use that section for the shipped marketplace category instead of opening **`package.json`**.
 
+**README: displayName (task-n39-1):** **`package.json`** **`displayName`** (Marketplace / Extensions UI listing title) is written out in **`README.md`** *Display name (task-n38-1)* — use that section for the shipped listing title instead of opening **`package.json`**.
+
 **CHANGELOG (task-n19-1):** **`CHANGELOG.md`** — semver release notes at the package root (Keep a Changelog–style). When you bump **`package.json`** **`version`**, add a **`## [x.y.z]`** section there (coordinate with *Extension version vs monorepo / packaging (task-n16-3)*). Epic-level history remains in the product-track file above.
 
 **Security notes (task-n18-1):** see **`## Security notes (task-n18-1)`** above — **`npm audit`** triage, **`overrides`** policy, issue tracker pointer.
