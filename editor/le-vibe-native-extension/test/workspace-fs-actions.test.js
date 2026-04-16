@@ -27,6 +27,8 @@ test('validateWorkspaceRelativeCreatePath rejects denied segments (task-n11-1)',
   assert.equal(validateWorkspaceRelativeCreatePath('node_modules/pkg/index.js').ok, false);
   assert.equal(validateWorkspaceRelativeCreatePath('.ssh/known_hosts').ok, false);
   assert.equal(validateWorkspaceRelativeCreatePath('x/.env').ok, false);
+  assert.equal(validateWorkspaceRelativeCreatePath('.GIT/config').ok, false);
+  assert.equal(validateWorkspaceRelativeCreatePath('src/Node_Modules/pkg/index.js').ok, false);
 });
 
 test('validateWorkspaceRelativeCreatePath accepts safe nested paths (task-n11-1)', () => {

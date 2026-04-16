@@ -15,6 +15,7 @@ const MAX_RELATIVE_PATH_LEN = 512;
  */
 function validateWorkspaceRelativeCreatePath(relativePath, options = {}) {
   const denied = options.deniedSegments || DEFAULT_DENIED_SEGMENTS;
+  const deniedLower = new Set(Array.from(denied, (seg) => String(seg).toLowerCase()));
   if (!relativePath || typeof relativePath !== 'string') {
     return {
       ok: false,
@@ -40,7 +41,7 @@ function validateWorkspaceRelativeCreatePath(relativePath, options = {}) {
   const normalized = path.posix.normalize(trimmed.replace(/\\/g, '/'));
   const segments = normalized.split('/').filter((s) => s.length > 0);
   for (const seg of segments) {
-    if (denied.has(seg)) {
+    if (deniedLower.has(seg.toLowerCase())) {
       return {
         ok: false,
         userMessage: `Lé Vibe Chat: path segment "${seg}" is blocked (sensitive or disallowed root).`,

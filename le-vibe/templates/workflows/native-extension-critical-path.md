@@ -113,9 +113,14 @@ Everything else is out-of-scope unless required to unblock one of the five.
 
 **Narrative:** Lé Vibe Chat must perform project changes end-to-end safely.
 
-- [ ] `pending` **task-cp3-1**: Create file/folder from chat with path traversal protection.
+- [x] `done` **task-cp3-1**: Create file/folder from chat with path traversal protection.
   - Acceptance:
     - workspace-relative only; deny-list enforced
+  - Evidence (2026-04-15):
+    - Hardened `editor/le-vibe-native-extension/workspace-fs-actions.js` path validation to enforce deny-list segments case-insensitively (e.g., `.GIT`, `Node_Modules`) in addition to existing workspace-relative traversal blocking.
+    - Extended `editor/le-vibe-native-extension/test/workspace-fs-actions.test.js` with uppercase/mixed-case deny-list regression assertions to prove create-path guardrails reject bypass attempts.
+    - Existing create flows in `editor/le-vibe-native-extension/extension.js` remain wired through `validateWorkspaceRelativeCreatePath(...)` + `createWorkspaceFile(...)` / `createWorkspaceFolder(...)` for interactive chat/panel entrypoints.
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 334 passed, smoke passed).
 - [ ] `pending` **task-cp3-2**: Move/rename flow with conflict handling and git-friendly behavior.
   - Acceptance:
     - destination conflict path covered in tests
