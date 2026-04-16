@@ -877,9 +877,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N31 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n31-1**: **OPERATOR — README pointer for SPDX license** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *License (task-n30-1)* for **`package.json`** **`license`** so operators align with **`task-n27-1`** / **`task-n29-1`** doc-discovery pattern.
+- [x] `done` **task-n31-1**: **OPERATOR — README pointer for SPDX license** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *License (task-n30-1)* for **`package.json`** **`license`** so operators align with **`task-n27-1`** / **`task-n29-1`** doc-discovery pattern.
   - Acceptance:
     - **`OPERATOR.md`** + **`operator-doc.test.js`** token
+    - **`npm run verify`** green
+  - Evidence:
+    - **`OPERATOR.md`** — **`README: SPDX license (task-n31-1)`** under *Product track*.
+    - **`test/operator-doc.test.js`** — **`task-n31-1`** token test; **`npm run verify`** green.
+
+### Epic N32 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n32-1**: **Extension README — `publisher`** — add one line (near **License** or **Operators**) documenting **`package.json`** **`publisher`** (marketplace identity; pairs with **`license`**) so contributors see the extension id prefix without opening **`package.json`**; include contract test deriving the string from **`package.json`**.
+  - Acceptance:
+    - **`README.md`** + targeted test
     - **`npm run verify`** green
 
 ---

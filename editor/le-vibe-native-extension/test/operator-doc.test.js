@@ -129,6 +129,15 @@ test('OPERATOR.md cross-links README monorepo clone (task-n29-1)', () => {
   assert.ok(text.includes('directory'));
 });
 
+test('OPERATOR.md cross-links README SPDX license (task-n31-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n31-1'));
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('License (task-n30-1)'));
+  assert.ok(text.includes('license'));
+  assert.ok(text.includes('SPDX'));
+});
+
 test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('workspace.applyEdit'));
