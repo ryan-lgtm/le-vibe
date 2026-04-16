@@ -265,3 +265,12 @@ test('OPERATOR.md documents status bar entry (task-n17-3)', () => {
   assert.ok(text.includes('status-bar-entry.js'));
   assert.ok(text.includes('leVibeNative.showStatusBarEntry'));
 });
+
+test('OPERATOR.md documents Security notes + npm audit triage (task-n18-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Security notes (task-n18-1)'));
+  assert.ok(text.includes('npm audit'));
+  assert.ok(text.includes('package-lock.json'));
+  assert.ok(text.includes('overrides'));
+  assert.ok(text.includes('github.com/ryan-lgtm/le-vibe/issues'));
+});

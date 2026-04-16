@@ -738,10 +738,14 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N18 — Hardening and tech debt (bounded)
 
-- [ ] `pending` **task-n18-1**: **Dependency audit** — `npm audit` triage for `editor/le-vibe-native-extension`: document `overrides`/`resolutions` rationale or bump safe minors; record outcome in `OPERATOR.md` *Security notes*.
+- [x] `done` **task-n18-1**: **Dependency audit** — `npm audit` triage for `editor/le-vibe-native-extension`: document `overrides`/`resolutions` rationale or bump safe minors; record outcome in `OPERATOR.md` *Security notes*.
   - Acceptance:
     - committed lockfile/package updates if any
     - if vulnerabilities remain: documented risk + tracking issue link or internal id
+  - Evidence:
+    - **`npm audit`** (2026-04-15): **0 vulnerabilities** — no lockfile change required; production **`ignore`** @ **5.3.2** (latest **7.x** is a **major** bump; deferred absent audit findings — note in **`OPERATOR.md`** *Security notes*).
+    - **`OPERATOR.md`** **`## Security notes (task-n18-1)`** — triage command, last outcome, **`overrides`** policy, **`bugs.url`** tracking pointer.
+    - **`test/operator-doc.test.js`** (task-n18-1); **`npm run verify`** green.
 - [ ] `pending` **task-n18-2**: **Flake hunt** — run `npm run verify` in a loop (e.g. 10× locally or in CI) and fix ordering/timing issues in tests; document any intentionally skipped cases.
   - Acceptance:
     - evidence note with command used and pass count

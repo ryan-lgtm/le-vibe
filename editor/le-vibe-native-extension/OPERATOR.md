@@ -78,6 +78,16 @@ npm run verify
 
 Runs **`npm test`** then **`npm run smoke`**. The **`package.json`** **`scripts.verify`** string is exactly **`npm test && npm run smoke`**. Underlying script entries: **`scripts.test`** = **`node --test ./test/*.test.js`**; **`scripts.smoke`** = **`node ./scripts/smoke-integration.js`**. Green = all unit tests pass; smoke confirms non-blank panel HTML, optional `lvibe` launcher string check when the full monorepo is present, a best-effort local Ollama probe (non-fatal if Ollama is down unless strict mode is on), and prints the **canonical first-party persisted config directory** (from `storage-inventory.js`) before `smoke: done`.
 
+## Security notes (task-n18-1)
+
+**Dependency audit:** from **`editor/le-vibe-native-extension/`**, run **`npm audit`** against the committed **`package-lock.json`** before releases or when bumping dependencies. Re-run **`npm run verify`** after any **`package.json`** / lockfile change.
+
+**Last triage (2026-04-15):** **`npm audit`** reported **0 vulnerabilities** for the resolved tree (production: **`ignore`**; dev: **`@vscode/vsce`** and its transitive dependencies).
+
+**`overrides` / `resolutions`:** this **`package.json`** does **not** define npm **`overrides`**. If a future audit surfaces a transitive issue with no direct upgrade path, add an **`overrides`** entry **only** with a short rationale in this section (CVE id, affected package range, why the override is safe for the extension host).
+
+**Residual risk / tracking:** if **`npm audit`** reports issues later, file or link a tracker under **`https://github.com/ryan-lgtm/le-vibe/issues`** (see **`package.json`** **`bugs.url`**) and note the product-track follow-up; do not ship silent **`npm audit fix --force`** major jumps without **`npm run verify`** and a short note here.
+
 ### CI (GitHub Actions)
 
 The repository workflow **`.github/workflows/le-vibe-native-extension-ci.yml`** runs on **push** and **pull request** to **`main`** and **`master`**: it executes **`npm ci`** then **`npm run verify`** in **`editor/le-vibe-native-extension`** on an **Ubuntu** runner (Node **18**). This is the automated ship gate for the extension package; failing steps should block merging once the check is marked **required** in GitHub branch protection (**Settings → Branches** for the default branch). Until your org wires that policy, treat a locally green **`npm run verify`** as the same bar before merging extension changes.
@@ -124,6 +134,8 @@ Chat transcript JSONL is capped by **`leVibeNative.chatTranscriptMaxBytes`** (de
 ## Product track
 
 Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N8 — operator runbook).
+
+**Security notes (task-n18-1):** see **`## Security notes (task-n18-1)`** above — **`npm audit`** triage, **`overrides`** policy, issue tracker pointer.
 
 **Settings disclosure guardrail:** **`npm test`** runs **`test/package-leVibeNative-keys-doc-inventory.test.js`**, which fails if any **`leVibeNative.*`** key in **`package.json`** contributes is absent from this runbook and/or **`README.md`** (add the key to operator or developer docs before shipping).
 
