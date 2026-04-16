@@ -690,6 +690,57 @@ Product intent: Cursor-like **@file / @folder** context without unbounded embedd
   - Evidence:
     - **`test/fixtures/n15-2/edit-proposal/`** + **`test/fixtures/n15-2/workspace-edit/`** golden JSON pairs; **`test/n15-2-golden-regression.test.js`**; shared mock **`test/mock-vscode-workspace-edit.js`** (used by **`workspace-edit-apply.test.js`**); **`OPERATOR.md`** *Regression goldens*; `npm run verify` green (no network).
 
+### Epic N16 — CI, packaging, and install path
+
+Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same bar as the rest of the stack: automated verify in CI, reproducible VSIX/build artifacts, and docs for how `lvibe .` + installed extension line up.
+
+- [ ] `pending` **task-n16-1**: Add a **repository CI job** (or extend an existing workflow) that runs `npm ci` + `npm run verify` in `editor/le-vibe-native-extension` on PR/push to `main` (Linux runner sufficient).
+  - Acceptance:
+    - workflow YAML checked in under `.github/workflows/` (or documented equivalent)
+    - failing tests block merge (required check or documented manual gate if repo policy differs)
+    - `OPERATOR.md` or root `README.md` mentions where CI runs extension verify
+- [ ] `pending` **task-n16-2**: **VSIX build script** + one-line docs: `npm run package` (or equivalent) produces an installable `.vsix`, with output path and `code --install-extension` example in `OPERATOR.md`.
+  - Acceptance:
+    - script exists in `editor/le-vibe-native-extension/package.json` `scripts`
+    - `.gitignore` ignores `*.vsix` if written to disk
+    - no secrets in VSIX build path
+- [ ] `pending` **task-n16-3**: **Version alignment note** — `package.json` `version` vs git tags / deb packaging: single paragraph in `OPERATOR.md` describing how operators bump extension version for a release (even if “manual for now”).
+  - Acceptance:
+    - explicit bump checklist (edit version → tag? → attach VSIX?)
+    - contract test optional; at minimum human-readable runbook
+
+### Epic N17 — UX polish and operator ergonomics
+
+- [ ] `pending` **task-n17-1**: **Command palette audit** — ensure every user-facing **Lé Vibe Chat** command has a `category` and title consistent with canonical naming; add missing keybindings only where they do not conflict with VS Code defaults (document overrides in README).
+  - Acceptance:
+    - table in README or `OPERATOR.md`: command id → title → default keybinding (if any)
+    - `npm run verify` green
+- [ ] `pending` **task-n17-2**: **Panel accessibility pass** — focus order, button `title`/`aria` equivalents in webview HTML where applicable, and high-contrast theme spot-check (document known gaps).
+  - Acceptance:
+    - short **Accessibility** subsection in README with tested VS Code themes + OS
+    - no regressions in `npm run verify`
+- [ ] `pending` **task-n17-3**: **Status bar entry** (optional, setting-gated): show Ollama reachability or “Lé Vibe Chat” idle/active with link to open panel; default off or subtle to avoid noise.
+  - Acceptance:
+    - `leVibeNative.showStatusBarEntry` (or similar) in `package.json` contributes
+    - clears on deactivate; tests for registration where mock allows
+
+### Epic N18 — Hardening and tech debt (bounded)
+
+- [ ] `pending` **task-n18-1**: **Dependency audit** — `npm audit` triage for `editor/le-vibe-native-extension`: document `overrides`/`resolutions` rationale or bump safe minors; record outcome in `OPERATOR.md` *Security notes*.
+  - Acceptance:
+    - committed lockfile/package updates if any
+    - if vulnerabilities remain: documented risk + tracking issue link or internal id
+- [ ] `pending` **task-n18-2**: **Flake hunt** — run `npm run verify` in a loop (e.g. 10× locally or in CI) and fix ordering/timing issues in tests; document any intentionally skipped cases.
+  - Acceptance:
+    - evidence note with command used and pass count
+    - no new network-dependent tests in default verify
+
+---
+
+## Board hygiene (engineering agents)
+
+If **Protocol 1–2** reports **no** `[ ]` rows and **no** `` `pending` `` tasks, **stop** and add at least one new **`pending`** task under the next epic (or a new Epic N*) with acceptance criteria before closing the pass — or escalate to product. The board must never be “all done” without an explicit product decision to freeze the track.
+
 ---
 
 ## Per-pass completion checklist (engineering agents)

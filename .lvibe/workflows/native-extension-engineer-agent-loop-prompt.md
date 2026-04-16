@@ -17,6 +17,7 @@ When implementing editor integration, prefer the same mental model users know fr
 Mandatory protocol:
 1) Open `.lvibe/workflows/native-extension-product-track.md`.
 2) Follow epic order exactly; select the first task marked `pending`.
+   If there are **no** `` `pending` `` tasks and **no** unchecked ``- [ ]`` rows: follow the **Board hygiene** section in that file (add at least one new `pending` task with acceptance criteria, or escalate to product). **Do not** end the pass with “no active task” without doing this.
 3) Execute only that active task scope in this pass.
 4) Implement code + tests + docs/evidence needed for that task acceptance criteria.
 5) Re-run targeted verification for changed files/components.
