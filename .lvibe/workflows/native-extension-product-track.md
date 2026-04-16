@@ -746,10 +746,23 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
     - **`npm audit`** (2026-04-15): **0 vulnerabilities** — no lockfile change required; production **`ignore`** @ **5.3.2** (latest **7.x** is a **major** bump; deferred absent audit findings — note in **`OPERATOR.md`** *Security notes*).
     - **`OPERATOR.md`** **`## Security notes (task-n18-1)`** — triage command, last outcome, **`overrides`** policy, **`bugs.url`** tracking pointer.
     - **`test/operator-doc.test.js`** (task-n18-1); **`npm run verify`** green.
-- [ ] `pending` **task-n18-2**: **Flake hunt** — run `npm run verify` in a loop (e.g. 10× locally or in CI) and fix ordering/timing issues in tests; document any intentionally skipped cases.
+- [x] `done` **task-n18-2**: **Flake hunt** — run `npm run verify` in a loop (e.g. 10× locally or in CI) and fix ordering/timing issues in tests; document any intentionally skipped cases.
   - Acceptance:
     - evidence note with command used and pass count
     - no new network-dependent tests in default verify
+  - Evidence:
+    - **`for i in $(seq 1 10); do npm run verify || exit 1; done`** from **`editor/le-vibe-native-extension/`** (2026-04-15): **10/10** passes; no ordering/timing fixes required this pass.
+    - **`OPERATOR.md`** **`### Flake resistance (task-n18-2)`** — loop command, **10/10**, intentionally skipped tests **none**, policy against adding network-dependent tests to default **`npm test`** without explicit track + mocks.
+    - **`test/operator-doc.test.js`** (task-n18-2); **`npm run verify`** green.
+
+### Epic N19 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n19-1**: **CHANGELOG for native extension** — add **`editor/le-vibe-native-extension/CHANGELOG.md`** (Keep a Changelog–style: `## [version]` sections); seed **`## [0.1.0]`** with a short shipped-capabilities summary and pointer to this product-track file for full epic history; link from **`README.md`** and **`OPERATOR.md`**.
+  - Acceptance:
+    - `CHANGELOG.md` present at extension package root
+    - README + OPERATOR cross-links
+    - `operator-doc.test.js` (or equivalent) asserts the file exists / first section header
+    - `npm run verify` green
 
 ---
 

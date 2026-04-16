@@ -274,3 +274,11 @@ test('OPERATOR.md documents Security notes + npm audit triage (task-n18-1)', () 
   assert.ok(text.includes('overrides'));
   assert.ok(text.includes('github.com/ryan-lgtm/le-vibe/issues'));
 });
+
+test('OPERATOR.md documents flake hunt loop + pass count (task-n18-2)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Flake resistance (task-n18-2)'));
+  assert.ok(text.includes('for i in $(seq 1 10)'));
+  assert.ok(text.includes('10/10'));
+  assert.ok(text.includes('Intentionally skipped tests'));
+});

@@ -78,6 +78,18 @@ npm run verify
 
 Runs **`npm test`** then **`npm run smoke`**. The **`package.json`** **`scripts.verify`** string is exactly **`npm test && npm run smoke`**. Underlying script entries: **`scripts.test`** = **`node --test ./test/*.test.js`**; **`scripts.smoke`** = **`node ./scripts/smoke-integration.js`**. Green = all unit tests pass; smoke confirms non-blank panel HTML, optional `lvibe` launcher string check when the full monorepo is present, a best-effort local Ollama probe (non-fatal if Ollama is down unless strict mode is on), and prints the **canonical first-party persisted config directory** (from `storage-inventory.js`) before `smoke: done`.
 
+### Flake resistance (task-n18-2)
+
+**Loop command used (2026-04-15):** from **`editor/le-vibe-native-extension/`**:
+
+```bash
+for i in $(seq 1 10); do npm run verify || exit 1; done
+```
+
+**Outcome:** **10/10** consecutive **`npm run verify`** runs passed (same machine, no failures). **Intentionally skipped tests:** none — **`npm test`** is fully offline; **`npm run smoke`** uses a **best-effort** local Ollama probe and does **not** fail CI when Ollama is absent unless **`LEVIBE_NATIVE_SMOKE_STRICT_OLLAMA=1`** (see *Smoke environment* below). Do **not** add network-dependent unit tests to the default **`npm test`** glob without an explicit product-track task and mocks.
+
+Re-run this loop after large async/timer refactors or if CI-only flakes appear.
+
 ## Security notes (task-n18-1)
 
 **Dependency audit:** from **`editor/le-vibe-native-extension/`**, run **`npm audit`** against the committed **`package-lock.json`** before releases or when bumping dependencies. Re-run **`npm run verify`** after any **`package.json`** / lockfile change.
@@ -136,6 +148,8 @@ Chat transcript JSONL is capped by **`leVibeNative.chatTranscriptMaxBytes`** (de
 Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N8 — operator runbook).
 
 **Security notes (task-n18-1):** see **`## Security notes (task-n18-1)`** above — **`npm audit`** triage, **`overrides`** policy, issue tracker pointer.
+
+**Flake resistance (task-n18-2):** see **`### Flake resistance (task-n18-2)`** under **Verify (canonical)** — 10× **`npm run verify`** evidence and intentional-skip policy.
 
 **Settings disclosure guardrail:** **`npm test`** runs **`test/package-leVibeNative-keys-doc-inventory.test.js`**, which fails if any **`leVibeNative.*`** key in **`package.json`** contributes is absent from this runbook and/or **`README.md`** (add the key to operator or developer docs before shipping).
 
