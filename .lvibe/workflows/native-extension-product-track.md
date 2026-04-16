@@ -1047,9 +1047,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N48 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n48-1**: **Extension README — `engines.node` minimum** — add one line (near **Prerequisites**) documenting **`package.json`** **`engines.node`** minimum so contributors can see the package-script runtime floor without scanning JSON; include contract test deriving the minimum major from **`engines.node`**.
+- [x] `done` **task-n48-1**: **Extension README — `engines.node` minimum** — add one line (near **Prerequisites**) documenting **`package.json`** **`engines.node`** minimum so contributors can see the package-script runtime floor without scanning JSON; include contract test deriving the minimum major from **`engines.node`**.
   - Acceptance:
     - **`README.md`** + targeted test
+    - **`npm run verify`** green
+  - Evidence:
+    - **`README.md`** — **`Node runtime minimum (task-n48-1)`** with **`engines.node`** literal and **`18+`** floor.
+    - **`test/readme-node-engine-min.test.js`**; **`npm run verify`** green.
+
+### Epic N49 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n49-1**: **OPERATOR — README pointer for `engines.node` minimum** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Node runtime minimum (task-n48-1)* for **`package.json`** **`engines.node`** so operators align with the README-first doc-discovery pattern.
+  - Acceptance:
+    - **`OPERATOR.md`** + **`operator-doc.test.js`** token
     - **`npm run verify`** green
 
 ---

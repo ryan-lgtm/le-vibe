@@ -28,6 +28,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Editor API minimum (task-n46-1):** **`engines.vscode`** is **`^1.85.0`** in **`package.json`** (minimum compatible VS Code API baseline: **`1.85+`**).
 
+**Node runtime minimum (task-n48-1):** **`engines.node`** is **`>=18`** in **`package.json`** (minimum Node.js major for this package's npm scripts / CI baseline: **`18+`**).
+
 **Changelog / release notes (task-n19-1):** see **`CHANGELOG.md`** — Keep a Changelog–style semver sections (**`[0.1.0]`** seeds the current shipped bar); update when bumping **`package.json`** **`version`**.
 
 **Extension entry (packaging):** **`package.json`** **`main`** is **`./extension.js`** (VS Code activation entry; see **`OPERATOR.md`**).
