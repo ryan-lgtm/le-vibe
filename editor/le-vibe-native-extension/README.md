@@ -51,6 +51,12 @@ Contributed commands use **`category`** **`Lé Vibe Chat`** and a short **`title
 | `leVibeNative.addContextAtFolder` | Lé Vibe Chat: @folder — add folder listing to context… | — |
 | `leVibeNative.addCurrentFileOutlineToContext` | Lé Vibe Chat: Add current file outline to context… | — |
 
+## Accessibility (task-n17-2)
+
+The readiness / chat **webview** (`extension.js` — `panelHtml`, `firstRunWizardHtml`) uses VS Code theme tokens (`var(--vscode-*)`) so colors follow the active theme, including **Dark Modern**, **Light Modern**, and **High Contrast** / **High Contrast Light** in VS Code **1.85+**. **Spot-check (Linux, Ubuntu):** panel text and controls remain readable when switching among those themes; buttons expose matching **`title`** and **`aria-label`** attributes; the prompt field has a visible **`<label>`** plus **`aria-label`**; status and chat log use **`aria-live`**; a **skip link** moves focus to the main panel region; **`prefers-reduced-motion`** is respected for scroll behavior.
+
+**Known gaps (not automated in CI):** no substitute for full assistive-technology or screen reader QA on every control; the panel is long — **Tab** order follows DOM order (top to bottom), which is many stops; the edit-preview **`<pre>`** can be verbose when announced. File issues if you hit a blocking contrast or focus trap in a specific theme/OS combination.
+
 ## Scope for task-n1-1
 
 - Extension host entrypoint exists (`extension.js`).

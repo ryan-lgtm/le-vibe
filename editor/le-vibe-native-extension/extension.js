@@ -420,10 +420,10 @@ function firstRunWizardHtml(step) {
   const progress = `Step ${safeStep + 1} of ${FINAL_STEP_INDEX + 1}`;
   const nextBtn =
     safeStep < FINAL_STEP_INDEX
-      ? '<button id="wizNext">Next checkpoint</button>'
-      : '<button id="wizFinish">Finish and open agent surface</button>';
+      ? '<button type="button" id="wizNext" title="Next checkpoint" aria-label="Next checkpoint">Next checkpoint</button>'
+      : '<button type="button" id="wizFinish" title="Finish and open agent surface" aria-label="Finish and open agent surface">Finish and open agent surface</button>';
   return `<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <style>
@@ -432,19 +432,24 @@ function firstRunWizardHtml(step) {
     .muted { opacity: 0.85; }
     .card { border: 1px solid var(--vscode-panel-border); border-radius: 8px; padding: 0.85rem 1rem; margin-top: 0.75rem; background: var(--vscode-sideBar-background); }
     button { margin-right: 0.5rem; margin-top: 0.5rem; padding: 0.4rem 0.85rem; cursor: pointer; }
+    .skip-link { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    .skip-link:focus { position: static; width: auto; height: auto; left: auto; padding: 0.35rem 0.55rem; margin-bottom: 0.5rem; background: var(--vscode-button-background); color: var(--vscode-button-foreground); outline: 1px solid var(--vscode-focusBorder); z-index: 1; }
   </style>
 </head>
 <body>
-  <h2>${escapeHtml(cur.title)}</h2>
+  <a class="skip-link" href="#levibe-wizard-main">Skip to first-run wizard content</a>
+  <main id="levibe-wizard-main" tabindex="-1">
+  <h2 id="wizTitle">${escapeHtml(cur.title)}</h2>
   <p class="muted">${escapeHtml(progress)}</p>
   <div class="card">
     <p>${escapeHtml(cur.body)}</p>
   </div>
   <div>
     ${nextBtn}
-    <button id="wizSkip">Skip onboarding</button>
+    <button type="button" id="wizSkip" title="Skip onboarding" aria-label="Skip onboarding">Skip onboarding</button>
   </div>
   <p class="muted">Skipping still opens the full Lé Vibe surface with explicit readiness states and actions.</p>
+  </main>
   <script>
     const vscode = acquireVsCodeApi();
     const next = document.getElementById('wizNext');
@@ -466,7 +471,10 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   };
   const content = getStateContent(state, detailOverride);
   const actionButtons = content.actions
-    .map((action) => `<button data-action="${escapeHtml(action.id)}">${escapeHtml(action.label)}</button>`)
+    .map(
+      (action) =>
+        `<button type="button" data-action="${escapeHtml(action.id)}" title="${escapeHtml(action.label)}" aria-label="${escapeHtml(action.label)}">${escapeHtml(action.label)}</button>`,
+    )
     .join('');
   const actionsBlock = actionButtons || '<p class="muted">No actions required.</p>';
   const diagnosticsText = diagnostics ? `<pre class="diag">${escapeHtml(JSON.stringify(diagnostics, null, 2))}</pre>` : '';
@@ -475,7 +483,7 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     return `<li ${active}>${escapeHtml(value)}</li>`;
   }).join('');
   return `<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <style>
@@ -490,12 +498,21 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     textarea { width: 100%; box-sizing: border-box; margin-top: 0.5rem; margin-bottom: 0.5rem; min-height: 74px; }
     .chat-log { margin-top: 0.75rem; border: 1px solid var(--vscode-panel-border); border-radius: 6px; padding: 0.6rem; min-height: 80px; white-space: pre-wrap; word-break: break-word; }
     .diag { margin-top: 0.75rem; background: var(--vscode-textCodeBlock-background); padding: 0.6rem; border-radius: 6px; white-space: pre-wrap; word-break: break-word; }
+    .skip-link { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    .skip-link:focus { position: static; width: auto; height: auto; left: auto; padding: 0.35rem 0.55rem; margin-bottom: 0.5rem; background: var(--vscode-button-background); color: var(--vscode-button-foreground); outline: 1px solid var(--vscode-focusBorder); z-index: 1; }
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; }
+    }
   </style>
 </head>
 <body>
-  <h2>Lé Vibe Native Startup</h2>
+  <a class="skip-link" href="#levibe-chat-main">Skip to Lé Vibe Chat panel content</a>
+  <main id="levibe-chat-main" tabindex="-1">
+  <h2 id="panelStartupHeading">Lé Vibe Native Startup</h2>
   <p class="muted">Deterministic readiness state with local-first remediation actions.</p>
+  <nav aria-label="Startup readiness states">
   <ul class="pill-list">${states}</ul>
+  </nav>
   <div class="state"><strong>${escapeHtml(state)}</strong></div>
   <p>${escapeHtml(content.detail)}</p>
   <div>${actionsBlock}</div>
@@ -503,79 +520,81 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <p class="muted">Send a prompt to local Ollama and receive streaming tokens.</p>
   <p class="muted" style="margin-bottom:0.25rem;">Quick actions (task-n12-2) — insert a template below. No network until you click <strong>Send Prompt</strong> (local Ollama only).</p>
   <div>
-    <button type="button" data-action="quickActionExplain">Explain…</button>
-    <button type="button" data-action="quickActionRefactorSelection">Refactor selection…</button>
-    <button type="button" data-action="quickActionGenerateTests">Generate tests…</button>
+    <button type="button" data-action="quickActionExplain" title="Insert explain template" aria-label="Insert explain template">Explain…</button>
+    <button type="button" data-action="quickActionRefactorSelection" title="Insert refactor selection template" aria-label="Insert refactor selection template">Refactor selection…</button>
+    <button type="button" data-action="quickActionGenerateTests" title="Insert generate tests template" aria-label="Insert generate tests template">Generate tests…</button>
   </div>
-  <textarea id="promptInput" placeholder="Ask local model something..."></textarea>
+  <label for="promptInput" class="muted" style="display:block;margin-top:0.35rem;">Prompt for local Ollama</label>
+  <textarea id="promptInput" placeholder="Ask local model something..." aria-label="Prompt for local Ollama (Lé Vibe Chat sends to configured local endpoint only)"></textarea>
   <div>
-    <button id="sendPrompt">Send Prompt</button>
-    <button id="cancelPrompt">Cancel Request</button>
-    <button id="retryLastPrompt">Retry last prompt</button>
+    <button type="button" id="sendPrompt" title="Send prompt" aria-label="Send prompt">Send Prompt</button>
+    <button type="button" id="cancelPrompt" title="Cancel in-flight request" aria-label="Cancel in-flight request">Cancel Request</button>
+    <button type="button" id="retryLastPrompt" title="Retry last prompt" aria-label="Retry last prompt">Retry last prompt</button>
   </div>
-  <div id="chatStatus" class="muted">Idle.</div>
-  <div id="chatLog" class="chat-log"></div>
+  <div id="chatStatus" class="muted" role="status" aria-live="polite">Idle.</div>
+  <div id="chatLog" class="chat-log" role="log" aria-live="polite" aria-relevant="additions text"></div>
   <h3>Edit preview (workspace)</h3>
   <p class="muted">Unified diff before writing. When <code>leVibeNative.requireEditPreviewBeforeApply</code> is on (default), click <strong>Accept preview</strong> then <strong>Apply to file</strong> — no silent whole-file overwrite.</p>
   <div>
-    <button data-action="previewSampleWorkspaceEdit">Preview sample workspace edit</button>
+    <button type="button" data-action="previewSampleWorkspaceEdit" title="Preview sample workspace edit" aria-label="Preview sample workspace edit">Preview sample workspace edit</button>
   </div>
-  <div id="editPreviewSection" style="display:none;margin-top:0.5rem;">
-    <pre id="editPreviewPre" class="diag"></pre>
+  <div id="editPreviewSection" style="display:none;margin-top:0.5rem;" aria-label="Edit preview diff">
+    <pre id="editPreviewPre" class="diag" role="region" aria-label="Unified diff preview"></pre>
     <div>
-      <button type="button" id="editPreviewAccept">Accept preview</button>
-      <button type="button" id="editPreviewReject">Reject</button>
-      <button type="button" id="editPreviewApply" disabled>Apply to file</button>
+      <button type="button" id="editPreviewAccept" title="Accept preview" aria-label="Accept preview">Accept preview</button>
+      <button type="button" id="editPreviewReject" title="Reject preview" aria-label="Reject preview">Reject</button>
+      <button type="button" id="editPreviewApply" disabled title="Apply preview to workspace file" aria-label="Apply preview to workspace file">Apply to file</button>
     </div>
   </div>
   <h3>Workspace plan (demo)</h3>
   <p class="muted">Epic N10 — per-step status in the chat line below; structured lines append to <code>workspace-plan-audit.jsonl</code> under ~/.config/le-vibe/levibe-native-chat/</p>
   <div>
-    <button data-action="dryRunSampleWorkspacePlan">Dry-run sample plan</button>
-    <button data-action="runSampleWorkspacePlan">Run sample workspace plan</button>
-    <button type="button" id="cancelWorkspacePlanRun" disabled>Cancel plan run</button>
-    <button type="button" id="undoWorkspacePlanRollback" disabled>Undo completed steps</button>
+    <button type="button" data-action="dryRunSampleWorkspacePlan" title="Dry-run sample plan" aria-label="Dry-run sample plan">Dry-run sample plan</button>
+    <button type="button" data-action="runSampleWorkspacePlan" title="Run sample workspace plan" aria-label="Run sample workspace plan">Run sample workspace plan</button>
+    <button type="button" id="cancelWorkspacePlanRun" disabled title="Cancel plan run" aria-label="Cancel plan run">Cancel plan run</button>
+    <button type="button" id="undoWorkspacePlanRollback" disabled title="Undo completed plan steps" aria-label="Undo completed plan steps">Undo completed steps</button>
   </div>
   <h3>Workspace context</h3>
   <p class="muted">Token-budget rules: max ${escapeHtml(budget.maxFiles)} files; each excerpt up to ${escapeHtml(budget.maxCharsPerFile)} chars and ${escapeHtml(budget.maxLinesPerFile)} lines; total injected context capped at ${escapeHtml(budget.maxTotalChars)} chars. Paths matching <code>.gitignore</code>, binary files, and files larger than the per-file char budget are skipped with an explicit Lé Vibe Chat message.</p>
   <div>
-    <button data-action="pickContextFile">Add context file</button>
-    <button data-action="addContextAtFile">@file…</button>
-    <button data-action="addContextAtFolder">@folder…</button>
-    <button data-action="addCurrentFileOutline">Outline (file)…</button>
-    <button data-action="clearContextFiles">Clear context</button>
+    <button type="button" data-action="pickContextFile" title="Add workspace context file" aria-label="Add workspace context file">Add context file</button>
+    <button type="button" data-action="addContextAtFile" title="Add workspace file to context (@file)" aria-label="Add workspace file to context (@file)">@file…</button>
+    <button type="button" data-action="addContextAtFolder" title="Add folder listing to context (@folder)" aria-label="Add folder listing to context (@folder)">@folder…</button>
+    <button type="button" data-action="addCurrentFileOutline" title="Add current file outline to context" aria-label="Add current file outline to context">Outline (file)…</button>
+    <button type="button" data-action="clearContextFiles" title="Clear selected workspace context" aria-label="Clear selected workspace context">Clear context</button>
   </div>
   <h3>Workspace scaffold (N11)</h3>
   <p class="muted">Create paths under the open folder only — no <code>..</code>; segments <code>.git</code>, <code>.ssh</code>, <code>.gnupg</code>, <code>node_modules</code>, <code>.env</code> are blocked. Move/rename uses VS Code rename (no overwrite if destination exists). Delete asks for a path, then a modal confirmation — never silent; each attempt is logged.</p>
   <div>
-    <button data-action="createWorkspaceFilePrompt">Create file…</button>
-    <button data-action="createWorkspaceFolderPrompt">Create folder…</button>
-    <button data-action="moveWorkspacePathPrompt">Move / rename…</button>
-    <button data-action="deleteWorkspacePathPrompt">Delete file or folder…</button>
+    <button type="button" data-action="createWorkspaceFilePrompt" title="Create workspace file" aria-label="Create workspace file">Create file…</button>
+    <button type="button" data-action="createWorkspaceFolderPrompt" title="Create workspace folder" aria-label="Create workspace folder">Create folder…</button>
+    <button type="button" data-action="moveWorkspacePathPrompt" title="Move or rename workspace path" aria-label="Move or rename workspace path">Move / rename…</button>
+    <button type="button" data-action="deleteWorkspacePathPrompt" title="Delete workspace file or folder" aria-label="Delete workspace file or folder">Delete file or folder…</button>
   </div>
   <h3>Terminal execution (N13)</h3>
   <p class="muted">Runs in a <strong>visible</strong> integrated terminal named <code>Lé Vibe Chat</code> — not a hidden PTY. Enable <code>leVibeNative.terminalExecutionEnabled</code> and allow-list patterns first. You confirm each batch unless you choose session-skip in the modal or set <code>leVibeNative.terminalSkipBatchConfirmation</code> (advanced).</p>
   <div>
-    <button data-action="runCommandInIntegratedTerminalPrompt">Run command in terminal…</button>
+    <button type="button" data-action="runCommandInIntegratedTerminalPrompt" title="Run command in integrated terminal" aria-label="Run command in integrated terminal">Run command in terminal…</button>
   </div>
   <h3>Operator handoff</h3>
   <p class="muted">Emit a reproducible handoff event to lvibe orchestration and append local audit evidence.</p>
   <div>
-    <button data-action="emitOperatorHandoff">Emit handoff event</button>
+    <button type="button" data-action="emitOperatorHandoff" title="Emit operator handoff event" aria-label="Emit operator handoff event">Emit handoff event</button>
   </div>
   <h3>Third-party agent migration</h3>
   <p class="muted">Moving from Continue, Cline, or similar? Open the checklist to avoid duplicate agent surfaces (no automatic uninstall).</p>
   <div>
-    <button data-action="openThirdPartyMigrationGuide">Open migration guide</button>
+    <button type="button" data-action="openThirdPartyMigrationGuide" title="Open third-party migration guide" aria-label="Open third-party migration guide">Open migration guide</button>
   </div>
   <h3>Lé Vibe Chat storage</h3>
   <p class="muted">Local JSONL under ~/.config/le-vibe/levibe-native-chat/</p>
   <div>
-    <button data-action="viewChatUsage">View usage</button>
-    <button data-action="exportChatTranscript">Export transcript</button>
-    <button data-action="clearChatTranscript">Clear transcript</button>
+    <button type="button" data-action="viewChatUsage" title="View transcript usage" aria-label="View transcript usage">View usage</button>
+    <button type="button" data-action="exportChatTranscript" title="Export transcript" aria-label="Export transcript">Export transcript</button>
+    <button type="button" data-action="clearChatTranscript" title="Clear transcript" aria-label="Clear transcript">Clear transcript</button>
   </div>
   ${diagnosticsText}
+  </main>
   <script>
     const vscode = acquireVsCodeApi();
     document.querySelectorAll('button[data-action]').forEach((button) => {

@@ -723,10 +723,12 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
     - `npm run verify` green
   - Evidence:
     - **`package.json`** **`contributes.commands`**: **`category`** **`Lé Vibe Chat`**, short **`title`** (palette shows **`Lé Vibe Chat: <title>`**); no default **`keybindings`** (documented); **`README.md`** *Command palette and keyboard shortcuts (task-n17-1)* table (id → palette label → **—**); **`OPERATOR.md`** *Product track* pointer; **`third-party-migration.js`** / **`docs/native-extension-boundary.md`** strings aligned; tests `command-palette-contributions.test.js`, `operator-doc.test.js`, `scaffold.test.js`; `npm run verify` green.
-- [ ] `pending` **task-n17-2**: **Panel accessibility pass** — focus order, button `title`/`aria` equivalents in webview HTML where applicable, and high-contrast theme spot-check (document known gaps).
+- [x] `done` **task-n17-2**: **Panel accessibility pass** — focus order, button `title`/`aria` equivalents in webview HTML where applicable, and high-contrast theme spot-check (document known gaps).
   - Acceptance:
     - short **Accessibility** subsection in README with tested VS Code themes + OS
     - no regressions in `npm run verify`
+  - Evidence:
+    - **`extension.js`** `panelHtml` / `firstRunWizardHtml`: **`lang="en"`**, skip link, **`main`** landmark, **`nav`** for state pills, **`title`** + **`aria-label`** on buttons, labeled prompt **`textarea`**, **`aria-live`** status/log, edit-preview region labels; **`prefers-reduced-motion`**; **`README.md`** *Accessibility (task-n17-2)* (Linux / VS Code themes + gaps); **`OPERATOR.md`** pointer; tests **`panel-accessibility.test.js`**, **`operator-doc.test.js`**; `npm run verify` green.
 - [ ] `pending` **task-n17-3**: **Status bar entry** (optional, setting-gated): show Ollama reachability or “Lé Vibe Chat” idle/active with link to open panel; default off or subtle to avoid noise.
   - Acceptance:
     - `leVibeNative.showStatusBarEntry` (or similar) in `package.json` contributes

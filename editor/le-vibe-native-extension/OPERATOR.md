@@ -131,6 +131,8 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 
 **Command palette inventory (task-n17-1):** **`README.md`** *Command palette and keyboard shortcuts (task-n17-1)* — table of **`leVibeNative.*`** command id → **Command Palette** label (**`Lé Vibe Chat:`** + **`title`**) → default keybinding (**none** shipped; bind in Keyboard Shortcuts).
 
+**Panel accessibility (task-n17-2):** **`README.md`** *Accessibility (task-n17-2)* — webview skip link, **`main`** landmark, button **`title`** / **`aria-label`**, live regions for status/log; theme spot-check notes and known gaps.
+
 ## E2E agentic editor release checklist (Epic N15, task-n15-1)
 
 Run **after** **`npm run verify`** is green. This is a **manual** gate for agentic-editor flows (edit preview, multi-step workspace plan, cancellation). **Sign off** each release in the table at the end (tag, VSIX version, or internal build id).

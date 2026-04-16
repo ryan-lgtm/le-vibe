@@ -252,3 +252,9 @@ test('OPERATOR.md documents command palette inventory pointer (task-n17-1)', () 
   assert.ok(text.includes('Command palette and keyboard shortcuts (task-n17-1)'));
   assert.ok(text.includes('Keyboard Shortcuts'));
 });
+
+test('OPERATOR.md documents panel accessibility pointer (task-n17-2)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Panel accessibility (task-n17-2)'));
+  assert.ok(text.includes('Accessibility (task-n17-2)'));
+});
