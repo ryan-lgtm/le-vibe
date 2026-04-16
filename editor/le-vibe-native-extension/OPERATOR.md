@@ -196,6 +196,8 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 
 **README: quick-index sequence token (task-n67-1):** **`README.md`** *Activation docs quick index (task-n62-1)* explicitly references *Activation docs sequence (task-n60-1)* — use that line to call out the built-in next step during handoff.
 
+**README: activation sequence return hop (task-n69-1):** **`README.md`** *Activation sequence return hop (task-n68-1)* points sequence readers back to *Activation docs quick index (task-n62-1)* — use that line when redirecting contributors to the compact activation-doc entrypoint.
+
 **CHANGELOG (task-n19-1):** **`CHANGELOG.md`** — semver release notes at the package root (Keep a Changelog–style). When you bump **`package.json`** **`version`**, add a **`## [x.y.z]`** section there (coordinate with *Extension version vs monorepo / packaging (task-n16-3)*). Epic-level history remains in the product-track file above.
 
 **Security notes (task-n18-1):** see **`## Security notes (task-n18-1)`** above — **`npm audit`** triage, **`overrides`** policy, issue tracker pointer.

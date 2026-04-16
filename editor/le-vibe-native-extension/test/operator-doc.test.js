@@ -282,6 +282,14 @@ test('OPERATOR.md cross-links README quick-index sequence token (task-n67-1)', (
   assert.ok(text.includes('Activation docs sequence (task-n60-1)'));
 });
 
+test('OPERATOR.md cross-links README activation sequence return hop (task-n69-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n69-1'));
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('Activation sequence return hop (task-n68-1)'));
+  assert.ok(text.includes('Activation docs quick index (task-n62-1)'));
+});
+
 test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('workspace.applyEdit'));
