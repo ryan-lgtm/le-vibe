@@ -38,7 +38,7 @@ test('registerLeVibeChatStatusBar creates item when enabled + first-party on (ta
             const map = {
               showStatusBarEntry: true,
               enableFirstPartyAgentSurface: true,
-              ollamaEndpoint: 'http://127.0.0.1:11434',
+              ollamaEndpoint: 'http://127.0.0.1:11435',
               ollamaTimeoutMs: 100,
               ollamaModel: 'mistral:latest',
               ollamaStreamStallMs: 60000,
@@ -47,6 +47,17 @@ test('registerLeVibeChatStatusBar creates item when enabled + first-party on (ta
               ollamaRetryBackoffMs: 100,
             };
             return key in map ? map[key] : def;
+          },
+          inspect(key) {
+            if (key === 'ollamaEndpoint') {
+              return {
+                defaultValue: 'http://127.0.0.1:11435',
+                globalValue: 'http://127.0.0.1:11435',
+                workspaceValue: undefined,
+                workspaceFolderValue: undefined,
+              };
+            }
+            return undefined;
           },
         };
       },

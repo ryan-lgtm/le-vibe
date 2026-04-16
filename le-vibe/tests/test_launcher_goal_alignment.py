@@ -50,3 +50,53 @@ def test_launcher_records_goal_alignment_start_and_end(
     assert summary["ready"] is False
     assert summary["source"] == "launcher_session_end"
     assert "stop_condition_not_met" in summary["blockers"]
+
+
+def test_launcher_appends_wait_flag_when_missing(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    captured: list[str] = []
+
+    class _CaptureProc:
+        def __init__(self, cmd: list[str]) -> None:
+            captured.extend(cmd)
+            self._rc = 0
+
+        def wait(self) -> int:
+            return self._rc
+
+    ws = tmp_path / "workspace"
+    ws.mkdir()
+    monkeypatch.setenv("LE_VIBE_LVIBE_CONSENT", "accept")
+    monkeypatch.setattr("le_vibe.launcher.ensure_managed_ollama", lambda **_: (True, "ok", None))
+    monkeypatch.setattr("le_vibe.launcher.stop_managed_ollama", lambda: None)
+    monkeypatch.setattr("le_vibe.launcher.subprocess.Popen", lambda cmd: _CaptureProc(cmd))
+    monkeypatch.setattr(sys, "argv", ["launcher", "--skip-first-run", "--editor", "fake-editor", str(ws)])
+
+    assert launcher.main() == 0
+    assert "--wait" in captured
+
+
+def test_launcher_does_not_duplicate_wait_flag(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    captured: list[str] = []
+
+    class _CaptureProc:
+        def __init__(self, cmd: list[str]) -> None:
+            captured.extend(cmd)
+            self._rc = 0
+
+        def wait(self) -> int:
+            return self._rc
+
+    ws = tmp_path / "workspace"
+    ws.mkdir()
+    monkeypatch.setenv("LE_VIBE_LVIBE_CONSENT", "accept")
+    monkeypatch.setattr("le_vibe.launcher.ensure_managed_ollama", lambda **_: (True, "ok", None))
+    monkeypatch.setattr("le_vibe.launcher.stop_managed_ollama", lambda: None)
+    monkeypatch.setattr("le_vibe.launcher.subprocess.Popen", lambda cmd: _CaptureProc(cmd))
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["launcher", "--skip-first-run", "--editor", "fake-editor", "--", "--wait", str(ws)],
+    )
+
+    assert launcher.main() == 0
+    assert captured.count("--wait") == 1

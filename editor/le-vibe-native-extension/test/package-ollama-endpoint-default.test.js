@@ -6,5 +6,5 @@ test('package.json default leVibeNative.ollamaEndpoint matches runbook URL (task
   const props = packageJson.contributes.configuration[0].properties;
   const ep = props['leVibeNative.ollamaEndpoint'];
   assert.ok(ep);
-  assert.equal(ep.default, 'http://127.0.0.1:11434');
+  assert.equal(ep.default, 'http://127.0.0.1:11435');
 });

@@ -113,11 +113,9 @@ json_escape() {
 }
 
 log_human() {
-  if [[ "$PRINT_JSON" -eq 1 ]]; then
-    printf '%s\n' "$*" >&2
-  else
-    printf '%s\n' "$*"
-  fi
+  # Always stderr: this script uses command substitution for values (e.g. CODIUM_PATH from
+  # verify_codium_executable); stdout from log_* must never pollute those captures.
+  printf '%s\n' "$*" >&2
 }
 
 log_tee() {
@@ -247,8 +245,14 @@ verify_first_party_extension_ready() {
   local first_party_extension_id="levibe.le-vibe-native-extension"
   local first_party_vsix="$ROOT/editor/le-vibe-native-extension/le-vibe-native-extension-0.1.0.vsix"
   local ext_list=""
+  local codium_cli="$CODIUM_PATH"
+  # After apt install, use the packaged launcher so --install-extension targets the same profile/binary
+  # as `lvibe` (workspace build path may be absent or stale).
+  if [[ "$DO_INSTALL" -eq 1 && -x "/usr/lib/le-vibe/bin/codium" ]]; then
+    codium_cli="/usr/lib/le-vibe/bin/codium"
+  fi
   log_tee "==> Runtime check: verify first-party extension (${first_party_extension_id})"
-  ext_list="$("$CODIUM_PATH" --list-extensions 2>/dev/null | tr '[:upper:]' '[:lower:]' || true)"
+  ext_list="$("$codium_cli" --list-extensions 2>/dev/null | tr '[:upper:]' '[:lower:]' || true)"
   if printf '%s\n' "$ext_list" | rg -n "^${first_party_extension_id}$" >/dev/null 2>&1; then
     log_tee "    OK: first-party extension already installed (${first_party_extension_id})"
     return 0
@@ -256,21 +260,21 @@ verify_first_party_extension_ready() {
 
   if [[ -f "$first_party_vsix" ]]; then
     log_tee "    Extension missing; installing local VSIX: $first_party_vsix"
-    if "$CODIUM_PATH" --install-extension "$first_party_vsix"; then
-      ext_list="$("$CODIUM_PATH" --list-extensions 2>/dev/null | tr '[:upper:]' '[:lower:]' || true)"
+    if "$codium_cli" --install-extension "$first_party_vsix"; then
+      ext_list="$("$codium_cli" --list-extensions 2>/dev/null | tr '[:upper:]' '[:lower:]' || true)"
       if printf '%s\n' "$ext_list" | rg -n "^${first_party_extension_id}$" >/dev/null 2>&1; then
         log_tee "    OK: first-party extension installed from local VSIX"
         return 0
       fi
     fi
     echo "install-le-vibe-local: first-party extension install attempted but extension id not visible: ${first_party_extension_id}" >&2
-    echo "  Remediation: ${CODIUM_PATH} --install-extension ${first_party_vsix}" >&2
+    echo "  Remediation: ${codium_cli} --install-extension ${first_party_vsix}" >&2
     return 1
   fi
 
   echo "install-le-vibe-local: first-party extension not installed and local VSIX missing: ${first_party_vsix}" >&2
   echo "  Build/package first: (cd editor/le-vibe-native-extension && npm ci && npm run package)" >&2
-  echo "  Then install: ${CODIUM_PATH} --install-extension ${first_party_vsix}" >&2
+  echo "  Then install: ${codium_cli} --install-extension ${first_party_vsix}" >&2
   return 1
 }
 

@@ -156,3 +156,45 @@ test('chat timeout transitions to error and returns idle', async () => {
   assert.deepEqual(states, ['sending', 'error', 'idle']);
   assert.equal(controller.getState(), 'idle');
 });
+
+test('chat retries once with installed fallback model when configured model returns HTTP 404', async () => {
+  let calls = 0;
+  const seenModels = [];
+  const fallbackEvents = [];
+  const controller = createChatController(
+    {
+      model: 'mistral:latest',
+      async listModels() {
+        return [{ name: 'deepseek-r1:14b' }];
+      },
+      streamPrompt({ model }) {
+        calls += 1;
+        seenModels.push(model || 'default');
+        return {
+          cancel() {},
+          async done(onEvent) {
+            if (calls === 1) {
+              throw Object.assign(new Error('missing model'), { code: 'OLLAMA_HTTP_ERROR', statusCode: 404 });
+            }
+            onEvent({ type: 'done', value: '' });
+          },
+        };
+      },
+    },
+    { maxRetries: 0, retryDelayMs: 0 },
+  );
+
+  await controller.sendPrompt('test', {
+    onToken: () => {},
+    onDone: (cancelled) => assert.equal(cancelled, false),
+    onError: () => assert.fail('expected fallback retry to succeed'),
+    onModelFallback: (info) => fallbackEvents.push(info),
+    onStateChange: () => {},
+  });
+
+  assert.equal(calls, 2);
+  assert.deepEqual(seenModels, ['default', 'deepseek-r1:14b']);
+  assert.equal(fallbackEvents.length, 1);
+  assert.equal(fallbackEvents[0].requestedModel, 'mistral:latest');
+  assert.equal(fallbackEvents[0].fallbackModel, 'deepseek-r1:14b');
+});

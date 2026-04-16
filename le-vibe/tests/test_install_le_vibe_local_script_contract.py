@@ -94,6 +94,7 @@ def test_install_le_vibe_local_runtime_readiness_contract():
     assert "hash -r" in text
     assert "lvibe ." in text
     assert "Runtime check: verify first-party extension (${first_party_extension_id})" in text
+    assert "/usr/lib/le-vibe/bin/codium" in text
     assert "first_party_extension_id=\"levibe.le-vibe-native-extension\"" in text
     assert "le-vibe-native-extension-0.1.0.vsix" in text
     assert "--list-extensions" in text

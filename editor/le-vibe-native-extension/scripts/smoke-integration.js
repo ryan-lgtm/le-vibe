@@ -9,7 +9,7 @@
  *
  * Env:
  * - LEVIBE_NATIVE_SMOKE_STRICT_OLLAMA=1 — exit 1 if Ollama is unreachable (local dev with Ollama CI).
- * - LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT — override default http://127.0.0.1:11434.
+ * - LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT — override default http://127.0.0.1:11435.
  * - LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS — override probe timeout (default 2500).
  * - LEVIBE_SMOKE_SKIP_LVIBE_LAUNCHER=1 — skip packaging/bin/lvibe check (extension-only trees).
  */
@@ -54,7 +54,7 @@ function assertNonBlankPanel() {
 
 async function smokeOllama() {
   const strict = process.env.LEVIBE_NATIVE_SMOKE_STRICT_OLLAMA === '1';
-  const endpoint = process.env.LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT || 'http://127.0.0.1:11434';
+  const endpoint = process.env.LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT || 'http://127.0.0.1:11435';
   const timeoutMs = Number(process.env.LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS || 2500);
   const client = createOllamaClient({
     endpoint,

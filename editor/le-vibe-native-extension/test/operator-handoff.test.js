@@ -15,7 +15,7 @@ test('handoff event contract is reproducible and versioned', () => {
     workspaceUri: 'file:///workspace/demo',
     startupState: 'ready',
     diagnostics: { modelCount: 1 },
-    ollamaEndpoint: 'http://127.0.0.1:11434',
+    ollamaEndpoint: 'http://127.0.0.1:11435',
     ollamaModel: 'mistral:latest',
     selectedContextPaths: ['README.md'],
     contextBudget: { maxFiles: 4 },

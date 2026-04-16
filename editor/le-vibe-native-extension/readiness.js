@@ -1,5 +1,6 @@
 'use strict';
 
+const { getEffectiveOllamaEndpoint } = require('./ollama-endpoint-resolve');
 const { createOllamaClient } = require('./ollama');
 
 const STARTUP_STATES = Object.freeze([
@@ -63,7 +64,7 @@ function mapOllamaErrorToDetail(error) {
 function getOllamaConfig(vscode) {
   const config = vscode.workspace.getConfiguration('leVibeNative');
   return {
-    endpoint: config.get('ollamaEndpoint', 'http://127.0.0.1:11434'),
+    endpoint: getEffectiveOllamaEndpoint(vscode),
     timeoutMs: config.get('ollamaTimeoutMs', 2500),
   };
 }

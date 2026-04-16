@@ -38,7 +38,12 @@ function isRetryableOllamaError(error) {
 function formatOllamaDiagnostic(error, endpoint) {
   const code = error && error.code ? String(error.code) : 'UNKNOWN';
   const msg = error && error.message ? String(error.message) : 'unknown error';
-  return `Lé Vibe Chat: request failed [${code}] ${msg} (endpoint: ${endpoint || 'unset'})`;
+  let hint = '';
+  if (code === 'OLLAMA_HTTP_ERROR' && error && Number(error.statusCode) === 404) {
+    hint =
+      ' — Ollama often returns 404 when the model is missing (`ollama list` on this host:port) or the endpoint does not match `lvibe` managed Ollama (default port 11435).';
+  }
+  return `Lé Vibe Chat: request failed [${code}] ${msg} (endpoint: ${endpoint || 'unset'})${hint}`;
 }
 
 module.exports = {

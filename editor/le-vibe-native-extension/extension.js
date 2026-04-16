@@ -4,6 +4,7 @@ const crypto = require('node:crypto');
 
 const OPEN_AGENT_SURFACE_COMMAND = 'leVibeNative.openAgentSurface';
 const OPEN_OLLAMA_SETUP_HELP_COMMAND = 'leVibeNative.openOllamaSetupHelp';
+const OPEN_OLLAMA_LOGGING_COMMAND = 'leVibeNative.openOllamaLogging';
 const OPEN_MODEL_PULL_HELP_COMMAND = 'leVibeNative.openModelPullHelp';
 const OPEN_WORKSPACE_SETUP_COMMAND = 'leVibeNative.openWorkspaceSetup';
 const START_NEW_CHAT_SESSION_COMMAND = 'leVibeNative.startNewChatSession';
@@ -33,6 +34,7 @@ let pendingSelectionContext = null;
 /** @type {string | null} */
 let pendingSelectionPromptTemplate = null;
 
+const { getEffectiveOllamaEndpoint, resolveEffectiveOllamaModel } = require('./ollama-endpoint-resolve');
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 const { createOllamaClient } = require('./ollama');
 const { createChatController } = require('./chat');
@@ -540,6 +542,7 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     <button type="button" id="sendPrompt" title="Send prompt" aria-label="Send prompt">Send Prompt</button>
     <button type="button" id="cancelPrompt" title="Cancel in-flight request" aria-label="Cancel in-flight request">Cancel Request</button>
     <button type="button" id="retryLastPrompt" title="Retry last prompt" aria-label="Retry last prompt">Retry last prompt</button>
+    <button type="button" data-action="openOllamaLogging" title="Live tail Ollama logs" aria-label="Live tail Ollama logs">Ollama Logging</button>
     <button type="button" id="startNewChatSession" title="Start new chat session" aria-label="Start new chat session">New chat</button>
     <button type="button" id="restoreRecentPrompt" title="Restore recent prompt" aria-label="Restore recent prompt">Restore recent…</button>
   </div>
@@ -870,7 +873,7 @@ function registerSelectionAssistQuickFixProvider(vscode, context) {
   );
 }
 
-function openAgentSurface() {
+async function openAgentSurface() {
   const vscode = require('vscode');
   if (!isFirstPartyAgentSurfaceEnabled(vscode)) {
     void vscode.window
@@ -889,10 +892,11 @@ function openAgentSurface() {
     return undefined;
   }
   const config = vscode.workspace.getConfiguration('leVibeNative');
+  const effectiveModel = await resolveEffectiveOllamaModel(vscode);
   const client = createOllamaClient({
-    endpoint: config.get('ollamaEndpoint', 'http://127.0.0.1:11434'),
+    endpoint: getEffectiveOllamaEndpoint(vscode),
     timeoutMs: config.get('ollamaTimeoutMs', 2500),
-    model: config.get('ollamaModel', 'mistral:latest'),
+    model: effectiveModel,
     streamStallMs: config.get('ollamaStreamStallMs', 60000),
     streamMaxMs: config.get('ollamaStreamMaxMs', 120000),
     maxRetries: config.get('ollamaMaxRetries', 2),
@@ -1062,7 +1066,7 @@ function openAgentSurface() {
     let assistantBuffer = '';
     panel.webview.postMessage({
       type: 'chatUpdate',
-      status: 'Streaming response from local Ollama...',
+      status: `Streaming response from local Ollama (model: ${client.model})...`,
       replaceLog: '',
     });
     void chat.sendPrompt(promptWithContext, {
@@ -1080,6 +1084,13 @@ function openAgentSurface() {
           status: willRetry
             ? `${detail} Retrying (${attempt}/${maxAttempts})...`
             : detail,
+        });
+      },
+      onModelFallback({ requestedModel, fallbackModel }) {
+        const requested = requestedModel || 'configured model';
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: `Model "${requested}" was not found on this Ollama endpoint; retrying with installed model "${fallbackModel}".`,
         });
       },
       onDone(cancelled) {
@@ -1611,6 +1622,10 @@ function openAgentSurface() {
       void vscode.commands.executeCommand(OPEN_OLLAMA_SETUP_HELP_COMMAND);
       return;
     }
+    if (msg.type === 'action' && msg.actionId === 'openOllamaLogging') {
+      void vscode.commands.executeCommand(OPEN_OLLAMA_LOGGING_COMMAND);
+      return;
+    }
     if (msg.type === 'action' && msg.actionId === 'openModelPullHelp') {
       void vscode.commands.executeCommand(OPEN_MODEL_PULL_HELP_COMMAND);
       return;
@@ -1851,14 +1866,15 @@ function openAgentSurface() {
 /**
  * @param {vscode.ExtensionContext} context
  */
-function activate(context) {
+async function activate(context) {
   const vscode = require('vscode');
   const workspaceUri = vscode.workspace.workspaceFolders?.[0]?.uri?.toString() || 'no-workspace';
   const orchestratorAuditPath = orchestratorEventAuditPath();
+  const inlineModel = await resolveEffectiveOllamaModel(vscode);
   const inlineClient = createOllamaClient({
-    endpoint: vscode.workspace.getConfiguration('leVibeNative').get('ollamaEndpoint', 'http://127.0.0.1:11434'),
+    endpoint: getEffectiveOllamaEndpoint(vscode),
     timeoutMs: vscode.workspace.getConfiguration('leVibeNative').get('ollamaTimeoutMs', 2500),
-    model: vscode.workspace.getConfiguration('leVibeNative').get('ollamaModel', 'mistral:latest'),
+    model: inlineModel,
     streamStallMs: vscode.workspace.getConfiguration('leVibeNative').get('ollamaStreamStallMs', 60000),
     streamMaxMs: vscode.workspace.getConfiguration('leVibeNative').get('ollamaStreamMaxMs', 120000),
     maxRetries: vscode.workspace.getConfiguration('leVibeNative').get('ollamaMaxRetries', 2),
@@ -1886,7 +1902,7 @@ function activate(context) {
         workspaceUri,
         startupState: input && input.startupState ? input.startupState : 'checking',
         diagnostics: (input && input.diagnostics) || {},
-        ollamaEndpoint: config.get('ollamaEndpoint', 'http://127.0.0.1:11434'),
+        ollamaEndpoint: getEffectiveOllamaEndpoint(vscode),
         ollamaModel: config.get('ollamaModel', 'mistral:latest'),
         selectedContextPaths: (input && input.selectedContextPaths) || [],
         contextBudget: (input && input.contextBudget) || getContextBudget(vscode),
@@ -2069,8 +2085,25 @@ function activate(context) {
     vscode.commands.registerCommand(OPEN_OLLAMA_SETUP_HELP_COMMAND, () =>
       vscode.env.openExternal(vscode.Uri.parse('https://ollama.com/download/linux')),
     ),
+    vscode.commands.registerCommand(OPEN_OLLAMA_LOGGING_COMMAND, async () => {
+      const term = vscode.window.createTerminal({ name: 'Lé Vibe Ollama Logs' });
+      term.show(true);
+      const script = [
+        'set -e',
+        'echo "Lé Vibe Chat: live-tail Ollama logs (Ctrl+C to stop)."',
+        'if [ -f "$HOME/.config/le-vibe/ollama-managed.log" ]; then echo "tail -F $HOME/.config/le-vibe/ollama-managed.log"; exec tail -n 200 -F "$HOME/.config/le-vibe/ollama-managed.log"; fi',
+        'if [ -f "$HOME/.ollama/logs/server.log" ]; then echo "tail -F $HOME/.ollama/logs/server.log"; exec tail -n 200 -F "$HOME/.ollama/logs/server.log"; fi',
+        'if [ -f "$HOME/.ollama-serve.log" ]; then echo "tail -F $HOME/.ollama-serve.log"; exec tail -n 200 -F "$HOME/.ollama-serve.log"; fi',
+        'if command -v journalctl >/dev/null 2>&1; then echo "journalctl -f -u ollama"; exec journalctl -f -u ollama -n 200; fi',
+        'echo "No Ollama runtime log file found. Falling back to Lé Vibe structured log."',
+        'exec tail -n 200 -F "$HOME/.config/le-vibe/le-vibe.log.jsonl"',
+      ].join('; ');
+      term.sendText(`bash -lc "${script.replace(/"/g, '\\"')}"`, true);
+    }),
     vscode.commands.registerCommand(OPEN_MODEL_PULL_HELP_COMMAND, () =>
-      vscode.window.showInformationMessage('Run `ollama pull mistral:latest` to install a local model.'),
+      vscode.window.showInformationMessage(
+        `Run \`ollama pull ${vscode.workspace.getConfiguration('leVibeNative').get('ollamaModel', 'mistral:latest')}\` to install your configured local model (or change leVibeNative.ollamaModel).`,
+      ),
     ),
     vscode.commands.registerCommand(OPEN_WORKSPACE_SETUP_COMMAND, async () => {
       const folder = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders[0];

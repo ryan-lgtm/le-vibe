@@ -10,7 +10,7 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Local-first:** the shipped defaults target **local Ollama** (see `leVibeNative.ollamaEndpoint`); the extension does **not** silently fall back to a cloud LLM.
 
-**Default local Ollama URL:** **`http://127.0.0.1:11434`** — configure via **`leVibeNative.ollamaEndpoint`** (smoke’s default probe matches unless `LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT` is set).
+**Default local Ollama URL:** **`http://127.0.0.1:11435`** — same port as **`lvibe`** managed `ollama serve` (`LE_VIBE_MANAGED_OLLAMA_PORT`); configure via **`leVibeNative.ollamaEndpoint`** (smoke’s default probe matches unless `LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT` is set). Use **`11434`** only for a standalone Ollama on the default listen address.
 
 **Default Ollama probe timeout:** **`2500` ms** — configure via **`leVibeNative.ollamaTimeoutMs`** (smoke override **`LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS`**; same default as the smoke table below).
 
@@ -151,7 +151,7 @@ The **authoritative extension version** for **Lé Vibe Chat** is **`editor/le-vi
 | Variable | Effect |
 |----------|--------|
 | `LEVIBE_NATIVE_SMOKE_STRICT_OLLAMA=1` | Fail smoke if Ollama is unreachable (use on a machine with Ollama). |
-| `LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT` | Override default `http://127.0.0.1:11434`. |
+| `LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT` | Override default `http://127.0.0.1:11435`. |
 | `LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS` | Override Ollama probe timeout (default `2500`). |
 | `LEVIBE_SMOKE_SKIP_LVIBE_LAUNCHER=1` | Skip `packaging/bin/lvibe` check (extension-only tree). |
 

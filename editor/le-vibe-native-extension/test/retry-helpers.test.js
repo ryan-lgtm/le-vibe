@@ -12,7 +12,16 @@ test('isRetryableOllamaError recognizes transient codes', () => {
 });
 
 test('formatOllamaDiagnostic includes code and endpoint', () => {
-  const text = formatOllamaDiagnostic({ code: 'X', message: 'oops' }, 'http://127.0.0.1:11434');
+  const text = formatOllamaDiagnostic({ code: 'X', message: 'oops' }, 'http://127.0.0.1:11435');
   assert.ok(text.includes('[X]'));
-  assert.ok(text.includes('127.0.0.1:11434'));
+  assert.ok(text.includes('127.0.0.1:11435'));
+});
+
+test('formatOllamaDiagnostic adds hint for Ollama HTTP 404 (model missing or wrong port)', () => {
+  const text = formatOllamaDiagnostic(
+    { code: 'OLLAMA_HTTP_ERROR', message: 'Ollama returned status 404.', statusCode: 404 },
+    'http://127.0.0.1:11435',
+  );
+  assert.ok(text.includes('OLLAMA_HTTP_ERROR'));
+  assert.ok(text.includes('managed Ollama'));
 });

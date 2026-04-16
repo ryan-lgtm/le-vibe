@@ -1842,6 +1842,11 @@ def main() -> int:
         )
 
     cmd = [args.editor, *args.editor_args]
+    # Keep launcher lifetime tied to editor window lifetime so managed Ollama
+    # is not cleaned up immediately after spawn.
+    has_wait = any(a == "--wait" or a.startswith("--wait=") for a in args.editor_args)
+    if not has_wait:
+        cmd.append("--wait")
     try:
         proc = subprocess.Popen(cmd)
     except OSError as e:

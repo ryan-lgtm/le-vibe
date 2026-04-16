@@ -1,5 +1,6 @@
 'use strict';
 
+const { getEffectiveOllamaEndpoint } = require('./ollama-endpoint-resolve');
 const { createOllamaClient } = require('./ollama');
 const { isFirstPartyAgentSurfaceEnabled } = require('./feature-flags');
 
@@ -37,7 +38,7 @@ function registerLeVibeChatStatusBar(vscode, context, opts) {
       return;
     }
     const cfg = vscode.workspace.getConfiguration('leVibeNative');
-    const endpoint = cfg.get('ollamaEndpoint', 'http://127.0.0.1:11434');
+    const endpoint = getEffectiveOllamaEndpoint(vscode);
     const timeoutMs = cfg.get('ollamaTimeoutMs', 2500);
     const model = cfg.get('ollamaModel', 'mistral:latest');
     const streamStallMs = cfg.get('ollamaStreamStallMs', 60000);

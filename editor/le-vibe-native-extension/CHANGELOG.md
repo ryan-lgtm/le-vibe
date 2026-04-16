@@ -2,6 +2,17 @@
 
 All notable changes to **Lé Vibe Native Agent** / **Lé Vibe Chat** in this package are documented here. Versions follow **`package.json`** semver. Epic-level delivery history lives in the monorepo product track (see below).
 
+## [Unreleased]
+
+### Fixed
+
+- Default **`leVibeNative.ollamaEndpoint`** aligns with **`lvibe`** managed Ollama (**`http://127.0.0.1:11435`**, see `LE_VIBE_MANAGED_OLLAMA_PORT`). The previous default (`11434`) targeted a different listener than the launcher, which commonly produced **404** on **`POST /api/generate`** (wrong daemon and/or model not present there). User-visible diagnostics now hint when Ollama returns **404** (missing model vs endpoint mismatch).
+- When the user has **not** overridden **`leVibeNative.ollamaEndpoint`**, the extension reads **`~/.config/le-vibe/managed_ollama.json`** (written by **`lvibe`**) and uses that **`host:port`** so readiness and chat track the managed Ollama instance even on older VSIX defaults or stale editor settings.
+- Chat now retries once with an installed local model tag when Ollama returns **HTTP 404** for the configured model (common model-missing case on an otherwise healthy endpoint).
+- Added command **`leVibeNative.openOllamaLogging`** and panel button **Ollama Logging** to open a live tail terminal for Ollama logs (`~/.ollama/logs/server.log`, `~/.ollama-serve.log`, `journalctl -u ollama`, fallback to `~/.config/le-vibe/le-vibe.log.jsonl`).
+- Streaming requests no longer inherit the short health-probe timeout; stream HTTP timeout now floors to a higher value (`>= 15s` and aligned with stream stall guard) to avoid premature **`OLLAMA_TIMEOUT`** while local models warm/load.
+- Robust model resolution: when **`leVibeNative.ollamaModel`** is not explicitly set, the extension now prefers launcher lock file **`~/.config/le-vibe/locked-model.json`** (`ollama_model`), then installed model inventory on the active endpoint, before falling back to static defaults.
+
 ## [0.1.0] - 2026-04-15
 
 ### Added

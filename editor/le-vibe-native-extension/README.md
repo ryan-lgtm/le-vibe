@@ -40,7 +40,7 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Activation index next hop (task-n64-1):** after this quick index, jump to **`Activation docs sequence (task-n60-1)`** for the guided breadcrumb flow.
 
-**Activation events (task-n50-1):** **`package.json`** **`activationEvents`** currently lists **`26`** entries: startup hook **`onStartupFinished`** plus **`25`** command-trigger events (**`onCommand:*`**) for deterministic lazy activation.
+**Activation events (task-n50-1):** **`package.json`** **`activationEvents`** currently lists **`27`** entries: startup hook **`onStartupFinished`** plus **`26`** command-trigger events (**`onCommand:*`**) for deterministic lazy activation.
 
 **Activation count rationale lookup (task-n58-1):** for why the startup literal appears in that count breakdown, see **`Startup activation intent (task-n54-1)`** below.
 
@@ -58,7 +58,7 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Local-first:** shipped defaults target **local Ollama** (`leVibeNative.ollamaEndpoint`); the extension does **not** silently fall back to a cloud LLM (same posture as **`OPERATOR.md`**).
 
-**Default local Ollama URL:** **`http://127.0.0.1:11434`** — Settings **`leVibeNative.ollamaEndpoint`** (smoke defaults match unless **`LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT`** is set; see **`OPERATOR.md`**).
+**Default local Ollama URL:** **`http://127.0.0.1:11435`** — matches **`lvibe`** managed Ollama; Settings **`leVibeNative.ollamaEndpoint`** (smoke defaults match unless **`LEVIBE_NATIVE_SMOKE_OLLAMA_ENDPOINT`** is set; see **`OPERATOR.md`**).
 
 **Default Ollama probe timeout:** **`2500` ms** — Settings **`leVibeNative.ollamaTimeoutMs`** (smoke override **`LEVIBE_NATIVE_SMOKE_OLLAMA_TIMEOUT_MS`**; see **`OPERATOR.md`**).
 
@@ -86,6 +86,7 @@ Contributed commands use **`category`** **`Lé Vibe Chat`** and a short **`title
 |------------|---------------------------|-------------------|
 | `leVibeNative.openAgentSurface` | Lé Vibe Chat: Open Agent Surface | — |
 | `leVibeNative.openOllamaSetupHelp` | Lé Vibe Chat: Open Ollama setup help | — |
+| `leVibeNative.openOllamaLogging` | Lé Vibe Chat: Open Ollama logging (live tail)… | — |
 | `leVibeNative.openModelPullHelp` | Lé Vibe Chat: Show local model install steps | — |
 | `leVibeNative.openWorkspaceSetup` | Lé Vibe Chat: Open workspace setup workflow… | — |
 | `leVibeNative.startNewChatSession` | Lé Vibe Chat: Start new chat session | — |

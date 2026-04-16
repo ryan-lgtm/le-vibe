@@ -5,6 +5,6 @@ const { createOllamaClient } = require('../ollama');
 
 test('createOllamaClient default model matches leVibeNative.ollamaModel (task-n8-42)', () => {
   const expected = packageJson.contributes.configuration[0].properties['leVibeNative.ollamaModel'].default;
-  const client = createOllamaClient({ endpoint: 'http://127.0.0.1:11434' });
+  const client = createOllamaClient({ endpoint: 'http://127.0.0.1:11435' });
   assert.equal(client.model, expected);
 });

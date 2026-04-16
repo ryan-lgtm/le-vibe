@@ -117,6 +117,9 @@ function createOllamaClient({
       };
     }
     const transport = parsedUrl.protocol === 'https:' ? https : http;
+    // Keep stream request timeout aligned with stream-level guards. The probe timeout
+    // (default 2500ms) is too short for first-token latency on cold local models.
+    const streamRequestTimeoutMs = Math.max(timeoutMs, streamStallMs, 15000);
     let reqRef = null;
     let cancelled = false;
     const done = (onEvent) =>
@@ -159,7 +162,7 @@ function createOllamaClient({
             hostname: parsedUrl.hostname,
             port: parsedUrl.port || (parsedUrl.protocol === 'https:' ? 443 : 80),
             path: parsedUrl.pathname,
-            timeout: timeoutMs,
+            timeout: streamRequestTimeoutMs,
             headers: { 'content-type': 'application/json' },
           },
           (res) => {

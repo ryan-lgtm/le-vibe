@@ -1,5 +1,7 @@
 'use strict';
 
+const { DEFAULT_OLLAMA_HTTP_ENDPOINT } = require('./default-ollama-endpoint');
+
 const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
@@ -17,7 +19,7 @@ function buildOperatorHandoffEvent(payload) {
     startup_state: payload.startupState || 'checking',
     diagnostics: payload.diagnostics || {},
     ollama: {
-      endpoint: payload.ollamaEndpoint || 'http://127.0.0.1:11434',
+      endpoint: payload.ollamaEndpoint || DEFAULT_OLLAMA_HTTP_ENDPOINT,
       model: payload.ollamaModel || 'mistral:latest',
     },
     context: {

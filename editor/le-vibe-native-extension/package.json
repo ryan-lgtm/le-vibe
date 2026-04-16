@@ -35,6 +35,7 @@
     "onStartupFinished",
     "onCommand:leVibeNative.openAgentSurface",
     "onCommand:leVibeNative.openOllamaSetupHelp",
+    "onCommand:leVibeNative.openOllamaLogging",
     "onCommand:leVibeNative.openModelPullHelp",
     "onCommand:leVibeNative.openWorkspaceSetup",
     "onCommand:leVibeNative.startNewChatSession",
@@ -69,6 +70,11 @@
       {
         "command": "leVibeNative.openOllamaSetupHelp",
         "title": "Open Ollama setup help",
+        "category": "Lé Vibe Chat"
+      },
+      {
+        "command": "leVibeNative.openOllamaLogging",
+        "title": "Open Ollama logging (live tail)…",
         "category": "Lé Vibe Chat"
       },
       {
@@ -244,8 +250,8 @@
           },
           "leVibeNative.ollamaEndpoint": {
             "type": "string",
-            "default": "http://127.0.0.1:11434",
-            "description": "Local Ollama endpoint used for startup health and model list checks."
+            "default": "http://127.0.0.1:11435",
+            "description": "Local Ollama endpoint used for startup health and model list checks. Default matches Lé Vibe managed Ollama (lvibe); use 11434 only if you run a standalone ollama serve there."
           },
           "leVibeNative.ollamaTimeoutMs": {
             "type": "integer",
