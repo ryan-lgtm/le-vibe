@@ -82,6 +82,16 @@ Runs **`npm test`** then **`npm run smoke`**. The **`package.json`** **`scripts.
 
 The repository workflow **`.github/workflows/le-vibe-native-extension-ci.yml`** runs on **push** and **pull request** to **`main`** and **`master`**: it executes **`npm ci`** then **`npm run verify`** in **`editor/le-vibe-native-extension`** on an **Ubuntu** runner (Node **18**). This is the automated ship gate for the extension package; failing steps should block merging once the check is marked **required** in GitHub branch protection (**Settings → Branches** for the default branch). Until your org wires that policy, treat a locally green **`npm run verify`** as the same bar before merging extension changes.
 
+### Packaged VSIX (task-n16-2)
+
+From **`editor/le-vibe-native-extension/`** after **`npm ci`**, run **`npm run package`**. That executes **`vsce package`** (**`package.json`** **`scripts.package`** = **`vsce package`**) and writes an installable **`le-vibe-native-extension-<version>.vsix`** in the **same directory** (for **`0.1.0`**, the file is **`le-vibe-native-extension-0.1.0.vsix`**). The monorepo root **`.gitignore`** ignores **`*.vsix`** so local builds are not committed. Install into a VS Code–compatible editor (CLI name may be **`code`** or **`codium`**):
+
+```bash
+code --install-extension ./le-vibe-native-extension-0.1.0.vsix
+```
+
+No tokens or cloud secrets are embedded in this packaging path — the VSIX is a local archive of the extension tree plus production **`node_modules`** per **`@vscode/vsce`** defaults.
+
 ### Smoke environment (optional)
 
 | Variable | Effect |

@@ -48,3 +48,6 @@ packaging/debian-le-vibe-ide/debian/files
 packaging/debian-le-vibe-ide/debian/*.substvars
 packaging/debian-le-vibe-ide/debian/*.debhelper.log
 packaging/debian-le-vibe-ide/debian/le-vibe-ide/
+
+# VS Code extension VSIX artifacts (npm run package in editor/le-vibe-native-extension)
+*.vsix

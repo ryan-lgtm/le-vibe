@@ -226,3 +226,12 @@ test('OPERATOR.md documents GitHub Actions CI for extension verify (task-n16-1)'
   assert.ok(text.includes('editor/le-vibe-native-extension'));
   assert.ok(text.includes('branch protection'));
 });
+
+test('OPERATOR.md documents VSIX packaging + install (task-n16-2)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('vsce package'));
+  assert.ok(text.includes('npm run package'));
+  assert.ok(text.includes('le-vibe-native-extension-0.1.0.vsix'));
+  assert.ok(text.includes('code --install-extension'));
+  assert.ok(text.includes('*.vsix'));
+});

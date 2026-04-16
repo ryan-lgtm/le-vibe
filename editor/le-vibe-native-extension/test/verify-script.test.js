@@ -16,3 +16,8 @@ test('package.json smoke script points at smoke-integration.js (task-n8-59)', ()
   const smoke = packageJson.scripts && packageJson.scripts.smoke;
   assert.equal(smoke, 'node ./scripts/smoke-integration.js');
 });
+
+test('package.json package script runs vsce package (task-n16-2)', () => {
+  const pkg = packageJson.scripts && packageJson.scripts.package;
+  assert.equal(pkg, 'vsce package');
+});

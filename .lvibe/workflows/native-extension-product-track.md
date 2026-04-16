@@ -701,11 +701,13 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
     - `OPERATOR.md` or root `README.md` mentions where CI runs extension verify
   - Evidence:
     - Added `.github/workflows/le-vibe-native-extension-ci.yml` (Ubuntu, Node 18, `npm ci` + `npm run verify` in `editor/le-vibe-native-extension`); **`OPERATOR.md`** *CI (GitHub Actions)* + root **`README.md`** pointer; branch-protection note for required checks; tests `test/ci-workflow-presence.test.js`, `operator-doc.test.js` (task-n16-1); `npm run verify` green.
-- [ ] `pending` **task-n16-2**: **VSIX build script** + one-line docs: `npm run package` (or equivalent) produces an installable `.vsix`, with output path and `code --install-extension` example in `OPERATOR.md`.
+- [x] `done` **task-n16-2**: **VSIX build script** + one-line docs: `npm run package` (or equivalent) produces an installable `.vsix`, with output path and `code --install-extension` example in `OPERATOR.md`.
   - Acceptance:
     - script exists in `editor/le-vibe-native-extension/package.json` `scripts`
     - `.gitignore` ignores `*.vsix` if written to disk
     - no secrets in VSIX build path
+  - Evidence:
+    - **`package.json`** **`scripts.package`** = **`vsce package`**; devDependency **`@vscode/vsce`**; **`.vscodeignore`** excludes **`test/`** and smoke script; root **`.gitignore`** **`*.vsix`**; **`LICENSE`** (MIT) for clean packaging; **`OPERATOR.md`** *Packaged VSIX* + **`README.md`** script literal; tests `verify-script.test.js`, `operator-doc.test.js`, `root-gitignore-vsix.test.js`; `npm run verify` green; local **`npm run package`** produces **`le-vibe-native-extension-0.1.0.vsix`**.
 - [ ] `pending` **task-n16-3**: **Version alignment note** — `package.json` `version` vs git tags / deb packaging: single paragraph in `OPERATOR.md` describing how operators bump extension version for a release (even if “manual for now”).
   - Acceptance:
     - explicit bump checklist (edit version → tag? → attach VSIX?)

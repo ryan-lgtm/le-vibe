@@ -1,0 +1,5 @@
+# Packaged VSIX should not ship dev-only sources (task-n16-2)
+.vscode/**
+.vscode-test/**
+test/**
+scripts/smoke-integration.js
