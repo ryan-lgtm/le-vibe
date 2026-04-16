@@ -37,6 +37,8 @@
     "onCommand:leVibeNative.openOllamaSetupHelp",
     "onCommand:leVibeNative.openModelPullHelp",
     "onCommand:leVibeNative.openWorkspaceSetup",
+    "onCommand:leVibeNative.startNewChatSession",
+    "onCommand:leVibeNative.restoreRecentPrompt",
     "onCommand:leVibeNative.viewChatUsage",
     "onCommand:leVibeNative.exportChatTranscript",
     "onCommand:leVibeNative.clearChatTranscript",
@@ -76,6 +78,16 @@
       {
         "command": "leVibeNative.openWorkspaceSetup",
         "title": "Open workspace setup workflow…",
+        "category": "Lé Vibe Chat"
+      },
+      {
+        "command": "leVibeNative.startNewChatSession",
+        "title": "Start new chat session",
+        "category": "Lé Vibe Chat"
+      },
+      {
+        "command": "leVibeNative.restoreRecentPrompt",
+        "title": "Restore recent prompt…",
         "category": "Lé Vibe Chat"
       },
       {

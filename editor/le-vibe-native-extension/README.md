@@ -40,7 +40,7 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Activation index next hop (task-n64-1):** after this quick index, jump to **`Activation docs sequence (task-n60-1)`** for the guided breadcrumb flow.
 
-**Activation events (task-n50-1):** **`package.json`** **`activationEvents`** currently lists **`23`** entries: startup hook **`onStartupFinished`** plus **`22`** command-trigger events (**`onCommand:*`**) for deterministic lazy activation.
+**Activation events (task-n50-1):** **`package.json`** **`activationEvents`** currently lists **`25`** entries: startup hook **`onStartupFinished`** plus **`24`** command-trigger events (**`onCommand:*`**) for deterministic lazy activation.
 
 **Activation count rationale lookup (task-n58-1):** for why the startup literal appears in that count breakdown, see **`Startup activation intent (task-n54-1)`** below.
 
@@ -80,6 +80,8 @@ Contributed commands use **`category`** **`Lé Vibe Chat`** and a short **`title
 | `leVibeNative.openOllamaSetupHelp` | Lé Vibe Chat: Open Ollama setup help | — |
 | `leVibeNative.openModelPullHelp` | Lé Vibe Chat: Show local model install steps | — |
 | `leVibeNative.openWorkspaceSetup` | Lé Vibe Chat: Open workspace setup workflow… | — |
+| `leVibeNative.startNewChatSession` | Lé Vibe Chat: Start new chat session | — |
+| `leVibeNative.restoreRecentPrompt` | Lé Vibe Chat: Restore recent prompt… | — |
 | `leVibeNative.viewChatUsage` | Lé Vibe Chat: View transcript usage | — |
 | `leVibeNative.exportChatTranscript` | Lé Vibe Chat: Export transcript | — |
 | `leVibeNative.clearChatTranscript` | Lé Vibe Chat: Clear transcript | — |
@@ -154,6 +156,8 @@ The panel includes a basic local prompt test surface:
 | **View usage** | Agent surface panel + Command Palette (`Lé Vibe Chat: View transcript usage`) | Shows line count, on-disk bytes, and absolute JSONL path. |
 | **Export transcript** | Panel + Palette (`Lé Vibe Chat: Export transcript`) | Save dialog writes a copy of the current workspace JSONL (local-only). |
 | **Clear transcript** | Panel + Palette (`Lé Vibe Chat: Clear transcript`) | Modal confirmation, then deletes that workspace’s JSONL file. |
+| **New chat** | Panel prompt controls + Command Palette (`Lé Vibe Chat: Start new chat session`) | Resets in-panel prompt/log state for a fresh turn sequence without deleting bounded JSONL history. |
+| **Restore recent prompt** | Panel prompt controls + Command Palette (`Lé Vibe Chat: Restore recent prompt…`) | Picks a recent user prompt from the current workspace transcript and prefills the prompt input. |
 
 All paths stay under `~/.config/le-vibe/levibe-native-chat/` unless the user chooses another location during export.
 

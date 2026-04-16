@@ -6,6 +6,8 @@ const OPEN_AGENT_SURFACE_COMMAND = 'leVibeNative.openAgentSurface';
 const OPEN_OLLAMA_SETUP_HELP_COMMAND = 'leVibeNative.openOllamaSetupHelp';
 const OPEN_MODEL_PULL_HELP_COMMAND = 'leVibeNative.openModelPullHelp';
 const OPEN_WORKSPACE_SETUP_COMMAND = 'leVibeNative.openWorkspaceSetup';
+const START_NEW_CHAT_SESSION_COMMAND = 'leVibeNative.startNewChatSession';
+const RESTORE_RECENT_PROMPT_COMMAND = 'leVibeNative.restoreRecentPrompt';
 const VIEW_CHAT_USAGE_COMMAND = 'leVibeNative.viewChatUsage';
 const EXPORT_CHAT_TRANSCRIPT_COMMAND = 'leVibeNative.exportChatTranscript';
 const CLEAR_CHAT_TRANSCRIPT_COMMAND = 'leVibeNative.clearChatTranscript';
@@ -72,6 +74,7 @@ const {
 const {
   transcriptPath,
   appendEntry,
+  loadTranscript,
   getTranscriptStats,
   readTranscriptRaw,
   clearTranscript,
@@ -531,6 +534,8 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     <button type="button" id="sendPrompt" title="Send prompt" aria-label="Send prompt">Send Prompt</button>
     <button type="button" id="cancelPrompt" title="Cancel in-flight request" aria-label="Cancel in-flight request">Cancel Request</button>
     <button type="button" id="retryLastPrompt" title="Retry last prompt" aria-label="Retry last prompt">Retry last prompt</button>
+    <button type="button" id="startNewChatSession" title="Start new chat session" aria-label="Start new chat session">New chat</button>
+    <button type="button" id="restoreRecentPrompt" title="Restore recent prompt" aria-label="Restore recent prompt">Restore recent…</button>
   </div>
   <div id="chatStatus" class="muted" role="status" aria-live="polite">Idle.</div>
   <div id="chatLog" class="chat-log" role="log" aria-live="polite" aria-relevant="additions text"></div>
@@ -612,6 +617,12 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     });
     document.getElementById('retryLastPrompt').addEventListener('click', () => {
       vscode.postMessage({ type: 'chat', actionId: 'retryLastPrompt' });
+    });
+    document.getElementById('startNewChatSession').addEventListener('click', () => {
+      vscode.postMessage({ type: 'chat', actionId: 'startNewChatSession' });
+    });
+    document.getElementById('restoreRecentPrompt').addEventListener('click', () => {
+      vscode.postMessage({ type: 'chat', actionId: 'restoreRecentPrompt' });
     });
     window.addEventListener('message', (event) => {
       const msg = event.data;
@@ -815,6 +826,24 @@ function openAgentSurface() {
   let latestStartupState = 'checking';
   let latestDiagnostics = { mode: 'startup_probe' };
   let lastPromptPlain = null;
+
+  function collectRecentUserPrompts(limit = 12) {
+    const rows = loadTranscript(transcriptFile)
+      .filter((line) => line && line.role === 'user' && typeof line.content === 'string')
+      .map((line) => String(line.content).trim())
+      .filter((line) => line.length > 0);
+    const out = [];
+    const seen = new Set();
+    for (let i = rows.length - 1; i >= 0 && out.length < limit; i -= 1) {
+      const prompt = rows[i];
+      if (seen.has(prompt)) {
+        continue;
+      }
+      seen.add(prompt);
+      out.push(prompt);
+    }
+    return out;
+  }
   let editPreviewSession = null;
   /** @type {null | { cancelled: boolean; cancel: () => void }} */
   let planRunCanceller = null;
@@ -1461,6 +1490,47 @@ function openAgentSurface() {
       runPromptSend(lastPromptPlain, { skipUserTranscript: true });
       return;
     }
+    if (msg.type === 'chat' && msg.actionId === 'startNewChatSession') {
+      lastPromptPlain = null;
+      panel.webview.postMessage({
+        type: 'chatUpdate',
+        status: 'Started a new chat session in this panel. Transcript history is preserved (bounded JSONL).',
+        replaceLog: '',
+      });
+      return;
+    }
+    if (msg.type === 'chat' && msg.actionId === 'restoreRecentPrompt') {
+      void (async () => {
+        const recent = collectRecentUserPrompts();
+        if (!recent.length) {
+          panel.webview.postMessage({
+            type: 'chatUpdate',
+            status: 'No recent prompts found for this workspace yet.',
+          });
+          return;
+        }
+        const choice = await vscode.window.showQuickPick(
+          recent.map((text, idx) => ({
+            label: `${idx + 1}. ${text.slice(0, 90)}${text.length > 90 ? '…' : ''}`,
+            detail: text,
+          })),
+          {
+            title: 'Restore recent prompt (Lé Vibe Chat)',
+            placeHolder: 'Pick a previous user prompt to prefill',
+          },
+        );
+        if (!choice || !choice.detail) {
+          return;
+        }
+        lastPromptPlain = choice.detail;
+        panel.webview.postMessage({ type: 'prefillPrompt', text: choice.detail });
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: 'Recent prompt restored to input. Edit if needed, then Send Prompt.',
+        });
+      })();
+      return;
+    }
     if (msg.type === 'chat' && msg.actionId === 'cancelPrompt') {
       const didCancel = chat.cancelPrompt();
       panel.webview.postMessage({
@@ -1679,6 +1749,18 @@ function activate(context) {
         );
       }
     }),
+    vscode.commands.registerCommand(START_NEW_CHAT_SESSION_COMMAND, async () => {
+      await vscode.commands.executeCommand(OPEN_AGENT_SURFACE_COMMAND);
+      await vscode.window.showInformationMessage(
+        'Use the panel action "New chat" to reset in-panel conversation while preserving bounded transcript history.',
+      );
+    }),
+    vscode.commands.registerCommand(RESTORE_RECENT_PROMPT_COMMAND, async () => {
+      await vscode.commands.executeCommand(OPEN_AGENT_SURFACE_COMMAND);
+      await vscode.window.showInformationMessage(
+        'Use the panel action "Restore recent…" to pick and prefill a previous prompt from workspace transcript history.',
+      );
+    }),
   );
 
   const config = vscode.workspace.getConfiguration('leVibeNative');
@@ -1708,6 +1790,8 @@ module.exports = {
   OPEN_OLLAMA_SETUP_HELP_COMMAND,
   OPEN_MODEL_PULL_HELP_COMMAND,
   OPEN_WORKSPACE_SETUP_COMMAND,
+  START_NEW_CHAT_SESSION_COMMAND,
+  RESTORE_RECENT_PROMPT_COMMAND,
   VIEW_CHAT_USAGE_COMMAND,
   EXPORT_CHAT_TRANSCRIPT_COMMAND,
   CLEAR_CHAT_TRANSCRIPT_COMMAND,

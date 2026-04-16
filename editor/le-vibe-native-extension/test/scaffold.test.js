@@ -14,6 +14,8 @@ test('manifest contributes Lé Vibe Open Agent Surface command', () => {
   assert.equal(command.category, 'Lé Vibe Chat');
   assert.equal(command.title, 'Open Agent Surface');
   assert.ok(commands.find((item) => item.command === 'leVibeNative.pickContextFile'));
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.startNewChatSession'));
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.restoreRecentPrompt'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.clearContextFiles'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.emitOperatorHandoff'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.openThirdPartyMigrationGuide'));
@@ -38,6 +40,8 @@ test('manifest supports deterministic activation entrypoints', () => {
   );
   assert.ok(activationEvents.includes('onStartupFinished'), 'expected startup activation event');
   assert.ok(activationEvents.includes('onCommand:leVibeNative.pickContextFile'));
+  assert.ok(activationEvents.includes('onCommand:leVibeNative.startNewChatSession'));
+  assert.ok(activationEvents.includes('onCommand:leVibeNative.restoreRecentPrompt'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.emitOperatorHandoff'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.openThirdPartyMigrationGuide'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.applySelectionDemoReplace'));
@@ -68,6 +72,8 @@ test('extension exports activate/deactivate and command constant', () => {
   assert.equal(extensionModule.ADD_CONTEXT_AT_FILE_COMMAND, 'leVibeNative.addContextAtFile');
   assert.equal(extensionModule.ADD_CONTEXT_AT_FOLDER_COMMAND, 'leVibeNative.addContextAtFolder');
   assert.equal(extensionModule.ADD_CURRENT_FILE_OUTLINE_COMMAND, 'leVibeNative.addCurrentFileOutlineToContext');
+  assert.equal(extensionModule.START_NEW_CHAT_SESSION_COMMAND, 'leVibeNative.startNewChatSession');
+  assert.equal(extensionModule.RESTORE_RECENT_PROMPT_COMMAND, 'leVibeNative.restoreRecentPrompt');
   assert.equal(path.basename(require.resolve('../extension')), 'extension.js');
 });
 
@@ -103,6 +109,8 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('Send Prompt'));
     assert.ok(html.includes('Cancel Request'));
     assert.ok(html.includes('Retry last prompt'));
+    assert.ok(html.includes('New chat'));
+    assert.ok(html.includes('Restore recent…'));
     assert.ok(html.includes('Lé Vibe Chat storage'));
     assert.ok(html.includes('View usage'));
     assert.ok(html.includes('Export transcript'));

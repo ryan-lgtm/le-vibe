@@ -56,10 +56,14 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Updated `editor/le-vibe-native-extension/chat.js` with an explicit chat lifecycle state machine (`sending`, `streaming`, `retrying`, `cancelled`, `completed`, `error`, `idle`) and deterministic idle cleanup after success/cancel/error.
     - Updated `editor/le-vibe-native-extension/test/chat.test.js` to assert state transitions and coverage for cancel/retry/timeout paths, including final idle state to prevent stuck loading.
     - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 323 passed, smoke passed).
-- [ ] `pending` **task-cp1-2**: Add conversation controls that matter in real use (new chat, restore recent, clear/export).
+- [x] `done` **task-cp1-2**: Add conversation controls that matter in real use (new chat, restore recent, clear/export).
   - Acceptance:
     - bounded persistence unchanged
     - clear operator-visible paths/docs
+  - Evidence (2026-04-15):
+    - Updated `editor/le-vibe-native-extension/extension.js` and `editor/le-vibe-native-extension/package.json` to add new conversation controls: `leVibeNative.startNewChatSession` and `leVibeNative.restoreRecentPrompt`, plus panel buttons (`New chat`, `Restore recent…`) and transcript-backed recent prompt restore flow.
+    - Updated `editor/le-vibe-native-extension/README.md` command/storage control docs and `editor/le-vibe-native-extension/test/scaffold.test.js` command/export/panel assertions for the new controls.
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 323 passed, smoke passed).
 - [ ] `pending` **task-cp1-3**: Add prompt context controls in-panel (`@file`, `@folder`, selection explain/refactor/tests).
   - Acceptance:
     - strict token/file caps respected
