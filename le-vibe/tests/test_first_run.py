@@ -81,7 +81,29 @@ def test_first_run_agent_readiness_fails_when_model_missing(tmp_path: Path, monk
     assert "selected model" in msg.lower()
 
 
-def test_first_run_agent_readiness_ok_when_model_and_cline_present(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_first_run_agent_readiness_ok_when_model_and_first_party_extension_present(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    cfg = tmp_path / "le-vibe"
+    cfg.mkdir(parents=True)
+    (cfg / "model-decision.json").write_text('{"selected_model":"deepseek-r1:8b"}', encoding="utf-8")
+    monkeypatch.setattr("le_vibe.first_run.verify_api", lambda _h, _p: True)
+    monkeypatch.setattr(
+        "le_vibe.first_run.list_local_model_names",
+        lambda _h, _p: ["deepseek-r1:8b"],
+    )
+    monkeypatch.setattr(
+        "le_vibe.first_run.subprocess.check_output",
+        lambda *_a, **_k: "levibe.le-vibe-native-extension\n",
+    )
+    ok, msg = evaluate_first_run_agent_readiness(config_dir=cfg)
+    assert ok is True
+    assert msg == "agent-ready"
+
+
+def test_first_run_agent_readiness_fails_when_first_party_extension_missing(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
     cfg = tmp_path / "le-vibe"
     cfg.mkdir(parents=True)
     (cfg / "model-decision.json").write_text('{"selected_model":"deepseek-r1:8b"}', encoding="utf-8")
@@ -95,27 +117,6 @@ def test_first_run_agent_readiness_ok_when_model_and_cline_present(tmp_path: Pat
         lambda *_a, **_k: "saoudrizwan.claude-dev\nredhat.vscode-yaml\n",
     )
     ok, msg = evaluate_first_run_agent_readiness(config_dir=cfg)
-    assert ok is True
-    assert msg == "agent-ready"
-
-
-def test_first_run_agent_readiness_fails_when_continue_is_active(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-):
-    cfg = tmp_path / "le-vibe"
-    cfg.mkdir(parents=True)
-    (cfg / "model-decision.json").write_text('{"selected_model":"deepseek-r1:8b"}', encoding="utf-8")
-    monkeypatch.setattr("le_vibe.first_run.verify_api", lambda _h, _p: True)
-    monkeypatch.setattr(
-        "le_vibe.first_run.list_local_model_names",
-        lambda _h, _p: ["deepseek-r1:8b"],
-    )
-    monkeypatch.setattr(
-        "le_vibe.first_run.subprocess.check_output",
-        lambda *_a, **_k: "continue.continue\nsaoudrizwan.claude-dev\n",
-    )
-    ok, msg = evaluate_first_run_agent_readiness(config_dir=cfg)
     assert ok is False
-    assert "disallowed extension" in msg.lower()
-    assert "continue.continue" in msg
-    assert "--uninstall-extension continue.continue" in msg
+    assert "first-party" in msg.lower()
+    assert "levibe.le-vibe-native-extension" in msg

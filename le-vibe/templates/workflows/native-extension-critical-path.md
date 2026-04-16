@@ -27,10 +27,14 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Updated `packaging/scripts/install-le-vibe-local.sh` to verify/install `levibe.le-vibe-native-extension` from local VSIX and removed runtime invocation of `install-cline-extension.sh`.
     - Updated `le-vibe/tests/test_install_le_vibe_local_script_contract.py` runtime contract assertions to first-party extension readiness semantics.
     - Verification: `python -m pytest le-vibe/tests/test_install_le_vibe_local_script_contract.py le-vibe/tests/test_uninstall_le_vibe_local_script_contract.py` (23 passed).
-- [ ] `pending` **task-cp0-2**: Replace first-run readiness gate to check Lé Vibe Chat instead of third-party extension IDs.
+- [x] `done` **task-cp0-2**: Replace first-run readiness gate to check Lé Vibe Chat instead of third-party extension IDs.
   - Acceptance:
     - readiness passes with first-party extension only
     - tests updated for new extension ID/path
+  - Evidence (2026-04-15):
+    - Updated `le-vibe/le_vibe/first_run.py` readiness gate to require `levibe.le-vibe-native-extension` and removed third-party extension-ID gating.
+    - Updated `le-vibe/tests/test_first_run.py` to validate readiness success with first-party extension presence and failure when first-party extension is missing.
+    - Verification: `python -m pytest le-vibe/tests/test_first_run.py le-vibe/tests/test_install_le_vibe_local_script_contract.py` (28 passed).
 - [ ] `pending` **task-cp0-3**: Add migration cleanup for prior Continue/Cline extension artifacts in fresh install path.
   - Acceptance:
     - documented and tested cleanup behavior

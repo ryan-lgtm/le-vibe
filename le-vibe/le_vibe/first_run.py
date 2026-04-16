@@ -15,7 +15,7 @@ from .paths import LE_VIBE_MANAGED_OLLAMA_PORT, le_vibe_config_dir
 from .structured_log import append_structured_log
 from .user_settings import load_user_settings
 
-_DISALLOWED_EXTENSION_IDS: tuple[str, ...] = ("continue.continue",)
+_FIRST_PARTY_EXTENSION_ID = "levibe.le-vibe-native-extension"
 
 
 def first_run_marker_path(config_dir: Path | None = None) -> Path:
@@ -34,14 +34,6 @@ def _default_editor_for_readiness() -> str:
     return "codium"
 
 
-def _disallowed_extension_remediation(editor: str, extension_id: str) -> str:
-    return (
-        f"Lé Vibe: disallowed extension `{extension_id}` is active in the selected editor. "
-        "Continue must be removed for a Cline-only runtime. "
-        f"Run `{editor} --uninstall-extension {extension_id}` and retry `lvibe`."
-    )
-
-
 def evaluate_first_run_agent_readiness(
     *,
     config_dir: Path | None = None,
@@ -52,7 +44,7 @@ def evaluate_first_run_agent_readiness(
     C2 readiness gate:
     - managed Ollama API responds,
     - selected model exists on the managed API,
-    - Cline extension is active in the target editor binary.
+    - first-party Lé Vibe Chat extension is active in the target editor binary.
     """
     cfg = config_dir or le_vibe_config_dir()
     if not verify_api(host, port):
@@ -102,14 +94,11 @@ def evaluate_first_run_agent_readiness(
             "Install/configure the Lé Vibe editor binary and rerun `lvibe`.",
         )
     exts = {ln.strip().lower() for ln in out.splitlines() if ln.strip()}
-    for ext_id in _DISALLOWED_EXTENSION_IDS:
-        if ext_id in exts:
-            return False, _disallowed_extension_remediation(editor, ext_id)
-    if "saoudrizwan.claude-dev" not in exts:
+    if _FIRST_PARTY_EXTENSION_ID not in exts:
         return (
             False,
-            "Lé Vibe: Cline extension is not active in the selected editor. "
-            "Run `le-vibe-setup-cline` and retry.",
+            "Lé Vibe: first-party Lé Vibe Chat extension is not active in the selected editor. "
+            f"Install `{_FIRST_PARTY_EXTENSION_ID}` and retry `lvibe`.",
         )
     return True, "agent-ready"
 
