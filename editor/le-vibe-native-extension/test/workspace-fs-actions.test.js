@@ -148,6 +148,86 @@ test('moveWorkspaceEntry succeeds when source exists and destination is free (ta
   }
 });
 
+test('moveWorkspaceEntry uses WorkspaceEdit.renameFile with overwrite false (task-cp3-2)', async () => {
+  let seenWorkspaceEdit = null;
+  class WorkspaceEdit {
+    constructor() {
+      this.renameCalls = [];
+      seenWorkspaceEdit = this;
+    }
+    renameFile(from, to, ropts) {
+      this.renameCalls.push({ from: from.toString(), to: to.toString(), ropts });
+    }
+  }
+  const vscode = {
+    WorkspaceEdit,
+    Uri: {
+      parse(s) {
+        const fsPath = s.replace(/^file:\/\//, '/');
+        return { toString: () => s, fsPath };
+      },
+      joinPath(base, ...pathSegments) {
+        let p = base.fsPath || String(base.toString?.() ?? '').replace(/^file:\/\//, '/');
+        p = p.replace(/\/+$/, '') || '/';
+        for (const seg of pathSegments) p += `/${seg}`;
+        const url = p.startsWith('//') ? `file:${p}` : `file://${p}`;
+        return { toString: () => url, fsPath: p };
+      },
+    },
+    workspace: {
+      fs: {
+        stat: async (uri) => {
+          if (uri.toString().includes('/src.txt')) return {};
+          throw Object.assign(new Error('ENOENT'), { code: 'FileNotFound' });
+        },
+      },
+      applyEdit: async () => true,
+    },
+  };
+  const folder = { uri: vscode.Uri.parse('file:///tmp/ws/') };
+  const r = await moveWorkspaceEntry(vscode, folder, 'src.txt', 'dst.txt');
+  assert.equal(r.ok, true);
+  assert.ok(seenWorkspaceEdit);
+  assert.equal(seenWorkspaceEdit.renameCalls.length, 1);
+  assert.equal(seenWorkspaceEdit.renameCalls[0].ropts.overwrite, false);
+});
+
+test('moveWorkspaceEntry fallback fs.rename maps destination exists to deterministic conflict (task-cp3-2)', async () => {
+  class WorkspaceEdit {}
+  const vscode = {
+    WorkspaceEdit,
+    Uri: {
+      parse(s) {
+        const fsPath = s.replace(/^file:\/\//, '/');
+        return { toString: () => s, fsPath };
+      },
+      joinPath(base, ...pathSegments) {
+        let p = base.fsPath || String(base.toString?.() ?? '').replace(/^file:\/\//, '/');
+        p = p.replace(/\/+$/, '') || '/';
+        for (const seg of pathSegments) p += `/${seg}`;
+        const url = p.startsWith('//') ? `file:${p}` : `file://${p}`;
+        return { toString: () => url, fsPath: p };
+      },
+    },
+    workspace: {
+      fs: {
+        stat: async (uri) => {
+          if (uri.toString().includes('/src.txt')) return {};
+          throw Object.assign(new Error('ENOENT'), { code: 'FileNotFound' });
+        },
+        rename: async () => {
+          throw Object.assign(new Error('file exists'), { code: 'EEXIST' });
+        },
+      },
+      applyEdit: async () => true,
+    },
+  };
+  const folder = { uri: vscode.Uri.parse('file:///tmp/ws/') };
+  const r = await moveWorkspaceEntry(vscode, folder, 'src.txt', 'dst.txt');
+  assert.equal(r.ok, false);
+  assert.ok(String(r.userMessage).includes('destination already exists'));
+});
+
 /**
  * @param {{ missing?: boolean, applyOk?: boolean, isDirectory?: boolean }} opts
  */

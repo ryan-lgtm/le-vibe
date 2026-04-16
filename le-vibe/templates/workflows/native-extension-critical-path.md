@@ -121,9 +121,13 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Extended `editor/le-vibe-native-extension/test/workspace-fs-actions.test.js` with uppercase/mixed-case deny-list regression assertions to prove create-path guardrails reject bypass attempts.
     - Existing create flows in `editor/le-vibe-native-extension/extension.js` remain wired through `validateWorkspaceRelativeCreatePath(...)` + `createWorkspaceFile(...)` / `createWorkspaceFolder(...)` for interactive chat/panel entrypoints.
     - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 334 passed, smoke passed).
-- [ ] `pending` **task-cp3-2**: Move/rename flow with conflict handling and git-friendly behavior.
+- [x] `done` **task-cp3-2**: Move/rename flow with conflict handling and git-friendly behavior.
   - Acceptance:
     - destination conflict path covered in tests
+  - Evidence (2026-04-15):
+    - Hardened `editor/le-vibe-native-extension/workspace-fs-actions.js` fallback move path to normalize destination-exists rename errors (`FileExists` / `EEXIST` / “exists” message) into the same deterministic no-overwrite conflict remediation used by the primary path.
+    - Added focused tests in `editor/le-vibe-native-extension/test/workspace-fs-actions.test.js` to assert git-friendly behavior (`WorkspaceEdit.renameFile` invoked with `overwrite: false`) and destination-conflict handling in the fallback `workspace.fs.rename` path.
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 336 passed, smoke passed).
 - [ ] `pending` **task-cp3-3**: Delete flow with explicit confirmation + audit log.
   - Acceptance:
     - no silent delete path exists

@@ -249,6 +249,15 @@ async function moveWorkspaceEntry(vscode, workspaceFolder, fromRelative, toRelat
     await vscode.workspace.fs.rename(fromUri, toUri, { overwrite: false });
   } catch (e) {
     const msg = e && e.message ? e.message : String(e);
+    const code = e && e.code ? String(e.code) : '';
+    const lower = msg.toLowerCase();
+    if (code === 'FileExists' || code === 'EEXIST' || lower.includes('exist')) {
+      return {
+        ok: false,
+        userMessage:
+          'Lé Vibe Chat: destination already exists — move aborted (no overwrite). Remove or rename the destination first.',
+      };
+    }
     return {
       ok: false,
       userMessage: `Lé Vibe Chat: move failed — ${msg}`,
