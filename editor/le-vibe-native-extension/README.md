@@ -155,6 +155,8 @@ The panel includes a basic local prompt test surface:
 
 - Transcripts are stored as JSONL under `~/.config/le-vibe/levibe-native-chat/transcript-<workspaceKey>.jsonl` (workspace key is a short hash of the workspace folder URI).
 - Settings **`leVibeNative.chatTranscriptMaxBytes`** (default **524288** bytes) and **`leVibeNative.chatTranscriptMaxMessages`** (default **200** JSONL rows) cap storage.
+- Workspace conversation history is also persisted in the project at **`.lvibe/chat-history.jsonl`** and hydrated on panel open.
+- Settings **`leVibeNative.chatWorkspaceHistoryRetentionHours`** (default **24**) and **`leVibeNative.chatWorkspaceHistoryMaxEntries`** (default **2000**) prune workspace history.
 - When over budget, oldest messages are removed first and a **system** line records how many were compacted (explicit, not silent loss).
 
 ## Storage controls (task-n3-2)

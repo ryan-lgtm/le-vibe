@@ -12,6 +12,8 @@ All notable changes to **Lé Vibe Native Agent** / **Lé Vibe Chat** in this pac
 - Composer visual refresh for dark-theme chat ergonomics with high-contrast foreground and reduced friction for longer prompt drafting.
 - Milestone EPIC C (timeline + markdown): chat feed now uses structured role-based message bubbles with assistant markdown rendering (headings, lists, code fences, inline code, emphasis) in the webview.
 - Milestone EPIC D (thinking/streaming UX): added looping thinking indicator (`.` → `.....`) while waiting for first token, with immediate stop and seamless transition once streaming begins.
+- Milestone EPIC E (workspace history): added workspace-scoped chat persistence at `.lvibe/chat-history.jsonl`, with 24-hour window hydration on panel load and retention/max-entry pruning.
+- Milestone EPIC F (logs separation): logs tab now includes recent structured orchestrator events alongside Ollama live-tail access, keeping operational traces out of the main chat timeline.
 
 ### Fixed
 

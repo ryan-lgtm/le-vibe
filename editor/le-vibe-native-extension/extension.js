@@ -86,6 +86,11 @@ const {
   readTranscriptRaw,
   clearTranscript,
 } = require('./chat-transcript');
+const {
+  workspaceChatHistoryPath,
+  appendWorkspaceChatHistoryEntry,
+  readWorkspaceChatHistoryWindow,
+} = require('./workspace-chat-history');
 const { isFirstPartyAgentSurfaceEnabled } = require('./feature-flags');
 const { runThirdPartyMigrationGuide, scheduleThirdPartyMigrationNudge } = require('./third-party-migration');
 const { validateEditProposal, EDIT_PROPOSAL_KIND, formatEditProposalValidationForUser } = require('./edit-proposal');
@@ -108,7 +113,12 @@ const {
 const { fetchCurrentFileOutlineForContext } = require('./outline-context');
 const { registerLeVibeChatStatusBar } = require('./status-bar-entry');
 const { createInlineSuggestionProvider } = require('./inline-suggestions');
-const { orchestratorEventAuditPath, buildOrchestratorEvent, appendOrchestratorEvent } = require('./orchestrator-events');
+const {
+  orchestratorEventAuditPath,
+  buildOrchestratorEvent,
+  appendOrchestratorEvent,
+  readRecentOrchestratorEvents,
+} = require('./orchestrator-events');
 const { writeRunbookBundle } = require('./runbook-bundle');
 
 /**
@@ -600,7 +610,7 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <p>${escapeHtml(content.detail)}</p>
   <div>${actionsBlock}</div>
   <h3>Lé Vibe Chat storage</h3>
-  <p class="muted">Local JSONL under ~/.config/le-vibe/levibe-native-chat/</p>
+  <p class="muted">Workspace history lives in <code>.lvibe/chat-history.jsonl</code> (24h rolling window by default). Operational transcript/audit files remain local under ~/.config/le-vibe/levibe-native-chat/.</p>
   <div>
     <button type="button" data-action="viewChatUsage" title="View transcript usage" aria-label="View transcript usage">View usage</button>
     <button type="button" data-action="exportChatTranscript" title="Export transcript" aria-label="Export transcript">Export transcript</button>
@@ -613,6 +623,7 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <div>
     <button type="button" data-action="openOllamaLogging" title="Live tail Ollama logs" aria-label="Live tail Ollama logs">Ollama Logging</button>
   </div>
+  <pre id="recentEventsLog" class="diag" role="region" aria-label="Recent structured events">Loading recent structured events...</pre>
   ${diagnosticsText}
   </section>
   <section id="panel-tools" class="tab-panel" role="tabpanel" aria-labelledby="tab-tools">
@@ -739,6 +750,7 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     const promptInput = document.getElementById('promptInput');
     const chatLog = document.getElementById('chatLog');
     const chatStatus = document.getElementById('chatStatus');
+    const recentEventsLog = document.getElementById('recentEventsLog');
     const messages = [];
     let pendingAssistantId = null;
     let thinkingTimer = null;
@@ -966,6 +978,23 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
         const el = document.getElementById('promptInput');
         if (el) {
           el.value = msg.text;
+        }
+        return;
+      }
+      if (msg && msg.type === 'historySeed' && Array.isArray(msg.messages)) {
+        clearTimeline();
+        for (const entry of msg.messages) {
+          if (!entry || typeof entry !== 'object') {
+            continue;
+          }
+          const role = entry.role === 'assistant' || entry.role === 'system' ? entry.role : 'user';
+          pushMessage(role, typeof entry.content === 'string' ? entry.content : '');
+        }
+        return;
+      }
+      if (msg && msg.type === 'logsUpdate') {
+        if (recentEventsLog) {
+          recentEventsLog.textContent = typeof msg.text === 'string' ? msg.text : 'No structured events yet.';
         }
         return;
       }
@@ -1209,11 +1238,53 @@ async function openAgentSurface() {
   const contextBudget = getContextBudget(vscode);
   const workspaceUri = vscode.workspace.workspaceFolders?.[0]?.uri?.toString() || 'no-workspace';
   const workspaceFsPath = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath || '';
+  const workspaceHistoryFile = workspaceChatHistoryPath(workspaceFsPath);
+  const workspaceHistoryRetentionHours = config.get('chatWorkspaceHistoryRetentionHours', 24);
+  const workspaceHistoryMaxEntries = config.get('chatWorkspaceHistoryMaxEntries', 2000);
   const orchestratorAuditPath = orchestratorEventAuditPath();
   const selectedContexts = [];
   let latestStartupState = 'checking';
   let latestDiagnostics = { mode: 'startup_probe' };
   let lastPromptPlain = null;
+
+  function postWorkspaceHistorySeed() {
+    if (!workspaceHistoryFile) {
+      return;
+    }
+    let rows = [];
+    try {
+      rows = readWorkspaceChatHistoryWindow(workspaceHistoryFile, workspaceHistoryRetentionHours);
+    } catch {
+      rows = [];
+    }
+    panel.webview.postMessage({
+      type: 'historySeed',
+      messages: rows
+        .filter((row) => row && typeof row.content === 'string' && typeof row.role === 'string')
+        .map((row) => ({
+          id: row.id,
+          ts: row.ts,
+          role: row.role,
+          content: row.content,
+        })),
+    });
+  }
+
+  function postRecentStructuredEvents() {
+    const rows = readRecentOrchestratorEvents(orchestratorAuditPath, { workspaceUri, limit: 20 });
+    const text =
+      rows.length === 0
+        ? 'No structured events yet for this workspace.'
+        : rows
+            .map((row) => {
+              const when = row.timestamp_iso || 'unknown-time';
+              const type = row.event_type || 'unknown-event';
+              const payload = row.payload && typeof row.payload === 'object' ? JSON.stringify(row.payload) : '{}';
+              return `[${when}] ${type} ${payload}`;
+            })
+            .join('\n');
+    panel.webview.postMessage({ type: 'logsUpdate', text });
+  }
 
   function collectRecentUserPrompts(limit = 12) {
     const rows = loadTranscript(transcriptFile)
@@ -1315,6 +1386,8 @@ async function openAgentSurface() {
   function beginMainReadiness() {
     panel.webview.html = panelHtml('checking', null, { mode: 'startup_probe' }, contextBudget);
     queueMicrotask(() => flushPendingSelectionContext());
+    queueMicrotask(() => postWorkspaceHistorySeed());
+    queueMicrotask(() => postRecentStructuredEvents());
     resolveStartupSnapshot(vscode).then((snapshot) => {
       latestStartupState = snapshot.state;
       latestDiagnostics = snapshot.diagnostics || {};
@@ -1327,6 +1400,8 @@ async function openAgentSurface() {
             : 'Lé Vibe Chat: follow the highlighted readiness state and use the action buttons.',
       });
       queueMicrotask(() => flushPendingSelectionContext());
+      queueMicrotask(() => postWorkspaceHistorySeed());
+      queueMicrotask(() => postRecentStructuredEvents());
     });
   }
 
@@ -1408,16 +1483,21 @@ async function openAgentSurface() {
     const promptWithContext = buildPromptWithContext(groundedPrompt, selectedContexts, contextBudget.maxTotalChars);
     if (!skipUserTranscript) {
       try {
+        const userEntry = {
+          id: `u-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
+          ts: Date.now(),
+          role: 'user',
+          content: trimmed,
+        };
         appendEntry(
           transcriptFile,
-          {
-            id: `u-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
-            ts: Date.now(),
-            role: 'user',
-            content: trimmed,
-          },
+          userEntry,
           transcriptCaps,
         );
+        appendWorkspaceChatHistoryEntry(workspaceHistoryFile, userEntry, {
+          retentionHours: workspaceHistoryRetentionHours,
+          maxEntries: workspaceHistoryMaxEntries,
+        });
       } catch {
         /* ignore transcript write failures; chat still works */
       }
@@ -1454,16 +1534,21 @@ async function openAgentSurface() {
       onDone(cancelled) {
         if (!cancelled && assistantBuffer.length > 0) {
           try {
+            const assistantEntry = {
+              id: `a-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
+              ts: Date.now(),
+              role: 'assistant',
+              content: assistantBuffer,
+            };
             appendEntry(
               transcriptFile,
-              {
-                id: `a-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
-                ts: Date.now(),
-                role: 'assistant',
-                content: assistantBuffer,
-              },
+              assistantEntry,
               transcriptCaps,
             );
+            appendWorkspaceChatHistoryEntry(workspaceHistoryFile, assistantEntry, {
+              retentionHours: workspaceHistoryRetentionHours,
+              maxEntries: workspaceHistoryMaxEntries,
+            });
           } catch {
             /* ignore */
           }
@@ -1486,6 +1571,7 @@ async function openAgentSurface() {
               skip_user_transcript: skipUserTranscript === true,
             }),
           );
+          postRecentStructuredEvents();
         } catch {
           /* non-blocking audit append */
         }
@@ -1510,6 +1596,7 @@ async function openAgentSurface() {
               skip_user_transcript: skipUserTranscript === true,
             }),
           );
+          postRecentStructuredEvents();
         } catch {
           /* non-blocking audit append */
         }

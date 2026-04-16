@@ -182,6 +182,7 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('New chat'));
     assert.ok(html.includes('Restore recent…'));
     assert.ok(html.includes('Lé Vibe Chat storage'));
+    assert.ok(html.includes('.lvibe/chat-history.jsonl'));
     assert.ok(html.includes('View usage'));
     assert.ok(html.includes('Export transcript'));
     assert.ok(html.includes('Clear transcript'));
@@ -212,5 +213,8 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('addContextAtFile'));
     assert.ok(html.includes('addContextAtFolder'));
     assert.ok(html.includes('addCurrentFileOutline'));
+    assert.ok(html.includes('recentEventsLog'));
+    assert.ok(html.includes("msg.type === 'historySeed'"));
+    assert.ok(html.includes("msg.type === 'logsUpdate'"));
   });
 });
