@@ -1,6 +1,8 @@
 'use strict';
 
 const crypto = require('node:crypto');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const OPEN_AGENT_SURFACE_COMMAND = 'leVibeNative.openAgentSurface';
 const OPEN_OLLAMA_SETUP_HELP_COMMAND = 'leVibeNative.openOllamaSetupHelp';
@@ -909,6 +911,7 @@ async function openAgentSurface() {
   const { transcriptFile, transcriptCaps } = getTranscriptContext(vscode);
   const contextBudget = getContextBudget(vscode);
   const workspaceUri = vscode.workspace.workspaceFolders?.[0]?.uri?.toString() || 'no-workspace';
+  const workspaceFsPath = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath || '';
   const orchestratorAuditPath = orchestratorEventAuditPath();
   const selectedContexts = [];
   let latestStartupState = 'checking';
@@ -1036,6 +1039,64 @@ async function openAgentSurface() {
     beginMainReadiness();
   }
 
+  function buildOrchestratorGroundedPrompt(userPrompt) {
+    const prompt = String(userPrompt || '').trim();
+    const lvibeDir = workspaceFsPath ? path.join(workspaceFsPath, '.lvibe') : '';
+    const sessionManifestPath = lvibeDir ? path.join(lvibeDir, 'session-manifest.json') : '';
+    const workflowsPath = lvibeDir ? path.join(lvibeDir, 'workflows') : '';
+    const orchestratorWorkflowPath = workflowsPath
+      ? path.join(workflowsPath, 'native-extension-master-orchestrator-prompt.md')
+      : '';
+
+    const readSnippet = (filePath, maxChars = 1800) => {
+      if (!filePath || !fs.existsSync(filePath)) {
+        return '';
+      }
+      try {
+        return String(fs.readFileSync(filePath, 'utf8') || '').slice(0, maxChars).trim();
+      } catch {
+        return '';
+      }
+    };
+
+    const sessionManifestSnippet = readSnippet(sessionManifestPath, 1600);
+    const orchestratorWorkflowSnippet = readSnippet(orchestratorWorkflowPath, 2200);
+
+    const envSummary = {
+      workspace_uri: workspaceUri,
+      workspace_has_lvibe: !!(lvibeDir && fs.existsSync(lvibeDir)),
+      workspace_has_session_manifest: !!(sessionManifestPath && fs.existsSync(sessionManifestPath)),
+      workspace_has_workflows_dir: !!(workflowsPath && fs.existsSync(workflowsPath)),
+      readiness_state: latestStartupState,
+      ollama_endpoint: client.endpoint,
+      ollama_model: client.model,
+      selected_context_count: selectedContexts.length,
+    };
+    const sections = [
+      'SYSTEM ROLE (LÉ VIBE IDENTITY LOCK):',
+      '- You ARE the Lé Vibe Operator/Orchestrator for this workspace session.',
+      '- Never claim you are "not the orchestrator" or redirect identity to an external CLI role.',
+      '- Speak as the active in-editor operator grounded in local workspace/runtime state.',
+      '- If context is missing, ask one concrete follow-up question.',
+      '',
+      `Environment summary: ${JSON.stringify(envSummary)}`,
+    ];
+
+    if (sessionManifestSnippet) {
+      sections.push('', 'Session manifest excerpt (.lvibe/session-manifest.json):', sessionManifestSnippet);
+    }
+    if (orchestratorWorkflowSnippet) {
+      sections.push(
+        '',
+        'Orchestrator workflow excerpt (.lvibe/workflows/native-extension-master-orchestrator-prompt.md):',
+        orchestratorWorkflowSnippet,
+      );
+    }
+
+    sections.push('', `User request: ${prompt}`);
+    return sections.join('\n');
+  }
+
   function runPromptSend(promptPlain, { skipUserTranscript = false } = {}) {
     const trimmed = String(promptPlain || '').trim();
     if (!trimmed) {
@@ -1046,7 +1107,8 @@ async function openAgentSurface() {
     const turnId = crypto.randomUUID();
     const startedAtMs = Date.now();
     let retriesObserved = 0;
-    const promptWithContext = buildPromptWithContext(trimmed, selectedContexts, contextBudget.maxTotalChars);
+    const groundedPrompt = buildOrchestratorGroundedPrompt(trimmed);
+    const promptWithContext = buildPromptWithContext(groundedPrompt, selectedContexts, contextBudget.maxTotalChars);
     if (!skipUserTranscript) {
       try {
         appendEntry(
