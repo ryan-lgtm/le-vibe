@@ -1057,9 +1057,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N49 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n49-1**: **OPERATOR — README pointer for `engines.node` minimum** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Node runtime minimum (task-n48-1)* for **`package.json`** **`engines.node`** so operators align with the README-first doc-discovery pattern.
+- [x] `done` **task-n49-1**: **OPERATOR — README pointer for `engines.node` minimum** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Node runtime minimum (task-n48-1)* for **`package.json`** **`engines.node`** so operators align with the README-first doc-discovery pattern.
   - Acceptance:
     - **`OPERATOR.md`** + **`operator-doc.test.js`** token
+    - **`npm run verify`** green
+  - Evidence:
+    - **`OPERATOR.md`** — **`README: engines.node minimum (task-n49-1)`** under *Product track*.
+    - **`test/operator-doc.test.js`** — **`task-n49-1`** token test; **`npm run verify`** green.
+
+### Epic N50 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n50-1**: **Extension README — activationEvents count and intent** — add one line near command/discovery metadata documenting that **`package.json`** **`activationEvents`** includes **`onStartupFinished`** plus command-trigger entries, and include contract test deriving count + the startup event literal from **`package.json`**.
+  - Acceptance:
+    - **`README.md`** + targeted test
     - **`npm run verify`** green
 
 ---
