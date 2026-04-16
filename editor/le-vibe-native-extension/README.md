@@ -89,6 +89,12 @@ Token-budget rules (configurable in Settings):
 
 - Before a file is added as prompt context, Lé Vibe Chat applies **`.gitignore`** (workspace root `.gitignore` via [`ignore`](https://www.npmjs.com/package/ignore)), a **per-file size** check against **`leVibeNative.contextMaxCharsPerFile`** (disk bytes must not exceed that budget), and a **binary / non-text** probe (null-byte scan on an initial chunk). Skips use deterministic **`Lé Vibe Chat: skipped "path" — …`** strings (toast + no silent omission). Implementation: [`context-file-guards.js`](context-file-guards.js).
 
+### @file / @folder picker (Epic N14, task-n14-1)
+
+- **Palette:** **Lé Vibe Chat: @file — add workspace file to context…** (`leVibeNative.addContextAtFile`) and **Lé Vibe Chat: @folder — add folder listing to context…** (`leVibeNative.addContextAtFolder`); panel **@file…** / **@folder…** next to **Add context file**.
+- **Discovery:** both use **`vscode.workspace.findFiles`** with the same exclude glob as the legacy picker and a **strict scan cap** (`FILE_PICKER_MAX_SCAN_URIS` in [`at-mention-context.js`](at-mention-context.js)). **@folder** builds folder candidates from parent paths of scanned files, capped at **`FOLDER_QUICKPICK_MAX_CANDIDATES`**, with **`.gitignore`** applied.
+- **Budgets:** file excerpts and one-level folder listings respect **`leVibeNative.contextMaxCharsPerFile`** and **`leVibeNative.contextMaxLinesPerFile`**; the number of context slots still respects **`leVibeNative.contextMaxFiles`** and total injected size **`leVibeNative.contextMaxTotalChars`** via [`workspace-context.js`](workspace-context.js) (`### FOLDER:` blocks for directories).
+
 ## Inline assistant — selection → chat (Epic N12, task-n12-1)
 
 - **Command Palette / editor context menu:** **Lé Vibe Chat: Ask about selection…** (`leVibeNative.askChatAboutSelection`) — requires a **non-empty** selection in a **workspace file** (`file` scheme). Opens the Lé Vibe Chat panel (same as **Lé Vibe: Open Agent Surface**) if it was closed, then injects **workspace-relative path**, **0-based selection bounds** (surfaced in the context excerpt header), and a **clipped text excerpt** into prompt context, and **prefills** the prompt box with a short template line.

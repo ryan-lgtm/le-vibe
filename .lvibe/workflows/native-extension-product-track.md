@@ -666,9 +666,11 @@ Product intent: Cursor-like agent runs can execute shell commands; this must be 
 
 Product intent: Cursor-like **@file / @folder** context without unbounded embedding storage.
 
-- [ ] `pending` **task-n14-1**: Implement **@file** / **@folder** picker backed by workspace file search (ripgrep or VS Code API), with strict caps.
+- [x] `done` **task-n14-1**: Implement **@file** / **@folder** picker backed by workspace file search (ripgrep or VS Code API), with strict caps.
   - Acceptance:
     - respects `contextMax*` settings; tests for cap enforcement
+  - Evidence:
+    - `at-mention-context.js` — `pickAtFileContext` / `pickAtFolderContext` (`findFiles` + `FILE_PICKER_MAX_SCAN_URIS`, folder QuickPick `FOLDER_QUICKPICK_MAX_CANDIDATES`, `.gitignore`); folder listing via `readDirectory` clipped with `contextMaxCharsPerFile` / `contextMaxLinesPerFile`; `workspace-context.js` `### FOLDER:` blocks; palette + panel commands; `test/at-mention-context.test.js` + `workspace-context.test.js`; README / `OPERATOR.md`; `npm run verify` green.
 - [ ] `pending` **task-n14-2**: Optional **lightweight symbol index** (outline only) for current file — no full-repo embedding by default.
   - Acceptance:
     - documented limitations vs Cursor cloud index

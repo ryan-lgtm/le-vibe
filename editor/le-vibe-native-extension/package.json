@@ -51,7 +51,9 @@
     "onCommand:leVibeNative.deleteWorkspacePath",
     "onCommand:leVibeNative.askChatAboutSelection",
     "onCommand:leVibeNative.runCommandInIntegratedTerminal",
-    "onCommand:leVibeNative.clearTerminalSessionAllow"
+    "onCommand:leVibeNative.clearTerminalSessionAllow",
+    "onCommand:leVibeNative.addContextAtFile",
+    "onCommand:leVibeNative.addContextAtFolder"
   ],
   "contributes": {
     "commands": [
@@ -148,6 +150,16 @@
       {
         "command": "leVibeNative.clearTerminalSessionAllow",
         "title": "Lé Vibe Chat: Clear terminal session allow (re-enable confirmations)",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.addContextAtFile",
+        "title": "Lé Vibe Chat: @file — add workspace file to context…",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.addContextAtFolder",
+        "title": "Lé Vibe Chat: @folder — add folder listing to context…",
         "category": "Lé Vibe"
       }
     ],

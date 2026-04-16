@@ -36,7 +36,8 @@ function buildPromptWithContext(userPrompt, contexts, maxTotalChars) {
     }
     const label = String(item.path);
     const body = String(item.content);
-    const block = `### FILE: ${label}\n${body}\n`;
+    const header = item.kind === 'folder' ? '### FOLDER' : '### FILE';
+    const block = `${header}: ${label}\n${body}\n`;
     if (used + block.length > maxTotalChars) {
       break;
     }

@@ -21,6 +21,8 @@ const DELETE_WORKSPACE_PATH_COMMAND = 'leVibeNative.deleteWorkspacePath';
 const ASK_CHAT_ABOUT_SELECTION_COMMAND = 'leVibeNative.askChatAboutSelection';
 const RUN_COMMAND_IN_INTEGRATED_TERMINAL_COMMAND = 'leVibeNative.runCommandInIntegratedTerminal';
 const CLEAR_TERMINAL_SESSION_ALLOW_COMMAND = 'leVibeNative.clearTerminalSessionAllow';
+const ADD_CONTEXT_AT_FILE_COMMAND = 'leVibeNative.addContextAtFile';
+const ADD_CONTEXT_AT_FOLDER_COMMAND = 'leVibeNative.addContextAtFolder';
 
 /** @type {null | { path: string, content: string, selectionRange: { startLine: number, startCharacter: number, endLine: number, endCharacter: number } }} */
 let pendingSelectionContext = null;
@@ -87,6 +89,11 @@ const {
 } = require('./workspace-plan-exec');
 const { dryRunValidatedWorkspacePlan } = require('./workspace-plan-dry-run');
 const { runCommandInVisibleTerminal, clearTerminalSessionAllow } = require('./terminal-exec');
+const {
+  pickAtFileContext,
+  pickAtFolderContext,
+  FILE_PICKER_MAX_SCAN_URIS,
+} = require('./at-mention-context');
 
 /**
  * @param {import('vscode')} vscode
@@ -531,6 +538,8 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <p class="muted">Token-budget rules: max ${escapeHtml(budget.maxFiles)} files; each excerpt up to ${escapeHtml(budget.maxCharsPerFile)} chars and ${escapeHtml(budget.maxLinesPerFile)} lines; total injected context capped at ${escapeHtml(budget.maxTotalChars)} chars. Paths matching <code>.gitignore</code>, binary files, and files larger than the per-file char budget are skipped with an explicit Lé Vibe Chat message.</p>
   <div>
     <button data-action="pickContextFile">Add context file</button>
+    <button data-action="addContextAtFile">@file…</button>
+    <button data-action="addContextAtFolder">@folder…</button>
     <button data-action="clearContextFiles">Clear context</button>
   </div>
   <h3>Workspace scaffold (N11)</h3>
@@ -822,6 +831,36 @@ function openAgentSurface() {
     panel.webview.postMessage({
       type: 'prefillPrompt',
       text: prefillPromptForSelection(payload.path, r),
+    });
+  }
+
+  function postContextPick(picked, labelPrefix) {
+    if (!picked) {
+      return;
+    }
+    if (selectedContexts.length >= contextBudget.maxFiles) {
+      panel.webview.postMessage({
+        type: 'chatUpdate',
+        status: `Context cap reached (${contextBudget.maxFiles}). Clear context or raise contextMaxFiles.`,
+      });
+      return;
+    }
+    const same = selectedContexts.find(
+      (entry) => entry.path === picked.path && (entry.kind || 'file') === (picked.kind || 'file'),
+    );
+    if (same) {
+      panel.webview.postMessage({ type: 'chatUpdate', status: `Context already selected: ${picked.path}` });
+      return;
+    }
+    selectedContexts.push({
+      path: picked.path,
+      content: picked.content,
+      ...(picked.kind ? { kind: picked.kind } : {}),
+    });
+    const tag = picked.kind === 'folder' ? 'folder' : 'file';
+    panel.webview.postMessage({
+      type: 'chatUpdate',
+      status: `${labelPrefix} (${selectedContexts.length}/${contextBudget.maxFiles}): ${picked.path} [${tag}]`,
     });
   }
 
@@ -1235,25 +1274,19 @@ function openAgentSurface() {
     }
     if (msg.type === 'action' && msg.actionId === 'pickContextFile') {
       void vscode.commands.executeCommand(PICK_CONTEXT_FILE_COMMAND).then((picked) => {
-        if (!picked) {
-          return;
-        }
-        if (selectedContexts.length >= contextBudget.maxFiles) {
-          panel.webview.postMessage({
-            type: 'chatUpdate',
-            status: `Context file cap reached (${contextBudget.maxFiles}). Clear context or raise cap.`,
-          });
-          return;
-        }
-        if (selectedContexts.find((entry) => entry.path === picked.path)) {
-          panel.webview.postMessage({ type: 'chatUpdate', status: `Context already selected: ${picked.path}` });
-          return;
-        }
-        selectedContexts.push(picked);
-        panel.webview.postMessage({
-          type: 'chatUpdate',
-          status: `Context selected (${selectedContexts.length}/${contextBudget.maxFiles}): ${picked.path}`,
-        });
+        postContextPick(picked ? { ...picked, kind: 'file' } : null, 'Context selected');
+      });
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'addContextAtFile') {
+      void pickAtFileContext(vscode, () => getContextBudget(vscode)).then((picked) => {
+        postContextPick(picked, '@file context');
+      });
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'addContextAtFolder') {
+      void pickAtFolderContext(vscode, () => getContextBudget(vscode)).then((picked) => {
+        postContextPick(picked, '@folder context');
       });
       return;
     }
@@ -1440,7 +1473,7 @@ function activate(context) {
         return null;
       }
       const ig = await loadGitignoreMatcher(vscode, folder);
-      const files = await vscode.workspace.findFiles('**/*', '**/{node_modules,.git,.lvibe}/**', 300);
+      const files = await vscode.workspace.findFiles('**/*', '**/{node_modules,.git,.lvibe}/**', FILE_PICKER_MAX_SCAN_URIS);
       if (!files.length) {
         await vscode.window.showInformationMessage('No workspace files available for context selection.');
         return null;
@@ -1481,8 +1514,14 @@ function activate(context) {
         await vscode.window.showWarningMessage(prep.userMessage);
         return null;
       }
-      return { path: choice.label, content: prep.excerpt };
+      return { path: choice.label, content: prep.excerpt, kind: 'file' };
     }),
+    vscode.commands.registerCommand(ADD_CONTEXT_AT_FILE_COMMAND, () =>
+      pickAtFileContext(vscode, () => getContextBudget(vscode)),
+    ),
+    vscode.commands.registerCommand(ADD_CONTEXT_AT_FOLDER_COMMAND, () =>
+      pickAtFolderContext(vscode, () => getContextBudget(vscode)),
+    ),
     vscode.commands.registerCommand(CLEAR_CONTEXT_FILES_COMMAND, async () => {
       await vscode.window.showInformationMessage(
         'Use the panel action "Clear context" to clear currently selected workspace context files.',
@@ -1641,6 +1680,8 @@ module.exports = {
   ASK_CHAT_ABOUT_SELECTION_COMMAND,
   RUN_COMMAND_IN_INTEGRATED_TERMINAL_COMMAND,
   CLEAR_TERMINAL_SESSION_ALLOW_COMMAND,
+  ADD_CONTEXT_AT_FILE_COMMAND,
+  ADD_CONTEXT_AT_FOLDER_COMMAND,
   getTranscriptContext,
   getContextBudget,
   panelHtml,

@@ -28,3 +28,13 @@ test('buildPromptWithContext injects selected file excerpts within cap', () => {
   assert.ok(prompt.includes('### USER PROMPT'));
   assert.ok(prompt.includes('What does this project do?'));
 });
+
+test('buildPromptWithContext uses FOLDER header for folder context (task-n14-1)', () => {
+  const prompt = buildPromptWithContext(
+    'Summarize tree',
+    [{ path: 'src', kind: 'folder', content: '[file] main.ts\n[dir] lib' }],
+    800,
+  );
+  assert.ok(prompt.includes('### FOLDER: src'));
+  assert.ok(prompt.includes('[dir] lib'));
+});

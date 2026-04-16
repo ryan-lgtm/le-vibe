@@ -46,6 +46,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Workspace context guards (task-n11-4):** **Add workspace context file** applies root **`.gitignore`**, per-file size cap vs **`leVibeNative.contextMaxCharsPerFile`**, and binary detection — deterministic **`Lé Vibe Chat: skipped …`** messages; **`context-file-guards.js`**.
 
+**@file / @folder (task-n14-1):** Palette **`leVibeNative.addContextAtFile`** / **`leVibeNative.addContextAtFolder`** — **`vscode.workspace.findFiles`** with bounded scan + folder QuickPick cap; excerpts/listings clipped per **`contextMax*`**; implementation **`at-mention-context.js`**.
+
 **Selection → chat (task-n12-1):** Palette / context menu **`leVibeNative.askChatAboutSelection`** + CodeLens on selection — opens agent surface if needed; pushes path + clipped selection into context; **`selection-chat-context.js`**.
 
 **Quick action templates (task-n12-2):** Panel **Explain / Refactor selection / Generate tests** — inserts `QUICK_ACTION_TEMPLATES` from **`chat-quick-actions.js`**; Ollama only on **Send Prompt** (local endpoint).

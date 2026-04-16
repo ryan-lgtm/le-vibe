@@ -1,0 +1,48 @@
+'use strict';
+
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const ignore = require('ignore');
+
+const {
+  sliceToCap,
+  parentFolderPrefixes,
+  uniqueFolderCandidatesFromFiles,
+  FILE_PICKER_MAX_SCAN_URIS,
+  FOLDER_QUICKPICK_MAX_CANDIDATES,
+} = require('../at-mention-context.js');
+
+test('sliceToCap enforces max length (task-n14-1)', () => {
+  assert.deepEqual(sliceToCap([1, 2, 3, 4], 2), [1, 2]);
+  assert.deepEqual(sliceToCap([1], 0), []);
+});
+
+test('parentFolderPrefixes extracts ancestor dirs (task-n14-1)', () => {
+  assert.deepEqual(parentFolderPrefixes('a/b/c.ts'), ['a', 'a/b']);
+  assert.deepEqual(parentFolderPrefixes('root.ts'), []);
+});
+
+test('uniqueFolderCandidatesFromFiles respects folder cap (task-n14-1)', () => {
+  const ig = ignore();
+  const files = [];
+  for (let i = 0; i < 500; i += 1) {
+    files.push(`d${i}/f.txt`);
+  }
+  const folders = uniqueFolderCandidatesFromFiles(files, ig);
+  assert.ok(folders.length <= FOLDER_QUICKPICK_MAX_CANDIDATES);
+  assert.ok(folders.includes(''));
+});
+
+test('FILE_PICKER_MAX_SCAN_URIS is strict and documented in module (task-n14-1)', () => {
+  assert.equal(typeof FILE_PICKER_MAX_SCAN_URIS, 'number');
+  assert.ok(FILE_PICKER_MAX_SCAN_URIS > 0);
+  assert.ok(FILE_PICKER_MAX_SCAN_URIS <= 500);
+});
+
+test('uniqueFolderCandidatesFromFiles drops gitignored folder prefixes (task-n14-1)', () => {
+  const ig = ignore();
+  ig.add('secret/');
+  const folders = uniqueFolderCandidatesFromFiles(['secret/file.ts', 'ok/other.ts'], ig);
+  assert.ok(!folders.includes('secret'));
+  assert.ok(folders.includes('ok'));
+});
