@@ -108,7 +108,7 @@ function buildMigrationGuideMarkdown(detected) {
     '',
     '1. Open the Extensions view and **disable** or **uninstall** third-party agent extensions you no longer want.',
     '2. Ensure **Settings → Lé Vibe Native Extension → `leVibeNative.enableFirstPartyAgentSurface`** is **true** (default).',
-    '3. Run **Lé Vibe: Open Agent Surface** and confirm the readiness panel and local Ollama remediation appear (no empty gray view).',
+    '3. Run **Lé Vibe Chat: Open Agent Surface** and confirm the readiness panel and local Ollama remediation appear (no empty gray view).',
     '4. Optional: export legacy transcripts from the other tool before uninstall if you still need them.',
     '',
   ];
@@ -149,7 +149,7 @@ async function runThirdPartyMigrationGuide(vscode, { statePath, auditPath } = {}
   await vscode.window.showTextDocument(doc, { preview: true });
 
   const choice = await vscode.window.showInformationMessage(
-    'Lé Vibe: follow the migration checklist in the editor tab. Mark complete when you have disabled conflicting extensions and verified Lé Vibe Chat.',
+    'Lé Vibe Chat: follow the migration checklist in the editor tab. Mark complete when you have disabled conflicting extensions and verified Lé Vibe Chat.',
     'Mark remediated',
     'Open Extensions',
     'Close',
@@ -208,7 +208,7 @@ async function scheduleThirdPartyMigrationNudge(vscode) {
   }
 
   const choice = await vscode.window.showInformationMessage(
-    `Lé Vibe: third-party agent extension(s) detected (${detected.map((d) => d.label).join(', ')}). Open the migration guide for a safe checklist?`,
+    `Lé Vibe Chat: third-party agent extension(s) detected (${detected.map((d) => d.label).join(', ')}). Open the migration guide for a safe checklist?`,
     'Open guide',
     'Not now',
   );

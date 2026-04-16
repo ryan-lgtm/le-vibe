@@ -21,7 +21,7 @@ flowchart LR
   - Passes extension startup context through explicit, versioned handoff payload.
 - Native extension (VS Code extension + panel/commands):
   - Owns user-visible readiness state machine and actionable UX.
-  - Owns command surface (`Lé Vibe: Open Agent Surface`, setup/remediation actions).
+  - Owns command surface (**Lé Vibe Chat: Open Agent Surface**, setup/remediation actions).
   - Owns bounded transcript retention policy wiring and privacy controls.
   - Never silently falls back to cloud providers when local runtime is unhealthy.
 - Backend bridge (local extension-owned bridge module/process):

@@ -60,113 +60,113 @@
     "commands": [
       {
         "command": "leVibeNative.openAgentSurface",
-        "title": "Lé Vibe: Open Agent Surface",
-        "category": "Lé Vibe"
+        "title": "Open Agent Surface",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.openOllamaSetupHelp",
-        "title": "Lé Vibe: Open Ollama Setup Help",
-        "category": "Lé Vibe"
+        "title": "Open Ollama setup help",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.openModelPullHelp",
-        "title": "Lé Vibe: Show Local Model Install Steps",
-        "category": "Lé Vibe"
+        "title": "Show local model install steps",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.openWorkspaceSetup",
-        "title": "Lé Vibe: Open Workspace Setup Workflow",
-        "category": "Lé Vibe"
+        "title": "Open workspace setup workflow…",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.viewChatUsage",
-        "title": "Lé Vibe Chat: View transcript usage",
-        "category": "Lé Vibe"
+        "title": "View transcript usage",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.exportChatTranscript",
-        "title": "Lé Vibe Chat: Export transcript",
-        "category": "Lé Vibe"
+        "title": "Export transcript",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.clearChatTranscript",
-        "title": "Lé Vibe Chat: Clear transcript",
-        "category": "Lé Vibe"
+        "title": "Clear transcript",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.pickContextFile",
-        "title": "Lé Vibe Chat: Add workspace context file",
-        "category": "Lé Vibe"
+        "title": "Add workspace context file",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.clearContextFiles",
-        "title": "Lé Vibe Chat: Clear selected workspace context",
-        "category": "Lé Vibe"
+        "title": "Clear selected workspace context",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.emitOperatorHandoff",
-        "title": "Lé Vibe Chat: Emit operator handoff event",
-        "category": "Lé Vibe"
+        "title": "Emit operator handoff event",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.openThirdPartyMigrationGuide",
-        "title": "Lé Vibe: Open third-party agent migration guide",
-        "category": "Lé Vibe"
+        "title": "Open third-party migration guide…",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.applySelectionDemoReplace",
-        "title": "Lé Vibe Chat: Apply demo replace to selection",
-        "category": "Lé Vibe"
+        "title": "Apply demo replace to selection",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.createWorkspaceFile",
-        "title": "Lé Vibe Chat: Create workspace file…",
-        "category": "Lé Vibe"
+        "title": "Create workspace file…",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.createWorkspaceFolder",
-        "title": "Lé Vibe Chat: Create workspace folder…",
-        "category": "Lé Vibe"
+        "title": "Create workspace folder…",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.moveWorkspacePath",
-        "title": "Lé Vibe Chat: Move or rename workspace path…",
-        "category": "Lé Vibe"
+        "title": "Move or rename workspace path…",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.deleteWorkspacePath",
-        "title": "Lé Vibe Chat: Delete workspace file or folder…",
-        "category": "Lé Vibe"
+        "title": "Delete workspace file or folder…",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.askChatAboutSelection",
-        "title": "Lé Vibe Chat: Ask about selection…",
-        "category": "Lé Vibe"
+        "title": "Ask about selection…",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.runCommandInIntegratedTerminal",
-        "title": "Lé Vibe Chat: Run command in integrated terminal…",
-        "category": "Lé Vibe"
+        "title": "Run command in integrated terminal…",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.clearTerminalSessionAllow",
-        "title": "Lé Vibe Chat: Clear terminal session allow (re-enable confirmations)",
-        "category": "Lé Vibe"
+        "title": "Clear terminal session allow (re-enable confirmations)",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.addContextAtFile",
-        "title": "Lé Vibe Chat: @file — add workspace file to context…",
-        "category": "Lé Vibe"
+        "title": "@file — add workspace file to context…",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.addContextAtFolder",
-        "title": "Lé Vibe Chat: @folder — add folder listing to context…",
-        "category": "Lé Vibe"
+        "title": "@folder — add folder listing to context…",
+        "category": "Lé Vibe Chat"
       },
       {
         "command": "leVibeNative.addCurrentFileOutlineToContext",
-        "title": "Lé Vibe Chat: Add current file outline to context…",
-        "category": "Lé Vibe"
+        "title": "Add current file outline to context…",
+        "category": "Lé Vibe Chat"
       }
     ],
     "menus": {
@@ -195,7 +195,7 @@
           "leVibeNative.enableFirstPartyAgentSurface": {
             "type": "boolean",
             "default": true,
-            "markdownDescription": "Enable the first-party Lé Vibe Chat readiness panel and agent surface. Set to **false** for rollback (no panel auto-open; `Lé Vibe: Open Agent Surface` shows re-enable instructions). Local-first defaults are unchanged when enabled."
+            "markdownDescription": "Enable the first-party Lé Vibe Chat readiness panel and agent surface. Set to **false** for rollback (no panel auto-open; **Lé Vibe Chat: Open Agent Surface** shows re-enable instructions). Local-first defaults are unchanged when enabled."
           },
           "leVibeNative.showThirdPartyMigrationNudge": {
             "type": "boolean",

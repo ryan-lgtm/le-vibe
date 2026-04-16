@@ -717,10 +717,12 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N17 — UX polish and operator ergonomics
 
-- [ ] `pending` **task-n17-1**: **Command palette audit** — ensure every user-facing **Lé Vibe Chat** command has a `category` and title consistent with canonical naming; add missing keybindings only where they do not conflict with VS Code defaults (document overrides in README).
+- [x] `done` **task-n17-1**: **Command palette audit** — ensure every user-facing **Lé Vibe Chat** command has a `category` and title consistent with canonical naming; add missing keybindings only where they do not conflict with VS Code defaults (document overrides in README).
   - Acceptance:
     - table in README or `OPERATOR.md`: command id → title → default keybinding (if any)
     - `npm run verify` green
+  - Evidence:
+    - **`package.json`** **`contributes.commands`**: **`category`** **`Lé Vibe Chat`**, short **`title`** (palette shows **`Lé Vibe Chat: <title>`**); no default **`keybindings`** (documented); **`README.md`** *Command palette and keyboard shortcuts (task-n17-1)* table (id → palette label → **—**); **`OPERATOR.md`** *Product track* pointer; **`third-party-migration.js`** / **`docs/native-extension-boundary.md`** strings aligned; tests `command-palette-contributions.test.js`, `operator-doc.test.js`, `scaffold.test.js`; `npm run verify` green.
 - [ ] `pending` **task-n17-2**: **Panel accessibility pass** — focus order, button `title`/`aria` equivalents in webview HTML where applicable, and high-contrast theme spot-check (document known gaps).
   - Acceptance:
     - short **Accessibility** subsection in README with tested VS Code themes + OS

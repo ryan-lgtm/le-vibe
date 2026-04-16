@@ -20,12 +20,43 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Canonical user-facing name (chat UX):** **Lé Vibe Chat** — palette titles and panel copy use this name for the agent surface (per product track; same line as **`OPERATOR.md`**).
 
+## Command palette and keyboard shortcuts (task-n17-1)
+
+Contributed commands use **`category`** **`Lé Vibe Chat`** and a short **`title`** in **`package.json`**. VS Code shows **`Lé Vibe Chat: <title>`** in the Command Palette (and Quick Access).
+
+**Default keybindings:** none are shipped — built-in VS Code defaults vary by OS; contributing global shortcuts would risk clashes. Assign under **File → Preferences → Keyboard Shortcuts** (search **`leVibeNative`** or **Lé Vibe Chat**). If you add a user keybinding that overlaps a built-in command, the editor warns when saving.
+
+| Command id | Shown in Command Palette | Default keybinding |
+|------------|---------------------------|-------------------|
+| `leVibeNative.openAgentSurface` | Lé Vibe Chat: Open Agent Surface | — |
+| `leVibeNative.openOllamaSetupHelp` | Lé Vibe Chat: Open Ollama setup help | — |
+| `leVibeNative.openModelPullHelp` | Lé Vibe Chat: Show local model install steps | — |
+| `leVibeNative.openWorkspaceSetup` | Lé Vibe Chat: Open workspace setup workflow… | — |
+| `leVibeNative.viewChatUsage` | Lé Vibe Chat: View transcript usage | — |
+| `leVibeNative.exportChatTranscript` | Lé Vibe Chat: Export transcript | — |
+| `leVibeNative.clearChatTranscript` | Lé Vibe Chat: Clear transcript | — |
+| `leVibeNative.pickContextFile` | Lé Vibe Chat: Add workspace context file | — |
+| `leVibeNative.clearContextFiles` | Lé Vibe Chat: Clear selected workspace context | — |
+| `leVibeNative.emitOperatorHandoff` | Lé Vibe Chat: Emit operator handoff event | — |
+| `leVibeNative.openThirdPartyMigrationGuide` | Lé Vibe Chat: Open third-party migration guide… | — |
+| `leVibeNative.applySelectionDemoReplace` | Lé Vibe Chat: Apply demo replace to selection | — |
+| `leVibeNative.createWorkspaceFile` | Lé Vibe Chat: Create workspace file… | — |
+| `leVibeNative.createWorkspaceFolder` | Lé Vibe Chat: Create workspace folder… | — |
+| `leVibeNative.moveWorkspacePath` | Lé Vibe Chat: Move or rename workspace path… | — |
+| `leVibeNative.deleteWorkspacePath` | Lé Vibe Chat: Delete workspace file or folder… | — |
+| `leVibeNative.askChatAboutSelection` | Lé Vibe Chat: Ask about selection… | — |
+| `leVibeNative.runCommandInIntegratedTerminal` | Lé Vibe Chat: Run command in integrated terminal… | — |
+| `leVibeNative.clearTerminalSessionAllow` | Lé Vibe Chat: Clear terminal session allow (re-enable confirmations) | — |
+| `leVibeNative.addContextAtFile` | Lé Vibe Chat: @file — add workspace file to context… | — |
+| `leVibeNative.addContextAtFolder` | Lé Vibe Chat: @folder — add folder listing to context… | — |
+| `leVibeNative.addCurrentFileOutlineToContext` | Lé Vibe Chat: Add current file outline to context… | — |
+
 ## Scope for task-n1-1
 
 - Extension host entrypoint exists (`extension.js`).
 - Lé Vibe branded command is contributed:
   - `leVibeNative.openAgentSurface`
-  - Command palette title: `Lé Vibe: Open Agent Surface`
+  - Command palette title: `Lé Vibe Chat: Open Agent Surface`
 - Activation events include startup and command-triggered activation.
 
 ## Startup readiness panel (task-n1-2)
@@ -103,7 +134,7 @@ Token-budget rules (configurable in Settings):
 
 ## Inline assistant — selection → chat (Epic N12, task-n12-1)
 
-- **Command Palette / editor context menu:** **Lé Vibe Chat: Ask about selection…** (`leVibeNative.askChatAboutSelection`) — requires a **non-empty** selection in a **workspace file** (`file` scheme). Opens the Lé Vibe Chat panel (same as **Lé Vibe: Open Agent Surface**) if it was closed, then injects **workspace-relative path**, **0-based selection bounds** (surfaced in the context excerpt header), and a **clipped text excerpt** into prompt context, and **prefills** the prompt box with a short template line.
+- **Command Palette / editor context menu:** **Lé Vibe Chat: Ask about selection…** (`leVibeNative.askChatAboutSelection`) — requires a **non-empty** selection in a **workspace file** (`file` scheme). Opens the Lé Vibe Chat panel (same as **Lé Vibe Chat: Open Agent Surface**) if it was closed, then injects **workspace-relative path**, **0-based selection bounds** (surfaced in the context excerpt header), and a **clipped text excerpt** into prompt context, and **prefills** the prompt box with a short template line.
 - **CodeLens:** when text is selected, a lens **Ask Lé Vibe Chat about this selection** appears on the selection range and runs the same command.
 - Helpers: [`selection-chat-context.js`](selection-chat-context.js) (`buildSelectionContextEntry`, `prefillPromptForSelection`).
 
@@ -209,16 +240,16 @@ Each successful send appends a structured JSONL record under **`~/.config/le-vib
 - **Startup panel:** **`leVibeNative.openPanelOnStartup`** (default **`true`**) — when the first-party surface is enabled, open the readiness panel at editor startup (wizard may run first per **`leVibeNative.showFirstRunWizard`**).
 - **Rollback:** set **`leVibeNative.enableFirstPartyAgentSurface`** to **false** in Settings (JSON: `"leVibeNative.enableFirstPartyAgentSurface": false`). Effects:
   - Startup no longer auto-opens the readiness panel (even if **`leVibeNative.openPanelOnStartup`** is **`true`**).
-  - Command **Lé Vibe: Open Agent Surface** shows a message with **Open Settings** to flip the flag back; the webview panel is not created while disabled.
+  - Command **Lé Vibe Chat: Open Agent Surface** shows a message with **Open Settings** to flip the flag back; the webview panel is not created while disabled.
 - **Restore:** set the same key back to **true** (or remove the override). Palette commands for transcript export/clear and operator handoff remain available for recovery workflows while the panel is disabled.
 
 ## Third-party agent migration (task-n7-2)
 
 - **Goal:** Move from common third-party chat/agent extensions (e.g. Continue, Cline) to **Lé Vibe Chat** without silent cross-extension writes.
-- **Command:** `Lé Vibe: Open third-party agent migration guide` — opens a Markdown checklist in the editor and optional follow-up actions.
+- **Command:** **Lé Vibe Chat: Open third-party migration guide…** — opens a Markdown checklist in the editor and optional follow-up actions.
 - **Guardrails:** The extension does **not** uninstall other extensions or delete their data. It only writes migration state and JSONL audit lines under `~/.config/le-vibe/levibe-native-chat/` (`third-party-migration-state.json`, `third-party-migration-audit.jsonl`).
 - **Detection:** A small watchlist of marketplace extension IDs (see `third-party-migration.js`) is used to suggest the guide. If **`leVibeNative.showThirdPartyMigrationNudge`** (default **`true`**) is on and a watchlist extension is present while migration status is still **pending**, a one-time notification offers the guide; **Not now** records status **skipped** (no further auto nudges).
-- **Remediation:** Disable or uninstall conflicting extensions manually from the Extensions view, keep `leVibeNative.enableFirstPartyAgentSurface` **true**, then verify **Lé Vibe: Open Agent Surface**.
+- **Remediation:** Disable or uninstall conflicting extensions manually from the Extensions view, keep `leVibeNative.enableFirstPartyAgentSurface` **true**, then verify **Lé Vibe Chat: Open Agent Surface**.
 
 ## Operator verification / ship checklist (task-n8-1)
 

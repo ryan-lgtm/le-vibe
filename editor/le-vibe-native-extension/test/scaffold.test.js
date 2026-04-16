@@ -11,7 +11,8 @@ test('manifest contributes Lé Vibe Open Agent Surface command', () => {
   assert.ok(Array.isArray(commands), 'contributes.commands must be an array');
   const command = commands.find((item) => item.command === 'leVibeNative.openAgentSurface');
   assert.ok(command, 'expected leVibeNative.openAgentSurface command contribution');
-  assert.equal(command.title, 'Lé Vibe: Open Agent Surface');
+  assert.equal(command.category, 'Lé Vibe Chat');
+  assert.equal(command.title, 'Open Agent Surface');
   assert.ok(commands.find((item) => item.command === 'leVibeNative.pickContextFile'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.clearContextFiles'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.emitOperatorHandoff'));

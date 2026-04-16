@@ -245,3 +245,10 @@ test('OPERATOR.md documents version bump vs deb/git (task-n16-3)', () => {
   assert.ok(text.includes('git tag'));
   assert.ok(text.includes('GitHub Release'));
 });
+
+test('OPERATOR.md documents command palette inventory pointer (task-n17-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Command palette inventory (task-n17-1)'));
+  assert.ok(text.includes('Command palette and keyboard shortcuts (task-n17-1)'));
+  assert.ok(text.includes('Keyboard Shortcuts'));
+});

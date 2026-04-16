@@ -129,6 +129,8 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 
 **Scripts literal umbrella:** **`npm test`** runs **`test/package-json-all-scripts-doc-literal-sync.test.js`**, which fails if any **`package.json` `scripts`** value is absent from this runbook and/or **`README.md`** (keep **`scripts.test`**, **`scripts.smoke`**, **`scripts.verify`** literals documented when you change npm scripts).
 
+**Command palette inventory (task-n17-1):** **`README.md`** *Command palette and keyboard shortcuts (task-n17-1)* — table of **`leVibeNative.*`** command id → **Command Palette** label (**`Lé Vibe Chat:`** + **`title`**) → default keybinding (**none** shipped; bind in Keyboard Shortcuts).
+
 ## E2E agentic editor release checklist (Epic N15, task-n15-1)
 
 Run **after** **`npm run verify`** is green. This is a **manual** gate for agentic-editor flows (edit preview, multi-step workspace plan, cancellation). **Sign off** each release in the table at the end (tag, VSIX version, or internal build id).
@@ -140,7 +142,7 @@ Run **after** **`npm run verify`** is green. This is a **manual** gate for agent
 
 ### A — Preview → accept → apply → undo (edit proposal demo)
 
-1. **Lé Vibe: Open Agent Surface** — panel shows readiness + chat controls (not a blank/gray webview).
+1. **Lé Vibe Chat: Open Agent Surface** — panel shows readiness + chat controls (not a blank/gray webview).
 2. Click **Preview sample workspace edit** — a **unified diff** appears for **`.lvibe/.levibe-edit-preview-demo.txt`**.
 3. With **`leVibeNative.requireEditPreviewBeforeApply`** at default **`true`**: click **Accept preview**, then **Apply to file**. Optionally confirm **Reject** dismisses the preview **without** applying.
 4. Focus the modified file and use editor **Undo** once (**Ctrl+Z** / **Cmd+Z**) — contents revert for that **Apply** (one undo transaction per **Apply**, same manual contract as **task-n9-3** above).
