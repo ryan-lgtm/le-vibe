@@ -23,6 +23,8 @@ ENABLE_APT_SIM=0
 SKIP_VERIFY_GATE=0
 LOG_FILE=""
 PREFLIGHT_ONLY=0
+FRESH_INSTALL=0
+PURGE_OLLAMA_ON_FRESH=0
 
 usage() {
   cat <<'EOF'
@@ -38,7 +40,7 @@ From a monorepo clone on a supported Linux host, orchestrate the full maintainer
   5) packaging/scripts/verify-step14-closeout.sh --require-stack-deb
   6) With --install: sudo apt install both .deb files (stack first, then IDE — same as build-le-vibe-debs.sh)
   7) After install: packaging/scripts/manual-step14-install-smoke.sh --verify-only
-  8) Runtime readiness: reuse existing ollama on PATH (or install if missing), install Cline, verify /usr/bin/lvibe is runnable
+  8) Runtime readiness: reuse existing ollama on PATH (or install if missing), verify first-party extension is installed/active, verify /usr/bin/lvibe is runnable
 
 Resolves the repository root from this script’s path (your cwd may be anywhere).
 
@@ -54,6 +56,11 @@ Options:
   --json             On success, print one JSON object to stdout with paths and pass/fail flags.
                      Human progress remains on stderr unless stdout is only JSON (errors still on stderr).
   --log-file PATH    Append a timestamped transcript to PATH (mkdir -p parent when possible).
+  --fresh-install    Run a destructive local cleanup before install/build:
+                     invokes uninstall-le-vibe-local.sh with --purge-user-data, --purge-editor-data,
+                     --purge-agent-artifacts, and --purge-workspace "$ROOT".
+  --purge-ollama-on-fresh
+                     Only valid with --fresh-install; also removes ~/.ollama via uninstall helper.
   --preflight-only   Check prerequisites and print host/resource/editor-dep milestones only (no compile,
                      no .deb build, no apt install). Exits 0 when Linux + submodule + stack packaging tools +
                      VSCodium host deps pass; exits 2 if deps are missing. Combine with --json for machine-readable
@@ -75,6 +82,9 @@ Exit codes:
 
 Canonical full-product non-interactive install (build + sudo install + smoke):
   packaging/scripts/install-le-vibe-local.sh --install --yes
+
+Fresh reinstall from clean local state (destructive):
+  packaging/scripts/install-le-vibe-local.sh --fresh-install --install --yes
 
 Build artifacts only (no sudo):
   packaging/scripts/install-le-vibe-local.sh
@@ -233,19 +243,53 @@ verify_lvibe_cli_ready() {
   return 0
 }
 
-install_cline_extension() {
-  local cline_installer="$ROOT/packaging/scripts/install-cline-extension.sh"
-  if [[ ! -x "$cline_installer" ]]; then
-    echo "install-le-vibe-local: Cline installer helper missing or not executable: $cline_installer" >&2
+verify_first_party_extension_ready() {
+  local first_party_extension_id="levibe.le-vibe-native-extension"
+  local first_party_vsix="$ROOT/editor/le-vibe-native-extension/le-vibe-native-extension-0.1.0.vsix"
+  local ext_list=""
+  log_tee "==> Runtime check: verify first-party extension (${first_party_extension_id})"
+  ext_list="$("$CODIUM_PATH" --list-extensions 2>/dev/null | tr '[:upper:]' '[:lower:]' || true)"
+  if printf '%s\n' "$ext_list" | rg -n "^${first_party_extension_id}$" >/dev/null 2>&1; then
+    log_tee "    OK: first-party extension already installed (${first_party_extension_id})"
+    return 0
+  fi
+
+  if [[ -f "$first_party_vsix" ]]; then
+    log_tee "    Extension missing; installing local VSIX: $first_party_vsix"
+    if "$CODIUM_PATH" --install-extension "$first_party_vsix"; then
+      ext_list="$("$CODIUM_PATH" --list-extensions 2>/dev/null | tr '[:upper:]' '[:lower:]' || true)"
+      if printf '%s\n' "$ext_list" | rg -n "^${first_party_extension_id}$" >/dev/null 2>&1; then
+        log_tee "    OK: first-party extension installed from local VSIX"
+        return 0
+      fi
+    fi
+    echo "install-le-vibe-local: first-party extension install attempted but extension id not visible: ${first_party_extension_id}" >&2
+    echo "  Remediation: ${CODIUM_PATH} --install-extension ${first_party_vsix}" >&2
     return 1
   fi
-  log_tee "==> Runtime check: install Cline extension via install-cline-extension.sh"
-  if ! LE_VIBE_EDITOR="$CODIUM_PATH" "$cline_installer"; then
-    echo "install-le-vibe-local: failed to install Cline extension into editor binary: $CODIUM_PATH" >&2
-    echo "  Remediation: re-run packaging/scripts/install-cline-extension.sh with LE_VIBE_EDITOR set." >&2
+
+  echo "install-le-vibe-local: first-party extension not installed and local VSIX missing: ${first_party_vsix}" >&2
+  echo "  Build/package first: (cd editor/le-vibe-native-extension && npm ci && npm run package)" >&2
+  echo "  Then install: ${CODIUM_PATH} --install-extension ${first_party_vsix}" >&2
+  return 1
+}
+
+run_fresh_install_cleanup() {
+  local uninstall_script="$ROOT/packaging/scripts/uninstall-le-vibe-local.sh"
+  if [[ ! -x "$uninstall_script" ]]; then
+    echo "install-le-vibe-local: fresh-install requested, but uninstall helper is missing/not executable: $uninstall_script" >&2
     return 1
   fi
-  return 0
+  if ! have_cmd sudo; then
+    echo "install-le-vibe-local: --fresh-install requires sudo on PATH." >&2
+    return 1
+  fi
+  local clean_args=(--yes --purge-user-data --purge-editor-data --purge-agent-artifacts --purge-workspace "$ROOT")
+  if [[ "$PURGE_OLLAMA_ON_FRESH" -eq 1 ]]; then
+    clean_args+=(--purge-ollama-state)
+  fi
+  log_tee "==> Fresh-install cleanup: ${uninstall_script} ${clean_args[*]}"
+  "$uninstall_script" "${clean_args[@]}"
 }
 
 build_install_readiness_summary() {
@@ -492,6 +536,8 @@ while [[ $# -gt 0 ]]; do
     --json) PRINT_JSON=1 ;;
     --apt-sim) ENABLE_APT_SIM=1 ;;
     --skip-gate) SKIP_VERIFY_GATE=1 ;;
+    --fresh-install) FRESH_INSTALL=1 ;;
+    --purge-ollama-on-fresh) PURGE_OLLAMA_ON_FRESH=1 ;;
     --log-file)
       LOG_FILE="${2:-}"
       if [[ -z "$LOG_FILE" ]]; then echo "install-le-vibe-local: --log-file needs a path" >&2; exit 2; fi
@@ -514,10 +560,15 @@ if [[ "$SKIP_EDITOR_BUILD" -eq 1 && "$FORCE_EDITOR_BUILD" -eq 1 ]]; then
 fi
 
 if [[ "$PREFLIGHT_ONLY" -eq 1 ]]; then
-  if [[ "$DO_INSTALL" -eq 1 || "$FORCE_EDITOR_BUILD" -eq 1 || "$SKIP_EDITOR_BUILD" -eq 1 || "$ENABLE_APT_SIM" -eq 1 || "$SKIP_VERIFY_GATE" -eq 1 || "$SKIP_COMPILE_FAILFAST" -eq 1 ]]; then
-    echo "install-le-vibe-local: --preflight-only cannot be combined with --install, --force-editor-build, --skip-editor-build, --apt-sim, --skip-gate, or --skip-compile-failfast." >&2
+  if [[ "$DO_INSTALL" -eq 1 || "$FORCE_EDITOR_BUILD" -eq 1 || "$SKIP_EDITOR_BUILD" -eq 1 || "$ENABLE_APT_SIM" -eq 1 || "$SKIP_VERIFY_GATE" -eq 1 || "$SKIP_COMPILE_FAILFAST" -eq 1 || "$FRESH_INSTALL" -eq 1 || "$PURGE_OLLAMA_ON_FRESH" -eq 1 ]]; then
+    echo "install-le-vibe-local: --preflight-only cannot be combined with --install, --force-editor-build, --skip-editor-build, --apt-sim, --skip-gate, --skip-compile-failfast, --fresh-install, or --purge-ollama-on-fresh." >&2
     exit 2
   fi
+fi
+
+if [[ "$PURGE_OLLAMA_ON_FRESH" -eq 1 && "$FRESH_INSTALL" -ne 1 ]]; then
+  echo "install-le-vibe-local: --purge-ollama-on-fresh requires --fresh-install." >&2
+  exit 2
 fi
 
 if [[ "$DO_INSTALL" -eq 1 ]]; then
@@ -529,6 +580,10 @@ if [[ "$DO_INSTALL" -eq 1 ]]; then
     echo "install-le-vibe-local: --install requires apt-get (Debian/Ubuntu)." >&2
     exit 2
   fi
+fi
+
+if [[ "$FRESH_INSTALL" -eq 1 ]]; then
+  run_fresh_install_cleanup
 fi
 
 if [[ -n "$LOG_FILE" ]]; then
@@ -725,10 +780,10 @@ if ! ensure_ollama_runtime_ready; then
 fi
 RUNTIME_OLLAMA_STATE="ready"
 
-if ! install_cline_extension; then
-  INSTALL_READINESS_SUMMARY="$(build_install_readiness_summary "error" "cline_extension_install_failed")"
+if ! verify_first_party_extension_ready; then
+  INSTALL_READINESS_SUMMARY="$(build_install_readiness_summary "error" "first_party_extension_not_ready")"
   if [[ "$PRINT_JSON" -eq 1 ]]; then
-    emit_final_json "error" "runtime" "Cline extension install failed" "$PROBE_OUT" "$CODIUM_PATH" "${STACK_DEB:-}" "${IDE_DEB:-}" "true" "$([[ "$DO_INSTALL" -eq 1 ]] && echo true || echo false)" "$SMOKE_PASSED" "$RUNTIME_OLLAMA_STATE" "$RUNTIME_LVIBE_STATE" "install_cline_extension" "$RUNTIME_DEPENDENCY_MODE" "$EDITOR_BUILD_MODE" "error" "cline_extension_install_failed" "$INSTALL_READINESS_SUMMARY"
+    emit_final_json "error" "runtime" "first-party extension not ready" "$PROBE_OUT" "$CODIUM_PATH" "${STACK_DEB:-}" "${IDE_DEB:-}" "true" "$([[ "$DO_INSTALL" -eq 1 ]] && echo true || echo false)" "$SMOKE_PASSED" "$RUNTIME_OLLAMA_STATE" "$RUNTIME_LVIBE_STATE" "install_first_party_extension" "$RUNTIME_DEPENDENCY_MODE" "$EDITOR_BUILD_MODE" "error" "first_party_extension_not_ready" "$INSTALL_READINESS_SUMMARY"
   fi
   exit 1
 fi
@@ -762,7 +817,7 @@ else
 fi
 log_tee "STEP 14 verify: OK (verify-step14-closeout.sh --require-stack-deb)"
 log_tee "Next: hash -r  |  lvibe --help  |  codium --version  |  lvibe open-welcome  |  lvibe ."
-log_tee "Cline: extension install completed via packaging/scripts/install-cline-extension.sh (Open VSX pin + retries)."
+log_tee "First-party extension: levibe.le-vibe-native-extension is installed and active in the editor profile."
 log_tee ""
 
 if [[ "$RUNTIME_OLLAMA_STATE" != "ready" || "$RUNTIME_LVIBE_STATE" == "error" ]]; then

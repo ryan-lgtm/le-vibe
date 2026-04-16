@@ -93,7 +93,11 @@ def test_install_le_vibe_local_runtime_readiness_contract():
     assert "retrying once after IDE artifact cleanup" in text
     assert "hash -r" in text
     assert "lvibe ." in text
-    assert "install-cline-extension.sh" in text
+    assert "Runtime check: verify first-party extension (${first_party_extension_id})" in text
+    assert "first_party_extension_id=\"levibe.le-vibe-native-extension\"" in text
+    assert "le-vibe-native-extension-0.1.0.vsix" in text
+    assert "--list-extensions" in text
+    assert "--install-extension" in text
     assert "\"runtime_ollama_state\"" in text
     assert "\"runtime_lvibe_state\"" in text
     assert "\"runtime_remediation_hint\"" in text
@@ -116,7 +120,8 @@ def test_install_le_vibe_local_runtime_readiness_contract():
     assert "editor_build_skipped_by_flag" in text
     assert "runtime_ollama_not_ready" in text
     assert "runtime_lvibe_not_ready" in text
-    assert "cline_extension_install_failed" in text
+    assert "first_party_extension_not_ready" in text
+    assert "install_first_party_extension" in text
     assert "editor_build_not_ready" in text
     assert "codium_binary_not_ready" in text
     assert "deb_build_failed" in text
