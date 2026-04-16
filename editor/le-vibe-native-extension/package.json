@@ -56,7 +56,8 @@
     "onCommand:leVibeNative.clearTerminalSessionAllow",
     "onCommand:leVibeNative.addContextAtFile",
     "onCommand:leVibeNative.addContextAtFolder",
-    "onCommand:leVibeNative.addCurrentFileOutlineToContext"
+    "onCommand:leVibeNative.addCurrentFileOutlineToContext",
+    "onCommand:leVibeNative.packageRunbookDiagnostics"
   ],
   "contributes": {
     "commands": [
@@ -178,6 +179,11 @@
       {
         "command": "leVibeNative.addCurrentFileOutlineToContext",
         "title": "Add current file outline to context…",
+        "category": "Lé Vibe Chat"
+      },
+      {
+        "command": "leVibeNative.packageRunbookDiagnostics",
+        "title": "Package runbook diagnostics (support)…",
         "category": "Lé Vibe Chat"
       }
     ],

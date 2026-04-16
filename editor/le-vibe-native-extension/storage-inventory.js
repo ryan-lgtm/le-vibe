@@ -5,7 +5,7 @@ const os = require('node:os');
 
 /**
  * Single canonical directory for first-party Lé Vibe Native Chat persisted files (task-n8-2).
- * Keep in sync with `chat-transcript.js` / `first-run-wizard.js` / `operator-handoff.js` / `third-party-migration.js` / `workspace-plan-exec.js` / `workspace-fs-ops-audit.js` / `terminal-command-audit.js` / `orchestrator-events.js`.
+ * Keep in sync with `chat-transcript.js` / `first-run-wizard.js` / `operator-handoff.js` / `third-party-migration.js` / `workspace-plan-exec.js` / `workspace-fs-ops-audit.js` / `terminal-command-audit.js` / `orchestrator-events.js` / `runbook-bundle.js`.
  */
 function levibeNativeChatDir() {
   return path.join(os.homedir(), '.config', 'le-vibe', 'levibe-native-chat');
@@ -23,6 +23,7 @@ const PERSISTED_ARTIFACTS = Object.freeze([
   { basename: 'workspace-fs-ops-audit.jsonl', purpose: 'Append-only destructive workspace FS ops (lvibe.workspace_fs_ops_audit.v1).' },
   { basename: 'terminal-command-audit.jsonl', purpose: 'Append-only integrated terminal command audit (lvibe.terminal_command_audit.v1).' },
   { basename: 'orchestrator-events.jsonl', purpose: 'Append-only orchestrator bridge events (lvibe.orchestrator_event.v1).' },
+  { basename: 'runbook-bundles/', purpose: 'Support diagnostic bundles from Package runbook diagnostics (task-cp5-2).' },
   { basename: 'transcript-*.jsonl', purpose: 'Per-workspace bounded chat JSONL (hash suffix); not a single fixed file.' },
 ]);
 

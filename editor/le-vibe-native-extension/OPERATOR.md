@@ -155,6 +155,7 @@ Chat transcript JSONL is capped by **`leVibeNative.chatTranscriptMaxBytes`** (de
 
 **Terminal command audit (task-n13-3):** **`terminal-command-audit.jsonl`** — append-only **`lvibe.terminal_command_audit.v1`** lines (timestamp, cwd, command line; **`exit_code`** when **`onDidEndTerminalShellExecution`** matches). Same directory as other Lé Vibe Chat persistence; see **`terminal-command-audit.js`**.
 **Orchestrator bridge audit (task-cp5-1):** **`orchestrator-events.jsonl`** — append-only **`lvibe.orchestrator_event.v1`** lines with event types **`chat_turn`**, **`edit_apply`**, **`plan_run`**, **`terminal_exec`** for operator/orchestrator consumption (local-only JSONL).
+**Runbook diagnostics (task-cp5-2):** Palette **Lé Vibe Chat: Package runbook diagnostics (support)…** (`leVibeNative.packageRunbookDiagnostics`) writes a **local-only** folder under **`~/.config/le-vibe/levibe-native-chat/runbook-bundles/runbook-<timestamp>/`** (settings snapshot + recent audit/tail files + `README-runbook.txt`). No cloud upload; zip for support if needed.
 
 ## Product track
 

@@ -183,9 +183,14 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Added contract tests in `editor/le-vibe-native-extension/test/orchestrator-events.test.js` and root-path coverage in `editor/le-vibe-native-extension/test/storage-inventory.test.js`; updated persistence inventory in `storage-inventory.js`.
     - Documented the new contract/audit file in `editor/le-vibe-native-extension/README.md` and `editor/le-vibe-native-extension/OPERATOR.md`, including bounded persistence inventory entry for `orchestrator-events.jsonl`.
     - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 348 passed, smoke passed).
-- [ ] `pending` **task-cp5-2**: Add "runbook mode" command to package diagnostics for support (settings, logs, recent events).
+- [x] `done` **task-cp5-2**: Add "runbook mode" command to package diagnostics for support (settings, logs, recent events).
   - Acceptance:
     - local-only bundle output path documented
+  - Evidence (2026-04-15):
+    - Added `editor/le-vibe-native-extension/runbook-bundle.js` with `writeRunbookBundle()` — snapshots `leVibeNative` inspect map, tails orchestrator/terminal/plan/fs-ops/handoff audit JSONL, optional workspace transcript tail, and `README-runbook.txt`.
+    - Registered command `leVibeNative.packageRunbookDiagnostics` (**Package runbook diagnostics (support)…**) in `package.json` and `extension.js`; default output `~/.config/le-vibe/levibe-native-chat/runbook-bundles/runbook-<timestamp>/` (documented in README + OPERATOR + bounded persistence table).
+    - Tests: `editor/le-vibe-native-extension/test/runbook-bundle.test.js`; scaffold/activation updates; README activation counts `26` / `25`.
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 352 passed, smoke passed).
 
 ## Epic CP6 — Release gate: done means shippable
 

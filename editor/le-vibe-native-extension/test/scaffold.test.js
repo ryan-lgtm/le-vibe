@@ -30,6 +30,7 @@ test('manifest contributes Lé Vibe Open Agent Surface command', () => {
   assert.ok(commands.find((item) => item.command === 'leVibeNative.addContextAtFile'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.addContextAtFolder'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.addCurrentFileOutlineToContext'));
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.packageRunbookDiagnostics'));
 });
 
 test('manifest supports deterministic activation entrypoints', () => {
@@ -54,6 +55,7 @@ test('manifest supports deterministic activation entrypoints', () => {
   assert.ok(activationEvents.includes('onCommand:leVibeNative.addContextAtFile'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.addContextAtFolder'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.addCurrentFileOutlineToContext'));
+  assert.ok(activationEvents.includes('onCommand:leVibeNative.packageRunbookDiagnostics'));
 });
 
 test('extension exports activate/deactivate and command constant', () => {
@@ -72,6 +74,7 @@ test('extension exports activate/deactivate and command constant', () => {
   assert.equal(extensionModule.ADD_CONTEXT_AT_FILE_COMMAND, 'leVibeNative.addContextAtFile');
   assert.equal(extensionModule.ADD_CONTEXT_AT_FOLDER_COMMAND, 'leVibeNative.addContextAtFolder');
   assert.equal(extensionModule.ADD_CURRENT_FILE_OUTLINE_COMMAND, 'leVibeNative.addCurrentFileOutlineToContext');
+  assert.equal(extensionModule.PACKAGE_RUNBOOK_DIAGNOSTICS_COMMAND, 'leVibeNative.packageRunbookDiagnostics');
   assert.equal(extensionModule.START_NEW_CHAT_SESSION_COMMAND, 'leVibeNative.startNewChatSession');
   assert.equal(extensionModule.RESTORE_RECENT_PROMPT_COMMAND, 'leVibeNative.restoreRecentPrompt');
   assert.equal(typeof extensionModule.buildSelectionAssistQuickFixes, 'function');

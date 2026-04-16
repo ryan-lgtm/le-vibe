@@ -40,7 +40,7 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Activation index next hop (task-n64-1):** after this quick index, jump to **`Activation docs sequence (task-n60-1)`** for the guided breadcrumb flow.
 
-**Activation events (task-n50-1):** **`package.json`** **`activationEvents`** currently lists **`25`** entries: startup hook **`onStartupFinished`** plus **`24`** command-trigger events (**`onCommand:*`**) for deterministic lazy activation.
+**Activation events (task-n50-1):** **`package.json`** **`activationEvents`** currently lists **`26`** entries: startup hook **`onStartupFinished`** plus **`25`** command-trigger events (**`onCommand:*`**) for deterministic lazy activation.
 
 **Activation count rationale lookup (task-n58-1):** for why the startup literal appears in that count breakdown, see **`Startup activation intent (task-n54-1)`** below.
 
@@ -108,6 +108,7 @@ Contributed commands use **`category`** **`Lé Vibe Chat`** and a short **`title
 | `leVibeNative.addContextAtFile` | Lé Vibe Chat: @file — add workspace file to context… | — |
 | `leVibeNative.addContextAtFolder` | Lé Vibe Chat: @folder — add folder listing to context… | — |
 | `leVibeNative.addCurrentFileOutlineToContext` | Lé Vibe Chat: Add current file outline to context… | — |
+| `leVibeNative.packageRunbookDiagnostics` | Lé Vibe Chat: Package runbook diagnostics (support)… | — |
 
 ## Accessibility (task-n17-2)
 
@@ -273,6 +274,11 @@ Each successful send appends a structured JSONL record under **`~/.config/le-vib
 - Local audit log evidence is appended as JSONL at:
   - `~/.config/le-vibe/levibe-native-chat/operator-handoff-audit.jsonl`
 
+## Runbook diagnostics bundle (task-cp5-2)
+
+- **Command:** **Lé Vibe Chat: Package runbook diagnostics (support)…** (`leVibeNative.packageRunbookDiagnostics`).
+- **Local-only output path (default):** `~/.config/le-vibe/levibe-native-chat/runbook-bundles/runbook-<timestamp>/` — contains **`leVibeNative-settings.json`**, recent tails of audit JSONL (orchestrator, terminal, plan, fs-ops, handoff), optional **`transcript-tail.jsonl`** when a workspace folder is open, and **`README-runbook.txt`**. No network upload; zip the folder for support if needed. Implementation: [`runbook-bundle.js`](runbook-bundle.js).
+
 ## Orchestrator bridge contract (task-cp5-1)
 
 - Contract version: `lvibe.orchestrator_event.v1`.
@@ -356,5 +362,6 @@ All first-party on-disk state for this extension lives under **`~/.config/le-vib
 | `workspace-fs-ops-audit.jsonl` | Append-only destructive workspace FS operations (`lvibe.workspace_fs_ops_audit.v1`). |
 | `terminal-command-audit.jsonl` | Append-only integrated terminal command audit (`lvibe.terminal_command_audit.v1` — timestamp, cwd, command; exit code when shell integration reports `onDidEndTerminalShellExecution`). |
 | `orchestrator-events.jsonl` | Append-only operator/orchestrator bridge events (`lvibe.orchestrator_event.v1` with `chat_turn`, `edit_apply`, `plan_run`, `terminal_exec`). |
+| `runbook-bundles/` | Support runbook folders created by **Package runbook diagnostics** (`leVibeNative.packageRunbookDiagnostics`); each run writes `runbook-<timestamp>/` under this directory (local-only). |
 
 No embeddings or unbounded cloud sync are written by this extension; export/clear remain user-driven.

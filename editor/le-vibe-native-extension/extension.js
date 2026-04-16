@@ -26,6 +26,7 @@ const CLEAR_TERMINAL_SESSION_ALLOW_COMMAND = 'leVibeNative.clearTerminalSessionA
 const ADD_CONTEXT_AT_FILE_COMMAND = 'leVibeNative.addContextAtFile';
 const ADD_CONTEXT_AT_FOLDER_COMMAND = 'leVibeNative.addContextAtFolder';
 const ADD_CURRENT_FILE_OUTLINE_COMMAND = 'leVibeNative.addCurrentFileOutlineToContext';
+const PACKAGE_RUNBOOK_DIAGNOSTICS_COMMAND = 'leVibeNative.packageRunbookDiagnostics';
 
 /** @type {null | { path: string, content: string, selectionRange: { startLine: number, startCharacter: number, endLine: number, endCharacter: number } }} */
 let pendingSelectionContext = null;
@@ -104,6 +105,7 @@ const { fetchCurrentFileOutlineForContext } = require('./outline-context');
 const { registerLeVibeChatStatusBar } = require('./status-bar-entry');
 const { createInlineSuggestionProvider } = require('./inline-suggestions');
 const { orchestratorEventAuditPath, buildOrchestratorEvent, appendOrchestratorEvent } = require('./orchestrator-events');
+const { writeRunbookBundle } = require('./runbook-bundle');
 
 /**
  * @param {import('vscode')} vscode
@@ -2098,6 +2100,24 @@ function activate(context) {
         'Use the panel action "Restore recent…" to pick and prefill a previous prompt from workspace transcript history.',
       );
     }),
+    vscode.commands.registerCommand(PACKAGE_RUNBOOK_DIAGNOSTICS_COMMAND, async () => {
+      const folder = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders[0];
+      const workspaceFolderUri = folder ? folder.uri.toString() : 'no-workspace';
+      try {
+        const { outDir } = writeRunbookBundle({ vscode, workspaceFolderUri });
+        const pick = await vscode.window.showInformationMessage(
+          `Lé Vibe Chat: runbook diagnostics written to:\n${outDir}`,
+          'Open folder',
+        );
+        if (pick === 'Open folder') {
+          const u = vscode.Uri.file(outDir);
+          await vscode.env.openExternal(u);
+        }
+      } catch (e) {
+        const msg = e && e.message ? e.message : String(e);
+        await vscode.window.showErrorMessage(`Lé Vibe Chat: runbook bundle failed — ${msg}`);
+      }
+    }),
   );
 
   const config = vscode.workspace.getConfiguration('leVibeNative');
@@ -2147,6 +2167,7 @@ module.exports = {
   ADD_CONTEXT_AT_FILE_COMMAND,
   ADD_CONTEXT_AT_FOLDER_COMMAND,
   ADD_CURRENT_FILE_OUTLINE_COMMAND,
+  PACKAGE_RUNBOOK_DIAGNOSTICS_COMMAND,
   getTranscriptContext,
   getContextBudget,
   panelHtml,
