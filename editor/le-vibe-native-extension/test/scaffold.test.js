@@ -19,6 +19,7 @@ test('manifest contributes Lé Vibe Open Agent Surface command', () => {
   assert.ok(commands.find((item) => item.command === 'leVibeNative.applySelectionDemoReplace'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.createWorkspaceFile'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.createWorkspaceFolder'));
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.moveWorkspacePath'));
 });
 
 test('manifest supports deterministic activation entrypoints', () => {
@@ -34,6 +35,7 @@ test('manifest supports deterministic activation entrypoints', () => {
   assert.ok(activationEvents.includes('onCommand:leVibeNative.applySelectionDemoReplace'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.createWorkspaceFile'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.createWorkspaceFolder'));
+  assert.ok(activationEvents.includes('onCommand:leVibeNative.moveWorkspacePath'));
 });
 
 test('extension exports activate/deactivate and command constant', () => {
@@ -44,6 +46,7 @@ test('extension exports activate/deactivate and command constant', () => {
   assert.equal(extensionModule.APPLY_SELECTION_DEMO_REPLACE_COMMAND, 'leVibeNative.applySelectionDemoReplace');
   assert.equal(extensionModule.CREATE_WORKSPACE_FILE_COMMAND, 'leVibeNative.createWorkspaceFile');
   assert.equal(extensionModule.CREATE_WORKSPACE_FOLDER_COMMAND, 'leVibeNative.createWorkspaceFolder');
+  assert.equal(extensionModule.MOVE_WORKSPACE_PATH_COMMAND, 'leVibeNative.moveWorkspacePath');
   assert.equal(path.basename(require.resolve('../extension')), 'extension.js');
 });
 
@@ -98,5 +101,6 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('undoWorkspacePlanRollback'));
     assert.ok(html.includes('Workspace scaffold (N11)'));
     assert.ok(html.includes('createWorkspaceFilePrompt'));
+    assert.ok(html.includes('moveWorkspacePathPrompt'));
   });
 });

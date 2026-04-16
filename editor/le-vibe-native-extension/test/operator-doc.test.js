@@ -162,3 +162,10 @@ test('OPERATOR.md documents workspace scaffold create file/folder (task-n11-1)',
   assert.ok(text.includes('workspace-fs-actions.js'));
   assert.ok(text.includes('leVibeNative.openDocumentAfterWorkspaceCreate'));
 });
+
+test('OPERATOR.md documents workspace move/rename (task-n11-2)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n11-2'));
+  assert.ok(text.includes('moveWorkspaceEntry'));
+  assert.ok(text.includes('renameFile'));
+});

@@ -16,6 +16,7 @@ const OPEN_THIRD_PARTY_MIGRATION_COMMAND = 'leVibeNative.openThirdPartyMigration
 const APPLY_SELECTION_DEMO_REPLACE_COMMAND = 'leVibeNative.applySelectionDemoReplace';
 const CREATE_WORKSPACE_FILE_COMMAND = 'leVibeNative.createWorkspaceFile';
 const CREATE_WORKSPACE_FOLDER_COMMAND = 'leVibeNative.createWorkspaceFolder';
+const MOVE_WORKSPACE_PATH_COMMAND = 'leVibeNative.moveWorkspacePath';
 
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 const { createOllamaClient } = require('./ollama');
@@ -25,6 +26,7 @@ const {
   validateWorkspaceRelativeCreatePath,
   createWorkspaceFile,
   createWorkspaceFolder,
+  moveWorkspaceEntry,
 } = require('./workspace-fs-actions');
 const { handoffAuditPath, buildOperatorHandoffEvent, appendOperatorHandoffAudit } = require('./operator-handoff');
 const { formatOllamaDiagnostic } = require('./retry-helpers');
@@ -57,10 +59,6 @@ const {
 } = require('./workspace-plan-exec');
 const { dryRunValidatedWorkspacePlan } = require('./workspace-plan-dry-run');
 
-/**
- * @param {import('vscode')} vscode
- * @param {import('vscode').WorkspaceFolder} folder
- */
 /**
  * @param {import('vscode')} vscode
  * @param {import('vscode').WebviewPanel | null} panel
@@ -147,6 +145,61 @@ async function runCreateWorkspaceFolderInteractive(vscode, panel) {
     panel.webview.postMessage({ type: 'chatUpdate', status: `Created folder: ${label}` });
   }
   return result.uri;
+}
+
+/**
+ * @param {import('vscode')} vscode
+ * @param {import('vscode').WebviewPanel | null} panel
+ * @returns {Promise<{ from: string, to: string } | null>}
+ */
+async function runMoveWorkspacePathInteractive(vscode, panel) {
+  const folder = vscode.workspace.workspaceFolders?.[0];
+  if (!folder) {
+    await vscode.window.showWarningMessage('Open a folder workspace first.');
+    if (panel) {
+      panel.webview.postMessage({ type: 'chatUpdate', status: 'Open a folder workspace first.' });
+    }
+    return null;
+  }
+  const promptOpts = {
+    prompt:
+      'Workspace-relative path only. Blocked segments: .git, .ssh, .gnupg, node_modules, .env — no .. or absolute paths.',
+    validateInput: (value) => {
+      const r = validateWorkspaceRelativeCreatePath(value);
+      return r.ok ? undefined : r.userMessage.replace(/^Lé Vibe Chat: /, '');
+    },
+  };
+  const fromRel = await vscode.window.showInputBox({
+    title: 'Move / rename — source path',
+    placeHolder: 'e.g. notes/old-name.md',
+    ...promptOpts,
+  });
+  if (!fromRel) {
+    return null;
+  }
+  const toRel = await vscode.window.showInputBox({
+    title: 'Move / rename — destination path',
+    placeHolder: 'e.g. notes/new-name.md',
+    ...promptOpts,
+  });
+  if (!toRel) {
+    return null;
+  }
+  const result = await moveWorkspaceEntry(vscode, folder, fromRel, toRel);
+  if (!result.ok) {
+    await vscode.window.showWarningMessage(result.userMessage);
+    if (panel) {
+      panel.webview.postMessage({ type: 'chatUpdate', status: result.userMessage });
+    }
+    return null;
+  }
+  const fromLabel = vscode.workspace.asRelativePath(result.fromUri, false);
+  const toLabel = vscode.workspace.asRelativePath(result.toUri, false);
+  await vscode.window.showInformationMessage(`Lé Vibe Chat: moved ${fromLabel} → ${toLabel}`);
+  if (panel) {
+    panel.webview.postMessage({ type: 'chatUpdate', status: `Moved: ${fromLabel} → ${toLabel}` });
+  }
+  return { from: fromLabel, to: toLabel };
 }
 
 function buildSampleDemoWorkspacePlan(vscode, folder) {
@@ -355,10 +408,11 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     <button data-action="clearContextFiles">Clear context</button>
   </div>
   <h3>Workspace scaffold (N11)</h3>
-  <p class="muted">Create paths under the open folder only — no <code>..</code>; segments <code>.git</code>, <code>.ssh</code>, <code>.gnupg</code>, <code>node_modules</code>, <code>.env</code> are blocked.</p>
+  <p class="muted">Create paths under the open folder only — no <code>..</code>; segments <code>.git</code>, <code>.ssh</code>, <code>.gnupg</code>, <code>node_modules</code>, <code>.env</code> are blocked. Move/rename uses VS Code rename (no overwrite if destination exists).</p>
   <div>
     <button data-action="createWorkspaceFilePrompt">Create file…</button>
     <button data-action="createWorkspaceFolderPrompt">Create folder…</button>
+    <button data-action="moveWorkspacePathPrompt">Move / rename…</button>
   </div>
   <h3>Operator handoff</h3>
   <p class="muted">Emit a reproducible handoff event to lvibe orchestration and append local audit evidence.</p>
@@ -957,6 +1011,10 @@ function openAgentSurface() {
       void runCreateWorkspaceFolderInteractive(vscode, panel);
       return;
     }
+    if (msg.type === 'action' && msg.actionId === 'moveWorkspacePathPrompt') {
+      void runMoveWorkspacePathInteractive(vscode, panel);
+      return;
+    }
     if (msg.type === 'action' && msg.actionId === 'openThirdPartyMigrationGuide') {
       void vscode.commands.executeCommand(OPEN_THIRD_PARTY_MIGRATION_COMMAND);
       panel.webview.postMessage({ type: 'chatUpdate', status: 'Opening third-party migration guide…' });
@@ -1178,6 +1236,7 @@ function activate(context) {
     }),
     vscode.commands.registerCommand(CREATE_WORKSPACE_FILE_COMMAND, () => runCreateWorkspaceFileInteractive(vscode, null)),
     vscode.commands.registerCommand(CREATE_WORKSPACE_FOLDER_COMMAND, () => runCreateWorkspaceFolderInteractive(vscode, null)),
+    vscode.commands.registerCommand(MOVE_WORKSPACE_PATH_COMMAND, () => runMoveWorkspacePathInteractive(vscode, null)),
     vscode.commands.registerCommand(OPEN_THIRD_PARTY_MIGRATION_COMMAND, () => runThirdPartyMigrationGuide(vscode)),
     vscode.commands.registerCommand(OPEN_AGENT_SURFACE_COMMAND, openAgentSurface),
     vscode.commands.registerCommand(OPEN_OLLAMA_SETUP_HELP_COMMAND, () =>
@@ -1237,6 +1296,7 @@ module.exports = {
   APPLY_SELECTION_DEMO_REPLACE_COMMAND,
   CREATE_WORKSPACE_FILE_COMMAND,
   CREATE_WORKSPACE_FOLDER_COMMAND,
+  MOVE_WORKSPACE_PATH_COMMAND,
   getTranscriptContext,
   getContextBudget,
   panelHtml,

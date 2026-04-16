@@ -609,9 +609,11 @@ Product intent: parity with Copilot/Cursor **agent** tools: create new files, sc
     - open created file in editor on success (setting-gated)
   - Evidence:
     - `workspace-fs-actions.js` (`validateWorkspaceRelativeCreatePath`, `createWorkspaceFile`, `createWorkspaceFolder`); panel **Create file…** / **Create folder…** + commands `leVibeNative.createWorkspaceFile` / `leVibeNative.createWorkspaceFolder`; setting **`leVibeNative.openDocumentAfterWorkspaceCreate`** (default `true`); `test/workspace-fs-actions.test.js`, `test/scaffold.test.js`, `test/operator-doc.test.js`; README + `OPERATOR.md`; `npm run verify` green.
-- [ ] `pending` **task-n11-2**: Implement **rename/move** with git-friendly behavior (optional: run through VS Code rename API).
+- [x] `done` **task-n11-2**: Implement **rename/move** with git-friendly behavior (optional: run through VS Code rename API).
   - Acceptance:
     - conflict handling documented
+  - Evidence:
+    - `workspace-fs-actions.js` (`moveWorkspaceEntry` — `WorkspaceEdit.renameFile` with `overwrite: false`, parent dirs for destination); panel **Move / rename…** + command **`leVibeNative.moveWorkspacePath`**; README *Move / rename* + `OPERATOR.md`; tests `test/workspace-fs-actions.test.js`, `test/scaffold.test.js`, `test/operator-doc.test.js`; `npm run verify` green.
 - [ ] `pending` **task-n11-3**: Implement **delete file** behind explicit confirmation UX (never silent delete).
   - Acceptance:
     - confirmation modal or two-step confirm in panel

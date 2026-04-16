@@ -43,7 +43,8 @@
     "onCommand:leVibeNative.openThirdPartyMigrationGuide",
     "onCommand:leVibeNative.applySelectionDemoReplace",
     "onCommand:leVibeNative.createWorkspaceFile",
-    "onCommand:leVibeNative.createWorkspaceFolder"
+    "onCommand:leVibeNative.createWorkspaceFolder",
+    "onCommand:leVibeNative.moveWorkspacePath"
   ],
   "contributes": {
     "commands": [
@@ -115,6 +116,11 @@
       {
         "command": "leVibeNative.createWorkspaceFolder",
         "title": "Lé Vibe Chat: Create workspace folder…",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.moveWorkspacePath",
+        "title": "Lé Vibe Chat: Move or rename workspace path…",
         "category": "Lé Vibe"
       }
     ],

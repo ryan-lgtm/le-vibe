@@ -168,6 +168,94 @@ async function createWorkspaceFolder(vscode, workspaceFolder, relativePath) {
   return { ok: true, uri: dirUri };
 }
 
+/**
+ * Move or rename a file or folder within the workspace root using **`WorkspaceEdit.renameFile`**
+ * when available (lets the workbench/git integration treat it as a rename when possible).
+ * **`overwrite`** is always **`false`** — if the destination exists, the move aborts with a clear message.
+ *
+ * @param {import('vscode')} vscode
+ * @param {import('vscode').WorkspaceFolder} workspaceFolder
+ * @param {string} fromRelative
+ * @param {string} toRelative
+ * @returns {Promise<
+ *   | { ok: true, fromUri: import('vscode').Uri, toUri: import('vscode').Uri }
+ *   | { ok: false, userMessage: string }
+ * >}
+ */
+async function moveWorkspaceEntry(vscode, workspaceFolder, fromRelative, toRelative) {
+  const vf = validateWorkspaceRelativeCreatePath(fromRelative);
+  if (!vf.ok) {
+    return vf;
+  }
+  const vt = validateWorkspaceRelativeCreatePath(toRelative);
+  if (!vt.ok) {
+    return vt;
+  }
+  if (vf.normalizedRelative === vt.normalizedRelative) {
+    return {
+      ok: false,
+      userMessage: 'Lé Vibe Chat: source and destination are the same path.',
+    };
+  }
+
+  const fromUri = uriForNormalizedRelative(vscode, workspaceFolder.uri, vf.normalizedRelative);
+  const toUri = uriForNormalizedRelative(vscode, workspaceFolder.uri, vt.normalizedRelative);
+
+  try {
+    await vscode.workspace.fs.stat(fromUri);
+  } catch {
+    return {
+      ok: false,
+      userMessage: 'Lé Vibe Chat: nothing to move — source path does not exist.',
+    };
+  }
+
+  try {
+    await vscode.workspace.fs.stat(toUri);
+    return {
+      ok: false,
+      userMessage:
+        'Lé Vibe Chat: destination already exists — move aborted (no overwrite). Remove or rename the destination first.',
+    };
+  } catch {
+    // destination must be absent
+  }
+
+  const toSegs = vt.normalizedRelative.split('/').filter(Boolean);
+  if (toSegs.length > 1) {
+    const parentRel = toSegs.slice(0, -1).join('/');
+    const ensured = await ensureDirectoryChain(vscode, workspaceFolder.uri, parentRel);
+    if (!ensured.ok) {
+      return ensured;
+    }
+  }
+
+  const we = new vscode.WorkspaceEdit();
+  if (typeof we.renameFile === 'function') {
+    we.renameFile(fromUri, toUri, { overwrite: false });
+    const applied = await vscode.workspace.applyEdit(we);
+    if (!applied) {
+      return {
+        ok: false,
+        userMessage:
+          'Lé Vibe Chat: move was not applied — destination may exist, or the workspace rejected the rename.',
+      };
+    }
+    return { ok: true, fromUri, toUri };
+  }
+
+  try {
+    await vscode.workspace.fs.rename(fromUri, toUri, { overwrite: false });
+  } catch (e) {
+    const msg = e && e.message ? e.message : String(e);
+    return {
+      ok: false,
+      userMessage: `Lé Vibe Chat: move failed — ${msg}`,
+    };
+  }
+  return { ok: true, fromUri, toUri };
+}
+
 module.exports = {
   DEFAULT_DENIED_SEGMENTS,
   MAX_RELATIVE_PATH_LEN: MAX_RELATIVE_PATH_LEN,
@@ -175,4 +263,5 @@ module.exports = {
   uriForNormalizedRelative,
   createWorkspaceFile,
   createWorkspaceFolder,
+  moveWorkspaceEntry,
 };

@@ -40,6 +40,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Workspace scaffold (task-n11-1):** Palette **Lé Vibe Chat: Create workspace file…** / **Create workspace folder…** and panel **Create file…** / **Create folder…** — workspace-relative paths only; blocked segments per **`workspace-fs-actions.js`**. **`leVibeNative.openDocumentAfterWorkspaceCreate`** default **`true`** (open new file after create).
 
+**Workspace move/rename (task-n11-2):** Palette **Lé Vibe Chat: Move or rename workspace path…** + panel **Move / rename…** — **`WorkspaceEdit.renameFile`** when available (git-friendly rename); **no overwrite** if destination exists — explicit **`Lé Vibe Chat:`** errors; **`moveWorkspaceEntry`** in **`workspace-fs-actions.js`**.
+
 **Startup / rollout (defaults):** **`leVibeNative.enableFirstPartyAgentSurface`** default **`true`** (first-party Lé Vibe Chat surface); **`leVibeNative.showFirstRunWizard`** default **`true`** (checkpointed wizard); **`leVibeNative.openPanelOnStartup`** default **`true`** (auto-open panel when the first-party surface is enabled). Rollback semantics in **`README.md`** *Rollout and rollback*.
 
 **Third-party migration nudge:** **`leVibeNative.showThirdPartyMigrationNudge`** default **`true`**. **Ollama readiness source:** **`leVibeNative.useLiveOllamaReadiness`** default **`true`** (live local probes; for development overrides, set **`leVibeNative.useLiveOllamaReadiness`** to **`false`** and use **`leVibeNative.devStartupState`**). Migration flow in **`README.md`** *Third-party agent migration*.
