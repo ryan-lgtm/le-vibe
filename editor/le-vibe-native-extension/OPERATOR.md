@@ -180,6 +180,8 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 
 **README: activationEvents docs (task-n51-1):** **`package.json`** **`activationEvents`** startup + command-trigger intent is written out in **`README.md`** *Activation events (task-n50-1)* — use that section to verify activation behavior without opening **`package.json`**.
 
+**README: activationEvents command example (task-n53-1):** **`package.json`** **`activationEvents`** concrete command-trigger literal is written out in **`README.md`** *Activation event example (task-n52-1)* — use that section to find a shipped **`onCommand:leVibeNative.*`** example without opening **`package.json`**.
+
 **CHANGELOG (task-n19-1):** **`CHANGELOG.md`** — semver release notes at the package root (Keep a Changelog–style). When you bump **`package.json`** **`version`**, add a **`## [x.y.z]`** section there (coordinate with *Extension version vs monorepo / packaging (task-n16-3)*). Epic-level history remains in the product-track file above.
 
 **Security notes (task-n18-1):** see **`## Security notes (task-n18-1)`** above — **`npm audit`** triage, **`overrides`** policy, issue tracker pointer.

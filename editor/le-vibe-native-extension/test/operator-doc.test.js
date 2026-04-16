@@ -218,6 +218,14 @@ test('OPERATOR.md cross-links README activationEvents docs (task-n51-1)', () => 
   assert.ok(text.includes('activationEvents'));
 });
 
+test('OPERATOR.md cross-links README activationEvents command example (task-n53-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n53-1'));
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('Activation event example (task-n52-1)'));
+  assert.ok(text.includes('activationEvents'));
+});
+
 test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('workspace.applyEdit'));
