@@ -907,9 +907,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N34 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n34-1**: **Extension README — `keywords`** — add one line (near **Publisher** or **Operators**) documenting **`package.json`** **`keywords`** (registry/search hints) so contributors see the shipped tag list without opening **`package.json`**; include contract test asserting every **`keywords[]`** entry appears in **`README.md`** (or derive from **`package.json`** in test).
+- [x] `done` **task-n34-1**: **Extension README — `keywords`** — add one line (near **Publisher** or **Operators**) documenting **`package.json`** **`keywords`** (registry/search hints) so contributors see the shipped tag list without opening **`package.json`**; include contract test asserting every **`keywords[]`** entry appears in **`README.md`** (or derive from **`package.json`** in test).
   - Acceptance:
     - **`README.md`** + targeted test
+    - **`npm run verify`** green
+  - Evidence:
+    - **`README.md`** — **`Keywords (task-n34-1)`** listing all **`keywords`** entries.
+    - **`test/readme-keywords.test.js`**; **`npm run verify`** green.
+
+### Epic N35 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n35-1**: **OPERATOR — README pointer for `keywords`** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Keywords (task-n34-1)* for **`package.json`** **`keywords`** so operators align with **`task-n33-1`** doc-discovery pattern.
+  - Acceptance:
+    - **`OPERATOR.md`** + **`operator-doc.test.js`** token
     - **`npm run verify`** green
 
 ---
