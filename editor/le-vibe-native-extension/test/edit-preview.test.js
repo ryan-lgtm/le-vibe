@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { buildUnifiedDiff, canApplyAfterPreview } = require('../edit-preview.js');
+const { buildUnifiedDiff, canApplyAfterPreview, reducePreviewUiState } = require('../edit-preview.js');
 
 test('buildUnifiedDiff emits markers and +/- lines for changed files (task-n9-2)', () => {
   const d = buildUnifiedDiff('a\nb\n', 'a\nx\n', 'demo.txt');
@@ -50,4 +50,40 @@ test('canApplyAfterPreview allows apply without accept when preview not required
     userAcceptedPreview: false,
   });
   assert.equal(r.ok, true);
+});
+
+test('reducePreviewUiState enforces preview-required default path (task-cp2-2)', () => {
+  const shown = reducePreviewUiState(
+    { requireEditPreviewBeforeApply: true, hasSession: false, userAcceptedPreview: false },
+    'preview_shown',
+  );
+  assert.equal(shown.hasSession, true);
+  assert.equal(shown.userAcceptedPreview, false);
+  assert.equal(shown.applyEnabled, false);
+
+  const accepted = reducePreviewUiState(
+    { requireEditPreviewBeforeApply: true, hasSession: shown.hasSession, userAcceptedPreview: shown.userAcceptedPreview },
+    'accept',
+  );
+  assert.equal(accepted.applyEnabled, true);
+  assert.equal(accepted.userAcceptedPreview, true);
+});
+
+test('reducePreviewUiState reject clears session + disables apply (task-cp2-2)', () => {
+  const rejected = reducePreviewUiState(
+    { requireEditPreviewBeforeApply: true, hasSession: true, userAcceptedPreview: true },
+    'reject',
+  );
+  assert.equal(rejected.hasSession, false);
+  assert.equal(rejected.userAcceptedPreview, false);
+  assert.equal(rejected.applyEnabled, false);
+});
+
+test('reducePreviewUiState cannot accept without active preview (task-cp2-2)', () => {
+  const accepted = reducePreviewUiState(
+    { requireEditPreviewBeforeApply: true, hasSession: false, userAcceptedPreview: false },
+    'accept',
+  );
+  assert.equal(accepted.hasSession, false);
+  assert.equal(accepted.applyEnabled, false);
 });

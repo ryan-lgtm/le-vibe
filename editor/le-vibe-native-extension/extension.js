@@ -82,7 +82,7 @@ const {
 const { isFirstPartyAgentSurfaceEnabled } = require('./feature-flags');
 const { runThirdPartyMigrationGuide, scheduleThirdPartyMigrationNudge } = require('./third-party-migration');
 const { validateEditProposal, EDIT_PROPOSAL_KIND, formatEditProposalValidationForUser } = require('./edit-proposal');
-const { buildUnifiedDiff, canApplyAfterPreview } = require('./edit-preview');
+const { buildUnifiedDiff, canApplyAfterPreview, reducePreviewUiState } = require('./edit-preview');
 const { applyEditProposalBatchAsWorkspaceEdit } = require('./workspace-edit-apply');
 const { resolveSingleSelectionForPartialApply } = require('./selection-apply');
 const { buildPreviewRevision, checkDiskContentMatchesRevision } = require('./edit-conflict');
@@ -1046,10 +1046,24 @@ function openAgentSurface() {
     }
     if (msg.type === 'editPreview') {
       if (msg.action === 'accept') {
-        if (editPreviewSession) {
-          editPreviewSession.userAccepted = true;
+        const ui = reducePreviewUiState(
+          {
+            requireEditPreviewBeforeApply: true,
+            hasSession: !!editPreviewSession,
+            userAcceptedPreview: !!(editPreviewSession && editPreviewSession.userAccepted),
+          },
+          'accept',
+        );
+        if (!editPreviewSession) {
+          panel.webview.postMessage({
+            type: 'chatUpdate',
+            status: 'No pending edit preview to accept.',
+          });
+          panel.webview.postMessage({ type: 'editPreviewUpdate', applyEnabled: ui.applyEnabled });
+          return;
         }
-        panel.webview.postMessage({ type: 'editPreviewUpdate', applyEnabled: true });
+        editPreviewSession.userAccepted = ui.userAcceptedPreview;
+        panel.webview.postMessage({ type: 'editPreviewUpdate', applyEnabled: ui.applyEnabled });
         panel.webview.postMessage({
           type: 'chatUpdate',
           status: 'Edit preview accepted — you can Apply to file.',
@@ -1057,6 +1071,22 @@ function openAgentSurface() {
         return;
       }
       if (msg.action === 'reject') {
+        const ui = reducePreviewUiState(
+          {
+            requireEditPreviewBeforeApply: true,
+            hasSession: !!editPreviewSession,
+            userAcceptedPreview: !!(editPreviewSession && editPreviewSession.userAccepted),
+          },
+          'reject',
+        );
+        if (!editPreviewSession) {
+          panel.webview.postMessage({
+            type: 'chatUpdate',
+            status: 'No pending edit preview to reject.',
+          });
+          panel.webview.postMessage({ type: 'editPreviewUpdate', applyEnabled: ui.applyEnabled });
+          return;
+        }
         editPreviewSession = null;
         panel.webview.postMessage({ type: 'editPreviewUpdate', clear: true });
         panel.webview.postMessage({ type: 'chatUpdate', status: 'Edit preview rejected.' });
@@ -1188,7 +1218,14 @@ function openAgentSurface() {
         panel.webview.postMessage({
           type: 'editPreview',
           unifiedDiff: diff,
-          applyEnabled: !requirePreview,
+          applyEnabled: reducePreviewUiState(
+            {
+              requireEditPreviewBeforeApply: requirePreview,
+              hasSession: false,
+              userAcceptedPreview: false,
+            },
+            'preview_shown',
+          ).applyEnabled,
         });
         panel.webview.postMessage({
           type: 'chatUpdate',

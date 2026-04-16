@@ -85,9 +85,14 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Updated `editor/le-vibe-native-extension/edit-proposal.js` to add `formatEditProposalValidationForUser()` for deterministic, user-visible invalid-proposal summaries.
     - Added regression coverage in `editor/le-vibe-native-extension/test/edit-proposal.test.js` (invalid-summary formatting/truncation) and `editor/le-vibe-native-extension/test/scaffold.test.js` (panel includes proposal validation controls).
     - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 327 passed, smoke passed).
-- [ ] `pending` **task-cp2-2**: Diff preview and explicit accept/reject/apply actions as default path.
+- [x] `done` **task-cp2-2**: Diff preview and explicit accept/reject/apply actions as default path.
   - Acceptance:
     - preview required by default before apply
+  - Evidence (2026-04-15):
+    - Updated `editor/le-vibe-native-extension/edit-preview.js` with deterministic `reducePreviewUiState()` reducer for explicit preview actions (`preview_shown`, `accept`, `reject`) so the default `requireEditPreviewBeforeApply=true` path keeps Apply disabled until Accept and always disables Apply after Reject.
+    - Updated `editor/le-vibe-native-extension/extension.js` to enforce explicit action handling with active-session checks: Accept/Reject without a pending preview now surface clear in-panel status and never enable apply.
+    - Added coverage in `editor/le-vibe-native-extension/test/edit-preview.test.js` for default-path gating, reject clear behavior, and no-session accept blocking.
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 330 passed, smoke passed).
 - [ ] `pending` **task-cp2-3**: WorkspaceEdit apply with single undo transaction per accepted batch.
   - Acceptance:
     - one undo reverts batch

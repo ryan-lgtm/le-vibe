@@ -31,6 +31,53 @@ function canApplyAfterPreview({ requireEditPreviewBeforeApply, previewShown, use
 }
 
 /**
+ * Deterministic UI reducer for explicit preview actions.
+ * @param {{ requireEditPreviewBeforeApply: boolean, hasSession: boolean, userAcceptedPreview: boolean }} input
+ * @param {'preview_shown'|'accept'|'reject'} action
+ * @returns {{ applyEnabled: boolean, hasSession: boolean, userAcceptedPreview: boolean }}
+ */
+function reducePreviewUiState(input, action) {
+  const base = {
+    requireEditPreviewBeforeApply: !!input.requireEditPreviewBeforeApply,
+    hasSession: !!input.hasSession,
+    userAcceptedPreview: !!input.userAcceptedPreview,
+  };
+  if (action === 'preview_shown') {
+    return {
+      applyEnabled: !base.requireEditPreviewBeforeApply,
+      hasSession: true,
+      userAcceptedPreview: false,
+    };
+  }
+  if (action === 'accept') {
+    if (!base.hasSession) {
+      return {
+        applyEnabled: false,
+        hasSession: false,
+        userAcceptedPreview: false,
+      };
+    }
+    return {
+      applyEnabled: true,
+      hasSession: true,
+      userAcceptedPreview: true,
+    };
+  }
+  if (action === 'reject') {
+    return {
+      applyEnabled: false,
+      hasSession: false,
+      userAcceptedPreview: false,
+    };
+  }
+  return {
+    applyEnabled: base.hasSession && (!base.requireEditPreviewBeforeApply || base.userAcceptedPreview),
+    hasSession: base.hasSession,
+    userAcceptedPreview: base.userAcceptedPreview,
+  };
+}
+
+/**
  * Line-based unified diff (minimal LCS) for webview / operator visibility.
  * @param {string} before
  * @param {string} after
@@ -94,4 +141,5 @@ function diffLineOps(a, b) {
 module.exports = {
   canApplyAfterPreview,
   buildUnifiedDiff,
+  reducePreviewUiState,
 };
