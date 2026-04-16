@@ -217,9 +217,23 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - **Installer / operator UX:** **`debian/le-vibe.postinst`**, **`debian/le-vibe.README.Debian`**, **`debian/lvibe.1`**, **`debian/le-vibe.1`**, **`debian/le-vibe-setup-cline.1`**, **`docs/continue-extension-pin.md`** — default path is **Lé Vibe Chat** + managed Ollama; Cline is documented as optional.
     - **Startup reminder:** **`packaging/autostart/le-vibe-continue-setup.desktop`**, **`packaging/scripts/le-vibe-continue-setup-autostart.sh`** — notification copy no longer implies third-party is required.
     - Tests: **`tests/test_cline_setup_auto.py`** (opt-in default), **`tests/test_continue_autostart_script.py`**, **`tests/test_continue_pin_bash_step14h_contract.py`** (script name contract); **`python -m pytest`** on targeted modules (full suite may require optional **`.lvibe/session-manifest.json`** in dev trees).
-- [ ] `pending` **task-cp6-3**: Product freeze marker (`track complete`) with explicit sign-off fields.
+- [x] `done` **task-cp6-3**: Product freeze marker (`track complete`) with explicit sign-off fields.
   - Acceptance:
     - workflow has final sign-off block (Product + Eng + QA)
+  - Evidence (2026-04-15):
+    - Added **CP6 — Track complete (product freeze sign-off)** table (Product / Engineering / QA) to this workflow file.
+    - Contract test **`le-vibe/tests/test_native_extension_critical_path_signoff_contract.py`** guards the sign-off block.
+    - Verification: **`python -m pytest le-vibe/tests/test_native_extension_critical_path_signoff_contract.py -q`**.
+
+### CP6 — Track complete (product freeze sign-off)
+
+**`track complete`:** set to **`signed`** only after **task-cp6-1** automated + manual acceptance is **PASS** and **task-cp6-2** default-path criteria are met. Replace `_unsigned_` placeholders below with real sign-offs; keep this table as the canonical freeze record for the Lé Vibe Chat native-extension critical path.
+
+| Role | Sign-off (name or handle) | Date (YYYY-MM-DD) | Notes |
+|------|---------------------------|-------------------|-------|
+| Product | _unsigned_ | | |
+| Engineering | _unsigned_ | | |
+| QA | _unsigned_ | | |
 
 ---
 
