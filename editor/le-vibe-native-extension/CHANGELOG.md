@@ -14,6 +14,8 @@ All notable changes to **Lé Vibe Native Agent** / **Lé Vibe Chat** in this pac
 - Milestone EPIC D (thinking/streaming UX): added looping thinking indicator (`.` → `.....`) while waiting for first token, with immediate stop and seamless transition once streaming begins.
 - Milestone EPIC E (workspace history): added workspace-scoped chat persistence at `.lvibe/chat-history.jsonl`, with 24-hour window hydration on panel load and retention/max-entry pruning.
 - Milestone EPIC F (logs separation): logs tab now includes recent structured orchestrator events alongside Ollama live-tail access, keeping operational traces out of the main chat timeline.
+- Milestone EPIC G (context integrity): extracted orchestrator identity-grounding prompt builder with explicit tests proving in-session identity lock language remains present and `.lvibe` session/workflow snippets are included when available.
+- Milestone EPIC H (quality/docs): updated operator/developer docs and acceptance checklist with migration guidance for prior panel users and explicit checks for chat-history restore plus logs-tab operational separation.
 
 ### Fixed
 

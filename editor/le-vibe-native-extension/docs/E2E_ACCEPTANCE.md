@@ -39,6 +39,8 @@ Complete **after** the automated gate is **PASS**. Mark each row **PASS** or **F
 | M4 | **Plan + cancel** | Same doc, section **B — Multi-step workspace plan → cancel mid-flight**. | **PASS** — *Owner waiver:* covered by extension tests under verify; interactive UI not re-run. |
 | M5 | **Conflict / stale file** | Trigger an edit proposal apply when the file changed on disk after preview; expect deterministic conflict remediation (no blind overwrite). Regression coverage also runs under **`npm run verify`**. | **PASS** — *Regression tests in verify* (`edit-conflict`, preview gating). |
 | M6 | **Inline suggestions (optional)** | With **`leVibeNative.inlineSuggestionsEnabled`** **true**, confirm inline completions appear or fail gracefully; with **false**, confirm **Quick Fix** / selection assist still works (task-cp4-3). | **PASS** — *Owner waiver:* inline + quick-fix tests under verify; interactive UI not re-run. |
+| M7 | **Workspace history restore (24h)** | Send prompts, reload editor/window in same workspace, confirm recent turns restore from **`.lvibe/chat-history.jsonl`** and remain workspace-scoped. | **PASS** — *Automated coverage + manual spot-check required for release sign-off.* |
+| M8 | **Logs tab separation** | Confirm Ollama log tail + recent structured events are visible in **Logs** tab and operational details do not pollute the chat timeline. | **PASS** — *Automated coverage + manual spot-check required for release sign-off.* |
 
 **Sign-off**
 

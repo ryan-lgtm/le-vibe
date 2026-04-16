@@ -119,6 +119,7 @@ const {
   appendOrchestratorEvent,
   readRecentOrchestratorEvents,
 } = require('./orchestrator-events');
+const { buildOrchestratorGroundedPrompt } = require('./orchestrator-grounding');
 const { writeRunbookBundle } = require('./runbook-bundle');
 
 /**
@@ -1411,7 +1412,7 @@ async function openAgentSurface() {
     beginMainReadiness();
   }
 
-  function buildOrchestratorGroundedPrompt(userPrompt) {
+  function buildGroundedPrompt(userPrompt) {
     const prompt = String(userPrompt || '').trim();
     const lvibeDir = workspaceFsPath ? path.join(workspaceFsPath, '.lvibe') : '';
     const sessionManifestPath = lvibeDir ? path.join(lvibeDir, 'session-manifest.json') : '';
@@ -1444,29 +1445,10 @@ async function openAgentSurface() {
       ollama_model: client.model,
       selected_context_count: selectedContexts.length,
     };
-    const sections = [
-      'SYSTEM ROLE (LÉ VIBE IDENTITY LOCK):',
-      '- You ARE the Lé Vibe Operator/Orchestrator for this workspace session.',
-      '- Never claim you are "not the orchestrator" or redirect identity to an external CLI role.',
-      '- Speak as the active in-editor operator grounded in local workspace/runtime state.',
-      '- If context is missing, ask one concrete follow-up question.',
-      '',
-      `Environment summary: ${JSON.stringify(envSummary)}`,
-    ];
-
-    if (sessionManifestSnippet) {
-      sections.push('', 'Session manifest excerpt (.lvibe/session-manifest.json):', sessionManifestSnippet);
-    }
-    if (orchestratorWorkflowSnippet) {
-      sections.push(
-        '',
-        'Orchestrator workflow excerpt (.lvibe/workflows/native-extension-master-orchestrator-prompt.md):',
-        orchestratorWorkflowSnippet,
-      );
-    }
-
-    sections.push('', `User request: ${prompt}`);
-    return sections.join('\n');
+    return buildOrchestratorGroundedPrompt(prompt, envSummary, {
+      sessionManifestSnippet,
+      orchestratorWorkflowSnippet,
+    });
   }
 
   function runPromptSend(promptPlain, { skipUserTranscript = false } = {}) {
@@ -1479,7 +1461,7 @@ async function openAgentSurface() {
     const turnId = crypto.randomUUID();
     const startedAtMs = Date.now();
     let retriesObserved = 0;
-    const groundedPrompt = buildOrchestratorGroundedPrompt(trimmed);
+    const groundedPrompt = buildGroundedPrompt(trimmed);
     const promptWithContext = buildPromptWithContext(groundedPrompt, selectedContexts, contextBudget.maxTotalChars);
     if (!skipUserTranscript) {
       try {

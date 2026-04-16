@@ -167,6 +167,12 @@ History retention controls: **`leVibeNative.chatWorkspaceHistoryRetentionHours`*
 **Orchestrator bridge audit (task-cp5-1):** **`orchestrator-events.jsonl`** — append-only **`lvibe.orchestrator_event.v1`** lines with event types **`chat_turn`**, **`edit_apply`**, **`plan_run`**, **`terminal_exec`** for operator/orchestrator consumption (local-only JSONL).
 **Runbook diagnostics (task-cp5-2):** Palette **Lé Vibe Chat: Package runbook diagnostics (support)…** (`leVibeNative.packageRunbookDiagnostics`) writes a **local-only** folder under **`~/.config/le-vibe/levibe-native-chat/runbook-bundles/runbook-<timestamp>/`** (settings snapshot + recent audit/tail files + `README-runbook.txt`). No cloud upload; zip for support if needed.
 
+## Migration notes
+
+- Previous panel users should expect a chat-first default tab with operational controls split across **Settings**, **Logs**, and **Tools**.
+- Workspace chat restore now comes from **`.lvibe/chat-history.jsonl`** (24h default retention window), while operator audits remain under `~/.config/le-vibe/levibe-native-chat/`.
+- Identity grounding remains strict: prompts are built with an explicit orchestrator lock and include `.lvibe/session-manifest.json` plus workflow excerpts when present.
+
 ## Product track
 
 Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N8 — operator runbook).

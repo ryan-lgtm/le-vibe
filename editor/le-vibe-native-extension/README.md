@@ -339,6 +339,12 @@ Each successful send appends a structured JSONL record under **`~/.config/le-vib
 - **Detection:** A small watchlist of marketplace extension IDs (see `third-party-migration.js`) is used to suggest the guide. If **`leVibeNative.showThirdPartyMigrationNudge`** (default **`true`**) is on and a watchlist extension is present while migration status is still **pending**, a one-time notification offers the guide; **Not now** records status **skipped** (no further auto nudges).
 - **Remediation:** Disable or uninstall conflicting extensions manually from the Extensions view, keep `leVibeNative.enableFirstPartyAgentSurface` **true**, then verify **Lé Vibe Chat: Open Agent Surface**.
 
+## Migration notes for previous panel users
+
+- The chat timeline now focuses on conversation only; operational controls moved into **Settings**, **Logs**, and **Tools** tabs.
+- Workspace-scoped chat continuity is now sourced from **`.lvibe/chat-history.jsonl`** (rolling 24h by default) so reopening the workspace restores recent turns.
+- Local transcript/audit paths under `~/.config/le-vibe/levibe-native-chat/` remain for operator diagnostics and export workflows.
+
 ## Operator verification / ship checklist (task-n8-1)
 
 - **E2E agentic editor (Epic N15, task-n15-1):** before tagging or publishing, run the manual **E2E agentic editor release checklist** in **`OPERATOR.md`** — **Preview sample workspace edit** → **Accept preview** → **Apply to file** → editor **Undo**; then **Run sample workspace plan** and **Cancel plan run** mid-flight — and record a row in the **Sign-off (per release)** table there.
