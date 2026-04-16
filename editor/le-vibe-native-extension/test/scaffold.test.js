@@ -22,6 +22,8 @@ test('manifest contributes Lé Vibe Open Agent Surface command', () => {
   assert.ok(commands.find((item) => item.command === 'leVibeNative.moveWorkspacePath'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.deleteWorkspacePath'));
   assert.ok(commands.find((item) => item.command === 'leVibeNative.askChatAboutSelection'));
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.runCommandInIntegratedTerminal'));
+  assert.ok(commands.find((item) => item.command === 'leVibeNative.clearTerminalSessionAllow'));
 });
 
 test('manifest supports deterministic activation entrypoints', () => {
@@ -39,6 +41,8 @@ test('manifest supports deterministic activation entrypoints', () => {
   assert.ok(activationEvents.includes('onCommand:leVibeNative.createWorkspaceFolder'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.moveWorkspacePath'));
   assert.ok(activationEvents.includes('onCommand:leVibeNative.deleteWorkspacePath'));
+  assert.ok(activationEvents.includes('onCommand:leVibeNative.runCommandInIntegratedTerminal'));
+  assert.ok(activationEvents.includes('onCommand:leVibeNative.clearTerminalSessionAllow'));
 });
 
 test('extension exports activate/deactivate and command constant', () => {
@@ -52,6 +56,8 @@ test('extension exports activate/deactivate and command constant', () => {
   assert.equal(extensionModule.MOVE_WORKSPACE_PATH_COMMAND, 'leVibeNative.moveWorkspacePath');
   assert.equal(extensionModule.DELETE_WORKSPACE_PATH_COMMAND, 'leVibeNative.deleteWorkspacePath');
   assert.equal(extensionModule.ASK_CHAT_ABOUT_SELECTION_COMMAND, 'leVibeNative.askChatAboutSelection');
+  assert.equal(extensionModule.RUN_COMMAND_IN_INTEGRATED_TERMINAL_COMMAND, 'leVibeNative.runCommandInIntegratedTerminal');
+  assert.equal(extensionModule.CLEAR_TERMINAL_SESSION_ALLOW_COMMAND, 'leVibeNative.clearTerminalSessionAllow');
   assert.equal(path.basename(require.resolve('../extension')), 'extension.js');
 });
 
@@ -111,5 +117,7 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('deleteWorkspacePathPrompt'));
     assert.ok(html.includes('quickActionExplain'));
     assert.ok(html.includes('task-n12-2'));
+    assert.ok(html.includes('Terminal execution (N13)'));
+    assert.ok(html.includes('runCommandInIntegratedTerminalPrompt'));
   });
 });

@@ -49,7 +49,9 @@
     "onCommand:leVibeNative.createWorkspaceFolder",
     "onCommand:leVibeNative.moveWorkspacePath",
     "onCommand:leVibeNative.deleteWorkspacePath",
-    "onCommand:leVibeNative.askChatAboutSelection"
+    "onCommand:leVibeNative.askChatAboutSelection",
+    "onCommand:leVibeNative.runCommandInIntegratedTerminal",
+    "onCommand:leVibeNative.clearTerminalSessionAllow"
   ],
   "contributes": {
     "commands": [
@@ -136,6 +138,16 @@
       {
         "command": "leVibeNative.askChatAboutSelection",
         "title": "Lé Vibe Chat: Ask about selection…",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.runCommandInIntegratedTerminal",
+        "title": "Lé Vibe Chat: Run command in integrated terminal…",
+        "category": "Lé Vibe"
+      },
+      {
+        "command": "leVibeNative.clearTerminalSessionAllow",
+        "title": "Lé Vibe Chat: Clear terminal session allow (re-enable confirmations)",
         "category": "Lé Vibe"
       }
     ],
@@ -312,6 +324,11 @@
               "curl | sh"
             ],
             "description": "Deny-list: if any pattern matches the normalized command (substring or * glob), the command is blocked before allow matching."
+          },
+          "leVibeNative.terminalSkipBatchConfirmation": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "**Advanced.** When **true**, skip the confirmation modal before sending each command batch to the integrated terminal (still uses visible `Terminal.sendText`, not a hidden PTY). Prefer per-batch confirmation or **Run and skip further prompts (this session)** in the modal instead."
           }
         }
       }

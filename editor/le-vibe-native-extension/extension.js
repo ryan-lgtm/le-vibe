@@ -19,6 +19,8 @@ const CREATE_WORKSPACE_FOLDER_COMMAND = 'leVibeNative.createWorkspaceFolder';
 const MOVE_WORKSPACE_PATH_COMMAND = 'leVibeNative.moveWorkspacePath';
 const DELETE_WORKSPACE_PATH_COMMAND = 'leVibeNative.deleteWorkspacePath';
 const ASK_CHAT_ABOUT_SELECTION_COMMAND = 'leVibeNative.askChatAboutSelection';
+const RUN_COMMAND_IN_INTEGRATED_TERMINAL_COMMAND = 'leVibeNative.runCommandInIntegratedTerminal';
+const CLEAR_TERMINAL_SESSION_ALLOW_COMMAND = 'leVibeNative.clearTerminalSessionAllow';
 
 /** @type {null | { path: string, content: string, selectionRange: { startLine: number, startCharacter: number, endLine: number, endCharacter: number } }} */
 let pendingSelectionContext = null;
@@ -84,6 +86,7 @@ const {
   applyWorkspacePlanRollbackInverses,
 } = require('./workspace-plan-exec');
 const { dryRunValidatedWorkspacePlan } = require('./workspace-plan-dry-run');
+const { runCommandInVisibleTerminal, clearTerminalSessionAllow } = require('./terminal-exec');
 
 /**
  * @param {import('vscode')} vscode
@@ -537,6 +540,11 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     <button data-action="createWorkspaceFolderPrompt">Create folder…</button>
     <button data-action="moveWorkspacePathPrompt">Move / rename…</button>
     <button data-action="deleteWorkspacePathPrompt">Delete file or folder…</button>
+  </div>
+  <h3>Terminal execution (N13)</h3>
+  <p class="muted">Runs in a <strong>visible</strong> integrated terminal named <code>Lé Vibe Chat</code> — not a hidden PTY. Enable <code>leVibeNative.terminalExecutionEnabled</code> and allow-list patterns first. You confirm each batch unless you choose session-skip in the modal or set <code>leVibeNative.terminalSkipBatchConfirmation</code> (advanced).</p>
+  <div>
+    <button data-action="runCommandInIntegratedTerminalPrompt">Run command in terminal…</button>
   </div>
   <h3>Operator handoff</h3>
   <p class="muted">Emit a reproducible handoff event to lvibe orchestration and append local audit evidence.</p>
@@ -1297,6 +1305,26 @@ function openAgentSurface() {
       panel.webview.postMessage({ type: 'chatUpdate', status: 'Operator handoff event emitted.' });
       return;
     }
+    if (msg.type === 'action' && msg.actionId === 'runCommandInIntegratedTerminalPrompt') {
+      void (async () => {
+        const line = await vscode.window.showInputBox({
+          title: 'Run in integrated terminal (Lé Vibe Chat)',
+          prompt:
+            'One-line shell command. Allow/deny policy applies; confirm each batch unless session-skip or terminalSkipBatchConfirmation.',
+          validateInput: (value) => {
+            if (!String(value || '').trim()) {
+              return 'Enter a non-empty command.';
+            }
+            return undefined;
+          },
+        });
+        if (!line) {
+          return;
+        }
+        await runCommandInVisibleTerminal(vscode, line, { panel });
+      })();
+      return;
+    }
     if (msg.type === 'action' && msg.actionId === 'viewChatUsage') {
       const stats = getTranscriptStats(transcriptFile);
       void vscode.window.showInformationMessage(
@@ -1382,6 +1410,9 @@ function activate(context) {
   const vscode = require('vscode');
   registerSelectionChatCodeLens(vscode, context);
   context.subscriptions.push(
+    vscode.workspace.onDidChangeWorkspaceFolders(() => {
+      clearTerminalSessionAllow();
+    }),
     vscode.commands.registerCommand(EMIT_OPERATOR_HANDOFF_COMMAND, async (input) => {
       const config = vscode.workspace.getConfiguration('leVibeNative');
       const { workspaceUri, transcriptFile, transcriptCaps } = getTranscriptContext(vscode);
@@ -1524,6 +1555,29 @@ function activate(context) {
     vscode.commands.registerCommand(DELETE_WORKSPACE_PATH_COMMAND, () => runDeleteWorkspacePathInteractive(vscode, null)),
     vscode.commands.registerCommand(OPEN_THIRD_PARTY_MIGRATION_COMMAND, () => runThirdPartyMigrationGuide(vscode)),
     vscode.commands.registerCommand(ASK_CHAT_ABOUT_SELECTION_COMMAND, runAskChatAboutSelection),
+    vscode.commands.registerCommand(RUN_COMMAND_IN_INTEGRATED_TERMINAL_COMMAND, async () => {
+      const line = await vscode.window.showInputBox({
+        title: 'Run in integrated terminal (Lé Vibe Chat)',
+        prompt:
+          'One-line shell command. Allow/deny policy applies; confirm each batch unless session-skip or terminalSkipBatchConfirmation.',
+        validateInput: (value) => {
+          if (!String(value || '').trim()) {
+            return 'Enter a non-empty command.';
+          }
+          return undefined;
+        },
+      });
+      if (!line) {
+        return;
+      }
+      await runCommandInVisibleTerminal(vscode, line, {});
+    }),
+    vscode.commands.registerCommand(CLEAR_TERMINAL_SESSION_ALLOW_COMMAND, async () => {
+      clearTerminalSessionAllow();
+      await vscode.window.showInformationMessage(
+        'Lé Vibe Chat: cleared “skip further prompts” for this extension host session (terminal commands).',
+      );
+    }),
     vscode.commands.registerCommand(OPEN_AGENT_SURFACE_COMMAND, openAgentSurface),
     vscode.commands.registerCommand(OPEN_OLLAMA_SETUP_HELP_COMMAND, () =>
       vscode.env.openExternal(vscode.Uri.parse('https://ollama.com/download/linux')),
@@ -1585,6 +1639,8 @@ module.exports = {
   MOVE_WORKSPACE_PATH_COMMAND,
   DELETE_WORKSPACE_PATH_COMMAND,
   ASK_CHAT_ABOUT_SELECTION_COMMAND,
+  RUN_COMMAND_IN_INTEGRATED_TERMINAL_COMMAND,
+  CLEAR_TERMINAL_SESSION_ALLOW_COMMAND,
   getTranscriptContext,
   getContextBudget,
   panelHtml,

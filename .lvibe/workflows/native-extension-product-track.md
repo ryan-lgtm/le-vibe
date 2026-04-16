@@ -651,9 +651,11 @@ Product intent: Cursor-like agent runs can execute shell commands; this must be 
     - written policy in docs + settings keys
   - Evidence:
     - `TERMINAL_EXECUTION_POLICY.md` + `terminal-execution-policy.js`; `package.json` contributes **`leVibeNative.terminalExecutionEnabled`** (default **false**), **`leVibeNative.terminalCommandAllowPatterns`**, **`leVibeNative.terminalCommandDenyPatterns`**; README + `OPERATOR.md`; `test/terminal-execution-policy.test.js`; `npm run verify` green in `editor/le-vibe-native-extension`.
-- [ ] `pending` **task-n13-2**: If enabled, run commands in **VS Code terminal** with full user visibility (no hidden PTY).
+- [x] `done` **task-n13-2**: If enabled, run commands in **VS Code terminal** with full user visibility (no hidden PTY).
   - Acceptance:
     - user must confirm each command batch unless an explicit “session allow” mode is enabled (advanced)
+  - Evidence:
+    - `terminal-exec.js` — `runCommandInVisibleTerminal` uses `Terminal.sendText` on a named visible terminal (`Lé Vibe Chat`); modal confirmation per batch; **Run and skip further prompts (this session)** + workspace-folder change + **`leVibeNative.clearTerminalSessionAllow`**; advanced **`leVibeNative.terminalSkipBatchConfirmation`**; palette + panel entrypoints; `test/terminal-exec.test.js`; README / `OPERATOR.md` / `TERMINAL_EXECUTION_POLICY.md`; `npm run verify` green.
 - [ ] `pending` **task-n13-3**: Structured audit log for every executed command (timestamp, cwd, exit code).
   - Acceptance:
     - audit path documented next to other Lé Vibe Chat persistence

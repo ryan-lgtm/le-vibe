@@ -1,6 +1,6 @@
 # Terminal execution policy (Lé Vibe Chat, Epic N13)
 
-**Status:** Policy and settings only (task-n13-1). Actual execution in the VS Code terminal is implemented in later tasks (n13-2+).
+**Status:** Policy + **visible integrated-terminal execution** (task-n13-2). Commands are sent with `Terminal.sendText` into a named terminal (**`Lé Vibe Chat`**) — not a hidden `child_process` PTY. Structured audit logging is **n13-3**.
 
 ## Principles
 
@@ -16,8 +16,13 @@
 | `leVibeNative.terminalExecutionEnabled` | Master switch (default **`false`**). |
 | `leVibeNative.terminalCommandAllowPatterns` | String array — at least one substring/glob must match the normalized command (case-insensitive substring; `*` for simple glob). |
 | `leVibeNative.terminalCommandDenyPatterns` | String array — if any pattern matches, the command is blocked regardless of allow list. |
+| `leVibeNative.terminalSkipBatchConfirmation` | Advanced — default **`false`**. When **`true`**, skip the confirmation modal before each batch (still visible terminal only). |
 
-Implementation: [`terminal-execution-policy.js`](terminal-execution-policy.js) (`evaluateTerminalCommand`, `getTerminalExecutionPolicy`).
+Implementation: [`terminal-execution-policy.js`](terminal-execution-policy.js) (`evaluateTerminalCommand`, `getTerminalExecutionPolicy`). Execution entrypoints: [`terminal-exec.js`](terminal-exec.js) (`runCommandInVisibleTerminal`), palette **Lé Vibe Chat: Run command in integrated terminal…**, panel **Run command in terminal…**.
+
+### Confirmation (task-n13-2)
+
+Unless **`terminalSkipBatchConfirmation`** is **true** or you already chose **Run and skip further prompts (this session)** in the modal, you must **confirm each command batch** before it is sent. Session skip is cleared when workspace folders change or via **Lé Vibe Chat: Clear terminal session allow (re-enable confirmations)**.
 
 ## Recommended workspace snippet
 

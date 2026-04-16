@@ -105,11 +105,15 @@ Token-budget rules (configurable in Settings):
 
 ## Terminal execution policy (Epic N13, task-n13-1)
 
-Agent-driven shell commands are **high risk**; policy is **settings + documentation only** until Epic N13 wires execution (see [`TERMINAL_EXECUTION_POLICY.md`](TERMINAL_EXECUTION_POLICY.md), [`terminal-execution-policy.js`](terminal-execution-policy.js)).
+Agent-driven shell commands are **high risk**; see [`TERMINAL_EXECUTION_POLICY.md`](TERMINAL_EXECUTION_POLICY.md), [`terminal-execution-policy.js`](terminal-execution-policy.js).
 
 - **`leVibeNative.terminalExecutionEnabled`** — default **`false`** (off until you opt in; use **Workspace** settings for per-repo opt-in).
 - **`leVibeNative.terminalCommandAllowPatterns`** — default **empty**; when execution is enabled, you must add at least one allow pattern or **no** commands pass (allow-list mode).
 - **`leVibeNative.terminalCommandDenyPatterns`** — shipped **deny** defaults block common destructive / pipe-to-shell patterns; **deny** is evaluated before **allow**.
+
+### Visible integrated terminal (task-n13-2)
+
+Approved commands run only via the **integrated terminal** (named **`Lé Vibe Chat`**) using `Terminal.sendText` — **no hidden PTY**. Palette **Lé Vibe Chat: Run command in integrated terminal…** and the panel **Run command in terminal…** prompt for a one-line command. You **confirm each batch** in a modal unless you choose **Run and skip further prompts (this session)**, or set the advanced **`leVibeNative.terminalSkipBatchConfirmation`** to **`true`**. Session skip clears when workspace folders change or via **Lé Vibe Chat: Clear terminal session allow (re-enable confirmations)**. Implementation: [`terminal-exec.js`](terminal-exec.js).
 
 ## Edit preview before apply (Epic N9)
 
