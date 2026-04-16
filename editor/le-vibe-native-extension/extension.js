@@ -81,7 +81,7 @@ const {
 } = require('./chat-transcript');
 const { isFirstPartyAgentSurfaceEnabled } = require('./feature-flags');
 const { runThirdPartyMigrationGuide, scheduleThirdPartyMigrationNudge } = require('./third-party-migration');
-const { validateEditProposal, EDIT_PROPOSAL_KIND } = require('./edit-proposal');
+const { validateEditProposal, EDIT_PROPOSAL_KIND, formatEditProposalValidationForUser } = require('./edit-proposal');
 const { buildUnifiedDiff, canApplyAfterPreview } = require('./edit-preview');
 const { applyEditProposalBatchAsWorkspaceEdit } = require('./workspace-edit-apply');
 const { resolveSingleSelectionForPartialApply } = require('./selection-apply');
@@ -544,6 +544,11 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <div>
     <button type="button" data-action="previewSampleWorkspaceEdit" title="Preview sample workspace edit" aria-label="Preview sample workspace edit">Preview sample workspace edit</button>
   </div>
+  <label for="editProposalInput" class="muted" style="display:block;margin-top:0.5rem;">Validate edit proposal JSON (no writes on invalid)</label>
+  <textarea id="editProposalInput" placeholder='{"kind":"levibe.edit_proposal.v1","proposals":[...]}' aria-label="Edit proposal JSON"></textarea>
+  <div>
+    <button type="button" data-action="validateEditProposalJson" title="Validate edit proposal JSON" aria-label="Validate edit proposal JSON">Validate proposal JSON</button>
+  </div>
   <div id="editPreviewSection" style="display:none;margin-top:0.5rem;" aria-label="Edit preview diff">
     <pre id="editPreviewPre" class="diag" role="region" aria-label="Unified diff preview"></pre>
     <div>
@@ -605,9 +610,24 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     const vscode = acquireVsCodeApi();
     document.querySelectorAll('button[data-action]').forEach((button) => {
       button.addEventListener('click', () => {
-        vscode.postMessage({ type: 'action', actionId: button.getAttribute('data-action') });
+        const actionId = button.getAttribute('data-action');
+        if (actionId === 'validateEditProposalJson') {
+          return;
+        }
+        vscode.postMessage({ type: 'action', actionId });
       });
     });
+    const validateBtn = document.querySelector('button[data-action="validateEditProposalJson"]');
+    if (validateBtn) {
+      validateBtn.addEventListener('click', () => {
+        const input = document.getElementById('editProposalInput');
+        vscode.postMessage({
+          type: 'action',
+          actionId: 'validateEditProposalJson',
+          input: input ? input.value : '',
+        });
+      });
+    }
     document.getElementById('sendPrompt').addEventListener('click', () => {
       const prompt = document.getElementById('promptInput').value || '';
       vscode.postMessage({ type: 'chat', actionId: 'sendPrompt', prompt });
@@ -1177,6 +1197,40 @@ function openAgentSurface() {
             : 'Sample diff shown — Apply to file is allowed without Accept (requireEditPreviewBeforeApply is off).',
         });
       })();
+      return;
+    }
+    if (msg.type === 'action' && msg.actionId === 'validateEditProposalJson') {
+      const raw = typeof msg.input === 'string' ? msg.input.trim() : '';
+      if (!raw) {
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: 'Lé Vibe Chat: provide edit proposal JSON first.',
+        });
+        return;
+      }
+      let parsed;
+      try {
+        parsed = JSON.parse(raw);
+      } catch (e) {
+        const detail = e && e.message ? e.message : String(e);
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: `Lé Vibe Chat: edit proposal parse error — ${detail}`,
+        });
+        return;
+      }
+      const validated = validateEditProposal(parsed);
+      if (!validated.ok) {
+        panel.webview.postMessage({
+          type: 'chatUpdate',
+          status: formatEditProposalValidationForUser(validated.errors),
+        });
+        return;
+      }
+      panel.webview.postMessage({
+        type: 'chatUpdate',
+        status: `Lé Vibe Chat: edit proposal valid (${validated.value.proposals.length} change(s)) — preview/apply flow required before writes.`,
+      });
       return;
     }
     if (msg.type === 'action' && msg.actionId === 'dryRunSampleWorkspacePlan') {

@@ -2,7 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { validateEditProposal, EDIT_PROPOSAL_KIND } = require('../edit-proposal.js');
+const { validateEditProposal, EDIT_PROPOSAL_KIND, formatEditProposalValidationForUser } = require('../edit-proposal.js');
 
 const sampleUri = 'file:///home/user/project/src/foo.ts';
 
@@ -117,4 +117,27 @@ test('validateEditProposal rejects invalid confidence flag token', () => {
     confidence: { flags: ['Bad_Case'] },
   });
   assert.equal(r.ok, false);
+});
+
+test('formatEditProposalValidationForUser renders deterministic invalid summary (task-cp2-1)', () => {
+  const msg = formatEditProposalValidationForUser([
+    'root must be a non-null object',
+    'proposals must be a non-empty array',
+  ]);
+  assert.ok(msg.startsWith('Lé Vibe Chat: edit proposal invalid — '));
+  assert.ok(msg.includes('root must be a non-null object'));
+  assert.ok(msg.includes('proposals must be a non-empty array'));
+});
+
+test('formatEditProposalValidationForUser truncates oversized error arrays (task-cp2-1)', () => {
+  const msg = formatEditProposalValidationForUser([
+    'e1',
+    'e2',
+    'e3',
+    'e4',
+    'e5',
+    'e6',
+    'e7',
+  ]);
+  assert.ok(msg.includes('(+1 more)'));
 });

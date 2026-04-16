@@ -123,6 +123,8 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('Open migration guide'));
     assert.ok(html.includes('Edit preview (workspace)'));
     assert.ok(html.includes('Preview sample workspace edit'));
+    assert.ok(html.includes('Validate proposal JSON'));
+    assert.ok(html.includes('editProposalInput'));
     assert.ok(html.includes('editPreviewApply'));
     assert.ok(html.includes('Workspace plan (demo)'));
     assert.ok(html.includes('Dry-run sample plan'));

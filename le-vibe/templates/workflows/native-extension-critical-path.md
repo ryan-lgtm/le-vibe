@@ -77,9 +77,14 @@ Everything else is out-of-scope unless required to unblock one of the five.
 
 **Narrative:** this is the core trust loop; no silent destructive writes.
 
-- [ ] `pending` **task-cp2-1**: Structured edit proposals with schema validation and user-visible parse errors.
+- [x] `done` **task-cp2-1**: Structured edit proposals with schema validation and user-visible parse errors.
   - Acceptance:
     - invalid proposals never write to disk
+  - Evidence (2026-04-15):
+    - Updated `editor/le-vibe-native-extension/extension.js` panel flow to add explicit in-panel JSON proposal validation (`validateEditProposalJson`) with parse-error messaging (`Lé Vibe Chat: edit proposal parse error — …`) and schema validation messaging before any preview/apply path.
+    - Updated `editor/le-vibe-native-extension/edit-proposal.js` to add `formatEditProposalValidationForUser()` for deterministic, user-visible invalid-proposal summaries.
+    - Added regression coverage in `editor/le-vibe-native-extension/test/edit-proposal.test.js` (invalid-summary formatting/truncation) and `editor/le-vibe-native-extension/test/scaffold.test.js` (panel includes proposal validation controls).
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 327 passed, smoke passed).
 - [ ] `pending` **task-cp2-2**: Diff preview and explicit accept/reject/apply actions as default path.
   - Acceptance:
     - preview required by default before apply

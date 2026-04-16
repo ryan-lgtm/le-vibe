@@ -63,6 +63,20 @@ function validateEditProposal(raw) {
 }
 
 /**
+ * Convert parse/validation failures into a deterministic, user-visible string.
+ * @param {string[]} errors
+ * @returns {string}
+ */
+function formatEditProposalValidationForUser(errors) {
+  if (!Array.isArray(errors) || errors.length === 0) {
+    return 'Lé Vibe Chat: edit proposal invalid — unknown validation error.';
+  }
+  const detail = errors.slice(0, 6).join('; ');
+  const suffix = errors.length > 6 ? ` (+${errors.length - 6} more)` : '';
+  return `Lé Vibe Chat: edit proposal invalid — ${detail}${suffix}`;
+}
+
+/**
  * @param {unknown} c
  * @param {string} path
  * @param {string[]} errors
@@ -199,4 +213,5 @@ function rangeOrderingOk(a, b) {
 module.exports = {
   EDIT_PROPOSAL_KIND: KIND,
   validateEditProposal,
+  formatEditProposalValidationForUser,
 };
