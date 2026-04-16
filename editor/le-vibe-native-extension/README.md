@@ -222,6 +222,7 @@ Each successful send appends a structured JSONL record under **`~/.config/le-vib
 
 ## Operator verification / ship checklist (task-n8-1)
 
+- **E2E agentic editor (Epic N15, task-n15-1):** before tagging or publishing, run the manual **E2E agentic editor release checklist** in **`OPERATOR.md`** — **Preview sample workspace edit** → **Accept preview** → **Apply to file** → editor **Undo**; then **Run sample workspace plan** and **Cancel plan run** mid-flight — and record a row in the **Sign-off (per release)** table there.
 - **Workflow board:** **`.lvibe/workflows/native-extension-product-track.md`** (Epic N8 — task order for this extension; operator runbook references the same path under **`OPERATOR.md`** *Product track*).
 - **Canonical command:** from `editor/le-vibe-native-extension/`, run **`npm run verify`** (runs **`npm test`** then **`npm run smoke`**; **`package.json`** **`scripts.verify`** = **`npm test && npm run smoke`**).
 - **Underlying scripts:** **`package.json`** **`scripts.test`** = **`node --test ./test/*.test.js`**; **`scripts.smoke`** = **`node ./scripts/smoke-integration.js`**.

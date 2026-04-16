@@ -679,9 +679,11 @@ Product intent: Cursor-like **@file / @folder** context without unbounded embedd
 
 ### Epic N15 — QA / parity gates for “agentic editor” releases
 
-- [ ] `pending` **task-n15-1**: **E2E checklist** (manual or scripted): propose edit → preview → accept → undo → multi-file plan → cancel mid-flight.
+- [x] `done` **task-n15-1**: **E2E checklist** (manual or scripted): propose edit → preview → accept → undo → multi-file plan → cancel mid-flight.
   - Acceptance:
     - checklist lives in `OPERATOR.md` or extension README; signed off per release
+  - Evidence:
+    - Added **`OPERATOR.md`** section **E2E agentic editor release checklist (task-n15-1)** with steps A (Preview sample workspace edit → Accept preview → Apply to file → Undo) and B (Run sample workspace plan → Cancel plan run mid-flight) plus **Sign-off (per release)** table; **`README.md`** *Operator verification* cross-link; tests `test/operator-doc.test.js`, `test/readme-e2e-checklist-pointer.test.js`; `npm run verify` green.
 - [ ] `pending` **task-n15-2**: **Regression tests** for proposal parser + WorkspaceEdit builder (golden files in `test/fixtures/`).
   - Acceptance:
     - `npm run verify` includes new tests; no flaky network

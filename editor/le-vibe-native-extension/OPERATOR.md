@@ -102,3 +102,33 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 **Settings disclosure guardrail:** **`npm test`** runs **`test/package-leVibeNative-keys-doc-inventory.test.js`**, which fails if any **`leVibeNative.*`** key in **`package.json`** contributes is absent from this runbook and/or **`README.md`** (add the key to operator or developer docs before shipping).
 
 **Scripts literal umbrella:** **`npm test`** runs **`test/package-json-all-scripts-doc-literal-sync.test.js`**, which fails if any **`package.json` `scripts`** value is absent from this runbook and/or **`README.md`** (keep **`scripts.test`**, **`scripts.smoke`**, **`scripts.verify`** literals documented when you change npm scripts).
+
+## E2E agentic editor release checklist (Epic N15, task-n15-1)
+
+Run **after** **`npm run verify`** is green. This is a **manual** gate for agentic-editor flows (edit preview, multi-step workspace plan, cancellation). **Sign off** each release in the table at the end (tag, VSIX version, or internal build id).
+
+### Prerequisites
+
+- Open a **folder workspace** (not a single untitled buffer only) so demos can write under **`.lvibe/`** in that folder.
+- **Ollama** is **not** required for these panel demos (they use the built-in sample paths and **`WorkspaceEdit`**).
+
+### A — Preview → accept → apply → undo (edit proposal demo)
+
+1. **Lé Vibe: Open Agent Surface** — panel shows readiness + chat controls (not a blank/gray webview).
+2. Click **Preview sample workspace edit** — a **unified diff** appears for **`.lvibe/.levibe-edit-preview-demo.txt`**.
+3. With **`leVibeNative.requireEditPreviewBeforeApply`** at default **`true`**: click **Accept preview**, then **Apply to file**. Optionally confirm **Reject** dismisses the preview **without** applying.
+4. Focus the modified file and use editor **Undo** once (**Ctrl+Z** / **Cmd+Z**) — contents revert for that **Apply** (one undo transaction per **Apply**, same manual contract as **task-n9-3** above).
+
+### B — Multi-step workspace plan → cancel mid-flight
+
+1. Click **Run sample workspace plan** — chat log shows **`Lé Vibe Chat: plan step N/M — …`** for **three** steps (sample **create_file** → **apply_edit** → **move_file** under **`.lvibe/`**).
+2. While **Cancel plan run** is enabled, click **Cancel plan run**.
+3. **Expected:** status indicates cancellation after the **in-flight** step finishes; **remaining steps are not run** (partial completion is explicit). **Cancel** does **not** auto-rollback completed steps — clean up with editor/SCM if needed (see **`WORKSPACE_PLAN.v1.md`**).
+
+### Sign-off (per release)
+
+| Release (tag or VSIX version) | Date (YYYY-MM-DD) | Sign-off (name or initials) | Notes |
+|-------------------------------|-------------------|------------------------------|-------|
+| _e.g. extension 0.x / git tag_ | _e.g. 2026-04-15_ | | |
+
+Add or update a row whenever you **tag**, **publish a VSIX**, or **bless an internal build** so agentic-editor releases stay auditable.

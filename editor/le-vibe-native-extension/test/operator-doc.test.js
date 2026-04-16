@@ -198,3 +198,15 @@ test('OPERATOR.md documents quick action templates (task-n12-2)', () => {
   assert.ok(text.includes('chat-quick-actions.js'));
   assert.ok(text.includes('QUICK_ACTION_TEMPLATES'));
 });
+
+test('OPERATOR.md documents E2E agentic editor release checklist + sign-off (task-n15-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n15-1'));
+  assert.ok(text.includes('E2E agentic editor release checklist'));
+  assert.ok(text.includes('Preview sample workspace edit'));
+  assert.ok(text.includes('Accept preview'));
+  assert.ok(text.includes('Apply to file'));
+  assert.ok(text.includes('Run sample workspace plan'));
+  assert.ok(text.includes('Cancel plan run'));
+  assert.ok(text.includes('Sign-off (per release)'));
+});
