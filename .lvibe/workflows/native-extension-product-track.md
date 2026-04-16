@@ -791,7 +791,18 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N22 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n22-1**: **OPERATOR VSIX note — CHANGELOG ships** — under **`OPERATOR.md`** *Packaged VSIX (task-n16-2)*, add one sentence that **`CHANGELOG.md`** is **not** listed in **`.vscodeignore`**, so semver release notes ship inside the **`.vsix`** alongside the extension sources operators expect.
+- [x] `done` **task-n22-1**: **OPERATOR VSIX note — CHANGELOG ships** — under **`OPERATOR.md`** *Packaged VSIX (task-n16-2)*, add one sentence that **`CHANGELOG.md`** is **not** listed in **`.vscodeignore`**, so semver release notes ship inside the **`.vsix`** alongside the extension sources operators expect.
+  - Evidence:
+    - **`OPERATOR.md`** *Packaged VSIX* — **`CHANGELOG.md ships in the VSIX (task-n22-1)`** paragraph (what **`.vscodeignore`** omits vs **`CHANGELOG.md`**).
+    - **`test/operator-doc.test.js`** (task-n22-1); **`test/vscodeignore-changelog-ships.test.js`** — asserts **`.vscodeignore`** does not list **`CHANGELOG.md`**; **`npm run verify`** green.
+
+### Epic N23 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n23-1**: **Manual VSIX install spot-check (OPERATOR)** — add one bullet under *Packaged VSIX (task-n16-2)* or the *E2E agentic editor release checklist*: after **`code --install-extension ./le-vibe-native-extension-<version>.vsix`**, confirm the Extensions view lists **Lé Vibe Native Agent** (or the **`displayName`** from **`package.json`**) at the expected **`version`**.
+  - Acceptance:
+    - **`OPERATOR.md`** only (short manual verification step)
+    - **`operator-doc.test.js`** asserts the new bullet/heading token
+    - **`npm run verify`** green
 
 ---
 

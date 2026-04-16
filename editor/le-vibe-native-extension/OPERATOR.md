@@ -114,6 +114,8 @@ code --install-extension ./le-vibe-native-extension-0.1.0.vsix
 
 No tokens or cloud secrets are embedded in this packaging path — the VSIX is a local archive of the extension tree plus production **`node_modules`** per **`@vscode/vsce`** defaults.
 
+**`CHANGELOG.md` ships in the VSIX (task-n22-1):** **`CHANGELOG.md`** is **not** listed in **`.vscodeignore`** (that file excludes only dev-only paths such as **`test/**`**, **`scripts/smoke-integration.js`**, **`.vscode/**`, **`.vscode-test/**`**), so semver release notes are included in the **`.vsix`** archive for operators and users who inspect the package.
+
 ### Extension version vs monorepo / packaging (task-n16-3)
 
 The **authoritative extension version** for **Lé Vibe Chat** is **`editor/le-vibe-native-extension/package.json`** **`version`** — it feeds **`@vscode/vsce`** output (**`le-vibe-native-extension-<version>.vsix`**) and what users see in the Extensions view. That semver string is **independent by default** from root **Debian** package versions (**`debian/changelog`**, **`le-vibe`** / **`le-vibe-ide`** `.deb` numbers): do **not** assume the IDE `.deb` and this **`package.json`** bump in lockstep unless you deliberately align them for a coordinated release. Monorepo **git tags** are also **manual for now** (no automation in this repo ties a tag only to the extension subtree); teams may use a dedicated tag pattern (e.g. **`levibe-native-extension-v0.2.0`**) or document the extension version in a broader release note.

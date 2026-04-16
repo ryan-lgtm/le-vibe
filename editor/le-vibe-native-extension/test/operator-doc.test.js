@@ -236,6 +236,13 @@ test('OPERATOR.md documents VSIX packaging + install (task-n16-2)', () => {
   assert.ok(text.includes('*.vsix'));
 });
 
+test('OPERATOR.md documents CHANGELOG ships in VSIX via .vscodeignore (task-n22-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('ships in the VSIX (task-n22-1)'));
+  assert.ok(text.includes('`CHANGELOG.md`'));
+  assert.ok(text.includes('.vscodeignore'));
+});
+
 test('OPERATOR.md documents version bump vs deb/git (task-n16-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('task-n16-3'));
