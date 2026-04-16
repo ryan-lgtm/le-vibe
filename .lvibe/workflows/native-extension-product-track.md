@@ -780,11 +780,18 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N21 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n21-1**: **`docs/README.md` CHANGELOG parity** — extend **`docs/README.md`** first-party native extension bullet (or adjacent line) with the same **`editor/le-vibe-native-extension/CHANGELOG.md`** link so the maintainer index matches the repo landing page.
+- [x] `done` **task-n21-1**: **`docs/README.md` CHANGELOG parity** — extend **`docs/README.md`** first-party native extension bullet (or adjacent line) with the same **`editor/le-vibe-native-extension/CHANGELOG.md`** link so the maintainer index matches the repo landing page.
   - Acceptance:
     - `docs/README.md` only (plus product-track / tests if contract test added under `editor/le-vibe-native-extension/test/`)
     - link path matches root README
     - `npm run verify` green
+  - Evidence:
+    - **`docs/README.md`** maintainer table — **semver release notes** link to **`../editor/le-vibe-native-extension/CHANGELOG.md`** (path token **`editor/le-vibe-native-extension/CHANGELOG.md`** matches root **`README.md`**).
+    - **`test/docs-readme-pointer.test.js`** — **`docs/README.md links native extension CHANGELOG (task-n21-1)`**; **`npm run verify`** green.
+
+### Epic N22 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n22-1**: **OPERATOR VSIX note — CHANGELOG ships** — under **`OPERATOR.md`** *Packaged VSIX (task-n16-2)*, add one sentence that **`CHANGELOG.md`** is **not** listed in **`.vscodeignore`**, so semver release notes ship inside the **`.vsix`** alongside the extension sources operators expect.
 
 ---
 
