@@ -112,6 +112,8 @@ From **`editor/le-vibe-native-extension/`** after **`npm ci`**, run **`npm run p
 code --install-extension ./le-vibe-native-extension-0.1.0.vsix
 ```
 
+**Manual spot-check (task-n23-1):** after a successful install, open the **Extensions** view in the editor (**View → Extensions**, or **Ctrl+Shift+X** / **Cmd+Shift+X**). Locate **Lé Vibe Native Agent** — that string is **`package.json`** **`displayName`** (publisher **`levibe`**). Confirm the **version** shown there matches **`package.json`** **`version`** (for the sample above, **0.1.0**). If the version does not match, you likely installed a different **`.vsix`** or an older cached build — re-run **`npm run package`** and install again.
+
 No tokens or cloud secrets are embedded in this packaging path — the VSIX is a local archive of the extension tree plus production **`node_modules`** per **`@vscode/vsce`** defaults.
 
 **`CHANGELOG.md` ships in the VSIX (task-n22-1):** **`CHANGELOG.md`** is **not** listed in **`.vscodeignore`** (that file excludes only dev-only paths such as **`test/**`**, **`scripts/smoke-integration.js`**, **`.vscode/**`, **`.vscode-test/**`**), so semver release notes are included in the **`.vsix`** archive for operators and users who inspect the package.

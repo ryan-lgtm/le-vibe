@@ -798,11 +798,18 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N23 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n23-1**: **Manual VSIX install spot-check (OPERATOR)** — add one bullet under *Packaged VSIX (task-n16-2)* or the *E2E agentic editor release checklist*: after **`code --install-extension ./le-vibe-native-extension-<version>.vsix`**, confirm the Extensions view lists **Lé Vibe Native Agent** (or the **`displayName`** from **`package.json`**) at the expected **`version`**.
+- [x] `done` **task-n23-1**: **Manual VSIX install spot-check (OPERATOR)** — add one bullet under *Packaged VSIX (task-n16-2)* or the *E2E agentic editor release checklist*: after **`code --install-extension ./le-vibe-native-extension-<version>.vsix`**, confirm the Extensions view lists **Lé Vibe Native Agent** (or the **`displayName`** from **`package.json`**) at the expected **`version`**.
   - Acceptance:
     - **`OPERATOR.md`** only (short manual verification step)
     - **`operator-doc.test.js`** asserts the new bullet/heading token
     - **`npm run verify`** green
+  - Evidence:
+    - **`OPERATOR.md`** *Packaged VSIX* — **`Manual spot-check (task-n23-1)`** — Extensions view, **`displayName`** **Lé Vibe Native Agent**, publisher **`levibe`**, version matches **`package.json`** **`version`**.
+    - **`test/operator-doc.test.js`** (task-n23-1); **`npm run verify`** green.
+
+### Epic N24 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n24-1**: **OPERATOR Packaged VSIX — alternate CLI** — add one sentence after the **`code --install-extension`** example: if **`code`** is not on **`PATH`**, use **`codium`** or your editor’s equivalent (**`--install-extension`** path unchanged).
 
 ---
 

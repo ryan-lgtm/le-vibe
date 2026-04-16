@@ -243,6 +243,13 @@ test('OPERATOR.md documents CHANGELOG ships in VSIX via .vscodeignore (task-n22-
   assert.ok(text.includes('.vscodeignore'));
 });
 
+test('OPERATOR.md documents VSIX manual install spot-check (task-n23-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Manual spot-check (task-n23-1)'));
+  assert.ok(text.includes('Lé Vibe Native Agent'));
+  assert.ok(text.includes('displayName'));
+});
+
 test('OPERATOR.md documents version bump vs deb/git (task-n16-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('task-n16-3'));
