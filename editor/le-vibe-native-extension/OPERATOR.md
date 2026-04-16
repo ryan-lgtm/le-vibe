@@ -92,6 +92,18 @@ code --install-extension ./le-vibe-native-extension-0.1.0.vsix
 
 No tokens or cloud secrets are embedded in this packaging path — the VSIX is a local archive of the extension tree plus production **`node_modules`** per **`@vscode/vsce`** defaults.
 
+### Extension version vs monorepo / packaging (task-n16-3)
+
+The **authoritative extension version** for **Lé Vibe Chat** is **`editor/le-vibe-native-extension/package.json`** **`version`** — it feeds **`@vscode/vsce`** output (**`le-vibe-native-extension-<version>.vsix`**) and what users see in the Extensions view. That semver string is **independent by default** from root **Debian** package versions (**`debian/changelog`**, **`le-vibe`** / **`le-vibe-ide`** `.deb` numbers): do **not** assume the IDE `.deb` and this **`package.json`** bump in lockstep unless you deliberately align them for a coordinated release. Monorepo **git tags** are also **manual for now** (no automation in this repo ties a tag only to the extension subtree); teams may use a dedicated tag pattern (e.g. **`levibe-native-extension-v0.2.0`**) or document the extension version in a broader release note.
+
+**Version bump checklist (operators):**
+
+1. Edit **`package.json`** **`version`** (semver: patch / minor / major as appropriate), then **`npm run verify`** in **`editor/le-vibe-native-extension/`**.
+2. Run **`npm run package`** and confirm the generated **`le-vibe-native-extension-<version>.vsix`** matches the new **`version`** string.
+3. Commit the **`package.json`** / lockfile change (if any) on **`main`** (or your release branch).
+4. **Optional git tag** at the repo root: e.g. **`git tag -a levibe-native-extension-vX.Y.Z -m "Lé Vibe native extension X.Y.Z"`** then **`git push origin levibe-native-extension-vX.Y.Z`** — only if your release process uses tags; otherwise skip.
+5. **Publish / hand off:** attach the **`.vsix`** to a **GitHub Release** (or your internal artifact store). Installers upgrading from an older VSIX get the new **`version`** without editing **`debian/`** unless you are also shipping a Debian-side change.
+
 ### Smoke environment (optional)
 
 | Variable | Effect |

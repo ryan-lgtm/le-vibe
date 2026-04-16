@@ -235,3 +235,13 @@ test('OPERATOR.md documents VSIX packaging + install (task-n16-2)', () => {
   assert.ok(text.includes('code --install-extension'));
   assert.ok(text.includes('*.vsix'));
 });
+
+test('OPERATOR.md documents version bump vs deb/git (task-n16-3)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n16-3'));
+  assert.ok(text.includes('package.json'));
+  assert.ok(text.includes('debian/changelog'));
+  assert.ok(text.includes('Version bump checklist'));
+  assert.ok(text.includes('git tag'));
+  assert.ok(text.includes('GitHub Release'));
+});

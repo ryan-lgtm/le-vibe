@@ -708,10 +708,12 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
     - no secrets in VSIX build path
   - Evidence:
     - **`package.json`** **`scripts.package`** = **`vsce package`**; devDependency **`@vscode/vsce`**; **`.vscodeignore`** excludes **`test/`** and smoke script; root **`.gitignore`** **`*.vsix`**; **`LICENSE`** (MIT) for clean packaging; **`OPERATOR.md`** *Packaged VSIX* + **`README.md`** script literal; tests `verify-script.test.js`, `operator-doc.test.js`, `root-gitignore-vsix.test.js`; `npm run verify` green; local **`npm run package`** produces **`le-vibe-native-extension-0.1.0.vsix`**.
-- [ ] `pending` **task-n16-3**: **Version alignment note** — `package.json` `version` vs git tags / deb packaging: single paragraph in `OPERATOR.md` describing how operators bump extension version for a release (even if “manual for now”).
+- [x] `done` **task-n16-3**: **Version alignment note** — `package.json` `version` vs git tags / deb packaging: single paragraph in `OPERATOR.md` describing how operators bump extension version for a release (even if “manual for now”).
   - Acceptance:
     - explicit bump checklist (edit version → tag? → attach VSIX?)
     - contract test optional; at minimum human-readable runbook
+  - Evidence:
+    - **`OPERATOR.md`** *Extension version vs monorepo / packaging (task-n16-3)* — **`package.json`** as source of truth, independence from **`debian/changelog`** / `.deb`, optional **`git tag`**, five-step **Version bump checklist** ending in **GitHub Release** / VSIX handoff; **`test/operator-doc.test.js`** (task-n16-3); `npm run verify` green.
 
 ### Epic N17 — UX polish and operator ergonomics
 
