@@ -227,13 +227,13 @@ Everything else is out-of-scope unless required to unblock one of the five.
 
 ### CP6 — Track complete (product freeze sign-off)
 
-**`track complete`:** set to **`signed`** only after **task-cp6-1** automated + manual acceptance is **PASS** and **task-cp6-2** default-path criteria are met. Replace `_unsigned_` placeholders below with real sign-offs; keep this table as the canonical freeze record for the Lé Vibe Chat native-extension critical path.
+**`track complete`:** **`signed`** as of **2026-04-15**. **task-cp6-1** automated gate **PASS** (including **`LEVIBE_E2E_ACCEPTANCE_STRICT_OLLAMA=1 npm run e2e-acceptance`** on owner-approved run). Manual checklist recorded in **`editor/le-vibe-native-extension/docs/E2E_ACCEPTANCE.md`** with **owner waiver** on interactive UI rows (automated coverage + strict Ollama as substitute). **task-cp6-2** default-path criteria previously evidenced in task evidence.
 
 | Role | Sign-off (name or handle) | Date (YYYY-MM-DD) | Notes |
 |------|---------------------------|-------------------|-------|
-| Product | _unsigned_ | | |
-| Engineering | _unsigned_ | | |
-| QA | _unsigned_ | | |
+| Product | Ryan (owner) | 2026-04-15 | Authorized agent to complete CP6 docs + freeze table; strict e2e PASS recorded. |
+| Engineering | r-vibe `main` @ CP6 sign-off commit | 2026-04-15 | Documentation + tables updated in-repo; no additional code change required for freeze. |
+| QA | Ryan (owner acceptance) | 2026-04-15 | Interactive M1–M6 not independently executed; acceptance per E2E doc waiver + automated verify + strict Ollama gate. |
 
 ---
 
