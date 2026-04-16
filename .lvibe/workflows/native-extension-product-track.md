@@ -1267,9 +1267,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N70 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n70-1**: **Extension README — quick index line references activation sequence return hop** — add one short note in **`README.md`** near *Activation docs quick index (task-n62-1)* that points to *Activation sequence return hop (task-n68-1)* so both index and sequence sections advertise the reciprocal navigation; include targeted token test.
+- [x] `done` **task-n70-1**: **Extension README — quick index line references activation sequence return hop** — add one short note in **`README.md`** near *Activation docs quick index (task-n62-1)* that points to *Activation sequence return hop (task-n68-1)* so both index and sequence sections advertise the reciprocal navigation; include targeted token test.
   - Acceptance:
     - **`README.md`** + targeted test
+    - **`npm run verify`** green
+  - Evidence:
+    - **`README.md`** — **`Activation quick-index return pointer (task-n70-1)`** near quick-index docs references **`Activation sequence return hop (task-n68-1)`**.
+    - **`test/readme-activation-quick-index-return-pointer.test.js`**; **`npm run verify`** green.
+
+### Epic N71 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n71-1**: **OPERATOR — README pointer for quick-index return pointer** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Activation quick-index return pointer (task-n70-1)* so operators can signal the reciprocal nav token from the quick-index side; include **`operator-doc.test.js`** token.
+  - Acceptance:
+    - **`OPERATOR.md`** + **`operator-doc.test.js`** token
     - **`npm run verify`** green
 
 ---

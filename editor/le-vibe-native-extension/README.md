@@ -36,6 +36,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Activation docs quick index (task-n62-1, task-n66-1):** use the activation lines below as a compact index for event inventory, examples, and rationale before diving into implementation details (**`Activation docs sequence (task-n60-1)`** is the guided next-step breadcrumb).
 
+**Activation quick-index return pointer (task-n70-1):** this quick-index context is also the return destination named in **`Activation sequence return hop (task-n68-1)`** when readers loop back from sequence details.
+
 **Activation index next hop (task-n64-1):** after this quick index, jump to **`Activation docs sequence (task-n60-1)`** for the guided breadcrumb flow.
 
 **Activation events (task-n50-1):** **`package.json`** **`activationEvents`** currently lists **`23`** entries: startup hook **`onStartupFinished`** plus **`22`** command-trigger events (**`onCommand:*`**) for deterministic lazy activation.
