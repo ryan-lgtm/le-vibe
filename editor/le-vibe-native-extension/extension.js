@@ -29,6 +29,8 @@ const ADD_CURRENT_FILE_OUTLINE_COMMAND = 'leVibeNative.addCurrentFileOutlineToCo
 
 /** @type {null | { path: string, content: string, selectionRange: { startLine: number, startCharacter: number, endLine: number, endCharacter: number } }} */
 let pendingSelectionContext = null;
+/** @type {string | null} */
+let pendingSelectionPromptTemplate = null;
 
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 const { createOllamaClient } = require('./ollama');
@@ -722,6 +724,9 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
  */
 async function runAskChatAboutSelection() {
   const vscode = require('vscode');
+  const opts = arguments[0] || {};
+  const quickTemplateId =
+    opts && typeof opts.quickTemplateId === 'string' ? opts.quickTemplateId : null;
   if (!isFirstPartyAgentSurfaceEnabled(vscode)) {
     void vscode.window
       .showInformationMessage(
@@ -771,6 +776,7 @@ async function runAskChatAboutSelection() {
     },
     budget,
   );
+  pendingSelectionPromptTemplate = quickTemplateId;
   await vscode.commands.executeCommand(OPEN_AGENT_SURFACE_COMMAND);
 }
 
@@ -805,6 +811,59 @@ function registerSelectionChatCodeLens(vscode, context) {
           ];
         },
       },
+    ),
+  );
+}
+
+/**
+ * @param {typeof import('vscode')} vscode
+ * @param {import('vscode').TextDocument} document
+ * @param {import('vscode').Range} range
+ * @returns {import('vscode').CodeAction[]}
+ */
+function buildSelectionAssistQuickFixes(vscode, document, range) {
+  const cfg = vscode.workspace.getConfiguration('leVibeNative');
+  const inlineEnabled = cfg.get('inlineSuggestionsEnabled', false) === true;
+  if (inlineEnabled) {
+    return [];
+  }
+  if (!range || range.isEmpty) {
+    return [];
+  }
+  if (document.uri.scheme !== 'file' || !vscode.workspace.getWorkspaceFolder(document.uri)) {
+    return [];
+  }
+  const mk = (title, templateId) => {
+    const action = new vscode.CodeAction(title, vscode.CodeActionKind.QuickFix);
+    action.command = {
+      command: ASK_CHAT_ABOUT_SELECTION_COMMAND,
+      title,
+      arguments: [{ quickTemplateId: templateId }],
+    };
+    return action;
+  };
+  return [
+    mk('Lé Vibe Chat: Ask about selection', null),
+    mk('Lé Vibe Chat: Explain selection', QUICK_ACTION_ID.EXPLAIN),
+    mk('Lé Vibe Chat: Refactor selection', QUICK_ACTION_ID.REFACTOR_SELECTION),
+    mk('Lé Vibe Chat: Generate tests from selection', QUICK_ACTION_ID.GENERATE_TESTS),
+  ];
+}
+
+/**
+ * @param {typeof import('vscode')} vscode
+ * @param {import('vscode').ExtensionContext} context
+ */
+function registerSelectionAssistQuickFixProvider(vscode, context) {
+  context.subscriptions.push(
+    vscode.languages.registerCodeActionsProvider(
+      { scheme: 'file' },
+      {
+        provideCodeActions(document, range) {
+          return buildSelectionAssistQuickFixes(vscode, document, range);
+        },
+      },
+      { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] },
     ),
   );
 }
@@ -903,8 +962,11 @@ function openAgentSurface() {
     });
     panel.webview.postMessage({
       type: 'prefillPrompt',
-      text: prefillPromptForSelection(payload.path, r),
+      text: pendingSelectionPromptTemplate
+        ? `${getQuickActionTemplate(pendingSelectionPromptTemplate)}\n\n${prefillPromptForSelection(payload.path, r)}`
+        : prefillPromptForSelection(payload.path, r),
     });
+    pendingSelectionPromptTemplate = null;
   }
 
   function postContextPick(picked, labelPrefix) {
@@ -1668,6 +1730,7 @@ function activate(context) {
     }),
   );
   registerSelectionChatCodeLens(vscode, context);
+  registerSelectionAssistQuickFixProvider(vscode, context);
   context.subscriptions.push(
     vscode.languages.registerInlineCompletionItemProvider({ scheme: 'file' }, inlineProvider),
     vscode.workspace.onDidChangeWorkspaceFolders(() => {
@@ -1936,4 +1999,5 @@ module.exports = {
   panelHtml,
   firstRunWizardHtml,
   isFirstPartyAgentSurfaceEnabled,
+  buildSelectionAssistQuickFixes,
 };

@@ -159,9 +159,15 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Added regression tests in `editor/le-vibe-native-extension/test/inline-suggestions.test.js` for rapid-request debounce suppression and "latest request wins" cancellation semantics.
     - Documented inline suggestion latency budget in `editor/le-vibe-native-extension/README.md` and `editor/le-vibe-native-extension/OPERATOR.md` with target `<= 1200 ms p95` time-to-first-suggestion for small local-prefix requests.
     - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 343 passed, smoke passed).
-- [ ] `pending` **task-cp4-3**: Add fallback quick-fix actions when inline provider is disabled/unavailable.
+- [x] `done` **task-cp4-3**: Add fallback quick-fix actions when inline provider is disabled/unavailable.
   - Acceptance:
     - users still get selection-based assist from context menu/CodeLens
+  - Evidence (2026-04-15):
+    - Updated `editor/le-vibe-native-extension/extension.js` to register a selection-based Quick Fix provider that offers fallback Lé Vibe Chat actions (`Ask`, `Explain`, `Refactor`, `Generate tests`) when `leVibeNative.inlineSuggestionsEnabled` is off; actions route through the existing selection-context flow and prefill the chat prompt with the selected quick-action template.
+    - Existing context-menu and CodeLens selection assist paths remain active (`leVibeNative.askChatAboutSelection`), preserving selection-first assist when inline completion is disabled/unavailable.
+    - Added regression tests in `editor/le-vibe-native-extension/test/scaffold.test.js` for quick-fix fallback action emission when inline suggestions are disabled and suppression when inline suggestions are enabled.
+    - Updated `editor/le-vibe-native-extension/README.md` and `editor/le-vibe-native-extension/OPERATOR.md` to document fallback assist surfaces (context menu, CodeLens, Quick Fix).
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 345 passed, smoke passed).
 
 ## Epic CP5 — Operator/orchestrator integration
 

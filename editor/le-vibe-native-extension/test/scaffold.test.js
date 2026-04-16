@@ -74,7 +74,64 @@ test('extension exports activate/deactivate and command constant', () => {
   assert.equal(extensionModule.ADD_CURRENT_FILE_OUTLINE_COMMAND, 'leVibeNative.addCurrentFileOutlineToContext');
   assert.equal(extensionModule.START_NEW_CHAT_SESSION_COMMAND, 'leVibeNative.startNewChatSession');
   assert.equal(extensionModule.RESTORE_RECENT_PROMPT_COMMAND, 'leVibeNative.restoreRecentPrompt');
+  assert.equal(typeof extensionModule.buildSelectionAssistQuickFixes, 'function');
   assert.equal(path.basename(require.resolve('../extension')), 'extension.js');
+});
+
+test('buildSelectionAssistQuickFixes returns selection fallback quick-fix actions when inline is disabled (task-cp4-3)', () => {
+  const fakeVscode = {
+    workspace: {
+      getConfiguration() {
+        return { get() { return false; } };
+      },
+      getWorkspaceFolder() {
+        return { uri: { toString() { return 'file:///ws'; } } };
+      },
+    },
+    CodeActionKind: { QuickFix: 'quickfix' },
+    CodeAction: class {
+      constructor(title, kind) {
+        this.title = title;
+        this.kind = kind;
+        this.command = null;
+      }
+    },
+  };
+  const out = extensionModule.buildSelectionAssistQuickFixes(
+    fakeVscode,
+    { uri: { scheme: 'file' } },
+    { isEmpty: false },
+  );
+  assert.equal(Array.isArray(out), true);
+  assert.equal(out.length >= 3, true);
+  assert.equal(out[0].command.command, 'leVibeNative.askChatAboutSelection');
+});
+
+test('buildSelectionAssistQuickFixes returns empty when inline is enabled (task-cp4-3)', () => {
+  const fakeVscode = {
+    workspace: {
+      getConfiguration() {
+        return { get() { return true; } };
+      },
+      getWorkspaceFolder() {
+        return { uri: { toString() { return 'file:///ws'; } } };
+      },
+    },
+    CodeActionKind: { QuickFix: 'quickfix' },
+    CodeAction: class {
+      constructor(title, kind) {
+        this.title = title;
+        this.kind = kind;
+        this.command = null;
+      }
+    },
+  };
+  const out = extensionModule.buildSelectionAssistQuickFixes(
+    fakeVscode,
+    { uri: { scheme: 'file' } },
+    { isEmpty: false },
+  );
+  assert.deepEqual(out, []);
 });
 
 test('readiness state set includes required startup states', () => {
