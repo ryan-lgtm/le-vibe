@@ -757,12 +757,23 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N19 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n19-1**: **CHANGELOG for native extension** — add **`editor/le-vibe-native-extension/CHANGELOG.md`** (Keep a Changelog–style: `## [version]` sections); seed **`## [0.1.0]`** with a short shipped-capabilities summary and pointer to this product-track file for full epic history; link from **`README.md`** and **`OPERATOR.md`**.
+- [x] `done` **task-n19-1**: **CHANGELOG for native extension** — add **`editor/le-vibe-native-extension/CHANGELOG.md`** (Keep a Changelog–style: `## [version]` sections); seed **`## [0.1.0]`** with a short shipped-capabilities summary and pointer to this product-track file for full epic history; link from **`README.md`** and **`OPERATOR.md`**.
   - Acceptance:
     - `CHANGELOG.md` present at extension package root
     - README + OPERATOR cross-links
     - `operator-doc.test.js` (or equivalent) asserts the file exists / first section header
     - `npm run verify` green
+  - Evidence:
+    - **`editor/le-vibe-native-extension/CHANGELOG.md`** — **`# Changelog`**, **`## [0.1.0]`** (2026-04-15), Added bullets + product-track pointer; **`README.md`** / **`OPERATOR.md`** cross-links; version-bump step **6** in **`OPERATOR.md`** *Extension version vs monorepo / packaging*.
+    - **`test/changelog-presence.test.js`**, **`operator-doc.test.js`** (task-n19-1); **`npm run verify`** green.
+
+### Epic N20 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n20-1**: **Root README parity** — ensure the monorepo **root `README.md`** “Native extension” (or equivalent) subsection links to **`CHANGELOG.md`** as well as **`README.md`** / **`OPERATOR.md`** under **`editor/le-vibe-native-extension/`**, so release readers find semver notes from the repo landing page.
+  - Acceptance:
+    - root README diff only (no unrelated doc churn)
+    - link to `editor/le-vibe-native-extension/CHANGELOG.md`
+    - `npm run verify` in `editor/le-vibe-native-extension/` still green (extension tests unchanged or extended if a root-doc contract test is added at repo root)
 
 ---
 

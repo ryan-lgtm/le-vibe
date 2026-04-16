@@ -4,6 +4,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Operators:** see **`OPERATOR.md`** for the canonical `npm run verify` command, smoke env vars, and persistence pointers.
 
+**Changelog / release notes (task-n19-1):** see **`CHANGELOG.md`** — Keep a Changelog–style semver sections (**`[0.1.0]`** seeds the current shipped bar); update when bumping **`package.json`** **`version`**.
+
 **Extension entry (packaging):** **`package.json`** **`main`** is **`./extension.js`** (VS Code activation entry; see **`OPERATOR.md`**).
 
 **Prerequisites (developers):** **Node.js 18+** on your PATH to run **`npm run verify`** / **`npm test`** (see `package.json` **`engines.node`**). The installed VS Code extension host uses the editor’s runtime; the Node requirement applies to this package’s scripts and CI only. To install or run this extension in an editor, match **`engines.vscode`** in `package.json` — currently **VS Code 1.85+** or a compatible build (**VSCodium**, etc.) at the same API level.

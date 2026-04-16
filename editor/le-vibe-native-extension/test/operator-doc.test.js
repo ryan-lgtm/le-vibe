@@ -282,3 +282,9 @@ test('OPERATOR.md documents flake hunt loop + pass count (task-n18-2)', () => {
   assert.ok(text.includes('10/10'));
   assert.ok(text.includes('Intentionally skipped tests'));
 });
+
+test('OPERATOR.md documents CHANGELOG pointer (task-n19-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('CHANGELOG (task-n19-1)'));
+  assert.ok(text.includes('CHANGELOG.md'));
+});

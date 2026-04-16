@@ -125,6 +125,7 @@ The **authoritative extension version** for **Lé Vibe Chat** is **`editor/le-vi
 3. Commit the **`package.json`** / lockfile change (if any) on **`main`** (or your release branch).
 4. **Optional git tag** at the repo root: e.g. **`git tag -a levibe-native-extension-vX.Y.Z -m "Lé Vibe native extension X.Y.Z"`** then **`git push origin levibe-native-extension-vX.Y.Z`** — only if your release process uses tags; otherwise skip.
 5. **Publish / hand off:** attach the **`.vsix`** to a **GitHub Release** (or your internal artifact store). Installers upgrading from an older VSIX get the new **`version`** without editing **`debian/`** unless you are also shipping a Debian-side change.
+6. **CHANGELOG:** add a **`## [version]`** section to **`CHANGELOG.md`** summarizing user-visible changes (see *CHANGELOG (task-n19-1)* under *Product track*).
 
 ### Smoke environment (optional)
 
@@ -146,6 +147,8 @@ Chat transcript JSONL is capped by **`leVibeNative.chatTranscriptMaxBytes`** (de
 ## Product track
 
 Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N8 — operator runbook).
+
+**CHANGELOG (task-n19-1):** **`CHANGELOG.md`** — semver release notes at the package root (Keep a Changelog–style). When you bump **`package.json`** **`version`**, add a **`## [x.y.z]`** section there (coordinate with *Extension version vs monorepo / packaging (task-n16-3)*). Epic-level history remains in the product-track file above.
 
 **Security notes (task-n18-1):** see **`## Security notes (task-n18-1)`** above — **`npm audit`** triage, **`overrides`** policy, issue tracker pointer.
 
