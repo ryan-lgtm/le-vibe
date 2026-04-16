@@ -188,6 +188,8 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 
 **README: activation count rationale lookup (task-n59-1):** the startup-count relationship is written out in **`README.md`** *Activation count rationale lookup (task-n58-1)* — use that section to explain why startup activation appears in the event breakdown quickly.
 
+**README: activation docs sequence (task-n61-1):** the intended activation-doc flow is written out in **`README.md`** *Activation docs sequence (task-n60-1)* — use that section when guiding contributors through activation metadata discovery.
+
 **CHANGELOG (task-n19-1):** **`CHANGELOG.md`** — semver release notes at the package root (Keep a Changelog–style). When you bump **`package.json`** **`version`**, add a **`## [x.y.z]`** section there (coordinate with *Extension version vs monorepo / packaging (task-n16-3)*). Epic-level history remains in the product-track file above.
 
 **Security notes (task-n18-1):** see **`## Security notes (task-n18-1)`** above — **`npm audit`** triage, **`overrides`** policy, issue tracker pointer.
