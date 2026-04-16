@@ -36,6 +36,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Activation events (task-n50-1):** **`package.json`** **`activationEvents`** currently lists **`23`** entries: startup hook **`onStartupFinished`** plus **`22`** command-trigger events (**`onCommand:*`**) for deterministic lazy activation.
 
+**Activation count rationale lookup (task-n58-1):** for why the startup literal appears in that count breakdown, see **`Startup activation intent (task-n54-1)`** below.
+
 **Activation event example (task-n52-1):** one shipped command-trigger literal is **`onCommand:leVibeNative.openAgentSurface`** from **`package.json`** **`activationEvents`** (concrete prefix example mapping to a real command contribution).
 
 **Activation example lookup (task-n56-1):** for the palette label behind that event literal, see **`## Command palette and keyboard shortcuts (task-n17-1)`** below (single-hop mapping from activation trigger to user-visible command title).
