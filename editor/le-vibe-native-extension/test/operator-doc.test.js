@@ -194,6 +194,14 @@ test('OPERATOR.md cross-links README version (task-n45-1)', () => {
   assert.ok(text.includes('version'));
 });
 
+test('OPERATOR.md cross-links README engines.vscode minimum (task-n47-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n47-1'));
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('Editor API minimum (task-n46-1)'));
+  assert.ok(text.includes('engines.vscode'));
+});
+
 test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('workspace.applyEdit'));
