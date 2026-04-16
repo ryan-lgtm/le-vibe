@@ -34,7 +34,7 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Extension entry (packaging):** **`package.json`** **`main`** is **`./extension.js`** (VS Code activation entry; see **`OPERATOR.md`**).
 
-**Activation docs quick index (task-n62-1):** use the activation lines below as a compact index for event inventory, examples, and rationale before diving into implementation details.
+**Activation docs quick index (task-n62-1, task-n66-1):** use the activation lines below as a compact index for event inventory, examples, and rationale before diving into implementation details (**`Activation docs sequence (task-n60-1)`** is the guided next-step breadcrumb).
 
 **Activation index next hop (task-n64-1):** after this quick index, jump to **`Activation docs sequence (task-n60-1)`** for the guided breadcrumb flow.
 

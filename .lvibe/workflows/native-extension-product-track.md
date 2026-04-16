@@ -1227,9 +1227,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N66 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n66-1**: **Extension README — activation docs quick index references sequence token** — add one short parenthetical on *Activation docs quick index (task-n62-1)* explicitly naming *Activation docs sequence (task-n60-1)* so the index line itself carries the next-step token; include targeted token test.
+- [x] `done` **task-n66-1**: **Extension README — activation docs quick index references sequence token** — add one short parenthetical on *Activation docs quick index (task-n62-1)* explicitly naming *Activation docs sequence (task-n60-1)* so the index line itself carries the next-step token; include targeted token test.
   - Acceptance:
     - **`README.md`** + targeted test
+    - **`npm run verify`** green
+  - Evidence:
+    - **`README.md`** — **`Activation docs quick index (task-n62-1)`** now explicitly names **`Activation docs sequence (task-n60-1)`**.
+    - **`test/readme-activation-quick-index-sequence-token.test.js`**; **`npm run verify`** green.
+
+### Epic N67 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n67-1**: **OPERATOR — README pointer for quick-index sequence token** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Activation docs quick index (task-n62-1)* and noting it explicitly references *Activation docs sequence (task-n60-1)* so operators can call out the built-in next step.
+  - Acceptance:
+    - **`OPERATOR.md`** + **`operator-doc.test.js`** token
     - **`npm run verify`** green
 
 ---
