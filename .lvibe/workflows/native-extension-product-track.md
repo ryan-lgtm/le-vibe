@@ -636,9 +636,11 @@ Product intent: complement the chat panel with lightweight, Copilot-like trigger
     - works when panel closed (opens panel)
   - Evidence:
     - Command **`leVibeNative.askChatAboutSelection`** + editor context menu; CodeLens on selection range; `runAskChatAboutSelection` → `pendingSelectionContext` + **`executeCommand(openAgentSurface)`**; `flushPendingSelectionContext` pushes context + **`prefillPrompt`**; **`selection-chat-context.js`**; README + `OPERATOR.md`; tests `selection-chat-context.test.js`, scaffold, `operator-doc`; `npm run verify` green.
-- [ ] `pending` **task-n12-2**: **Quick actions** strip in chat for common intents (explain, refactor selection, generate tests) as templated prompts (local-only).
+- [x] `done` **task-n12-2**: **Quick actions** strip in chat for common intents (explain, refactor selection, generate tests) as templated prompts (local-only).
   - Acceptance:
     - templates documented; no network calls beyond configured Ollama
+  - Evidence:
+    - Panel buttons **`quickActionExplain`** / **`quickActionRefactorSelection`** / **`quickActionGenerateTests`** → **`prefillPrompt`** + status; templates in **`chat-quick-actions.js`** (`explain`, `refactor_selection`, `generate_tests`); README lists exact template intents; **`OPERATOR.md`**; tests **`chat-quick-actions.test.js`**, scaffold + `operator-doc`; `npm run verify` green.
 
 ### Epic N13 — Terminal and command execution (Cursor-like, high risk — gated)
 

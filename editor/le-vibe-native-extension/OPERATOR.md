@@ -48,6 +48,8 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Selection → chat (task-n12-1):** Palette / context menu **`leVibeNative.askChatAboutSelection`** + CodeLens on selection — opens agent surface if needed; pushes path + clipped selection into context; **`selection-chat-context.js`**.
 
+**Quick action templates (task-n12-2):** Panel **Explain / Refactor selection / Generate tests** — inserts `QUICK_ACTION_TEMPLATES` from **`chat-quick-actions.js`**; Ollama only on **Send Prompt** (local endpoint).
+
 **Startup / rollout (defaults):** **`leVibeNative.enableFirstPartyAgentSurface`** default **`true`** (first-party Lé Vibe Chat surface); **`leVibeNative.showFirstRunWizard`** default **`true`** (checkpointed wizard); **`leVibeNative.openPanelOnStartup`** default **`true`** (auto-open panel when the first-party surface is enabled). Rollback semantics in **`README.md`** *Rollout and rollback*.
 
 **Third-party migration nudge:** **`leVibeNative.showThirdPartyMigrationNudge`** default **`true`**. **Ollama readiness source:** **`leVibeNative.useLiveOllamaReadiness`** default **`true`** (live local probes; for development overrides, set **`leVibeNative.useLiveOllamaReadiness`** to **`false`** and use **`leVibeNative.devStartupState`**). Migration flow in **`README.md`** *Third-party agent migration*.

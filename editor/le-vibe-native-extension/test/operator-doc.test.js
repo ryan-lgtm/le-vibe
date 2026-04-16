@@ -191,3 +191,10 @@ test('OPERATOR.md documents selection to chat (task-n12-1)', () => {
   assert.ok(text.includes('leVibeNative.askChatAboutSelection'));
   assert.ok(text.includes('selection-chat-context.js'));
 });
+
+test('OPERATOR.md documents quick action templates (task-n12-2)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n12-2'));
+  assert.ok(text.includes('chat-quick-actions.js'));
+  assert.ok(text.includes('QUICK_ACTION_TEMPLATES'));
+});

@@ -33,6 +33,14 @@ const {
   relativePosixForGitignore,
 } = require('./context-file-guards');
 const { buildSelectionContextEntry, prefillPromptForSelection } = require('./selection-chat-context');
+const { QUICK_ACTION_ID, getQuickActionTemplate } = require('./chat-quick-actions');
+
+/** Panel `data-action` → quick template id (task-n12-2). */
+const PANEL_QUICK_ACTION_MAP = {
+  quickActionExplain: QUICK_ACTION_ID.EXPLAIN,
+  quickActionRefactorSelection: QUICK_ACTION_ID.REFACTOR_SELECTION,
+  quickActionGenerateTests: QUICK_ACTION_ID.GENERATE_TESTS,
+};
 const {
   validateWorkspaceRelativeCreatePath,
   createWorkspaceFile,
@@ -481,6 +489,12 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <div>${actionsBlock}</div>
   <h3>Local prompt test</h3>
   <p class="muted">Send a prompt to local Ollama and receive streaming tokens.</p>
+  <p class="muted" style="margin-bottom:0.25rem;">Quick actions (task-n12-2) — insert a template below. No network until you click <strong>Send Prompt</strong> (local Ollama only).</p>
+  <div>
+    <button type="button" data-action="quickActionExplain">Explain…</button>
+    <button type="button" data-action="quickActionRefactorSelection">Refactor selection…</button>
+    <button type="button" data-action="quickActionGenerateTests">Generate tests…</button>
+  </div>
   <textarea id="promptInput" placeholder="Ask local model something..."></textarea>
   <div>
     <button id="sendPrompt">Send Prompt</button>
@@ -1238,6 +1252,16 @@ function openAgentSurface() {
     if (msg.type === 'action' && msg.actionId === 'clearContextFiles') {
       selectedContexts.length = 0;
       panel.webview.postMessage({ type: 'chatUpdate', status: 'Workspace context cleared.' });
+      return;
+    }
+    if (msg.type === 'action' && PANEL_QUICK_ACTION_MAP[msg.actionId]) {
+      const qid = PANEL_QUICK_ACTION_MAP[msg.actionId];
+      const template = getQuickActionTemplate(qid);
+      panel.webview.postMessage({ type: 'prefillPrompt', text: template });
+      panel.webview.postMessage({
+        type: 'chatUpdate',
+        status: `Lé Vibe Chat: "${qid}" template loaded — edit the prompt, then Send Prompt (local Ollama only).`,
+      });
       return;
     }
     if (msg.type === 'action' && msg.actionId === 'createWorkspaceFilePrompt') {

@@ -95,6 +95,14 @@ Token-budget rules (configurable in Settings):
 - **CodeLens:** when text is selected, a lens **Ask Lé Vibe Chat about this selection** appears on the selection range and runs the same command.
 - Helpers: [`selection-chat-context.js`](selection-chat-context.js) (`buildSelectionContextEntry`, `prefillPromptForSelection`).
 
+### Quick actions — templated prompts (task-n12-2)
+
+- **Panel strip** under *Local prompt test*: **Explain…**, **Refactor selection…**, **Generate tests…** — each inserts a **fixed template** into the prompt box. **No HTTP** runs until you click **Send Prompt** (then only the configured **local Ollama** endpoint, same as any other chat message).
+- Templates (see [`chat-quick-actions.js`](chat-quick-actions.js) `QUICK_ACTION_TEMPLATES`):
+  - **`explain`** — *Explain the following code or notes in plain language. Call out assumptions and edge cases.*
+  - **`refactor_selection`** — *Refactor the code below for clarity…* (behavior-preserving; preserve public APIs unless noted.)
+  - **`generate_tests`** — *Generate focused unit tests…* (minimal mocks; note gaps.)
+
 ## Edit preview before apply (Epic N9)
 
 - **`leVibeNative.requireEditPreviewBeforeApply`** (default **`true`**) — for the panel **Preview sample workspace edit** flow, a unified diff is shown first; when **`true`**, you must click **Accept preview** before **Apply to file** (no silent whole-file overwrite from preview alone). Set to **`false`** only if you accept **Apply to file** immediately after the diff is shown (the preview is still displayed for that demo path).

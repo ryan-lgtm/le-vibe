@@ -109,5 +109,7 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('createWorkspaceFilePrompt'));
     assert.ok(html.includes('moveWorkspacePathPrompt'));
     assert.ok(html.includes('deleteWorkspacePathPrompt'));
+    assert.ok(html.includes('quickActionExplain'));
+    assert.ok(html.includes('task-n12-2'));
   });
 });
