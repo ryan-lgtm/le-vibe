@@ -1187,9 +1187,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N62 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n62-1**: **Extension README — activation docs quick index label** — add one short line introducing the activation-doc cluster as a quick index (right above the activation lines) so contributors can recognize the section purpose before reading each item; include a targeted token test.
+- [x] `done` **task-n62-1**: **Extension README — activation docs quick index label** — add one short line introducing the activation-doc cluster as a quick index (right above the activation lines) so contributors can recognize the section purpose before reading each item; include a targeted token test.
   - Acceptance:
     - **`README.md`** + targeted test
+    - **`npm run verify`** green
+  - Evidence:
+    - **`README.md`** — **`Activation docs quick index (task-n62-1)`** introducing the activation-doc cluster.
+    - **`test/readme-activation-docs-quick-index.test.js`**; **`npm run verify`** green.
+
+### Epic N63 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n63-1**: **OPERATOR — README pointer for activation docs quick index** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Activation docs quick index (task-n62-1)* so operators can send contributors to the activation doc cluster entrypoint first.
+  - Acceptance:
+    - **`OPERATOR.md`** + **`operator-doc.test.js`** token
     - **`npm run verify`** green
 
 ---
