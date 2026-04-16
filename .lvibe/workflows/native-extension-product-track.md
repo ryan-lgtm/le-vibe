@@ -769,11 +769,22 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N20 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n20-1**: **Root README parity** — ensure the monorepo **root `README.md`** “Native extension” (or equivalent) subsection links to **`CHANGELOG.md`** as well as **`README.md`** / **`OPERATOR.md`** under **`editor/le-vibe-native-extension/`**, so release readers find semver notes from the repo landing page.
+- [x] `done` **task-n20-1**: **Root README parity** — ensure the monorepo **root `README.md`** “Native extension” (or equivalent) subsection links to **`CHANGELOG.md`** as well as **`README.md`** / **`OPERATOR.md`** under **`editor/le-vibe-native-extension/`**, so release readers find semver notes from the repo landing page.
   - Acceptance:
     - root README diff only (no unrelated doc churn)
     - link to `editor/le-vibe-native-extension/CHANGELOG.md`
     - `npm run verify` in `editor/le-vibe-native-extension/` still green (extension tests unchanged or extended if a root-doc contract test is added at repo root)
+  - Evidence:
+    - **Root `README.md`** *Documentation & project depth* — added **semver release notes** link to **`editor/le-vibe-native-extension/CHANGELOG.md`** alongside README, OPERATOR, product track.
+    - **`test/root-readme-pointer.test.js`** — **`monorepo root README links native extension CHANGELOG (task-n20-1)`**; **`npm run verify`** green.
+
+### Epic N21 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n21-1**: **`docs/README.md` CHANGELOG parity** — extend **`docs/README.md`** first-party native extension bullet (or adjacent line) with the same **`editor/le-vibe-native-extension/CHANGELOG.md`** link so the maintainer index matches the repo landing page.
+  - Acceptance:
+    - `docs/README.md` only (plus product-track / tests if contract test added under `editor/le-vibe-native-extension/test/`)
+    - link path matches root README
+    - `npm run verify` green
 
 ---
 
