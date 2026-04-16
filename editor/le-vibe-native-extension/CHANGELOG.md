@@ -10,6 +10,8 @@ All notable changes to **Lé Vibe Native Agent** / **Lé Vibe Chat** in this pac
 - Keyboard-accessible tab navigation with WAI-ARIA roles (`tablist`, `tab`, `tabpanel`) and arrow/home/end support for panel switching.
 - Milestone EPIC B (composer interaction model): chat composer now supports `Enter` to send, `Shift+Enter` for newline, immediate clear-on-send, local user echo in the timeline, and auto-grow up to 12 visible rows.
 - Composer visual refresh for dark-theme chat ergonomics with high-contrast foreground and reduced friction for longer prompt drafting.
+- Milestone EPIC C (timeline + markdown): chat feed now uses structured role-based message bubbles with assistant markdown rendering (headings, lists, code fences, inline code, emphasis) in the webview.
+- Milestone EPIC D (thinking/streaming UX): added looping thinking indicator (`.` → `.....`) while waiting for first token, with immediate stop and seamless transition once streaming begins.
 
 ### Fixed
 

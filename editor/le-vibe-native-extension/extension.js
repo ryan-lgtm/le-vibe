@@ -534,7 +534,19 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     }
     textarea::placeholder { color: rgba(255, 255, 255, 0.72); }
     textarea:focus { outline: 1px solid var(--vscode-focusBorder); outline-offset: 1px; }
-    .chat-log { margin-top: 0.75rem; border: 1px solid var(--vscode-panel-border); border-radius: 6px; padding: 0.6rem; min-height: 80px; white-space: pre-wrap; word-break: break-word; }
+    .chat-log { margin-top: 0.75rem; border: 1px solid var(--vscode-panel-border); border-radius: 6px; padding: 0.6rem; min-height: 140px; max-height: 42vh; overflow-y: auto; display: flex; flex-direction: column; gap: 0.45rem; }
+    .msg { max-width: 90%; border: 1px solid var(--vscode-panel-border); border-radius: 8px; padding: 0.45rem 0.55rem; word-break: break-word; }
+    .msg-user { align-self: flex-end; background: rgba(70, 90, 120, 0.35); }
+    .msg-assistant { align-self: flex-start; background: var(--vscode-editorWidget-background); }
+    .msg-system { align-self: center; background: transparent; border-style: dashed; opacity: 0.9; }
+    .msg-role { font-size: 11px; opacity: 0.75; margin-bottom: 0.2rem; text-transform: uppercase; letter-spacing: 0.02em; }
+    .msg-content p { margin: 0.3rem 0; }
+    .msg-content p:first-child { margin-top: 0; }
+    .msg-content p:last-child { margin-bottom: 0; }
+    .msg-content pre { overflow: auto; background: var(--vscode-textCodeBlock-background); border-radius: 6px; padding: 0.45rem; }
+    .msg-content code { font-family: var(--vscode-editor-font-family, var(--vscode-font-family)); }
+    .msg-content ul { margin: 0.3rem 0 0.3rem 1.2rem; padding: 0; }
+    .msg-content h1, .msg-content h2, .msg-content h3 { margin: 0.4rem 0 0.2rem 0; font-size: 1em; }
     .diag { margin-top: 0.75rem; background: var(--vscode-textCodeBlock-background); padding: 0.6rem; border-radius: 6px; white-space: pre-wrap; word-break: break-word; }
     .skip-link { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
     .skip-link:focus { position: static; width: auto; height: auto; left: auto; padding: 0.35rem 0.55rem; margin-bottom: 0.5rem; background: var(--vscode-button-background); color: var(--vscode-button-foreground); outline: 1px solid var(--vscode-focusBorder); z-index: 1; }
@@ -723,15 +735,145 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
       });
     }
     const MAX_COMPOSER_ROWS = 12;
+    const THINKING_STEPS = ['.', '..', '...', '....', '.....'];
     const promptInput = document.getElementById('promptInput');
     const chatLog = document.getElementById('chatLog');
-    const appendLine = (text) => {
-      if (typeof text !== 'string' || text.length === 0) {
+    const chatStatus = document.getElementById('chatStatus');
+    const messages = [];
+    let pendingAssistantId = null;
+    let thinkingTimer = null;
+    let thinkingStep = 0;
+    let sawFirstToken = false;
+    const escapeHtml = (value) =>
+      String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    const inlineMarkdown = (value) =>
+      escapeHtml(value)
+        .replace(/\x60([^\x60]+)\x60/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    const markdownToHtml = (raw) => {
+      const input = String(raw || '');
+      if (!input.trim()) {
+        return '';
+      }
+      const lines = input.split(/\r?\n/);
+      const out = [];
+      let inCode = false;
+      let codeLines = [];
+      let inList = false;
+      const closeList = () => {
+        if (inList) {
+          out.push('</ul>');
+          inList = false;
+        }
+      };
+      for (const line of lines) {
+        if (line.trim().startsWith('\x60\x60\x60')) {
+          closeList();
+          if (!inCode) {
+            inCode = true;
+            codeLines = [];
+          } else {
+            out.push('<pre><code>' + escapeHtml(codeLines.join('\n')) + '</code></pre>');
+            inCode = false;
+            codeLines = [];
+          }
+          continue;
+        }
+        if (inCode) {
+          codeLines.push(line);
+          continue;
+        }
+        const heading = line.match(/^(#{1,3})\s+(.*)$/);
+        if (heading) {
+          closeList();
+          const level = heading[1].length;
+          out.push('<h' + level + '>' + inlineMarkdown(heading[2]) + '</h' + level + '>');
+          continue;
+        }
+        const list = line.match(/^\s*[-*]\s+(.*)$/);
+        if (list) {
+          if (!inList) {
+            out.push('<ul>');
+            inList = true;
+          }
+          out.push('<li>' + inlineMarkdown(list[1]) + '</li>');
+          continue;
+        }
+        closeList();
+        if (line.trim().length === 0) {
+          continue;
+        }
+        out.push('<p>' + inlineMarkdown(line) + '</p>');
+      }
+      closeList();
+      if (inCode) {
+        out.push('<pre><code>' + escapeHtml(codeLines.join('\n')) + '</code></pre>');
+      }
+      return out.join('');
+    };
+    const renderTimeline = () => {
+      chatLog.innerHTML = '';
+      for (const msg of messages) {
+        const item = document.createElement('div');
+        item.className = 'msg ' + (msg.role === 'user' ? 'msg-user' : msg.role === 'assistant' ? 'msg-assistant' : 'msg-system');
+        const role = document.createElement('div');
+        role.className = 'msg-role';
+        role.textContent = msg.role;
+        const body = document.createElement('div');
+        body.className = 'msg-content';
+        if (msg.role === 'assistant') {
+          body.innerHTML = markdownToHtml(msg.content);
+        } else {
+          body.textContent = msg.content;
+        }
+        item.appendChild(role);
+        item.appendChild(body);
+        chatLog.appendChild(item);
+      }
+      chatLog.scrollTop = chatLog.scrollHeight;
+    };
+    const pushMessage = (role, content) => {
+      const entry = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8), role, content: String(content || '') };
+      messages.push(entry);
+      renderTimeline();
+      return entry.id;
+    };
+    const updateMessage = (id, nextContent) => {
+      const target = messages.find((m) => m.id === id);
+      if (!target) {
         return;
       }
-      const needsBreak = chatLog.textContent.length > 0 && !chatLog.textContent.endsWith('\n');
-      chatLog.textContent += (needsBreak ? '\n' : '') + text;
-      chatLog.scrollTop = chatLog.scrollHeight;
+      target.content = String(nextContent || '');
+      renderTimeline();
+    };
+    const clearTimeline = () => {
+      messages.length = 0;
+      pendingAssistantId = null;
+      sawFirstToken = false;
+      renderTimeline();
+    };
+    const stopThinkingIndicator = () => {
+      if (thinkingTimer) {
+        clearInterval(thinkingTimer);
+        thinkingTimer = null;
+      }
+    };
+    const startThinkingIndicator = (assistantMessageId) => {
+      stopThinkingIndicator();
+      thinkingStep = 0;
+      sawFirstToken = false;
+      thinkingTimer = setInterval(() => {
+        if (sawFirstToken) {
+          stopThinkingIndicator();
+          return;
+        }
+        updateMessage(assistantMessageId, THINKING_STEPS[thinkingStep]);
+        thinkingStep = (thinkingStep + 1) % THINKING_STEPS.length;
+      }, 240);
     };
     const autoresizeComposer = () => {
       if (!promptInput) {
@@ -767,8 +909,9 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
         vscode.postMessage({ type: 'chat', actionId: 'sendPrompt', prompt });
         return;
       }
-      appendLine('User: ' + trimmed);
-      appendLine('Assistant:');
+      pushMessage('user', trimmed);
+      pendingAssistantId = pushMessage('assistant', THINKING_STEPS[0]);
+      startThinkingIndicator(pendingAssistantId);
       if (promptInput) {
         promptInput.value = '';
         autoresizeComposer();
@@ -829,16 +972,36 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
       if (!msg || msg.type !== 'chatUpdate') {
         return;
       }
-      const status = document.getElementById('chatStatus');
-      const log = document.getElementById('chatLog');
       if (msg.status) {
-        status.textContent = msg.status;
+        chatStatus.textContent = msg.status;
+        if (/Response complete|Request cancelled|No request is currently running|Enter a prompt first\./.test(msg.status)) {
+          stopThinkingIndicator();
+          pendingAssistantId = null;
+        }
       }
       if (typeof msg.replaceLog === 'string') {
-        log.textContent = msg.replaceLog;
+        if (msg.replaceLog.length === 0) {
+          clearTimeline();
+        } else {
+          clearTimeline();
+          pushMessage('system', msg.replaceLog);
+        }
       } else if (typeof msg.append === 'string') {
-        log.textContent += msg.append;
-        log.scrollTop = log.scrollHeight;
+        if (!pendingAssistantId) {
+          pendingAssistantId = pushMessage('assistant', '');
+        }
+        const target = messages.find((m) => m.id === pendingAssistantId);
+        if (!target) {
+          pendingAssistantId = pushMessage('assistant', msg.append);
+        } else {
+          if (!sawFirstToken) {
+            sawFirstToken = true;
+            stopThinkingIndicator();
+            target.content = '';
+          }
+          target.content += msg.append;
+          renderTimeline();
+        }
       }
     });
     document.getElementById('editPreviewAccept').addEventListener('click', () => {

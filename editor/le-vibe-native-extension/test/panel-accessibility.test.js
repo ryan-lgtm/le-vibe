@@ -14,6 +14,7 @@ test('panel and wizard HTML include accessibility baseline (task-n17-2)', () => 
   assert.ok(panel.includes('aria-label="Prompt for local Ollama'), 'prompt aria-label');
   assert.ok(panel.includes('role="status"'), 'chat status live region');
   assert.ok(panel.includes('role="log"'), 'chat log live region');
+  assert.ok(panel.includes('aria-relevant="additions text"'), 'chat log additions mode');
   assert.ok(panel.includes('nav aria-label='), 'states nav label');
 
   const wiz = extensionModule.firstRunWizardHtml(0);
