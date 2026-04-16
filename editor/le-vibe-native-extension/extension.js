@@ -1179,9 +1179,16 @@ function openAgentSurface() {
         const rel = '.levibe-edit-preview-demo.txt';
         const targetUri = vscode.Uri.joinPath(folder.uri, rel);
         let before = '';
+        let previewStat = null;
         try {
           const bytes = await vscode.workspace.fs.readFile(targetUri);
           before = Buffer.from(bytes).toString('utf8');
+          try {
+            const st = await vscode.workspace.fs.stat(targetUri);
+            previewStat = { mtime: st.mtime, size: st.size };
+          } catch {
+            previewStat = null;
+          }
         } catch {
           before = '';
         }
@@ -1213,7 +1220,7 @@ function openAgentSurface() {
           newText: after,
           previewShown: true,
           userAccepted: false,
-          previewRevision: buildPreviewRevision(before),
+          previewRevision: buildPreviewRevision(before, previewStat),
         };
         panel.webview.postMessage({
           type: 'editPreview',

@@ -100,9 +100,14 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Hardened `editor/le-vibe-native-extension/workspace-edit-apply.js` to explicitly reject empty proposal batches before any write call and preserve a single `workspace.applyEdit` call for each accepted validated batch.
     - Added focused regression tests in `editor/le-vibe-native-extension/test/workspace-edit-apply.test.js` for mixed full-file + range edits in one batch (`getApplyCount() === 1`) and for empty-batch rejection without any `applyEdit` call.
     - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 332 passed, smoke passed).
-- [ ] `pending` **task-cp2-4**: Stale-file conflict detection (version/hash/mtime) before apply.
+- [x] `done` **task-cp2-4**: Stale-file conflict detection (version/hash/mtime) before apply.
   - Acceptance:
     - deterministic conflict remediation shown to user
+  - Evidence (2026-04-15):
+    - Updated `editor/le-vibe-native-extension/edit-conflict.js` preview revision contract to include metadata snapshot (`mtimeMs`, `sizeBytes`) alongside content hash and added deterministic metadata conflict copy (`EDIT_PREVIEW_METADATA_CONFLICT_MESSAGE`).
+    - Updated `editor/le-vibe-native-extension/extension.js` preview capture to snapshot file stat metadata at preview time and pass it into `buildPreviewRevision(...)` so apply-time checks enforce mtime/size drift plus hash mismatch and missing-file remediation.
+    - Added regression coverage in `editor/le-vibe-native-extension/test/edit-conflict.test.js` for mtime-drift and size-drift blocked apply behavior with deterministic remediation messages.
+    - Verification: `npm run verify` in `editor/le-vibe-native-extension/` (tests 334 passed, smoke passed).
 
 ## Epic CP3 — Agentic file system operations (create/edit/delete/move)
 
