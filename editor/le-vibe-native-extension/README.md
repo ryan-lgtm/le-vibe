@@ -22,6 +22,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Description (task-n40-1):** **`package.json`** **`description`** — *First-party Lé Vibe agent surface for deterministic startup and local-first orchestration.* (Marketplace / Extensions UI summary blurb.)
 
+**Package name (task-n42-1):** **`le-vibe-native-extension`** — **`package.json`** **`name`** (npm/package identifier; distinct from **`displayName`**).
+
 **Changelog / release notes (task-n19-1):** see **`CHANGELOG.md`** — Keep a Changelog–style semver sections (**`[0.1.0]`** seeds the current shipped bar); update when bumping **`package.json`** **`version`**.
 
 **Extension entry (packaging):** **`package.json`** **`main`** is **`./extension.js`** (VS Code activation entry; see **`OPERATOR.md`**).
