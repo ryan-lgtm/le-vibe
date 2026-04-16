@@ -646,9 +646,11 @@ Product intent: complement the chat panel with lightweight, Copilot-like trigger
 
 Product intent: Cursor-like agent runs can execute shell commands; this must be **opt-in**, obvious, and logged.
 
-- [ ] `pending` **task-n13-1**: Design **terminal execution policy**: off by default; per-workspace opt-in; allow-list/deny-list patterns.
+- [x] `done` **task-n13-1**: Design **terminal execution policy**: off by default; per-workspace opt-in; allow-list/deny-list patterns.
   - Acceptance:
     - written policy in docs + settings keys
+  - Evidence:
+    - `TERMINAL_EXECUTION_POLICY.md` + `terminal-execution-policy.js`; `package.json` contributes **`leVibeNative.terminalExecutionEnabled`** (default **false**), **`leVibeNative.terminalCommandAllowPatterns`**, **`leVibeNative.terminalCommandDenyPatterns`**; README + `OPERATOR.md`; `test/terminal-execution-policy.test.js`; `npm run verify` green in `editor/le-vibe-native-extension`.
 - [ ] `pending` **task-n13-2**: If enabled, run commands in **VS Code terminal** with full user visibility (no hidden PTY).
   - Acceptance:
     - user must confirm each command batch unless an explicit “session allow” mode is enabled (advanced)

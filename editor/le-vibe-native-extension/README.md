@@ -103,6 +103,14 @@ Token-budget rules (configurable in Settings):
   - **`refactor_selection`** — *Refactor the code below for clarity…* (behavior-preserving; preserve public APIs unless noted.)
   - **`generate_tests`** — *Generate focused unit tests…* (minimal mocks; note gaps.)
 
+## Terminal execution policy (Epic N13, task-n13-1)
+
+Agent-driven shell commands are **high risk**; policy is **settings + documentation only** until Epic N13 wires execution (see [`TERMINAL_EXECUTION_POLICY.md`](TERMINAL_EXECUTION_POLICY.md), [`terminal-execution-policy.js`](terminal-execution-policy.js)).
+
+- **`leVibeNative.terminalExecutionEnabled`** — default **`false`** (off until you opt in; use **Workspace** settings for per-repo opt-in).
+- **`leVibeNative.terminalCommandAllowPatterns`** — default **empty**; when execution is enabled, you must add at least one allow pattern or **no** commands pass (allow-list mode).
+- **`leVibeNative.terminalCommandDenyPatterns`** — shipped **deny** defaults block common destructive / pipe-to-shell patterns; **deny** is evaluated before **allow**.
+
 ## Edit preview before apply (Epic N9)
 
 - **`leVibeNative.requireEditPreviewBeforeApply`** (default **`true`**) — for the panel **Preview sample workspace edit** flow, a unified diff is shown first; when **`true`**, you must click **Accept preview** before **Apply to file** (no silent whole-file overwrite from preview alone). Set to **`false`** only if you accept **Apply to file** immediately after the diff is shown (the preview is still displayed for that demo path).

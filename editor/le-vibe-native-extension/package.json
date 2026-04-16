@@ -285,6 +285,33 @@
             "type": "boolean",
             "default": true,
             "description": "After creating a workspace file via Lé Vibe Chat scaffold commands, open it in the active editor."
+          },
+          "leVibeNative.terminalExecutionEnabled": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "**Off by default.** When **true**, future Lé Vibe Chat terminal execution (Epic N13) may run only under allow/deny rules. Prefer **Workspace** settings so each repository opts in explicitly."
+          },
+          "leVibeNative.terminalCommandAllowPatterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [],
+            "description": "Allow-list for agent terminal commands: each entry matches the normalized one-line command (case-insensitive substring, or * for a simple full-line glob). If execution is enabled and this list is empty, no commands are permitted."
+          },
+          "leVibeNative.terminalCommandDenyPatterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [
+              "rm -rf",
+              "sudo ",
+              ":(){ :|:& };:",
+              "| sh",
+              "curl | sh"
+            ],
+            "description": "Deny-list: if any pattern matches the normalized command (substring or * glob), the command is blocked before allow matching."
           }
         }
       }
