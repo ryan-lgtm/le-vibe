@@ -156,6 +156,8 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 
 **README: issues + GitHub source (task-n27-1):** **`package.json`** **`bugs.url`** and **`homepage`** (issue tracker + monorepo **tree** URL for this package) are written out in **`README.md`** *Issues / bugs (task-n25-1)* and *Source on GitHub (task-n26-1)* — use those sections for copy-paste URLs instead of opening **`package.json`**.
 
+**README: monorepo clone (task-n29-1):** **`package.json`** **`repository`** **`url`** and **`directory`** (clone root + package path inside the monorepo) are written out in **`README.md`** *Monorepo clone (task-n28-1)* — use that section instead of assembling **`git`** clone + **`cd`** paths manually.
+
 **CHANGELOG (task-n19-1):** **`CHANGELOG.md`** — semver release notes at the package root (Keep a Changelog–style). When you bump **`package.json`** **`version`**, add a **`## [x.y.z]`** section there (coordinate with *Extension version vs monorepo / packaging (task-n16-3)*). Epic-level history remains in the product-track file above.
 
 **Security notes (task-n18-1):** see **`## Security notes (task-n18-1)`** above — **`npm audit`** triage, **`overrides`** policy, issue tracker pointer.

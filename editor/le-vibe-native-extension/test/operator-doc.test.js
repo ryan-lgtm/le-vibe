@@ -120,6 +120,15 @@ test('OPERATOR.md cross-links README issues + GitHub source (task-n27-1)', () =>
   assert.ok(text.includes('homepage'));
 });
 
+test('OPERATOR.md cross-links README monorepo clone (task-n29-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n29-1'));
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('Monorepo clone (task-n28-1)'));
+  assert.ok(text.includes('repository'));
+  assert.ok(text.includes('directory'));
+});
+
 test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('workspace.applyEdit'));
