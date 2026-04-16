@@ -90,6 +90,7 @@ test('panel HTML is never blank and includes state indicator', () => {
     assert.ok(html.includes('Export transcript'));
     assert.ok(html.includes('Clear transcript'));
     assert.ok(html.includes('Add context file'));
+    assert.ok(html.includes('.gitignore'));
     assert.ok(html.includes('Clear context'));
     assert.ok(html.includes('Emit handoff event'));
     assert.ok(html.includes('Third-party agent migration'));

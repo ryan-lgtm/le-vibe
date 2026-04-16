@@ -24,6 +24,11 @@ const { createOllamaClient } = require('./ollama');
 const { createChatController } = require('./chat');
 const { isSafeRelativePath, clipTextByBudget, buildPromptWithContext } = require('./workspace-context');
 const {
+  loadGitignoreMatcher,
+  loadContextFileWithGuards,
+  relativePosixForGitignore,
+} = require('./context-file-guards');
+const {
   validateWorkspaceRelativeCreatePath,
   createWorkspaceFile,
   createWorkspaceFolder,
@@ -501,7 +506,7 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     <button type="button" id="undoWorkspacePlanRollback" disabled>Undo completed steps</button>
   </div>
   <h3>Workspace context</h3>
-  <p class="muted">Token-budget rules: max ${escapeHtml(budget.maxFiles)} files; each excerpt up to ${escapeHtml(budget.maxCharsPerFile)} chars and ${escapeHtml(budget.maxLinesPerFile)} lines; total injected context capped at ${escapeHtml(budget.maxTotalChars)} chars.</p>
+  <p class="muted">Token-budget rules: max ${escapeHtml(budget.maxFiles)} files; each excerpt up to ${escapeHtml(budget.maxCharsPerFile)} chars and ${escapeHtml(budget.maxLinesPerFile)} lines; total injected context capped at ${escapeHtml(budget.maxTotalChars)} chars. Paths matching <code>.gitignore</code>, binary files, and files larger than the per-file char budget are skipped with an explicit Lé Vibe Chat message.</p>
   <div>
     <button data-action="pickContextFile">Add context file</button>
     <button data-action="clearContextFiles">Clear context</button>
@@ -1246,15 +1251,24 @@ function activate(context) {
         await vscode.window.showWarningMessage('Open a folder workspace first.');
         return null;
       }
+      const ig = await loadGitignoreMatcher(vscode, folder);
       const files = await vscode.workspace.findFiles('**/*', '**/{node_modules,.git,.lvibe}/**', 300);
       if (!files.length) {
         await vscode.window.showInformationMessage('No workspace files available for context selection.');
         return null;
       }
-      const items = files.map((uri) => ({
-        label: vscode.workspace.asRelativePath(uri, false),
-        uri,
-      }));
+      const items = files
+        .map((uri) => ({
+          label: vscode.workspace.asRelativePath(uri, false),
+          uri,
+        }))
+        .filter((item) => !ig.ignores(relativePosixForGitignore(item.label)));
+      if (!items.length) {
+        await vscode.window.showInformationMessage(
+          'Lé Vibe Chat: no files available for context — empty tree or every candidate matches .gitignore.',
+        );
+        return null;
+      }
       const choice = await vscode.window.showQuickPick(items, {
         title: 'Select workspace file for Lé Vibe Chat context',
         placeHolder: 'Choose one file to include as prompt context excerpt',
@@ -1267,10 +1281,19 @@ function activate(context) {
         return null;
       }
       const ctx = getContextBudget(vscode);
-      const bytes = await vscode.workspace.fs.readFile(choice.uri);
-      const raw = Buffer.from(bytes).toString('utf8');
-      const excerpt = clipTextByBudget(raw, ctx.maxCharsPerFile, ctx.maxLinesPerFile);
-      return { path: choice.label, content: excerpt };
+      const prep = await loadContextFileWithGuards(
+        vscode,
+        folder,
+        choice.uri,
+        choice.label,
+        { maxCharsPerFile: ctx.maxCharsPerFile, maxLinesPerFile: ctx.maxLinesPerFile },
+        ig,
+      );
+      if (!prep.ok) {
+        await vscode.window.showWarningMessage(prep.userMessage);
+        return null;
+      }
+      return { path: choice.label, content: prep.excerpt };
     }),
     vscode.commands.registerCommand(CLEAR_CONTEXT_FILES_COMMAND, async () => {
       await vscode.window.showInformationMessage(

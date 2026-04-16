@@ -177,3 +177,10 @@ test('OPERATOR.md documents workspace delete + audit (task-n11-3)', () => {
   assert.ok(text.includes('workspace-fs-ops-audit.jsonl'));
   assert.ok(text.includes('workspace_fs_ops_audit'));
 });
+
+test('OPERATOR.md documents workspace context read guards (task-n11-4)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n11-4'));
+  assert.ok(text.includes('context-file-guards.js'));
+  assert.ok(text.includes('contextMaxCharsPerFile'));
+});

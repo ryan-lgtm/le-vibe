@@ -85,6 +85,10 @@ Token-budget rules (configurable in Settings):
 - **`leVibeNative.contextMaxLinesPerFile`** (default **`80`**)
 - **`leVibeNative.contextMaxTotalChars`** (default **`3200`**)
 
+### Context read guards (task-n11-4)
+
+- Before a file is added as prompt context, Lé Vibe Chat applies **`.gitignore`** (workspace root `.gitignore` via [`ignore`](https://www.npmjs.com/package/ignore)), a **per-file size** check against **`leVibeNative.contextMaxCharsPerFile`** (disk bytes must not exceed that budget), and a **binary / non-text** probe (null-byte scan on an initial chunk). Skips use deterministic **`Lé Vibe Chat: skipped "path" — …`** strings (toast + no silent omission). Implementation: [`context-file-guards.js`](context-file-guards.js).
+
 ## Edit preview before apply (Epic N9)
 
 - **`leVibeNative.requireEditPreviewBeforeApply`** (default **`true`**) — for the panel **Preview sample workspace edit** flow, a unified diff is shown first; when **`true`**, you must click **Accept preview** before **Apply to file** (no silent whole-file overwrite from preview alone). Set to **`false`** only if you accept **Apply to file** immediately after the diff is shown (the preview is still displayed for that demo path).

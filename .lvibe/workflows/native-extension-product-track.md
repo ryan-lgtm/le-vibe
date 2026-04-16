@@ -620,9 +620,11 @@ Product intent: parity with Copilot/Cursor **agent** tools: create new files, sc
     - audit log line for destructive ops
   - Evidence:
     - Path prompt + modal **`showWarningMessage`** (`Delete` / cancel) before **`deleteWorkspaceEntry`**; panel **Delete file or folder…** + command **`leVibeNative.deleteWorkspacePath`**; JSONL **`workspace-fs-ops-audit.jsonl`** (`lvibe.workspace_fs_ops_audit.v1`) on success or failed delete after confirm; `workspace-fs-ops-audit.js`, `workspace-fs-actions.js`; README + `OPERATOR.md`; tests `workspace-fs-actions.test.js`, `workspace-fs-ops-audit.test.js`, `scaffold.test.js`, `operator-doc.test.js`, `storage-inventory.test.js`; `npm run verify` green.
-- [ ] `pending` **task-n11-4**: **.gitignore / binary / large file** guards before reading/writing context (align with workspace context budget).
+- [x] `done` **task-n11-4**: **.gitignore / binary / large file** guards before reading/writing context (align with workspace context budget).
   - Acceptance:
     - deterministic skip reasons surfaced in UI
+  - Evidence:
+    - `context-file-guards.js` + `ignore` dependency — root `.gitignore`, `stat.size` vs `contextMaxCharsPerFile`, binary null-byte probe; `formatContextGuardUserMessage` strings; **`leVibeNative.pickContextFile`** filters QuickPick + `showWarningMessage` on skip; panel Workspace context copy; README + `OPERATOR.md`; `test/context-file-guards.test.js`, scaffold + `operator-doc` updates; `npm run verify` green.
 
 ### Epic N12 — “Inline assistant” affordances (Copilot-like)
 

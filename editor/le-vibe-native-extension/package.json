@@ -27,6 +27,9 @@
   "categories": [
     "Other"
   ],
+  "dependencies": {
+    "ignore": "^5.3.2"
+  },
   "main": "./extension.js",
   "activationEvents": [
     "onStartupFinished",
