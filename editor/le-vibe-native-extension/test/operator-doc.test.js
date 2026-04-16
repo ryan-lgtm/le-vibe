@@ -210,6 +210,14 @@ test('OPERATOR.md cross-links README engines.node minimum (task-n49-1)', () => {
   assert.ok(text.includes('engines.node'));
 });
 
+test('OPERATOR.md cross-links README activationEvents docs (task-n51-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n51-1'));
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('Activation events (task-n50-1)'));
+  assert.ok(text.includes('activationEvents'));
+});
+
 test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('workspace.applyEdit'));

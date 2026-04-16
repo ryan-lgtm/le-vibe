@@ -1077,9 +1077,19 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
 
 ### Epic N51 — Post-track continuity (engineering backlog)
 
-- [ ] `pending` **task-n51-1**: **OPERATOR — README pointer for activationEvents docs** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Activation events (task-n50-1)* for **`package.json`** **`activationEvents`** so operators can verify startup/command activation intent without opening JSON.
+- [x] `done` **task-n51-1**: **OPERATOR — README pointer for activationEvents docs** — under **`OPERATOR.md`** *Product track*, add one line cross-linking **`README.md`** *Activation events (task-n50-1)* for **`package.json`** **`activationEvents`** so operators can verify startup/command activation intent without opening JSON.
   - Acceptance:
     - **`OPERATOR.md`** + **`operator-doc.test.js`** token
+    - **`npm run verify`** green
+  - Evidence:
+    - **`OPERATOR.md`** — **`README: activationEvents docs (task-n51-1)`** under *Product track*.
+    - **`test/operator-doc.test.js`** — **`task-n51-1`** token test; **`npm run verify`** green.
+
+### Epic N52 — Post-track continuity (engineering backlog)
+
+- [ ] `pending` **task-n52-1**: **Extension README — activationEvents command prefix example** — add one line near *Activation events (task-n50-1)* documenting one concrete **`onCommand:leVibeNative.*`** activation event literal from **`package.json`** so contributors can map the prefix pattern to a shipped command; include targeted contract test deriving that literal from **`package.json`**.
+  - Acceptance:
+    - **`README.md`** + targeted test
     - **`npm run verify`** green
 
 ---
