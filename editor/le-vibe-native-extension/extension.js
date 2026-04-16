@@ -501,10 +501,18 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
 <head>
   <meta charset="UTF-8" />
   <style>
-    body { font-family: var(--vscode-font-family); color: var(--vscode-foreground); padding: 1rem 1.25rem; line-height: 1.45; font-size: 13px; }
-    h2 { margin-bottom: 0.35rem; }
+    body { font-family: var(--vscode-font-family); color: var(--vscode-foreground); padding: 0.9rem 1rem; line-height: 1.45; font-size: 13px; background: var(--vscode-editor-background); }
+    h2, h3 { margin: 0 0 0.35rem 0; }
+    .page-title { margin-bottom: 0.2rem; }
+    .workspace-subtitle { margin-top: 0; margin-bottom: 0.75rem; }
     .state { margin: 0.5rem 0 0.75rem 0; }
     .muted { opacity: 0.8; }
+    .panel { border: 1px solid var(--vscode-panel-border); border-radius: 8px; background: var(--vscode-sideBar-background); overflow: hidden; }
+    .tabs { display: flex; gap: 0.15rem; padding: 0.35rem; border-bottom: 1px solid var(--vscode-panel-border); background: var(--vscode-editorWidget-background); }
+    .tab-btn { border: 1px solid transparent; border-radius: 6px; padding: 0.3rem 0.7rem; cursor: pointer; background: transparent; color: var(--vscode-foreground); }
+    .tab-btn[aria-selected="true"] { border-color: var(--vscode-focusBorder); background: var(--vscode-button-secondaryBackground); }
+    .tab-panel { display: none; padding: 0.85rem; }
+    .tab-panel.active { display: block; }
     .pill-list { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; padding: 0; margin: 0.25rem 0 1rem 0; }
     .pill-list li { border: 1px solid var(--vscode-panel-border); border-radius: 999px; padding: 0.15rem 0.55rem; }
     .pill-list li.active { border-color: var(--vscode-focusBorder); }
@@ -522,14 +530,16 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
 <body>
   <a class="skip-link" href="#levibe-chat-main">Skip to Lé Vibe Chat panel content</a>
   <main id="levibe-chat-main" tabindex="-1">
-  <h2 id="panelStartupHeading">Lé Vibe Native Startup</h2>
-  <p class="muted">Deterministic readiness state with local-first remediation actions.</p>
-  <nav aria-label="Startup readiness states">
-  <ul class="pill-list">${states}</ul>
-  </nav>
-  <div class="state"><strong>${escapeHtml(state)}</strong></div>
-  <p>${escapeHtml(content.detail)}</p>
-  <div>${actionsBlock}</div>
+  <h2 id="panelStartupHeading" class="page-title">Lé Vibe Chat Workspace</h2>
+  <p class="muted workspace-subtitle">Chat-first local operator workspace with separate operational surfaces.</p>
+  <div class="panel">
+  <div class="tabs" role="tablist" aria-label="Lé Vibe workspace panels">
+    <button type="button" class="tab-btn" role="tab" id="tab-chat" aria-controls="panel-chat" aria-selected="true" tabindex="0">Chat</button>
+    <button type="button" class="tab-btn" role="tab" id="tab-settings" aria-controls="panel-settings" aria-selected="false" tabindex="-1">Settings</button>
+    <button type="button" class="tab-btn" role="tab" id="tab-logs" aria-controls="panel-logs" aria-selected="false" tabindex="-1">Logs</button>
+    <button type="button" class="tab-btn" role="tab" id="tab-tools" aria-controls="panel-tools" aria-selected="false" tabindex="-1">Tools</button>
+  </div>
+  <section id="panel-chat" class="tab-panel active" role="tabpanel" aria-labelledby="tab-chat">
   <h3>Local prompt test</h3>
   <p class="muted">Send a prompt to local Ollama and receive streaming tokens.</p>
   <p class="muted" style="margin-bottom:0.25rem;">Quick actions (task-n12-2) — insert a template below. No network until you click <strong>Send Prompt</strong> (local Ollama only).</p>
@@ -544,12 +554,38 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     <button type="button" id="sendPrompt" title="Send prompt" aria-label="Send prompt">Send Prompt</button>
     <button type="button" id="cancelPrompt" title="Cancel in-flight request" aria-label="Cancel in-flight request">Cancel Request</button>
     <button type="button" id="retryLastPrompt" title="Retry last prompt" aria-label="Retry last prompt">Retry last prompt</button>
-    <button type="button" data-action="openOllamaLogging" title="Live tail Ollama logs" aria-label="Live tail Ollama logs">Ollama Logging</button>
     <button type="button" id="startNewChatSession" title="Start new chat session" aria-label="Start new chat session">New chat</button>
     <button type="button" id="restoreRecentPrompt" title="Restore recent prompt" aria-label="Restore recent prompt">Restore recent…</button>
   </div>
   <div id="chatStatus" class="muted" role="status" aria-live="polite">Idle.</div>
   <div id="chatLog" class="chat-log" role="log" aria-live="polite" aria-relevant="additions text"></div>
+  </section>
+  <section id="panel-settings" class="tab-panel" role="tabpanel" aria-labelledby="tab-settings">
+  <h3>Lé Vibe Native Startup</h3>
+  <p class="muted">Deterministic readiness state with local-first remediation actions.</p>
+  <nav aria-label="Startup readiness states">
+  <ul class="pill-list">${states}</ul>
+  </nav>
+  <div class="state"><strong>${escapeHtml(state)}</strong></div>
+  <p>${escapeHtml(content.detail)}</p>
+  <div>${actionsBlock}</div>
+  <h3>Lé Vibe Chat storage</h3>
+  <p class="muted">Local JSONL under ~/.config/le-vibe/levibe-native-chat/</p>
+  <div>
+    <button type="button" data-action="viewChatUsage" title="View transcript usage" aria-label="View transcript usage">View usage</button>
+    <button type="button" data-action="exportChatTranscript" title="Export transcript" aria-label="Export transcript">Export transcript</button>
+    <button type="button" data-action="clearChatTranscript" title="Clear transcript" aria-label="Clear transcript">Clear transcript</button>
+  </div>
+  </section>
+  <section id="panel-logs" class="tab-panel" role="tabpanel" aria-labelledby="tab-logs">
+  <h3>Logs</h3>
+  <p class="muted">Operational logging stays outside chat. Open Ollama live tail and inspect structured diagnostics.</p>
+  <div>
+    <button type="button" data-action="openOllamaLogging" title="Live tail Ollama logs" aria-label="Live tail Ollama logs">Ollama Logging</button>
+  </div>
+  ${diagnosticsText}
+  </section>
+  <section id="panel-tools" class="tab-panel" role="tabpanel" aria-labelledby="tab-tools">
   <h3>Edit preview (workspace)</h3>
   <p class="muted">Unified diff before writing. When <code>leVibeNative.requireEditPreviewBeforeApply</code> is on (default), click <strong>Accept preview</strong> then <strong>Apply to file</strong> — no silent whole-file overwrite.</p>
   <div>
@@ -608,17 +644,46 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
   <div>
     <button type="button" data-action="openThirdPartyMigrationGuide" title="Open third-party migration guide" aria-label="Open third-party migration guide">Open migration guide</button>
   </div>
-  <h3>Lé Vibe Chat storage</h3>
-  <p class="muted">Local JSONL under ~/.config/le-vibe/levibe-native-chat/</p>
-  <div>
-    <button type="button" data-action="viewChatUsage" title="View transcript usage" aria-label="View transcript usage">View usage</button>
-    <button type="button" data-action="exportChatTranscript" title="Export transcript" aria-label="Export transcript">Export transcript</button>
-    <button type="button" data-action="clearChatTranscript" title="Clear transcript" aria-label="Clear transcript">Clear transcript</button>
+  </section>
   </div>
-  ${diagnosticsText}
   </main>
   <script>
     const vscode = acquireVsCodeApi();
+    const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+    const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+    function activateTab(tabId, focusTab) {
+      tabs.forEach((tab) => {
+        const active = tab.id === tabId;
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+        tab.tabIndex = active ? 0 : -1;
+        if (active && focusTab) {
+          tab.focus();
+        }
+      });
+      panels.forEach((panel) => {
+        panel.classList.toggle('active', panel.getAttribute('aria-labelledby') === tabId);
+      });
+    }
+    tabs.forEach((tab, idx) => {
+      tab.addEventListener('click', () => activateTab(tab.id, false));
+      tab.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft' && event.key !== 'Home' && event.key !== 'End') {
+          return;
+        }
+        event.preventDefault();
+        if (event.key === 'Home') {
+          activateTab(tabs[0].id, true);
+          return;
+        }
+        if (event.key === 'End') {
+          activateTab(tabs[tabs.length - 1].id, true);
+          return;
+        }
+        const delta = event.key === 'ArrowRight' ? 1 : -1;
+        const next = (idx + delta + tabs.length) % tabs.length;
+        activateTab(tabs[next].id, true);
+      });
+    });
     document.querySelectorAll('button[data-action]').forEach((button) => {
       button.addEventListener('click', () => {
         const actionId = button.getAttribute('data-action');

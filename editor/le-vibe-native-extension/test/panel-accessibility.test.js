@@ -8,6 +8,9 @@ test('panel and wizard HTML include accessibility baseline (task-n17-2)', () => 
   assert.ok(panel.includes('<html lang="en">'), 'panel html lang');
   assert.ok(panel.includes('id="levibe-chat-main"'), 'panel main landmark');
   assert.ok(panel.includes('skip-link'), 'panel skip link');
+  assert.ok(panel.includes('role="tablist"'), 'tablist present');
+  assert.ok(panel.includes('role="tab" id="tab-chat"'), 'chat tab present');
+  assert.ok(panel.includes('role="tabpanel" aria-labelledby="tab-chat"'), 'chat panel present');
   assert.ok(panel.includes('aria-label="Prompt for local Ollama'), 'prompt aria-label');
   assert.ok(panel.includes('role="status"'), 'chat status live region');
   assert.ok(panel.includes('role="log"'), 'chat log live region');

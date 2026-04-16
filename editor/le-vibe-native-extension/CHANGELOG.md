@@ -4,6 +4,11 @@ All notable changes to **Lé Vibe Native Agent** / **Lé Vibe Chat** in this pac
 
 ## [Unreleased]
 
+### Added
+
+- Milestone EPIC A (chat surface shell): the panel now uses a dedicated tabbed workspace (`Chat`, `Settings`, `Logs`, `Tools`) so the main conversation feed stays focused while startup/remediation controls, diagnostics, and operational actions live in separate surfaces.
+- Keyboard-accessible tab navigation with WAI-ARIA roles (`tablist`, `tab`, `tabpanel`) and arrow/home/end support for panel switching.
+
 ### Fixed
 
 - Default **`leVibeNative.ollamaEndpoint`** aligns with **`lvibe`** managed Ollama (**`http://127.0.0.1:11435`**, see `LE_VIBE_MANAGED_OLLAMA_PORT`). The previous default (`11434`) targeted a different listener than the launcher, which commonly produced **404** on **`POST /api/generate`** (wrong daemon and/or model not present there). User-visible diagnostics now hint when Ollama returns **404** (missing model vs endpoint mismatch).
