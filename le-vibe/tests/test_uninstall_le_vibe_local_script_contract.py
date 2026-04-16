@@ -25,3 +25,10 @@ def test_uninstall_le_vibe_local_script_documents_safe_options() -> None:
     assert "dpkg --remove --force-remove-reinstreq" in text
     assert "apt-get remove --purge" in text
     assert "OK: lvibe not on PATH" in text
+    assert "continue.continue-*" in text
+    assert "saoudrizwan.claude-dev-*" in text
+    assert ".vscode/extensions" in text
+    assert ".vscode-oss/extensions" in text
+    assert ".config/VSCodium/extensions" in text
+    assert "globalStorage/saoudrizwan.claude-dev" in text
+    assert "globalStorage/continue.continue" in text

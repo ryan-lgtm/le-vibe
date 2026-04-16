@@ -35,10 +35,14 @@ Everything else is out-of-scope unless required to unblock one of the five.
     - Updated `le-vibe/le_vibe/first_run.py` readiness gate to require `levibe.le-vibe-native-extension` and removed third-party extension-ID gating.
     - Updated `le-vibe/tests/test_first_run.py` to validate readiness success with first-party extension presence and failure when first-party extension is missing.
     - Verification: `python -m pytest le-vibe/tests/test_first_run.py le-vibe/tests/test_install_le_vibe_local_script_contract.py` (28 passed).
-- [ ] `pending` **task-cp0-3**: Add migration cleanup for prior Continue/Cline extension artifacts in fresh install path.
+- [x] `done` **task-cp0-3**: Add migration cleanup for prior Continue/Cline extension artifacts in fresh install path.
   - Acceptance:
     - documented and tested cleanup behavior
     - no stale third-party extension state after `--fresh-install`
+  - Evidence (2026-04-15):
+    - Updated `packaging/scripts/uninstall-le-vibe-local.sh` purge-agent-artifacts cleanup to remove stale third-party extension artifacts: extension directories (`continue.continue-*`, `saoudrizwan.claude-dev-*`) and legacy `globalStorage` state.
+    - Updated `le-vibe/tests/test_uninstall_le_vibe_local_script_contract.py` to assert cleanup contract strings for third-party extension/artifact removal paths.
+    - Verification: `python -m pytest le-vibe/tests/test_uninstall_le_vibe_local_script_contract.py le-vibe/tests/test_install_le_vibe_local_script_contract.py` (23 passed).
 
 ## Epic CP1 — Chat core loop quality (daily-driver usable)
 

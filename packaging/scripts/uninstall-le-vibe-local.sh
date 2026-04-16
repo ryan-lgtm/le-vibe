@@ -5,6 +5,9 @@ set -euo pipefail
 
 ASSUME_YES=0
 PURGE_USER_DATA=0
+PURGE_EDITOR_DATA=0
+PURGE_AGENT_ARTIFACTS=0
+PURGE_OLLAMA_STATE=0
 PURGE_WORKSPACE=""
 
 usage() {
@@ -23,12 +26,16 @@ Default actions:
 Options:
   --yes                    Non-interactive apt/autoremove.
   --purge-user-data        Remove ~/.config/le-vibe after package uninstall.
+  --purge-editor-data      Remove Lé Vibe editor user-data/cache directories under ~/.config and ~/.vscode.
+  --purge-agent-artifacts  Remove agent-era local artifacts (.continue, .clinerules, and legacy setup hints).
+  --purge-ollama-state     Remove local Ollama model/config data under ~/.ollama.
   --purge-workspace PATH   Remove PATH/.lvibe (exact path only, safety checked).
   -h, --help               Show this message.
 
 Examples:
   packaging/scripts/uninstall-le-vibe-local.sh
   packaging/scripts/uninstall-le-vibe-local.sh --yes --purge-user-data
+  packaging/scripts/uninstall-le-vibe-local.sh --yes --purge-user-data --purge-editor-data --purge-agent-artifacts
   packaging/scripts/uninstall-le-vibe-local.sh --yes --purge-workspace "/home/user/my-project"
 EOF
 }
@@ -39,6 +46,9 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --yes) ASSUME_YES=1 ;;
     --purge-user-data) PURGE_USER_DATA=1 ;;
+    --purge-editor-data) PURGE_EDITOR_DATA=1 ;;
+    --purge-agent-artifacts) PURGE_AGENT_ARTIFACTS=1 ;;
+    --purge-ollama-state) PURGE_OLLAMA_STATE=1 ;;
     --purge-workspace)
       PURGE_WORKSPACE="${2:-}"
       if [[ -z "$PURGE_WORKSPACE" ]]; then
@@ -89,6 +99,7 @@ fi
 
 echo "==> Removing known install leftovers"
 sudo rm -f /usr/bin/lvibe /usr/bin/le-vibe /usr/bin/lvibe-hygiene /usr/bin/le-vibe-setup-continue
+sudo rm -f /usr/bin/le-vibe-setup-cline
 sudo rm -rf /usr/lib/le-vibe
 sudo rm -f /usr/share/applications/le-vibe.desktop
 sudo rm -f /usr/share/icons/hicolor/scalable/apps/le-vibe.svg
@@ -97,6 +108,47 @@ sudo rm -rf /usr/share/doc/le-vibe /usr/share/doc/le-vibe-ide
 if [[ "$PURGE_USER_DATA" -eq 1 ]]; then
   echo "==> Removing user data: ~/.config/le-vibe"
   rm -rf "$HOME/.config/le-vibe"
+fi
+
+if [[ "$PURGE_EDITOR_DATA" -eq 1 ]]; then
+  echo "==> Removing editor data for Lé Vibe profile/cache"
+  rm -rf "$HOME/.config/Lé Vibe"
+  rm -rf "$HOME/.config/Code - OSS"
+  rm -rf "$HOME/.vscode-oss"
+fi
+
+if [[ "$PURGE_AGENT_ARTIFACTS" -eq 1 ]]; then
+  echo "==> Removing local agent artifacts and legacy extension state"
+  rm -rf "$HOME/.continue"
+  rm -rf "$HOME/.clinerules"
+  rm -rf "$HOME/.config/Claude"
+  rm -rf "$HOME/.config/claude"
+  rm -rf "$HOME/.config/Lé Vibe/User/globalStorage/saoudrizwan.claude-dev"
+  rm -rf "$HOME/.config/Lé Vibe/User/globalStorage/continue.continue"
+  rm -rf "$HOME/.config/Code - OSS/User/globalStorage/saoudrizwan.claude-dev"
+  rm -rf "$HOME/.config/Code - OSS/User/globalStorage/continue.continue"
+
+  # Fresh-install path must leave no stale third-party extension state behind.
+  extension_dirs=(
+    "$HOME/.vscode/extensions"
+    "$HOME/.vscode-oss/extensions"
+    "$HOME/.config/VSCodium/extensions"
+  )
+  extension_globs=(
+    "continue.continue-*"
+    "saoudrizwan.claude-dev-*"
+  )
+  for ext_dir in "${extension_dirs[@]}"; do
+    [[ -d "$ext_dir" ]] || continue
+    for ext_glob in "${extension_globs[@]}"; do
+      rm -rf "$ext_dir"/$ext_glob
+    done
+  done
+fi
+
+if [[ "$PURGE_OLLAMA_STATE" -eq 1 ]]; then
+  echo "==> Removing local Ollama state: ~/.ollama"
+  rm -rf "$HOME/.ollama"
 fi
 
 if [[ -n "$PURGE_WORKSPACE" ]]; then
@@ -110,6 +162,10 @@ if [[ -n "$PURGE_WORKSPACE" ]]; then
   fi
   echo "==> Removing workspace memory: $PURGE_WORKSPACE/.lvibe"
   rm -rf "$PURGE_WORKSPACE/.lvibe"
+  if [[ "$PURGE_AGENT_ARTIFACTS" -eq 1 ]]; then
+    rm -rf "$PURGE_WORKSPACE/.continue"
+    rm -rf "$PURGE_WORKSPACE/.clinerules"
+  fi
 fi
 
 echo "==> Refreshing caches"
