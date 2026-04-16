@@ -256,6 +256,61 @@ async function moveWorkspaceEntry(vscode, workspaceFolder, fromRelative, toRelat
   return { ok: true, fromUri, toUri };
 }
 
+/**
+ * Delete a file or folder under the workspace root. Uses **`WorkspaceEdit.deleteFile`** when available
+ * (with **`recursive: true`** for directories). Never runs without caller-side confirmation.
+ *
+ * @param {import('vscode')} vscode
+ * @param {import('vscode').WorkspaceFolder} workspaceFolder
+ * @param {string} relativePath
+ * @returns {Promise<
+ *   | { ok: true, uri: import('vscode').Uri, isDirectory: boolean }
+ *   | { ok: false, userMessage: string }
+ * >}
+ */
+async function deleteWorkspaceEntry(vscode, workspaceFolder, relativePath) {
+  const v = validateWorkspaceRelativeCreatePath(relativePath);
+  if (!v.ok) {
+    return v;
+  }
+  const targetUri = uriForNormalizedRelative(vscode, workspaceFolder.uri, v.normalizedRelative);
+  let st;
+  try {
+    st = await vscode.workspace.fs.stat(targetUri);
+  } catch {
+    return {
+      ok: false,
+      userMessage: 'Lé Vibe Chat: nothing to delete — path does not exist.',
+    };
+  }
+  const isDirectory = st.type === vscode.FileType.Directory;
+
+  const we = new vscode.WorkspaceEdit();
+  if (typeof we.deleteFile === 'function') {
+    we.deleteFile(targetUri, { recursive: isDirectory });
+    const applied = await vscode.workspace.applyEdit(we);
+    if (!applied) {
+      return {
+        ok: false,
+        userMessage:
+          'Lé Vibe Chat: delete was not applied — the workspace rejected the operation (file may be busy or protected).',
+      };
+    }
+    return { ok: true, uri: targetUri, isDirectory };
+  }
+
+  try {
+    await vscode.workspace.fs.delete(targetUri, { recursive: isDirectory });
+  } catch (e) {
+    const msg = e && e.message ? e.message : String(e);
+    return {
+      ok: false,
+      userMessage: `Lé Vibe Chat: delete failed — ${msg}`,
+    };
+  }
+  return { ok: true, uri: targetUri, isDirectory };
+}
+
 module.exports = {
   DEFAULT_DENIED_SEGMENTS,
   MAX_RELATIVE_PATH_LEN: MAX_RELATIVE_PATH_LEN,
@@ -264,4 +319,5 @@ module.exports = {
   createWorkspaceFile,
   createWorkspaceFolder,
   moveWorkspaceEntry,
+  deleteWorkspaceEntry,
 };

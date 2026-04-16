@@ -169,3 +169,11 @@ test('OPERATOR.md documents workspace move/rename (task-n11-2)', () => {
   assert.ok(text.includes('moveWorkspaceEntry'));
   assert.ok(text.includes('renameFile'));
 });
+
+test('OPERATOR.md documents workspace delete + audit (task-n11-3)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n11-3'));
+  assert.ok(text.includes('deleteWorkspaceEntry'));
+  assert.ok(text.includes('workspace-fs-ops-audit.jsonl'));
+  assert.ok(text.includes('workspace_fs_ops_audit'));
+});

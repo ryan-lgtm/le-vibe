@@ -17,6 +17,7 @@ const APPLY_SELECTION_DEMO_REPLACE_COMMAND = 'leVibeNative.applySelectionDemoRep
 const CREATE_WORKSPACE_FILE_COMMAND = 'leVibeNative.createWorkspaceFile';
 const CREATE_WORKSPACE_FOLDER_COMMAND = 'leVibeNative.createWorkspaceFolder';
 const MOVE_WORKSPACE_PATH_COMMAND = 'leVibeNative.moveWorkspacePath';
+const DELETE_WORKSPACE_PATH_COMMAND = 'leVibeNative.deleteWorkspacePath';
 
 const { STARTUP_STATES, resolveStartupSnapshot, getStateContent } = require('./readiness');
 const { createOllamaClient } = require('./ollama');
@@ -27,7 +28,14 @@ const {
   createWorkspaceFile,
   createWorkspaceFolder,
   moveWorkspaceEntry,
+  deleteWorkspaceEntry,
+  uriForNormalizedRelative,
 } = require('./workspace-fs-actions');
+const {
+  workspaceFsOpsAuditPath,
+  buildWorkspaceFsOpsAuditEvent,
+  appendWorkspaceFsOpsAudit,
+} = require('./workspace-fs-ops-audit');
 const { handoffAuditPath, buildOperatorHandoffEvent, appendOperatorHandoffAudit } = require('./operator-handoff');
 const { formatOllamaDiagnostic } = require('./retry-helpers');
 const {
@@ -200,6 +208,97 @@ async function runMoveWorkspacePathInteractive(vscode, panel) {
     panel.webview.postMessage({ type: 'chatUpdate', status: `Moved: ${fromLabel} → ${toLabel}` });
   }
   return { from: fromLabel, to: toLabel };
+}
+
+/**
+ * @param {import('vscode')} vscode
+ * @param {import('vscode').WebviewPanel | null} panel
+ * @returns {Promise<import('vscode').Uri | null>}
+ */
+async function runDeleteWorkspacePathInteractive(vscode, panel) {
+  const folder = vscode.workspace.workspaceFolders?.[0];
+  if (!folder) {
+    await vscode.window.showWarningMessage('Open a folder workspace first.');
+    if (panel) {
+      panel.webview.postMessage({ type: 'chatUpdate', status: 'Open a folder workspace first.' });
+    }
+    return null;
+  }
+  const promptOpts = {
+    prompt:
+      'Workspace-relative path only. Blocked segments: .git, .ssh, .gnupg, node_modules, .env — no .. or absolute paths. Step 2 is a confirmation dialog — nothing is deleted until you confirm there.',
+    validateInput: (value) => {
+      const r = validateWorkspaceRelativeCreatePath(value);
+      return r.ok ? undefined : r.userMessage.replace(/^Lé Vibe Chat: /, '');
+    },
+  };
+  const rel = await vscode.window.showInputBox({
+    title: 'Delete file or folder — path (step 1 of 2)',
+    placeHolder: 'e.g. tmp/old-file.txt',
+    ...promptOpts,
+  });
+  if (!rel) {
+    return null;
+  }
+  const vf = validateWorkspaceRelativeCreatePath(rel);
+  if (!vf.ok) {
+    await vscode.window.showWarningMessage(vf.userMessage);
+    if (panel) {
+      panel.webview.postMessage({ type: 'chatUpdate', status: vf.userMessage });
+    }
+    return null;
+  }
+  const displayPath = vf.normalizedRelative;
+  const pick = await vscode.window.showWarningMessage(
+    `Permanently delete "${displayPath}" from this workspace? This cannot be undone from Lé Vibe Chat. A line is appended to workspace-fs-ops-audit.jsonl under ~/.config/le-vibe/levibe-native-chat/.`,
+    { modal: true },
+    'Delete',
+  );
+  if (pick !== 'Delete') {
+    return null;
+  }
+
+  const auditFile = workspaceFsOpsAuditPath();
+  const wsUri = folder.uri.toString();
+  const targetUriGuess = uriForNormalizedRelative(vscode, folder.uri, displayPath);
+
+  const result = await deleteWorkspaceEntry(vscode, folder, displayPath);
+  if (result.ok) {
+    appendWorkspaceFsOpsAudit(
+      auditFile,
+      buildWorkspaceFsOpsAuditEvent({
+        op: 'delete',
+        workspaceUri: wsUri,
+        relativePath: displayPath,
+        targetUri: result.uri.toString(),
+        outcome: 'success',
+        isDirectory: result.isDirectory,
+      }),
+    );
+    const label = vscode.workspace.asRelativePath(result.uri, false);
+    await vscode.window.showInformationMessage(`Lé Vibe Chat: deleted ${label}`);
+    if (panel) {
+      panel.webview.postMessage({ type: 'chatUpdate', status: `Deleted: ${label}` });
+    }
+    return result.uri;
+  }
+
+  appendWorkspaceFsOpsAudit(
+    auditFile,
+    buildWorkspaceFsOpsAuditEvent({
+      op: 'delete',
+      workspaceUri: wsUri,
+      relativePath: displayPath,
+      targetUri: targetUriGuess.toString(),
+      outcome: 'failed',
+      detail: result.userMessage,
+    }),
+  );
+  await vscode.window.showWarningMessage(result.userMessage);
+  if (panel) {
+    panel.webview.postMessage({ type: 'chatUpdate', status: result.userMessage });
+  }
+  return null;
 }
 
 function buildSampleDemoWorkspacePlan(vscode, folder) {
@@ -408,11 +507,12 @@ function panelHtml(state, detailOverride, diagnostics, contextBudget) {
     <button data-action="clearContextFiles">Clear context</button>
   </div>
   <h3>Workspace scaffold (N11)</h3>
-  <p class="muted">Create paths under the open folder only — no <code>..</code>; segments <code>.git</code>, <code>.ssh</code>, <code>.gnupg</code>, <code>node_modules</code>, <code>.env</code> are blocked. Move/rename uses VS Code rename (no overwrite if destination exists).</p>
+  <p class="muted">Create paths under the open folder only — no <code>..</code>; segments <code>.git</code>, <code>.ssh</code>, <code>.gnupg</code>, <code>node_modules</code>, <code>.env</code> are blocked. Move/rename uses VS Code rename (no overwrite if destination exists). Delete asks for a path, then a modal confirmation — never silent; each attempt is logged.</p>
   <div>
     <button data-action="createWorkspaceFilePrompt">Create file…</button>
     <button data-action="createWorkspaceFolderPrompt">Create folder…</button>
     <button data-action="moveWorkspacePathPrompt">Move / rename…</button>
+    <button data-action="deleteWorkspacePathPrompt">Delete file or folder…</button>
   </div>
   <h3>Operator handoff</h3>
   <p class="muted">Emit a reproducible handoff event to lvibe orchestration and append local audit evidence.</p>
@@ -1015,6 +1115,10 @@ function openAgentSurface() {
       void runMoveWorkspacePathInteractive(vscode, panel);
       return;
     }
+    if (msg.type === 'action' && msg.actionId === 'deleteWorkspacePathPrompt') {
+      void runDeleteWorkspacePathInteractive(vscode, panel);
+      return;
+    }
     if (msg.type === 'action' && msg.actionId === 'openThirdPartyMigrationGuide') {
       void vscode.commands.executeCommand(OPEN_THIRD_PARTY_MIGRATION_COMMAND);
       panel.webview.postMessage({ type: 'chatUpdate', status: 'Opening third-party migration guide…' });
@@ -1237,6 +1341,7 @@ function activate(context) {
     vscode.commands.registerCommand(CREATE_WORKSPACE_FILE_COMMAND, () => runCreateWorkspaceFileInteractive(vscode, null)),
     vscode.commands.registerCommand(CREATE_WORKSPACE_FOLDER_COMMAND, () => runCreateWorkspaceFolderInteractive(vscode, null)),
     vscode.commands.registerCommand(MOVE_WORKSPACE_PATH_COMMAND, () => runMoveWorkspacePathInteractive(vscode, null)),
+    vscode.commands.registerCommand(DELETE_WORKSPACE_PATH_COMMAND, () => runDeleteWorkspacePathInteractive(vscode, null)),
     vscode.commands.registerCommand(OPEN_THIRD_PARTY_MIGRATION_COMMAND, () => runThirdPartyMigrationGuide(vscode)),
     vscode.commands.registerCommand(OPEN_AGENT_SURFACE_COMMAND, openAgentSurface),
     vscode.commands.registerCommand(OPEN_OLLAMA_SETUP_HELP_COMMAND, () =>
@@ -1297,6 +1402,7 @@ module.exports = {
   CREATE_WORKSPACE_FILE_COMMAND,
   CREATE_WORKSPACE_FOLDER_COMMAND,
   MOVE_WORKSPACE_PATH_COMMAND,
+  DELETE_WORKSPACE_PATH_COMMAND,
   getTranscriptContext,
   getContextBudget,
   panelHtml,

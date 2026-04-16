@@ -6,6 +6,7 @@ const {
   validateWorkspaceRelativeCreatePath,
   DEFAULT_DENIED_SEGMENTS,
   moveWorkspaceEntry,
+  deleteWorkspaceEntry,
 } = require('../workspace-fs-actions.js');
 
 test('validateWorkspaceRelativeCreatePath rejects traversal (task-n11-1)', () => {
@@ -143,4 +144,92 @@ test('moveWorkspaceEntry succeeds when source exists and destination is free (ta
     assert.ok(r.fromUri.toString().includes('a.txt'));
     assert.ok(r.toUri.toString().includes('b.txt'));
   }
+});
+
+/**
+ * @param {{ missing?: boolean, applyOk?: boolean, isDirectory?: boolean }} opts
+ */
+function mockVscodeForDelete(opts = {}) {
+  const { missing = false, applyOk = true, isDirectory = false } = opts;
+  class WorkspaceEdit {
+    constructor() {
+      /** @type {{ uri: unknown, opts: unknown } | null} */
+      this.lastDelete = null;
+    }
+
+    deleteFile(uri, delOpts) {
+      this.lastDelete = { uri, opts: delOpts };
+    }
+  }
+
+  return {
+    FileType: { File: 1, Directory: 2 },
+    WorkspaceEdit,
+    Uri: {
+      parse(s) {
+        const fsPath = s.replace(/^file:\/\//, '/');
+        return { toString: () => s, fsPath };
+      },
+      joinPath(base, ...pathSegments) {
+        let p = base.fsPath || String(base.toString?.() ?? '').replace(/^file:\/\//, '/');
+        p = p.replace(/\/+$/, '') || '/';
+        for (const seg of pathSegments) {
+          p += `/${seg}`;
+        }
+        const url = p.startsWith('//') ? `file:${p}` : `file://${p}`;
+        return { toString: () => url, fsPath: p };
+      },
+    },
+    workspace: {
+      fs: {
+        stat: async () => {
+          if (missing) {
+            const e = new Error('ENOENT');
+            /** @type {any} */ (e).code = 'FileNotFound';
+            throw e;
+          }
+          return { type: isDirectory ? 2 : 1 };
+        },
+        delete: async () => {},
+      },
+      applyEdit: async () => applyOk,
+    },
+  };
+}
+
+test('deleteWorkspaceEntry rejects missing path (task-n11-3)', async () => {
+  const vscode = mockVscodeForDelete({ missing: true });
+  const folder = { uri: vscode.Uri.parse('file:///tmp/ws/') };
+  const r = await deleteWorkspaceEntry(vscode, folder, 'gone.txt');
+  assert.equal(r.ok, false);
+  assert.ok(String(r.userMessage).includes('nothing to delete'));
+});
+
+test('deleteWorkspaceEntry deletes file via WorkspaceEdit.deleteFile (task-n11-3)', async () => {
+  const vscode = mockVscodeForDelete({ applyOk: true, isDirectory: false });
+  const folder = { uri: vscode.Uri.parse('file:///tmp/ws/') };
+  const r = await deleteWorkspaceEntry(vscode, folder, 'x.txt');
+  assert.equal(r.ok, true);
+  if (r.ok) {
+    assert.equal(r.isDirectory, false);
+    assert.ok(r.uri.toString().includes('x.txt'));
+  }
+});
+
+test('deleteWorkspaceEntry uses recursive delete for directories (task-n11-3)', async () => {
+  const vscode = mockVscodeForDelete({ applyOk: true, isDirectory: true });
+  const folder = { uri: vscode.Uri.parse('file:///tmp/ws/') };
+  const r = await deleteWorkspaceEntry(vscode, folder, 'sub/dir');
+  assert.equal(r.ok, true);
+  if (r.ok) {
+    assert.equal(r.isDirectory, true);
+  }
+});
+
+test('deleteWorkspaceEntry surfaces applyEdit failure (task-n11-3)', async () => {
+  const vscode = mockVscodeForDelete({ applyOk: false });
+  const folder = { uri: vscode.Uri.parse('file:///tmp/ws/') };
+  const r = await deleteWorkspaceEntry(vscode, folder, 'locked.txt');
+  assert.equal(r.ok, false);
+  assert.ok(String(r.userMessage).includes('not applied'));
 });

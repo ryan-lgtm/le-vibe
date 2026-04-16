@@ -614,10 +614,12 @@ Product intent: parity with Copilot/Cursor **agent** tools: create new files, sc
     - conflict handling documented
   - Evidence:
     - `workspace-fs-actions.js` (`moveWorkspaceEntry` — `WorkspaceEdit.renameFile` with `overwrite: false`, parent dirs for destination); panel **Move / rename…** + command **`leVibeNative.moveWorkspacePath`**; README *Move / rename* + `OPERATOR.md`; tests `test/workspace-fs-actions.test.js`, `test/scaffold.test.js`, `test/operator-doc.test.js`; `npm run verify` green.
-- [ ] `pending` **task-n11-3**: Implement **delete file** behind explicit confirmation UX (never silent delete).
+- [x] `done` **task-n11-3**: Implement **delete file** behind explicit confirmation UX (never silent delete).
   - Acceptance:
     - confirmation modal or two-step confirm in panel
     - audit log line for destructive ops
+  - Evidence:
+    - Path prompt + modal **`showWarningMessage`** (`Delete` / cancel) before **`deleteWorkspaceEntry`**; panel **Delete file or folder…** + command **`leVibeNative.deleteWorkspacePath`**; JSONL **`workspace-fs-ops-audit.jsonl`** (`lvibe.workspace_fs_ops_audit.v1`) on success or failed delete after confirm; `workspace-fs-ops-audit.js`, `workspace-fs-actions.js`; README + `OPERATOR.md`; tests `workspace-fs-actions.test.js`, `workspace-fs-ops-audit.test.js`, `scaffold.test.js`, `operator-doc.test.js`, `storage-inventory.test.js`; `npm run verify` green.
 - [ ] `pending` **task-n11-4**: **.gitignore / binary / large file** guards before reading/writing context (align with workspace context budget).
   - Acceptance:
     - deterministic skip reasons surfaced in UI

@@ -117,6 +117,11 @@ Token-budget rules (configurable in Settings):
 - **Git-friendly behavior:** moves use **`WorkspaceEdit.renameFile`** when the API is available so the workbench (and source-control providers) can treat the operation as a **rename** rather than delete+add when possible.
 - **Conflict handling (no silent overwrite):** if the **source is missing**, or the **destination already exists**, or **`applyEdit` is rejected**, the user gets an explicit **`Lé Vibe Chat:`** message and nothing is overwritten. Implementation: [`moveWorkspaceEntry`](workspace-fs-actions.js) (`overwrite: false`).
 
+### Delete file or folder (task-n11-3)
+
+- **Panel:** **Delete file or folder…** · **Command Palette:** **Lé Vibe Chat: Delete workspace file or folder…** (`leVibeNative.deleteWorkspacePath`). **Two-step UX:** workspace-relative path (`showInputBox`), then a **modal** confirmation — nothing is deleted until **Delete** is chosen (never silent).
+- **Audit:** each confirmed attempt (success or failure after confirm) appends one JSONL line to **`workspace-fs-ops-audit.jsonl`** under `~/.config/le-vibe/levibe-native-chat/` (`lvibe.workspace_fs_ops_audit.v1`). Implementation: [`deleteWorkspaceEntry`](workspace-fs-actions.js), [`workspace-fs-ops-audit.js`](workspace-fs-ops-audit.js).
+
 ## Operator handoff contract (task-n4-2)
 
 - Command: `Lé Vibe Chat: Emit operator handoff event` (`leVibeNative.emitOperatorHandoff`), also available as a panel action.
@@ -191,5 +196,6 @@ All first-party on-disk state for this extension lives under **`~/.config/le-vib
 | `third-party-migration-state.json` | Third-party migration status (`third_party_migration.v1`). |
 | `third-party-migration-audit.jsonl` | Append-only migration actions (`lvibe.third_party_migration.v1`). |
 | `workspace-plan-audit.jsonl` | Append-only workspace plan step records (`lvibe.workspace_plan_audit.v1`). |
+| `workspace-fs-ops-audit.jsonl` | Append-only destructive workspace FS operations (`lvibe.workspace_fs_ops_audit.v1`). |
 
 No embeddings or unbounded cloud sync are written by this extension; export/clear remain user-driven.
