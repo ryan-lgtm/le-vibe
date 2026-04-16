@@ -96,6 +96,7 @@ const {
   FILE_PICKER_MAX_SCAN_URIS,
 } = require('./at-mention-context');
 const { fetchCurrentFileOutlineForContext } = require('./outline-context');
+const { registerLeVibeChatStatusBar } = require('./status-bar-entry');
 
 /**
  * @param {import('vscode')} vscode
@@ -1692,6 +1693,10 @@ function activate(context) {
   setTimeout(() => {
     void scheduleThirdPartyMigrationNudge(vscode);
   }, 4000);
+
+  registerLeVibeChatStatusBar(vscode, context, {
+    openAgentSurfaceCommand: OPEN_AGENT_SURFACE_COMMAND,
+  });
 }
 
 function deactivate() {}

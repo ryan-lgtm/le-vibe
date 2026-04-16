@@ -58,7 +58,7 @@ Use this sheet when validating or shipping the first-party extension (`editor/le
 
 **Terminal execution — visible integrated terminal (task-n13-2):** Palette **`leVibeNative.runCommandInIntegratedTerminal`** / panel **Run command in terminal…** — policy must allow the command; then a **modal confirms each batch** unless **`leVibeNative.terminalSkipBatchConfirmation`** is **`true`** (advanced) or the user chose session-skip in the modal. Commands are sent only to a visible terminal named **`Lé Vibe Chat`** (`terminal-exec.js` — not a hidden PTY). **`leVibeNative.clearTerminalSessionAllow`** resets session-skip; changing workspace folders also clears it.
 
-**Startup / rollout (defaults):** **`leVibeNative.enableFirstPartyAgentSurface`** default **`true`** (first-party Lé Vibe Chat surface); **`leVibeNative.showFirstRunWizard`** default **`true`** (checkpointed wizard); **`leVibeNative.openPanelOnStartup`** default **`true`** (auto-open panel when the first-party surface is enabled). Rollback semantics in **`README.md`** *Rollout and rollback*.
+**Startup / rollout (defaults):** **`leVibeNative.enableFirstPartyAgentSurface`** default **`true`** (first-party Lé Vibe Chat surface); **`leVibeNative.showFirstRunWizard`** default **`true`** (checkpointed wizard); **`leVibeNative.openPanelOnStartup`** default **`true`** (auto-open panel when the first-party surface is enabled). **Status bar (task-n17-3):** **`leVibeNative.showStatusBarEntry`** default **`false`** — optional subtle status item (Lé Vibe Chat + local Ollama reachability; click opens agent surface). Rollback semantics in **`README.md`** *Rollout and rollback*.
 
 **Third-party migration nudge:** **`leVibeNative.showThirdPartyMigrationNudge`** default **`true`**. **Ollama readiness source:** **`leVibeNative.useLiveOllamaReadiness`** default **`true`** (live local probes; for development overrides, set **`leVibeNative.useLiveOllamaReadiness`** to **`false`** and use **`leVibeNative.devStartupState`**). Migration flow in **`README.md`** *Third-party agent migration*.
 
@@ -132,6 +132,8 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 **Command palette inventory (task-n17-1):** **`README.md`** *Command palette and keyboard shortcuts (task-n17-1)* — table of **`leVibeNative.*`** command id → **Command Palette** label (**`Lé Vibe Chat:`** + **`title`**) → default keybinding (**none** shipped; bind in Keyboard Shortcuts).
 
 **Panel accessibility (task-n17-2):** **`README.md`** *Accessibility (task-n17-2)* — webview skip link, **`main`** landmark, button **`title`** / **`aria-label`**, live regions for status/log; theme spot-check notes and known gaps.
+
+**Status bar entry (task-n17-3):** **`leVibeNative.showStatusBarEntry`** — see **Startup / rollout** above and **`README.md`** *Rollout and rollback*; implementation **`status-bar-entry.js`** (disposes on deactivate via **`ExtensionContext.subscriptions`**).
 
 ## E2E agentic editor release checklist (Epic N15, task-n15-1)
 

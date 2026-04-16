@@ -187,6 +187,11 @@
             "default": true,
             "description": "Open the Lé Vibe readiness panel at startup."
           },
+          "leVibeNative.showStatusBarEntry": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "Show a **subtle** status bar item for **Lé Vibe Chat** with local **Ollama** reachability (refreshes periodically). Click opens **Lé Vibe Chat: Open Agent Surface**. Off by default to avoid noise."
+          },
           "leVibeNative.showFirstRunWizard": {
             "type": "boolean",
             "default": true,

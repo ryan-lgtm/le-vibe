@@ -729,10 +729,12 @@ Product intent: **Lé Vibe Chat** is shippable from the monorepo with the same b
     - no regressions in `npm run verify`
   - Evidence:
     - **`extension.js`** `panelHtml` / `firstRunWizardHtml`: **`lang="en"`**, skip link, **`main`** landmark, **`nav`** for state pills, **`title`** + **`aria-label`** on buttons, labeled prompt **`textarea`**, **`aria-live`** status/log, edit-preview region labels; **`prefers-reduced-motion`**; **`README.md`** *Accessibility (task-n17-2)* (Linux / VS Code themes + gaps); **`OPERATOR.md`** pointer; tests **`panel-accessibility.test.js`**, **`operator-doc.test.js`**; `npm run verify` green.
-- [ ] `pending` **task-n17-3**: **Status bar entry** (optional, setting-gated): show Ollama reachability or “Lé Vibe Chat” idle/active with link to open panel; default off or subtle to avoid noise.
+- [x] `done` **task-n17-3**: **Status bar entry** (optional, setting-gated): show Ollama reachability or “Lé Vibe Chat” idle/active with link to open panel; default off or subtle to avoid noise.
   - Acceptance:
     - `leVibeNative.showStatusBarEntry` (or similar) in `package.json` contributes
     - clears on deactivate; tests for registration where mock allows
+  - Evidence:
+    - **`package.json`** **`leVibeNative.showStatusBarEntry`** (default **`false`**); **`status-bar-entry.js`** — right-aligned low-priority item, **`probeHealth`** refresh (90s interval, `maxRetries: 0`), click → **`leVibeNative.openAgentSurface`**; **`extension.js`** registers on activate; dispose clears item + interval + config listener via **`ExtensionContext.subscriptions`**; post-`await` **`!item`** guard avoids races on deactivate; **`README.md`** / **`OPERATOR.md`**; tests **`test/status-bar-entry.test.js`**, **`test/show-status-bar-entry-doc-sync.test.js`**, **`operator-doc.test.js`**; **`npm run verify`** green.
 
 ### Epic N18 — Hardening and tech debt (bounded)
 

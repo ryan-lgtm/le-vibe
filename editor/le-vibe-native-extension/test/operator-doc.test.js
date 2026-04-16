@@ -258,3 +258,10 @@ test('OPERATOR.md documents panel accessibility pointer (task-n17-2)', () => {
   assert.ok(text.includes('Panel accessibility (task-n17-2)'));
   assert.ok(text.includes('Accessibility (task-n17-2)'));
 });
+
+test('OPERATOR.md documents status bar entry (task-n17-3)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('Status bar (task-n17-3)'));
+  assert.ok(text.includes('status-bar-entry.js'));
+  assert.ok(text.includes('leVibeNative.showStatusBarEntry'));
+});

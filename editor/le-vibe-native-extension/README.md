@@ -244,6 +244,7 @@ Each successful send appends a structured JSONL record under **`~/.config/le-vib
 
 - **Feature flag:** **`leVibeNative.enableFirstPartyAgentSurface`** (default **`true`**). This is the supported switch for first-party Lé Vibe Chat rollout; toggling it does not delete data under `~/.config/le-vibe/`.
 - **Startup panel:** **`leVibeNative.openPanelOnStartup`** (default **`true`**) — when the first-party surface is enabled, open the readiness panel at editor startup (wizard may run first per **`leVibeNative.showFirstRunWizard`**).
+- **Status bar (optional, task-n17-3):** **`leVibeNative.showStatusBarEntry`** (default **`false`**) — when **`true`**, registers a **subtle** status bar entry (right-aligned, low priority) for **Lé Vibe Chat** with periodic local **Ollama** reachability text; **click** runs **Lé Vibe Chat: Open Agent Surface**. Off by default to avoid clutter.
 - **Rollback:** set **`leVibeNative.enableFirstPartyAgentSurface`** to **false** in Settings (JSON: `"leVibeNative.enableFirstPartyAgentSurface": false`). Effects:
   - Startup no longer auto-opens the readiness panel (even if **`leVibeNative.openPanelOnStartup`** is **`true`**).
   - Command **Lé Vibe Chat: Open Agent Surface** shows a message with **Open Settings** to flip the flag back; the webview panel is not created while disabled.
