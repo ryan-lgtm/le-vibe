@@ -34,6 +34,8 @@ This package is the first-party extension scaffold for the Lé Vibe native exten
 
 **Extension entry (packaging):** **`package.json`** **`main`** is **`./extension.js`** (VS Code activation entry; see **`OPERATOR.md`**).
 
+**Activation docs quick index (task-n62-1):** use the activation lines below as a compact index for event inventory, examples, and rationale before diving into implementation details.
+
 **Activation events (task-n50-1):** **`package.json`** **`activationEvents`** currently lists **`23`** entries: startup hook **`onStartupFinished`** plus **`22`** command-trigger events (**`onCommand:*`**) for deterministic lazy activation.
 
 **Activation count rationale lookup (task-n58-1):** for why the startup literal appears in that count breakdown, see **`Startup activation intent (task-n54-1)`** below.

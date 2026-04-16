@@ -250,6 +250,14 @@ test('OPERATOR.md cross-links README activation count rationale lookup (task-n59
   assert.ok(text.includes('activationEvents'));
 });
 
+test('OPERATOR.md cross-links README activation docs quick index (task-n63-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n63-1'));
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('Activation docs quick index (task-n62-1)'));
+  assert.ok(text.includes('activation'));
+});
+
 test('OPERATOR.md cross-links README activation docs sequence (task-n61-1)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('task-n61-1'));
