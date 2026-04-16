@@ -170,6 +170,14 @@ test('OPERATOR.md cross-links README displayName (task-n39-1)', () => {
   assert.ok(text.includes('displayName'));
 });
 
+test('OPERATOR.md cross-links README description (task-n41-1)', () => {
+  const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
+  assert.ok(text.includes('task-n41-1'));
+  assert.ok(text.includes('README.md'));
+  assert.ok(text.includes('Description (task-n40-1)'));
+  assert.ok(text.includes('description'));
+});
+
 test('OPERATOR.md documents WorkspaceEdit apply + manual undo (task-n9-3)', () => {
   const text = fs.readFileSync(path.join(__dirname, '..', 'OPERATOR.md'), 'utf8');
   assert.ok(text.includes('workspace.applyEdit'));

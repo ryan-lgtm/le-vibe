@@ -168,6 +168,8 @@ Workflow board: **`.lvibe/workflows/native-extension-product-track.md`** (Epic N
 
 **README: displayName (task-n39-1):** **`package.json`** **`displayName`** (Marketplace / Extensions UI listing title) is written out in **`README.md`** *Display name (task-n38-1)* — use that section for the shipped listing title instead of opening **`package.json`**.
 
+**README: description (task-n41-1):** **`package.json`** **`description`** (Marketplace / Extensions UI summary blurb) is written out in **`README.md`** *Description (task-n40-1)* — use that section for the shipped summary text instead of opening **`package.json`**.
+
 **CHANGELOG (task-n19-1):** **`CHANGELOG.md`** — semver release notes at the package root (Keep a Changelog–style). When you bump **`package.json`** **`version`**, add a **`## [x.y.z]`** section there (coordinate with *Extension version vs monorepo / packaging (task-n16-3)*). Epic-level history remains in the product-track file above.
 
 **Security notes (task-n18-1):** see **`## Security notes (task-n18-1)`** above — **`npm audit`** triage, **`overrides`** policy, issue tracker pointer.
