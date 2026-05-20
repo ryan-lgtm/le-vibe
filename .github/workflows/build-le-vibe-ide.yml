@@ -182,7 +182,7 @@ jobs:
           mapfile -t _pkgs < <(grep -v '^[[:space:]]*#' packaging/linux-vscodium-ci-apt.pkgs | grep -v '^[[:space:]]*$' || true)
           sudo apt-get install -y "${_pkgs[@]}"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version-file: editor/.nvmrc
 
